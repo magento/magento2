@@ -260,7 +260,7 @@ class InstallSchema implements InstallSchemaInterface
                 'group_id' => 1,
                 'website_id' => 1,
                 'name' => 'Main Website Store',
-                'root_category_id' => InstallData::DEFAULT_CATEGORY_ID,
+                'root_category_id' => 2,
                 'default_store_id' => 1
             ]
         );
