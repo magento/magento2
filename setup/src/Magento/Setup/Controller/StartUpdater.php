@@ -171,10 +171,10 @@ class StartUpdater extends AbstractActionController
         }
 
         $errorMessage .= $this->updater->createUpdaterTask(
-                [],
-                \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
-                [implode(' ', $enabledCaches)]
-            );
+            [],
+            \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
+            [implode(' ', $enabledCaches)]
+        );
 
         return $errorMessage;
     }
