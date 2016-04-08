@@ -42,7 +42,7 @@ class DefaultStore
      * @param null $scopeCode
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager, 
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         ReaderList $readerList,
         $runMode = ScopeInterface::SCOPE_STORE,
         $scopeCode = null
