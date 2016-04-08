@@ -14,6 +14,7 @@ interface SynonymGroupRepositoryInterface
      * Save synonym group data
      *
      * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup
+     * @param $errorOnMergeConflict
      * @return \Magento\Search\Api\Data\SynonymGroupInterface saved attribute set
      */
     public function save(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false);
