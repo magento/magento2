@@ -375,7 +375,6 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $this->_model->prepareForCartAdvanced($buyRequest, $this->product)
         );
 
-
         $buyRequest->setSuperGroup(1);
         $this->assertEquals(
             $expectedMsg,
