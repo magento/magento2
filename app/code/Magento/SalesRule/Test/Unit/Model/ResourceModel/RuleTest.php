@@ -48,11 +48,19 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $rule;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $relationProcessorMock;
 
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->rule = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->ruleResource = $this->getMockBuilder('Magento\SalesRule\Model\ResourceModel\Rule')
             ->disableOriginalConstructor()
             ->getMock();
@@ -79,7 +87,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('getResources')
             ->willReturn($this->resourcesMock);
 
-        $this->entityManager = $this->getMockBuilder('Magento\Framework\Model\EntityManager')
+        $this->entityManager = $this->getMockBuilder('Magento\Framework\EntityManager\EntityManager')
             ->setMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,206 +150,24 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->entityManager->expects($this->once())
             ->method('load')
-            ->with(RuleInterface::class, $abstractModel, $ruleId);
+            ->with($abstractModel, $ruleId, RuleInterface::class);
         $result = $this->model->load($abstractModel, $ruleId);
         $this->assertSame($this->model, $result);
     }
 
     public function testSave()
     {
-        $connectionMock = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $resourceMock = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
-            [
-                '_construct',
-                'getConnection',
-                '__wakeup',
-                'getIdFieldName'
-            ],
-            [],
-            '',
-            false
-        );
-        $connectionInterfaceMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $resourceMock->expects($this->any())
-            ->method('getConnection')
-            ->will($this->returnValue($connectionInterfaceMock));
-        $data = 'tableName';
-        $this->resourcesMock->expects($this->any())
-            ->method('getConnection')
-            ->will($this->returnValue($connectionMock));
-        $this->resourcesMock->expects($this->any())->method('getTableName')->with($data)->will(
-            $this->returnValue('tableName')
-        );
-        $mainTableReflection = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
-            '_mainTable'
-        );
-        $mainTableReflection->setAccessible(true);
-        $mainTableReflection->setValue($this->model, 'tableName');
-        $idFieldNameReflection = new \ReflectionProperty(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
-            '_idFieldName'
-        );
-        $idFieldNameReflection->setAccessible(true);
-        $idFieldNameReflection->setValue($this->model, 'idFieldName');
-        $connectionMock->expects($this->any())->method('save')->with('tableName', 'idFieldName');
-        $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
-
-        $abstractModelMock = $this->setupAbstractModel($resourceMock);
-        $abstractModelMock->setIdFieldName('id');
-        $abstractModelMock->setData(
-            [
-                'id'    => 12345,
-                'name'  => 'Test Name',
-                'value' => 'Test Value'
-            ]
-        );
-        $abstractModelMock->afterLoad();
-        $this->assertEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
-        $newData = ['value' => 'Test Value New'];
-        $abstractModelMock->addData($newData);
-        $this->assertNotEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
-        $abstractModelMock->isObjectNew(false);
-        $connectionMock->expects($this->any())
-            ->method('update')
-            ->with(
-                'tableName',
-                $newData,
-                'idFieldName'
-            );
-        $this->relationProcessorMock->expects($this->once())
-            ->method('validateDataIntegrity');
         $this->entityManager->expects($this->once())
-            ->method('save');
-
-        $this->model->save($abstractModelMock);
+            ->method('save')
+            ->with($this->rule, RuleInterface::class);
+        $this->assertEquals($this->model->save($this->rule), $this->model);
     }
 
-    private function setupAbstractModel($resourceMock)
+    public function testDelete()
     {
-        $context = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Framework\Model\Context'
-        );
-        $registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $resourceCollectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $extensionFactoryMock = $this->getMockBuilder(
-            '\Magento\Framework\Api\ExtensionAttributesFactory'
-        )->disableOriginalConstructor()
-            ->getMock();
-        $customAttributeFactoryMock = $this->getMockBuilder('\Magento\Framework\Api\AttributeValueFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $formFactoryMock = $this->getMockBuilder('\Magento\Framework\Data\FormFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $localeDateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-
-        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $abstractModelMock */
-        $abstractModelMock = $this->getMockForAbstractClass(
-            'Magento\Rule\Model\AbstractModel',
-            [
-                $context,
-                $registryMock,
-                $extensionFactoryMock,
-                $customAttributeFactoryMock,
-                $formFactoryMock,
-                $localeDateMock,
-                $resourceMock,
-                $resourceCollectionMock
-            ]
-        );
-
-        $conditionMock = $this->getMockBuilder('\Magento\Rule\Model\Condition\Combine')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'asArray',
-                    'setRule',
-                    'setId',
-                ]
-            )
-            ->getMock();
-        $conditionMock->expects($this->any())
-            ->method('asArray')
-            ->willReturn([]);
-        $conditionMock->expects($this->any())
-            ->method('setRule')
-            ->willReturnSelf();
-        $conditionMock->expects($this->any())
-            ->method('setId')
-            ->willReturnSelf();
-
-        $actionMock = $this->getMockBuilder('\Magento\Rule\Model\Action\Collection')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'asArray',
-                    'setRule',
-                    'setId',
-                ]
-            )
-            ->getMock();
-        $actionMock->expects($this->any())
-            ->method('setRule')
-            ->willReturnSelf();
-        $actionMock->expects($this->any())
-            ->method('setId')
-            ->willReturnSelf();
-
-        $actionMock->expects($this->any())
-            ->method('asArray')
-            ->willReturn([]);
-        $abstractModelMock->expects($this->any())
-            ->method('getConditions')
-            ->willReturn($conditionMock);
-        $abstractModelMock->expects($this->any())
-            ->method('getConditionsInstance')
-            ->willReturn($conditionMock);
-        $abstractModelMock->expects($this->any())
-            ->method('getActions')
-            ->willReturn($actionMock);
-        $abstractModelMock->expects($this->any())
-            ->method('getActionsInstance')
-            ->willReturn($actionMock);
-
-        return $abstractModelMock;
-    }
-
-    public function testDeleteSuccess()
-    {
-        $this->transactionManagerMock->expects($this->once())->method('start');
-        $abstractModelMock = $this->getMockBuilder('Magento\Rule\Model\AbstractModel')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $abstractModelMock->expects($this->once())->method('beforeDelete');
-        $this->entityManager->expects($this->once())->method('delete');
-        $abstractModelMock->expects($this->once())->method('isDeleted');
-        $abstractModelMock->expects($this->once())->method('afterDelete');
-        $this->transactionManagerMock->expects($this->once())->method('commit');
-
-        $this->model->delete($abstractModelMock);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage To test exception
-     */
-    public function testDeletionRollbackOnFailure()
-    {
-        $expectedException = new \Exception(__('To test exception'));
-        $this->transactionManagerMock->expects($this->once())->method('start');
-        $abstractModelMock = $this->getMockBuilder('Magento\Rule\Model\AbstractModel')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $abstractModelMock->expects($this->once())->method('beforeDelete')->willThrowException($expectedException);
-        $this->transactionManagerMock->expects($this->once())->method('rollBack');
-
-        $this->model->delete($abstractModelMock);
+        $this->entityManager->expects($this->once())
+            ->method('delete')
+            ->with($this->rule, RuleInterface::class);
+        $this->assertEquals($this->model->delete($this->rule), $this->model);
     }
 }
