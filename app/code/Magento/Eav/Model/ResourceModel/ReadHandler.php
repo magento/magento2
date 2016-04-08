@@ -7,16 +7,17 @@
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Model\Entity\ScopeResolver;
 use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReadHandler
+class ReadHandler implements AttributeInterface
 {
     /**
      * @var AttributeRepository
@@ -98,18 +99,18 @@ class ReadHandler
     /**
      * @param string $entityType
      * @param array $entityData
+     * @param array $arguments
      * @return array
      * @throws \Exception
+     * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @throws \Magento\Framework\Exception\LocalizedException
-     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function execute($entityType, $entityData)
+    public function execute($entityType, $entityData, $arguments = [])
     {
-        $data = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
-        if (!$metadata->getEavEntityType()) {
-            return $data;
+        if (!$metadata->getEavEntityType()) {//todo hasCustomAttributes
+            return $entityData;
         }
         $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
         $connection = $metadata->getEntityConnection();
@@ -145,8 +146,8 @@ class ReadHandler
             \Magento\Framework\DB\Select::SQL_UNION_ALL
         );
         foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
-            $data[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+            $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
         }
-        return $data;
+        return $entityData;
     }
 }
