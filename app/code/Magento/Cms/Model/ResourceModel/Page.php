@@ -10,13 +10,13 @@ use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Cms\Api\Data\PageInterface;
 
 /**
@@ -130,14 +130,14 @@ class Page extends AbstractDb
     }
 
     /**
-     * Load an object
-     *
-     * @param CmsPage|AbstractModel $object
-     * @param mixed $value
-     * @param string $field field to load by (defaults to model id)
-     * @return $this
+     * @param AbstractModel $object
+     * @param string $value
+     * @param string|null $field
+     * @return bool|int|string
+     * @throws LocalizedException
+     * @throws \Exception
      */
-    public function load(AbstractModel $object, $value, $field = null)
+    private function getPageId(AbstractModel $object, $value, $field = null)
     {
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
 
@@ -147,19 +147,31 @@ class Page extends AbstractDb
             $field = $entityMetadata->getIdentifierField();
         }
 
-        $isId = true;
+        $pageId = $value;
         if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
             $select = $this->_getLoadSelect($field, $value, $object);
             $select->reset(Select::COLUMNS)
                 ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
                 ->limit(1);
             $result = $this->getConnection()->fetchCol($select);
-            $value = count($result) ? $result[0] : $value;
-            $isId = count($result);
+            $pageId = count($result) ? $result[0] : false;
         }
+        return $pageId;
+    }
 
-        if ($isId) {
-            $this->entityManager->load(PageInterface::class, $object, $value);
+    /**
+     * Load an object
+     *
+     * @param CmsPage|AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
+     * @return $this
+     */
+    public function load(AbstractModel $object, $value, $field = null)
+    {
+        $pageId = $this->getPageId($object, $value, $field);
+        if ($pageId) {
+            $this->entityManager->load($object, $pageId, PageInterface::class, []);
         }
         return $this;
     }
@@ -382,7 +394,7 @@ class Page extends AbstractDb
      */
     public function save(AbstractModel $object)
     {
-        $this->entityManager->save(PageInterface::class, $object);
+        $this->entityManager->save($object, PageInterface::class, []);
         return $this;
     }
 
@@ -391,7 +403,7 @@ class Page extends AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->entityManager->delete(PageInterface::class, $object);
+        $this->entityManager->delete($object, PageInterface::class, []);
         return $this;
     }
 }
