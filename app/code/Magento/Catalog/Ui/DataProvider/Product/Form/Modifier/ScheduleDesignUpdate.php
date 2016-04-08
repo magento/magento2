@@ -75,7 +75,6 @@ class ScheduleDesignUpdate extends AbstractModifier
             $meta,
             [
                 'label' => __('Schedule Update From'),
-                'scopeLabel' => null,
                 'additionalClasses' => 'admin__field-date',
             ]
         );
@@ -96,7 +95,6 @@ class ScheduleDesignUpdate extends AbstractModifier
                 'additionalClasses' => 'admin__control-grouped-date',
                 'breakLine' => false,
                 'component' => 'Magento_Ui/js/form/components/group',
-                'scopeLabel' => $scopeLabel,
             ]
         );
         $meta = $this->arrayManager->set(
