@@ -17,10 +17,10 @@ define(
     function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator, shippingRatesRegistry, $t) {
         'use strict';
 
-        var checkoutConfig = window.checkoutConfig;
-        var OBSERVED_ELEMENTS = 'shipping-rates-validator:observedElements';
-        var POSTCODE_ELEMENT = 'shipping-rates-validator:postcode_element';
-        var VALIDATORS = 'shipping-rates-validator:validators';
+        var checkoutConfig = window.checkoutConfig,
+            OBSERVED_ELEMENTS = 'shipping-rates-validator:observedElements',
+            POSTCODE_ELEMENT = 'shipping-rates-validator:postcode_element',
+            VALIDATORS = 'shipping-rates-validator:validators';
 
         return {
             validateAddressTimeout: 0,
