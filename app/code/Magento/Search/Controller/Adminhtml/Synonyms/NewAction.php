@@ -38,7 +38,6 @@ class NewAction extends \Magento\Backend\App\Action
      *
      * @return \Magento\Backend\Model\View\Result\Forward
      */
-
     public function execute()
     {
         $forward = $this->forwardFactory->create();
