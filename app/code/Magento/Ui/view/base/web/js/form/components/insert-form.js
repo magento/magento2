@@ -90,7 +90,7 @@ define([
 
         /** @inheritdoc*/
         destroyInserted: function () {
-            if (this.isRendered) {
+            if (this.isRendered && this.externalForm()) {
                 this.externalForm().delegate('destroy');
                 this.removeActions();
                 this.responseStatus(undefined);
