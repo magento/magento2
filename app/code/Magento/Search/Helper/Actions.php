@@ -37,18 +37,18 @@ class Actions
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Search\Model\EngineResolver $engineResolver
      * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
-     * @param \Magento\Framework\Message\ManagerInterface
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Search\Model\EngineResolver $engineResolver,
         \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
-        \Magento\Framework\Message\ManagerInterface $messageMenager
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->engineResolver = $engineResolver;
         $this->searchFeatureConfig = $searchFeatureConfig;
-        $this->messageManager = $messageMenager;
+        $this->messageManager = $messageManager;
     }
 
     /**
