@@ -523,8 +523,8 @@ define([
 
             dataArr = this.recordData.splice(this.startIndex, this.recordData().length - this.startIndex);
             dataArr.splice(0, this.pageSize);
-            elems = _.sortBy(this.elems(), function(elem){
-                return parseInt(elem.index)
+            elems = _.sortBy(this.elems(), function (elem) {
+                return ~~elem.index;
             });
 
             data.concat(dataArr).forEach(function (rec, idx) {
