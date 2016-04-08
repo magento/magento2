@@ -16,11 +16,6 @@ class Edit extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
-     * @var \Magento\Backend\Model\Session $session
-     */
-    private $session;
-
-    /**
      * @var \Magento\Framework\Registry $registry
      */
     private $registry;
@@ -46,12 +41,10 @@ class Edit extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\Session $session,
         \Magento\Framework\Registry $registry,
         \Magento\Search\Helper\Actions $actionsHelper,
         \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
     ) {
-        $this->session = $session;
         $this->registry = $registry;
         $this->synGroupRepository = $synGroupRepository;
         $this->actionsHelper = $actionsHelper;
@@ -80,7 +73,7 @@ class Edit extends \Magento\Backend\App\Action
         }
 
         // 3. Set entered data if was error when we do save
-        $data = $this->session->getFormData(true);
+        $data = $this->_session->getFormData(true);
         if (!empty($data)) {
             $synGroupModel->setData($data);
         }
