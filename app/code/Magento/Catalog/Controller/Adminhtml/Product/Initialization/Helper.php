@@ -167,7 +167,7 @@ class Helper
 
         foreach ($useDefaults as $attributeCode => $useDefaultState) {
             if ($useDefaultState) {
-                $product->setData($attributeCode, null);
+                $product->unsetData($attributeCode);
             }
         }
 
