@@ -21,9 +21,9 @@ class Edit extends \Magento\Backend\App\Action
     private $registry;
 
     /**
-     * @var \Magento\Search\Helper\Actions $actionsHelper
+     * @var \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
      */
-    private $actionsHelper;
+    private $pageBuilder;
 
     /**
      * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
@@ -36,18 +36,18 @@ class Edit extends \Magento\Backend\App\Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\Session $session
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Search\Helper\Actions $actionsHelper
+     * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
      * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Search\Helper\Actions $actionsHelper,
+        \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder,
         \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
     ) {
         $this->registry = $registry;
         $this->synGroupRepository = $synGroupRepository;
-        $this->actionsHelper = $actionsHelper;
+        $this->pageBuilder = $pageBuilder;
         parent::__construct($context);
     }
 
@@ -61,11 +61,11 @@ class Edit extends \Magento\Backend\App\Action
     {
         // 1. Get ID and create model
         $groupId = $this->getRequest()->getParam('group_id');
-        /** @var \Magento\Search\Model\SynonymGroup $synGroupModel */
-        $synGroupModel = $this->synGroupRepository->get($groupId);
+        /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synGroup */
+        $synGroup = $this->synGroupRepository->get($groupId);
 
         // 2. Initial checking
-        if ($groupId && (!$synGroupModel->getId())) {
+        if ($groupId && (!$synGroup->getGroupId())) {
                 $this->messageManager->addError(__('This synonyms group no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
@@ -75,24 +75,27 @@ class Edit extends \Magento\Backend\App\Action
         // 3. Set entered data if was error when we do save
         $data = $this->_session->getFormData(true);
         if (!empty($data)) {
-            $synGroupModel->setData($data);
+            $synGroup->setGroupId($data['group_id']);
+            $synGroup->setStoreId($data['store_id']);
+            $synGroup->setWebsiteId($data['website_id']);
+            $synGroup->setSynonymGroup($data['synonyms']);
         }
 
         // 4. Register model to use later in save
         $this->registry->register(
             \Magento\Search\Controller\RegistryConstants::SEARCH_SYNONYMS,
-            $synGroupModel
+            $synGroup
         );
 
         // 5. Build edit synonyms group form
-        $resultPage = $this->actionsHelper->initAction();
+        $resultPage = $this->pageBuilder->build();
         $resultPage->addBreadcrumb(
             $groupId ? __('Edit Synonym Group') : __('New Synonym Group'),
             $groupId ? __('Edit Synonym Group') : __('New Synonym Group')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Synonym Group'));
         $resultPage->getConfig()->getTitle()->prepend(
-            $synGroupModel->getId() ? $synGroupModel->getSynonymGroup() : __('New Synonym Group')
+            $synGroup->getGroupId() ? $synGroup->getSynonymGroup() : __('New Synonym Group')
         );
         return $resultPage;
     }

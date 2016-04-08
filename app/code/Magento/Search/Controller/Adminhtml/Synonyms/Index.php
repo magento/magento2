@@ -15,21 +15,21 @@ class Index extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
-     * @var \Magento\Search\Helper\Actions $actionsHelper
+     * @var \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
      */
-    private $actionsHelper;
+    private $pageBuilder;
 
     /**
      * constructor.
      *
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Search\Helper\Actions $actionsHelper
+     * @param \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Search\Helper\Actions $actionsHelper
+        \Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder $pageBuilder
     ) {
-        $this->actionsHelper = $actionsHelper;
+        $this->pageBuilder = $pageBuilder;
         parent::__construct($context);
     }
 
@@ -40,7 +40,7 @@ class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $resultPage = $this->actionsHelper->initAction();
+        $resultPage = $this->pageBuilder->build();
         $resultPage->getConfig()->getTitle()->prepend(__('Search Synonyms'));
         return $resultPage;
     }
