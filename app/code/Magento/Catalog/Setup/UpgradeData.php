@@ -257,6 +257,12 @@ class UpgradeData implements UpgradeDataInterface
                 'frontend_label',
                 'Small'
             );
+            $categorySetup->updateAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                'image',
+                'frontend_input_renderer',
+                null
+            );
 
             //Design tab
             $categorySetup->updateAttribute(
