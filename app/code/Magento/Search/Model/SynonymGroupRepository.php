@@ -83,19 +83,19 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     }
 
     /**
-     * Return a particular synonym group model based on passed in synonym group id
+     * Return a particular synonym group interface instance based on passed in synonym group id
      *
-     * @param int $synGroupId
-     * @return SynonymGroup
+     * @param int $synonymGroupId
+     * @return \Magento\Search\Api\Data\SynonymGroupInterface
      */
-    public function get($synGroupId)
+    public function get($synonymGroupId)
     {
-        /** @var SynonymGroup $synonymGroupModel */
-        $synonymGroupModel = $this->synonymGroupFactory->create();
-        if ($synGroupId !== null) {
-            $synonymGroupModel->load($synGroupId);
+        /** @var SynonymGroup $synonymGroup */
+        $synonymGroup = $this->synonymGroupFactory->create();
+        if ($synonymGroupId !== null) {
+            $synonymGroup->load($synonymGroupId);
         }
-        return $synonymGroupModel;
+        return $synonymGroup;
     }
 
     /**

@@ -3,13 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Helper;
+namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 /**
- * A helper class for Aminhtml action controllers
+ * Result page builder class
  *
  */
-class Actions
+class ResultPageBuilder
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -52,11 +52,11 @@ class Actions
     }
 
     /**
-     * Init layout, menu and breadcrumb
+     * Build the initial page layout, menu and breadcrumb trail
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function initAction()
+    public function build()
     {
         $this->checkSearchEngineSupport();
         /** @var \Magento\Backend\Model\View\Result\Page  $resultPage **/

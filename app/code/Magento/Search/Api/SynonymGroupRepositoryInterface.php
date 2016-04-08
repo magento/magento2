@@ -28,10 +28,10 @@ interface SynonymGroupRepositoryInterface
     public function delete(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup);
 
     /**
-     * Return a paritcular synonym group model based on passed in synonym group id
+     * Return a paritcular synonym group interface instance based on passed in synonym group id
      *
-     * @param int $synGroupId
-     * @return \Magento\Search\Model\SynonymGroup
+     * @param int $synonymGroupId
+     * @return \Magento\Search\Api\Data\SynonymGroupInterface
      */
-    public function get($synGroupId);
+    public function get($synonymGroupId);
 }
