@@ -50,21 +50,29 @@ class StartUpdater extends AbstractActionController
     private $moduleList;
 
     /**
+     * @var \Magento\Framework\App\Cache\Manager
+     */
+    private $cacheManager;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\Navigation $navigation
      * @param \Magento\Setup\Model\Updater $updater
      * @param \Magento\Framework\Module\FullModuleList $moduleList
+     * @param \Magento\Framework\App\Cache\Manager $cacheManager
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\Navigation $navigation,
         \Magento\Setup\Model\Updater $updater,
-        \Magento\Framework\Module\FullModuleList $moduleList
+        \Magento\Framework\Module\FullModuleList $moduleList,
+        \Magento\Framework\App\Cache\Manager $cacheManager
     ) {
         $this->filesystem = $filesystem;
         $this->navigation = $navigation;
         $this->updater = $updater;
         $this->moduleList = $moduleList;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -94,12 +102,12 @@ class StartUpdater extends AbstractActionController
         ) {
             $errorMessage .= $this->validatePayload($postPayload);
             if (empty($errorMessage)) {
-                $this->createUpdaterTasks($postPayload, $errorMessage);
+                $errorMessage = $this->createUpdaterTasks($postPayload);
             }
         } else {
             $errorMessage .= 'Invalid request';
         }
-        $success = empty($errorMessage) ? true : false;
+        $success = empty($errorMessage);
         return new JsonModel(['success' => $success, 'message' => $errorMessage]);
     }
 
@@ -107,11 +115,11 @@ class StartUpdater extends AbstractActionController
      * Create Update tasks
      *
      * @param array $postPayload
-     * @param string $errorMessage
-     * @return void
+     * @return string
      */
-    private function createUpdaterTasks(array $postPayload, &$errorMessage)
+    private function createUpdaterTasks(array $postPayload)
     {
+        $errorMessage = '';
         $packages = $postPayload[self::KEY_POST_PACKAGES];
         $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
         $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
@@ -126,16 +134,11 @@ class StartUpdater extends AbstractActionController
             ['enable' => true]
         );
 
-        if ($cronTaskType == \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE
-            || $jobType == 'enable'
-            || $jobType == 'disable'
-        ) {
-            $errorMessage .= $this->updater->createUpdaterTask(
-                [],
-                \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE,
-                []
-            );
-        }
+        $errorMessage .= $this->updater->createUpdaterTask(
+            [],
+            \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE,
+            []
+        );
 
         $errorMessage .= $this->updater->createUpdaterTask(
             $packages,
@@ -157,12 +160,23 @@ class StartUpdater extends AbstractActionController
                 \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
                 ['enable' => false]
             );
-            $errorMessage .= $this->updater->createUpdaterTask(
+        }
+
+        $cacheStatus = $this->cacheManager-getStatus();
+        $enabledCaches = [];
+        foreach ($cacheStatus as $cacheName => $value) {
+            if ($value) {
+                $enabledCaches[] = $cacheName;
+            }
+        }
+
+        $errorMessage .= $this->updater->createUpdaterTask(
                 [],
                 \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
-                []
+                [implode(' ', $enabledCaches)]
             );
-        }
+
+        return $errorMessage;
     }
 
     /**

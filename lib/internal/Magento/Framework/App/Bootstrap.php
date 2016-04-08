@@ -117,41 +117,13 @@ class Bootstrap
      */
     public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
     {
-        if (file_exists(BP . '/var/.regenerate')) {
-            self::cleanGeneratedFiles();
-            unlink(BP . '/var/.regenerate');
-        }
+        $generatedFiles = new GeneratedFiles();
+        $generatedFiles->requestRegeneration($initParams);
         self::populateAutoloader($rootDir, $initParams);
         if ($factory === null) {
             $factory = self::createObjectManagerFactory($rootDir, $initParams);
         }
         return new self($factory, $rootDir, $initParams);
-    }
-
-    /**
-     * Clean generated code and DI configuration
-     *
-     * @return void
-     */
-    private static function cleanGeneratedFiles()
-    {
-        $defaultPaths = DirectoryList::getDefaultConfig();
-        $generationPath = isset(
-            $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION][DirectoryList::PATH]
-        ) ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION][DirectoryList::PATH]
-            : BP . '/' . $defaultPaths[DirectoryList::GENERATION][DirectoryList::PATH];
-
-        $diPath = isset(
-            $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI][DirectoryList::PATH]
-        ) ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI][DirectoryList::PATH]
-            : BP . '/' . $defaultPaths[DirectoryList::DI][DirectoryList::PATH];
-
-        if (is_dir($generationPath)) {
-            \Magento\Framework\Filesystem\Io\File::rmdirRecursive($generationPath);
-        }
-        if (is_dir($diPath)) {
-            \Magento\Framework\Filesystem\Io\File::rmdirRecursive($diPath);
-        }
     }
 
     /**
