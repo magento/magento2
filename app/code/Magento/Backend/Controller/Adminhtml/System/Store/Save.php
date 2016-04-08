@@ -60,6 +60,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
 
                     case 'store':
                         $eventName = 'store_edit';
+                        /** @var \Magento\Store\Model\Store $storeModel */
                         $storeModel = $this->_objectManager->create('Magento\Store\Model\Store');
                         $postData['store']['name'] = $this->filterManager->removeTags($postData['store']['name']);
                         if ($postData['store']['store_id']) {
@@ -76,6 +77,11 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                             $storeModel->getGroupId()
                         );
                         $storeModel->setWebsiteId($groupModel->getWebsiteId());
+                        if (!$storeModel->isActive() && !$storeModel->isCanDisable()) {
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('The default store must have at least one enabled store view')
+                            );
+                        }
                         $storeModel->save();
 
                         $this->_objectManager->get('Magento\Store\Model\StoreManager')->reinitStores();
