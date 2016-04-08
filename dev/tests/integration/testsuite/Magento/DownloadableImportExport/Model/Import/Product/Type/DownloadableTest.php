@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
@@ -45,7 +45,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $productMetadata;
 
@@ -55,8 +55,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->model = $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Import\Product::class
         );
-        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
-        $metadataPool = $this->objectManager->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+        /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
     }
 

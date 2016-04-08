@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
@@ -36,7 +36,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $subjectReaderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->paymentDOMock = $this->getMock(PaymentDataObjectInterface::class);
         $this->orderMock = $this->getMock(OrderAdapterInterface::class);

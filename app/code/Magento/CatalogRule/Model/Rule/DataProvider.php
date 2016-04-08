@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Rule;
@@ -74,6 +74,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $rule = $this->collection->getNewEmptyItem();
             $rule->setData($data);
             $this->loadedData[$rule->getId()] = $rule->getData();
+            $this->dataPersistor->clear('catalog_rule');
         }
 
         return $this->loadedData;

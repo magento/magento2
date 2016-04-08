@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Test\Unit\Model;
@@ -57,7 +57,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->templateFilter = $this->getMockBuilder('\Magento\Newsletter\Model\Template\Filter')
             ->disableOriginalConstructor()

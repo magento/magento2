@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,6 +13,14 @@
                     <item name="class" xsi:type="string">Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier\GoogleOptimizer</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                 </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\GoogleOptimizer\Block\Adminhtml\Form\CmsPage" type="Magento\GoogleOptimizer\Block\Adminhtml\Form">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code-entity" xsi:type="string">Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page\EntityCmsPage</item>
+                <item name="form-name" xsi:type="string">cms_page_form</item>
             </argument>
         </arguments>
     </virtualType>

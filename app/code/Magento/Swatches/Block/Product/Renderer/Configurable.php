@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Product\Renderer;
@@ -404,7 +404,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     public function getMediaCallback()
     {
-        return $this->getBaseUrl() . self::MEDIA_CALLBACK_ACTION;
+        return $this->getUrl(self::MEDIA_CALLBACK_ACTION, ['_secure' => $this->getRequest()->isSecure()]);
     }
 
     /**

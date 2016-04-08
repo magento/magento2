@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
@@ -86,8 +86,6 @@ class Category extends AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
-     * @param EntityManager $entityManager
-     * @param Category\AggregateCount $aggregateCount
      * @param array $data
      */
     public function __construct(
@@ -97,8 +95,6 @@ class Category extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        EntityManager $entityManager,
-        Category\AggregateCount $aggregateCount,
         $data = []
     ) {
         parent::__construct(
@@ -110,9 +106,7 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-        $this->entityManager = $entityManager;
         $this->connectionName  = 'catalog';
-        $this->aggregateCount = $aggregateCount;
     }
 
     /**
@@ -191,7 +185,7 @@ class Category extends AbstractResource
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
         parent::_beforeDelete($object);
-        $this->aggregateCount->processDelete($object);
+        $this->getAggregateCount()->processDelete($object);
         $this->deleteChildren($object);
     }
 
@@ -990,96 +984,19 @@ class Category extends AbstractResource
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Framework\DataObject $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
      */
     public function load($object, $entityId, $attributes = [])
     {
-        \Magento\Framework\Profiler::start('EAV:load_entity');
-        /**
-         * Load object base row data
-         */
-        $this->entityManager->load(CategoryInterface::class, $object, $entityId);
-
-        if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
+        $this->_attributes = [];
+        $this->loadAttributesMetadata($attributes);
+        $object = $this->getEntityManager()->load($object, $entityId, CategoryInterface::class, []);
+        if (!$this->getEntityManager()->has($object, \Magento\Catalog\Api\Data\CategoryInterface::class, [])) {
             $object->isObjectNew(true);
         }
-
-        $this->loadAttributesMetadata($attributes);
-
-        $this->_loadModelAttributes($object);
-
-        $object->setOrigData();
-
-        $this->_afterLoad($object);
-
-        \Magento\Framework\Profiler::stop('EAV:load_entity');
-        return $this;
-    }
-
-    /**
-     * Save object collected data
-     *
-     * @param   array $saveData array('newObject', 'entityRow', 'insert', 'update', 'delete')
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function _processSaveData($saveData)
-    {
-        extract($saveData, EXTR_SKIP);
-        /**
-         * Import variables into the current symbol table from save data array
-         *
-         * @see \Magento\Eav\Model\Entity\AbstractEntity::_collectSaveData()
-         *
-         * @var array $entityRow
-         * @var \Magento\Framework\Model\AbstractModel $newObject
-         * @var array $insert
-         * @var array $update
-         * @var array $delete
-         */
-
-        /**
-         * Process base row
-         */
-        $this->entityManager->save(CategoryInterface::class, $newObject);
-
-        /**
-         * insert attribute values
-         */
-        if (!empty($insert)) {
-            foreach ($insert as $attributeId => $value) {
-                $attribute = $this->getAttribute($attributeId);
-                $this->_insertAttribute($newObject, $attribute, $value);
-            }
-        }
-
-        /**
-         * update attribute values
-         */
-        if (!empty($update)) {
-            foreach ($update as $attributeId => $v) {
-                $attribute = $this->getAttribute($attributeId);
-                $this->_updateAttribute($newObject, $attribute, $v['value_id'], $v['value']);
-            }
-        }
-
-        /**
-         * delete empty attribute values
-         */
-        if (!empty($delete)) {
-            foreach ($delete as $table => $values) {
-                $this->_deleteAttributes($newObject, $table, $values);
-            }
-        }
-
-        $this->_processAttributeValues();
-
-        $newObject->isObjectNew(false);
-
         return $this;
     }
 
@@ -1088,33 +1005,48 @@ class Category extends AbstractResource
      */
     public function delete($object)
     {
-        try {
-            $this->transactionManager->start($this->getConnection());
-            if (is_numeric($object)) {
-            } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
-                $object->beforeDelete();
-            }
-            $this->_beforeDelete($object);
-            $this->entityManager->delete(\Magento\Catalog\Api\Data\CategoryInterface::class, $object);
-
-            $this->_afterDelete($object);
-
-            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
-                $object->isDeleted(true);
-                $object->afterDelete();
-            }
-            $this->transactionManager->commit();
-            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
-                $object->afterDeleteCommit();
-            }
-        } catch (\Exception $e) {
-            $this->transactionManager->rollBack();
-            throw $e;
-        }
+        $this->getEntityManager()->delete($object, CategoryInterface::class, []);
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
             ['product' => $object]
         );
         return $this;
+    }
+
+    /**
+     * Save entity's attributes into the object's resource
+     *
+     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getEntityManager()->save($object, CategoryInterface::class, []);
+        return $this;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\EntityManager');
+        }
+        return $this->entityManager;
+    }
+
+    /**
+     * @return Category\AggregateCount
+     */
+    private function getAggregateCount()
+    {
+        if (null === $this->aggregateCount) {
+            $this->aggregateCount = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Category\AggregateCount');
+        }
+        return $this->aggregateCount;
     }
 }

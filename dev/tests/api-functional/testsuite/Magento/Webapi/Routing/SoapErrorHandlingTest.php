@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -110,8 +110,8 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         } catch (\SoapFault $e) {
             $this->checkSoapFault(
                 $e,
-                'SOAP-ERROR: Parsing WSDL: Couldn\'t bind to service',
-                'WSDL'
+                'Consumer is not authorized to access %resources',
+                'env:Sender'
             );
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -900,12 +900,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
      */
     public function testProductDuplicateCategories()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
+
         $csvFixture = 'products_duplicate_category.csv';
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $csvFixture;
@@ -935,7 +937,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\Catalog\Model\Category::class
         );
 
-        $category->setStoreId(1);
         $category->load(444);
 
         $this->assertTrue($category !== null);
@@ -950,11 +951,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
         );
         $errorCount = count($errorProcessor->getAllErrors());
+        $this->assertTrue($errorCount === 1 , 'Error expected');
 
         $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
         $this->assertContains('URL key for specified store already exists' , $errorMessage);
         $this->assertContains('Default Category/Category 2' , $errorMessage);
-        $this->assertTrue($errorCount === 1 , 'Error expected');
 
         $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);

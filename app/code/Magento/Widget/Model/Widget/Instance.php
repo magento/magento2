@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model\Widget;
@@ -244,7 +244,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
         $parameters = $this->getData('widget_parameters');
         if (is_array($parameters)) {
-            if ((bool)$parameters['show_pager'] && !array_key_exists('page_var_name', $parameters)) {
+            if (array_key_exists('show_pager', $parameters) && !array_key_exists('page_var_name', $parameters)) {
                 $parameters['page_var_name'] = 'p' . $this->mathRandom->getRandomString(
                     5,
                     \Magento\Framework\Math\Random::CHARS_LOWERS

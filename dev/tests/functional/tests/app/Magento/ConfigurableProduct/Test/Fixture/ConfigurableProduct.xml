@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -71,7 +71,7 @@
         <field name="updated_at" is_required="1" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
-        <field name="visibility" is_required="0" group="autosettings" />
+        <field name="visibility" is_required="0" group="product-details" />
         <field name="weight" is_required="0" group="product-details" />
         <field name="product_has_weight" group="product-details" />
         <field name="id" />

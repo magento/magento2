@@ -144,10 +144,6 @@ location /media/import/ {
     deny all;
 }
 
-location ~ cron\.php {
-    deny all;
-}
-
 location ~ (index|get|static|report|404|503)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
@@ -162,4 +158,26 @@ location ~ (index|get|static|report|404|503)\.php$ {
     fastcgi_index  index.php;
     fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
     include        fastcgi_params;
+}
+
+gzip on;
+gzip_disable "msie6";
+
+gzip_comp_level 6;
+gzip_min_length 1100;
+gzip_proxied any;
+gzip_types
+    text/plain
+    text/css
+    text/js
+    text/xml
+    text/javascript
+    application/javascript
+    application/x-javascript
+    application/json
+    application/xml
+    application/xml+rss;
+
+location ~ \.php$ {
+    deny all;
 }

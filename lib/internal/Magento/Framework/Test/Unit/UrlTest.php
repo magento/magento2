@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,6 +54,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
+    /**
+     * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlModifier;
+
     protected function setUp()
     {
         $this->routeParamsResolverMock = $this->getMock(
@@ -86,6 +91,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->sidResolverMock = $this->getMock('Magento\Framework\Session\SidResolverInterface');
         $this->sessionMock = $this->getMock('Magento\Framework\Session\Generic', [], [], '', false);
         $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+
+        $this->urlModifier = $this->getMock('Magento\Framework\Url\ModifierInterface');
+        $this->urlModifier->expects($this->any())
+            ->method('execute')
+            ->willReturnArgument(0);
     }
 
     /**
@@ -126,7 +136,15 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $arguments = array_merge($arguments, ['scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE]);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        return $objectManager->getObject('Magento\Framework\Url', $arguments);
+        $model = $objectManager->getObject('Magento\Framework\Url', $arguments);
+
+        $modelProperty = (new \ReflectionClass(get_class($model)))
+            ->getProperty('urlModifier');
+
+        $modelProperty->setAccessible(true);
+        $modelProperty->setValue($model, $this->urlModifier);
+
+        return $model;
     }
 
     /**

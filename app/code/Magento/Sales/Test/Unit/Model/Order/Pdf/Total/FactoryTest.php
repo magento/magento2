@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Total;
@@ -17,7 +17,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_factory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_factory = new \Magento\Sales\Model\Order\Pdf\Total\Factory($this->_objectManager);

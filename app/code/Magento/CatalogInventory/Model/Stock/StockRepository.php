@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
@@ -59,22 +59,19 @@ class StockRepository implements StockRepositoryInterface
      * @param StockCollectionInterfaceFactory $collectionFactory
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param MapperFactory $mapperFactory
-     * @param StockRegistryStorage $stockRegistryStorage
      */
     public function __construct(
         StockResource $resource,
         StockFactory $stockFactory,
         StockCollectionInterfaceFactory $collectionFactory,
         QueryBuilderFactory $queryBuilderFactory,
-        MapperFactory $mapperFactory,
-        StockRegistryStorage $stockRegistryStorage
+        MapperFactory $mapperFactory
     ) {
         $this->resource = $resource;
         $this->stockFactory = $stockFactory;
         $this->stockCollectionFactory = $collectionFactory;
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->mapperFactory = $mapperFactory;
-        $this->stockRegistryStorage = $stockRegistryStorage;
     }
 
     /**
@@ -130,7 +127,7 @@ class StockRepository implements StockRepositoryInterface
     {
         try {
             $this->resource->delete($stock);
-            $this->stockRegistryStorage->removeStock();
+            $this->getStockRegistryStorage()->removeStock();
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock with id "%1"', $stock->getStockId()),
@@ -157,5 +154,17 @@ class StockRepository implements StockRepositoryInterface
             );
         }
         return true;
+    }
+
+    /**
+     * @return StockRegistryStorage
+     */
+    private function getStockRegistryStorage()
+    {
+        if (null === $this->stockRegistryStorage) {
+            $this->stockRegistryStorage = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Model\StockRegistryStorage');
+        }
+        return $this->stockRegistryStorage;
     }
 }

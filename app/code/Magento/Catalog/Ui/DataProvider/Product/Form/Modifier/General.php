@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -140,10 +140,16 @@ class General extends AbstractModifier
      */
     protected function prepareFirstPanel(array $meta)
     {
-        $generalPanelName = $this->getGeneralPanelName($meta);
-
-        $meta[$generalPanelName]['arguments']['data']['config']['label'] = '';
-        $meta[$generalPanelName]['arguments']['data']['config']['collapsible'] = false;
+        if ($generalPanelCode = $this->getFirstPanelCode($meta)) {
+            $meta[$generalPanelCode] = $this->arrayManager->merge(
+                'arguments/data/config',
+                $meta[$generalPanelCode],
+                [
+                    'label' => '',
+                    'collapsible' => false,
+                ]
+            );
+        }
 
         return $meta;
     }
@@ -157,24 +163,18 @@ class General extends AbstractModifier
     protected function customizeStatusField(array $meta)
     {
         $switcherConfig = [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'dataType' => Form\Element\DataType\Number::NAME,
-                        'formElement' => Form\Element\Checkbox::NAME,
-                        'componentType' => Form\Field::NAME,
-                        'prefer' => 'toggle',
-                        'valueMap' => [
-                            'true' => '1',
-                            'false' => '2'
-                        ],
-                    ],
-                ],
+            'dataType' => Form\Element\DataType\Number::NAME,
+            'formElement' => Form\Element\Checkbox::NAME,
+            'componentType' => Form\Field::NAME,
+            'prefer' => 'toggle',
+            'valueMap' => [
+                'true' => '1',
+                'false' => '2'
             ],
         ];
 
-        $path = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_STATUS);
-        $meta = $this->arrayManager->merge($path, $meta, $switcherConfig);
+        $path = $this->arrayManager->findPath(ProductAttributeInterface::CODE_STATUS, $meta, null, 'children');
+        $meta = $this->arrayManager->merge($path . static::META_CONFIG_PATH, $meta, $switcherConfig);
 
         return $meta;
     }
@@ -187,74 +187,60 @@ class General extends AbstractModifier
      */
     protected function customizeWeightField(array $meta)
     {
-        if ($weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT)) {
+        $weightPath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_WEIGHT, $meta, null, 'children');
+
+        if ($weightPath) {
             if ($this->locator->getProduct()->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL) {
-                $weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT);
                 $meta = $this->arrayManager->merge(
-                    $weightPath,
+                    $weightPath . static::META_CONFIG_PATH,
                     $meta,
                     [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
-                                    'validation' => [
-                                        'validate-number' => true,
-                                    ],
-                                    'additionalClasses' => 'admin__field-small',
-                                    'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
-                                    'imports' => [
-                                        'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
-                                            . '.product_has_weight:value'
-                                    ]
-                                ],
-                            ],
+                        'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
+                        'validation' => [
+                            'validate-zero-or-greater' => true
                         ],
+                        'additionalClasses' => 'admin__field-small',
+                        'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
+                        'imports' => [
+                            'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
+                                . '.product_has_weight:value'
+                        ]
                     ]
                 );
 
-                $containerPath = $this->getElementArrayPath(
+                $containerPath = $this->arrayManager->findPath(
+                    static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_WEIGHT,
                     $meta,
-                    static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_WEIGHT
+                    null,
+                    'children'
                 );
-                $meta = $this->arrayManager->merge($containerPath, $meta, [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'component' => 'Magento_Ui/js/form/components/group',
-                            ],
-                        ],
-                    ],
+                $meta = $this->arrayManager->merge($containerPath . static::META_CONFIG_PATH, $meta, [
+                    'component' => 'Magento_Ui/js/form/components/group',
                 ]);
 
                 $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
                     . ProductAttributeInterface::CODE_HAS_WEIGHT;
                 $meta = $this->arrayManager->set(
-                    $hasWeightPath,
+                    $hasWeightPath . static::META_CONFIG_PATH,
                     $meta,
                     [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => 'boolean',
-                                    'formElement' => Form\Element\Select::NAME,
-                                    'componentType' => Form\Field::NAME,
-                                    'dataScope' => 'product_has_weight',
-                                    'label' => '',
-                                    'options' => [
-                                        [
-                                            'label' => __('This item has weight'),
-                                            'value' => 1
-                                        ],
-                                        [
-                                            'label' => __('This item has no weight'),
-                                            'value' => 0
-                                        ],
-                                    ],
-                                    'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
-                                ],
+
+                        'dataType' => 'boolean',
+                        'formElement' => Form\Element\Select::NAME,
+                        'componentType' => Form\Field::NAME,
+                        'dataScope' => 'product_has_weight',
+                        'label' => '',
+                        'options' => [
+                            [
+                                'label' => __('This item has weight'),
+                                'value' => 1
                             ],
-                        ]
+                            [
+                                'label' => __('This item has no weight'),
+                                'value' => 0
+                            ],
+                        ],
+                        'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
                     ]
                 );
             }
@@ -274,8 +260,8 @@ class General extends AbstractModifier
         $fromField = 'news_from_date';
         $toField = 'news_to_date';
 
-        $fromFieldPath = $this->getElementArrayPath($meta, $fromField);
-        $toFieldPath = $this->getElementArrayPath($meta, $toField);
+        $fromFieldPath = $this->arrayManager->findPath($fromField, $meta, null, 'children');
+        $toFieldPath = $this->arrayManager->findPath($toField, $meta, null, 'children');
 
         if ($fromFieldPath && $toFieldPath) {
             $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
@@ -317,7 +303,7 @@ class General extends AbstractModifier
                 $this->arrayManager->get($toFieldPath, $meta)
             );
 
-            $meta =  $this->arrayManager->remove($toContainerPath, $meta);
+            $meta = $this->arrayManager->remove($toContainerPath, $meta);
         }
 
         return $meta;
@@ -337,39 +323,53 @@ class General extends AbstractModifier
             ProductAttributeInterface::CODE_SEO_FIELD_META_KEYWORD,
             ProductAttributeInterface::CODE_SEO_FIELD_META_DESCRIPTION,
         ];
+        $textListeners = [
+            ProductAttributeInterface::CODE_SEO_FIELD_META_KEYWORD,
+            ProductAttributeInterface::CODE_SEO_FIELD_META_DESCRIPTION
+        ];
+
         foreach ($listeners as $listener) {
-            $listenerPath = $this->getElementArrayPath($meta, $listener);
+            $listenerPath = $this->arrayManager->findPath($listener, $meta, null, 'children');
             $importsConfig = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'component' => 'Magento_Catalog/js/components/import-handler',
-                            'imports' => [
-                                'handleChanges' => '${$.provider}:data.product.name',
-                            ],
-                            'autoImportIfEmpty' => true,
-                            'allowImport' => $this->locator->getProduct()->getId() ? false : true,
-                        ],
-                    ],
+                'mask' => $this->locator->getStore()->getConfig('catalog/fields_masks/' . $listener),
+                'component' => 'Magento_Catalog/js/components/import-handler',
+                'imports' => [
+                    'handleNameChanges' => '${$.provider}:data.product.name',
+                    'handleDescriptionChanges' => '${$.provider}:data.product.description',
+                    'handleSkuChanges' => '${$.provider}:data.product.sku',
+                    'handleColorChanges' => '${$.provider}:data.product.color',
+                    'handleCountryChanges' => '${$.provider}:data.product.country_of_manufacture',
+                    'handleGenderChanges' => '${$.provider}:data.product.gender',
+                    'handleMaterialChanges' => '${$.provider}:data.product.material',
+                    'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
+                    'handleSizeChanges' => '${$.provider}:data.product.size'
                 ],
             ];
 
-            $meta = $this->arrayManager->merge($listenerPath, $meta, $importsConfig);
+            if (!in_array($listener, $textListeners)) {
+                $importsConfig['elementTmpl'] = 'ui/form/element/input';
+            }
+
+            $meta = $this->arrayManager->merge($listenerPath . static::META_CONFIG_PATH, $meta, $importsConfig);
         }
 
-        $namePath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_NAME);
-
-        return $this->arrayManager->merge(
-            $namePath,
+        $skuPath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_SKU, $meta, null, 'children');
+        $meta = $this->arrayManager->merge(
+            $skuPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'valueUpdate' => 'keyup'
-                        ],
-                    ],
-                ],
+                'autoImportIfEmpty' => true,
+                'allowImport' => $this->locator->getProduct()->getId() ? false : true,
+            ]
+        );
+
+        $namePath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_NAME, $meta, null, 'children');
+
+        return $this->arrayManager->merge(
+            $namePath . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'valueUpdate' => 'keyup'
             ]
         );
     }

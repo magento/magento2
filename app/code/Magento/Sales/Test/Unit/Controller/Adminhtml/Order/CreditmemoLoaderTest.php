@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
@@ -71,7 +71,7 @@ class CreditmemoLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockConfiguration;
 
-    public function setUp()
+    protected function setUp()
     {
         $data = [];
         $this->creditmemoRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\CreditmemoRepositoryInterface')

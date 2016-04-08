@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,8 @@ define([
 ], function (ko, $, _, Element) {
     'use strict';
 
-    var transformProp;
+    var transformProp,
+        isTouchDevice = typeof document.ontouchstart !== 'undefined';
 
     /**
      * Get element context
@@ -33,14 +34,14 @@ define([
             vi = vendors.length,
             property;
 
-        if (typeof style.transform != 'undefined') {
+        if (typeof style.transform !== 'undefined') {
             return 'transform';
         }
 
         while (vi--) {
             property = vendors[vi] + base;
 
-            if (typeof style[property] != 'undefined') {
+            if (typeof style[property] !== 'undefined') {
                 return property;
             }
         }
@@ -49,7 +50,8 @@ define([
     return Element.extend({
         defaults: {
             rootSelector: '${ $.recordsProvider }:div.admin__field',
-            tableSelector: '${ $.rootSelector } -> table.admin__dynamic-rows',
+            tableClass: 'table.admin__dynamic-rows',
+            tableSelector: '${ $.rootSelector } -> ${ $.tableClass }',
             separatorsClass: {
                 top: '_dragover-top',
                 bottom: '_dragover-bottom'
@@ -72,7 +74,6 @@ define([
             _.bindAll(
                 this,
                 'initTable',
-                'mousedownHandler',
                 'mousemoveHandler',
                 'mouseupHandler'
             );
@@ -112,6 +113,20 @@ define([
         },
 
         /**
+         * Init listens to start drag
+         *
+         * @param {Object} elem - DOM element
+         * @param {Object} data - element data
+         */
+        initListeners: function (elem, data) {
+            if (isTouchDevice) {
+                $(elem).on('touchstart', this.mousedownHandler.bind(this, data, elem));
+            } else {
+                $(elem).on('mousedown', this.mousedownHandler.bind(this, data, elem));
+            }
+        },
+
+        /**
          * Mouse down handler
          *
          * @param {Object} data - element data
@@ -129,14 +144,21 @@ define([
             drEl.originRow = originRecord;
             drEl.instance = recordNode = this.processingStyles(recordNode, elem);
             drEl.instanceCtx = this.getRecord(originRecord[0]);
-            drEl.eventMousedownY = event.pageY;
+            drEl.eventMousedownY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY;
             drEl.minYpos =
                 this.table.offset().top - originRecord.offset().top +
                 this.table.outerHeight() - this.table.find('tbody').outerHeight();
             drEl.maxYpos = drEl.minYpos + this.table.find('tbody').outerHeight() - originRecord.outerHeight();
             this.tableWrapper.append(recordNode);
-            this.body.bind('mousemove', this.mousemoveHandler);
-            this.body.bind('mouseup', this.mouseupHandler);
+
+            if (isTouchDevice) {
+                this.body.bind('touchmove', this.mousemoveHandler);
+                this.body.bind('touchend', this.mouseupHandler);
+            } else {
+                this.body.bind('mousemove', this.mousemoveHandler);
+                this.body.bind('mouseup', this.mouseupHandler);
+            }
+
         },
 
         /**
@@ -146,11 +168,15 @@ define([
          */
         mousemoveHandler: function (event) {
             var depEl = this.draggableElement,
-                positionY = event.pageY - depEl.eventMousedownY,
+                pageY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY,
+                positionY = pageY - depEl.eventMousedownY,
                 processingPositionY = positionY + 'px',
                 processingMaxYpos = depEl.maxYpos + 'px',
                 processingMinYpos = depEl.minYpos + 'px',
                 depElement = this.getDepElement(depEl.instance, positionY);
+
+            event.stopPropagation();
+            event.preventDefault();
 
             if (depElement) {
                 depEl.depElement ? depEl.depElement.elem.removeClass(depEl.depElement.className) : false;
@@ -187,8 +213,15 @@ define([
             }
 
             drEl.originRow.removeClass(this.draggableElementClass);
-            this.body.unbind('mousemove', this.mousemoveHandler);
-            this.body.unbind('mouseup', this.mouseupHandler);
+
+            if (isTouchDevice) {
+                this.body.unbind('touchmove', this.mousemoveHandler);
+                this.body.unbind('touchend', this.mouseupHandler);
+            } else {
+                this.body.unbind('mousemove', this.mousemoveHandler);
+                this.body.unbind('mouseup', this.mouseupHandler);
+            }
+
             drEl.instance.remove();
             this.draggableElement = {};
         },
@@ -218,7 +251,10 @@ define([
          */
 
         getDepElement: function (curInstance, position) {
-            var recordsCollection = this.table.find('tbody > tr'),
+            var tableSelector = this.tableClass + ' tr',
+                recordsCollection = this.table.find('tbody > tr').filter(function (index, elem) {
+                    return !$(elem).parents(tableSelector).length;
+                }),
                 curInstancePositionTop = $(curInstance).position().top,
                 curInstancePositionBottom = curInstancePositionTop + $(curInstance).height();
 

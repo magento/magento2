@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Rule\Metadata;
@@ -78,7 +78,7 @@ class ValueProvider
         $applyOptions = [
             ['label' => __('Percent of product price discount'), 'value' =>  Rule::BY_PERCENT_ACTION],
             ['label' => __('Fixed amount discount'), 'value' => Rule::BY_FIXED_ACTION],
-            ['label' => __('Fixed amount discount for whole cart'), 'value' => Rule::BY_PERCENT_ACTION],
+            ['label' => __('Fixed amount discount for whole cart'), 'value' => Rule::CART_FIXED_ACTION],
             ['label' => __('Buy X get Y free (discount amount is Y)'), 'value' => Rule::BUY_X_GET_Y_ACTION]
         ];
 

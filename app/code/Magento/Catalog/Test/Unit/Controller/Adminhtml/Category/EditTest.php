@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
@@ -175,7 +175,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getStore', 'getDefaultStoreView', 'getRootCategoryId']
+            ['getStore', 'getDefaultStoreView', 'getRootCategoryId', 'getCode']
         );
         $this->requestMock = $this->getMockForAbstractClass(
             'Magento\Framework\App\RequestInterface',
@@ -262,13 +262,13 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('__call')
             ->will($this->returnValue([]));
 
+        $this->storeManagerInterfaceMock->expects($this->any())
+            ->method('getStore')
+            ->with($storeId)
+            ->will($this->returnSelf());
+
         if (!$categoryId) {
-            if ($storeId) {
-                $this->storeManagerInterfaceMock->expects($this->once())
-                    ->method('getStore')
-                    ->with($storeId)
-                    ->will($this->returnSelf());
-            } else {
+            if (!$storeId) {
                 $this->storeManagerInterfaceMock->expects($this->once())
                     ->method('getDefaultStoreView')
                     ->will($this->returnSelf());

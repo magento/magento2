@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -96,13 +96,13 @@
                     <item name="prefer" xsi:type="string">toggle</item>
                     <item name="label" xsi:type="string" translate="true">Enable Category</item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
-                    <item name="default" xsi:type="number">1</item>
+                    <item name="default" xsi:type="string">1</item>
                 </item>
             </argument>
         </field>
@@ -115,13 +115,13 @@
                     <item name="source" xsi:type="string">category</item>
                     <item name="prefer" xsi:type="string">toggle</item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
-                    <item name="default" xsi:type="number">1</item>
+                    <item name="default" xsi:type="string">1</item>
                     <item name="label" xsi:type="string" translate="true">Include in Menu</item>
                 </item>
             </argument>
@@ -467,10 +467,10 @@
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="string">0</item>
                 </item>
             </argument>
         </field>
@@ -526,10 +526,10 @@
                         <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                     </item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="string">0</item>
                 </item>
             </argument>
         </field>
@@ -552,6 +552,7 @@
                     <item name="required" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">220</item>
                     <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="scopeLabel" xsi:type="string">[STORE VIEW]</item>
                     <item name="imports" xsi:type="array">
                         <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                     </item>
@@ -564,6 +565,7 @@
                         <item name="sortOrder" xsi:type="number">230</item>
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
+                        <item name="scopeLabel" xsi:type="string"/>
                         <item name="imports" xsi:type="array">
                             <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>
@@ -578,6 +580,7 @@
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="label" xsi:type="string" translate="true">To</item>
                         <item name="formElement" xsi:type="string">date</item>
+                        <item name="scopeLabel" xsi:type="string"/>
                         <item name="imports" xsi:type="array">
                             <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>

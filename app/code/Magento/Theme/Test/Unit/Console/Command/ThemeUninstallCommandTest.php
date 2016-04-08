@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);

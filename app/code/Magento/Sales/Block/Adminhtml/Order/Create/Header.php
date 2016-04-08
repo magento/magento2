@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
@@ -81,7 +81,7 @@ class Header extends AbstractCreate
             );
             return $out;
         } elseif (!$customerId && $storeId) {
-            $out .= __('Create New Order for New Customer in %1', $this->getStore()->getName());
+            $out .= __('Create New Order in %1', $this->getStore()->getName());
             return $out;
         } elseif ($customerId && !$storeId) {
             $out .= __('Create New Order for %1', $this->_getCustomerName($customerId));

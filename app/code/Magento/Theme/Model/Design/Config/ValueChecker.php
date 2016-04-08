@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Config;
@@ -95,6 +95,9 @@ class ValueChecker
     protected function isEqualArrays(array $value, array $defaultValue)
     {
         $result = true;
+        if (count($value) !== count($defaultValue)) {
+            return false;
+        }
         foreach ($value as $key => $elem) {
             if (is_array($elem)) {
                 if (isset($defaultValue[$key])) {

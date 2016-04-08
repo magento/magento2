@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\ResourceModel\Db;
 
-use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\EntityMetadata;
 
 class DeleteEntityRow
 {
