@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Routing;
@@ -25,7 +25,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->_assertSoapException(
                 $serviceInfo,
                 $requestData,
-                'SOAP-ERROR: Parsing WSDL: Couldn\'t bind to service'
+                'Consumer is not authorized to access %resources'
             );
         } elseif (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
             $this->_assertRestUnauthorizedException($serviceInfo, $requestData);
@@ -111,7 +111,7 @@ abstract class BaseService extends \Magento\TestFramework\TestCase\WebapiAbstrac
             }
 
             if ($expectedMessage) {
-                $this->assertEquals($expectedMessage, $e->getMessage());
+                $this->assertContains($expectedMessage, $e->getMessage());
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -27,11 +27,15 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_catalogProductRelation;
 
     /**
+     * Link constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param Relation $catalogProductRelation
      * @param string|null $connectionName
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        Relation $catalogProductRelation,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);

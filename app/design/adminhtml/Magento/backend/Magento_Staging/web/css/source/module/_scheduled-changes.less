@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -226,7 +226,7 @@
 .limited-text {
     display: inline-block;
     line-height: 1.4em;
-    max-height: 2.4em; // Exactly 3 lines
+    max-height: 4.4em; // Exactly 3 lines
     overflow: hidden;
     position: relative;
     vertical-align: top;
@@ -254,7 +254,7 @@
         -webkit-line-clamp: 3;
         display: -webkit-box;
         height: auto;
-        max-height: 3.6em; // Is needed to get it work
+        max-height: 4.4em; // Is needed to get it work
 
         &:after {
             display: none;
@@ -274,13 +274,34 @@
 .fieldset-schedule {
     border-bottom: 1px solid @collapsible__border-color;
 
+    .admin__fieldset {
+        padding: 0;
+        
+        > :last-child {
+            margin-bottom: @indent__l;
+        }
+        
+        > .fieldset-wrapper {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
     .fieldset-wrapper-title {
+        border-bottom: 0;
         margin: @indent__base 0 @indent__s;
+        line-height: 1.2;
+        padding: 0;
 
         strong {
             font-size: 2rem;
             font-weight: @font-weight__regular;
         }
+    }
+
+    .hasDatepicker.admin__control-text {
+        width: 19rem;
     }
 }
 
@@ -293,6 +314,7 @@
     .schedule-summary-name,
     .schedule-summary-date {
         display: table-cell;
+        padding-right: .5rem;
     }
 
     .schedule-summary-name {

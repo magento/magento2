@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,7 +52,8 @@ define([
             },
             imports: {
                 toolbarSection: '${ $.toolbarContainer }:toolbarSection',
-                prefix: '${ $.toolbarContainer }:rootSelector'
+                prefix: '${ $.toolbarContainer }:rootSelector',
+                messagesClass: '${ $.externalFormName }:messagesClass'
             },
             settings: {
                 ajax: {
@@ -121,9 +122,10 @@ define([
         },
 
         /**
-         * Remove actions tollbar.
+         * Remove actions toolbar.
          */
         removeActions: function () {
+            $(this.formHeader).siblings('.' + this.messagesClass).remove();
             $(this.formHeader).remove();
             this.formHeader = $();
         },

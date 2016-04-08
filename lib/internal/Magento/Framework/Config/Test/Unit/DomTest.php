@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Test\Unit;
@@ -12,7 +12,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
      */
     protected $validationStateMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->validationStateMock = $this->getMock(
             '\Magento\Framework\Config\ValidationStateInterface',

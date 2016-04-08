@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,15 +58,6 @@ class SystemPackage
         $result = [];
         $systemPackages = [];
         $systemPackages = $this->getInstalledSystemPackages($systemPackages);
-        if (empty($systemPackages)) {
-            // git cloned Magento does not include system package
-            throw new \RuntimeException(
-                'We\'re sorry, no components are available because you cloned the Magento 2 GitHub repository. ' .
-                'You must manually update components as discussed in the ' .
-                '<a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
-                'Installation Guide</a>.'
-            );
-        }
         foreach ($systemPackages as $systemPackage) {
             $versions = [];
             $systemPackageInfo = $this->infoCommand->run($systemPackage);
@@ -156,6 +147,7 @@ class SystemPackage
     /**
      * @param array $systemPackages
      * @return array
+     * @throws \RuntimeException
      */
     public function getInstalledSystemPackages($systemPackages)
     {
@@ -174,6 +166,14 @@ class SystemPackage
                     $systemPackages[] = $packageName;
                 }
             }
+        }
+        if (empty($systemPackages)) {
+            throw new \RuntimeException(
+                'We\'re sorry, no components are available because you cloned the Magento 2 GitHub repository. ' .
+                'You must manually update components as discussed in the ' .
+                '<a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
+                'Installation Guide</a>.'
+            );
         }
         return $systemPackages;
     }

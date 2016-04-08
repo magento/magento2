@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         self::$pathToSource = BP;
         self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
         if (!is_dir(self::$reportDir)) {
-            mkdir(self::$reportDir, 0770);
+            mkdir(self::$reportDir);
         }
     }
 
@@ -58,7 +58,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $directoriesToCheck = Files::init()->readLists($changedFilesBaseDir . '/_files/whitelist/common.txt');
 
         $changedFiles = [];
-        foreach (glob($changedFilesBaseDir . '/_files/changed_files*') as $listFile) {
+        foreach (glob($changedFilesBaseDir . '/../_files/changed_files*') as $listFile) {
             $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
         array_walk(
@@ -98,7 +98,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function testCodeStylePsr2()
     {
-        $reportFile = self::$reportDir . '/phpcs_psr2_report.xml';
+        $reportFile = self::$reportDir . '/phpcs_psr2_report.txt';
         $wrapper = new Wrapper();
         $codeSniffer = new CodeSniffer('PSR2', $reportFile, $wrapper);
         if (!$codeSniffer->canRun()) {
@@ -110,10 +110,14 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $result = $codeSniffer->run(self::getWhitelist());
 
+        $output = "";
+        if (file_exists($reportFile)) {
+            $output = file_get_contents($reportFile);
+        }
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
+            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $output
         );
     }
 
@@ -124,7 +128,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function testCodeStyle()
     {
-        $reportFile = self::$reportDir . '/phpcs_report.xml';
+        $reportFile = self::$reportDir . '/phpcs_report.txt';
         $wrapper = new Wrapper();
         $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/phpcs'), $reportFile, $wrapper);
         if (!$codeSniffer->canRun()) {
@@ -132,10 +136,16 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         }
         $codeSniffer->setExtensions(['php', 'phtml']);
         $result = $codeSniffer->run(self::getWhitelist(['php', 'phtml']));
+
+        $output = "";
+        if (file_exists($reportFile)) {
+            $output = file_get_contents($reportFile);
+        }
+
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
+            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $output
         );
     }
 
@@ -147,7 +157,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function testAnnotationStandard()
     {
-        $reportFile = self::$reportDir . '/phpcs_annotations_report.xml';
+        $reportFile = self::$reportDir . '/phpcs_annotations_report.txt';
         $wrapper = new Wrapper();
         $codeSniffer = new CodeSniffer(
             realpath(__DIR__ . '/../../../../framework/Magento/ruleset.xml'),
@@ -159,10 +169,14 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         }
 
         $result = $codeSniffer->run(self::getWhitelist(['php']));
+        $output = "";
+        if (file_exists($reportFile)) {
+            $output = file_get_contents($reportFile);
+        }
         $this->assertEquals(
             0,
             $result,
-            "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
+            "PHP Code Sniffer has found {$result} error(s): " . PHP_EOL . $output
         );
     }
 
@@ -173,17 +187,25 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function testCodeMess()
     {
-        $reportFile = self::$reportDir . '/phpmd_report.xml';
+        $reportFile = self::$reportDir . '/phpmd_report.txt';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
 
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
 
+
+        $result = $codeMessDetector->run(self::getWhitelist(['php']));
+
+        $output = "";
+        if (file_exists($reportFile)) {
+            $output = file_get_contents($reportFile);
+        }
+
         $this->assertEquals(
             Command::EXIT_SUCCESS,
-            $codeMessDetector->run(self::getWhitelist(['php'])),
-            "PHP Code Mess has found error(s): See detailed report in {$reportFile}"
+            $result,
+            "PHP Code Mess has found error(s):" . PHP_EOL . $output
         );
 
         // delete empty reports
@@ -213,9 +235,16 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $copyPasteDetector->setBlackList($blackList);
 
+        $result = $copyPasteDetector->run([BP]);
+
+        $output = "";
+        if (file_exists($reportFile)) {
+            $output = file_get_contents($reportFile);
+        }
+
         $this->assertTrue(
-            $copyPasteDetector->run([BP]),
-            "PHP Copy/Paste Detector has found error(s): See detailed report in {$reportFile}"
+            $result,
+            "PHP Copy/Paste Detector has found error(s):" . PHP_EOL . $output
         );
     }
 

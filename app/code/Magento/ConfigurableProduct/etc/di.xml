@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -65,9 +65,9 @@
     <type name="Magento\Catalog\Model\Product\Type">
         <plugin name="configurable_output" type="Magento\ConfigurableProduct\Model\Product\Type\Plugin" />
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
-            <argument name="relationActions" xsi:type="array">
+            <argument name="extensionActions" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
                     <item name="create" xsi:type="array">
                         <item name="create_configurable_options" xsi:type="string">Magento\ConfigurableProduct\Model\Product\SaveHandler</item>

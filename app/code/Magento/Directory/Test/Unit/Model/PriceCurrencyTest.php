@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class PriceCurrencyTest extends \PHPUnit_Framework_TestCase
      */
     protected $currencyFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManager')
             ->disableOriginalConstructor()

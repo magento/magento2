@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml\Integration;
@@ -10,6 +10,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Security\Model\SecurityCookie;
 
 /**
  * Integration Save controller
@@ -19,34 +20,22 @@ use Magento\Framework\Exception\State\UserLockedException;
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
-     * @var \Magento\Security\Helper\SecurityCookie
+     * @var SecurityCookie
      */
-    protected $securityCookieHelper;
+    private $securityCookie;
 
     /**
-     * Set security cookie helper
+     * Get security cookie
      *
-     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @return void
+     * @return SecurityCookie
      * @deprecated
      */
-    public function setSecurityCookieHelper(\Magento\Security\Helper\SecurityCookie $securityCookieHelper)
+    private function getSecurityCookie()
     {
-        $this->securityCookieHelper = $securityCookieHelper;
-    }
-
-    /**
-     * Get security cookie helper
-     *
-     * @return \Magento\Security\Helper\SecurityCookie
-     * @deprecated
-     */
-    public function getSecurityCookieHelper()
-    {
-        if (!($this->securityCookieHelper instanceof \Magento\Security\Helper\SecurityCookie)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Security\Helper\SecurityCookie');
+        if (!($this->securityCookie instanceof SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
         } else {
-            return $this->securityCookieHelper;
+            return $this->securityCookie;
         }
     }
 
@@ -74,7 +63,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->processData($integrationData);
         } catch (UserLockedException $e) {
             $this->_auth->logout();
-            $this->getSecurityCookieHelper()->setLogoutReasonCookie(
+            $this->getSecurityCookie()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('*');

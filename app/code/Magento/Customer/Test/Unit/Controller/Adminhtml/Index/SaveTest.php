@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Controller\Adminhtml\Index\Save;
+use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\Controller\Result\Redirect;
 
 /**
@@ -131,9 +133,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $addressDataFactoryMock;
 
     /**
-     * @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $emailNotification;
+    protected $emailNotificationMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -165,7 +167,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
             ->disableOriginalConstructor()
-            ->setMethods(['unsCustomerData', 'setCustomerData'])
+            ->setMethods(['unsCustomerFormData', 'setCustomerFormData'])
             ->getMock();
         $this->formFactoryMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\FormFactory')
             ->disableOriginalConstructor()
@@ -212,26 +214,15 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+        $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['sendNotificationEmailsIfRequired'])
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->context = $objectManager->getObject(
-            'Magento\Backend\App\Action\Context',
-            [
-                'request' => $this->requestMock,
-                'session' => $this->sessionMock,
-                'authorization' => $this->authorizationMock,
-                'messageManager' => $this->messageManagerMock,
-                'resultRedirectFactory' => $this->redirectFactoryMock,
-            ]
-        );
+
         $this->model = $objectManager->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Save',
             [
-                'context' => $this->context,
                 'resultForwardFactory' => $this->resultForwardFactoryMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
                 'formFactory' => $this->formFactoryMock,
@@ -244,9 +235,18 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'coreRegistry' => $this->registryMock,
                 'customerAccountManagement' => $this->managementMock,
                 'addressDataFactory' => $this->addressDataFactoryMock,
-                'emailNotification' => $this->emailNotification
+                'request' => $this->requestMock,
+                'session' => $this->sessionMock,
+                'authorization' => $this->authorizationMock,
+                'messageManager' => $this->messageManagerMock,
+                'resultRedirectFactory' => $this->redirectFactoryMock,
             ]
         );
+
+        $refClass = new \ReflectionClass(Save::class);
+        $property = $refClass->getProperty('emailNotification');
+        $property->setAccessible(true);
+        $property->setValue($this->model, $this->emailNotificationMock);
     }
 
     /**
@@ -470,9 +470,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($customerMock)
             ->willReturnSelf();
 
-        $this->emailNotification->expects($this->once())
-            ->method('sendNotificationEmailsIfRequired')
-            ->with($customerMock, $customerMock)
+        $customerEmail = 'customer@email.com';
+        $customerMock->expects($this->once())->method('getEmail')->willReturn($customerEmail);
+
+        $this->emailNotificationMock->expects($this->once())
+            ->method('credentialsChanged')
+            ->with($customerMock, $customerEmail)
             ->willReturnSelf();
 
         $this->authorizationMock->expects($this->once())
@@ -497,7 +500,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('unsubscribeCustomerById');
 
         $this->sessionMock->expects($this->once())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->once())
             ->method('register')
@@ -746,7 +749,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('subscribeCustomerById');
 
         $this->sessionMock->expects($this->once())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->once())
             ->method('register')
@@ -885,7 +888,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create');
 
         $this->sessionMock->expects($this->never())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->never())
             ->method('register');
@@ -898,7 +901,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with(new \Magento\Framework\Message\Error('Validator Exception'));
 
         $this->sessionMock->expects($this->once())
-            ->method('setCustomerData')
+            ->method('setCustomerFormData')
             ->with($postValue);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
@@ -1025,7 +1028,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create');
 
         $this->sessionMock->expects($this->never())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->never())
             ->method('register');
@@ -1038,7 +1041,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with(new \Magento\Framework\Message\Error('Localized Exception'));
 
         $this->sessionMock->expects($this->once())
-            ->method('setCustomerData')
+            ->method('setCustomerFormData')
             ->with($postValue);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
@@ -1166,7 +1169,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create');
 
         $this->sessionMock->expects($this->never())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->never())
             ->method('register');
@@ -1179,7 +1182,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($exception, __('Something went wrong while saving the customer.'));
 
         $this->sessionMock->expects($this->once())
-            ->method('setCustomerData')
+            ->method('setCustomerFormData')
             ->with($postValue);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */

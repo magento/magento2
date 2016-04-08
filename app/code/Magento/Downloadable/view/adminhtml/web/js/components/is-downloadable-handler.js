@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -10,8 +10,7 @@ define([
     return Element.extend({
         defaults: {
             listens: {
-                disabled: 'changeVisibility',
-                checked: 'changeVisibility'
+                disabled: 'changeVisibility'
             },
             modules: {
                 samplesFieldset: '${ $.samplesFieldset }',
@@ -23,7 +22,7 @@ define([
          * Change visibility for samplesFieldset & linksFieldset based on current statuses of checkbox.
          */
         changeVisibility: function () {
-            if (this.samplesFieldset && this.linksFieldset) {
+            if (this.samplesFieldset() && this.linksFieldset()) {
                 if (this.checked() && !this.disabled()) {
                     this.samplesFieldset().visible(true);
                     this.linksFieldset().visible(true);
@@ -32,6 +31,16 @@ define([
                     this.linksFieldset().visible(false);
                 }
             }
+        },
+
+        /**
+         * Handle checked state changes for checkbox / radio button.
+         *
+         * @param {Boolean} newChecked
+         */
+        onCheckedChanged: function (newChecked) {
+            this.changeVisibility();
+            this._super(newChecked);
         }
     });
 });

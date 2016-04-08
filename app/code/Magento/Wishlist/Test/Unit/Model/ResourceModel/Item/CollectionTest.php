@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
 
     /**
-     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @var Collection
      */
     protected $collection;
 
@@ -31,15 +35,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     /** @var  string */
     protected $sql = "SELECT `main_table`.* FROM `testMainTableName` AS `main_table`
- INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id=main_table.product_id
- AND product_name_table.store_id=1
- AND product_name_table.attribute_id=12
+ INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id = main_table.product_id
+ AND product_name_table.store_id = 1
+ AND product_name_table.attribute_id = 12
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
+
+    /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->getMock(
@@ -103,7 +112,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeId')
             ->will($this->returnValue(4));
 
-
         $catalogConfFactory
             ->expects($this->once())
             ->method('create')
@@ -130,7 +138,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($this->attrId));
 
-
         $catalogAttrFactory = $this->getMock(
             'Magento\Catalog\Model\Entity\AttributeFactory',
             ['create'],
@@ -138,6 +145,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $catalogAttrFactory
             ->expects($this->once())
             ->method('create')
@@ -176,10 +184,31 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager
             ]
         );
+
+        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $reflection = new \ReflectionClass(get_class($this->collection));
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->collection, $this->metadataPool);
     }
 
     public function testAddProductNameFilter()
     {
+        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityMetadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+
+        $this->metadataPool->expects($this->once())
+            ->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($entityMetadata);
+
         $collection = $this->collection->addProductNameFilter('TestProductName');
         $sql = $collection->getSelect()->__toString();
         $sql = trim(preg_replace('/\s+/', ' ', $sql));

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -184,7 +184,7 @@ define([
                     var type = $(element).data('priceType'),
                         amount = parseFloat($(element).data('priceAmount'));
 
-                    if (type && amount) {
+                    if (type && !_.isNaN(amount)) {
                         prices[type] = {
                             amount: amount
                         };

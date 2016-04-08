@@ -1,23 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
 use Magento\Downloadable\Api\Data\SampleInterface;
-use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Model\Sample\ContentValidator;
-use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Downloadable\Model\ResourceModel\Sample as ResourceModel;
-use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
 use Magento\Downloadable\Helper\File;
+use Magento\Downloadable\Model\Product\Type;
+use Magento\Downloadable\Model\ResourceModel\Sample as ResourceModel;
+use Magento\Downloadable\Model\Sample\ContentValidator;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class SampleRepository
@@ -28,7 +29,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @var ResourceModel
@@ -66,7 +67,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     protected $downloadableFile;
 
     /**
-     * @param MetadataPool $metadataPool
      * @param ProductRepositoryInterface $productRepository
      * @param Type $productType
      * @param ResourceModel $resourceModel
@@ -76,7 +76,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
      * @param File $downloadableFile
      */
     public function __construct(
-        MetadataPool $metadataPool,
         ProductRepositoryInterface $productRepository,
         Type $productType,
         ResourceModel $resourceModel,
@@ -85,7 +84,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         JsonHelper $jsonHelper,
         File $downloadableFile
     ) {
-        $this->metadataPool = $metadataPool;
         $this->productRepository = $productRepository;
         $this->productType = $productType;
         $this->resourceModel = $resourceModel;
@@ -180,7 +178,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         if (empty($title)) {
             throw new InputException(__('Sample title cannot be empty.'));
         }
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $sample->setProductId($product->getData($metadata->getLinkField()));
         $this->setFiles($sample);
         return $this->resourceModel->save($sample);
@@ -221,5 +219,17 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             throw new StateException(__('Cannot delete sample with id %1', $sample->getId()), $exception);
         }
         return true;
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }
