@@ -6,8 +6,6 @@
 
 namespace Magento\Security\Test\Unit\Model\ResourceModel\AdminSessionInfo;
 
-use Magento\Security\Model\ConfigInterface;
-
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection testing
  */
@@ -16,7 +14,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection */
     protected $collectionMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime */
+    /** @var \Magento\Framework\Stdlib\DateTime\DateTime */
     protected $dateTimeMock;
 
     /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb */
@@ -29,7 +27,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->dateTimeMock = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime',
+            \Magento\Framework\Stdlib\DateTime\DateTime::class,
             [],
             [],
             '',
@@ -136,14 +134,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $timestamp = time();
 
         $this->dateTimeMock->expects($this->once())
-            ->method('gmDate')
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with(
                 'updated_at',
-                ['gt' => $this->dateTimeMock->formatDate($timestamp - $sessionLifeTime)]
+                ['gt' => $this->collectionMock->getConnection()->formatDate($timestamp - $sessionLifeTime)]
             )
             ->willReturnSelf();
 
