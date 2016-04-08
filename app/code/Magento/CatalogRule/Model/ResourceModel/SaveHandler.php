@@ -6,9 +6,13 @@
 namespace Magento\CatalogRule\Model\ResourceModel;
 
 use Magento\CatalogRule\Model\ResourceModel\Rule;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
-class SaveHandler
+/**
+ * Class SaveHandler
+ */
+class SaveHandler implements AttributeInterface
 {
     /**
      * @var Rule
@@ -35,10 +39,11 @@ class SaveHandler
     /**
      * @param string $entityType
      * @param array $entityData
+     * @param array $arguments
      * @return array
      * @throws \Exception
      */
-    public function execute($entityType, $entityData)
+    public function execute($entityType, $entityData, $arguments = [])
     {
         $linkField = $this->metadataPool->getMetadata($entityType)->getLinkField();
         if (isset($entityData['website_ids'])) {

@@ -15,7 +15,7 @@
             <thead if="element.columnsHeader">
             <tr data-bind="foreach: {data: labels, as: 'label'}">
                 <th text="label.config.label"
-                    css="$parent.setClasses(label.config)">
+                    css="item.columnsHeaderClasses">
                 </th>
             </tr>
             </thead>
