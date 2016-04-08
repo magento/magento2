@@ -8,13 +8,13 @@ namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Model\Product\OptionFactory;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
  */
-
-class ReadHandler
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var OptionFactory
@@ -49,10 +49,11 @@ class ReadHandler
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $options = [];
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */

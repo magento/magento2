@@ -77,7 +77,7 @@ define([
 
         /** @inheritdoc */
         destroyInserted: function () {
-            if (this.isRendered) {
+            if (this.isRendered && this.externalListing()) {
                 this.externalListing().destroy();
             }
 

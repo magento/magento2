@@ -6,12 +6,12 @@
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Sitemap cms page collection model
@@ -149,7 +149,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if ($isId) {
-            $this->entityManager->load(PageInterface::class, $object, $value);
+            $this->entityManager->load($object, $value, PageInterface::class);
         }
         return $this;
     }
@@ -198,7 +198,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->entityManager->delete(PageInterface::class, $object);
+        $this->entityManager->delete($object, PageInterface::class);
         return $this;
     }
 }
