@@ -5,8 +5,34 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-class Index extends \Magento\Search\Controller\Adminhtml\Synonyms
+class Index extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
+
+    /**
+     * @var \Magento\Search\Helper\Actions $actionsHelper
+     */
+    private $actionsHelper;
+
+    /**
+     * constructor.
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Search\Helper\Actions $actionsHelper
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Search\Helper\Actions $actionsHelper
+    ) {
+        $this->actionsHelper = $actionsHelper;
+        parent::__construct($context);
+    }
+
     /**
      * Synonyms grid
      *
@@ -14,7 +40,7 @@ class Index extends \Magento\Search\Controller\Adminhtml\Synonyms
      */
     public function execute()
     {
-        $resultPage = $this->_initAction();
+        $resultPage = $this->actionsHelper->initAction();
         $resultPage->getConfig()->getTitle()->prepend(__('Search Synonyms'));
         return $resultPage;
     }

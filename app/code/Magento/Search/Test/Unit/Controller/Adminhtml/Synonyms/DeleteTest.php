@@ -33,9 +33,14 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Search\Api\Data\SynonymGroupInterface|\PHPUnit_Framework_MockObject_MockObject $synonymGroupMock
+     * @var \Magento\Search\Model\SynonymGroup|\PHPUnit_Framework_MockObject_MockObject $synonymGroupMock
      */
     protected $synonymGroupMock;
+
+    /**
+     * @var \Magento\Search\Api\Data\SynonymGroupRepositoryInterface $repository
+     */
+    protected $repository;
 
     protected function setUp()
     {
@@ -79,15 +84,15 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->synonymGroupMock = $this->getMockForAbstractClass(
-            'Magento\Search\Api\Data\SynonymGroupInterface',
+        $this->synonymGroupMock = $this->getMock(
+            'Magento\Search\Model\SynonymGroup',
+            [],
             [],
             '',
-            false,
-            true,
-            true,
-            ['load', 'delete', 'getTitle']
+            false
         );
+
+        $this->repository = $this->getMock('Magento\Search\Api\SynonymGroupRepositoryInterface', [], [], '', false);
 
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
@@ -100,7 +105,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             'Magento\Search\Controller\Adminhtml\Synonyms\Delete',
             [
                 'context' => $this->contextMock,
-                'synonymGroupInterface' => $this->synonymGroupMock
+                'synGroupRepository' => $this->repository
             ]
         );
     }
@@ -109,15 +114,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())->method('getParam')->with('group_id')->willReturn(10);
 
-        $repository = $this->getMock('Magento\Search\Api\SynonymGroupRepositoryInterface', [], [], '', false);
-        $repository->expects($this->once())->method('delete')->with($this->synonymGroupMock);
-
-        $this->synonymGroupMock->expects($this->once())->method('load')->with(10);
-
-        $this->objectManagerMock->expects($this->any())->method('create')
-            ->willReturnMap([
-                    ['Magento\Search\Api\SynonymGroupRepositoryInterface', [], $repository]
-            ]);
+        $this->repository->expects($this->once())->method('delete')->with($this->synonymGroupMock);
+        $this->repository->expects($this->once())->method('get')->with(10)->willReturn($this->synonymGroupMock);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')

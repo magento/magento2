@@ -8,8 +8,34 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 use Magento\Search\Model\Synonym\MergeConflictException;
 
-class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
+class Save extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
+
+    /**
+     * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     */
+    private $synGroupRepository;
+
+    /**
+     * MassDelete constructor.
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+    ) {
+        $this->synGroupRepository = $synGroupRepository;
+        parent::__construct($context);
+    }
+
     /**
      * Save action
      *
@@ -19,9 +45,9 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
+
         // check if data sent
         $data = $this->getRequest()->getPostValue();
-
         if ($data) {
             $synGroupId = $this->getRequest()->getParam('group_id');
 
@@ -30,9 +56,9 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             }
 
             // Create model and load any existing data
-            $this->synonymGroupModel->load($synGroupId);
+            $synGroupModel = $this->synGroupRepository->get($synGroupId);
 
-            if (!$this->synonymGroupModel->getId() && $synGroupId) {
+            if (!$synGroupModel->getId() && $synGroupId) {
                 $this->messageManager->addError(__('This synonym group no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
@@ -49,28 +75,26 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             $words = array_map('trim', $words);
             $data['synonyms'] = strtolower(implode(',', $words));
 
-            $this->synonymGroupModel->setData($data);
+            $synGroupModel->setData($data);
 
             // save the data
-            /** @var \Magento\Search\Model\SynonymGroupRepository $synGroupRepository */
-            $synGroupRepository = $this->_objectManager->create('Magento\Search\Model\SynonymGroupRepository');
             if (isset($data['mergeOnConflict']) && $data['mergeOnConflict'] === 'true') {
-                $synGroupRepository->save($this->synonymGroupModel);
+                $this->synGroupRepository->save($synGroupModel);
                 $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
             } else {
                 try {
-                    $synGroupRepository->save($this->synonymGroupModel, true);
+                    $this->synGroupRepository->save($synGroupModel, true);
                     $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
                 } catch (MergeConflictException $exception) {
                     $this->getMessageManager()->addErrorMessage($this->getErrorMessage($exception));
                     $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath('*/*/edit', ['group_id' => $this->synonymGroupModel->getId()]);
+                    return $resultRedirect->setPath('*/*/edit', ['group_id' => $synGroupModel->getId()]);
                 }
             }
 
             // check if 'Save and Continue'
             if ($this->getRequest()->getParam('back')) {
-                return $resultRedirect->setPath('*/*/edit', ['group_id' => $this->synonymGroupModel->getId()]);
+                return $resultRedirect->setPath('*/*/edit', ['group_id' => $synGroupModel->getId()]);
             }
         }
         return $resultRedirect->setPath('*/*/');

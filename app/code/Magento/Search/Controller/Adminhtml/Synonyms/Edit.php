@@ -6,8 +6,58 @@
  */
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-class Edit extends \Magento\Search\Controller\Adminhtml\Synonyms
+class Edit extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
+
+    /**
+     * @var \Magento\Backend\Model\Session $session
+     */
+    private $session;
+
+    /**
+     * @var \Magento\Framework\Registry $registry
+     */
+    private $registry;
+
+    /**
+     * @var \Magento\Search\Helper\Actions $actionsHelper
+     */
+    private $actionsHelper;
+
+    /**
+     * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     */
+    private $synGroupRepository;
+
+    /**
+     * Edit constructor.
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Backend\Model\Session $session
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Search\Helper\Actions $actionsHelper
+     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Backend\Model\Session $session,
+        \Magento\Framework\Registry $registry,
+        \Magento\Search\Helper\Actions $actionsHelper,
+        \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+    ) {
+        $this->session = $session;
+        $this->registry = $registry;
+        $this->synGroupRepository = $synGroupRepository;
+        $this->actionsHelper = $actionsHelper;
+        parent::__construct($context);
+    }
+
     /**
      * Edit Synonym Group
      *
@@ -18,39 +68,38 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Synonyms
     {
         // 1. Get ID and create model
         $groupId = $this->getRequest()->getParam('group_id');
-        $this->synonymGroupModel = $this->_objectManager->create('Magento\Search\Model\SynonymGroup');
+        /** @var \Magento\Search\Model\SynonymGroup $synGroupModel */
+        $synGroupModel = $this->synGroupRepository->get($groupId);
 
         // 2. Initial checking
-        if ($groupId) {
-            $this->synonymGroupModel->load($groupId);
-            if (!$this->synonymGroupModel->getId()) {
+        if ($groupId && (!$synGroupModel->getId())) {
                 $this->messageManager->addError(__('This synonyms group no longer exists.'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');
-            }
         }
+
         // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
+        $data = $this->session->getFormData(true);
         if (!empty($data)) {
-            $this->synonymGroupModel->setData($data);
+            $synGroupModel->setData($data);
         }
 
         // 4. Register model to use later in save
         $this->registry->register(
             \Magento\Search\Controller\RegistryConstants::SEARCH_SYNONYMS,
-            $this->synonymGroupModel
+            $synGroupModel
         );
 
         // 5. Build edit synonyms group form
-        $resultPage = $this->_initAction();
+        $resultPage = $this->actionsHelper->initAction();
         $resultPage->addBreadcrumb(
             $groupId ? __('Edit Synonym Group') : __('New Synonym Group'),
             $groupId ? __('Edit Synonym Group') : __('New Synonym Group')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Synonym Group'));
         $resultPage->getConfig()->getTitle()->prepend(
-            $this->synonymGroupModel->getId() ? $this->synonymGroupModel->getSynonymGroup() : __('New Synonym Group')
+            $synGroupModel->getId() ? $synGroupModel->getSynonymGroup() : __('New Synonym Group')
         );
         return $resultPage;
     }
