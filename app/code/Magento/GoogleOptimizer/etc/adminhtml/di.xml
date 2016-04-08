@@ -16,6 +16,14 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\GoogleOptimizer\Block\Adminhtml\Form\CmsPage" type="Magento\GoogleOptimizer\Block\Adminhtml\Form">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="code-entity" xsi:type="string">Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page\EntityCmsPage</item>
+                <item name="form-name" xsi:type="string">cms_page_form</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Catalog\Model\Category\DataProvider">
         <plugin name="google_optimizer_category_data_provider" type="Magento\GoogleOptimizer\Model\Plugin\Catalog\Category\DataProvider" />
     </type>
