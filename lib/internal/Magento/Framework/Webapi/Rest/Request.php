@@ -250,7 +250,7 @@ class Request extends \Magento\Framework\Webapi\Request
 
         if (isset($requestData[$camelCaseKey])) {
             $requestData[$camelCaseKey] = $value;
-        } else {
+        } else if (isset($requestData[$snakeCaseKey])) {
             $requestData[$snakeCaseKey] = $value;
         }
     }
