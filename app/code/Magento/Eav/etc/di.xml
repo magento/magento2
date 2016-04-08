@@ -63,7 +63,7 @@
             <argument name="reservedAttributeList" xsi:type="object">Magento\Catalog\Model\Product\ReservedAttributeList\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+    <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
                 <item name="eav" xsi:type="array">
@@ -83,11 +83,6 @@
                     <item name="eav" xsi:type="string">\Magento\Eav\Model\AttributeProvider</item>
                 </item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Eav\Model\ResourceModel\ReadHandler">
-        <arguments>
-            <argument name="contextHandler" xsi:type="object">Magento\Eav\Model\ResourceModel\ContextHandler</argument>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\AbstractEntity">
