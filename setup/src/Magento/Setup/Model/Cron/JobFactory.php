@@ -9,6 +9,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory class to create jobs
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JobFactory
