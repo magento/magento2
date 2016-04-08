@@ -162,7 +162,7 @@ class MarketplaceManager
             $packageNames = array_column($this->getComposerInformation()->getInstalledMagentoPackages(), 'name');
             $installPackages = [];
             foreach ($packagesJsonData['packages'] as $packageName => $package) {
-                if (isset($package) && is_array($package)) {
+                if (!empty($package) && isset($package) && is_array($package)) {
                     $package = $this->unsetDevVersions($package);
                     ksort($package);
                     $packageValues = array_values($package);
