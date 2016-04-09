@@ -57,6 +57,9 @@ define([
             couponType = uiRegistry
                 .get('sales_rule_form.sales_rule_form.rule_information.coupon_type')
                 .value();
+            /**
+             * \Magento\Rule\Model\AbstractModel::COUPON_TYPE_AUTO = 3;
+             */
             disableAuto = couponType === 3 || isUseAutoGenerationChecked;
             _.each(
                 document.querySelectorAll(selector),
