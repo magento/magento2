@@ -30,6 +30,7 @@ define([
             dataLength: 0,
             identificationProperty: 'id',
             'attribute_set_id': '',
+            attributesTmp: [],
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
@@ -47,17 +48,6 @@ define([
                 modalWithGrid: '${ $.modalWithGrid }',
                 gridWithProducts: '${ $.gridWithProducts}'
             }
-        },
-
-        /**
-         * Invokes initialize method of parent class,
-         * contains initialization logic
-         */
-        initialize: function () {
-            this._super()
-                .changeVisibility(this.isEmpty());
-
-            return this;
         },
 
         /**
@@ -117,6 +107,7 @@ define([
             tmpArray.splice(index, 1);
 
             if (!tmpArray.length) {
+                this.attributesTmp = this.source.get('data.attributes');
                 this.source.set('data.attributes', []);
             }
 
@@ -179,10 +170,11 @@ define([
                 diff = 0,
                 dataCount,
                 elemsCount,
-                lastRecord;
+                lastRecord,
+                attributeCodes = this.source.get('data.attribute_codes');
 
             this.source.remove(this.dataScope + '.' + this.index);
-            this.isEmpty(data.length === 0);
+            this.isEmpty((!attributeCodes || data.length > 0 ? data.length : attributeCodes.length) === 0);
 
             _.each(data, function (row) {
                 _.each(row, function (value, key) {
@@ -248,6 +240,10 @@ define([
                 tmpArray.push(mappedData);
             }, this);
 
+            // Attributes cannot be changed before regeneration thought wizard
+            if (!this.source.get('data.attributes').length) {
+                this.source.set('data.attributes', this.attributesTmp);
+            }
             this.unionInsertData(tmpArray);
         },
 
