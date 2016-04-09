@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Code\GeneratedFiles;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -16,6 +17,17 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      */
     const INPUT_KEY_ALL = 'all';
     const INPUT_KEY_FORCE = 'force';
+
+    /**
+     * @var GeneratedFiles
+     */
+    private $generatedFiles;
+
+    public function __construct(GeneratedFiles $generatedFiles)
+    {
+        $this->generatedFiles = $generatedFiles;
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -102,7 +114,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             }
             $this->cleanup($input, $output);
 
-            touch(BP . '/var/.regenerate');
+            $this->generatedFiles->createRequestForRegeneration();
 
             if ($force) {
                 $output->writeln(
