@@ -39,6 +39,7 @@ define([
         },
 
         /*eslint-enable no-unused-vars*/
+        /*eslint-disable lines-around-comment*/
 
         /**
          * Enable/disable fields on Coupons tab
@@ -58,7 +59,7 @@ define([
                 .get('sales_rule_form.sales_rule_form.rule_information.coupon_type')
                 .value();
             /**
-             * \Magento\Rule\Model\AbstractModel::COUPON_TYPE_AUTO = 3;
+             * \Magento\Rule\Model\AbstractModel::COUPON_TYPE_AUTO
              */
             disableAuto = couponType === 3 || isUseAutoGenerationChecked;
             _.each(
