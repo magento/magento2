@@ -86,7 +86,7 @@
 
                             this.ge = new Ext.tree.TreeEditor(tree, {
                                 allowBlank:false,
-                                blankText:'<?php /* @escapeNotVerified */ echo $block->escapeQuote('A name is required.') ?>',
+                                blankText:'<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('A name is required.')) ?>',
                                 selectOnFocus:true,
                                 cls:'folder'
                             });
@@ -245,7 +245,7 @@
 
                         addGroup : function() {
                             prompt({
-                                content: "<?php /* @escapeNotVerified */ echo $block->escapeQuote('Please enter a new group name.') ?>",
+                                content: "<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Please enter a new group name.')) ?>",
                                 value: "",
                                 actions: {
                                     confirm: function (group_name) {
@@ -294,7 +294,7 @@
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '<?php /* @escapeNotVerified */ echo $block->escapeQuote('An attribute group named "/name/" already exists.') ?>';
+                                    errorText = '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('An attribute group named "/name/" already exists.')) ?>';
                                     alert({
                                         content: errorText.replace("/name/",name)
                                     });
@@ -392,7 +392,7 @@
                         rightRemove : function(tree, nodeThis, node) {
                             if( nodeThis.firstChild == null && node.id != 'empty' ) {
                                 var newNode = new Ext.tree.TreeNode({
-                                    text : '<?php /* @escapeNotVerified */ echo $block->escapeQuote('Empty') ?>',
+                                    text : '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Empty')) ?>',
                                     id : 'empty',
                                     cls : 'folder',
                                     is_user_defined : 1,
