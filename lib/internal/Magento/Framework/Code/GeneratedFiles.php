@@ -6,8 +6,9 @@
 namespace Magento\Framework\Code;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Regenerates generated code and DI configuration
@@ -20,56 +21,59 @@ class GeneratedFiles
     const REGENERATE_FLAG = '/var/.regenerate';
 
     /**
-     * @var ReadInterface
+     * @var WriteFactory
      */
-    private $readInterface;
+    private $writeFactory;
 
     /**
-     * @var File
+     * @var DirectoryList
      */
-    private $file;
+    private $directoryList;
+
+    /**
+     * @var WriteInterface
+     */
+    private $writeInterface;
 
     /**
      * Constructor
      *
-     * @param ReadInterface $readInterface
-     * @param File $file
+     * @param DirectoryList $directoryList
+     * @param DriverPool $driverPool
      */
-    public function __construct(ReadInterface $readInterface, File $file) {
-        $this->readInterface = $readInterface;
-        $this->file = $file;
+    public function __construct(DirectoryList $directoryList, DriverPool $driverPool) {
+        $this->directoryList = $directoryList;
+        $this->writeFactory = new WriteFactory($driverPool);
     }
 
     /**
      * Clean generated code and DI configuration
      *
-     * @param array $initParams
      * @return void
      */
-     public function requestRegeneration($initParams)
+     public function requestRegeneration()
     {
-        if (file_exists(BP . self::REGENERATE_FLAG)) {
-            $directoryList = new DirectoryList(BP, $initParams);
-            $generationPath = BP . '/' . $directoryList->getPath(DirectoryList::GENERATION);
-            $diPath = BP . '/' . $directoryList->getPath(DirectoryList::DI);
+        $this->writeInterface = $this->writeFactory->create(BP);
 
-            if ($this->readInterface->isDirectory($generationPath)) {
-                $this->file->deleteDirectory($generationPath, true);
+        if ($this->writeInterface->isExist(BP . self::REGENERATE_FLAG)) {
+            $generationPath = BP . '/' . $this->directoryList->getPath(DirectoryList::GENERATION);
+            $diPath = BP . '/' . $this->directoryList->getPath(DirectoryList::DI);
+
+            if ($this->writeInterface->isDirectory($generationPath)) {
+                $this->writeInterface->delete($generationPath);
 			}
-            if ($this->readInterface->isDirectory($diPath)) {
-                $this->file->deleteDirectory($diPath, true);
+            if ($this->writeInterface->isDirectory($diPath)) {
+            $this->writeInterface->delete($diPath);
             }
-            unlink(BP . self::REGENERATE_FLAG);
+            $this->writeInterface->delete(BP . self::REGENERATE_FLAG);
         }
     }
 
     /**
      * Create flag for regeneration of code and di
-     *
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function createRequestForRegeneration()
     {
-        $this->file->touch(BP . '/var/.regenerate');
+        $this->writeInterface->touch(BP . '/var/.regenerate');
     }
 }

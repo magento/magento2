@@ -13,6 +13,7 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\App\ObjectManager\Environment;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Code\GeneratedFiles;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -108,6 +109,9 @@ class ObjectManagerFactory
      */
     public function create(array $arguments)
     {
+        $generatedFiles = new GeneratedFiles($this->directoryList, $this->driverPool);
+        $generatedFiles->requestRegeneration();
+
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $this->configFilePool, $arguments);
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(

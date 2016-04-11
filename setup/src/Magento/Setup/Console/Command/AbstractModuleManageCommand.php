@@ -6,6 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\Code\GeneratedFiles;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,11 +28,12 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Constructor
      *
      * @param GeneratedFiles $generatedFiles
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(GeneratedFiles $generatedFiles)
+    public function __construct(GeneratedFiles $generatedFiles,ObjectManagerProvider $objectManagerProvider)
     {
         $this->generatedFiles = $generatedFiles;
-        parent::__construct();
+        parent::__construct($objectManagerProvider);
     }
 
     /**
