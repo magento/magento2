@@ -854,15 +854,15 @@ define([
         ],
         'date_range_min': [
             function (value, minValue) {
-                return new Date(value).getTime() >= (minValue * 1000)
+                return new Date(value).getTime() >= (minValue * 1000);
             },
-            $.mage.__('Please enter a valid date in this field.')
+            $.mage.__('The date is not within the specified range.')
         ],
         'date_range_max': [
             function (value, maxValue) {
-                return new Date(value).getTime() <= (maxValue * 1000)
+                return new Date(value).getTime() <= (maxValue * 1000);
             },
-            $.mage.__('Please enter a valid date in this field.')
+            $.mage.__('The date is not within the specified range.')
         ]
     }, function (data) {
         return {
