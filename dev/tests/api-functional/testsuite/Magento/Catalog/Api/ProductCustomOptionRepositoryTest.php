@@ -167,7 +167,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         unset($result['product_sku']);
         unset($result['option_id']);
         if (!empty($result['values'])) {
-            foreach ($result['values'] as $key => $value) {
+            foreach (array_keys($result['values']) as $key) {
                 unset($result['values'][$key]['option_type_id']);
             }
         }
