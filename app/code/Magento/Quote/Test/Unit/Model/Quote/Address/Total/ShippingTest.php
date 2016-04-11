@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
@@ -175,9 +175,8 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->method('isFreeShipping')
             ->with($this->quote, [$this->cartItem])
             ->willReturn(true);
-        $this->address->expects($this->once())
-            ->method('setFreeShipping')
-            ->with(true);
+        $this->address->expects($this->atLeastOnce())
+            ->method('setFreeShipping');
         $this->total->expects($this->atLeastOnce())
             ->method('setTotalAmount');
         $this->total->expects($this->atLeastOnce())
@@ -200,7 +199,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->cartItem->expects($this->atLeastOnce())
             ->method('getQty')
             ->willReturn(2);
-        $this->address->expects($this->once())
+        $this->address->expects($this->atLeastOnce())
             ->method('getFreeShipping')
             ->willReturn(true);
         $this->cartItem->expects($this->once())

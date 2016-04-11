@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer;
@@ -199,8 +199,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 3 => ['type' => null, 'value' => 'hello']
             ]);
 
-        $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, 'code', 3)
+        $this->swatchHelper->expects($this->once())->method('loadFirstVariationSwatchImage')
+            ->with($this->product, ['code' => 3])
             ->willReturn($this->product);
 
         $this->product->expects($this->exactly(4))->method('getData')
@@ -239,8 +239,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 3 => ['type' => Swatch::SWATCH_TYPE_VISUAL_IMAGE, 'value' => 'hello']
             ]);
 
-        $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, 'code', 3)
+        $this->swatchHelper->expects($this->once())->method('loadFirstVariationSwatchImage')
+            ->with($this->product, ['code' => 3])
             ->willReturn($this->product);
 
         $this->swatchMediaHelper->expects($this->exactly(2))->method('getSwatchAttributeImage')
@@ -287,8 +287,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 3 => ['type' => Swatch::SWATCH_TYPE_VISUAL_IMAGE, 'value' => 'hello']
             ]);
 
-        $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, 'code', 3)
+        $this->swatchHelper->expects($this->once())->method('loadFirstVariationSwatchImage')
+            ->with($this->product, ['code' => 3])
             ->willReturn($this->product);
 
         $this->swatchMediaHelper->expects($this->exactly(2))->method('getSwatchAttributeImage')

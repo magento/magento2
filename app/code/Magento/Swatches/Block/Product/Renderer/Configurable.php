@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Product\Renderer;
@@ -37,6 +37,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
 
     /**
+     * @deprecated
+     *
      * When we init media gallery empty image types contain this value.
      */
     const EMPTY_IMAGE_VALUE = 'no_selection';
@@ -276,11 +278,17 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getVariationMedia($attributeCode, $optionId)
     {
-        $variationProduct = $this->swatchHelper->loadFirstVariationWithSwatchImage(
+        $variationProduct = $this->swatchHelper->loadFirstVariationSwatchImage(
             $this->getProduct(),
-            $attributeCode,
-            $optionId
+            [$attributeCode => $optionId]
         );
+
+        if (!$variationProduct) {
+            $variationProduct = $this->swatchHelper->loadFirstVariationImage(
+                $this->getProduct(),
+                [$attributeCode => $optionId]
+            );
+        }
 
         $variationMediaArray = [];
         if ($variationProduct) {
@@ -319,7 +327,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function isProductHasImage(Product $product, $imageType)
     {
-        return $product->getData($imageType) !== null && $product->getData($imageType) != self::EMPTY_IMAGE_VALUE;
+        return $product->getData($imageType) !== null && $product->getData($imageType) != 'no_selection';
     }
 
     /**

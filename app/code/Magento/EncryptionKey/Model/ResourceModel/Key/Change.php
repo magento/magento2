@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Encryption key changer resource model
@@ -43,6 +44,13 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Framework\App\DeploymentConfig\Writer
      */
     protected $writer;
+
+    /**
+     * Random
+     *
+     * @var \Magento\Framework\Math\Random
+     */
+    protected $random;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -92,7 +100,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if (null === $key) {
-            $key = md5(time());
+            $key = md5($this->getRandom()->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE));
         }
         $this->encryptor->setNewKey($key);
 
@@ -113,6 +121,29 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Get Math Random
+     *
+     * @return \Magento\Framework\Math\Random
+     */
+    public function getRandom()
+    {
+        if (!$this->random) {
+            $this->random = ObjectManager::getInstance()->get('\Magento\Framework\Math\Random');
+        }
+        return $this->random;
+    }
+
+    /**
+     * Set Random
+     *
+     * @param \Magento\Framework\Math\Random $random
+     */
+    public function setRandom(\Magento\Framework\Math\Random $random)
+    {
+        $this->random = $random;
     }
 
     /**

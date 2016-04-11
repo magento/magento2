@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,7 +49,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
-
 
     public function setUp()
     {
@@ -174,6 +173,35 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertEquals($expected, $this->systemPackage->getPackageVersions());
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage System packages not found
+     */
+    public function testGetPackageVersionGitCloned()
+    {
+        $package = $this->getMock('\Composer\Package\Package', [], [], '', false);
+        $this->repository
+            ->expects($this->once())
+            ->method('getPackages')
+            ->willReturn([$package]);
+
+        $this->locker->expects($this->once())->method('getLockedRepository')->willReturn($this->repository);
+        $this->composerInformation->expects($this->any())->method('isSystemPackage')->willReturn(false);
+        $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
+        $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
+
+        $this->composerAppFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->magentoComposerApp);
+
+        $this->composerAppFactory->expects($this->once())
+            ->method('createInfoCommand')
+            ->willReturn($this->infoCommand);
+
+        $this->systemPackage = new SystemPackage($this->composerAppFactory, $this->composerInformation);
+        $this->systemPackage->getPackageVersions();
     }
 
     /**

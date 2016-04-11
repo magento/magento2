@@ -2,7 +2,7 @@
 /**
  * Obsolete methods
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -2504,4 +2504,5 @@ return [
     ['get', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['set', 'Magento\Quote\Api\ShippingMethodManagementInterface', 'Magento\Quote\Model\ShippingMethodManagementInterface::get'],
     ['getTypeSwitcherData', 'Magento\Catalog\Block\Adminhtml\Product'],
+    ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
 ];

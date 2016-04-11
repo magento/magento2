@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -172,6 +172,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventManagerMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mediaConfig;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -348,6 +351,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->converterMock
         );
 
+        $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -374,6 +378,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'entityCollectionProvider' => $this->entityCollectionProviderMock,
                 'linkTypeProvider' => $this->linkTypeProviderMock,
                 'mediaGalleryEntryConverterPool' => $this->mediaGalleryEntryConverterPoolMock,
+                'catalogProductMediaConfig' => $this->mediaConfig,
                 'data' => ['id' => 1]
             ]
         );
@@ -383,7 +388,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributes()
     {
         $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
@@ -394,7 +399,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attribute->expects($this->any())->method('isInGroup')->will($this->returnValue(true));
-        $productType->expects($this->any())->method('getEditableAttributes')->will(
+        $productType->expects($this->any())->method('getSetAttributes')->will(
             $this->returnValue([$attribute])
         );
         $expect = [$attribute];
@@ -1004,7 +1009,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function setupMediaAttributes()
     {
         $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
@@ -1033,7 +1038,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn($frontendMock);
         $attributeSmallImage->expects($this->any())->method('getAttributeCode')->willReturn('small_image');
 
-        $productType->expects($this->any())->method('getEditableAttributes')->will(
+        $productType->expects($this->any())->method('getSetAttributes')->will(
             $this->returnValue(['image' => $attributeImage, 'small_image' => $attributeSmallImage])
         );
 
@@ -1052,8 +1057,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaAttributeValues()
     {
-        $this->setupMediaAttributes();
-
+        $this->mediaConfig->expects($this->once())->method('getMediaAttributeCodes')
+            ->willReturn(['image', 'small_image']);
         $this->model->setData('image', 'imageValue');
         $this->model->setData('small_image', 'smallImageValue');
 
@@ -1068,29 +1073,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupMediaAttributes();
         $this->assertNull($this->model->getGalleryAttributeBackend());
-    }
-
-    public function testGetGalleryAttributeBackend()
-    {
-        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->setMethods(['getEditableAttributes'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
-            $this->returnValue($productType)
-        );
-
-        $attributeMediaGallery = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
-            ->setMethods(['__wakeup', 'getAttributeCode', 'getBackend'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $attributeMediaGallery->expects($this->any())->method('getAttributeCode')->willReturn('media_gallery');
-        $expectedValue = 'expected';
-        $attributeMediaGallery->expects($this->once())->method('getBackend')->willReturn($expectedValue);
-
-        $productType->expects($this->once())->method('getEditableAttributes')
-            ->willReturn(['media_gallery' => $attributeMediaGallery]);
-        $this->assertEquals($expectedValue, $this->model->getGalleryAttributeBackend());
     }
 
     public function testGetMediaGalleryEntriesNone()

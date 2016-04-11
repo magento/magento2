@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -75,12 +75,21 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
         $product->load(1);
         // fixture
+        $this->assertArrayNotHasKey('_cache_instance_product_set_attributes', $product->getData());
         $attributes = $this->_model->getSetAttributes($product);
+        $this->assertArrayHasKey('_cache_instance_product_set_attributes', $product->getData());
+
         $this->assertArrayHasKey('sku', $attributes);
         $this->assertArrayHasKey('name', $attributes);
+        $isTypeExists = false;
         foreach ($attributes as $attribute) {
             $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Eav\Attribute', $attribute);
+            $applyTo = $attribute->getApplyTo();
+            if (count($applyTo) > 0 && !in_array('simple', $applyTo)) {
+                $isTypeExists = true;
+            }
         }
+        $this->assertTrue($isTypeExists);
         /* possibility of fatal error if passing null instead of product */
     }
 
@@ -95,33 +104,6 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->_model->attributesCompare($attribute[3], $attribute[1]));
         $this->assertEquals(-1, $this->_model->attributesCompare($attribute[2], $attribute[3]));
         $this->assertEquals(1, $this->_model->attributesCompare($attribute[3], $attribute[2]));
-    }
-
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     */
-    public function testGetEditableAttributes()
-    {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(1);
-        // fixture
-        $this->assertArrayNotHasKey('_cache_editable_attributes', $product->getData());
-        $attributes = $this->_model->getEditableAttributes($product);
-        $this->assertArrayHasKey('_cache_editable_attributes', $product->getData());
-
-        // not clear how to test what is apply_to and what does it have to do with "editable" term
-
-        $isTypeExists = false;
-        foreach ($attributes as $attribute) {
-            $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Eav\Attribute', $attribute);
-            $applyTo = $attribute->getApplyTo();
-            if (count($applyTo) > 0 && !in_array('simple', $applyTo)) {
-                $isTypeExists = true;
-            }
-        }
-        $this->assertTrue($isTypeExists);
     }
 
     public function testGetAttributeById()

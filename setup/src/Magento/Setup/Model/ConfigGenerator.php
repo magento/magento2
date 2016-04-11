@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -262,6 +262,7 @@ class ConfigGenerator
             }
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $hosts);
         }
+        $configData->setOverrideWhenSave(true);
         return $configData;
     }
 }

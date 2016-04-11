@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -53,10 +53,17 @@ define([
 
 
     ko.extenders.disposableCustomerData = function(target, sectionName) {
-        storage.remove(sectionName);
+        var sectionDataIds, newSectionDataIds = {};
         target.subscribe(function(newValue) {
             setTimeout(function(){
                 storage.remove(sectionName);
+                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
+                _.each(sectionDataIds, function (data, name) {
+                    if (name != sectionName) {
+                        newSectionDataIds[name] = data;
+                    }
+                });
+                $.cookieStorage.set('section_data_ids', newSectionDataIds);
             }, 3000);
         });
         return target;
@@ -97,7 +104,9 @@ define([
         remove: function (sections) {
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
-                storageInvalidation.set(sectionName, true);
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    storageInvalidation.set(sectionName, true);
+                }
             });
         }
     };
@@ -128,7 +137,7 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
                 if (_.isEmpty(countryData())) {
-                    countryData(customerData.reload(['directory-data'], false));
+                    customerData.reload(['directory-data'], false);
                 }
             }
         },
@@ -177,14 +186,18 @@ define([
             });
         },
         invalidate: function (sectionNames) {
-            var sectionDataIds;
+            var sectionDataIds,
+                sectionsNamesForInvalidation;
 
-            buffer.remove(_.contains(sectionNames, '*') ? buffer.keys() : sectionNames);
+            sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
             // Invalidate section in cookie (increase version of section with 1000)
             _.each(sectionNames, function (sectionName) {
-                sectionDataIds[sectionName] += 1000;
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    sectionDataIds[sectionName] += 1000;
+                }
             });
             $.cookieStorage.set('section_data_ids', sectionDataIds);
         },

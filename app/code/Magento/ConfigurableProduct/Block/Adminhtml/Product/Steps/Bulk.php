@@ -2,15 +2,29 @@
 /**
  * Adminhtml block for fieldset of configurable product
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps;
 
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\App\ObjectManager;
+
 class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
 {
-    /** @var \Magento\Catalog\Helper\Image */
+    /** @var Image */
     protected $image;
+
+    /**
+     * @var ProductFactory
+     */
+    private $productFactory;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes
@@ -18,18 +32,92 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     protected $variationMediaAttributes;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Image $image
+     * @var Config
+     */
+    private $catalogProductMediaConfig;
+
+    /**
+     * @param Context $context
+     * @param Image $image
      * @param \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Image $image,
+        Context $context,
+        Image $image,
         \Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes $variationMediaAttributes
     ) {
         parent::__construct($context);
         $this->image = $image;
         $this->variationMediaAttributes = $variationMediaAttributes;
+    }
+
+    /**
+     * The getter function to get the productFactory for real application code
+     *
+     * @deprecated
+     *
+     * @return ProductFactory
+     */
+    private function getProductFactory()
+    {
+        if ($this->productFactory === null) {
+            $this->productFactory = ObjectManager::getInstance()->get('Magento\Catalog\Model\ProductFactory');
+        }
+        return $this->productFactory;
+    }
+
+    /**
+     * The setter function to inject the mocked productFactory during unit test
+     *
+     * @deprecated
+     *
+     * @throws \LogicException
+     *
+     * @param ProductFactory $productFactory
+     *
+     * @return void
+     */
+    public function setProductFactory(ProductFactory $productFactory)
+    {
+        if ($this->productFactory != null) {
+            throw new \LogicException(__('productFactory is already set'));
+        }
+        $this->productFactory = $productFactory;
+    }
+
+    /**
+     * The getter function to get the catalogProductMediaConfig for real application code
+     *
+     * @deprecated
+     *
+     * @return Config
+     */
+    private function getCatalogProductMediaConfig()
+    {
+        if ($this->catalogProductMediaConfig === null) {
+            $this->catalogProductMediaConfig = ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\Media\Config');
+        }
+        return $this->catalogProductMediaConfig;
+    }
+
+    /**
+     * The setter function to inject the mocked catalogProductMediaConfig during unit test
+     *
+     * @deprecated
+     *
+     * @throws \LogicException
+     *
+     * @param Config $catalogProductMediaConfig
+     *
+     * @return void
+     */
+    public function setCatalogProductMediaConfig(Config $catalogProductMediaConfig)
+    {
+        if ($this->catalogProductMediaConfig != null) {
+            throw new \LogicException(__('catalogProductMediaConfig is already set'));
+        }
+        $this->catalogProductMediaConfig = $catalogProductMediaConfig;
     }
 
     /**
@@ -56,10 +144,10 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
     public function getImageTypes()
     {
         $imageTypes = [];
-        foreach ($this->variationMediaAttributes->getMediaAttributes() as $attribute) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
-            $imageTypes[$attribute->getAttributeCode()] = [
-                'code' => $attribute->getAttributeCode(),
+        foreach ($this->getCatalogProductMediaConfig()->getMediaAttributeCodes() as $attributeCode) {
+            /* @var $attribute Attribute */
+            $imageTypes[$attributeCode] = [
+                'code' => $attributeCode,
                 'value' => '',
                 'name' => '',
             ];
@@ -72,6 +160,10 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
      */
     public function getMediaAttributes()
     {
-        return $this->variationMediaAttributes->getMediaAttributes();
+        static $simple;
+        if (empty($simple)) {
+            $simple = $this->getProductFactory()->create()->setTypeId(Type::TYPE_SIMPLE)->getMediaAttributes();
+        }
+        return $simple;
     }
 }
