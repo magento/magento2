@@ -851,6 +851,18 @@ define([
                 return !value || (/<script\b[^>]*>([\s\S]*?)<\/script>$/ig).test(value);
             },
             $.mage.__('Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document.')
+        ],
+        'date_range_min': [
+            function (value, minValue) {
+                return new Date(value).getTime() >= (minValue * 1000)
+            },
+            $.mage.__('Please enter a valid date in this field.')
+        ],
+        'date_range_max': [
+            function (value, maxValue) {
+                return new Date(value).getTime() <= (maxValue * 1000)
+            },
+            $.mage.__('Please enter a valid date in this field.')
         ]
     }, function (data) {
         return {
