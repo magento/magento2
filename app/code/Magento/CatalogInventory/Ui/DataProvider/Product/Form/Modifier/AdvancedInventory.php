@@ -10,6 +10,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Data provider for advanced inventory form
@@ -34,6 +35,11 @@ class AdvancedInventory extends AbstractModifier
     private $arrayManager;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    protected $stockConfiguration;
+
+    /**
      * @var array
      */
     private $meta = [];
@@ -42,15 +48,18 @@ class AdvancedInventory extends AbstractModifier
      * @param LocatorInterface $locator
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         LocatorInterface $locator,
         StockRegistryInterface $stockRegistry,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        StockConfigurationInterface $stockConfiguration
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
         $this->arrayManager = $arrayManager;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -76,6 +85,16 @@ class AdvancedInventory extends AbstractModifier
         if (isset($stockData['is_in_stock'])) {
             $data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode]['is_in_stock'] =
                 (int)$stockData['is_in_stock'];
+        }
+
+        if (null !== $this->stockConfiguration->getDefaultConfigValue('min_sale_qty')) {
+            // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
+            $minSaleQtyValue = unserialize($this->stockConfiguration->getDefaultConfigValue('min_sale_qty'));
+            $minSaleQtyData = [];
+            foreach ($minSaleQtyValue as $group => $qty) {
+                $minSaleQtyData[] = ['customer_group_id' => $group, 'min_sale_qty' => $qty];
+            }
+            $data[$modelId][self::DATA_SOURCE_DEFAULT]['stock_data']['min_qty_allowed_in_shopping_cart'] = $minSaleQtyData;
         }
 
         return $data;
