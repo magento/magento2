@@ -23,6 +23,11 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      */
     private $generatedFiles;
 
+    /**
+     * Constructor
+     *
+     * @param GeneratedFiles $generatedFiles
+     */
     public function __construct(GeneratedFiles $generatedFiles)
     {
         $this->generatedFiles = $generatedFiles;
