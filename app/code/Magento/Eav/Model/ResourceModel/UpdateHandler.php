@@ -121,7 +121,7 @@ class UpdateHandler implements AttributeInterface
                 /**
                  * Only scalar values can be stored in generic tables
                  */
-                if (isset($data[$attribute->getAttributeCode()]) && !is_scalar($data[$attribute->getAttributeCode()])) {
+                if (isset($entityData[$attribute->getAttributeCode()]) && !is_scalar($entityData[$attribute->getAttributeCode()])) {
                     continue;
                 }
                 if (isset($snapshot[$attribute->getAttributeCode()])
