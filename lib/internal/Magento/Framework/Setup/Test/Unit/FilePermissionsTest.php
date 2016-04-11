@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Setup\Test\Unit;
 
 use \Magento\Framework\Setup\FilePermissions;
@@ -27,16 +26,6 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     private $directoryListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Driver\File
-     */
-    private $driverFileMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\OsInfo
-     */
-    private $osInfoMock;
-
-    /**
      * @var FilePermissions
      */
     private $filePermissions;
@@ -45,8 +34,6 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->driverFileMock = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
-        $this->osInfoMock = $this->getMock('Magento\Framework\OsInfo', [], [], '', false);
 
         $this->filesystemMock
             ->expects($this->any())
@@ -56,9 +43,7 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,
-            $this->directoryListMock,
-            $this->driverFileMock,
-            $this->osInfoMock
+            $this->directoryListMock
         );
     }
 
@@ -212,55 +197,6 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * Directories have executable permission, not Windows
-     */
-    public function testCheckDirectoryPermissionForCLIUser()
-    {
-        $this->directoryListMock->expects($this->once())->method('getPath')->willReturn('/var/generation');
-        $this->driverFileMock->expects($this->once())
-            ->method('readDirectory')
-            ->willReturn(['/var/generation/Composer', '/var/gen/Magento']);
-        // Should never check for OS if executable
-        $this->osInfoMock->expects($this->never())->method('isWindows');
-        $this->assertTrue($this->filePermissions->checkDirectoryPermissionForCLIUser());
-    }
-
-    /**
-     * Directories do not have executable permissions, is Windows
-     */
-    public function testCheckDirectoryPermissionForCLIUserWin()
-    {
-        $this->directoryListMock->expects($this->once())->method('getPath')->willReturn('/var/generationNotExec');
-        $this->driverFileMock->expects($this->once())
-            ->method('readDirectory')
-            ->willReturn(['/var/generation/ComposerNotExec', '/var/generation/MagentoNotExec']);
-        // Contains a 'NotExec', so is_executable will return false, isWindows should be called once for each
-        // directory (including parent) and return true
-        $this->osInfoMock->expects($this->exactly(3))->method('isWindows')->willReturn(true);
-        $this->assertTrue($this->filePermissions->checkDirectoryPermissionForCLIUser());
-    }
-
-    /**
-     * One directory does not have executable permission, is not Windows
-     */
-    public function testCheckDirectoryPermissionForCLIUserNotExecutable()
-    {
-        $this->directoryListMock->expects($this->once())->method('getPath')->willReturn('/var/generation');
-        $this->driverFileMock->expects($this->once())
-            ->method('readDirectory')
-            ->willReturn(['/var/generation/ComposerNotExec', '/var/gen/Magento']);
-        // Contains a 'NotExec', so is_executable will return false, isWindows should be called and return false
-        $this->osInfoMock->expects($this->once())->method('isWindows')->willReturn(false);
-        $this->assertFalse($this->filePermissions->checkDirectoryPermissionForCLIUser());
-    }
-
-    /*
-     * exec directory, unix
-     * non-exec directory, windows
-     * non-exec directory, unix
-     */
-
     public function setUpDirectoryListInstallation()
     {
         $this->directoryListMock
@@ -339,47 +275,4 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
             ->method('isWritable')
             ->will($this->returnValue(false));
     }
-}
-
-namespace Magento\Framework\Setup;
-
-/**
- * Overriding the built-in PHP function is_dir, always returns true,
- * allows unit test of this code without having to setup special directories.
- *
- * @param string $filename
- * @return true
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
-function is_dir($filename)
-{
-    return true;
-}
-
-/**
- * Overriding the built-in PHP function is_readable, always returns true,
- * allows unit test of this code without having to setup special directories.
- *
- * @param string $filename
- * @return true
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
-function is_readable($filename)
-{
-    return true;
-}
-
-/**
- * Overriding the built-in PHP function is_executable, will return false if directory name contains 'NotExec'
- * Allows unit test of this code without having to setup a special directory with non-executable permission.
- *
- * @param string $filename
- * @return bool
- */
-function is_executable($filename)
-{
-    if (strpos($filename, 'NotExec') !== false) {
-        return false;
-    }
-    return true;
 }
