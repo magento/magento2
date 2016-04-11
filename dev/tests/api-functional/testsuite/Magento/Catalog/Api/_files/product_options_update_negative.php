@@ -17,6 +17,6 @@ return [
                 'sku' => 'sku1',
                 'max_characters' => 10,
             ],
-            'ProductSku should be specify',
+            'ProductSku should be specified',
         ]
 ];
