@@ -63,7 +63,6 @@ define([
                     .find('select').not(this.options.shippingSelector).on('change', this._propertyChange);
                 this._updateOrderSubmit(isDisable);
             }
-
         },
 
         /**
@@ -236,7 +235,7 @@ define([
                 callBackResponseHandler = null,
                 shippingMethod = $.trim($(this.options.shippingSelector).val());
             this._shippingTobilling();
-            if (url && resultId && this._validateForm() && shippingMethod) {
+            if (url && resultId && shippingMethod) {
                 this._updateOrderSubmit(true);
                 this._toggleButton(this.options.updateOrderSelector, true);
                 // form data and callBack updated based on the shippping Form element
