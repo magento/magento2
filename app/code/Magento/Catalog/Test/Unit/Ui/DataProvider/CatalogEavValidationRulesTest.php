@@ -55,7 +55,7 @@ class CatalogEavValidationRulesTest extends \PHPUnit_Framework_TestCase
 
     public function buildDataProvider()
     {
-        $data['arguments']['data']['config']['required'] = true;
+        $data['required'] = true;
 
         return [
             [
