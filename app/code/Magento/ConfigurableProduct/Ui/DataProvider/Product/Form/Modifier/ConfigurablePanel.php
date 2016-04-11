@@ -227,6 +227,10 @@ class ConfigurablePanel extends AbstractModifier
                                             . 'configurable_associated_product_listing.product_columns.ids',
                                         'modalWithGrid' => 'ns=' . $this->formName . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
+                                        'productsFilters' => $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing'
+                                            . '.' . $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing.listing_top.listing_filters',
                                     ],
                                 ],
                             ],

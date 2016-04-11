@@ -12,8 +12,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Locale\FormatInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AttributePersistor
