@@ -41,7 +41,7 @@ define([
             var valueFromConfig = this.valueFromConfig();
 
             if (newChecked) {
-                if (_.isArray(valueFromConfig)) {
+                if (_.isArray(valueFromConfig) || valueFromConfig === '1') {
                     this.changeVisibleDisabled(this.inputField, true, true, 1);
                 } else if (_.isObject(valueFromConfig)) {
                     this.changeVisibleDisabled(this.inputField, false, true, null);
