@@ -15,7 +15,8 @@ class TableTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
+     *      | \PHPUnit_Framework_MockObject_MockObject
      */
     private $collectionFactory;
 
