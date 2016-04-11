@@ -11,8 +11,14 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 
 class Configurable
 {
+    /**
+     * @var \Magento\Eav\Model\Config|\Magento\Swatches\Model\SwatchFactory
+     */
     private $eavConfig;
 
+    /**
+     * @var \Magento\Swatches\Helper\Data
+     */
     private $swatchHelper;
 
     /**
@@ -33,6 +39,8 @@ class Configurable
      * @param ConfigurableProduct $subject
      * @param Collection $result
      * @return Collection
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetUsedProductCollection(
         ConfigurableProductType $subject,
