@@ -217,11 +217,26 @@
     //  Password Strength Meter
     //  ---------------------------------------------
 
+    .field.password {
+        .control {
+            .lib-vendor-prefix-display();
+            .lib-vendor-prefix-flex-direction();
+
+            .mage-error {
+                .lib-vendor-prefix-order(2);
+            }
+
+            .input-text {
+                .lib-vendor-prefix-order(0);
+            }
+        }
+    }
+
     .password-strength-meter {
         background-color: @password-strength-color__default;
-        height: 32px;
-        line-height: 32px;
-        padding: 0 9px;
+        height: @form-element-input__height;
+        line-height: @form-element-input__height;
+        padding: @form-element-input__padding;
         position: relative;
         z-index: 1;
 
@@ -265,6 +280,7 @@
 
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
+
         .captcha-img {
             vertical-align: middle;
         }
