@@ -156,12 +156,10 @@
                 </field>
             </container>
 
-            <container name="container_min_sale_qty">
+            <fieldset name="container_min_sale_qty">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="formElement" xsi:type="string">container</item>
-                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                        <item name="label" xsi:type="string" translate="true">Minimum Qty Allowed in Shopping Cart</item>
+                        <item name="label" xsi:type="string" translate="true"/>
                         <item name="dataScope" xsi:type="string">stock_data</item>
                         <item name="sortOrder" xsi:type="number">400</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
@@ -170,6 +168,7 @@
                 <field name="min_sale_qty">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Minimum Qty Allowed in Shopping Cart</item>
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">min_sale_qty</item>
@@ -177,10 +176,13 @@
                                 <item name="validate-number" xsi:type="boolean">true</item>
                                 <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
+                            <item name="sortOrder" xsi:type="string">0</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                             <item name="imports" xsi:type="array">
                                 <item name="handleChanges" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
                             </item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="visible" xsi:type="boolean">false</item>
                         </item>
                     </argument>
                 </field>
@@ -195,20 +197,72 @@
                                 <item name="false" xsi:type="string">0</item>
                             </item>
                             <item name="value" xsi:type="string">1</item>
-                            <item name="exports" xsi:type="array">
-                                <item name="checked" xsi:type="string">${$.parentName}.min_sale_qty:disabled</item>
-                            </item>
-                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="inputField" xsi:type="string">ns = ${ $.ns }, index=min_sale_qty</item>
+                            <item name="dynamicRowsField" xsi:type="string">ns = ${ $.ns }, index=min_qty_allowed_in_shopping_cart</item>
+                            <item name="sortOrder" xsi:type="string">2</item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-min-sale-qty</item>
                             <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
                             <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                             <item name="keyInConfiguration" xsi:type="string">min_sale_qty</item>
-                            <item name="links" xsi:type="array">
-                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.min_sale_qty</item>
+                            <item name="unserialized" xsi:type="boolean">true</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="admin__field-no-label" xsi:type="boolean">true</item>
+                                <item name="admin__field-use-config" xsi:type="boolean">true</item>
                             </item>
                         </item>
                     </argument>
                 </field>
-            </container>
+                <dynamicRows name="min_qty_allowed_in_shopping_cart">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">dynamicRows</item>
+                            <item name="sortOrder" xsi:type="string">1</item>
+                            <item name="addButton" xsi:type="boolean">false</item>
+                            <item name="label" xsi:type="string" translate="true">Minimum Qty Allowed in Shopping Cart</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="dndConfig" xsi:type="array">
+                                <item name="enabled" xsi:type="boolean">false</item>
+                            </item>
+                        </item>
+                    </argument>
+                    <container name="record">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="isTemplate" xsi:type="boolean">true</item>
+                                <item name="is_collection" xsi:type="boolean">true</item>
+                                <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                                <item name="componentType" xsi:type="string">container</item>
+                            </item>
+                        </argument>
+                        <field name="customer_group_id">
+                            <argument name="data" xsi:type="array">
+                                <item name="options" xsi:type="object">Magento\Customer\Model\Customer\Source\Group</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="dataType" xsi:type="string">text</item>
+                                    <item name="formElement" xsi:type="string">select</item>
+                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                    <item name="label" xsi:type="string" translate="true">Customer Group</item>
+                                    <item name="dataScope" xsi:type="string">customer_group_id</item>
+                                    <item name="disabled" xsi:type="boolean">true</item>
+                                </item>
+                            </argument>
+                        </field>
+                        <field name="min_sale_qty">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="dataType" xsi:type="string">number</item>
+                                    <item name="formElement" xsi:type="string">input</item>
+                                    <item name="visible" xsi:type="boolean">true</item>
+                                    <item name="label" xsi:type="string" translate="true">Minimum Qty</item>
+                                    <item name="dataScope" xsi:type="string">min_sale_qty</item>
+                                    <item name="disabled" xsi:type="boolean">true</item>
+                                </item>
+                            </argument>
+                        </field>
+                    </container>
+                </dynamicRows>
+            </fieldset>
 
             <container name="container_max_sale_qty">
                 <argument name="data" xsi:type="array">
