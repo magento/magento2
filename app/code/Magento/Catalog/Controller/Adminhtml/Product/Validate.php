@@ -19,6 +19,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     *
      * @deprecated
      */
     protected $_dateFilter;
