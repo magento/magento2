@@ -46,6 +46,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         $indexers = $this->getIndexers($input);
         foreach ($indexers as $indexer) {
             try {
+                $this->validateIndexerStatus($indexer);
                 $startTime = microtime(true);
                 $indexerConfig = $this->getConfig()->getIndexer($indexer->getId());
                 $sharedIndex = $indexerConfig['shared_index'];
@@ -67,6 +68,24 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->writeln($indexer->getTitle() . ' indexer process unknown error:');
                 $output->writeln($e->getMessage());
             }
+        }
+    }
+
+    /**
+     * Validate that indexer is not locked
+     *
+     * @param \Magento\Framework\Indexer\IndexerInterface $indexer
+     * @throws LocalizedException
+     */
+    private function validateIndexerStatus(\Magento\Framework\Indexer\IndexerInterface $indexer)
+    {
+        if ($indexer->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_WORKING) {
+            throw new LocalizedException(
+                __(
+                    '%1 index is locked by another reindex process. Skipping.',
+                    $indexer->getTitle()
+                )
+            );
         }
     }
 
