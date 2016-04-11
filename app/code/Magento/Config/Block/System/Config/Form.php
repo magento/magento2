@@ -504,9 +504,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * check if can use restore value
+     * Check if can use restore value
      *
-     * @param $fieldValue
+     * @param int $fieldValue
      * @return bool
      */
     public function getCanRestoreToDefault($fieldValue)

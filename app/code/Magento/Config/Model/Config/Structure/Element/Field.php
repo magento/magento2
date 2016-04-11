@@ -283,7 +283,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
     }
 
     /**
-     * check if the field can be restored to default
+     * Check if the field can be restored to default
      *
      * @return bool
      */
