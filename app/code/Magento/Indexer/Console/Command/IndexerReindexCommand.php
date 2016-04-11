@@ -97,7 +97,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     private function validateSharedIndex($sharedIndex)
     {
         if (empty($sharedIndex)) {
-            throw new \InvalidArgumentException('sharedIndex must be a valid indexer ID');
+            throw new \InvalidArgumentException('sharedIndex must be a valid shared index identifier');
         }
         $indexerIds = $this->getIndexerIdsBySharedIndex($sharedIndex);
         if (empty($indexerIds)) {
