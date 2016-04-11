@@ -6,15 +6,11 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Controller\StartUpdater;
-
 /**
  * Validates payloads for updater tasks
  */
 class PayloadValidator
 {
-
-
     /**
      * @var \Magento\Framework\Module\FullModuleList
      */
@@ -23,9 +19,7 @@ class PayloadValidator
     /**
      * @param \Magento\Framework\Module\FullModuleList $moduleList
      */
-    public function __construct(
-        \Magento\Framework\Module\FullModuleList $moduleList
-     ) {
+    public function __construct(\Magento\Framework\Module\FullModuleList $moduleList) {
         $this->moduleList = $moduleList;
     }
 
@@ -80,12 +74,17 @@ class PayloadValidator
     private function validateUpdatePayload(array $postPayload)
     {
         $errorMessage = '';
-        $packages = $postPayload[UpdaterTaskCreator::KEY_POST_PACKAGES];
-        foreach ($packages as $package) {
-            if ((!isset($package[UpdaterTaskCreator::KEY_POST_PACKAGE_NAME]))
-                || (!isset($package[UpdaterTaskCreator::KEY_POST_PACKAGE_VERSION]))) {
-                $errorMessage .= 'Missing package information' . PHP_EOL;
-                break;
+        if (!isset($postPayload[UpdaterTaskCreator::KEY_POST_PACKAGES])) {
+            $errorMessage = 'Missing packages' . PHP_EOL;
+        } else {
+            $packages = $postPayload[UpdaterTaskCreator::KEY_POST_PACKAGES];
+            foreach ($packages as $package) {
+                if ((!isset($package[UpdaterTaskCreator::KEY_POST_PACKAGE_NAME]))
+                    || (!isset($package[UpdaterTaskCreator::KEY_POST_PACKAGE_VERSION]))
+                ) {
+                    $errorMessage .= 'Missing package information' . PHP_EOL;
+                    break;
+                }
             }
         }
         return $errorMessage;
@@ -100,12 +99,16 @@ class PayloadValidator
     private function validateEnableDisablePayload(array $postPayload)
     {
         $errorMessage = '';
-        $packages = $postPayload[UpdaterTaskCreator::KEY_POST_PACKAGES];
-        foreach ($packages as $package) {
-            if (!$this->moduleList->has($package[UpdaterTaskCreator::KEY_POST_PACKAGE_NAME])) {
-                $errorMessage .= 'Invalid Magento module name: ' . $package[UpdaterTaskCreator::KEY_POST_PACKAGE_NAME]
-                    . PHP_EOL;
-                break;
+        if (!isset($postPayload[UpdaterTaskCreator::KEY_POST_PACKAGES])) {
+            $errorMessage = 'Missing packages' . PHP_EOL;
+        } else {
+            $packages = $postPayload[UpdaterTaskCreator::KEY_POST_PACKAGES];
+            foreach ($packages as $package) {
+                if (!$this->moduleList->has($package[UpdaterTaskCreator::KEY_POST_PACKAGE_NAME])) {
+                    $errorMessage .= 'Invalid Magento module name: '
+                        . $package[UpdaterTaskCreator::KEY_POST_PACKAGE_NAME] . PHP_EOL;
+                    break;
+                }
             }
         }
         return $errorMessage;

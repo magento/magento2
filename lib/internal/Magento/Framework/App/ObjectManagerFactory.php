@@ -109,8 +109,9 @@ class ObjectManagerFactory
      */
     public function create(array $arguments)
     {
-        $generatedFiles = new GeneratedFiles($this->directoryList, $this->driverPool);
-        $generatedFiles->requestRegeneration();
+        $writeFactory = new  \Magento\Framework\Filesystem\Directory\WriteFactory($this->driverPool);
+        $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory);
+        $generatedFiles->regenerate();
 
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $this->configFilePool, $arguments);
         $arguments = array_merge($deploymentConfig->get(), $arguments);

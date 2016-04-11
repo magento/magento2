@@ -30,7 +30,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * @param GeneratedFiles $generatedFiles
      * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(GeneratedFiles $generatedFiles,ObjectManagerProvider $objectManagerProvider)
+    public function __construct(GeneratedFiles $generatedFiles, ObjectManagerProvider $objectManagerProvider)
     {
         $this->generatedFiles = $generatedFiles;
         parent::__construct($objectManagerProvider);
@@ -121,7 +121,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             }
             $this->cleanup($input, $output);
 
-            $this->generatedFiles->createRequestForRegeneration();
+            $this->generatedFiles->requestRegeneration();
 
             if ($force) {
                 $output->writeln(
