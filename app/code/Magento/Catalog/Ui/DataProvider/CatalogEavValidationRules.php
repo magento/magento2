@@ -22,7 +22,7 @@ class CatalogEavValidationRules
     public function build(ProductAttributeInterface $attribute, array $data)
     {
         $rules = [];
-        if (!empty($data['arguments']['data']['config']['required'])) {
+        if (isset($data['required']) && $data['required'] == 1) {
             $rules['required-entry'] = true;
         }
         if ($attribute->getFrontendInput() === 'price') {
