@@ -6,9 +6,13 @@
 namespace Magento\Cms\Model\ResourceModel\Block\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Block;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
-class ReadHandler
+/**
+ * Class ReadHandler
+ */
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var MetadataPool
@@ -35,11 +39,11 @@ class ReadHandler
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         if ($entity->getId()) {
             $stores = $this->resourceBlock->lookupStoreIds((int)$entity->getId());
