@@ -89,13 +89,18 @@ class AdvancedInventory extends AbstractModifier
 
         if (null !== $this->stockConfiguration->getDefaultConfigValue('min_sale_qty')) {
             // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
-            $minSaleQtyValue = unserialize($this->stockConfiguration->getDefaultConfigValue('min_sale_qty'));
-            $minSaleQtyData = [];
-            foreach ($minSaleQtyValue as $group => $qty) {
-                $minSaleQtyData[] = ['customer_group_id' => $group, 'min_sale_qty' => $qty];
+            $minSaleQtyValue = @unserialize($this->stockConfiguration->getDefaultConfigValue('min_sale_qty'));
+            if ($minSaleQtyValue !== false) {
+                foreach ($minSaleQtyValue as $group => $qty) {
+                    $data[$modelId][self::DATA_SOURCE_DEFAULT]['stock_data']['min_qty_allowed_in_shopping_cart'][] = [
+                        'customer_group_id' => $group,
+                        'min_sale_qty' => $qty
+                    ];
+                }
+            } else {
+                $data[$modelId][self::DATA_SOURCE_DEFAULT]['stock_data']['min_qty_allowed_in_shopping_cart']
+                    = $this->stockConfiguration->getDefaultConfigValue('min_sale_qty');
             }
-            $data[$modelId][self::DATA_SOURCE_DEFAULT]['stock_data']['min_qty_allowed_in_shopping_cart']
-                = $minSaleQtyData;
         }
 
         return $data;
