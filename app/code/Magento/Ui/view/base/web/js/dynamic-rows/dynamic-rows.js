@@ -251,7 +251,7 @@ define([
          * @param {Array} elems
          */
         checkSpinner: function (elems) {
-            this.showSpinner(!this.recordData().length || elems && elems.length === this.getChildItems().length);
+            this.showSpinner(!(!this.recordData().length || elems && elems.length === this.getChildItems().length));
         },
 
         /**
@@ -262,9 +262,10 @@ define([
         parsePagesData: function (data) {
             var pages;
 
-            this.relatedData = _.filter(data, function (elem) {
-                return !this.deleteProperty || elem[this.deleteProperty] !== this.deleteValue;
-            }, this);
+            this.relatedData = this.deleteProperty ?
+                _.filter(data, function (elem) {
+                    return elem[this.deleteProperty] !== this.deleteValue;
+                }, this) : data;
 
             pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
             this.pages(pages);
