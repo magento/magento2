@@ -328,7 +328,7 @@
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">container</item>
                         <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                        <item name="label" xsi:type="string" translate="true">Use Deferred Stock update</item>
+                        <item name="label" xsi:type="string" translate="true">Use Deferred Stock Update</item>
                         <item name="dataScope" xsi:type="string">stock_data</item>
                         <item name="sortOrder" xsi:type="number">850</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
@@ -337,7 +337,7 @@
                 <field name="deferred_stock_update">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
-                            <item name="label" xsi:type="string" translate="true">Use Deferred Stock update</item>
+                            <item name="label" xsi:type="string" translate="true">Use Deferred Stock Update</item>
                             <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">deferred_stock_update</item>
