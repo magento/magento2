@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\Unit\Model\GuestCartManagement\Plugin;
+namespace Magento\Quote\Test\Unit\Model\GuestCartManagement\Plugin;
 
-use Magento\Checkout\Model\GuestCartManagement\Plugin\Authorization;
+use Magento\Quote\Model\GuestCartManagement\Plugin\Authorization;
 
 class AuthorizationTest extends \PHPUnit_Framework_TestCase
 {
