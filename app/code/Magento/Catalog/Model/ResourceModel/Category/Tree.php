@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\Framework\Data\Tree\Dbp;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -677,13 +677,13 @@ class Tree extends Dbp
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
     }
