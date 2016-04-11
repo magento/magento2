@@ -394,9 +394,9 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
     {
         $bodyItem = [];
+        $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
         for ($i = 1, $count = count($line); $i < $count; $i++) {
             if(isset($rowMap[$sectionColumns[$i]])) {
-                $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
                 if (in_array($rowMap[$sectionColumns[$i]], $dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }
