@@ -75,9 +75,9 @@
     <preference for="\Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="\Magento\Downloadable\Model\File\ContentUploader" />
     <preference for="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
     <preference for="\Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="\Magento\Downloadable\Model\DownloadableOption" />
-    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
-            <argument name="relationActions" xsi:type="array">
+            <argument name="extensionActions" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
                     <item name="read" xsi:type="array">
                         <item name="downloadable_link_read" xsi:type="string">Magento\Downloadable\Model\Link\ReadHandler</item>
@@ -99,7 +99,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\Entity\MetadataPool">
+    <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="Magento\Downloadable\Api\Data\LinkInterface" xsi:type="array">

@@ -7,7 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,7 +71,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('cms_block_store', [$whereForInsert])
             ->willReturnSelf();
 
-        $entityMetadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())
