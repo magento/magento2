@@ -6,7 +6,6 @@
 namespace Magento\Framework\Code;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
@@ -21,11 +20,6 @@ class GeneratedFiles
     const REGENERATE_FLAG = '/var/.regenerate';
 
     /**
-     * @var WriteFactory
-     */
-    private $writeFactory;
-
-    /**
      * @var DirectoryList
      */
     private $directoryList;
@@ -33,17 +27,17 @@ class GeneratedFiles
     /**
      * @var WriteInterface
      */
-    private $writeInterface;
+    private $write;
 
     /**
      * Constructor
      *
      * @param DirectoryList $directoryList
-     * @param DriverPool $driverPool
+     * @param WriteFactory $writeFactory
      */
-    public function __construct(DirectoryList $directoryList, DriverPool $driverPool) {
+    public function __construct(DirectoryList $directoryList, WriteFactory $writeFactory) {
         $this->directoryList = $directoryList;
-        $this->writeFactory = new WriteFactory($driverPool);
+        $this->write = $writeFactory->create(BP);
     }
 
     /**
@@ -51,29 +45,27 @@ class GeneratedFiles
      *
      * @return void
      */
-     public function requestRegeneration()
+     public function regenerate()
     {
-        $this->writeInterface = $this->writeFactory->create(BP);
-
-        if ($this->writeInterface->isExist(BP . self::REGENERATE_FLAG)) {
+        if ($this->write->isExist(self::REGENERATE_FLAG)) {
             $generationPath = BP . '/' . $this->directoryList->getPath(DirectoryList::GENERATION);
             $diPath = BP . '/' . $this->directoryList->getPath(DirectoryList::DI);
 
-            if ($this->writeInterface->isDirectory($generationPath)) {
-                $this->writeInterface->delete($generationPath);
+            if ($this->write->isDirectory($generationPath)) {
+                $this->write->delete($generationPath);
 			}
-            if ($this->writeInterface->isDirectory($diPath)) {
-            $this->writeInterface->delete($diPath);
+            if ($this->write->isDirectory($diPath)) {
+                $this->write->delete($diPath);
             }
-            $this->writeInterface->delete(BP . self::REGENERATE_FLAG);
+            $this->write->delete(BP . self::REGENERATE_FLAG);
         }
     }
 
     /**
      * Create flag for regeneration of code and di
      */
-    public function createRequestForRegeneration()
+    public function requestRegeneration()
     {
-        $this->writeInterface->touch(BP . '/var/.regenerate');
+        $this->write->touch(BP . '/var/.regenerate');
     }
 }

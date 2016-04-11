@@ -7,7 +7,6 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Controller\StartUpdater;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Zend\Json\Json;
@@ -114,6 +113,8 @@ class UpdaterTaskCreator
             ['enable' => true]
         );
 
+        $cacheStatus = $this->cacheManager->getStatus();
+
         $errorMessage .= $this->updater->createUpdaterTask(
             [],
             \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE,
@@ -142,7 +143,6 @@ class UpdaterTaskCreator
             );
         }
 
-        $cacheStatus = $this->cacheManager->getStatus();
         $enabledCaches = [];
         foreach ($cacheStatus as $cacheName => $value) {
             if ($value) {

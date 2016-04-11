@@ -36,6 +36,11 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $fullModuleList;
 
+    /**
+     * @var \Magento\Framework\Code\GeneratedFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $generatedFiles;
+
     protected function setUp()
     {
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
@@ -47,6 +52,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $this->generatedFiles = $this->getMock('\Magento\Framework\Code\GeneratedFiles', [], [], '', false);
+
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
@@ -55,13 +62,6 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
                 ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
                 ['Magento\Framework\Module\FullModuleList', $this->fullModuleList],
             ]));
-    }
-
-    protected function tearDown()
-    {
-        if (file_exists(BP . '/var/.regenerate')) {
-            unlink(BP . '/var/.regenerate');
-        }
     }
 
     /**
@@ -93,9 +93,11 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->cleanupFiles->expects($clearStaticContent ? $this->once() : $this->never())
             ->method('clearMaterializedViewFiles');
 
+        $this->generatedFiles->expects($this->once())->method('requestRegeneration');
+
         $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+            ? new CommandTester(new ModuleEnableCommand($this->generatedFiles, $this->objectManagerProvider))
+            : new CommandTester(new ModuleDisableCommand($this->generatedFiles, $this->objectManagerProvider));
         $input = ['module' => ['Magento_Module1', 'Magento_Module2']];
         if ($clearStaticContent) {
             $input['--clear-static-content'] = true;
@@ -141,7 +143,10 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getModulesToChange')
             ->with(true, ['invalid'])
             ->willThrowException(new \LogicException('Unknown module(s): invalid'));
-        $commandTester = new CommandTester(new ModuleEnableCommand($this->objectManagerProvider));
+        $commandTester = new CommandTester(new ModuleEnableCommand(
+            $this->generatedFiles,
+            $this->objectManagerProvider)
+        );
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
         $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
@@ -153,7 +158,10 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getModulesToChange')
             ->with(false, ['invalid'])
             ->willThrowException(new \LogicException('Unknown module(s): invalid'));
-        $commandTester = new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+        $commandTester = new CommandTester(new ModuleDisableCommand(
+            $this->generatedFiles,
+            $this->objectManagerProvider)
+        );
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
         $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
@@ -185,8 +193,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->with($isEnable, ['Magento_Module1']);
 
         $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+            ? new CommandTester(new ModuleEnableCommand($this->generatedFiles, $this->objectManagerProvider))
+            : new CommandTester(new ModuleDisableCommand($this->generatedFiles, $this->objectManagerProvider));
         $input = ['--all' => true];
         $commandTester->execute($input);
         $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
@@ -223,8 +231,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->method('setIsEnabled');
 
         $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+            ? new CommandTester(new ModuleEnableCommand($this->generatedFiles, $this->objectManagerProvider))
+            : new CommandTester(new ModuleDisableCommand($this->generatedFiles, $this->objectManagerProvider));
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2']]);
         $this->assertStringMatchesFormat(
             'Unable to change status of modules%aconstraint1%aconstraint2%a',
@@ -264,8 +272,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->with($isEnable, ['Magento_Module1']);
 
         $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+            ? new CommandTester(new ModuleEnableCommand($this->generatedFiles, $this->objectManagerProvider))
+            : new CommandTester(new ModuleDisableCommand($this->generatedFiles, $this->objectManagerProvider));
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2'], '--force' => true]);
         $this->assertStringMatchesFormat(
             $expectedMessage . '%amodules might not function properly%a',
@@ -300,8 +308,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->method('setIsEnabled');
 
         $commandTester = $isEnable
-            ? new CommandTester(new ModuleEnableCommand($this->objectManagerProvider))
-            : new CommandTester(new ModuleDisableCommand($this->objectManagerProvider));
+            ? new CommandTester(new ModuleEnableCommand($this->generatedFiles, $this->objectManagerProvider))
+            : new CommandTester(new ModuleDisableCommand($this->generatedFiles, $this->objectManagerProvider));
         $commandTester->execute(['module' => ['Magento_Module1', 'Magento_Module2']]);
         $this->assertStringMatchesFormat(
             'No modules were changed%a',
