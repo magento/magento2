@@ -19,8 +19,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->eavConfig = $this->getMock('\Magento\Eav\Model\Config', ['getEntityAttributeCodes', 'getAttribute'], [], '', false);
-        $this->swatchHelper = $this->getMock('\Magento\Swatches\Helper\Data', ['isVisualSwatch', 'isTextSwatch'], [], '', false);
+        $this->eavConfig = $this->getMock(
+            '\Magento\Eav\Model\Config',
+            ['getEntityAttributeCodes', 'getAttribute'],
+            [],
+            '',
+            false
+        );
+        $this->swatchHelper = $this->getMock(
+            '\Magento\Swatches\Helper\Data',
+            ['isVisualSwatch', 'isTextSwatch'],
+            [],
+            '',
+            false
+        );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->pluginModel = $objectManager->getObject(
@@ -32,24 +44,43 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterGetUsedProductCollection() {
+    public function testAfterGetUsedProductCollection()
+    {
         $subject = $this->getMock('\Magento\ConfigurableProduct\Model\Product\Type\Configurable', [], [], '', false);
-        $result = $this->getMock('\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection', ['getEntity', 'addAttributeToSelect'], [], '', false);
+        $result = $this->getMock(
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
+            ['getEntity', 'addAttributeToSelect'],
+            [],
+            '',
+            false
+        );
 
-        $collectionEntity = $this->getMock('\Magento\Eav\Model\Entity\Collection\AbstractCollection', ['getType'], [], '', false);
+        $collectionEntity = $this->getMock(
+            '\Magento\Eav\Model\Entity\Collection\AbstractCollection',
+            ['getType'],
+            [],
+            '',
+            false
+        );
         $collectionEntity->expects($this->once())->method('getType')->willReturn('catalog');
         $result->expects($this->once())->method('getEntity')->willReturn($collectionEntity);
 
         $attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
 
-        $this->eavConfig->expects($this->once())->method('getEntityAttributeCodes')->with('catalog')->willReturn(['size', 'color', 'swatch1']);
+        $this->eavConfig->expects($this->once())->method('getEntityAttributeCodes')->with('catalog')
+            ->willReturn(['size', 'color', 'swatch1']);
+
         $this->eavConfig->expects($this->exactly(3))->method('getAttribute')->willReturn($attribute);
 
         $this->swatchHelper->expects($this->exactly(3))->method('isVisualSwatch')->with($attribute)->willReturn(true);
 
-        $result->expects($this->once())->method('addAttributeToSelect')->with($this->identicalTo(['image', 'size', 'color', 'swatch1']))->willReturn($result);
+        $result->expects($this->once())->method('addAttributeToSelect')
+            ->with($this->identicalTo(['image', 'size', 'color', 'swatch1']))->willReturn($result);
 
         $result = $this->pluginModel->afterGetUsedProductCollection($subject, $result);
-        $this->assertInstanceOf('\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection', $result);
+        $this->assertInstanceOf(
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection',
+            $result
+        );
     }
 }
