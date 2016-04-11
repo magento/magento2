@@ -27,6 +27,22 @@ class Select extends DefaultValidator
     }
 
     /**
+     * Unset values marked for deleting
+     *
+     * @param $values
+     * @return $this
+     */
+    protected function cleanValues(&$values)
+    {
+        foreach ($values as $index => $value) {
+            if (array_key_exists('is_delete', $value) && $value['is_delete'] == 1) {
+                unset($values[$index]);
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Validate option type fields
      *
      * @param Option $option
@@ -45,6 +61,9 @@ class Select extends DefaultValidator
         if ($this->checkAllValuesRemoved($values)) {
             return false;
         }
+
+        //do not validate values for deleteing
+        $this->cleanValues($values);
 
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
         if ($option->getProduct()) {
