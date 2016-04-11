@@ -191,6 +191,13 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
                 'expected' => 'custom_options',
             ],
             [
+                'options' => [
+                    1 => 'value',
+                    2 => [1, 2, [1, 2]],
+                ],
+                'expected' => 'custom_options',
+            ],
+            [
                 'options' => [],
                 'expected' => null,
             ],

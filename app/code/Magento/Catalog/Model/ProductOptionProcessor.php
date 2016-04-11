@@ -84,6 +84,10 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
             $data = [];
             foreach ($options as $optionId => $optionValue) {
                 if (is_array($optionValue)) {
+                    $filter = function ($item) {
+                        return !is_array($item);
+                    };
+                    $optionValue = array_filter($optionValue, $filter);
                     $optionValue = implode(',', $optionValue);
                 }
 
