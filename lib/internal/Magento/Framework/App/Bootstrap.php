@@ -10,7 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\AppInterface;
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\Populator;
-use Magento\Framework\Code\GeneratedFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Profiler;
@@ -118,8 +117,6 @@ class Bootstrap
      */
     public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
     {
-        $generatedFiles = new GeneratedFiles();
-        $generatedFiles->requestRegeneration($initParams);
         self::populateAutoloader($rootDir, $initParams);
         if ($factory === null) {
             $factory = self::createObjectManagerFactory($rootDir, $initParams);
