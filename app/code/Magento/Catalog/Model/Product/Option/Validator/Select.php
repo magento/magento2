@@ -16,7 +16,7 @@ class Select extends DefaultValidator
      * @param array $values
      * @return bool
      */
-    private function checkAllValuesRemoved($values)
+    protected function checkAllValuesRemoved($values)
     {
         foreach ($values as $value) {
             if (!array_key_exists('is_delete', $value) || $value['is_delete'] != 1) {
