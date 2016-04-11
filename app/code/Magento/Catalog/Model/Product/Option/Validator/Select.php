@@ -16,7 +16,7 @@ class Select extends DefaultValidator
      * @param array $values
      * @return bool
      */
-    protected function checkAllValuesRemoved($values)
+    private function checkAllValuesRemoved($values)
     {
         foreach ($values as $value) {
             if (!array_key_exists('is_delete', $value) || $value['is_delete'] != 1) {
@@ -29,17 +29,17 @@ class Select extends DefaultValidator
     /**
      * Unset values marked for deleting
      *
-     * @param $values
-     * @return $this
+     * @param array $values
+     * @return array
      */
-    protected function cleanValues(&$values)
+    private function filterDeletedValues($values)
     {
         foreach ($values as $index => $value) {
             if (array_key_exists('is_delete', $value) && $value['is_delete'] == 1) {
                 unset($values[$index]);
             }
         }
-        return $this;
+        return $values;
     }
 
     /**
@@ -62,8 +62,8 @@ class Select extends DefaultValidator
             return false;
         }
 
-        //do not validate values for deleteing
-        $this->cleanValues($values);
+        //do not validate values for deleting
+        $values = $this->filterDeletedValues($values);
 
         $storeId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
         if ($option->getProduct()) {
