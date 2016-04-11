@@ -411,7 +411,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         ];
 
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $this->setExpectedException('SoapFault', $message);
+            $this->setExpectedException('SoapFault');
         } else {
             $this->setExpectedException('Exception', $message, 400);
         }
