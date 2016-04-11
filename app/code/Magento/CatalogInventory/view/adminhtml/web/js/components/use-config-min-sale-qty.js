@@ -38,8 +38,9 @@ define([
          * @inheritdoc
          */
         'onCheckedChanged': function (newChecked) {
+            var valueFromConfig = this.valueFromConfig();
+
             if (newChecked) {
-                var valueFromConfig = this.valueFromConfig();
                 if (_.isArray(valueFromConfig)) {
                     this.changeVisibleDisabled(this.inputField, true, true, 1);
                 } else if (_.isObject(valueFromConfig)) {
@@ -66,11 +67,13 @@ define([
             registry.async(filter)(
                 function (currentComponent) {
                     var initialValue = currentComponent.initialValue;
+
                     if (_.isString(initialValue) || valueFromConfig === 1) {
                         currentComponent.value(1);
                     } else if (initialValue) {
                         currentComponent.value(initialValue);
                     }
+
                     currentComponent.visible(visible);
                     currentComponent.disabled(disabled);
                 }

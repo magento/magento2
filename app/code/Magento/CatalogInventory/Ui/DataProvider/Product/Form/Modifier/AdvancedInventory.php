@@ -94,7 +94,8 @@ class AdvancedInventory extends AbstractModifier
             foreach ($minSaleQtyValue as $group => $qty) {
                 $minSaleQtyData[] = ['customer_group_id' => $group, 'min_sale_qty' => $qty];
             }
-            $data[$modelId][self::DATA_SOURCE_DEFAULT]['stock_data']['min_qty_allowed_in_shopping_cart'] = $minSaleQtyData;
+            $data[$modelId][self::DATA_SOURCE_DEFAULT]['stock_data']['min_qty_allowed_in_shopping_cart']
+                = $minSaleQtyData;
         }
 
         return $data;
