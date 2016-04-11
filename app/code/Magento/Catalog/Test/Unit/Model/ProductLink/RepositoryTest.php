@@ -18,6 +18,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $hydratorPoolMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $hydratorMock;
 
     /**
@@ -78,7 +83,14 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->metadataPoolMock = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
+            'Magento\Framework\EntityManager\MetadataPool',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->hydratorPoolMock = $this->getMock(
+            'Magento\Framework\EntityManager\HydratorPool',
             [],
             [],
             '',
@@ -86,13 +98,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->hydratorMock = $this->getMock(
             'Magento\Framework\Model\Entity\EntityHydrator',
-            [],
+            ['extract'],
             [],
             '',
             false
         );
         $this->metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -112,7 +124,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->metadataPoolMock->expects($this->any())->method('getHydrator')->willReturn($this->hydratorMock);
+        $this->hydratorPoolMock->expects($this->any())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -123,6 +135,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 'linkInitializer' => $this->linkInitializerMock,
                 'linkManagement' => $linkManagementMock,
                 'metadataPool' => $this->metadataPoolMock,
+                'hydratorPool' => $this->hydratorPoolMock,
                 'linkTypeProvider' => $this->linkTypeProvider,
                 'linkResource' => $this->linkResourceMock
             ]
@@ -151,6 +164,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
+        $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('linkField');
         $this->hydratorMock->expects($this->once())->method('extract')
             ->with($productMock)
@@ -186,6 +200,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
+        $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('linkField');
         $this->hydratorMock->expects($this->once())->method('extract')
             ->with($productMock)
@@ -220,6 +235,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
+        $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('linkField');
         $this->hydratorMock->expects($this->once())->method('extract')
             ->with($productMock)
@@ -256,6 +272,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->once())->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
+        $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('linkField');
         $this->hydratorMock->expects($this->once())->method('extract')
             ->with($productMock)
@@ -288,6 +305,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->exactly(2))->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->exactly(2))->method('getSku')->willReturn('product');
         $entityMock->expects($this->once())->method('getLinkType')->willReturn('linkType');
+        $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->model->delete($entityMock);
     }
 }
