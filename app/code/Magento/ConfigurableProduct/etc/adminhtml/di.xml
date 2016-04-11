@@ -47,6 +47,7 @@
     </virtualType>
     <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite">
         <arguments>
+            <argument name="allowedProductTypes" xsi:type="object">Magento\Catalog\Ui\BaseAllowedProductTypes</argument>
             <argument name="modifiers" xsi:type="array">
                 <item name="configurablePanel" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel</item>
                 <item name="configurablePrice" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice</item>
@@ -64,4 +65,13 @@
             <argument name="dataSourceName" xsi:type="string">product_form.product_form_data_source</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\BaseAllowedProductTypes" type="Magento\Catalog\Ui\AllowedProductTypes">
+        <arguments>
+            <argument name="productTypes" xsi:type="array">
+                <item name="simple" xsi:type="string">simple</item>
+                <item name="virtual" xsi:type="string">virtual</item>
+                <item name="configurable" xsi:type="string">configurable</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
