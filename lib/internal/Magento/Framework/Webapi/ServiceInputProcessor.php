@@ -155,7 +155,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     }
                 } catch (SerializationException $e) {
                     throw new SerializationException(
-                        __(
+                        new Phrase(
                             'Error occurred during "%field_name" processing. %details',
                             ['field_name' => $propertyName, 'details' => $e->getMessage()]
                         )
