@@ -9,11 +9,11 @@ use Magento\Vault\Block\CardRendererInterface;
 
 /** @var CardRendererInterface|Template $block */
 
-$ccNumberView = 'xxxx-xxxx-xxxx-' . $block->escapeHtml($block->getNumberLast4Digits());
+$ccNumberView = $block->escapeHtml($block->getNumberLast4Digits());
 ?>
 <tr>
     <td data-th="<?php echo $block->escapeHtml(__('Card Number')) ?>" class="col card-number">
-        <?php /* @noEscape */ echo $ccNumberView ?>
+        <span><?php echo $block->escapeHtml(__('ending')); ?></span> <?php /* @noEscape */ echo $ccNumberView ?>
     </td>
     <td data-th="<?php echo $block->escapeHtml(__('Expiration Date')) ?>" class="col card-expire">
         <?php echo $block->escapeHtml($block->getExpDate()); ?>
@@ -27,7 +27,7 @@ $ccNumberView = 'xxxx-xxxx-xxxx-' . $block->escapeHtml($block->getNumberLast4Dig
     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
         <form
             class="form"
-            action="<?php /* @escapeNotVerified */ echo $block->getUrl('vault/cards/deleteaction') ?>"
+            action="<?php echo $block->escapeUrl($block->getUrl('vault/cards/deleteaction')); ?>"
             method="post"
             >
             <?php echo $block->getBlockHtml('formkey')?>
@@ -50,5 +50,6 @@ $ccNumberView = 'xxxx-xxxx-xxxx-' . $block->escapeHtml($block->getNumberLast4Dig
                                 }'>
                 <span><?php echo $block->escapeHtml(__('Delete')) ?></span>
             </button>
+        </form>
     </td>
 </tr>

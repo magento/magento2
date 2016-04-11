@@ -342,6 +342,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
             [
