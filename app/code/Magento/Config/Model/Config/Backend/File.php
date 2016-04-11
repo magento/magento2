@@ -179,7 +179,6 @@ class File extends \Magento\Framework\App\Config\Value
     protected function _getUploadDir()
     {
         $fieldConfig = $this->getFieldConfig();
-        /* @var $fieldConfig \Magento\Framework\Simplexml\Element */
 
         if (!array_key_exists('upload_dir', $fieldConfig)) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -189,19 +188,32 @@ class File extends \Magento\Framework\App\Config\Value
 
         if (is_array($fieldConfig['upload_dir'])) {
             $uploadDir = $fieldConfig['upload_dir']['value'];
-            if (array_key_exists('scope_info', $fieldConfig['upload_dir']) && $fieldConfig['upload_dir']['scope_info']
+            if (
+                array_key_exists('scope_info', $fieldConfig['upload_dir'])
+                && $fieldConfig['upload_dir']['scope_info']
             ) {
                 $uploadDir = $this->_appendScopeInfo($uploadDir);
             }
 
             if (array_key_exists('config', $fieldConfig['upload_dir'])) {
-                $uploadDir = $this->_mediaDirectory->getAbsolutePath($uploadDir);
+                $uploadDir = $this->getUploadDirPath($uploadDir);
             }
         } else {
             $uploadDir = (string)$fieldConfig['upload_dir'];
         }
 
         return $uploadDir;
+    }
+
+    /**
+     * Retrieve upload directory path
+     *
+     * @param string $uploadDir
+     * @return string
+     */
+    protected function getUploadDirPath($uploadDir)
+    {
+        return $this->_mediaDirectory->getAbsolutePath($uploadDir);
     }
 
     /**
