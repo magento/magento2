@@ -24,6 +24,7 @@ define([
             insertDataFromWizard: [],
             map: null,
             isEmpty: true,
+            isShowAddProductButton: false,
             cacheGridData: [],
             unionInsertData: [],
             deleteProperty: false,
@@ -48,6 +49,17 @@ define([
                 modalWithGrid: '${ $.modalWithGrid }',
                 gridWithProducts: '${ $.gridWithProducts}'
             }
+        },
+
+        /**
+         * Invokes initialize method of parent class,
+         * contains initialization logic
+         */
+        initialize: function () {
+            this._super()
+                .changeVisibility(this.isEmpty());
+
+            return this;
         },
 
         /**
@@ -109,6 +121,7 @@ define([
             if (!tmpArray.length) {
                 this.attributesTmp = this.source.get('data.attributes');
                 this.source.set('data.attributes', []);
+                this.cacheGridData = [];
             }
 
             this.unionInsertData(tmpArray);
@@ -138,7 +151,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'actionsListOpened'
+                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'isShowAddProductButton', 'actionsListOpened'
                 ]);
 
             return this;
@@ -174,7 +187,10 @@ define([
                 attributeCodes = this.source.get('data.attribute_codes');
 
             this.source.remove(this.dataScope + '.' + this.index);
-            this.isEmpty((!attributeCodes || data.length > 0 ? data.length : attributeCodes.length) === 0);
+            this.isEmpty(data.length === 0);
+            this.isShowAddProductButton(
+                (!attributeCodes || data.length > 0 ? data.length : attributeCodes.length) > 0
+            );
 
             _.each(data, function (row) {
                 _.each(row, function (value, key) {
