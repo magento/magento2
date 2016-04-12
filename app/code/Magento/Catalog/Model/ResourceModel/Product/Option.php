@@ -16,7 +16,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -561,13 +561,13 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
     }
