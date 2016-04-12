@@ -73,6 +73,7 @@ class ReadinessCheck
      * @param DeploymentConfig $deploymentConfig
      * @param Filesystem $filesystem
      * @param PhpReadinessCheck $phpReadinessCheck
+     * @param PathBuilder $pathBuilder
      */
     public function __construct(
         DbValidator $dbValidator,
