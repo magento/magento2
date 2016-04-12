@@ -37,7 +37,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRegularPrice()
     {
-        $priceInfoMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\PriceInfoInterface',
+        $priceInfoMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Pricing\PriceInfoInterface',
             [],
             '',
             false,
