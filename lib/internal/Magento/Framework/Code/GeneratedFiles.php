@@ -66,7 +66,7 @@ class GeneratedFiles
      * Create flag for regeneration of code and di
      *
      * @return void
-    */
+     */
     public function requestRegeneration()
     {
         $this->write->touch(self::REGENERATE_FLAG);
