@@ -17,20 +17,22 @@ define([
      * @returns {Object}
      */
     function validate(id, value, params) {
-        result = {
-            rule: id,
-            passed: true,
-            message: ''
-        };
+        var rule,
+            message,
+            valid,
+            result = {
+                rule: id,
+                passed: true,
+                message: ''
+            };
 
         if (!rulesList[id]) {
             return result;
         }
 
-        var rule    = rulesList[id],
-            message = rule.message,
-            valid   = rule.handler(value, params),
-            result;
+        rule    = rulesList[id];
+        message = rule.message;
+        valid   = rule.handler(value, params);
 
         if (!valid) {
             params = Array.isArray(params) ?
