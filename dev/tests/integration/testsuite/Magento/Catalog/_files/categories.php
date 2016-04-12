@@ -21,13 +21,20 @@ $categoryLinkRepository = $objectManager->create(
 );
 
 /** @var Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagement */
-$categoryLinkManagement = $objectManager->create(
-    'Magento\Catalog\Api\CategoryLinkManagementInterface',
-    [
-        'productRepository' => $productRepository,
-        'categoryLinkRepository' => $categoryLinkRepository
-    ]
-);
+$categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
+$reflectionClass = new \ReflectionClass(get_class($categoryLinkManagement));
+$properties = [
+    'productRepository' => $productRepository,
+    'categoryLinkRepository' => $categoryLinkRepository
+];
+foreach ($properties as $key => $value) {
+    if ($reflectionClass->hasProperty($key)) {
+        $reflectionProperty = $reflectionClass->getProperty($key);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($categoryLinkManagement, $value);
+    }
+}
+
 
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2

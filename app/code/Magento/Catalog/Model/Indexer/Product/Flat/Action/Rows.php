@@ -7,7 +7,6 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
 use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
-use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class Rows reindex action for mass actions
@@ -21,7 +20,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
     protected $flatItemEraser;
 
     /**
-     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
@@ -31,7 +29,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param Eraser $flatItemEraser
      */
     public function __construct(
-        MetadataPool $metadataPool,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
@@ -41,7 +38,6 @@ class Rows extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         Eraser $flatItemEraser
     ) {
         parent::__construct(
-            $metadataPool,
             $resource,
             $storeManager,
             $productHelper,

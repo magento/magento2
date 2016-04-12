@@ -115,9 +115,7 @@ abstract class WebapiAbstract extends \PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         //clear garbage in memory
-        if (version_compare(PHP_VERSION, '5.3', '>=')) {
-            gc_collect_cycles();
-        }
+        gc_collect_cycles();
 
         $fixtureNamespace = self::_getFixtureNamespace();
         if (isset(self::$_classLevelFixtures[$fixtureNamespace])

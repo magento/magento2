@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -22,7 +22,7 @@ class IndexBuilder
     const SECONDS_IN_DAY = 86400;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -106,7 +106,6 @@ class IndexBuilder
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param int $batchCount
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,7 +118,6 @@ class IndexBuilder
         \Magento\Framework\Stdlib\DateTime $dateFormat,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        MetadataPool $metadataPool,
         $batchCount = 1000
     ) {
         $this->resource = $resource;
@@ -133,7 +131,6 @@ class IndexBuilder
         $this->dateTime = $dateTime;
         $this->productFactory = $productFactory;
         $this->batchCount = $batchCount;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -604,7 +601,7 @@ class IndexBuilder
         $priceTable = $priceAttr->getBackend()->getTable();
         $attributeId = $priceAttr->getId();
 
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $select->join(
             ['e' => $this->getTable('catalog_product_entity')],
             sprintf('e.entity_id = rp.product_id'),
@@ -731,5 +728,17 @@ class IndexBuilder
         }
 
         return $timeStamp;
+    }
+
+    /**
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

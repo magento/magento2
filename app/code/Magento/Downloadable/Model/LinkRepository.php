@@ -7,17 +7,18 @@ namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface as ProductRepository;
-use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
 use Magento\Downloadable\Api\Data\LinkInterface;
-use \Magento\Downloadable\Model\Product\Type as DownloadableType;
-use Magento\Downloadable\Model\Link\ContentValidator;
+use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
 use Magento\Downloadable\Helper\File;
-use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Downloadable\Model\Link\ContentValidator;
+use Magento\Downloadable\Model\Product\Type as DownloadableType;
 use Magento\Downloadable\Model\ResourceModel\Link as LinkResource;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class LinkRepository
@@ -28,7 +29,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @var ProductRepository
@@ -66,7 +67,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     protected $downloadableFile;
 
     /**
-     * @param MetadataPool $metadataPool
      * @param ProductRepository $productRepository
      * @param DownloadableType $downloadableType
      * @param LinkResource $resourceModel
@@ -76,7 +76,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @param File $downloadableFile
      */
     public function __construct(
-        MetadataPool $metadataPool,
         ProductRepository $productRepository,
         DownloadableType $downloadableType,
         LinkResource $resourceModel,
@@ -85,7 +84,6 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         JsonHelper $jsonHelper,
         File $downloadableFile
     ) {
-        $this->metadataPool = $metadataPool;
         $this->productRepository = $productRepository;
         $this->downloadableType = $downloadableType;
         $this->resourceModel = $resourceModel;
@@ -187,7 +185,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         if (empty($title)) {
             throw new InputException(__('Link title cannot be empty.'));
         }
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $link->setProductId($product->getData($metadata->getLinkField()));
         $this->setFiles($link);
         $this->resourceModel->save($link);
@@ -240,5 +238,17 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             throw new StateException(__('Cannot delete link with id %1', $link->getId()), $exception);
         }
         return true;
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

@@ -48,26 +48,36 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $structureMock->expects($this->at(2))
-            ->method('addAssets')
-            ->with('path/file.css', ['src' => 'path/file.css', 'media' => 'all', 'content_type' => 'css'])
+            ->method('setMetaData')
+            ->with('og:video:secure_url', 'https://secure.example.com/movie.swf')
             ->willReturnSelf();
 
         $structureMock->expects($this->at(3))
-            ->method('addAssets')
-            ->with('path/file.js', ['src' => 'path/file.js', 'defer' => 'defer', 'content_type' => 'js'])
+            ->method('setMetaData')
+            ->with('og:locale:alternate', 'uk_UA')
             ->willReturnSelf();
 
         $structureMock->expects($this->at(4))
             ->method('addAssets')
-            ->with('http://url.com', ['src' => 'http://url.com', 'src_type' => 'url'])
+            ->with('path/file.css', ['src' => 'path/file.css', 'media' => 'all', 'content_type' => 'css'])
             ->willReturnSelf();
 
         $structureMock->expects($this->at(5))
+            ->method('addAssets')
+            ->with('path/file.js', ['src' => 'path/file.js', 'defer' => 'defer', 'content_type' => 'js'])
+            ->willReturnSelf();
+
+        $structureMock->expects($this->at(6))
+            ->method('addAssets')
+            ->with('http://url.com', ['src' => 'http://url.com', 'src_type' => 'url'])
+            ->willReturnSelf();
+
+        $structureMock->expects($this->at(7))
             ->method('removeAssets')
             ->with('path/remove/file.css')
             ->willReturnSelf();
 
-        $structureMock->expects($this->at(6))
+        $structureMock->expects($this->at(8))
             ->method('setElementAttribute')
             ->with(Config::ELEMENT_TYPE_HEAD, 'head_attribute_name', 'head_attribute_value')
             ->willReturnSelf();

@@ -80,6 +80,7 @@ class DataLoader
             && $storedData['scope'] == $scope && $storedData['scope_id'] == $scopeId
         ) {
             $data[$scope] = $storedData;
+            $this->dataPersistor->clear('theme_design_config');
         }
 
         return $data;
