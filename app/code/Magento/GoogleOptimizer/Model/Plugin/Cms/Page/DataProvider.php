@@ -6,8 +6,6 @@
 
 namespace Magento\GoogleOptimizer\Model\Plugin\Cms\Page;
 
-
-
 class DataProvider
 {
     /**
@@ -34,7 +32,8 @@ class DataProvider
     public function afterPrepareMeta(\Magento\Cms\Model\Page\DataProvider $subject, $result)
     {
         $result['page_view_optimization']['arguments']['data']['disabled'] = !$this->helper->isGoogleExperimentActive();
-        $result['page_view_optimization']['arguments']['data']['config']['componentType'] = \Magento\Ui\Component\Form\Fieldset::NAME;
+        $result['page_view_optimization']['arguments']['data']['config']['componentType'] =
+            \Magento\Ui\Component\Form\Fieldset::NAME;
         $result['page_view_optimization']['arguments']['data']['config']['label'] = __('Page View Optimization');
         return $result;
     }
