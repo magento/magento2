@@ -23,7 +23,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
@@ -44,7 +44,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $metadata = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -72,7 +72,7 @@ class CreateEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturn('100000001');
 
         $this->metadataPool = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
+            'Magento\Framework\EntityManager\MetadataPool',
             [],
             [],
             '',
