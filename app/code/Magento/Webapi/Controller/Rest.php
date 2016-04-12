@@ -270,11 +270,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected function processApiRequest()
     {
         $this->validateRequest();
-        /** @var array $inputData */
-        $inputData = $this->_request->getRequestData();
         $route = $this->getCurrentRoute();
         $serviceMethodName = $route->getServiceMethod();
         $serviceClassName = $route->getServiceClass();
+        /** @var array $inputData */
+        $inputData = $this->_request->getRequestData($serviceClassName, $serviceMethodName);
         $inputData = $this->paramsOverrider->override($inputData, $route->getParameters());
         $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
         $service = $this->_objectManager->get($serviceClassName);
