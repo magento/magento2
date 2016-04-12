@@ -53,7 +53,7 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
                 'value',
                 'default',
                 0,
-                'design/head/default_title'
+                ['path' => 'design/head/default_title']
             )
         );
     }
@@ -77,7 +77,7 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
                 'value',
                 'website',
                 1,
-                'design/head/default_title'
+                ['path' => 'design/head/default_title']
             )
         );
     }
@@ -111,7 +111,7 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
                 ],
                 'website',
                 1,
-                $path
+                ['path' => $path]
             )
         );
     }

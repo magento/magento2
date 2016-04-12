@@ -6,15 +6,16 @@
 
 namespace Magento\Eav\Model\ResourceModel;
 
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Model\Entity\ScopeResolver;
+use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
 /**
  * Class CreateHandler
  */
-class CreateHandler
+class CreateHandler implements AttributeInterface
 {
     /**
      * @var AttributeRepository
@@ -81,11 +82,13 @@ class CreateHandler
 
     /**
      * @param string $entityType
-     * @param array $data
+     * @param array $entityData
+     * @param array $arguments
      * @return array
      * @throws \Exception
+     * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      */
-    public function execute($entityType, $data)
+    public function execute($entityType, $entityData, $arguments = [])
     {
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
 
@@ -96,21 +99,21 @@ class CreateHandler
                 if ($attribute->isStatic()) {
                     continue;
                 }
-                if (isset($data[$attribute->getAttributeCode()])
-                    && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
+                if (isset($entityData[$attribute->getAttributeCode()])
+                    && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerInsert(
                         $entityType,
-                        $data[$metadata->getLinkField()],
+                        $entityData[$metadata->getLinkField()],
                         $attribute->getAttributeCode(),
-                        $data[$attribute->getAttributeCode()]
+                        $entityData[$attribute->getAttributeCode()]
                     );
-                    $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
+                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
             }
-            $context = $this->scopeResolver->getEntityContext($entityType, $data);
+            $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
             $this->attributePersistor->flush($entityType, $context);
         }
-        return $data;
+        return $entityData;
     }
 }
