@@ -46,7 +46,10 @@ class EntityCmsPage extends DataObject
     }
 
     /**
-     * @inheritDoc
+     * Returns Code Model
+     *
+     * @return GoogleOptimizerCode|null
+     * @throws NoSuchEntityException
      */
     public function getCode()
     {
