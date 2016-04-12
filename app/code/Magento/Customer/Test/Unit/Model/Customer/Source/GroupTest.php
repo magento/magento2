@@ -9,7 +9,6 @@ use Magento\Customer\Model\Customer\Source\Group;
 use Magento\Framework\Module\Manager;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Phrase;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
 
@@ -72,8 +71,8 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $customerGroups = [
-            ['label' => new Phrase('ALL GROUPS'), 'value' => 32000],
-            ['label' => new Phrase('NOT LOGGED IN'), 'value' => 0]
+            ['label' => __('ALL GROUPS'), 'value' => 32000],
+            ['label' => __('NOT LOGGED IN'), 'value' => 0]
         ];
 
         $this->moduleManagerMock->expects($this->any())
