@@ -9,8 +9,10 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
+use Magento\Framework\View\Design\Theme\Customization\Path;
 use Magento\Setup\Model\PhpReadinessCheck;
 use Magento\Setup\Validator\DbValidator;
+use Magento\Setup\Model\PathBuilder;
 
 /**
  * This class is used by setup:cron:run command to check if this command can be run properly. It also checks if PHP
@@ -32,7 +34,9 @@ class ReadinessCheck
     const KEY_PHP_VERSION_VERIFIED = 'php_version_verified';
     const KEY_PHP_SETTINGS_VERIFIED = 'php_settings_verified';
     const KEY_PHP_EXTENSIONS_VERIFIED = 'php_extensions_verified';
+    const KEY_DIR_AND_FILE_PATHS = 'dir_and_file_paths';
     const KEY_ERROR = 'error';
+    const KEY_LIST = 'list';
     const KEY_CURRENT_TIMESTAMP = 'current_timestamp';
     const KEY_LAST_TIMESTAMP = 'last_timestamp';
     /**#@-*/
@@ -58,6 +62,11 @@ class ReadinessCheck
     private $phpReadinessCheck;
 
     /**
+     * @var PathBuilder
+     */
+    private $pathBuilder;
+
+    /**
      * Constructor
      *
      * @param DbValidator $dbValidator
@@ -69,12 +78,14 @@ class ReadinessCheck
         DbValidator $dbValidator,
         DeploymentConfig $deploymentConfig,
         Filesystem $filesystem,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        PathBuilder $pathBuilder
     ) {
         $this->dbValidator = $dbValidator;
         $this->deploymentConfig = $deploymentConfig;
         $this->filesystem = $filesystem;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->pathBuilder = $pathBuilder;
     }
 
     /**
@@ -84,6 +95,7 @@ class ReadinessCheck
      */
     public function runReadinessCheck()
     {
+        $returnValue = true;
         $resultJsonRawData = [self::KEY_READINESS_CHECKS => []];
         // checks PHP
         $phpVersionCheckResult = $this->phpReadinessCheck->checkPhpVersion();
@@ -92,8 +104,6 @@ class ReadinessCheck
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_VERSION_VERIFIED] = $phpVersionCheckResult;
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_EXTENSIONS_VERIFIED] = $phpExtensionsCheckResult;
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_SETTINGS_VERIFIED] = $phpSettingsCheckResult;
-        // checks Database privileges
-        $success = true;
         $errorMsg = '';
         $write = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $dbInfo = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
@@ -104,16 +114,29 @@ class ReadinessCheck
                 $dbInfo[ConfigOptionsListConstants::KEY_USER],
                 $dbInfo[ConfigOptionsListConstants::KEY_PASSWORD]
             );
-        } catch (\Exception $e) {
-            $success = false;
-            $errorMsg .= $e->getMessage();
-        }
-        if ($success) {
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_DB_WRITE_PERMISSION_VERIFIED] = true;
-        } else {
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_DB_WRITE_PERMISSION_VERIFIED] = false;
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMsg;
+            $returnValue = false;
         }
+
+        $errorMsg = '';
+        // Prepare list of magento specific files and directory paths for updater application to check write
+        // permissions
+        try {
+            $dirAndFilePaths = $this->pathBuilder->build();
+            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_LIST] = $dirAndFilePaths;
+            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_ERROR] = $errorMsg;
+
+        } catch (\Exception $e) {
+            $errorMsg = $e->getMessage();
+            $returnValue = false;
+            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_ERROR] = $errorMsg;
+            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_LIST] = [];
+        }
+
         // updates timestamp
         if ($write->isExist(self::SETUP_CRON_JOB_STATUS_FILE)) {
             $jsonData = json_decode($write->readFile(self::SETUP_CRON_JOB_STATUS_FILE), true);
@@ -125,6 +148,6 @@ class ReadinessCheck
 
         $resultJson = json_encode($resultJsonRawData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $write->writeFile(self::SETUP_CRON_JOB_STATUS_FILE, $resultJson);
-        return $success;
+        return $returnValue;
     }
 }
