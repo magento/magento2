@@ -10,8 +10,9 @@ define([
     'Magento_Checkout/js/view/payment/default',
     'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function ($, _, Component, Braintree, quote, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+    'Magento_Checkout/js/model/payment/additional-validators'
+], function ($, _, Component, Braintree, quote, fullScreenLoader, additionalValidators) {
     'use strict';
 
     var checkout;
@@ -173,7 +174,9 @@ define([
          * Triggers when customer click "Continue to PayPal" button
          */
         payWithPayPal: function () {
-            checkout.paypal.initAuthFlow();
+            if (additionalValidators.validate()) {
+                checkout.paypal.initAuthFlow();
+            }
         },
 
         /**
