@@ -41,6 +41,11 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private $readinessCheck;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PathBuilder
+     */
+    private $pathBuilder;
+
+    /**
      * @var array
      */
     private $expected;
@@ -63,11 +68,13 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
         $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
+        $this->pathBuilder = $this->getMock('Magento\Setup\Model\PathBuilder', [], [], '', false);
         $this->readinessCheck = new ReadinessCheck(
             $this->dbValidator,
             $this->deploymentConfig,
             $this->filesystem,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->pathBuilder
         );
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion')->willReturn(['success' => true]);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(['success' => true]);

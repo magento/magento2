@@ -33,8 +33,7 @@ class PathBuilder
      */
     public function __construct(
         DirectoryList $directoryList
-    )
-    {
+    ) {
         $this->directoryList = $directoryList;
     }
 
