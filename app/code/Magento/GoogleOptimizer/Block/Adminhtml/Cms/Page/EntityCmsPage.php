@@ -11,7 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GoogleOptimizer\Block\Adminhtml\EntityCodeResolverInterface;
 use Magento\GoogleOptimizer\Model\Code as GoogleOptimizerCode;
 
-class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
+class EntityCmsPage extends DataObject
 {
     /**
      * @var \Magento\Framework\Registry
@@ -50,9 +50,13 @@ class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
      */
     public function getCode()
     {
+        $code = null;
         $entity = $this->getEntity();
-        $this->codeModel->loadByEntityIdAndType($entity->getId(), GoogleOptimizerCode::ENTITY_TYPE_PAGE);
-        return $this->codeModel;
+        if ($entity->getId()) {
+            $this->codeModel->loadByEntityIdAndType($entity->getId(), GoogleOptimizerCode::ENTITY_TYPE_PAGE);
+            $code = $this->codeModel;
+        }
+        return $code;
     }
 
     /**
@@ -65,7 +69,7 @@ class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
     {
         if (!$this->entity) {
             $this->entity = $this->coreRegistry->registry('cms_page');
-            if (!$this->entity || !$this->entity->getId()) {
+            if (!$this->entity) {
                 throw new NoSuchEntityException();
             }
         }
