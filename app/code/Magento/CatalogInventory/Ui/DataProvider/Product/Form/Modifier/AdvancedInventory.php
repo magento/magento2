@@ -95,11 +95,11 @@ class AdvancedInventory extends AbstractModifier
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
             if ($minSaleQtyValue !== false) {
                 foreach ($minSaleQtyValue as $group => $qty) {
-                    $minSaleQtyData[] = ['customer_group_id' => $group, 'min_sale_qty' => $qty];
+                    $minSaleQtyData[] = ['customer_group_id' => $group, StockItemInterface::MIN_SALE_QTY => $qty];
                     $data = $this->arrayManager->set($path, $data, $minSaleQtyData);
                 }
             } else {
-                $minSaleQtyData = $this->stockConfiguration->getDefaultConfigValue('min_sale_qty');
+                $minSaleQtyData = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
                 $data = $this->arrayManager->set($path, $data, $minSaleQtyData);
             }
         }
