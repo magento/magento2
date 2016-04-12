@@ -30,6 +30,11 @@ use Magento\Framework\EntityManager\MetadataPool;
  */
 class Option extends AbstractExtensibleModel implements ProductCustomOptionInterface
 {
+    /**
+     * Option type percent
+     */
+    const TYPE_PERCENT = 'percent';
+
     const OPTION_GROUP_TEXT = 'text';
 
     const OPTION_GROUP_FILE = 'file';
@@ -424,7 +429,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == 'percent') {
+        if ($flag && $this->getPriceType() == self::TYPE_PERCENT) {
             $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
@@ -825,6 +830,21 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     public function getExtensionAttributes()
     {
         return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * Return regular price.
+     *
+     * @return float|int
+     */
+    public function getRegularPrice()
+    {
+        if ($this->getPriceType() == self::TYPE_PERCENT) {
+            $basePrice = $this->getProduct()->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            return $price;
+        }
+        return $this->_getData(self::KEY_PRICE);
     }
 
     /**
