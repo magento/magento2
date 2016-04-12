@@ -22,7 +22,6 @@ use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\App\ObjectManager;
-use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Class QuoteManagement

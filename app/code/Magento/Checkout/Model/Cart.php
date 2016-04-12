@@ -14,6 +14,7 @@ use Magento\Framework\DataObject;
 /**
  * Shopping cart model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 
  */
 class Cart extends DataObject implements CartInterface
 {
