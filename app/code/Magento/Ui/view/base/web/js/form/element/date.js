@@ -114,7 +114,7 @@ define([
 
                 shiftedValue = shiftedValue.format(this.datetimeFormat);
             } else {
-                shiftedValue = value;
+                shiftedValue = '';
             }
             if (shiftedValue !== this.shiftedValue()) {
                 this.shiftedValue(shiftedValue);
@@ -139,7 +139,7 @@ define([
                     value = value.format(this.outputDateFormat);
                 }
             } else {
-                value = shiftedValue;
+                value = '';
             }
             if (value !== this.value()) {
                 this.value(value);
