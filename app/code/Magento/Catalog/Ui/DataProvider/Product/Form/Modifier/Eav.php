@@ -734,6 +734,10 @@ class Eav extends AbstractModifier
 
         $meta['arguments']['data']['config']['formElement'] = WysiwygElement::NAME;
         $meta['arguments']['data']['config']['wysiwyg'] = true;
+        $meta['arguments']['data']['config']['wysiwygConfigData'] = [
+            'add_variables' => false,
+            'add_widgets' => false
+        ];
 
         return $meta;
     }
