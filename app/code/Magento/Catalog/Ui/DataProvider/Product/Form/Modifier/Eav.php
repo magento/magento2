@@ -25,7 +25,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
@@ -52,9 +52,9 @@ class Eav extends AbstractModifier
     protected $eavConfig;
 
     /**
-     * @var EavValidationRules
+     * @var CatalogEavValidationRules
      */
-    protected $eavValidationRules;
+    protected $catalogEavValidationRules;
 
     /**
      * @var RequestInterface
@@ -163,7 +163,7 @@ class Eav extends AbstractModifier
 
     /**
      * @param LocatorInterface $locator
-     * @param EavValidationRules $eavValidationRules
+     * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
      * @param RequestInterface $request
      * @param GroupCollectionFactory $groupCollectionFactory
@@ -185,7 +185,7 @@ class Eav extends AbstractModifier
      */
     public function __construct(
         LocatorInterface $locator,
-        EavValidationRules $eavValidationRules,
+        CatalogEavValidationRules $catalogEavValidationRules,
         Config $eavConfig,
         RequestInterface $request,
         GroupCollectionFactory $groupCollectionFactory,
@@ -205,7 +205,7 @@ class Eav extends AbstractModifier
         $attributesToEliminate = []
     ) {
         $this->locator = $locator;
-        $this->eavValidationRules = $eavValidationRules;
+        $this->catalogEavValidationRules = $catalogEavValidationRules;
         $this->eavConfig = $eavConfig;
         $this->request = $request;
         $this->groupCollectionFactory = $groupCollectionFactory;
@@ -575,7 +575,7 @@ class Eav extends AbstractModifier
 
         // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
         $childData = $this->arrayManager->get($configPath, $meta, []);
-        if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
+        if (($rules = $this->catalogEavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'validation' => $rules,
             ]);
