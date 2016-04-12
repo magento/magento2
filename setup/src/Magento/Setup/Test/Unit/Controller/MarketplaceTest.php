@@ -35,9 +35,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->controller = new Marketplace($this->composerInformation, $this->marketplaceManager);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::saveAuthJsonAction
-     */
     public function testSaveAuthJsonAction()
     {
         $this->marketplaceManager
@@ -55,9 +52,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::saveAuthJsonAction
-     */
     public function testSaveAuthJsonActionWithError()
     {
         $this->marketplaceManager
@@ -75,9 +69,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::checkAuthAction
-     */
     public function testCheckAuthAction()
     {
         $this->marketplaceManager
@@ -95,9 +86,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::checkAuthAction
-     */
     public function testCheckAuthActionWithError()
     {
         $this->marketplaceManager
@@ -112,9 +100,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::removeCredentialsAction
-     */
     public function testRemoveCredentialsAction()
     {
         $this->marketplaceManager
@@ -129,9 +114,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::removeCredentialsAction
-     */
     public function testRemoveCredentialsWithError()
     {
         $this->marketplaceManager
@@ -146,9 +128,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::popupAuthAction
-     */
     public function testPopupAuthAction()
     {
         $viewModel = $this->controller->popupAuthAction();
