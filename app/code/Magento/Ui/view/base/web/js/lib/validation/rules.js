@@ -6,10 +6,11 @@ define([
     'jquery',
     'underscore',
     './utils',
+    'moment',
     'jquery/validate',
     'jquery/ui',
     'mage/translate'
-], function ($, _, utils) {
+], function ($, _, utils, moment) {
     'use strict';
 
     /**
@@ -73,7 +74,7 @@ define([
         "range-words": [
             function(value, params) {
                 return utils.stripHtml(value).match(/\b\w+\b/g).length >= params[0] &&
-                        value.match(/bw+b/g).length < params[1];
+                    value.match(/bw+b/g).length < params[1];
             },
             $.mage.__('Please enter between {0} and {1} words.')
         ],
@@ -758,7 +759,7 @@ define([
              * @param value - input field value
              * @return {*}
              */
-            function(value) {
+                function(value) {
                 return value;
             }, $.mage.__('Please enter issue number or start date for switch/solo card type.')
         ],
@@ -854,13 +855,13 @@ define([
         ],
         'date_range_min': [
             function (value, minValue) {
-                return new Date(value).getTime() >= (minValue * 1000);
+                return moment.utc(value, 'MM/DD/YYYY').unix() >= minValue;
             },
             $.mage.__('The date is not within the specified range.')
         ],
         'date_range_max': [
             function (value, maxValue) {
-                return new Date(value).getTime() <= (maxValue * 1000);
+                return moment.utc(value, 'MM/DD/YYYY').unix() <= maxValue;
             },
             $.mage.__('The date is not within the specified range.')
         ]
