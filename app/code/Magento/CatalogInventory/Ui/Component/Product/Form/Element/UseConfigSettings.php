@@ -27,7 +27,7 @@ class UseConfigSettings extends Checkbox
             && $config['valueFromConfig'] instanceof ValueSourceInterface
         ) {
             $keyInConfiguration = $config['valueFromConfig']->getValue($config['keyInConfiguration']);
-            if (isset($config['unserialized']) && $config['unserialized'] === true) {
+            if (!empty($config['unserialized'])) {
                 $config['valueFromConfig'] = @unserialize($keyInConfiguration) !== false
                     ? @unserialize($keyInConfiguration)
                     : $keyInConfiguration;

@@ -40,13 +40,11 @@ define([
         'onCheckedChanged': function (newChecked) {
             var valueFromConfig = this.valueFromConfig();
 
-            if (newChecked) {
-                if (_.isArray(valueFromConfig) || valueFromConfig === '1') {
-                    this.changeVisibleDisabled(this.inputField, true, true, 1);
-                } else if (_.isObject(valueFromConfig)) {
-                    this.changeVisibleDisabled(this.inputField, false, true, null);
-                    this.changeVisibleDisabled(this.dynamicRowsField, true, true, null);
-                }
+            if (newChecked && (_.isArray(valueFromConfig) || valueFromConfig === '1')) {
+                this.changeVisibleDisabled(this.inputField, true, true, 1);
+            } else if (newChecked && _.isObject(valueFromConfig)) {
+                this.changeVisibleDisabled(this.inputField, false, true, null);
+                this.changeVisibleDisabled(this.dynamicRowsField, true, true, null);
             } else {
                 this.changeVisibleDisabled(this.inputField, true, false, null);
                 this.changeVisibleDisabled(this.dynamicRowsField, false, true, null);
