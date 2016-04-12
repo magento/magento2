@@ -88,6 +88,10 @@ class Dependency
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $file = $moduleDir . '/composer.json';
 
+            if (!file_exists($file) || !is_readable($file)) {
+                continue;
+            }
+
             /** @var Package $package */
             $package = $this->getModuleComposerPackage($file);
             $suggest = json_decode(json_encode($package->get('suggest')), true);
