@@ -612,11 +612,12 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
 
     /**
      * @param bool $flag
-     * @return void
+     * @return $this
      */
     public function setHasDataChanges($flag)
     {
         $this->_hasDataChanges = $flag;
+        return $this;
     }
 
     /**
