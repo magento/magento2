@@ -94,7 +94,7 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
         $this->writeInterface
             ->expects($this->once())
             ->method('isExist')
-            ->with(BP. GeneratedFiles::REGENERATE_FLAG)
+            ->with(GeneratedFiles::REGENERATE_FLAG)
             ->willReturn(false);
         $this->directoryList->expects($this->never())->method('getPath');
         $this->writeInterface->expects($this->never())->method('getPath');
@@ -105,6 +105,6 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
     public function testRequestRegeneration()
     {
         $this->writeInterface->expects($this->once())->method("touch");
-        $this->model->regenerate();
+        $this->model->requestRegeneration();
     }
 }

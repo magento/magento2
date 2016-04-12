@@ -78,7 +78,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $content
-     * @param int $content
+     * @param int $payload
      * @dataProvider updateInvalidRequestDataProvider
      */
     public function testUpdateInvalidRequest($content, $payload)

@@ -145,8 +145,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \LogicException('Unknown module(s): invalid'));
         $commandTester = new CommandTester(new ModuleEnableCommand(
             $this->generatedFiles,
-            $this->objectManagerProvider)
-        );
+            $this->objectManagerProvider
+        ));
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
         $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());
@@ -160,8 +160,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \LogicException('Unknown module(s): invalid'));
         $commandTester = new CommandTester(new ModuleDisableCommand(
             $this->generatedFiles,
-            $this->objectManagerProvider)
-        );
+            $this->objectManagerProvider
+        ));
         $input = ['module' => ['invalid']];
         $commandTester->execute($input);
         $this->assertEquals('Unknown module(s): invalid' . PHP_EOL, $commandTester->getDisplay());

@@ -109,7 +109,7 @@ class ObjectManagerFactory
      */
     public function create(array $arguments)
     {
-        $writeFactory = new  \Magento\Framework\Filesystem\Directory\WriteFactory($this->driverPool);
+        $writeFactory = new \Magento\Framework\Filesystem\Directory\WriteFactory($this->driverPool);
         $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory);
         $generatedFiles->regenerate();
 

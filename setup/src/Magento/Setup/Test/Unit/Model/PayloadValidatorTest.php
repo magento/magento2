@@ -20,7 +20,6 @@ class PayloadValidatorTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
-
     public function setUp()
     {
         $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
