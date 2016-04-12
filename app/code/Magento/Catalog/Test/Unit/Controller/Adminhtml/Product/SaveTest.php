@@ -120,6 +120,7 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
                 'productBuilder' => $this->productBuilder,
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
+                'initializationHelper' => $this->initializationHelper,
                 'storeManager' => $storeManagerInterfaceMock,
             ]
         );
@@ -135,6 +136,8 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         $productData = ['product' => ['name' => 'test-name']];
 
         $this->request->expects($this->any())->method('getPostValue')->willReturn($productData);
+        $this->initializationHelper->expects($this->any())->method('initialize')
+            ->willReturn($this->product);
         $this->product->expects($this->any())->method('getSku')->willThrowException(new $exceptionType(__('message')));
 
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');
