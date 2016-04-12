@@ -342,7 +342,7 @@ class General extends AbstractModifier
                     'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
                     'handleSizeChanges' => '${$.provider}:data.product.size'
                 ],
-                'allowImport' => $this->locator->getProduct()->getId() ? false : true,
+                'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
             if (!in_array($listener, $textListeners)) {
