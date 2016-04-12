@@ -55,9 +55,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Prepares Meta
      *
+     * @param array $meta
      * @return array
      */
-    public function prepareMeta($meta)
+    public function prepareMeta(array $meta)
     {
         return $meta;
     }
