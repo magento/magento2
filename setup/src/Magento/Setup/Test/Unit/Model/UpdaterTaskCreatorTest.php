@@ -16,7 +16,6 @@ class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
      */
     private $updater;
 
-
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -55,15 +54,14 @@ class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $payload
      * @dataProvider createUpdaterTasksDataProvider
      */
-    public function testCreateUpdaterTasks($payload, $one, $two)
+    public function testCreateUpdaterTasks($payload)
     {
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
-        $write->expects($this->once())
-            ->method('writeFile');
-            //->with('.type.json', '{"type":"enable","headerTitle":"Enable Package 1","titles":["C"]}');
+        $write->expects($this->once())->method('writeFile');
         $this->cacheManager->expects($this->once())->method('getStatus')->willReturn([
             'cache1' => 1, 'cache2' => 0, 'cache3' => 1
         ]);
@@ -76,11 +74,22 @@ class UpdaterTaskCreatorTest extends \PHPUnit_Framework_TestCase
     public function createUpdaterTasksDataProvider()
     {
         return [
-            [['type' => 'uninstall', 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']], 'headerTitle'=>'Uninstall Package1', 'dataOption' => true], 0, false],
-            [['type' => 'update', 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]], 'headerTitle'=>'Uninstall Package1'], 0, false],
-            [['type' => 'enable', 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]], 'headerTitle'=>'Uninstall Package1'], 1, true],
-            [['type' => 'disable', 'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]], 'headerTitle'=>'Uninstall Package1'], 1, true],
+            [['type' => 'uninstall',
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
+                'headerTitle'=>'Uninstall Package1', 'dataOption' => true
+            ], 0, false],
+            [['type' => 'update',
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'headerTitle'=>'Uninstall Package1'
+            ], 0, false],
+            [['type' => 'enable',
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'headerTitle'=>'Uninstall Package1'
+            ], 1, true],
+            [['type' => 'disable',
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'headerTitle'=>'Uninstall Package1'
+            ], 1, true],
         ];
     }
-
 }

@@ -19,7 +19,8 @@ class PayloadValidator
     /**
      * @param \Magento\Framework\Module\FullModuleList $moduleList
      */
-    public function __construct(\Magento\Framework\Module\FullModuleList $moduleList) {
+    public function __construct(\Magento\Framework\Module\FullModuleList $moduleList)
+    {
         $this->moduleList = $moduleList;
     }
 

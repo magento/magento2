@@ -16,17 +16,17 @@ class GeneratedFiles
 {
     /**
      * Separator literal to assemble timer identifier from timer names
-     */
+    */
     const REGENERATE_FLAG = '/var/.regenerate';
 
     /**
      * @var DirectoryList
-     */
+    */
     private $directoryList;
 
     /**
      * @var WriteInterface
-     */
+    */
     private $write;
 
     /**
@@ -34,8 +34,9 @@ class GeneratedFiles
      *
      * @param DirectoryList $directoryList
      * @param WriteFactory $writeFactory
-     */
-    public function __construct(DirectoryList $directoryList, WriteFactory $writeFactory) {
+    */
+    public function __construct(DirectoryList $directoryList, WriteFactory $writeFactory)
+    {
         $this->directoryList = $directoryList;
         $this->write = $writeFactory->create(BP);
     }
@@ -44,8 +45,8 @@ class GeneratedFiles
      * Clean generated code and DI configuration
      *
      * @return void
-     */
-     public function regenerate()
+    */
+    public function regenerate()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
             $generationPath = BP . '/' . $this->directoryList->getPath(DirectoryList::GENERATION);
@@ -53,7 +54,7 @@ class GeneratedFiles
 
             if ($this->write->isDirectory($generationPath)) {
                 $this->write->delete($generationPath);
-			}
+            }
             if ($this->write->isDirectory($diPath)) {
                 $this->write->delete($diPath);
             }
@@ -63,9 +64,11 @@ class GeneratedFiles
 
     /**
      * Create flag for regeneration of code and di
-     */
+     *
+     * @return void
+    */
     public function requestRegeneration()
     {
-        $this->write->touch(BP . '/var/.regenerate');
+        $this->write->touch(self::REGENERATE_FLAG);
     }
 }
