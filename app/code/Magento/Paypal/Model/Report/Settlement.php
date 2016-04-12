@@ -164,6 +164,13 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
+     * Columns with DateTime data type
+     * 
+     * @var array
+     */
+    private $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
+
+    /**
     * @param \Magento\Framework\Model\Context $context
     * @param \Magento\Framework\Registry $registry
     * @param \Magento\Framework\Filesystem $filesystem
@@ -394,10 +401,9 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
     {
         $bodyItem = [];
-        $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
         for ($i = 1, $count = count($line); $i < $count; $i++) {
             if(isset($rowMap[$sectionColumns[$i]])) {
-                if (in_array($rowMap[$sectionColumns[$i]], $dateTimeColumns)) {
+                if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }
                 $bodyItem[$rowMap[$sectionColumns[$i]]] = $line[$i];
