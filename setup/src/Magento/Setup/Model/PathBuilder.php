@@ -12,9 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class PathBuilder
 {
-    const MAGENTO_BASE_PACKAGE_RELATIVE_PATH = 'magento/magento2-base';
-
-    const COMPOSER_JSON_FILE_NAME = 'composer.json';
+    const MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE = 'magento/magento2-base/composer.json';
 
     const COMPOSER_KEY_EXTRA = 'extra';
 
@@ -52,18 +50,10 @@ class PathBuilder
         $vendorPath = $this->directoryList->getPath(DirectoryList::CONFIG) . '/' . self::VENDOR_PATH_FILE;
         $vendorDir = require "{$vendorPath}";
 
-        $basePackageComposerFilePath =
-            $vendorDir
-            . '/'
-            . self::MAGENTO_BASE_PACKAGE_RELATIVE_PATH
-            . '/' . self::COMPOSER_JSON_FILE_NAME;
+        $basePackageComposerFilePath = $vendorDir . '/' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE;
         if (!file_exists($basePackageComposerFilePath)) {
             throw new \Magento\Setup\Exception(
-                'Could not locate '
-                . self::MAGENTO_BASE_PACKAGE_RELATIVE_PATH
-                . ' '
-                . self::COMPOSER_JSON_FILE_NAME
-                . ' file.'
+                'Could not locate ' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE . ' file.'
             );
         }
         $composerJsonFileData = json_decode(file_get_contents($basePackageComposerFilePath), true);

@@ -69,6 +69,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
         $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
         $this->pathBuilder = $this->getMock('Magento\Setup\Model\PathBuilder', [], [], '', false);
+        $this->pathBuilder->expects($this->once())->method('build')->willReturn([__FILE__]);
         $this->readinessCheck = new ReadinessCheck(
             $this->dbValidator,
             $this->deploymentConfig,
@@ -100,6 +101,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'error' => 'Connection failure'
             ],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -122,6 +127,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'error' => 'Database user username does not have write access.'
             ],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -139,6 +148,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100
         ];
         $expectedJson = json_encode($expected, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -156,6 +169,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
+            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+                ReadinessCheck::KEY_LIST => [__FILE__],
+                ReadinessCheck::KEY_ERROR => ""
+            ],
             ReadinessCheck::KEY_LAST_TIMESTAMP => 50,
             ReadinessCheck::KEY_CURRENT_TIMESTAMP => 100,
         ];
