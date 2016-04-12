@@ -6,8 +6,10 @@
 namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Config;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 
 /**
@@ -151,6 +153,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $productGalleryReadHandler;
 
     /**
+     * @var Config
+     */
+    private $catalogConfig;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -191,8 +198,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Cache\FrontendInterface $cache,
-        MetadataPool $metadataPool
+        \Magento\Framework\Cache\FrontendInterface $cache
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -202,7 +208,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_scopeConfig = $scopeConfig;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->metadataPool = $metadataPool;
         $this->cache = $cache;
         parent::__construct(
             $catalogProductOption,
@@ -377,7 +382,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            $cacheId =  __CLASS__ . $product->getId() . '_' . $product->getStoreId();
+            $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $cacheId =  __CLASS__ . $product->getData($metadata->getLinkField()) . '_' . $product->getStoreId();
             $configurableAttributes = $this->cache->load($cacheId);
             $configurableAttributes = $this->hasCacheData($configurableAttributes);
             if ($configurableAttributes) {
@@ -508,8 +514,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getUsedProductCollection($product)
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('price')
-//                ->addAttributeToSelect('msrp')
-//                ->addAttributeToSelect('media_gallery')
+                ->addAttributeToSelect('weight')
+                ->addAttributeToSelect('image')
+                ->addAttributeToSelect('thumbnail')
+                ->addAttributeToSelect('status')
+                ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
 
@@ -542,7 +551,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected function getGalleryReadHandler()
     {
         if ($this->productGalleryReadHandler === null) {
-            $this->productGalleryReadHandler = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->productGalleryReadHandler = ObjectManager::getInstance()
                 ->get(GalleryReadHandler::class);
         }
         return $this->productGalleryReadHandler;
@@ -615,7 +624,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function save($product)
     {
         parent::save($product);
-        $cacheId =  __CLASS__ . $product->getId() . '_' . $product->getStoreId();
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $cacheId =  __CLASS__ . $product->getData($metadata->getLinkField()) . '_' . $product->getStoreId();
         $this->cache->remove($cacheId);
 
         $extensionAttributes = $product->getExtensionAttributes();
@@ -646,7 +656,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             return;
         }
 
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($data as $attributeData) {
             /** @var $configurableAttribute \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute */
@@ -1166,5 +1176,30 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             }
         }
         return parent::setImageFromChildProduct($product);
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Get Config instance
+     * @return Config
+     * @deprecated
+     */
+    private function getCatalogConfig()
+    {
+        if (!$this->catalogConfig) {
+            $this->catalogConfig = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->catalogConfig;
     }
 }

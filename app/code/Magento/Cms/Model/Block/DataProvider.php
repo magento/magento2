@@ -74,6 +74,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $block = $this->collection->getNewEmptyItem();
             $block->setData($data);
             $this->loadedData[$block->getId()] = $block->getData();
+            $this->dataPersistor->clear('cms_block');
         }
 
         return $this->loadedData;

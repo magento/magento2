@@ -102,6 +102,9 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('theme_design_config')
             ->willReturn(['scope' => $scope, 'scope_id' => $scopeId]);
+        $this->dataPersistor->expects($this->once())
+            ->method('clear')
+            ->with('theme_design_config');
 
         $result = $this->model->getData();
 

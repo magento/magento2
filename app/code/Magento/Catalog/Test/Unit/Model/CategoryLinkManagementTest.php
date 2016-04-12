@@ -28,9 +28,6 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->categoryRepositoryMock = $this->getMock('\Magento\Catalog\Model\CategoryRepository', [], [], '', false);
         $productResource = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
-        $productRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $categoryLinkRepository = $this->getMockBuilder('Magento\Catalog\Api\CategoryLinkRepositoryInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -44,14 +41,18 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $this->model = new \Magento\Catalog\Model\CategoryLinkManagement(
             $this->categoryRepositoryMock,
-            $productRepositoryMock,
-            $productResource,
-            $categoryLinkRepository,
-            $this->productLinkFactoryMock,
-            $indexerRegistry
+            $this->productLinkFactoryMock
         );
+
+        $this->setProperties($this->model, [
+            'productResource' => $productResource,
+            'categoryLinkRepository' => $categoryLinkRepository,
+            'productLinkFactory' => $this->productLinkFactoryMock,
+            'indexerRegistry' => $indexerRegistry
+        ]);
     }
 
     public function testGetAssignedProducts()
@@ -93,5 +94,21 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
             ->with($categoryId)
             ->willReturnSelf();
         $this->assertEquals([$categoryProductLinkMock], $this->model->getAssignedProducts($categoryId));
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

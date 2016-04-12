@@ -308,6 +308,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_productIdCached;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    private $appState;
+
+    /**
      * List of attributes in ProductInterface
      * @var array
      */
@@ -344,6 +349,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $mediaGalleryProcessor;
 
     /**
+     * @var Product\LinkTypeProvider
+     */
+    protected $linkTypeProvider;
+
+    /**
+     * Product constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -361,8 +372,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Product\Type $catalogProductType
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Catalog\Model\ResourceModel\Product $resource
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $resourceCollection
+     * @param ResourceModel\Product $resource
+     * @param ResourceModel\Product\Collection $resourceCollection
      * @param \Magento\Framework\Data\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
@@ -371,14 +382,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
+     * @param ProductLink\CollectionProvider $entityCollectionProvider
+     * @param Product\LinkTypeProvider $linkTypeProvider
+     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
+     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param EntryConverterPool $mediaGalleryEntryConverterPool
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
-     * @param ProductLinkRepositoryInterface $linkRepository
-     * @param \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -408,11 +422,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         CategoryRepositoryInterface $categoryRepository,
         Product\Image\CacheFactory $imageCacheFactory,
+        \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider,
+        \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
+        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
+        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         EntryConverterPool $mediaGalleryEntryConverterPool,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
-        ProductLinkRepositoryInterface $linkRepository,
-        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -435,11 +451,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         $this->categoryRepository = $categoryRepository;
         $this->imageCacheFactory = $imageCacheFactory;
+        $this->entityCollectionProvider = $entityCollectionProvider;
+        $this->linkTypeProvider = $linkTypeProvider;
+        $this->productLinkFactory = $productLinkFactory;
+        $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
-        $this->linkRepository = $linkRepository;
-        $this->mediaGalleryProcessor = $mediaGalleryProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -1391,7 +1409,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getProductLinks()
     {
         if ($this->_links === null) {
-            $this->_links = $this->linkRepository->getList($this);
+            $this->_links = $this->getLinkRepository()->getList($this);
         }
         return $this->_links;
     }
@@ -1503,7 +1521,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function addImageToMediaGallery($file, $mediaAttribute = null, $move = false, $exclude = true)
     {
         if ($this->hasGalleryAttribute()) {
-            $this->mediaGalleryProcessor->addImage(
+            $this->getMediaGalleryProcessor()->addImage(
                 $this,
                 $file,
                 $mediaAttribute,
@@ -2263,6 +2281,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
+        if ($this->getAppState()->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
+            $identities[] = self::CACHE_TAG;
+        }
         return array_unique($identities);
     }
 
@@ -2547,5 +2568,45 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setId($value)
     {
         return $this->setData('entity_id', $value);
+    }
+
+    /**
+     * Get application state
+     *
+     * @deprecated
+     * @return \Magento\Framework\App\State
+     */
+    private function getAppState()
+    {
+        if (!$this->appState instanceof \Magento\Framework\App\State) {
+            $this->appState = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\App\State::class
+            );
+        }
+        return $this->appState;
+    }
+
+    /**
+     * @return ProductLinkRepositoryInterface
+     */
+    private function getLinkRepository()
+    {
+        if (null === $this->linkRepository) {
+            $this->linkRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\ProductLinkRepositoryInterface');
+        }
+        return $this->linkRepository;
+    }
+
+    /**
+     * @return Product\Gallery\Processor
+     */
+    private function getMediaGalleryProcessor()
+    {
+        if (null === $this->mediaGalleryProcessor) {
+            $this->mediaGalleryProcessor = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\Gallery\Processor');
+        }
+        return $this->mediaGalleryProcessor;
     }
 }

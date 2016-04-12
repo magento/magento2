@@ -16,7 +16,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Model\Entity\MetadataPool
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPoolMock;
 
@@ -62,7 +62,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $this->repositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
         $this->productTypeMock = $this->getMock('\Magento\Downloadable\Model\Product\Type', [], [], '', false);
         $this->sampleResourceMock = $this->getMock(
@@ -116,11 +116,10 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata = $this->getMock('Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
-        $this->service = new \Magento\Downloadable\Model\SampleRepository(
-            $this->metadataPoolMock,
+        $this->service = new SampleRepository(
             $this->repositoryMock,
             $this->productTypeMock,
             $this->sampleResourceMock,
@@ -129,6 +128,11 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->jsonEncoderMock,
             $this->contentUploaderMock
         );
+
+        $refClass = new \ReflectionClass(SampleRepository::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->service, $this->metadataPoolMock);
     }
 
     /**
@@ -415,7 +419,6 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->service->delete($sampleId);
     }
-
 
     public function testGetList()
     {
