@@ -9,7 +9,7 @@ use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DB\Select;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
@@ -138,7 +138,7 @@ class Rule extends AbstractResource
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
-        $this->entityManager->load(RuleInterface::class, $object, $value);
+        $this->entityManager->load($object, $value, RuleInterface::class);
         return $this;
     }
 
@@ -368,29 +368,7 @@ class Rule extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-        $this->beginTransaction();
-        try {
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                $this->entityManager->save(RuleInterface::class, $object);
-                $this->unserializeFields($object);
-                $this->processAfterSaves($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
+        $this->entityManager->save($object, RuleInterface::class);
         return $this;
     }
 
@@ -403,20 +381,7 @@ class Rule extends AbstractResource
      */
     public function delete(AbstractModel $object)
     {
-        $this->transactionManager->start($this->getConnection());
-        try {
-            $object->beforeDelete();
-            $this->_beforeDelete($object);
-            $this->entityManager->delete('Magento\SalesRule\Api\Data\RuleInterface', $object);
-            $this->_afterDelete($object);
-            $object->isDeleted(true);
-            $object->afterDelete();
-            $this->transactionManager->commit();
-            $object->afterDeleteCommit();
-        } catch (\Exception $exception) {
-            $this->transactionManager->rollBack();
-            throw $exception;
-        }
+        $this->entityManager->delete($object, RuleInterface::class);
         return $this;
     }
 }

@@ -7,10 +7,15 @@
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
 class DateTime extends Date
 {
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * 
+     * @deprecated 
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {
@@ -25,5 +30,22 @@ class DateTime extends Date
         $this->_normalToLocalFilter = new \Zend_Filter_NormalizedToLocalized(
             ['date_format' => \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT]
         );
+    }
+
+    /**
+     * Convert date from localized to internal format
+     *
+     * @param string $value
+     * @return string
+     * @throws LocalizedException
+     */
+    public function filter($value)
+    {
+        try {
+            $value = new \DateTime($value);
+            return $value->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            throw new \Exception('Invalid input datetime format');
+        }
     }
 }
