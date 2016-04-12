@@ -16,17 +16,17 @@ class GeneratedFiles
 {
     /**
      * Separator literal to assemble timer identifier from timer names
-    */
+     */
     const REGENERATE_FLAG = '/var/.regenerate';
 
     /**
      * @var DirectoryList
-    */
+     */
     private $directoryList;
 
     /**
      * @var WriteInterface
-    */
+     */
     private $write;
 
     /**
@@ -34,7 +34,7 @@ class GeneratedFiles
      *
      * @param DirectoryList $directoryList
      * @param WriteFactory $writeFactory
-    */
+     */
     public function __construct(DirectoryList $directoryList, WriteFactory $writeFactory)
     {
         $this->directoryList = $directoryList;
@@ -45,7 +45,7 @@ class GeneratedFiles
      * Clean generated code and DI configuration
      *
      * @return void
-    */
+     */
     public function regenerate()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
