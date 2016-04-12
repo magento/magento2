@@ -8,25 +8,25 @@ namespace Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor;
+use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
 class Save extends Action
 {
     /**
-     * @var ImageProcessor
+     * @var FileProcessor
      */
-    protected $imageProcessor;
+    protected $fileProcessor;
 
     /**
      * @param Context $context
-     * @param ImageProcessor $imageProcessor
+     * @param FileProcessor $fileProcessor
      */
     public function __construct(
         Context $context,
-        ImageProcessor $imageProcessor
+        FileProcessor $fileProcessor
     ) {
         parent::__construct($context);
-        $this->imageProcessor = $imageProcessor;
+        $this->fileProcessor = $fileProcessor;
     }
 
     /**
@@ -34,7 +34,7 @@ class Save extends Action
      */
     public function execute()
     {
-        $result = $this->imageProcessor->saveToTmp(key($_FILES));
+        $result = $this->fileProcessor->saveToTmp(key($_FILES));
         return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);
     }
 }
