@@ -67,11 +67,6 @@ class Eav extends AbstractModifier
     protected $groupCollectionFactory;
 
     /**
-     * @var array
-     */
-    protected $prevSetAttributes;
-
-    /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
@@ -85,21 +80,6 @@ class Eav extends AbstractModifier
      * @var MetaPropertiesMapper
      */
     protected $metaPropertiesMapper;
-
-    /**
-     * @var EavAttribute[]
-     */
-    private $attributes = [];
-
-    /**
-     * @var AttributeGroupInterface[]
-     */
-    private $groups = [];
-
-    /**
-     * @var array
-     */
-    private $canDisplayUseDefault = [];
 
     /**
      * @var ProductAttributeGroupRepositoryInterface
@@ -119,22 +99,22 @@ class Eav extends AbstractModifier
     /**
      * @var SortOrderBuilder
      */
-    private $sortOrderBuilder;
+    protected $sortOrderBuilder;
 
     /**
      * @var EavAttributeFactory
      */
-    private $eavAttributeFactory;
+    protected $eavAttributeFactory;
 
     /**
      * @var Translit
      */
-    private $translitFilter;
+    protected $translitFilter;
 
     /**
      * @var ArrayManager
      */
-    private $arrayManager;
+    protected $arrayManager;
 
     /**
      * @var ScopeOverriddenValue
@@ -144,22 +124,42 @@ class Eav extends AbstractModifier
     /**
      * @var array
      */
-    private $bannedInputTypes = ['media_image'];
-
-    /**
-     * @var array
-     */
     private $attributesToDisable;
 
     /**
      * @var array
      */
-    private $attributesToEliminate;
+    protected $attributesToEliminate;
 
     /**
      * @var DataPersistorInterface
      */
-    private $dataPersistor;
+    protected $dataPersistor;
+
+    /**
+     * @var EavAttribute[]
+     */
+    private $attributes = [];
+
+    /**
+     * @var AttributeGroupInterface[]
+     */
+    private $attributeGroups = [];
+
+    /**
+     * @var array
+     */
+    private $canDisplayUseDefault = [];
+
+    /**
+     * @var array
+     */
+    private $bannedInputTypes = ['media_image'];
+
+    /**
+     * @var array
+     */
+    private $prevSetAttributes;
 
     /**
      * @param LocatorInterface $locator
@@ -231,8 +231,10 @@ class Eav extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         $sortOrder = 0;
+
         foreach ($this->getGroups() as $groupCode => $group) {
             $attributes = !empty($this->getAttributes()[$groupCode]) ? $this->getAttributes()[$groupCode] : [];
+
             if ($attributes) {
                 $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
@@ -242,6 +244,7 @@ class Eav extends AbstractModifier
                 $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =
                     $sortOrder * self::SORT_ORDER_MULTIPLIER;
             }
+
             $sortOrder++;
         }
 
@@ -256,7 +259,7 @@ class Eav extends AbstractModifier
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getAttributesMeta(array $attributes, $groupCode)
+    private function getAttributesMeta(array $attributes, $groupCode)
     {
         $meta = [];
 
@@ -289,6 +292,7 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @param int $sortOrder
      * @return array
+     * @api
      */
     public function addContainerChildren(
         array $attributeContainer,
@@ -303,7 +307,11 @@ class Eav extends AbstractModifier
         $attributeContainer = $this->arrayManager->merge(
             ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER),
             $attributeContainer,
-            ['sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER]
+            [
+                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
+                // TODO: Eliminate this in scope of MAGETWO-51364
+                'scopeLabel' => $this->getScopeLabel($attribute),
+            ]
         );
 
         return $attributeContainer;
@@ -316,6 +324,7 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @param int $sortOrder
      * @return array
+     * @api
      */
     public function getContainerChildren(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -384,9 +393,9 @@ class Eav extends AbstractModifier
      *
      * @return null|string
      */
-    protected function getTypeProduct()
+    private function getProductType()
     {
-        return (string)$this->request->getParam('type', null) ?: $this->locator->getProduct()->getTypeId();
+        return (string)$this->request->getParam('type', $this->locator->getProduct()->getTypeId());
     }
 
     /**
@@ -394,7 +403,7 @@ class Eav extends AbstractModifier
      *
      * @return int
      */
-    protected function getPrevSetId()
+    private function getPreviousSetId()
     {
         return (int)$this->request->getParam('prev_set_id', 0);
     }
@@ -404,17 +413,17 @@ class Eav extends AbstractModifier
      *
      * @return AttributeGroupInterface[]
      */
-    protected function getGroups()
+    private function getGroups()
     {
-        if (!$this->groups) {
+        if (!$this->attributeGroups) {
             $searchCriteria = $this->prepareGroupSearchCriteria()->create();
             $attributeGroupSearchResult = $this->attributeGroupRepository->getList($searchCriteria);
             foreach ($attributeGroupSearchResult->getItems() as $group) {
-                $this->groups[$this->calculateGroupCode($group)] = $group;
+                $this->attributeGroups[$this->calculateGroupCode($group)] = $group;
             }
         }
 
-        return $this->groups;
+        return $this->attributeGroups;
     }
 
     /**
@@ -422,7 +431,7 @@ class Eav extends AbstractModifier
      *
      * @return SearchCriteriaBuilder
      */
-    protected function prepareGroupSearchCriteria()
+    private function prepareGroupSearchCriteria()
     {
         return $this->searchCriteriaBuilder->addFilter(
             AttributeGroupInterface::ATTRIBUTE_SET_ID,
@@ -435,7 +444,7 @@ class Eav extends AbstractModifier
      *
      * @return int|null
      */
-    protected function getAttributeSetId()
+    private function getAttributeSetId()
     {
         return $this->locator->getProduct()->getAttributeSetId();
     }
@@ -445,7 +454,7 @@ class Eav extends AbstractModifier
      *
      * @return ProductAttributeInterface[]
      */
-    protected function getAttributes()
+    private function getAttributes()
     {
         if (!$this->attributes) {
             foreach ($this->getGroups() as $group) {
@@ -462,7 +471,7 @@ class Eav extends AbstractModifier
      * @param AttributeGroupInterface $group
      * @return ProductAttributeInterface[]
      */
-    protected function loadAttributes(AttributeGroupInterface $group)
+    private function loadAttributes(AttributeGroupInterface $group)
     {
         $attributes = [];
         $sortOrder = $this->sortOrderBuilder
@@ -475,7 +484,7 @@ class Eav extends AbstractModifier
             ->addSortOrder($sortOrder)
             ->create();
         $groupAttributes = $this->attributeRepository->getList($searchCriteria)->getItems();
-        $productType = $this->getTypeProduct();
+        $productType = $this->getProductType();
         foreach ($groupAttributes as $attribute) {
             $applyTo = $attribute->getApplyTo();
             $isRelated = !$applyTo || in_array($productType, $applyTo);
@@ -493,11 +502,11 @@ class Eav extends AbstractModifier
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getPrevSetAttributes()
+    private function getPreviousSetAttributes()
     {
         if ($this->prevSetAttributes === null) {
             $searchCriteria = $this->searchCriteriaBuilder
-                ->addFilter('attribute_set_id', $this->getPrevSetId())
+                ->addFilter('attribute_set_id', $this->getPreviousSetId())
                 ->create();
             $attributes = $this->attributeRepository->getList($searchCriteria)->getItems();
             $this->prevSetAttributes = [];
@@ -518,6 +527,7 @@ class Eav extends AbstractModifier
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @api
      */
     public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
@@ -623,6 +633,7 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return array
+     * @api
      */
     public function setupAttributeContainerMeta(ProductAttributeInterface $attribute)
     {
@@ -656,14 +667,15 @@ class Eav extends AbstractModifier
      *
      * @param ProductAttributeInterface $attribute
      * @return mixed|null
+     * @api
      */
     public function setupAttributeData(ProductAttributeInterface $attribute)
     {
         $product = $this->locator->getProduct();
         $productId = $product->getId();
-        $prevSetId = $this->getPrevSetId();
+        $prevSetId = $this->getPreviousSetId();
         $notUsed = !$prevSetId
-            || ($prevSetId && !in_array($attribute->getAttributeCode(), $this->getPrevSetAttributes()));
+            || ($prevSetId && !in_array($attribute->getAttributeCode(), $this->getPreviousSetAttributes()));
 
         if ($productId && $notUsed) {
             return $this->getValue($attribute);
@@ -735,7 +747,7 @@ class Eav extends AbstractModifier
      * @param string $value
      * @return mixed
      */
-    protected function getFormElementsMapValue($value)
+    private function getFormElementsMapValue($value)
     {
         $valueMap = $this->formElementMapper->getMappings();
 
@@ -748,7 +760,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @return mixed
      */
-    protected function getValue(ProductAttributeInterface $attribute)
+    private function getValue(ProductAttributeInterface $attribute)
     {
         /** @var Product $product */
         $product = $this->locator->getProduct();
@@ -762,7 +774,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @return \Magento\Framework\Phrase|string
      */
-    protected function getScopeLabel(ProductAttributeInterface $attribute)
+    private function getScopeLabel(ProductAttributeInterface $attribute)
     {
         if (
             $this->storeManager->isSingleStoreMode()
@@ -789,7 +801,7 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @return bool
      */
-    protected function canDisplayUseDefault(ProductAttributeInterface $attribute)
+    private function canDisplayUseDefault(ProductAttributeInterface $attribute)
     {
         $attributeCode = $attribute->getAttributeCode();
         /** @var Product $product */
@@ -815,7 +827,7 @@ class Eav extends AbstractModifier
      */
     private function isScopeGlobal($attribute)
     {
-        return ($attribute->getScope() == ProductAttributeInterface::SCOPE_GLOBAL_TEXT);
+        return $attribute->getScope() === ProductAttributeInterface::SCOPE_GLOBAL_TEXT;
     }
 
     /**

@@ -5,9 +5,11 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config\FileUploader;
 
-use Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\UrlInterface;
+use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
-class ImageProcessorTest extends \PHPUnit_Framework_TestCase
+class FileProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $uploaderFactory;
@@ -15,20 +17,26 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\MediaStorage\Model\File\Uploader|\PHPUnit_Framework_MockObject_MockObject */
     protected $uploader;
 
-    /** @var \Magento\Theme\Model\Design\Config\FileUploader\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $imageConfig;
-
     /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendModelFactory;
 
-    /** @var \Magento\Theme\Model\Design\Backend\Image|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Backend\File|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendModel;
 
     /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $metadataProvider;
 
-    /** @var ImageProcessor */
-    protected $imageProcessor;
+    /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $directoryWrite;
+
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $storeManager;
+
+    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $store;
+
+    /** @var FileProcessor */
+    protected $fileProcessor;
 
     public function setUp()
     {
@@ -39,23 +47,36 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->uploader = $this->getMockBuilder('Magento\MediaStorage\Model\File\Uploader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageConfig = $this->getMockBuilder('Magento\Theme\Model\Design\Config\FileUploader\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->backendModelFactory = $this->getMockBuilder('Magento\Theme\Model\Design\BackendModelFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModel = $this->getMockBuilder('Magento\Theme\Model\Design\Backend\Image')
+        $this->backendModel = $this->getMockBuilder('Magento\Theme\Model\Design\Backend\File')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataProvider = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageProcessor = new ImageProcessor(
+        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->directoryWrite = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+            ->getMockForAbstractClass();
+        $filesystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($this->directoryWrite);
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->getMockForAbstractClass();
+        $this->store = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+            ->setMethods(['getBaseUrl'])
+            ->getMockForAbstractClass();
+
+        $this->fileProcessor = new FileProcessor(
             $this->uploaderFactory,
-            $this->imageConfig,
             $this->backendModelFactory,
-            $this->metadataProvider
+            $this->metadataProvider,
+            $filesystem,
+            $this->storeManager
         );
     }
 
@@ -66,9 +87,20 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $metadata = [
             $fieldCode => [
                 'path' => $path,
-                'backend_model' => 'Magento\Theme\Model\Design\Backend\Image'
+                'backend_model' => 'Magento\Theme\Model\Design\Backend\File'
             ],
         ];
+        $this->storeManager->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->once())
+            ->method('getBaseUrl')
+            ->with(UrlInterface::URL_TYPE_MEDIA)
+            ->willReturn('http://magento2.com/pub/media/');
+        $this->directoryWrite->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('tmp/' . FileProcessor::FILE_DIR)
+            ->willReturn('absolute/path/to/tmp/media');
 
         $this->metadataProvider->expects($this->once())
             ->method('get')
@@ -97,25 +129,17 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->uploader->expects($this->once())
             ->method('addValidateCallback')
             ->with('size', $this->backendModel, 'validateMaxSize');
-        $this->imageConfig
-            ->expects($this->once())
-            ->method('getAbsoluteTmpMediaPath')
-            ->willReturn('absolute/path/to/tmp/media');
         $this->uploader->expects($this->once())
             ->method('save')
             ->with('absolute/path/to/tmp/media')
             ->willReturn(['file' => 'file.jpg', 'size' => '234234']);
-        $this->imageConfig->expects($this->once())
-            ->method('getTmpMediaUrl')
-            ->with('file.jpg')
-            ->willReturn('http://magento2.com/pub/media/tmp/file.jpg');
         $this->assertEquals(
             [
                 'file' => 'file.jpg',
                 'size' => '234234',
-                'url' => 'http://magento2.com/pub/media/tmp/file.jpg'
+                'url' => 'http://magento2.com/pub/media/tmp/' . FileProcessor::FILE_DIR . '/file.jpg'
             ],
-            $this->imageProcessor->saveToTmp($fieldCode)
+            $this->fileProcessor->saveToTmp($fieldCode)
         );
     }
 }
