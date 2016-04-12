@@ -69,15 +69,19 @@ define([
                 case 1:
                     strengthLabel = $t('Weak');
                     break;
+
                 case 2:
                     strengthLabel = $t('Medium');
                     break;
+
                 case 3:
                     strengthLabel = $t('Strong');
                     break;
+
                 case 4:
                     strengthLabel = $t('Very Strong');
                     break;
+
                 case 0:
                 default:
                     strengthLabel = $t('No password');
