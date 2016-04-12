@@ -89,8 +89,8 @@ class AdvancedInventory extends AbstractModifier
 
         if (null !== $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY)) {
             // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
-            $minSaleQtyValue = @unserialize($this->stockConfiguration->getDefaultConfigValue(
-                StockItemInterface::MIN_SALE_QTY)
+            $minSaleQtyValue = @unserialize(
+                $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY)
             );
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
             if ($minSaleQtyValue !== false) {
