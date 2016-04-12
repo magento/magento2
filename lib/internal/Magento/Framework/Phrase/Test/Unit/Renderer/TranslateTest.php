@@ -38,19 +38,39 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testRender()
+    public function testRenderTextWithoutTranslation()
     {
         $text = 'text';
+        $this->_translator->expects($this->once())
+            ->method('getData')
+            ->willReturn([]);
+        $this->assertEquals($text, $this->_renderer->render([$text], []));
+    }
+
+    public function testRenderTextWithSingleQuotes()
+    {
         $translatedTextInDictionary = "That's translated text";
         $translatedTextInput = 'That\\\'s translated text';
         $translate = 'translate';
 
-        $this->_translator->expects($this->exactly(2))
+        $this->_translator->expects($this->once())
             ->method('getData')
             ->will($this->returnValue([$translatedTextInDictionary => $translate]));
 
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
-        $this->assertEquals($text, $this->_renderer->render([$text], []));
+    }
+
+    public function testRenderTextWithDoubleQuotes()
+    {
+        $translatedTextInDictionary = "That\"s translated text";
+        $translatedTextInput = 'That\"s translated text';
+        $translate = 'translate';
+
+        $this->_translator->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+
+        $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }
 
     public function testRenderException()
