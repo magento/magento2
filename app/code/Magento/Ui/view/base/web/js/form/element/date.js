@@ -19,6 +19,9 @@ define([
 
             dateFormat: 'MM/dd/y', // ICU Date Format
             timeFormat: 'HH:mm', // ICU Time Format
+            validationParams: {
+                dateFormat: '${ $.outputDateFormat }'
+            },
 
             /**
              * Format of date that comes from the
@@ -159,6 +162,7 @@ define([
 
             this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
             this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+            this.validationParams.dateFormat = this.outputDateFormat;
         }
     });
 });
