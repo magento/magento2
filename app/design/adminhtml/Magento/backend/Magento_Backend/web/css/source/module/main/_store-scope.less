@@ -6,12 +6,16 @@
 .tree-store-scope {
     &.admin__fieldset {
         padding: 0;
+
+        .admin__field {
+            margin-left: -@temp_gutter;
+        }
     }
 
     [class*='field-w'],
     [class*='field-sg'] {
         &.admin__field {
-            margin: 0;
+            margin: 0 0 0 -@temp_gutter;
         }
 
         .admin__field-label {
