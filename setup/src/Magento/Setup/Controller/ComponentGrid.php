@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Setup\Model\DateTime\TimezoneProvider;
+
 /**
  * Controller for component grid tasks
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -54,14 +56,16 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
+     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
+     * @param TimezoneProvider $tzProvider
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache,
-        \Magento\Setup\Model\MarketplaceManager $marketplaceManager
+        \Magento\Setup\Model\MarketplaceManager $marketplaceManager,
+        TimezoneProvider $tzProvider
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
@@ -70,7 +74,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
-        $this->timezone = $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $this->timezone = $tzProvider->get();
     }
 
     /**
