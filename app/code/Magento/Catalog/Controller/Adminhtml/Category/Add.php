@@ -50,6 +50,15 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
+        /**
+         * Check if we have data in session (if during category save was exception)
+         */
+        $data = $this->_getSession()->getCategoryData(true);
+        if (isset($data['general'])) {
+            unset($data['general']['image']);
+            $category->addData($data['general']);
+        }
+
         $resultPageFactory = $this->_objectManager->get('Magento\Framework\View\Result\PageFactory');
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $resultPageFactory->create();

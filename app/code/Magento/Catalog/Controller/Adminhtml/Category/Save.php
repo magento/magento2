@@ -51,6 +51,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     private $storeManager;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     */
+    private $dateTimeFilter;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -113,6 +118,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $isNewCategory = !isset($data['general']['entity_id']);
         $data = $this->stringToBoolConverting($data);
         $data = $this->imagePreprocessing($data);
+        $data = $this->dateTimePreprocessing($data, $category);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         $store = $this->storeManager->getStore($storeId);
         $this->storeManager->setCurrentStore($store->getCode());
@@ -337,5 +343,43 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         }
         return ['path' => $path, 'params' => $params];
+    }
+
+    /**
+     * Datetime data preprocessing
+     *
+     * @param array $postData
+     * @param \Magento\Catalog\Model\Category $category
+     *
+     * @return array
+     */
+    private function dateTimePreprocessing($postData, $category)
+    {
+        $dateFieldFilters = [];
+        $attributes = $category->getAttributes();
+        foreach ($attributes as $attrKey => $attribute) {
+            if ($attribute->getBackend()->getType() == 'datetime') {
+                if (array_key_exists($attrKey, $postData['general']) && $postData['general'][$attrKey] != '') {
+                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
+                }
+            }
+        }
+        $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $postData['general']);
+        $postData['general'] = $inputFilter->getUnescaped();
+        return $postData;
+    }
+
+    /**
+     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     *
+     * @deprecated
+     */
+    private function getDateTimeFilter()
+    {
+        if ($this->dateTimeFilter === null) {
+            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        }
+        return $this->dateTimeFilter;
     }
 }
