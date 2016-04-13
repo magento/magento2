@@ -317,8 +317,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(41))->method('log')->with('Caches clearing:');
         $this->logger->expects($this->at(44))->method('log')->with('Disabling Maintenance Mode:');
         $this->logger->expects($this->at(46))->method('log')->with('Post installation file permissions check...');
-        $this->logger->expects($this->at(48))->method('logSuccess')->with('Magento installation complete.');
-        $this->logger->expects($this->at(50))->method('log')
+        $this->logger->expects($this->at(48))->method('log')->with('Write installation date...');
+        $this->logger->expects($this->at(50))->method('logSuccess')->with('Magento installation complete.');
+        $this->logger->expects($this->at(52))->method('log')
             ->with('Sample Data is installed with errors. See log file for details');
         $this->object->install($request);
     }
