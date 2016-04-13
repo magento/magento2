@@ -8,6 +8,18 @@ namespace Magento\Checkout\Block\Checkout;
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
+     * Attributes with custom convertion to selects
+     * key is an attribute code
+     * value is a method to fetch values
+     *
+     * @var array
+     */
+    private $attributesToConvert = [
+        'prefix' => 'getNamePrefixOptions',
+        'suffix' => 'getNameSuffixOptions',
+    ];
+
+    /**
      * @var \Magento\Customer\Model\AttributeMetadataDataProvider
      */
     private $attributeMetadataDataProvider;
@@ -23,18 +35,81 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $merger;
 
     /**
+     * @var \Magento\Customer\Model\Options
+     */
+    private $options;
+
+    /**
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
+     * @param \Magento\Customer\Model\Options $options
      * @param AttributeMerger $merger
      */
     public function __construct(
         \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider,
         \Magento\Ui\Component\Form\AttributeMapper $attributeMapper,
+        \Magento\Customer\Model\Options $options,
         AttributeMerger $merger
     ) {
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
         $this->attributeMapper = $attributeMapper;
+        $this->options = $options;
         $this->merger = $merger;
+    }
+
+    private function getElements()
+    {
+        /** @var \Magento\Eav\Api\Data\AttributeInterface[] $attributes */
+        $attributes = $this->attributeMetadataDataProvider->loadAttributesCollection(
+            'customer_address',
+            'customer_register_address'
+        );
+
+        $elements = [];
+        foreach ($attributes as $attribute) {
+            $code = $attribute->getAttributeCode();
+            if ($attribute->getIsUserDefined()) {
+                continue;
+            }
+            $elements[$code] = $this->attributeMapper->map($attribute);
+            if (isset($elements[$code]['label'])) {
+                $label = $elements[$code]['label'];
+                $elements[$code]['label'] = __($label);
+            }
+        }
+        return $elements;
+    }
+
+    /**
+     * @param array $elements
+     * @return array
+     */
+    public function convertPrefixSuffix($elements)
+    {
+        $codes = array_keys($this->attributesToConvert);
+        foreach ($elements as $code => $element) {
+            if (!in_array($code, $codes)) {
+                continue;
+            }
+            $options = call_user_func_array(
+                [$this->options, $this->attributesToConvert[$code]],
+                []
+            );
+            if (!is_array($options)) {
+                continue;
+            }
+            $elements[$code]['dataType'] = 'select';
+            $elements[$code]['formElement'] = 'select';
+
+            foreach ($options as $key => $value) {
+                $elements[$code]['options'][] = [
+                    'value' => $key,
+                    'label' => $value,
+                ];
+            }
+        }
+
+        return $elements;
     }
 
     /**
@@ -45,24 +120,8 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      */
     public function process($jsLayout)
     {
-        /** @var \Magento\Eav\Api\Data\AttributeInterface[] $attributes */
-        $attributes = $this->attributeMetadataDataProvider->loadAttributesCollection(
-            'customer_address',
-            'customer_register_address'
-        );
-
-        $elements = [];
-        foreach ($attributes as $attribute) {
-            if ($attribute->getIsUserDefined()) {
-                continue;
-            }
-            $elements[$attribute->getAttributeCode()] = $this->attributeMapper->map($attribute);
-            if (isset($elements[$attribute->getAttributeCode()]['label'])) {
-                $label = $elements[$attribute->getAttributeCode()]['label'];
-                $elements[$attribute->getAttributeCode()]['label'] = __($label);
-            }
-        }
-
+        $elements = $this->getElements();
+        $elements = $this->convertPrefixSuffix($elements);
         // The following code is a workaround for custom address attributes
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']
