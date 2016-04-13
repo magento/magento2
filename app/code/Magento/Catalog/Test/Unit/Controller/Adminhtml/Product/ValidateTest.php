@@ -121,6 +121,20 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
             ->getMock();
         $this->resultJsonFactory->expects($this->any())->method('create')->willReturn($this->resultJson);
 
+        $storeManagerInterfaceMock = $this->getMockForAbstractClass(
+            'Magento\Store\Model\StoreManagerInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getStore', 'getCode']
+        );
+
+        $storeManagerInterfaceMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnSelf());
+
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Validate',
@@ -132,6 +146,7 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
                 'initializationHelper' => $this->initializationHelper,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'productFactory' => $this->productFactory,
+                'storeManager' => $storeManagerInterfaceMock,
             ]
         );
     }
