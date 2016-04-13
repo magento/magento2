@@ -27,7 +27,7 @@ define([
                 position: '${ $.name }.${ $.positionProvider }:value'
             },
             exports: {
-                index: '${ $.provider }:${ $.dataScope }.record_id'
+                recordId: '${ $.provider }:${ $.dataScope }.record_id'
             },
             modules: {
                 parentComponent: '${ $.parentName }'
@@ -71,9 +71,11 @@ define([
          * @param {Number} position - element position
          */
         initPosition: function (position) {
-            this.parentComponent().setMaxPosition(position, this);
+            var pos = parseInt(position, 10);
 
-            if (!position) {
+            this.parentComponent().setMaxPosition(pos, this);
+
+            if (!pos) {
                 this.position = this.parentComponent().maxPosition;
             }
         },
