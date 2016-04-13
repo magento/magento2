@@ -451,14 +451,19 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected function _validateMergedLayout($cacheId, $layout)
     {
         $layoutStr = '<handle id="handle">' . $layout . '</handle>';
+
         if ($this->appState->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
             if (!$this->layoutValidator->isValid($layoutStr, Validator::LAYOUT_SCHEMA_MERGED, false)) {
                 $messages = $this->layoutValidator->getMessages();
                 //Add first message to exception
                 $message = reset($messages);
-                $this->logger->info('Cache file with merged layout: ' . $cacheId . ': ' . $message);
+                $this->logger->info(
+                    'Cache file with merged layout: ' . $cacheId
+                    . ' and handles ' . implode(', ', (array)$this->getHandles()) . ': ' . $message
+                );
             }
         }
+
         return $this;
     }
 
