@@ -199,6 +199,11 @@ class ToModel
         return $ruleModel;
     }
 
+    /**
+     * Convert date to ISO8601
+     * 
+     * @param RuleDataModel $dataModel
+     */
     public function formattingDate(RuleDataModel $dataModel)
     {
         $fromDate = new \DateTime($dataModel->getFromDate());
