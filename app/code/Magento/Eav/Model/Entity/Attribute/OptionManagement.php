@@ -48,12 +48,8 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
         if (!$attribute->usesSource()) {
             throw new StateException(__('Attribute %1 doesn\'t work with options', $attributeCode));
         }
-        $optionId = 'new_option';
-        if ($option->getValue()) {
-            $this->validateOption($attribute, $option->getValue());
-            $optionId = $option->getValue();
-        }
 
+        $optionId = $option->getValue() ?: 'new_option';
         $options = [];
         $options['value'][$optionId][0] = $option->getLabel();
         $options['order'][$optionId] = $option->getSortOrder();
