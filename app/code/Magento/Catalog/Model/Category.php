@@ -226,6 +226,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $metadataService;
 
     /**
+     * @var \Magento\Framework\App\Cache\TypeListInterface
+     */
+    private $cacheTypeList;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -1075,7 +1080,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function afterSave()
     {
         $result = parent::afterSave();
-        $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        $this->_getResource()
+            ->addCommitCallback([$this, 'reindex'])
+            ->addCommitCallback([$this, 'invalidateCache']);
         return $result;
     }
 
@@ -1101,6 +1108,36 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Invalidate related cache types
+     *
+     * @return void
+     */
+    public function invalidateCache()
+    {
+        $relatedCacheTypes = ['layout', 'full_page'];
+        foreach ($this->_designAttributes as $attribute) {
+            if ($this->dataHasChangedFor($attribute)) {
+                $this->getCacheTypeList()->invalidate($relatedCacheTypes);
+                break;
+            }
+        }
+    }
+
+    /**
+     * @return \Magento\Framework\App\Cache\TypeListInterface
+     *
+     * @deprecated
+     */
+    private function getCacheTypeList()
+    {
+        if ($this->cacheTypeList === null) {
+            $this->cacheTypeList = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\App\Cache\TypeListInterface');
+        }
+        return $this->cacheTypeList;
+    }
+
+    /**
      * Init indexing process after category delete
      *
      * @return \Magento\Framework\Model\AbstractModel
@@ -1108,6 +1145,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function afterDeleteCommit()
     {
         $this->reindex();
+        $this->invalidateCache();
         return parent::afterDeleteCommit();
     }
 
