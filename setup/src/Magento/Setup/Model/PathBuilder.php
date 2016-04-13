@@ -22,6 +22,7 @@ class PathBuilder
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface $reader
      */
     private $reader;
+
     /**
      * Constructor
      *
@@ -43,16 +44,27 @@ class PathBuilder
     {
         // Locate composer.json for magento2-base module and read the extra map section for the list of
         // magento specific files and directories that updater will need access to perform the upgrade
+
         $vendorDir = require VENDOR_PATH;
-
-
         $basePackageComposerFilePath = $vendorDir . '/' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE;
         if (!$this->reader->isExist($basePackageComposerFilePath)) {
             throw new \Magento\Setup\Exception(
                 'Could not locate ' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE . ' file.'
             );
         }
+        if (!$this->reader->isReadable($basePackageComposerFilePath)) {
+            throw new \Magento\Setup\Exception(
+                'Could not read ' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE . ' file.'
+            );
+        }
         $composerJsonFileData = json_decode($this->reader->readFile($basePackageComposerFilePath), true);
+        if (!isset($composerJsonFileData[self::COMPOSER_KEY_EXTRA][self::COMPOSER_KEY_MAP])) {
+            throw new \Magento\Setup\Exception(
+                'Could not find "extra" => "map" section within '
+                . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE
+                . ' file.'
+            );
+        }
         $extraMappings = $composerJsonFileData[self::COMPOSER_KEY_EXTRA][self::COMPOSER_KEY_MAP];
         $fileAndPathList = [];
         foreach ($extraMappings as $map) {

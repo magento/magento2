@@ -127,8 +127,8 @@ class ReadinessCheck
         // Prepare list of magento specific files and directory paths for updater application to check write
         // permissions
         try {
-            $dirAndFilePaths = $this->pathBuilder->build();
-            $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = $dirAndFilePaths;
+            $filePaths = $this->pathBuilder->build();
+            $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = $filePaths;
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $returnValue = false;

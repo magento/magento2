@@ -7,7 +7,6 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use \Magento\Setup\Model\PathBuilder;
-use \Magento\Setup\Model\Cron\ReadinessCheck;
 
 class PathBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,18 +40,15 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->readFactoryMock->expects($this->once())->method('create')->willReturn($this->readerMock);
-        $this->pathBuilder = $objectManager->getObject(
-            'Magento\Setup\Model\PathBuilder',
-            ['readFactory' => $this->readFactoryMock]
-        );
+        $this->pathBuilder = new PathBuilder($this->readFactoryMock);
     }
 
-    // Error scenario (magento/magento2-base/composer.json not found)
-    public function testBuildNoComposerJsonFile()
+    // Error scenario: magento/magento2-base/composer.json not found
+    public function testBuildComposerJsonFileNotFound()
     {
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(false);
+        $this->readerMock->expects($this->never())->method('isReadable');
         $this->readerMock->expects($this->never())->method('readFile');
         $this->setExpectedException(
             'Magento\Setup\Exception',
@@ -61,10 +57,49 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase
         $this->pathBuilder->build();
     }
 
+    // Error scenario: magento/magento2-base/composer.json file could not be read
+    public function testBuildComposerJsonFileNotReadable()
+    {
+        $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
+        $this->readerMock->expects($this->once())->method('isReadable')->willReturn(false);
+        $this->readerMock->expects($this->never())->method('readFile');
+        $this->setExpectedException(
+            'Magento\Setup\Exception',
+            sprintf('Could not read %s file.', PathBuilder::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE)
+        );
+        $this->pathBuilder->build();
+    }
+
+    // Error scenario: ["extra"]["map"] is absent within magento/magento2-base/composer.json file
+    public function testBuildNoExtraMapSectionInComposerJsonFile()
+    {
+        $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
+        $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
+        $jsonData = json_encode(
+            [
+                PathBuilder::COMPOSER_KEY_EXTRA =>
+                [
+                    __FILE__,
+                    __FILE__
+                ]
+            ]
+        );
+        $this->readerMock->expects($this->once())->method('readFile')->willReturn($jsonData);
+        $this->setExpectedException(
+            'Magento\Setup\Exception',
+            sprintf(
+                'Could not find "extra" => "map" section within %s file.',
+                PathBuilder::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE
+            )
+        );
+        $this->pathBuilder->build();
+    }
+
     // Success scenario
     public function testBuild()
     {
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
+        $this->readerMock->expects($this->once())->method('isReadable')->willReturn(true);
         $jsonData = json_encode(
             [
                 PathBuilder::COMPOSER_KEY_EXTRA =>
@@ -88,5 +123,4 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase
         $actualList = $this->pathBuilder->build();
         $this->assertEquals($expectedList, $actualList);
     }
-
 }
