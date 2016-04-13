@@ -8,8 +8,14 @@
 
 namespace Magento\Paypal\Test\Unit\Model\Express;
 
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Shipping;
+use Magento\Quote\Model\ShippingAssignment;
+use Magento\Quote\Api\Data\CartExtensionInterface;
+
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
+    const SHIPPING_METHOD = 'new_shipping_method';
     /**
      * @var \Magento\Paypal\Model\Express\Checkout | \Magento\Paypal\Model\Express\Checkout
      */
@@ -53,7 +59,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             [
                 'getId', 'assignCustomer', 'assignCustomerWithAddressChange', 'getBillingAddress',
                 'getShippingAddress', 'isVirtual', 'addCustomerAddress', 'collectTotals', '__wakeup',
-                'save', 'getCustomerData'
+                'save', 'getCustomerData', 'getIsVirtual', 'getExtensionAttributes'
             ], [], '', false);
         $this->customerAccountManagementMock = $this->getMock(
             '\Magento\Customer\Model\AccountManagement',
@@ -105,5 +111,59 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
             ->with($customerDataMock, $quoteAddressMock, $quoteAddressMock);
         $customerDataMock->expects($this->once())->method('getId');
         $this->checkoutModel->setCustomerWithAddressChange($customerDataMock, $quoteAddressMock, $quoteAddressMock);
+    }
+
+    public function testUpdateShippingMethod()
+    {
+        $shippingAddressMock = $this->getMockBuilder(Quote\Address::class)
+            ->setMethods(['setCollectShippingRates', 'getShippingMethod', 'setShippingMethod'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $billingAddressMock = $this->getMockBuilder(Quote\Address::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $shippingAddressMock->expects(static::once())
+            ->method('getShippingMethod')
+            ->willReturn('old_method');
+        $shippingAddressMock->expects(static::once())
+            ->method('setShippingMethod')
+            ->with(self::SHIPPING_METHOD)
+            ->willReturnSelf();
+
+        $shippingMock = $this->getMockBuilder(Shipping::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $shippingMock->expects(static::once())
+            ->method('setMethod')
+            ->with(self::SHIPPING_METHOD);
+
+        $shippingAssignmentMock = $this->getMockBuilder(ShippingAssignment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $shippingAssignmentMock->expects(static::once())
+            ->method('getShipping')
+            ->willReturn($shippingMock);
+
+        $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
+            ->setMethods(['getShippingAssignments'])
+            ->getMockForAbstractClass();
+        $cartExtensionMock->expects(static::exactly(2))
+            ->method('getShippingAssignments')
+            ->willReturn([$shippingAssignmentMock]);
+
+        $this->quoteMock->expects(static::exactly(2))
+            ->method('getShippingAddress')
+            ->willReturn($shippingAddressMock);
+        $this->quoteMock->expects(static::exactly(2))
+            ->method('getIsVirtual')
+            ->willReturn(false);
+        $this->quoteMock->expects(static::any())
+            ->method('getBillingAddress')
+            ->willReturn($billingAddressMock);
+        $this->quoteMock->expects(static::once())
+            ->method('getExtensionAttributes')
+            ->willReturn($cartExtensionMock);
+
+        $this->checkoutModel->updateShippingMethod(self::SHIPPING_METHOD);
     }
 }
