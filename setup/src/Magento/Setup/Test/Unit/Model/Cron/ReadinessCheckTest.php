@@ -101,7 +101,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'error' => 'Connection failure'
             ],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
-            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+            ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
                 ReadinessCheck::KEY_ERROR => ""
             ],
@@ -127,7 +127,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                 'error' => 'Database user username does not have write access.'
             ],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
-            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+            ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
                 ReadinessCheck::KEY_ERROR => ""
             ],
@@ -148,7 +148,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
-            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+            ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
                 ReadinessCheck::KEY_ERROR => ""
             ],
@@ -169,7 +169,7 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $expected = [
             ReadinessCheck::KEY_READINESS_CHECKS => [ReadinessCheck::KEY_DB_WRITE_PERMISSION_VERIFIED => true],
             ReadinessCheck::KEY_PHP_CHECKS => $this->expected,
-            ReadinessCheck::KEY_DIR_AND_FILE_PATHS => [
+            ReadinessCheck::KEY_FILE_PATHS => [
                 ReadinessCheck::KEY_LIST => [__FILE__],
                 ReadinessCheck::KEY_ERROR => ""
             ],
