@@ -161,11 +161,6 @@
 
 .selectmenu {
     &:extend(.abs-form-control-pattern);
-
-    &._focus {
-        &:extend(.abs-form-control-pattern:focus);
-    }
-
     display: inline-block;
     padding-left: 1.5rem;
     position: relative;
@@ -175,6 +170,10 @@
 
     &:hover {
         &:extend(.abs-form-control-pattern:hover);
+    }
+
+    &._focus {
+        &:extend(.abs-form-control-pattern:focus);
     }
 
     &._active {

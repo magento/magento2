@@ -58,11 +58,11 @@
     }
 }
 
-// @todo ui Move to other place - will be done in upcoming task "Address Tabs":
+//  @todo ui Move to other place - will be done in upcoming task 'Address Tabs':
 
 .address-item-edit-content {
     background: @color-white;
-    border: 1px solid #dad1c8;
+    border: 1px solid @color-gray-brown;
     box-shadow: 0 2px 1px 0 rgba(217, 210, 202, .5);
     margin-left: 359px;
     max-width: 500px;
@@ -80,7 +80,7 @@
 .address-list {
     float: left;
     list-style-type: none;
-    margin:0;
+    margin: 0;
     padding: 0;
     width: 360px;
 
@@ -91,8 +91,8 @@
     }
 
     .address-list-item {
-        background: #f1f1f1;
-        border: 1px solid #d9d2ca;
+        background: @color-white-fog2;
+        border: 1px solid @color-gray-brown;
         cursor: pointer;
         margin-bottom: -1px;
         padding: 10px 10px 15px;
@@ -134,15 +134,15 @@
         }
     }
 
-    address:first-line {
-        //  its not work  if First Name and Last Name in two lines
-        font-weight: bold;
-    }
-
     address {
         font-style: normal;
         line-height: 1.5;
         margin: 0 20px 15px 0;
+
+        &:first-line {
+            //  It does not work if First Name and Last Name are arranged in two lines
+            font-weight: bold;
+        }
     }
 
     .address-list-actions {
@@ -262,7 +262,9 @@ label.mage-error {
 //  Selectbox in calendar @todo ui - Remove after default select styles set
 //  _____________________________________________
 
-.ui-datepicker .ui-datepicker-title select:extend(.admin__control-select all) {};
+.ui-datepicker .ui-datepicker-title select {
+    &:extend(.admin__control-select all);
+}
 
 //
 //  Data grid
@@ -282,7 +284,7 @@ label.mage-error {
         }
 
         select,
-        input[type="text"]{
+        input[type='text'] {
             font-size: 1.3rem;
             height: 2.8rem;
             min-width: 5rem;
@@ -295,7 +297,6 @@ label.mage-error {
         }
 
         select {
-            padding: .2rem 1.8rem .2rem .3rem;
             background-position+: ~'calc(100% - 5px)' -37px;
             background-size+: auto;
             background-position+: 100%;
@@ -303,6 +304,7 @@ label.mage-error {
             background-position+: ~'calc(100% - 18px)' 0;
             background-size+: 1px 100%;
             height: 2.8rem;
+            padding: .2rem 1.8rem .2rem .3rem;
 
             &:focus {
                 background-position+: ~'calc(100% - 5px)' 11px;
@@ -370,7 +372,7 @@ label.mage-error {
         height: 22px;
         left: 0;
         opacity: 0.01;
-        position:absolute;
+        position: absolute;
         top: 0;
         width: 22px;
         z-index: 2;
@@ -416,7 +418,7 @@ label.mage-error {
                     &:before {
                         content: '-';
                         font-size: 2rem;
-                        line-height: 0.7rem;
+                        line-height: .7rem;
                     }
                 }
             }

@@ -1,7 +1,7 @@
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
+// /**
+//  * Copyright © 2016 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
 
 .fotorama-video-container {
     &:after {
@@ -24,7 +24,7 @@
     &.video-unplayed {
         &:hover {
             img {
-                opacity: 0.6;
+                opacity: .6;
             }
 
             &:after {
@@ -48,14 +48,15 @@
 }
 
 .product-video {
+    bottom: 0;
     height: 75%;
     left: 0;
+    margin: auto;
     position: absolute;
+    right: 0;
     top: 0;
     width: 100%;
-    right: 0;
-    bottom: 0;
-    margin: auto;
+
     iframe {
         height: 100%;
         left: 0;
