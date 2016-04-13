@@ -37,6 +37,11 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /* @var \Magento\Framework\Config\CacheInterface $cache */
+        $cache = $this->_objectManager->create('Magento\Framework\Config\CacheInterface');
+        $cache->remove('extension_attributes_config');
+        
         $this->repository = $this->_objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
         $this->_addressFactory = $this->_objectManager->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
         $this->dataObjectHelper = $this->_objectManager->create('Magento\Framework\Api\DataObjectHelper');
