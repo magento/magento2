@@ -7,7 +7,6 @@
 
 .animation(@animation) {
     -webkit-animation: @animation;
-    -o-animation: @animation;
     animation: @animation;
 }
 
@@ -47,10 +46,10 @@
 }
 
 //  Backface visibility
-//  Prevent browsers from flickering when using CSS 3D transforms. Default value is `visible`, but can be changed to `hidden`
+//  Prevent browsers from flickering when using CSS 3D transforms. Default value is 'visible', but can be changed to 'hidden'
 
 .backface-visibility(@visibility) {
-    -webkit-backface-visibility: @visibility;
     -moz-backface-visibility: @visibility;
+    -webkit-backface-visibility: @visibility;
     backface-visibility: @visibility;
 }
