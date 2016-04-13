@@ -37,15 +37,15 @@ class DateTime extends Date
      *
      * @param string $value
      * @return string
-     * @throws LocalizedException
+     * @throws \Exception
      */
     public function filter($value)
     {
         try {
-            $value = new \DateTime($value);
-            return $value->format('Y-m-d H:i:s');
+            $dateTime = new \DateTime($value);
+            return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Exception('Invalid input datetime format');
+            throw new \Exception((string)__("Invalid input datetime format of value '%1'", $value));
         }
     }
 }
