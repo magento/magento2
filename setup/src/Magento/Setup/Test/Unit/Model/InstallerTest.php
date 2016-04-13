@@ -132,6 +132,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $componentRegistrar;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PhpReadinessCheck
+     */
+    private $phpReadinessCheck;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -179,6 +184,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
         $this->sampleDataState = $this->getMock('Magento\Framework\Setup\SampleData\State', [], [], '', false);
         $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -220,7 +226,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->setupFactory,
             $this->dataSetupFactory,
             $this->sampleDataState,
-            $this->componentRegistrar
+            $this->componentRegistrar,
+            $this->phpReadinessCheck
         );
     }
 
@@ -280,33 +287,36 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Setup\Model\AdminAccount', [], [], '', false)
         );
         $this->sampleDataState->expects($this->once())->method('hasError')->willReturn(true);
+        $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(
+            ['responseType' => \Magento\Setup\Controller\ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]
+        );
 
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento installation:');
         $this->logger->expects($this->at(1))->method('log')->with('File permissions check...');
+        $this->logger->expects($this->at(3))->method('log')->with('Required extensions check...');
         // at(2) invokes logMeta()
-        $this->logger->expects($this->at(3))->method('log')->with('Enabling Maintenance Mode...');
+        $this->logger->expects($this->at(5))->method('log')->with('Enabling Maintenance Mode...');
         // at(4) - logMeta and so on...
-        $this->logger->expects($this->at(5))->method('log')->with('Installing deployment configuration...');
-        $this->logger->expects($this->at(7))->method('log')->with('Installing database schema:');
-        $this->logger->expects($this->at(9))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(11))->method('log')->with("Module 'Bar_Two':");
-        $this->logger->expects($this->at(13))->method('log')->with('Schema post-updates:');
-        $this->logger->expects($this->at(14))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(16))->method('log')->with("Module 'Bar_Two':");
-        $this->logger->expects($this->at(19))->method('log')->with('Installing user configuration...');
-        $this->logger->expects($this->at(21))->method('log')->with('Enabling caches:');
-        $this->logger->expects($this->at(25))->method('log')->with('Installing data...');
-        $this->logger->expects($this->at(26))->method('log')->with('Data install/update:');
-        $this->logger->expects($this->at(27))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(29))->method('log')->with("Module 'Bar_Two':");
-        $this->logger->expects($this->at(31))->method('log')->with('Data post-updates:');
-        $this->logger->expects($this->at(32))->method('log')->with("Module 'Foo_One':");
-        $this->logger->expects($this->at(34))->method('log')->with("Module 'Bar_Two':");
-        $this->logger->expects($this->at(37))->method('log')->with('Installing admin user...');
-        $this->logger->expects($this->at(39))->method('log')->with('Caches clearing:');
-        $this->logger->expects($this->at(42))->method('log')->with('Disabling Maintenance Mode:');
-        $this->logger->expects($this->at(44))->method('log')->with('Post installation file permissions check...');
-        $this->logger->expects($this->at(46))->method('log')->with('Write installation date...');
+        $this->logger->expects($this->at(7))->method('log')->with('Installing deployment configuration...');
+        $this->logger->expects($this->at(9))->method('log')->with('Installing database schema:');
+        $this->logger->expects($this->at(11))->method('log')->with("Module 'Foo_One':");
+        $this->logger->expects($this->at(13))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(15))->method('log')->with('Schema post-updates:');
+        $this->logger->expects($this->at(16))->method('log')->with("Module 'Foo_One':");
+        $this->logger->expects($this->at(18))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(21))->method('log')->with('Installing user configuration...');
+        $this->logger->expects($this->at(23))->method('log')->with('Enabling caches:');
+        $this->logger->expects($this->at(27))->method('log')->with('Installing data...');
+        $this->logger->expects($this->at(28))->method('log')->with('Data install/update:');
+        $this->logger->expects($this->at(29))->method('log')->with("Module 'Foo_One':");
+        $this->logger->expects($this->at(31))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(33))->method('log')->with('Data post-updates:');
+        $this->logger->expects($this->at(34))->method('log')->with("Module 'Foo_One':");
+        $this->logger->expects($this->at(36))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(39))->method('log')->with('Installing admin user...');
+        $this->logger->expects($this->at(41))->method('log')->with('Caches clearing:');
+        $this->logger->expects($this->at(44))->method('log')->with('Disabling Maintenance Mode:');
+        $this->logger->expects($this->at(46))->method('log')->with('Post installation file permissions check...');
         $this->logger->expects($this->at(48))->method('logSuccess')->with('Magento installation complete.');
         $this->logger->expects($this->at(50))->method('log')
             ->with('Sample Data is installed with errors. See log file for details');
@@ -333,6 +343,27 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->method('getMissingWritablePathsForInstallation')
             ->willReturn(['foo', 'bar']);
         $this->object->checkInstallationFilePermissions();
+    }
+
+    public function testCheckExtensions()
+    {
+        $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(
+            ['responseType' => \Magento\Setup\Controller\ResponseTypeInterface::RESPONSE_TYPE_SUCCESS]
+        );
+        $this->object->checkExtensions();
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Missing following extensions: 'foo'
+     */
+    public function testCheckExtensionsError()
+    {
+        $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(
+            ['responseType' => \Magento\Setup\Controller\ResponseTypeInterface::RESPONSE_TYPE_ERROR,
+            'data'=>['required'=>['foo', 'bar'], 'missing'=>['foo']]]
+        );
+        $this->object->checkExtensions();
     }
 
     public function testCheckApplicationFilePermissions()
