@@ -322,9 +322,6 @@ class Cart extends DataObject implements CartInterface
             $request = new \Magento\Framework\DataObject($requestInfo);
         }
 
-        if (!$request->hasQty()) {
-            $request->setQty(1);
-        }
         !$request->hasFormKey() ?: $request->unsFormKey();
 
         return $request;
@@ -351,7 +348,7 @@ class Cart extends DataObject implements CartInterface
             //If product was not found in cart and there is set minimal qty for it
             if ($minimumQty
                 && $minimumQty > 0
-                && $request->getQty() < $minimumQty
+                && !$request->getQty()
                 && !$this->getQuote()->hasProductId($productId)
             ) {
                 $request->setQty($minimumQty);
@@ -691,7 +688,7 @@ class Cart extends DataObject implements CartInterface
                 // If product was not found in cart and there is set minimal qty for it
                 if ($minimumQty
                     && $minimumQty > 0
-                    && $request->getQty() < $minimumQty
+                    && !$request->getQty()
                     && !$this->getQuote()->hasProductId($productId)
                 ) {
                     $request->setQty($minimumQty);
