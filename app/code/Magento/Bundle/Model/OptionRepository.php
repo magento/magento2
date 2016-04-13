@@ -189,7 +189,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $option->setStoreId($product->getStoreId());
         $option->setParentId($product->getData($metadata->getLinkField()));
         $linksToAdd = [];
-        $option->setDefaultTitle($option->getTitle());
+        $option->setDefaultTitle($option->getDefaultTitle() ?: $option->getTitle());
         if (is_array($option->getProductLinks())) {
             $linksToAdd = $option->getProductLinks();
         }

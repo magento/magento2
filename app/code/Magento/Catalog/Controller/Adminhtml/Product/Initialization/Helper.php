@@ -40,6 +40,8 @@ class Helper
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     *
+     * @deprecated
      */
     protected $dateFilter;
 
@@ -67,6 +69,11 @@ class Helper
      * @var LinkResolver
      */
     private $linkResolver;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     */
+    private $dateTimeFilter;
 
     /**
      * Helper constructor.
@@ -142,7 +149,7 @@ class Helper
         foreach ($attributes as $attrKey => $attribute) {
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                    $dateFieldFilters[$attrKey] = $this->dateFilter;
+                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
                 }
             }
         }
@@ -362,5 +369,19 @@ class Helper
             $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
         }
         return $this->linkResolver;
+    }
+
+    /**
+     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     *
+     * @deprecated
+     */
+    private function getDateTimeFilter()
+    {
+        if ($this->dateTimeFilter === null) {
+            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        }
+        return $this->dateTimeFilter;
     }
 }
