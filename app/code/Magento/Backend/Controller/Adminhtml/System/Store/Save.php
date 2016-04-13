@@ -42,6 +42,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
 
                     case 'group':
                         $postData['group']['name'] = $this->filterManager->removeTags($postData['group']['name']);
+                        /** @var \Magento\Store\Model\Group $groupModel */
                         $groupModel = $this->_objectManager->create('Magento\Store\Model\Group');
                         if ($postData['group']['group_id']) {
                             $groupModel->load($postData['group']['group_id']);
@@ -51,6 +52,15 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                             $groupModel->setId(null);
                         }
 
+                        if (!empty($postData['group']['default_store_id'])) {
+                            $defaultStoreId = $postData['group']['default_store_id'];
+                            if (!empty($groupModel->getStores()[$defaultStoreId]) &&
+                                !$groupModel->getStores()[$defaultStoreId]->isActive()) {
+                                throw new \Magento\Framework\Exception\LocalizedException(
+                                    __('An inactive store view cannot be saved as default store view')
+                                );
+                            }
+                        }
                         $groupModel->save();
 
                         $this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
@@ -77,9 +87,9 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                             $storeModel->getGroupId()
                         );
                         $storeModel->setWebsiteId($groupModel->getWebsiteId());
-                        if (!$storeModel->isActive() && !$storeModel->isCanDisable()) {
+                        if (!$storeModel->isActive() && $storeModel->isDefault()) {
                             throw new \Magento\Framework\Exception\LocalizedException(
-                                __('The default store must have at least one enabled store view')
+                                __('The default store cannot be disabled')
                             );
                         }
                         $storeModel->save();
