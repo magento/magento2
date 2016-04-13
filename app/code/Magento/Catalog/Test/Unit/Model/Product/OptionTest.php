@@ -54,7 +54,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
         $amountMock->expects($this->once())->method('getValue')->willReturn(50);
         $this->model->setPrice(50);
-        $this->model->setPriceType(Option::TYPE_PERCENT);
+        $this->model->setPriceType(\Magento\Catalog\Model\Product\Option\Value::TYPE_PERCENT);
         $this->assertEquals(25, $this->model->getRegularPrice());
         $this->model->setPriceType(null);
         $this->assertEquals(50, $this->model->getRegularPrice());
