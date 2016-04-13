@@ -854,14 +854,14 @@ define([
             $.mage.__('Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document.')
         ],
         'date_range_min': [
-            function (value, minValue) {
-                return moment.utc(value, 'MM/DD/YYYY').unix() >= minValue;
+            function (value, minValue, params) {
+                return moment.utc(value, params.dateFormat).unix() >= minValue;
             },
             $.mage.__('The date is not within the specified range.')
         ],
         'date_range_max': [
-            function (value, maxValue) {
-                return moment.utc(value, 'MM/DD/YYYY').unix() <= maxValue;
+            function (value, maxValue, params) {
+                return moment.utc(value, params.dateFormat).unix() <= maxValue;
             },
             $.mage.__('The date is not within the specified range.')
         ]
