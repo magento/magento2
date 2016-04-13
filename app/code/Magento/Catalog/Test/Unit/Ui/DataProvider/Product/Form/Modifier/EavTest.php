@@ -33,6 +33,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
  * Class EavTest
  *
  * @method Eav getModel
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EavTest extends AbstractModifierTest
