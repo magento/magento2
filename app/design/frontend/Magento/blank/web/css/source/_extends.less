@@ -44,8 +44,8 @@
     }
 
     dd {
-        float: left;
         display: inline-block;
+        float: left;
         margin: 0 0 @indent__xs;
     }
 };
@@ -224,8 +224,8 @@
 //  ---------------------------------------------
 
 .abs-input-qty {
-    width: 47px;
     text-align: center;
+    width: 47px;
 }
 
 //
@@ -631,8 +631,8 @@
         @_margin: false
     );
     border-radius: 0;
-    font-weight: @font-weight__regular;
     font-size: inherit;
+    font-weight: @font-weight__regular;
 
     &:active,
     &:not(:focus) {
@@ -686,7 +686,7 @@
         }
 
         &:after {
-            content:')';
+            content: ')';
         }
     }
 }
@@ -700,11 +700,11 @@
     padding-right: 12px;
     position: relative;
     .lib-icon-font(
-        @icon-down,
-        @_icon-font-size: 26px,
-        @_icon-font-line-height: 10px,
-        @_icon-font-margin: 3px 0 0 0,
-        @_icon-font-position: after
+    @icon-down,
+    @_icon-font-size: 26px,
+    @_icon-font-line-height: 10px,
+    @_icon-font-margin: 3px 0 0 0,
+    @_icon-font-position: after
     );
 
     &:after {
@@ -715,16 +715,16 @@
 
     &-expanded {
         .lib-icon-font-symbol(
-            @_icon-font-content: @icon-up,
-            @_icon-font-position: after
+        @_icon-font-content: @icon-up,
+        @_icon-font-position: after
         );
     }
 }
 
 .abs-tax-total-expanded {
     .lib-icon-font-symbol(
-        @_icon-font-content: @icon-up,
-        @_icon-font-position: after
+    @_icon-font-content: @icon-up,
+    @_icon-font-position: after
     );
 }
 
@@ -1090,7 +1090,7 @@
 
 .abs-field-date-input {
     .lib-css(margin-right, @indent__s);
-    width: calc(~"100% - (@{icon-calendar__font-size} + @{indent__s})");
+    width: calc(~'100% - (@{icon-calendar__font-size} + @{indent__s})');
 }
 
 //
@@ -1103,7 +1103,7 @@
 
     input {
         .lib-css(margin-right, @indent__s);
-        width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
+        width: calc(~'100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})');
     }
 }
 
@@ -1219,8 +1219,6 @@
             }
 
             .amount .price {
-                position: relative;
-                padding-right: @indent__m;
                 .lib-icon-font(
                 @icon-down,
                 @_icon-font-size: 30px,
@@ -1228,6 +1226,8 @@
                 @_icon-font-position: after,
                 @_icon-font-display: block
                 );
+                position: relative;
+                padding-right: @indent__m;
 
                 &:after {
                     position: absolute;

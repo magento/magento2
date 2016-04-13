@@ -31,15 +31,15 @@
         overflow: hidden;
 
         li {
-            background-color: #f0f0f0;
+            background-color: @color-gray94;
             float: left;
 
             > a {
-                border: 1px solid #cccccc;
+                border: 1px solid @color-gray80;
+                color: @color-very-dark-gray1;
+                display: block;
                 padding: 7px 10px;
                 text-decoration: none;
-                display: block;
-                color: #7d7d7d;
             }
         }
 
@@ -48,7 +48,7 @@
         }
 
         li.ui-tabs-active {
-            background-color: #dedede;
+            background-color: @color-gray85;
         }
     }
 
@@ -56,14 +56,14 @@
         overflow: hidden;
 
         > li {
-            list-style: none;
-            width: 190px;
-            height: 340px;
+            background-color: @color-white;
+            border: 1px solid @color-gray85;
             float: left;
-            border: 1px solid #7d7d7d;
+            height: 340px;
+            list-style: none;
             margin: 0 25px 20px 0;
             padding: 10px;
-            background-color: #fff;
+            width: 190px;
         }
 
         .image-holder {
@@ -78,10 +78,10 @@
             overflow: hidden;
 
             a {
-                text-decoration: none;
-                color: #7d7d7d;
-                float: left;
+                color: @color-gray85;
                 display: inline-block;
+                float: left;
+                text-decoration: none;
             }
 
             a:last-child {
@@ -95,30 +95,30 @@
 
         .controlbar-bottom {
             .position {
-                border-top: 1px solid #7d7d7d;
+                border-top: 1px solid @color-gray85;
                 margin-top: 6px;
                 padding-top: 4px;
 
                 input {
-                    width: 50px;
-                    height: 25px;
                     float: left;
+                    height: 25px;
                     margin-right: 5px;
+                    width: 50px;
                 }
 
                 a {
-                    text-decoration: none;
-                    color: #7d7d7d;
+                    color: @color-gray85;
+                    display: block;
+                    float: left;
                     margin-right: 5px;
                     margin-top: -2px;
-                    float: left;
-                    display: block;
+                    text-decoration: none;
                 }
             }
         }
 
         .selected {
-            background-color: #f5d6c7;
+            background-color: @color-pink-light;
         }
     }
 
@@ -128,8 +128,8 @@
 
     table.data-grid {
         th.col-draggable-position {
+            margin: 0 auto;
             width: 10px;
-            margin: 0 auto 0 auto;
         }
 
         td.col-position {
@@ -139,22 +139,22 @@
             }
 
             .position input {
-                width: 40px;
                 text-align: center;
+                width: 40px;
             }
 
             a {
+                color: @color-gray85;
                 text-decoration: none;
-                color: #7d7d7d;
             }
         }
 
         .selected td {
-            background-color: #f5d6c7;
+            background-color: @color-pink-light;
         }
 
         tr.on-mouse td {
-            background-color: #e5f7fe;
+            background-color: @color-blue-clear-sky;
         }
     }
 
@@ -182,28 +182,40 @@
         width: 1px;
     }
 
-    .mode-tile:before {
-        content: "\e63d";
+    .mode-tile {
+        &:before {
+            content: '\e63d';
+        }
     }
 
-    .mode-grid:before {
-        content: "\e63e";
+    .mode-grid {
+        &:before {
+            content: '\e63e';
+        }
     }
 
-    .icon-gripper:before {
-        content: "\e617";
+    .icon-gripper {
+        &:before {
+            content: '\e617';
+        }
     }
 
-    .icon-close-mage:before {
-        content: "\e62f";
+    .icon-close-mage {
+        &:before {
+            content: '\e62f';
+        }
     }
 
-    .icon-backward:before {
-        content: "\e619";
+    .icon-backward {
+        &:before {
+            content: '\e619';
+        }
     }
 
-    .icon-forward:before {
-        content: "\e618";
+    .icon-forward {
+        :before {
+            content: '\e618';
+        }
     }
 
     .hidden {
@@ -211,8 +223,8 @@
     }
 
     .smart_category {
-        display: block;
         clear: both;
+        display: block;
         margin-bottom: 5px;
     }
 
@@ -221,8 +233,8 @@
     }
 
     .add_product_sku {
-        float: left;
         display: block;
+        float: left;
         margin: 5px;
     }
 
@@ -254,13 +266,13 @@
 
 .visual_merchandiser_draggable_container {
     > li {
-        list-style: none;
-        width: 190px;
-        height: 340px;
+        border: 1px solid @color-gray85;
         float: left;
-        border: 1px solid #7d7d7d;
+        height: 340px;
+        list-style: none;
         margin: 0 15px 15px 0;
         padding: 10px;
+        width: 190px;
     }
 }
 
@@ -283,6 +295,7 @@
     .smart-category-table {
         .action-delete {
             .action-icon();
+
             &:before {
                 &:extend(.abs-icon all);
                 content: @icon-delete__content;

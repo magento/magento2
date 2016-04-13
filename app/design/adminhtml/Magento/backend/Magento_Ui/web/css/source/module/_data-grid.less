@@ -75,11 +75,11 @@
 }
 
 body._in-resize {
+    cursor: col-resize;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    cursor: col-resize;
 
     .data-grid-th,
     .data-grid-th._sortable,
@@ -270,12 +270,12 @@ body._in-resize {
         }
 
         .action-select {
+            .link-pattern();
             background-color: transparent;
             border: none;
             font-size: @data-grid__font-size;
-            position: relative;
-            .link-pattern();
             padding: 0 3rem 0 0;
+            position: relative;
 
             &:hover {
                 &:after {

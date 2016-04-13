@@ -8,10 +8,11 @@
 //  _____________________________________________
 
 html {
-    box-sizing: border-box;
     //  Prevent iOS text size adjust after orientation change, without disabling user zoom.
-    -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+
+    box-sizing: border-box;
 }
 
 * {
@@ -200,6 +201,7 @@ samp {
 //  ---------------------------------------------
 
 //  Known limitation: by default, Chrome and Safari on OS X allow very limited styling of 'select', unless a 'border' property is set.
+
 button,
 input,
 optgroup,
@@ -211,6 +213,7 @@ textarea {
 }
 
 //  Address 'overflow' set to 'hidden' in IE 8/9/10/11.
+
 button {
     overflow: visible;
 }
@@ -228,9 +231,9 @@ select {
 //  Correct inability to style clickable 'input' types in iOS.
 //  Improve usability and consistency of cursor style between image-type 'input' and others.
 button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
+html input[type='button'],
+input[type='reset'],
+input[type='submit'] {
     -webkit-appearance: button;
     cursor: pointer;
 }
@@ -242,6 +245,7 @@ html input[disabled] {
 }
 
 //  Remove inner padding and border in Firefox 4+.
+
 button,
 input {
     &::-moz-focus-inner {
@@ -251,6 +255,7 @@ input {
 }
 
 //  Address Firefox 4+ setting 'line-height' on 'input' using '!important' in the UA stylesheet.
+
 input {
     line-height: normal;
 }
