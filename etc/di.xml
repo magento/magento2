@@ -114,7 +114,7 @@
         <arguments>
             <argument name="preprocessorContainer" xsi:type="array">
                 <item name="stopwordsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords</item>
-                <item name="synonymsPreprocessor" xsi:type="object">Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Synonyms</item>
+                <item name="synonymsPreprocessor" xsi:type="object">Magento\Search\Adapter\Query\Preprocessor\Synonyms</item>
             </argument>
         </arguments>
     </type>
