@@ -14,6 +14,8 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
  */
 class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
 {
+    const ACTIVE_STORE = 1;
+
     /**
      * @var \Magento\Catalog\Model\Config\Source\Category
      */
@@ -137,9 +139,10 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
         );
 
         if ($this->_coreRegistry->registry('store_action') == 'edit') {
-            $stores = $this->_storeFactory->create()->getCollection()->addGroupFilter(
-                $groupModel->getId()
-            )->toOptionArray();
+            $stores = $this->_storeFactory->create()->getCollection()
+                ->addGroupFilter($groupModel->getId())
+                ->addStatusFilter(self::ACTIVE_STORE)
+                ->toOptionArray();
             $fieldset->addField(
                 'group_default_store_id',
                 'select',
