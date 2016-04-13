@@ -169,6 +169,7 @@ class ToModel
             }
         } else {
             $ruleModel = $this->ruleFactory->create();
+            $this->formattingDate($dataModel);
         }
 
         $modelData = $ruleModel->getData();
@@ -196,5 +197,13 @@ class ToModel
         $this->mapFields($ruleModel, $dataModel);
 
         return $ruleModel;
+    }
+
+    public function formattingDate(RuleDataModel $dataModel)
+    {
+        $fromDate = new \DateTime($dataModel->getFromDate());
+        $toDate = new \DateTime($dataModel->getToDate());
+        $dataModel->setFromDate($fromDate->format(\DateTime::ISO8601));
+        $dataModel->setToDate($toDate->format(\DateTime::ISO8601));
     }
 }
