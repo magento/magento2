@@ -59,7 +59,7 @@
     }
 
     .legend {
-        span {
+        > span {
             margin-right: @indent__xs;
         }
     }
@@ -141,12 +141,20 @@
             @_icon-font-text-hide: true
             );
             display: inline-block;
+            margin-top: -4px;
             vertical-align: middle;
 
             &:focus {
                 box-shadow: none;
                 outline: 0;
             }
+        }
+    }
+
+    .field.date,
+    .field-dob {
+        .hasDatepicker {
+            &:extend(.abs-field-date-input all);
         }
     }
 
