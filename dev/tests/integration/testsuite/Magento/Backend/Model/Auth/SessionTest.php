@@ -38,8 +38,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        $this->auth = null;
         $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)->setCurrentScope(null);
-        $this->auth->logout();
     }
 
     /**
