@@ -87,8 +87,12 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
     {
         $url = $this->buildUrl($currencyFrom, $currenciesTo);
         set_time_limit(0);
-        $response = $this->getServiceResponse($url);
-        ini_restore('max_execution_time');
+        try {
+            $response = $this->getServiceResponse($url);
+        } finally {
+            ini_restore('max_execution_time');
+        }
+
         foreach ($currenciesTo as $currencyTo) {
             if ($currencyFrom == $currencyTo) {
                 $data[$currencyFrom][$currencyTo] = $this->_numberFormat(1);
