@@ -358,7 +358,6 @@ class Eav extends AbstractModifier
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
                 }
-
             }
         }
 
