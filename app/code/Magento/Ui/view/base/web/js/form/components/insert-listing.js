@@ -16,11 +16,19 @@ define([
             externalListingName: '${ $.ns }.${ $.ns }',
             behaviourType: 'simple',
             externalFilterMode: false,
+            requestConfig: {
+                method: 'POST'
+            },
             externalCondition: 'nin',
             settings: {
                 edit: {
                     imports: {
                         'onChangeRecord': '${ $.editorProvider }:changed'
+                    }
+                },
+                filter: {
+                    exports: {
+                        'requestConfig': '${ $.externalProvider }:requestConfig'
                     }
                 }
             },
@@ -61,6 +69,12 @@ define([
                 defaults.editableData = {};
                 _.map(defaults.settings.edit.imports, function (value, key) {
                     this.imports[key] = value;
+                }, defaults);
+            }
+
+            if (config.externalFilterMode === true) {
+                _.map(defaults.settings.filter.exports, function (value, key) {
+                    this.exports[key] = value;
                 }, defaults);
             }
 
@@ -261,18 +275,24 @@ define([
                 selectionsData = {},
                 request;
 
-            selectionsData['filters_modifier'] = {};
-            selectionsData['filters_modifier'][this.indexField] = {
-                'condition_type': filterType,
-                value: selections[itemsType]
-            };
             _.extend(selectionsData, this.params || {}, selections.params);
-            selectionsData.filters = {};
-            this.selections().excludeMode() ? selectionsData.paging = {
-                notLimits: 1
-            } : false;
 
-            request = this.requestData(selectionsData);
+            if (selections[itemsType] && selections[itemsType].length) {
+                selectionsData.filters = {};
+                selectionsData['filters_modifier'] = {};
+                selectionsData['filters_modifier'][this.indexField] = {
+                    'condition_type': filterType,
+                    value: selections[itemsType]
+                };
+            }
+
+            selectionsData.paging = {
+                notLimits: 1
+            };
+
+            request = this.requestData(selectionsData, {
+                method: this.requestConfig.method
+            });
             request
                 .done(function (data) {
                     this.setExternalValue(data.items || data);
