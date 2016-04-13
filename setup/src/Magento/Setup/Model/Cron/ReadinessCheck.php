@@ -34,7 +34,7 @@ class ReadinessCheck
     const KEY_PHP_VERSION_VERIFIED = 'php_version_verified';
     const KEY_PHP_SETTINGS_VERIFIED = 'php_settings_verified';
     const KEY_PHP_EXTENSIONS_VERIFIED = 'php_extensions_verified';
-    const KEY_DIR_AND_FILE_PATHS = 'dir_and_file_paths';
+    const KEY_FILE_PATHS = 'file_paths';
     const KEY_ERROR = 'error';
     const KEY_LIST = 'list';
     const KEY_CURRENT_TIMESTAMP = 'current_timestamp';
@@ -128,15 +128,13 @@ class ReadinessCheck
         // permissions
         try {
             $dirAndFilePaths = $this->pathBuilder->build();
-            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_LIST] = $dirAndFilePaths;
-            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_ERROR] = $errorMsg;
-
+            $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = $dirAndFilePaths;
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
             $returnValue = false;
-            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_ERROR] = $errorMsg;
-            $resultJsonRawData[self::KEY_DIR_AND_FILE_PATHS][self::KEY_LIST] = [];
+            $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = [];
         }
+        $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_ERROR] = $errorMsg;
 
         // updates timestamp
         if ($write->isExist(self::SETUP_CRON_JOB_STATUS_FILE)) {

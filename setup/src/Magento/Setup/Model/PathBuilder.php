@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\FileSystem\Directory\ReadFactory;
 
 /**
  * Prepares list of magento specific files and directory paths that updater will need access to perform the upgrade
@@ -18,20 +18,18 @@ class PathBuilder
 
     const COMPOSER_KEY_MAP = 'map';
 
-    const VENDOR_PATH_FILE = 'vendor_path.php';
-
     /**
-     * @var DirectoryList
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface $reader
      */
-    private $directoryList;
-
+    private $reader;
     /**
-     * PathBuilder constructor.
-     * @param DirectoryList $directoryList
+     * Constructor
+     *
+     * @param ReadFactory $readFactory
      */
-    public function __construct(DirectoryList $directoryList)
+    public function __construct(ReadFactory $readFactory)
     {
-        $this->directoryList = $directoryList;
+        $this->reader = $readFactory->create(BP);
     }
 
     /**
@@ -45,17 +43,16 @@ class PathBuilder
     {
         // Locate composer.json for magento2-base module and read the extra map section for the list of
         // magento specific files and directories that updater will need access to perform the upgrade
+        $vendorDir = require VENDOR_PATH;
 
-        $vendorPath = $this->directoryList->getPath(DirectoryList::CONFIG) . '/' . self::VENDOR_PATH_FILE;
-        $vendorDir = require "{$vendorPath}";
 
         $basePackageComposerFilePath = $vendorDir . '/' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE;
-        if (!file_exists($basePackageComposerFilePath)) {
+        if (!$this->reader->isExist($basePackageComposerFilePath)) {
             throw new \Magento\Setup\Exception(
                 'Could not locate ' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE . ' file.'
             );
         }
-        $composerJsonFileData = json_decode(file_get_contents($basePackageComposerFilePath), true);
+        $composerJsonFileData = json_decode($this->reader->readFile($basePackageComposerFilePath), true);
         $extraMappings = $composerJsonFileData[self::COMPOSER_KEY_EXTRA][self::COMPOSER_KEY_MAP];
         $fileAndPathList = [];
         foreach ($extraMappings as $map) {
