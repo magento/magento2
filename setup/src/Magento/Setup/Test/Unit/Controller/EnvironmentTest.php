@@ -289,4 +289,10 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());
     }
+
+    public function testIndexAction()
+    {
+        $model = $this->environment->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $model);
+    }
 }
