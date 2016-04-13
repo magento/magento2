@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @legend-border-bottom: 1px solid @color-gray-light6;
 @form-field__vertical-indent__desktop: 29px;
 @form-calendar-icon__color: @primary__color;
@@ -12,7 +16,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .fieldset {
         .lib-form-fieldset();
 
@@ -96,7 +99,7 @@
         text-indent: .01em;
         text-overflow: '';
 
-        &::-ms-expand{
+        &::-ms-expand {
             display:none;
         }
 
@@ -180,7 +183,7 @@
 }
 
 //
-//    Desktop
+//  Desktop
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {

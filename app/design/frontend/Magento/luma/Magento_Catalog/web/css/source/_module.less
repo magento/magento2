@@ -62,9 +62,9 @@
     .category {
         &-image {
             .image {
-                max-width: 100%;
-                height: auto;
                 display: block;
+                height: auto;
+                max-width: 100%;
             }
         }
     
@@ -76,8 +76,9 @@
     }
     
     //
-    //    Product images general container
-    //--------------------------------------
+    //  Product images general container
+    //  -----------------------------------------
+
     .product-image {
         &-container {
             display: inline-block;
@@ -85,29 +86,29 @@
         }
     
         &-wrapper {
-            height: 0;
             display: block;
+            height: 0;
+            overflow: hidden;
             position: relative;
             z-index: 1;
-            overflow: hidden;
         }
     
         &-photo {
-            display: block;
-            position: absolute;
-            top: 0;
             bottom: 0;
-            left: 0;
-            right: 0;
-            margin: auto;
+            display: block;
             height: auto;
+            left: 0;
+            margin: auto;
             max-width: 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
     }
     
     //
-    //    Product view
-    //--------------------------------------
+    //  Product view
+    //  -----------------------------------------
     .product.media {
         .product.photo .photo.image {
             &:extend(.abs-adaptive-images-centered);
@@ -164,11 +165,11 @@
     
     .product-info-main {
         .product-info-price {
-            border-bottom: 1px @color-gray-light5 solid;
-            display: table;
-            width: 100%;
             .lib-css(color, @product-info-price);
+            border-bottom: 1px solid @color-gray-light5;
+            display: table;
             margin-bottom: @indent__s + @indent__xs;
+            width: 100%;
     
             .price-box {
                 display: table-cell;
@@ -291,13 +292,13 @@
     .product-options-wrapper {
         .fieldset-product-options-inner {
             .legend {
-                border: none;
                 .lib-css(font-weight, @font-weight__semibold);
-                display: inline-block;
                 .lib-font-size(14px);
+                border: none;
+                display: inline-block;
                 float: none;
-                padding: 0;
                 margin: 0 0 8px;
+                padding: 0;
             }
     
             &.required,
@@ -355,8 +356,8 @@
     
             .price {
                 font-size: 22px;
-                line-height: 22px;
                 font-weight: @font-weight__semibold;
+                line-height: 22px;
             }
     
             .price-including-tax + .price-excluding-tax,
@@ -439,8 +440,8 @@
     .minimal-price-link,
     .price-excluding-tax,
     .price-including-tax {
-        white-space: nowrap;
         display: block;
+        white-space: nowrap;
     }
     
     .ui-dialog-titlebar-close {
@@ -462,8 +463,8 @@
                     width: auto;
     
                     .product-item-photo {
-                        position: absolute;
                         left: 0;
+                        position: absolute;
                         top: 0;
                     }
                 }
@@ -585,7 +586,7 @@
 
     .product-info-price {
         margin: 0 -@indent__s 0;
-        width: ~'calc(100% + 2*@{indent__s})'!important;
+        width: ~'calc(100% + 2*@{indent__s})' !important;
 
         > *:first-child {
             padding-left: @indent__s;
@@ -622,9 +623,9 @@
 
     .box-tocart {
         .action.tocart {
-            width: 49%;
-            margin-right: 1%;
             margin-bottom: 0;
+            margin-right: 1%;
+            width: 49%;
         }
     }
 
@@ -701,11 +702,11 @@
             .product-item {
                 &-info {
                     .product-item-photo {
-                        position: relative;
-                        left: auto;
-                        top: auto;
                         float: left;
+                        left: auto;
                         margin: 0 @indent__s @indent__s 0;
+                        position: relative;
+                        top: auto;
                     }
                 }
 
@@ -732,9 +733,9 @@
                 &-info {
                     .product-item-photo {
                         float: none;
+                        left: 0;
                         margin: 0;
                         position: absolute;
-                        left: 0;
                         top: 0;
                     }
                 }
@@ -747,7 +748,6 @@
     }
 }
 
-
 //
 //  Common
 //  _____________________________________________
@@ -757,6 +757,7 @@
     //
     //  Compare Products Page
     //  -----------------------------------------
+
     body.catalog-product-compare-index {
         .action.print {
             float: right;
@@ -793,12 +794,12 @@
         }
     
         .cell {
-            width: 180px;
             padding: 15px;
+            width: 180px;
     
             .attibute.value {
-                width: 100%;
                 overflow: hidden;
+                width: 100%;
             }
     
             &.product.info,
@@ -818,14 +819,14 @@
                 .lib-font-size(13);
     
                 img {
-                    max-width: 100%;
                     height: auto;
+                    max-width: 100%;
                 }
             }
     
             &.remove {
-                padding-top: 0;
                 padding-bottom: 0;
+                padding-top: 0;
                 text-align: right;
     
                 .action.delete {
@@ -873,12 +874,12 @@
     }
     
     .comparison.headings {
-        position: absolute;
-        z-index: 2;
-        top: 0;
-        left: 0;
-        width: auto;
         .lib-css(background, @color-white);
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: auto;
+        z-index: 2;
     }
     
     .block-compare {
@@ -892,8 +893,8 @@
     
         .action.delete {
             &:extend(.abs-remove-button-for-blocks all);
-            position: absolute;
             left: 0;
+            position: absolute;
             top: 0;
         }
     
@@ -917,7 +918,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .table-wrapper.comparison {
-        .table-comparison > tbody > tr{
+        .table-comparison > tbody > tr {
             > th,
             > td {
                 display: table-cell;
@@ -992,9 +993,9 @@
         }
     
         .field.choice {
+            left: 0;
             position: absolute;
             top: 2px;
-            left: 0;
     
             .label {
                 &:extend(.abs-visually-hidden all);
