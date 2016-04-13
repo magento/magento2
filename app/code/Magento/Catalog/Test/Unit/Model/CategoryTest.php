@@ -434,6 +434,48 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->category->reindex();
     }
 
+    public function testInvalidateCache()
+    {
+        $designAttributes = [
+            'custom_design' => null,
+            'custom_design_from' => 1,
+            'custom_design_to' => null,
+            'page_layout' => null,
+            'custom_layout_update' => 1,
+            'custom_apply_to_products' => null,
+        ];
+        $origData = [
+            'custom_design' => null,
+            'custom_design_from' => null,
+            'custom_design_to' => null,
+            'page_layout' => null,
+            'custom_layout_update' => null,
+            'custom_apply_to_products' => null,
+        ];
+
+        $this->category->addData($designAttributes);
+        foreach ($origData as $key => $value){
+            $this->category->setOrigData($key, $value);
+        }
+
+        $cacheTypeListMock = $this->getMock(
+            '\Magento\Framework\App\Cache\TypeListInterface',
+            ['invalidate', 'getTypes', 'getTypeLabels', 'getInvalidated', 'cleanType'],
+            [],
+            '',
+            false
+        );
+        $cacheTypeListMock->expects($this->once())->method('invalidate');
+
+        $reflection = new \ReflectionClass(get_class($this->category));
+
+        $reflectionProperty = $reflection->getProperty('cacheTypeList');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->category, $cacheTypeListMock);
+
+        $this->category->invalidateCache();
+    }
+
     public function testGetCustomAttributes()
     {
         $nameAttributeCode = 'name';
