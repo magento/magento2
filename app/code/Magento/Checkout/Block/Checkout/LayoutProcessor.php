@@ -5,20 +5,10 @@
  */
 namespace Magento\Checkout\Block\Checkout;
 
+use Magento\Framework\App\ObjectManager;
+
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
-    /**
-     * Attributes with custom convertion to selects
-     * key is an attribute code
-     * value is a method to fetch values
-     *
-     * @var array
-     */
-    private $attributesToConvert = [
-        'prefix' => 'getNamePrefixOptions',
-        'suffix' => 'getNameSuffixOptions',
-    ];
-
     /**
      * @var \Magento\Customer\Model\AttributeMetadataDataProvider
      */
@@ -42,22 +32,34 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     /**
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
-     * @param \Magento\Customer\Model\Options $options
      * @param AttributeMerger $merger
      */
     public function __construct(
         \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider,
         \Magento\Ui\Component\Form\AttributeMapper $attributeMapper,
-        \Magento\Customer\Model\Options $options,
         AttributeMerger $merger
     ) {
         $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
         $this->attributeMapper = $attributeMapper;
-        $this->options = $options;
         $this->merger = $merger;
     }
 
-    private function getElements()
+    /**
+     * @deprecated
+     * @return \Magento\Customer\Model\Options
+     */
+    private function getOptions()
+    {
+        if (!is_object($this->options)) {
+            $this->options = ObjectManager::getInstance()->get(\Magento\Customer\Model\Options::class);
+        }
+        return $this->options;
+    }
+
+    /**
+     * @return array
+     */
+    private function getAddressAttributes()
     {
         /** @var \Magento\Eav\Api\Data\AttributeInterface[] $attributes */
         $attributes = $this->attributeMetadataDataProvider->loadAttributesCollection(
@@ -81,18 +83,26 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
+     * Convert prefix and suffix from inputs to selects when necessary
+     *
      * @param array $elements
      * @return array
      */
-    public function convertPrefixSuffix($elements)
+    private function convertPrefixSuffix($elements)
     {
-        $codes = array_keys($this->attributesToConvert);
+        $attributesToConvert = [
+            'prefix' => 'getNamePrefixOptions',
+            'suffix' => 'getNameSuffixOptions',
+        ];
+
+        $codes = array_keys($attributesToConvert);
         foreach ($elements as $code => $element) {
             if (!in_array($code, $codes)) {
                 continue;
             }
+            $optionz = $this->getOptions();
             $options = call_user_func_array(
-                [$this->options, $this->attributesToConvert[$code]],
+                [$this->getOptions(), $attributesToConvert[$code]],
                 []
             );
             if (!is_array($options)) {
@@ -120,7 +130,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      */
     public function process($jsLayout)
     {
-        $elements = $this->getElements();
+        $elements = $this->getAddressAttributes();
         $elements = $this->convertPrefixSuffix($elements);
         // The following code is a workaround for custom address attributes
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
