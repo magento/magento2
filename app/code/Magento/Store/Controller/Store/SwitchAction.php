@@ -97,6 +97,10 @@ class SwitchAction extends Action
             $this->storeCookieManager->setStoreCookie($store);
         }
 
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        if ($store->isUseStoreInUrl()) {
+            $this->getResponse()->setRedirect($store->getBaseUrl());
+        } else {
+            $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+        }
     }
 }
