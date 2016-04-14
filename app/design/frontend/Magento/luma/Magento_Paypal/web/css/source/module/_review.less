@@ -171,6 +171,28 @@
         &:extend(.abs-add-clearfix-desktop all);
         &:extend(.abs-discount-block-desktop all);
         border-top: @border-width__base solid @border-color__base;
+
+        .block {
+            .lib-css(margin-bottom, @indent__base - @indent__xs);
+
+            &.giftcard {
+                &.active {
+                    .lib-css(padding-bottom, @indent__xl);
+                }
+            }
+
+            .title {
+                &:after {
+                    display: inline;
+                    margin-left: @indent__s;
+                    position: static;
+                }
+            }
+
+            .content {
+                .lib-css(padding-bottom, 0);
+            }
+        }
     }
 
     .order-review-form {
