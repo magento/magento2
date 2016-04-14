@@ -276,10 +276,10 @@ class EavTest extends AbstractModifierTest
         $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn(1);
-        $this->productMock->expects($this->any())
+        $this->productMock->expects($this->once())
             ->method('getAttributeSetId')
             ->willReturn(4);
-        $this->productMock->expects($this->any())
+        $this->productMock->expects($this->once())
             ->method('getData')
             ->with(ProductAttributeInterface::CODE_PRICE)->willReturn('19.9900');
 
@@ -292,47 +292,47 @@ class EavTest extends AbstractModifierTest
         $this->attributeGroupRepositoryMock->expects($this->any())
             ->method('getList')
             ->willReturn($this->searchCriteriaMock);
-        $this->searchCriteriaMock->expects($this->any())
+        $this->searchCriteriaMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->attributeGroupMock]);
-        $this->sortOrderBuilderMock->expects($this->any())
+        $this->sortOrderBuilderMock->expects($this->once())
             ->method('setField')
             ->willReturnSelf();
-        $this->sortOrderBuilderMock->expects($this->any())
+        $this->sortOrderBuilderMock->expects($this->once())
             ->method('setAscendingDirection')
             ->willReturnSelf();
         $dataObjectMock = $this->getMock('\Magento\Framework\Api\AbstractSimpleObject', [], [], '', false);
-        $this->sortOrderBuilderMock->expects($this->any())
+        $this->sortOrderBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($dataObjectMock);
 
         $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('addFilter')
             ->willReturnSelf();
-        $this->searchCriteriaBuilderMock->expects($this->any())
+        $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addSortOrder')
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->any())
             ->method('create')
             ->willReturn($this->searchCriteriaMock);
 
-        $this->attributeRepositoryMock->expects($this->any())
+        $this->attributeRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->searchCriteriaMock)
             ->willReturn($this->searchResultsMock);
         $this->eavAttributeMock->expects($this->any())
             ->method('getAttributeGroupCode')
             ->willReturn('product-details');
-        $this->eavAttributeMock->expects($this->any())
+        $this->eavAttributeMock->expects($this->once())
             ->method('getApplyTo')
             ->willReturn([]);
-        $this->eavAttributeMock->expects($this->any())
+        $this->eavAttributeMock->expects($this->once())
             ->method('getFrontendInput')
             ->willReturn(ProductAttributeInterface::CODE_PRICE);
         $this->eavAttributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn(ProductAttributeInterface::CODE_PRICE);
-        $this->searchResultsMock->expects($this->any())
+        $this->searchResultsMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->eavAttributeMock]);
 
