@@ -24,6 +24,9 @@ interface AdapterInterface
      *     'soap' => array(
      *         'service' => $soapService,    // soap service name with Version suffix e.g. catalogProductV1, customerV2
      *         'operation' => $operation     // soap operation name e.g. catalogProductCreate
+     *         'token' => '21hasbtlaqy8t3mj73kjh71cxxkqj4aq'    // optional : for token based Authentication. Will
+     *                                                             override default Oauth based authentication provided
+     *                                                             by test framework
      *     ),
      *     OR
      *     'serviceInterface' => $phpServiceInterfaceName, // e.g. \Magento\Catalog\Api\ProductInterface
