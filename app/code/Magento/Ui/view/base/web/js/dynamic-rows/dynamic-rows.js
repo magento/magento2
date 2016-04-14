@@ -30,11 +30,11 @@ define([
             addButton: true,
             addButtonLabel: $t('Add'),
             recordData: [],
-            recordIterator: 0,
             maxPosition: 0,
             deleteProperty: 'delete',
             identificationProperty: 'record_id',
             deleteValue: true,
+            showSpinner: true,
             isDifferedFromDefault: false,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
@@ -60,11 +60,18 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault'
+                recordData: 'setDifferedFromDefault parsePagesData',
+                currentPage: 'changePage',
+                elems: 'checkSpinner'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
-            }
+            },
+            pages: 1,
+            pageSize: 5,
+            relatedData: [],
+            currentPage: 1,
+            startIndex: 0
         },
 
         /**
@@ -79,7 +86,8 @@ define([
                 .initChildren()
                 .initDnd()
                 .setColumnsHeaderListener()
-                .initDefaultRecord();
+                .initDefaultRecord()
+                .checkSpinner();
 
             return this;
         },
@@ -93,11 +101,14 @@ define([
             this._super()
                 .track('childTemplate')
                 .observe([
+                    'pages',
+                    'currentPage',
                     'recordData',
                     'columnsHeader',
                     'visible',
                     'disabled',
                     'labels',
+                    'showSpinner',
                     'isDifferedFromDefault'
                 ]);
 
@@ -125,7 +136,7 @@ define([
          */
         setColumnsHeaderListener: function () {
             if (this.columnsHeaderAfterRender) {
-                this.on('elems', this.renderColumnsHeader.bind(this));
+                this.on('recordData', this.renderColumnsHeader.bind(this));
             }
 
             return this;
@@ -135,16 +146,20 @@ define([
          * Render column header
          */
         renderColumnsHeader: function () {
-            this.elems().length ? this.columnsHeader(true) : this.columnsHeader(false);
+            this.recordData().length ? this.columnsHeader(true) : this.columnsHeader(false);
         },
 
         /**
          * Init default record
+         *
+         * @returns Chainable.
          */
         initDefaultRecord: function () {
             if (this.defaultRecord && !this.recordData().length) {
                 this.addChild();
             }
+
+            return this;
         },
 
         /**
@@ -225,7 +240,136 @@ define([
             });
 
             updatedCollection = this.updatePosition(sorted, position, elem.name);
+
+            this.elems([]);
             this.elems(updatedCollection);
+        },
+
+        /**
+         * Checking loader visibility
+         *
+         * @param {Array} elems
+         */
+        checkSpinner: function (elems) {
+            this.showSpinner(!(!this.recordData().length || elems && elems.length === this.getChildItems().length));
+        },
+
+        /**
+         * Filtering data and calculates the quantity of pages
+         *
+         * @param {Array} data
+         */
+        parsePagesData: function (data) {
+            var pages;
+
+            this.relatedData = this.deleteProperty ?
+                _.filter(data, function (elem) {
+                    return elem[this.deleteProperty] !== this.deleteValue;
+                }, this) : data;
+
+            pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
+            this.pages(pages);
+        },
+
+        /**
+         * Get items to rendering on current page
+         *
+         * @returns {Array} data
+         */
+        getChildItems: function () {
+            this.startIndex = (parseInt(this.currentPage(), 10) - 1) * this.pageSize;
+
+            return this.relatedData.slice(this.startIndex, this.startIndex + this.pageSize);
+        },
+
+        /**
+         * Processing pages before addChild
+         *
+         * @param {Object} ctx - element context
+         * @param {Number|String} index - element index
+         * @param {Number|String} prop - additional property to element
+         */
+        processingAddChild: function (ctx, index, prop) {
+            if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
+                this.clear();
+                this.pages(this.pages() + 1);
+                this.currentPage(this.pages());
+            } else if (parseInt(this.currentPage(), 10) !== this.pages()) {
+                this.currentPage(this.pages());
+            }
+
+            this.addChild(ctx, index, prop);
+        },
+
+        /**
+         * Processing pages before deleteRecord
+         *
+         * @param {Number|String} index - element index
+         * @param {Number|String} recordId
+         */
+        processingDeleteRecord: function (index, recordId) {
+            this.deleteRecord(index, recordId);
+
+            if (this.getChildItems().length <= 0) {
+                this.pages(this.pages() - 1);
+                this.currentPage(this.pages());
+            }
+        },
+
+        /**
+         * Change page
+         *
+         * @param {Number} page - current page
+         */
+        changePage: function (page) {
+            if (page === 1 && !this.recordData().length) {
+                return false;
+            }
+
+            if (parseInt(page, 10) > this.pages()) {
+                this.currentPage(this.pages());
+
+                return false;
+            } else if (parseInt(page, 10) < 1) {
+                this.currentPage(1);
+
+                return false;
+            }
+
+            this.clear();
+            this.initChildren();
+        },
+
+        /**
+         * Check page
+         *
+         * @returns {Boolean} is page first or not
+         */
+        isFirst: function () {
+            return this.currentPage() === 1;
+        },
+
+        /**
+         * Check page
+         *
+         * @returns {Boolean} is page last or not
+         */
+        isLast: function () {
+            return this.currentPage() === this.pages();
+        },
+
+        /**
+         * Change page to next
+         */
+        nextPage: function () {
+            this.currentPage(this.currentPage() + 1);
+        },
+
+        /**
+         * Change page to previos
+         */
+        previousPage: function () {
+            this.currentPage(this.currentPage() - 1);
         },
 
         /**
@@ -313,19 +457,30 @@ define([
                 this.recordData()[recordInstance.index][this.deleteProperty] = this.deleteValue;
                 this.recordData.valueHasMutated();
             } else {
-                lastRecord =
-                    _.findWhere(this.elems(), {
-                        index: this.recordIterator - 1
-                    }) ||
-                    _.findWhere(this.elems(), {
-                        index: (this.recordIterator - 1).toString()
-                    });
-                lastRecord.destroy();
+                this.update = true;
+
+                if (parseInt(this.currentPage(), 10) === this.pages()) {
+                    lastRecord =
+                        _.findWhere(this.elems(), {
+                            index: this.startIndex + this.getChildItems().length - 1
+                        }) ||
+                        _.findWhere(this.elems(), {
+                            index: (this.startIndex + this.getChildItems().length - 1).toString()
+                        });
+
+                    lastRecord.destroy();
+                }
+
                 this.removeMaxPosition();
                 recordsData = this._getDataByProp(recordId);
                 this._updateData(recordsData);
-                --this.recordIterator;
+                this.update = false;
             }
+
+            if (this.pages() < parseInt(this.currentPage(), 10)) {
+                this.currentPage(this.pages());
+            }
+
             this._sort();
         },
 
@@ -338,7 +493,7 @@ define([
         _getDataByProp: function (id, prop) {
             prop = prop || this.identificationProperty;
 
-            return _.reject(this.source.get(this.dataScope + '.' + this.index), function (recordData) {
+            return _.reject(this.getChildItems(), function (recordData) {
                 return parseInt(recordData[prop], 10) === parseInt(id, 10);
             }, this);
         },
@@ -359,14 +514,27 @@ define([
          * @param {Array} data - record data
          */
         _updateData: function (data) {
-            var elems = utils.copy(this.elems()),
-                path;
+            var elems = _.clone(this.elems()),
+                path,
+                dataArr;
 
-            this.recordData([]);
-            elems = utils.copy(this.elems());
-            data.forEach(function (rec, idx) {
-                elems[idx].recordId = rec[this.identificationProperty];
-                path = this.dataScope + '.' + this.index + '.' + idx;
+            dataArr = this.recordData.splice(this.startIndex, this.recordData().length - this.startIndex);
+            dataArr.splice(0, this.pageSize);
+            elems = _.sortBy(this.elems(), function (elem) {
+                return ~~elem.index;
+            });
+
+            data.concat(dataArr).forEach(function (rec, idx) {
+                if (elems[idx]) {
+                    elems[idx].recordId = rec[this.identificationProperty];
+                }
+
+                if (!rec.position) {
+                    rec.position = this.maxPosition;
+                    this.setMaxPosition();
+                }
+
+                path = this.dataScope + '.' + this.index + '.' + (this.startIndex + idx);
                 this.source.set(path, rec);
             }, this);
 
@@ -390,7 +558,6 @@ define([
             this.elems.each(function (elem) {
                 elem.destroy();
             }, this);
-            this.recordIterator = 0;
 
             return this;
         },
@@ -443,9 +610,14 @@ define([
 
         /**
          * Initialize children
+         *
+         * @returns {Object} Chainable.
          */
         initChildren: function () {
-            this.recordData.each(this.addChild, this);
+            this.showSpinner(true);
+            this.getChildItems().each(function (data, index) {
+                this.addChild(data, this.startIndex + index);
+            }, this);
 
             return this;
         },
@@ -501,6 +673,7 @@ define([
          *
          * @param {Object} data - component data
          * @param {Number} index - record(row) index
+         * @param {Number|String} prop - custom identify property
          *
          * @returns {Object} Chainable.
          */
@@ -508,8 +681,8 @@ define([
             var template = this.templates.record,
                 child;
 
-            index = !index && !_.isNumber(index) ? this.recordIterator : index;
-            prop = _.isNumber(prop) ? prop : index;
+            index = index || _.isNumber(index) ? index : this.recordData().length;
+            prop = prop || _.isNumber(prop) ? prop : index;
 
             _.extend(this.templates.record, {
                 recordId: prop
@@ -520,7 +693,6 @@ define([
                 index: index
             });
 
-            ++this.recordIterator;
             layout([child]);
 
             return this;
