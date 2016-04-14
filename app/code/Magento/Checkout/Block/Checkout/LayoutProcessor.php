@@ -100,7 +100,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             if (!in_array($code, $codes)) {
                 continue;
             }
-            $optionz = $this->getOptions();
             $options = call_user_func_array(
                 [$this->getOptions(), $attributesToConvert[$code]],
                 []
