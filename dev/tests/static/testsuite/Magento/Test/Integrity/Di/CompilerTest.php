@@ -9,6 +9,7 @@ namespace Magento\Test\Integrity\Di;
 
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
@@ -43,11 +44,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     protected $_compilationDir;
 
     /**
-     * @var string
-     */
-    protected $_tmpDir;
-
-    /**
      * @var \Magento\Framework\ObjectManager\Config\Mapper\Dom()
      */
     protected $_mapper;
@@ -70,17 +66,11 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = BP;
         $basePath = str_replace('\\', '/', $basePath);
 
-        $this->_tmpDir = realpath(__DIR__) . '/tmp';
-        $this->_generationDir = $this->_tmpDir . '/generation';
-        if (!file_exists($this->_generationDir)) {
-            mkdir($this->_generationDir, 0777, true);
-        }
-        $this->_compilationDir = $this->_tmpDir . '/di';
-        if (!file_exists($this->_compilationDir)) {
-            mkdir($this->_compilationDir, 0777, true);
-        }
+        $directoryList = new DirectoryList($basePath);
+        $this->_generationDir = $directoryList->getPath(DirectoryList::GENERATION);
+        $this->_compilationDir = $directoryList->getPath(DirectoryList::DI);
 
-        $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile-multi-tenant --generation=%s --di=%s';
+        $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile';
 
         $booleanUtils = new \Magento\Framework\Stdlib\BooleanUtils();
         $constInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Constant();
@@ -114,14 +104,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_validator->add(new \Magento\Framework\Code\Validator\ArgumentSequence());
         $this->_validator->add(new \Magento\Framework\Code\Validator\ConstructorArgumentTypes());
         $this->pluginValidator = new \Magento\Framework\Interception\Code\InterfaceValidator();
-    }
-
-    protected function tearDown()
-    {
-        $filesystem = new \Magento\Framework\Filesystem\Driver\File();
-        if ($filesystem->isExists($this->_tmpDir)) {
-            $filesystem->deleteDirectory($this->_tmpDir);
-        }
     }
 
     /**
@@ -412,7 +394,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     public function testCompiler()
     {
         try {
-            $this->_shell->execute($this->_command, [$this->_generationDir, $this->_compilationDir]);
+            $this->_shell->execute($this->_command);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             $this->fail($exception->getPrevious()->getMessage());
         }
