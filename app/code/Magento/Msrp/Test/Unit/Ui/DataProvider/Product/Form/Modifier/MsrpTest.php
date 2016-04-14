@@ -17,7 +17,7 @@ class MsrpTest extends AbstractModifierTest
     /**
      * @var MsrpConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $msrpConfigMock;
+    private $msrpConfigMock;
 
     protected function setUp()
     {
