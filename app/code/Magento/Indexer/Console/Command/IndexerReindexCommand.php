@@ -17,6 +17,16 @@ use Magento\Framework\Indexer\ConfigInterface;
 class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
     /**
+     * @var array
+     */
+    private $sharedIndexesComplete = [];
+
+    /**
+     * @var \Magento\Framework\Indexer\ConfigInterface
+     */
+    private $config;
+
+    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -34,21 +44,18 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $indexers = $this->getIndexers($input);
-        $config = $this->getConfig();
-        $sharedIndexesComplete = [];
         foreach ($indexers as $indexer) {
             try {
                 $startTime = microtime(true);
-                $indexerConfig = $config->getIndexer($indexer->getId());
+                $indexerConfig = $this->getConfig()->getIndexer($indexer->getId());
+                $sharedIndex = $indexerConfig['shared_index'];
 
                 // Skip indexers having shared index that was already complete
-                if (!in_array($indexerConfig['shared_index'], $sharedIndexesComplete)) {
+                if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
                     $indexer->reindexAll();
-                } else {
-                    $indexer->getState()->setStatus(StateInterface::STATUS_VALID)->save();
-                }
-                if ($indexerConfig['shared_index']) {
-                    $sharedIndexesComplete[] = $indexerConfig['shared_index'];
+                    if ($sharedIndex) {
+                        $this->validateSharedIndex($sharedIndex);
+                    }
                 }
                 $resultTime = microtime(true) - $startTime;
                 $output->writeln(
@@ -64,6 +71,54 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
+     * Get indexer ids that have common shared index
+     *
+     * @param $sharedIndex
+     * @return array
+     */
+    private function getIndexerIdsBySharedIndex($sharedIndex)
+    {
+        $indexers = $this->getConfig()->getIndexers();
+        $result = [];
+        foreach ($indexers as $indexerCode => $indexerConfig) {
+            if ($indexerConfig['shared_index'] == $sharedIndex) {
+                $result[] = $indexerConfig['indexer_id'];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Validate indexers by shared index ID
+     *
+     * @param $sharedIndex
+     * @return $this
+     */
+    private function validateSharedIndex($sharedIndex)
+    {
+        if (empty($sharedIndex)) {
+            throw new \InvalidArgumentException('sharedIndex must be a valid shared index identifier');
+        }
+        $indexerIds = $this->getIndexerIdsBySharedIndex($sharedIndex);
+        if (empty($indexerIds)) {
+            return $this;
+        }
+        $indexerFactory = $this->getObjectManager()->create('Magento\Indexer\Model\IndexerFactory');
+        foreach ($indexerIds as $indexerId) {
+            /** @var \Magento\Indexer\Model\Indexer $indexer */
+            $indexer = $indexerFactory->create();
+            $indexer->load($indexerId);
+            /** @var \Magento\Indexer\Model\Indexer\State $state */
+            $state = $indexer->getState();
+            $state->setStatus(\Magento\Framework\Indexer\StateInterface::STATUS_VALID);
+            $state->save();
+        }
+        $this->sharedIndexesComplete[] = $sharedIndex;
+        return $this;
+    }
+
+
+    /**
      * Get config
      *
      * @return \Magento\Framework\Indexer\ConfigInterface
@@ -71,6 +126,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     private function getConfig()
     {
-        return $this->getObjectManager()->get(ConfigInterface::class);
+        if (!$this->config) {
+            $this->config = $this->getObjectManager()->get(ConfigInterface::class);
+        }
+        return $this->config;
     }
 }
