@@ -51,7 +51,7 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         /**
-         * Check if we have data in session (if during category save was exception)
+         * Check if there are data in session (if there was an exception on saving category)
          */
         $categoryData = $this->_getSession()->getCategoryData(true);
         if (is_array($categoryData)) {
