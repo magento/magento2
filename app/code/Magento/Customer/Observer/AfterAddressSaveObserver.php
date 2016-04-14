@@ -9,6 +9,7 @@ namespace Magento\Customer\Observer;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State as AppState;
@@ -73,6 +74,11 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected $escaper;
 
     /**
+     * @var CustomerSession
+     */
+    private $customerSession;
+
+    /**
      * @param Vat $customerVat
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
@@ -132,6 +138,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
                     $customer->setGroupId($defaultGroupId);
                     $customer->save();
+                    $this->getCustomerSession()->setCustomerGroupId($defaultGroupId);
                 }
             } else {
                 $result = $this->_customerVat->checkVatNumber(
@@ -148,6 +155,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $newGroupId) {
                     $customer->setGroupId($newGroupId);
                     $customer->save();
+                    $this->getCustomerSession()->setCustomerGroupId($newGroupId);
                 }
 
                 $customerAddress->setVatValidationResult($result);
@@ -300,5 +308,20 @@ class AfterAddressSaveObserver implements ObserverInterface
         $this->messageManager->addError(implode(' ', $message));
 
         return $this;
+    }
+
+    /**
+     * Get customer session
+     *
+     * @return CustomerSession
+     *
+     * @deprecated
+     */
+    private function getCustomerSession()
+    {
+        if ($this->customerSession === null) {
+            $this->customerSession = \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerSession::class);
+        }
+        return $this->customerSession;
     }
 }
