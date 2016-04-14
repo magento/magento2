@@ -14,8 +14,6 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
  */
 class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
 {
-    const ACTIVE_STORE = 1;
-
     /**
      * @var \Magento\Catalog\Model\Config\Source\Category
      */
@@ -137,11 +135,11 @@ class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
                 'disabled' => $groupModel->isReadOnly()
             ]
         );
-
         if ($this->_coreRegistry->registry('store_action') == 'edit') {
+            $storeActive = 1;
             $stores = $this->_storeFactory->create()->getCollection()
                 ->addGroupFilter($groupModel->getId())
-                ->addStatusFilter(self::ACTIVE_STORE)
+                ->addStatusFilter($storeActive)
                 ->toOptionArray();
             $fieldset->addField(
                 'group_default_store_id',
