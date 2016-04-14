@@ -31,6 +31,7 @@ class Base extends StreamHandler
     /**
      * @param DriverInterface $filesystem
      * @param string $filePath
+     * @param string $fileName
      */
     public function __construct(
         DriverInterface $filesystem,
@@ -38,20 +39,42 @@ class Base extends StreamHandler
         $fileName = null
     ) {
         $this->filesystem = $filesystem;
-        if(null === $fileName){
-            $fileName = $this->fileName;
+        if (!empty($fileName)) {
+            $this->fileName = $this->sanitizeFileName($fileName);
         }
         parent::__construct(
-            $filePath ? $filePath . $fileName : BP . $fileName,
+            $filePath ? $filePath . $this->fileName : BP . DIRECTORY_SEPARATOR . $this->fileName,
             $this->loggerType
         );
+        
         $this->setFormatter(new LineFormatter(null, null, true));
+    }
+
+    /**
+     * @param $fileName
+     *
+     * @return string
+     * @throws \InvalidArgumentException
+     */
+    public function sanitizeFileName($fileName)
+    {
+        if (!is_string($fileName)) {
+            throw  new \InvalidArgumentException('Filename expected to be a string');
+        }
+
+        $parts = explode('/', $fileName);
+        $parts = array_filter($parts, function ($value) {
+            return !in_array($value, ['', '.', '..']);
+        });
+
+        return implode('/', $parts);
     }
 
     /**
      * @{inheritDoc}
      *
      * @param $record array
+     *
      * @return void
      */
     public function write(array $record)
