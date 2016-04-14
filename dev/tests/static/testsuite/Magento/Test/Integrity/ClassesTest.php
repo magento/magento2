@@ -600,7 +600,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $errors = [];
         $filesToTest = $files->getPhpFiles(Files::INCLUDE_TESTS);
 
-        if(($key = array_search(__FILE__, $filesToTest)) !== false) {
+        if (($key = array_search(__FILE__, $filesToTest)) !== false) {
             unset($filesToTest[$key]);
         }
 
