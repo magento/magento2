@@ -166,10 +166,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customOptionFactoryMock->expects($this->any())
-            ->method('create')
-            ->with(['data' => ['is_delete' => false]])
-            ->willReturn($this->customOptionMock);
         $this->productLinksMock->expects($this->any())
             ->method('initializeLinks')
             ->willReturn($this->productMock);
@@ -215,9 +211,13 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->customOptionMock->expects($this->once())
             ->method('setOptionId');
 
+        $optionsData = [
+            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1'],
+            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1'],
+        ];
         $productData = [
             'stock_data' => ['stock_data'],
-            'options' => ['option1' => ['is_delete' => true], 'option2' => ['is_delete' => false]]
+            'options' => $optionsData,
         ];
         $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
@@ -292,6 +292,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $productData['category_ids'] = [];
         $productData['website_ids'] = [];
+        unset($productData['options']);
 
         $this->productMock->expects($this->once())
             ->method('addData')
@@ -305,6 +306,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->any())
             ->method('getOptionsReadOnly')
             ->willReturn(false);
+
+        $this->customOptionFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(['data' => $optionsData['option2']])
+            ->willReturn($this->customOptionMock);
         $this->productMock->expects($this->once())
             ->method('setOptions')
             ->with([$this->customOptionMock]);

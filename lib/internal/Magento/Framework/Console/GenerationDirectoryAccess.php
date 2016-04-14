@@ -57,7 +57,7 @@ class GenerationDirectoryAccess
                 try {
                     $probeFilePath = $generationDirectoryPath . DIRECTORY_SEPARATOR . time();
                     $fileWriteFactory->create($probeFilePath, DriverPool::FILE, 'w');
-                    $directoryWrite->delete($probeFilePath);
+                    $driver->deleteFile($probeFilePath);
                 } catch (\Exception $e) {
                     return false;
                 }
