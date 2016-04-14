@@ -109,6 +109,7 @@ class Config implements ConfigInterface
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
         $this->lifetimePath = $lifetimePath;
+        $this->setCookieSecure($this->_httpRequest->isSecure());
 
         /**
          * Session handler
