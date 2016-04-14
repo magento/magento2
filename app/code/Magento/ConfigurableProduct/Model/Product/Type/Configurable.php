@@ -7,6 +7,7 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Config;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
@@ -150,6 +151,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var GalleryReadHandler
      */
     private $productGalleryReadHandler;
+
+    /**
+     * @var Config
+     */
+    private $catalogConfig;
 
     /**
      * @codingStandardsIgnoreStart/End
@@ -510,7 +516,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->addAttributeToSelect('price')
                 ->addAttributeToSelect('weight')
                 ->addAttributeToSelect('image')
+                ->addAttributeToSelect('thumbnail')
                 ->addAttributeToSelect('status')
+                ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
 
@@ -1180,5 +1188,18 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Get Config instance
+     * @return Config
+     * @deprecated
+     */
+    private function getCatalogConfig()
+    {
+        if (!$this->catalogConfig) {
+            $this->catalogConfig = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->catalogConfig;
     }
 }
