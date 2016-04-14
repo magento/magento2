@@ -41,102 +41,102 @@ class EavTest extends AbstractModifierTest
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eavConfigMock;
+    private $eavConfigMock;
 
     /**
      * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eavValidationRulesMock;
+    private $eavValidationRulesMock;
 
     /**
      * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
      * @var GroupCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupCollectionFactoryMock;
+    private $groupCollectionFactoryMock;
 
     /**
      * @var GroupCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupCollectionMock;
+    private $groupCollectionMock;
 
     /**
      * @var Group|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupMock;
+    private $groupMock;
 
     /**
      * @var EavAttribute|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeMock;
+    private $attributeMock;
 
     /**
      * @var EntityType|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $entityTypeMock;
+    private $entityTypeMock;
 
     /**
      * @var AttributeCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeCollectionMock;
+    private $attributeCollectionMock;
 
     /**
      * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
      * @var FormElementMapper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $formElementMapperMock;
+    private $formElementMapperMock;
 
     /**
      * @var MetaPropertiesMapper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metaPropertiesMapperMock;
+    private $metaPropertiesMapperMock;
 
     /**
      * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchCriteriaBuilderMock;
+    private $searchCriteriaBuilderMock;
 
     /**
      * @var ProductAttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeGroupRepositoryMock;
+    private $attributeGroupRepositoryMock;
 
     /**
      * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchCriteriaMock;
+    private $searchCriteriaMock;
 
     /**
      * @var SortOrderBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sortOrderBuilderMock;
+    private $sortOrderBuilderMock;
 
     /**
      * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeRepositoryMock;
+    private $attributeRepositoryMock;
 
     /**
      * @var AttributeGroupInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeGroupMock;
+    private $attributeGroupMock;
 
     /**
      * @var SearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $searchResultsMock;
+    private $searchResultsMock;
 
     /**
      * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eavAttributeMock;
+    private $eavAttributeMock;
 
     protected function setUp()
     {
@@ -328,7 +328,7 @@ class EavTest extends AbstractModifierTest
             ->willReturn([]);
         $this->eavAttributeMock->expects($this->once())
             ->method('getFrontendInput')
-            ->willReturn(ProductAttributeInterface::CODE_PRICE);
+            ->willReturn('price');
         $this->eavAttributeMock->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn(ProductAttributeInterface::CODE_PRICE);
