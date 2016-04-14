@@ -134,4 +134,10 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
+
+    public function testIndexAction()
+    {
+        $model = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $model);
+    }
 }
