@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
@@ -42,7 +43,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $productMetadata;
 
@@ -50,8 +51,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
-        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
-        $metadataPool = $this->objectManager->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+        /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
     }
 
@@ -92,8 +93,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertTrue(is_numeric($productId));
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
-        $product->load($productId);
+        $product = $this->objectManager->get(ProductRepositoryInterface::class)->getById($productId);
 
         $this->assertFalse($product->isObjectNew());
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());

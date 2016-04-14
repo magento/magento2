@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,15 +51,6 @@ class ObjectManagerProvider
             $initParams = $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM);
             $factory = Bootstrap::createObjectManagerFactory(BP, $initParams);
             $this->objectManager = $factory->create($initParams);
-            $this->objectManager->configure(
-                [
-                    'Magento\Framework\Stdlib\DateTime\Timezone' => [
-                        'arguments' => [
-                            'scopeType' => \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-                        ]
-                    ]
-                ]
-            );
         }
         return $this->objectManager;
     }

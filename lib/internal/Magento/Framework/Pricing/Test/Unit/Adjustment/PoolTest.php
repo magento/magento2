@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -14,7 +14,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
      */
     public $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $adjustmentsData = [
             'adj1' => ['className' => 'adj1_class', 'sortOrder' => 10],

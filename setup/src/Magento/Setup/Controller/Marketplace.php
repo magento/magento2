@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -33,6 +33,19 @@ class Marketplace extends AbstractActionController
     {
         $this->composerInformation = $composerInformation;
         $this->marketplaceManager = $marketplaceManager;
+    }
+
+    /**
+     * No index action, return 404 error page
+     *
+     * @return ViewModel
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
     }
 
     /**

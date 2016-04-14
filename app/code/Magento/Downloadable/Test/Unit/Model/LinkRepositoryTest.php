@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model;
@@ -11,7 +11,7 @@ use Magento\Framework\DataObject;
 class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Model\Entity\MetadataPool
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPoolMock;
 
@@ -62,7 +62,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $this->repositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
         $this->productTypeMock = $this->getMock('\Magento\Downloadable\Model\Product\Type', [], [], '', false);
         $this->linkResourceMock = $this->getMock('Magento\Downloadable\Model\ResourceModel\Link', [], [], '', false);
@@ -110,11 +110,10 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata = $this->getMock('Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
-        $this->service = new \Magento\Downloadable\Model\LinkRepository(
-            $this->metadataPoolMock,
+        $this->service = new LinkRepository(
             $this->repositoryMock,
             $this->productTypeMock,
             $this->linkResourceMock,
@@ -123,6 +122,11 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->jsonEncoderMock,
             $this->contentUploaderMock
         );
+
+        $refClass = new \ReflectionClass(LinkRepository::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->service, $this->metadataPoolMock);
     }
 
     /**

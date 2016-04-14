@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
@@ -185,18 +187,7 @@ class Related extends AbstractModifier
                     false,
                     $this->locator->getStore()->getId()
                 );
-                $data[$productId]['links'][$dataScope][] = [
-                    'id' => $linkedProduct->getId(),
-                    'thumbnail' => $this->imageHelper->init($linkedProduct, 'product_listing_thumbnail')->getUrl(),
-                    'name' => $linkedProduct->getName(),
-                    'status' => $this->status->getOptionText($linkedProduct->getStatus()),
-                    'attribute_set' => $this->attributeSetRepository
-                        ->get($linkedProduct->getAttributeSetId())
-                        ->getAttributeSetName(),
-                    'sku' => $linkItem->getLinkedProductSku(),
-                    'price' => $linkedProduct->getPrice(),
-                    'position' => $linkItem->getPosition(),
-                ];
+                $data[$productId]['links'][$dataScope][] = $this->fillData($linkedProduct, $linkItem);
             }
         }
 
@@ -204,6 +195,29 @@ class Related extends AbstractModifier
         $data[$productId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $this->locator->getStore()->getId();
 
         return $data;
+    }
+
+    /**
+     * Prepare data column
+     *
+     * @param ProductInterface $linkedProduct
+     * @param ProductLinkInterface $linkItem
+     * @return array
+     */
+    protected function fillData(ProductInterface $linkedProduct, ProductLinkInterface $linkItem)
+    {
+        return [
+            'id' => $linkedProduct->getId(),
+            'thumbnail' => $this->imageHelper->init($linkedProduct, 'product_listing_thumbnail')->getUrl(),
+            'name' => $linkedProduct->getName(),
+            'status' => $this->status->getOptionText($linkedProduct->getStatus()),
+            'attribute_set' => $this->attributeSetRepository
+                ->get($linkedProduct->getAttributeSetId())
+                ->getAttributeSetName(),
+            'sku' => $linkItem->getLinkedProductSku(),
+            'price' => $linkedProduct->getPrice(),
+            'position' => $linkItem->getPosition(),
+        ];
     }
 
     /**
@@ -228,7 +242,7 @@ class Related extends AbstractModifier
     protected function getRelatedFieldset()
     {
         $content = __(
-            'Related products are shown to shoppers in addition to the item the shopper is looking at.'
+            'Related products are shown to customers in addition to the item the customer is looking at.'
         );
 
         return [
@@ -414,7 +428,6 @@ class Related extends AbstractModifier
                             'buttons' => [
                                 [
                                     'text' => __('Cancel'),
-                                    'class' => 'action-secondary',
                                     'actions' => [
                                         'closeModal'
                                     ]
@@ -529,56 +542,66 @@ class Related extends AbstractModifier
                             ],
                         ],
                     ],
-                    'children' => [
-                        'id' => $this->getTextColumn('id', false, 'ID', 0),
-                        'thumbnail' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'componentType' => Field::NAME,
-                                        'formElement' => Input::NAME,
-                                        'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
-                                        'dataType' => Text::NAME,
-                                        'dataScope' => 'thumbnail',
-                                        'fit' => true,
-                                        'label' => __('Thumbnail'),
-                                        'sortOrder' => 10,
-                                    ],
-                                ],
-                            ],
+                    'children' => $this->fillMeta(),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Retrieve meta column
+     *
+     * @return array
+     */
+    protected function fillMeta()
+    {
+        return [
+            'id' => $this->getTextColumn('id', false, __('ID'), 0),
+            'thumbnail' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'componentType' => Field::NAME,
+                            'formElement' => Input::NAME,
+                            'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
+                            'dataType' => Text::NAME,
+                            'dataScope' => 'thumbnail',
+                            'fit' => true,
+                            'label' => __('Thumbnail'),
+                            'sortOrder' => 10,
                         ],
-                        'name' => $this->getTextColumn('name', false, 'Name', 20),
-                        'status' => $this->getTextColumn('status', true, 'Status', 30),
-                        'attribute_set' => $this->getTextColumn('attribute_set', false, 'Attribute Set', 40),
-                        'sku' => $this->getTextColumn('sku', true, 'SKU', 50),
-                        'price' => $this->getTextColumn('price', true, 'Price', 60),
-                        'actionDelete' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'additionalClasses' => 'data-grid-actions-cell',
-                                        'componentType' => 'actionDelete',
-                                        'dataType' => Text::NAME,
-                                        'label' => __('Actions'),
-                                        'sortOrder' => 70,
-                                        'fit' => true,
-                                    ],
-                                ],
-                            ],
+                    ],
+                ],
+            ],
+            'name' => $this->getTextColumn('name', false, __('Name'), 20),
+            'status' => $this->getTextColumn('status', true, __('Status'), 30),
+            'attribute_set' => $this->getTextColumn('attribute_set', false, __('Attribute Set'), 40),
+            'sku' => $this->getTextColumn('sku', true, __('SKU'), 50),
+            'price' => $this->getTextColumn('price', true, __('Price'), 60),
+            'actionDelete' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'additionalClasses' => 'data-grid-actions-cell',
+                            'componentType' => 'actionDelete',
+                            'dataType' => Text::NAME,
+                            'label' => __('Actions'),
+                            'sortOrder' => 70,
+                            'fit' => true,
                         ],
-                        'position' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'dataType' => Number::NAME,
-                                        'formElement' => Input::NAME,
-                                        'componentType' => Field::NAME,
-                                        'dataScope' => 'position',
-                                        'sortOrder' => 80,
-                                        'visible' => false,
-                                    ],
-                                ],
-                            ],
+                    ],
+                ],
+            ],
+            'position' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => Number::NAME,
+                            'formElement' => Input::NAME,
+                            'componentType' => Field::NAME,
+                            'dataScope' => 'position',
+                            'sortOrder' => 80,
+                            'visible' => false,
                         ],
                     ],
                 ],
@@ -591,11 +614,11 @@ class Related extends AbstractModifier
      *
      * @param string $dataScope
      * @param bool $fit
-     * @param string $label
+     * @param Phrase $label
      * @param int $sortOrder
      * @return array
      */
-    protected function getTextColumn($dataScope, $fit, $label, $sortOrder)
+    protected function getTextColumn($dataScope, $fit, Phrase $label, $sortOrder)
     {
         $column = [
             'arguments' => [
@@ -604,6 +627,7 @@ class Related extends AbstractModifier
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'elementTmpl' => 'ui/dynamic-rows/cells/text',
+                        'component' => 'Magento_Ui/js/form/element/text',
                         'dataType' => Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,

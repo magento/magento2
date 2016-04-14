@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model;
@@ -109,25 +109,6 @@ class AuthTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Bootstrap::ADMIN_NAME,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-        $this->assertTrue($this->_model->isLoggedIn());
-
-        $this->_model->getAuthStorage()->setUpdatedAt(time() - 101);
-        $this->assertFalse($this->_model->isLoggedIn());
-    }
-
-    /**
-     * Disabled form security in order to prevent exit from the app
-     * @magentoConfigFixture current_store admin/security/session_lifetime 59
-     */
-    public function testIsLoggedInWithIgnoredLifetime()
-    {
-        $this->_model->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-        );
-        $this->assertTrue($this->_model->isLoggedIn());
-
-        $this->_model->getAuthStorage()->setUpdatedAt(time() - 101);
         $this->assertTrue($this->_model->isLoggedIn());
     }
 

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Block\Adminhtml\Session;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\ConfigInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Test class for \Magento\Security\Block\Adminhtml\Session\Activity testing
@@ -31,7 +33,7 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
     protected $sessionsInfoCollection;
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var ConfigInterface
      */
     protected $securityConfig;
 
@@ -54,6 +56,11 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
      * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
+
+    /*
+     * @var RemoteAddress
+     */
+    protected $remoteAddressMock;
 
     /**
      * Init mocks for tests
@@ -79,13 +86,9 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->securityConfig =  $this->getMock(
-            '\Magento\Security\Helper\SecurityConfig',
-            ['getRemoteIp'],
-            [],
-            '',
-            false
-        );
+        $this->securityConfig =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->sessionMock =  $this->getMock(
             '\Magento\Security\Model\AdminSessionInfo',
@@ -110,12 +113,17 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->block = $this->objectManager->getObject(
-            '\Magento\Security\Block\Adminhtml\Session\Activity',
+            \Magento\Security\Block\Adminhtml\Session\Activity::class,
             [
                 'sessionsManager' => $this->sessionsManager,
                 'securityConfig' => $this->securityConfig,
-                'localeDate' => $this->localeDate
+                'localeDate' => $this->localeDate,
+                'remoteAddress' => $this->remoteAddressMock
             ]
         );
     }
@@ -167,8 +175,8 @@ class ActivityTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRemoteIp()
     {
-        $this->securityConfig->expects($this->once())
-            ->method('getRemoteIp')
+        $this->remoteAddressMock->expects($this->once())
+            ->method('getRemoteAddress')
             ->with(false);
         $this->block->getRemoteIp();
     }

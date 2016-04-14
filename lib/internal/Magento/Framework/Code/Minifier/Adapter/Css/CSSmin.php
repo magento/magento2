@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Code\Minifier\Adapter\Css;
 
 use CSSmin as CssMinLibrary;
@@ -26,10 +25,24 @@ class CSSmin implements AdapterInterface
 
     /**
      * @param CssMinLibrary $cssMinifier
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(CssMinLibrary $cssMinifier)
     {
-        $this->cssMinifier = $cssMinifier;
+        // TODO: set $cssMinifier in constructor once MAGETWO-51176 is resolved.
+    }
+
+    /**
+     * Get CSS Minifier
+     *
+     * @return \CSSMin
+     */
+    private function getCssMin()
+    {
+        if (!($this->cssMinifier instanceof \CSSMin)) {
+            $this->cssMinifier = new \CSSmin(false);
+        }
+        return $this->cssMinifier;
     }
 
     /**
@@ -42,7 +55,7 @@ class CSSmin implements AdapterInterface
     {
         $pcreRecursionLimit = ini_get('pcre.recursion_limit');
         ini_set('pcre.recursion_limit', self::PCRE_RECURSION_LIMIT);
-        $result = $this->cssMinifier->run($content);
+        $result = $this->getCssMin()->run($content);
         ini_set('pcre.recursion_limit', $pcreRecursionLimit);
         return $result;
     }

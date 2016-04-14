@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,7 +71,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('cms_page_store', [$whereForInsert])
             ->willReturnSelf();
 
-        $entityMetadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())

@@ -1,15 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
-
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Zend\View\Model\JsonModel;
 
 class MarketplaceManager
 {
@@ -81,7 +76,7 @@ class MarketplaceManager
         $this->composerInformation = $composerInformation;
         $this->curlClient = $curl;
         $this->filesystem = $filesystem;
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
     }
 
     /**
@@ -245,7 +240,8 @@ class MarketplaceManager
      */
     public function getAuthJson()
     {
-        $directory = $this->getFilesystem()->getDirectoryRead(DirectoryList::COMPOSER_HOME);
+        $directory = $this->getFilesystem()
+            ->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME);
         if ($directory->isExist($this->pathToAuthFile) && $directory->isReadable($this->pathToAuthFile)) {
             try {
                 $data = $directory->readFile($this->pathToAuthFile);
@@ -265,21 +261,20 @@ class MarketplaceManager
     public function removeCredentials()
     {
         $serviceUrl = $this->getCredentialBaseUrl();
-        $directory = $this->getFilesystem()->getDirectoryRead(DirectoryList::COMPOSER_HOME);
+        $directory = $this->getFilesystem()
+            ->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME);
         if ($directory->isExist($this->pathToAuthFile) && $directory->isReadable($this->pathToAuthFile)) {
             try {
                 $authJsonData = $this->getAuthJson();
-                if (!empty($authJsonData) && isset($authJsonData['http-basic'][$serviceUrl])) {
+                if (isset($authJsonData['http-basic']) && isset($authJsonData['http-basic'][$serviceUrl])) {
                     unset($authJsonData['http-basic'][$serviceUrl]);
-                    if (empty($authJsonData['http-basic'])) {
-                        return unlink(getenv('COMPOSER_HOME') . DIRECTORY_SEPARATOR . $this->pathToAuthFile);
+                    $path = \Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME
+                        . DIRECTORY_SEPARATOR . $this->pathToAuthFile;
+                    if ($authJsonData === ['http-basic' => []]) {
+                        return $this->getDirectory()->delete($path);
                     } else {
                         $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
-                        $this->getDirectory()->writeFile(
-                            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
-                            $data
-                        );
-                        return true;
+                        return $data !== false && $this->getDirectory()->writeFile($path, $data);
                     }
                 }
             } catch (\Exception $e) {
@@ -306,16 +301,14 @@ class MarketplaceManager
                 ]
             ]
         ];
-        $json = new JsonModel($authContent);
+        $json = new \Zend\View\Model\JsonModel($authContent);
         $json->setOption('prettyPrint', true);
         $jsonContent = $json->serialize();
 
         return $this->getDirectory()->writeFile(
-            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
+            \Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME .
+            DIRECTORY_SEPARATOR . $this->pathToAuthFile,
             $jsonContent
-        ) && $this->getDirectory()->changePermissions(
-            DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile,
-            \Magento\Framework\Filesystem\DriverInterface::WRITEABLE_FILE_MODE
         );
     }
 
@@ -417,7 +410,7 @@ class MarketplaceManager
     }
 
     /**
-     * @return ServiceLocatorInterface
+     * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
     public function getServiceLocator()
     {
@@ -449,7 +442,7 @@ class MarketplaceManager
     }
 
     /**
-     * @return Filesystem\Directory\Write|Filesystem\Directory\WriteInterface
+     * @return \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     public function getDirectory()
     {

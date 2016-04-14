@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
@@ -88,6 +88,8 @@ class Composite extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function modifyData(array $data)
     {
@@ -103,6 +105,12 @@ class Composite extends AbstractModifier
                 /** @var \Magento\Bundle\Api\Data\LinkInterface $productLink */
                 foreach ($option->getProductLinks() as $productLink) {
                     $linkedProduct = $this->productRepository->get($productLink->getSku());
+                    $integerQty = 1;
+                    if ($linkedProduct->getExtensionAttributes()->getStockItem()) {
+                        if ($linkedProduct->getExtensionAttributes()->getStockItem()->getIsQtyDecimal()) {
+                            $integerQty = 0;
+                        }
+                    }
                     $selections[] = [
                         'selection_id' => $productLink->getId(),
                         'option_id' => $productLink->getOptionId(),
@@ -112,8 +120,9 @@ class Composite extends AbstractModifier
                         'is_default' => ($productLink->getIsDefault()) ? '1' : '0',
                         'selection_price_value' => $productLink->getPrice(),
                         'selection_price_type' => $productLink->getPriceType(),
-                        'selection_qty' => $productLink->getQty(),
+                        'selection_qty' => (bool)$integerQty ? (int)$productLink->getQty() : $productLink->getQty(),
                         'selection_can_change_qty' => $productLink->getCanChangeQuantity(),
+                        'selection_qty_is_integer' => (bool)$integerQty,
                         'position' => $productLink->getPosition(),
                     ];
                 }
@@ -121,6 +130,7 @@ class Composite extends AbstractModifier
                     'position' => $option->getPosition(),
                     'option_id' => $option->getOptionId(),
                     'title' => $option->getTitle(),
+                    'default_title' => $option->getDefaultTitle(),
                     'type' => $option->getType(),
                     'required' => ($option->getRequired()) ? '1' : '0',
                     'bundle_selections' => $selections,

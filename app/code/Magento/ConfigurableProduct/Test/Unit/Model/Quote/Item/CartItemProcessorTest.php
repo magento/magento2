@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item;
@@ -65,10 +65,15 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->productOptionExtensionAttributes = $this->getMockBuilder(ProductOptionExtensionAttributes::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableItemOptions'])
-            ->getMock();
+        $this->productOptionExtensionAttributes = $this->getMockForAbstractClass(
+            ProductOptionExtensionAttributes::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['setConfigurableItemOptions']
+        );
 
         $this->model = new \Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor(
             $this->objectFactoryMock,

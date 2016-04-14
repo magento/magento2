@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -283,15 +283,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->will($this->returnValue($attributeCode));
-        $this->attribute->expects($this->at(3))
-            ->method('getIsFilterable')
-            ->will($this->returnValue(1));
-        $this->attribute->expects($this->at(4))
-            ->method('getIsFilterable')
-            ->will($this->returnValue(2));
-        $this->attribute->expects($this->at(5))
-            ->method('getIsFilterable')
-            ->will($this->returnValue(1));
 
         $this->target->setAttributeModel($this->attribute);
 

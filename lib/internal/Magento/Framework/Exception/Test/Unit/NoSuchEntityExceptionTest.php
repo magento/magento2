@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Exception\Test\Unit;
@@ -10,8 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class NoSuchEntityExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +27,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\Renderer\Placeholder')

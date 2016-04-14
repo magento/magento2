@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing;
@@ -33,7 +33,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var AttributeRepository */
     protected $component;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerMetadataManagement = $this->getMockForAbstractClass(
             'Magento\Customer\Api\CustomerMetadataManagementInterface',

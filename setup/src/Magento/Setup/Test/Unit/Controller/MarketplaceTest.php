@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -154,5 +154,11 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $viewModel = $this->controller->popupAuthAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
+    }
+
+    public function testIndexAction()
+    {
+        $model = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $model);
     }
 }

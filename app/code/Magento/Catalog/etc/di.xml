@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -46,16 +46,11 @@
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
-    <type name="Magento\Indexer\Model\Indexer\State">
-        <plugin name="setStatusForIndexer" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState" />
+    <type name="Magento\Theme\Block\Html\Topmenu">
+        <plugin name="catalogTopmenu" type="Magento\Catalog\Plugin\Block\Topmenu" />
     </type>
     <type name="Magento\Framework\Mview\View\StateInterface">
         <plugin name="setStatusForMview" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState" />
-    </type>
-    <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\IndexerState">
-        <arguments>
-            <argument name="state" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer\State</argument>
-        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Plugin\MviewState">
         <arguments>
@@ -202,10 +197,6 @@
         <plugin name="indexerCategoryFlatConfigGet" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData" />
         <plugin name="indexerProductFlatConfigGet" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\IndexerConfigData" />
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Category\Flat">
-        <plugin name="page-cache-indexer-reindex-category-flat"
-                type="Magento\Catalog\Model\Indexer\Category\AffectCache" sortOrder="10"/>
-    </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\AbstractAction">
         <arguments>
             <argument name="defaultPriceIndexer" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice</argument>
@@ -220,14 +211,6 @@
                 <item name="catalog_product" xsi:type="string">catalog_product</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Indexer\Category\Product">
-        <plugin name="page-cache-indexer-reindex-category-product"
-                type="Magento\Catalog\Model\Indexer\Product\AffectCache" sortOrder="10"/>
-    </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Category">
-        <plugin name="page-cache-indexer-reindex-product-category"
-                type="Magento\Catalog\Model\Indexer\Category\AffectCache" sortOrder="10"/>
     </type>
     <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
         <arguments>
@@ -292,10 +275,6 @@
         <arguments>
             <argument name="indexer" xsi:type="object" shared="false">Magento\Framework\Indexer\IndexerInterface</argument>
         </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Indexer\Product\Flat">
-        <plugin name="page-cache-indexer-reindex-product-flat"
-                type="Magento\Catalog\Model\Indexer\Product\AffectCache" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
         <arguments>
@@ -491,9 +470,6 @@
     <preference for="Magento\Catalog\Api\Data\ProductOptionInterface" type="Magento\Catalog\Model\ProductOption" />
     <virtualType name="Magento\Catalog\Model\ResourceModel\Attribute\Collection" type="Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection">
     </virtualType>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="transactionWrapper" type="Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
-    </type>
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
         <plugin name="attributeValidation" type="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation"/>
     </type>
@@ -563,14 +539,22 @@
             <argument name="operations" xsi:type="array">
                 <item name="default" xsi:type="array">
                     <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="string">Magento\Framework\Model\Operation\Write\Create</item>
-                    <item name="update" xsi:type="string">Magento\Framework\Model\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="string">Magento\Framework\Model\Operation\Write\Delete</item>
+                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Delete</item>
                 </item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\Entity\MetadataPool">
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Catalog\Api\ProductRepositoryInterface</item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Catalog\Api\CategoryRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
@@ -578,7 +562,7 @@
                     <item name="eavEntityType" xsi:type="string">catalog_product</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                     <item name="entityContext" xsi:type="array">
-                        <item name="store_id" xsi:type="string">store_id</item>
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
                 <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
@@ -586,15 +570,15 @@
                     <item name="eavEntityType" xsi:type="string">catalog_category</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                     <item name="entityContext" xsi:type="array">
-                        <item name="store_id" xsi:type="string">store_id</item>
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
         <arguments>
-            <argument name="relationActions" xsi:type="array">
+            <argument name="extensionActions" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
                     <item name="read" xsi:type="array">
                         <item name="optionReader" xsi:type="string">Magento\Catalog\Model\Product\Option\ReadHandler</item>
@@ -612,7 +596,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider">
         <arguments>
             <argument name="skipStaticColumns" xsi:type="array">
                 <item name="entity_type_id" xsi:type="string">entity_type_id</item>
@@ -707,6 +691,32 @@
                     <item name="path" xsi:type="string">design/watermark/thumbnail_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
                     <item name="default" xsi:type="string">stretch</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\CreateHandler" type="Magento\Eav\Model\ResourceModel\CreateHandler">
+        <arguments>
+            <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\ResourceModel\UpdateHandler" type="Magento\Eav\Model\ResourceModel\UpdateHandler">
+        <arguments>
+            <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="eav" xsi:type="array">
+                    <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
+                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
+                    </item>
+                    <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
+                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
+                    </item>
                 </item>
             </argument>
         </arguments>

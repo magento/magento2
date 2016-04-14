@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Interception;
@@ -82,10 +82,12 @@ trait Interceptor
     public function __sleep()
     {
         if (method_exists(get_parent_class($this), '__sleep')) {
-            return array_diff(parent::__sleep(), ['pluginLocator', 'pluginList', 'chain', 'subjectType']);
+            $properties = parent::__sleep();
         } else {
-            return array_keys(get_class_vars(get_parent_class($this)));
+            $properties = array_keys(get_object_vars($this));
         }
+        $properties = array_diff($properties, ['pluginLocator', 'pluginList', 'chain', 'subjectType', 'pluginLocator']);
+        return $properties;
     }
 
     /**

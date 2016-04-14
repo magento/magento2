@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,9 +12,9 @@ define([
     return Checkbox.extend({
         defaults: {
             clearing: false,
-            parentContainer: 'product_bundle_container',
-            parentSelections: 'bundle_selections',
-            changer: 'option_info.type'
+            parentContainer: '',
+            parentSelections: '',
+            changer: ''
         },
 
         /**
@@ -32,7 +32,7 @@ define([
          */
         initConfig: function () {
             this._super();
-            this.imports.changeType = this.getParentName(this.parentContainer) + '.' + this.changer + ':value';
+            this.imports.changeType = this.retrieveParentName(this.parentContainer) + '.' + this.changer + ':value';
 
             return this;
         },
@@ -41,23 +41,11 @@ define([
          * @inheritdoc
          */
         onUpdate: function () {
-            if (this.prefer === 'radio' && !this.clearing) {
+            if (this.prefer === 'radio' && this.checked() && !this.clearing) {
                 this.clearValues();
-            } else if (this.prefer === 'radio') {
-                this.clearing = false;
             }
 
             this._super();
-        },
-
-        /**
-         * Getter for parent name. Split string by provided parent name.
-         *
-         * @param {String} parent - parent name.
-         * @returns {String}
-         */
-        getParentName: function (parent) {
-            return this.name.split(parent)[0] + parent;
         },
 
         /**
@@ -66,34 +54,39 @@ define([
          * @param {String} type - type to change.
          */
         changeType: function (type) {
-            if (type === 'select') {
-                type = 'radio';
-            } else if (type === 'multi') {
-                type = 'checkbox';
-            }
+            var typeMap = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.changer).typeMap;
 
-            this.prefer = type;
-            this.clear();
-            this.elementTmpl(this.templates[type]);
-            this.clearing = false;
+            this.prefer = typeMap[type];
+            this.elementTmpl(this.templates[typeMap[type]]);
         },
 
         /**
          * Clears values in components like this.
          */
         clearValues: function () {
-            var records = registry.get(this.getParentName(this.parentSelections)),
+            var records = registry.get(this.retrieveParentName(this.parentSelections)),
                 index = this.index,
                 uid = this.uid;
 
-            this.clearing = true;
             records.elems.each(function (record) {
                 record.elems.filter(function (comp) {
                     return comp.index === index && comp.uid !== uid;
                 }).each(function (comp) {
+                    comp.clearing = true;
                     comp.clear();
+                    comp.clearing = false;
                 });
             });
+        },
+
+        /**
+         * Retrieve name for the most global parent with provided index.
+         *
+         * @param {String} parent - parent name.
+         * @returns {String}
+         */
+        retrieveParentName: function (parent) {
+            return this.name.replace(new RegExp('^(.+?\\.)?' + parent + '\\..+'), '$1' + parent);
         }
     });
 });
