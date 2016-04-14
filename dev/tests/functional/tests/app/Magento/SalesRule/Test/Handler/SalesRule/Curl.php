@@ -102,8 +102,8 @@ class Curl extends Conditions implements SalesRuleInterface
      */
     protected $mappingData = [
         'is_active' => [
-            'Active' => 1,
-            'Inactive' => 0,
+            'Yes' => 1,
+            'No' => 0,
         ],
         'coupon_type' => [
             'No Coupon' => 1,
