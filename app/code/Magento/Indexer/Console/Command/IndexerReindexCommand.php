@@ -46,6 +46,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         $indexers = $this->getIndexers($input);
         foreach ($indexers as $indexer) {
             try {
+                $this->validateIndexerStatus($indexer);
                 $startTime = microtime(true);
                 $indexerConfig = $this->getConfig()->getIndexer($indexer->getId());
                 $sharedIndex = $indexerConfig['shared_index'];
@@ -71,16 +72,35 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     }
 
     /**
+     * Validate that indexer is not locked
+     *
+     * @param \Magento\Framework\Indexer\IndexerInterface $indexer
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateIndexerStatus(\Magento\Framework\Indexer\IndexerInterface $indexer)
+    {
+        if ($indexer->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_WORKING) {
+            throw new LocalizedException(
+                __(
+                    '%1 index is locked by another reindex process. Skipping.',
+                    $indexer->getTitle()
+                )
+            );
+        }
+    }
+
+    /**
      * Get indexer ids that have common shared index
      *
-     * @param $sharedIndex
+     * @param string $sharedIndex
      * @return array
      */
     private function getIndexerIdsBySharedIndex($sharedIndex)
     {
         $indexers = $this->getConfig()->getIndexers();
         $result = [];
-        foreach ($indexers as $indexerCode => $indexerConfig) {
+        foreach ($indexers as $indexerConfig) {
             if ($indexerConfig['shared_index'] == $sharedIndex) {
                 $result[] = $indexerConfig['indexer_id'];
             }
@@ -91,7 +111,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     /**
      * Validate indexers by shared index ID
      *
-     * @param $sharedIndex
+     * @param string $sharedIndex
      * @return $this
      */
     private function validateSharedIndex($sharedIndex)
@@ -116,7 +136,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         $this->sharedIndexesComplete[] = $sharedIndex;
         return $this;
     }
-
 
     /**
      * Get config
