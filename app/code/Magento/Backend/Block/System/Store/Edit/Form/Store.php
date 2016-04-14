@@ -131,6 +131,7 @@ class Store extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
                 'options' => [0 => __('Disabled'), 1 => __('Enabled')],
                 'required' => true,
                 'disabled' => $storeModel->isReadOnly()
+                    || ($storeModel->getId() && $storeModel->isDefault() && $storeModel->isActive())
             ]
         );
 
