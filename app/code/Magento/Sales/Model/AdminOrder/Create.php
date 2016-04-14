@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1560,11 +1560,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         $customer = $this->getQuote()->getCustomer();
         $form = $this->_createCustomerForm($customer);
+        $customerData = $this->customerMapper->toFlatArray($customer);
 
         // emulate request
         $request = $form->prepareRequest($accountData);
         $data = $form->extractData($request);
         $data = $form->restoreData($data);
+        $data = array_merge($customerData, array_filter($data));
         $customer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customer,
@@ -1574,7 +1576,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
 
-        $customerData = $this->customerMapper->toFlatArray($customer);
         foreach ($form->getAttributes() as $attribute) {
             $code = sprintf('customer_%s', $attribute->getAttributeCode());
             $data[$code] = isset($customerData[$attribute->getAttributeCode()])

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Favicon;
@@ -41,7 +41,7 @@ class FaviconTest extends \PHPUnit_Framework_TestCase
     /**
      * Initialize testable object
      */
-    public function setUp()
+    protected function setUp()
     {
         $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
         $this->store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();

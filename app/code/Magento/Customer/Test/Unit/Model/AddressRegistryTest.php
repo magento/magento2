@@ -2,7 +2,7 @@
 /**
  * Unit test for converter \Magento\Customer\Model\AddressRegistry
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model;
@@ -19,7 +19,7 @@ class AddressRegistryTest extends \PHPUnit_Framework_TestCase
      */
     private $addressFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->addressFactory = $this->getMockBuilder('\Magento\Customer\Model\AddressFactory')
             ->disableOriginalConstructor()

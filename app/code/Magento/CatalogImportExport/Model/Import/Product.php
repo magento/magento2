@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -294,8 +294,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         'max_sale_qty' => 'max_cart_qty',
         'notify_stock_qty' => 'notify_on_stock_below',
         '_related_sku' => 'related_skus',
+        '_related_position' => 'related_position',
         '_crosssell_sku' => 'crosssell_skus',
+        '_crosssell_position' => 'crosssell_position',
         '_upsell_sku' => 'upsell_skus',
+        '_upsell_position' => 'upsell_position',
         'meta_keyword' => 'meta_keywords',
     ];
 
@@ -1102,13 +1105,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $sku = $rowData[self::COL_SKU];
 
+                $productId = $this->skuProcessor->getNewSku($sku)[$this->getProductEntityLinkField()];
+                $productLinkKeys = [];
+                $select = $this->_connection->select()->from(
+                    $resource->getTable('catalog_product_link'),
+                    ['id' => 'link_id', 'linked_id' => 'linked_product_id', 'link_type_id' => 'link_type_id']
+                )->where(
+                    'product_id = :product_id'
+                );
+                $bind = [':product_id' => $productId];
+                foreach ($this->_connection->fetchAll($select, $bind) as $linkData) {
+                    $linkKey = "{$productId}-{$linkData['linked_id']}-{$linkData['link_type_id']}";
+                    $productLinkKeys[$linkKey] = $linkData['id'];
+                }
                 foreach ($this->_linkNameToId as $linkName => $linkId) {
-                    $productId = $this->skuProcessor->getNewSku($sku)[$this->getProductEntityLinkField()];
                     $productIds[] = $productId;
                     if (isset($rowData[$linkName . 'sku'])) {
                         $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
-
-                        foreach ($linkSkus as $linkedSku) {
+                        $linkPositions = !empty($rowData[$linkName . 'position'])
+                            ? explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'position'])
+                            : [];
+                        foreach ($linkSkus as $linkedKey => $linkedSku) {
                             $linkedSku = trim($linkedSku);
                             if ((!is_null(
                                         $this->skuProcessor->getNewSku($linkedSku)
@@ -1143,19 +1160,21 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 }
 
                                 $linkKey = "{$productId}-{$linkedId}-{$linkId}";
-
+                                if(empty($productLinkKeys[$linkKey])) {
+                                    $productLinkKeys[$linkKey] = $nextLinkId;
+                                }
                                 if (!isset($linkRows[$linkKey])) {
                                     $linkRows[$linkKey] = [
-                                        'link_id' => $nextLinkId,
+                                        'link_id' => $productLinkKeys[$linkKey],
                                         'product_id' => $productId,
                                         'linked_product_id' => $linkedId,
                                         'link_type_id' => $linkId,
                                     ];
-                                    if (!empty($rowData[$linkName . 'position'])) {
+                                    if (!empty($linkPositions[$linkedKey])) {
                                         $positionRows[] = [
-                                            'link_id' => $nextLinkId,
+                                            'link_id' => $productLinkKeys[$linkKey],
                                             'product_link_attribute_id' => $positionAttrId[$linkId],
-                                            'value' => $rowData[$linkName . 'position'],
+                                            'value' => $linkPositions[$linkedKey],
                                         ];
                                     }
                                     $nextLinkId++;
@@ -1176,7 +1195,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
             if ($positionRows) {
                 // process linked product positions
-                $this->_connection->insertOnDuplicate($resource->getAttributeTypeTable('int'), $positionRows, ['value']);
+                $this->_connection->insertOnDuplicate(
+                    $resource->getAttributeTypeTable('int'),
+                    $positionRows, ['value']
+                );
             }
         }
         return $this;
@@ -2343,8 +2365,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $useConfigFields = array();
         foreach ($rowData as $key => $value) {
-            if (isset($this->defaultStockData[$key]) && isset($this->defaultStockData[self::INVENTORY_USE_CONFIG_PREFIX . $key]) && !empty($value)) {
-                $useConfigFields[self::INVENTORY_USE_CONFIG_PREFIX . $key] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
+            $useConfigName = self::INVENTORY_USE_CONFIG_PREFIX . $key;
+            if (isset($this->defaultStockData[$key])
+                && isset($this->defaultStockData[$useConfigName])
+                && !empty($value)
+                && empty($rowData[$useConfigName])
+            ) {
+                $useConfigFields[$useConfigName] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
             }
         }
         $rowData = array_merge($rowData, $useConfigFields);

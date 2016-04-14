@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -123,7 +123,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     protected $errorAggregator;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -985,14 +985,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     private function getAdvancedPricingMock($methods = [])
     {
         $metadataPoolMock = $this->getMock(
-            \Magento\Framework\Model\Entity\MetadataPool::class,
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',
             false
         );
         $metadataMock = $this->getMock(
-            \Magento\Framework\Model\Entity\EntityMetadata::class,
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',

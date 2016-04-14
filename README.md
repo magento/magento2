@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=master)](https://travis-ci.org/magento/magento2)
+[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=develop)](https://travis-ci.org/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
@@ -33,7 +33,7 @@ Use the following table to verify you have the correct prerequisites to install 
 		<td><a href="http://devdocs.magento.com/guides/v2.0/install-gde/prereq/apache.html">Apache</a></td>
 	</tr>
 	<tr>
-		<td>PHP 5.5.x or 5.6.x</td>
+		<td>PHP ~5.5.22 or 5.6.x</td>
 		<td><code>php -v</code></td>
 		<td><a href="http://devdocs.magento.com/guides/v2.0/install-gde/prereq/php-ubuntu.html">PHP Ubuntu</a><br><a href="http://devdocs.magento.com/guides/v2.0/install-gde/prereq/php-centos.html">PHP CentOS</a></td>
 	</tr>
@@ -72,3 +72,10 @@ To suggest documentation improvements, click [here][4].
 [2]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#report>
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
+
+<h2>Reporting security issues</h2>
+
+To report security vulnerabilities in Magento software or web sites, please e-mail <a href="mailto:security@magento.com">security@magento.com</a>. Please do not report security issues using GitHub. Be sure to encrypt your e-mail with our <a href="https://info2.magento.com/rs/magentoenterprise/images/security_at_magento.asc">encryption key</a> if it includes sensitive information. Learn more about reporting security issues <a href="https://magento.com/security/reporting-magento-security-issue">here</a>.
+
+Stay up-to-date on the latest vulnerabilities and patches for Magento by signing up for <a href="https://magento.com/security/sign-up">Security Alert Notifications</a>.
+

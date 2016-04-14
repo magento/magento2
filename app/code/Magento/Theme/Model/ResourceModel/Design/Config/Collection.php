@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Design\Config;
@@ -73,7 +73,15 @@ class Collection extends ConfigCollection
     protected function _afterLoad()
     {
         foreach ($this->_items as $item) {
-            $item->setData('value', $this->valueProcessor->process($item->getData('value'), $item->getData('path')));
+            $item->setData(
+                'value',
+                $this->valueProcessor->process(
+                    $item->getData('value'),
+                    $this->getData('scope'),
+                    $this->getData('scope_id'),
+                    $item->getData('path')
+                )
+            );
         }
         parent::_afterLoad();
     }

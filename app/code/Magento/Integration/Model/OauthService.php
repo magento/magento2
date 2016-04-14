@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model;
@@ -192,7 +192,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     public function postToConsumer($consumerId, $endpointUrl)
     {
         try {
-            $consumer = $this->_consumerFactory->create()->load($consumerId);
+            $consumer = $this->loadConsumer($consumerId);
             if (!$consumer->getId()) {
                 throw new \Magento\Framework\Oauth\Exception(
                     __('A consumer with ID %1 does not exist', $consumerId)

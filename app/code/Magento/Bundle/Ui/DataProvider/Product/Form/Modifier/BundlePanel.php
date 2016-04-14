@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\UrlInterface;
+use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Modal;
-use Magento\Framework\UrlInterface;
-use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as Shipment;
 
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields
@@ -21,12 +23,11 @@ class BundlePanel extends AbstractModifier
 {
     const GROUP_CONTENT = 'content';
     const CODE_SHIPMENT_TYPE = 'shipment_type';
-    const SORT_ORDER = 20;
-    const CODE_BUNDLE_DATA = 'bundle_data';
+    const CODE_BUNDLE_DATA = 'bundle-items';
     const CODE_AFFECT_BUNDLE_PRODUCT_SELECTIONS = 'affect_bundle_product_selections';
     const CODE_BUNDLE_HEADER = 'bundle_header';
     const CODE_BUNDLE_OPTIONS = 'bundle_options';
-    const CODE_MODAL_OPTIONS = 'modal';
+    const SORT_ORDER = 20;
 
     /**
      * @var UrlInterface
@@ -34,20 +35,36 @@ class BundlePanel extends AbstractModifier
     protected $urlBuilder;
 
     /**
-     * @var Shipment
+     * @var ShipmentType
      */
-    protected $shipment;
+    protected $shipmentType;
 
     /**
+     * @var ArrayManager
+     */
+    protected $arrayManager;
+
+    /**
+     * @var LocatorInterface
+     */
+    protected $locator;
+
+    /**
+     * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
-     * @param Shipment $shipment
+     * @param ShipmentType $shipmentType
+     * @param ArrayManager $arrayManager
      */
     public function __construct(
+        LocatorInterface $locator,
         UrlInterface $urlBuilder,
-        Shipment $shipment
+        ShipmentType $shipmentType,
+        ArrayManager $arrayManager
     ) {
+        $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
-        $this->shipment = $shipment;
+        $this->shipmentType = $shipmentType;
+        $this->arrayManager = $arrayManager;
     }
 
     /**
@@ -56,108 +73,107 @@ class BundlePanel extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        $generalPanel = $this->getGeneralPanelName($meta);
+        $path = $this->arrayManager->findPath(static::CODE_BUNDLE_DATA, $meta, null, 'children');
 
-        $meta = array_replace_recursive(
+        $meta = $this->arrayManager->merge(
+            $path,
             $meta,
             [
-                self::CODE_BUNDLE_DATA => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'label' => __('Bundle Items'),
-                                    'componentType' => isset($meta[$generalPanel]['componentType'])
-                                        ? $meta[$generalPanel]['componentType']
-                                        : Form\Fieldset::NAME,
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataScope' => '',
+                            'opened' => true,
+                            'sortOrder' => $this->getNextGroupSortOrder(
+                                $meta,
+                                static::GROUP_CONTENT,
+                                static::SORT_ORDER
+                            )
+                        ],
+                    ],
+                ],
+                'children' => [
+                    'modal' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'isTemplate' => false,
+                                    'componentType' => Modal::NAME,
                                     'dataScope' => '',
-                                    'sortOrder' =>
-                                        $this->getNextGroupSortOrder($meta, self::GROUP_CONTENT, self::SORT_ORDER),
-                                    'collapsible' => true,
-                                    'opened' => true,
+                                    'provider' => 'product_form.product_form_data_source',
+                                    'options' => [
+                                        'title' => __('Add Products to Option'),
+                                        'buttons' => [
+                                            [
+                                                'text' => __('Cancel'),
+                                                'actions' => ['closeModal'],
+                                            ],
+                                            [
+                                                'text' => __('Add Selected Products'),
+                                                'class' => 'action-primary',
+                                                'actions' => [
+                                                    [
+                                                        'targetName' => 'index = bundle_product_listing',
+                                                        'actionName' => 'save'
+                                                    ],
+                                                    'closeModal'
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'children' => [
+                            'bundle_product_listing' => [
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'autoRender' => false,
+                                            'componentType' => 'insertListing',
+                                            'dataScope' => 'bundle_product_listing',
+                                            'externalProvider' =>
+                                                'bundle_product_listing.bundle_product_listing_data_source',
+                                            'selectionsProvider' =>
+                                                'bundle_product_listing.bundle_product_listing.product_columns.ids',
+                                            'ns' => 'bundle_product_listing',
+                                            'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                                            'realTimeLink' => false,
+                                            'dataLinks' => ['imports' => false, 'exports' => true],
+                                            'behaviourType' => 'simple',
+                                            'externalFilterMode' => true,
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                    'children' => [
-                        'modal' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'isTemplate' => false,
-                                        'componentType' => Modal::NAME,
-                                        'dataScope' => '',
-                                        'provider' => 'product_form.product_form_data_source',
-                                        'options' => [
-                                            'title' => __('Add Products to Option'),
-                                            'buttons' => [
-                                                [
-                                                    'text' => __('Cancel'),
-                                                    'class' => 'action-secondary',
-                                                    'actions' => ['closeModal'],
-                                                ],
-                                                [
-                                                    'text' => __('Add Selected Products'),
-                                                    'class' => 'action-primary',
-                                                    'actions' => [
-                                                        [
-                                                            'targetName' => 'index = bundle_product_listing',
-                                                            'actionName' => 'save'
-                                                        ],
-                                                        'closeModal'
-                                                    ],
-                                                ],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                            'children' => [
-                                'bundle_product_listing' => [
-                                    'arguments' => [
-                                        'data' => [
-                                            'config' => [
-                                                'autoRender' => false,
-                                                'componentType' => 'insertListing',
-                                                'dataScope' => 'bundle_product_listing',
-                                                'externalProvider' =>
-                                                    'bundle_product_listing.bundle_product_listing_data_source',
-                                                'selectionsProvider' =>
-                                                    'bundle_product_listing.bundle_product_listing.product_columns.ids',
-                                                'ns' => 'bundle_product_listing',
-                                                'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
-                                                'realTimeLink' => false,
-                                                'dataLinks' => ['imports' => false, 'exports' => true],
-                                                'behaviourType' => 'simple',
-                                                'externalFilterMode' => true,
-                                            ],
-                                        ],
-                                    ],
+                    self::CODE_AFFECT_BUNDLE_PRODUCT_SELECTIONS => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => Form\Field::NAME,
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'dataScope' => 'data.affect_bundle_product_selections',
+                                    'visible' => false,
+                                    'value' => '1'
                                 ],
                             ],
                         ],
-                        self::CODE_SHIPMENT_TYPE => $this->getShipmentType(),
-                        self::CODE_AFFECT_BUNDLE_PRODUCT_SELECTIONS => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'componentType' => Form\Field::NAME,
-                                        'dataType' => Form\Element\DataType\Text::NAME,
-                                        'formElement' => Form\Element\Input::NAME,
-                                        'dataScope' => 'data.affect_bundle_product_selections',
-                                        'visible' => false,
-                                        'value' => '1'
-                                    ],
-                                ],
-                            ],
-                        ],
-                        self::CODE_BUNDLE_HEADER => $this->getBundleHeader(),
-                        self::CODE_BUNDLE_OPTIONS => $this->getBundleOptions()
-                    ]
+                    ],
+                    self::CODE_BUNDLE_HEADER => $this->getBundleHeader(),
+                    self::CODE_BUNDLE_OPTIONS => $this->getBundleOptions()
                 ]
             ]
         );
-        if (!empty($meta[$generalPanel]['children'][self::CODE_SHIPMENT_TYPE])) {
-            unset($meta[$generalPanel]['children'][self::CODE_SHIPMENT_TYPE]);
-        }
+
+        //TODO: Remove this workaround after MAGETWO-49902 is fixed
+        $bundleItemsGroup = $this->arrayManager->get($path, $meta);
+        $meta = $this->arrayManager->remove($path, $meta);
+        $meta = $this->arrayManager->set($path, $meta, $bundleItemsGroup);
+
+        $meta = $this->modifyShipmentType($meta);
 
         return $meta;
     }
@@ -171,26 +187,30 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
-     * Get Shipment Type configuration
+     * Modify Shipment Type configuration
      *
+     * @param array $meta
      * @return array
      */
-    protected function getShipmentType()
+    private function modifyShipmentType(array $meta)
     {
-        return [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'validation' => ['required-entry' => false],
-                        'dataScope' => 'data.product.shipment_type',
-                        'componentType' => 'select',
-                        'label' => __('Ship Bundle Items'),
-                        'options' => $this->shipment->getAllOptions(),
-                        'scopeLabel' => __('[GLOBAL]'),
-                    ],
-                ],
-            ],
-        ];
+        $meta = $this->arrayManager->merge(
+            $this->arrayManager->findPath(
+                static::CODE_SHIPMENT_TYPE,
+                $meta,
+                null,
+                'children'
+            ) . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'dataScope' => 'data.product.shipment_type',
+                'validation' => [
+                    'required-entry' => false
+                ]
+            ]
+        );
+
+        return $meta;
     }
 
     /**
@@ -384,11 +404,12 @@ class BundlePanel extends AbstractModifier
                         'listingDataProvider' => 'bundle_product_listing',
                         'actions' => [
                             [
-                                'targetName' => 'product_form.product_form.bundle_data.modal',
+                                'targetName' => 'product_form.product_form.' . static::CODE_BUNDLE_DATA . '.modal',
                                 'actionName' => 'toggleModal'
                             ],
                             [
-                                'targetName' => 'product_form.product_form.bundle_data.modal.bundle_product_listing',
+                                'targetName' => 'product_form.product_form.' . static::CODE_BUNDLE_DATA
+                                    . '.modal.bundle_product_listing',
                                 'actionName' => 'render'
                             ]
                         ],
@@ -400,13 +421,45 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
+     * Get configuration for option title
+     *
+     * @return array
+     */
+    protected function getTitleConfiguration()
+    {
+        $result['title']['arguments']['data']['config'] = [
+            'dataType' => Form\Element\DataType\Text::NAME,
+            'formElement' => Form\Element\Input::NAME,
+            'componentType' => Form\Field::NAME,
+            'dataScope' => $this->isDefaultStore() ? 'title' : 'default_title',
+            'label' => $this->isDefaultStore() ? __('Option Title') : __('Default Title'),
+            'sortOrder' => 10,
+            'validation' => ['required-entry' => true],
+        ];
+
+        if (!$this->isDefaultStore()) {
+            $result['store_title']['arguments']['data']['config'] = [
+                'dataType' => Form\Element\DataType\Text::NAME,
+                'formElement' => Form\Element\Input::NAME,
+                'componentType' => Form\Field::NAME,
+                'dataScope' => 'title',
+                'label' => __('Store View Title'),
+                'sortOrder' => 15,
+                'validation' => ['required-entry' => true],
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
      * Get option info
      *
      * @return array
      */
     protected function getOptionInfo()
     {
-        return [
+        $result = [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -421,21 +474,6 @@ class BundlePanel extends AbstractModifier
                 ],
             ],
             'children' => [
-                'title' => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'dataType' => Form\Element\DataType\Text::NAME,
-                                'formElement' => Form\Element\Input::NAME,
-                                'componentType' => Form\Field::NAME,
-                                'dataScope' => 'title',
-                                'label' => __('Option Title'),
-                                'sortOrder' => 10,
-                                'validation' => ['required-entry' => true],
-                            ],
-                        ],
-                    ],
-                ],
                 'type' => [
                     'arguments' => [
                         'data' => [
@@ -443,8 +481,14 @@ class BundlePanel extends AbstractModifier
                                 'dataType' => Form\Element\DataType\Text::NAME,
                                 'formElement' => Form\Element\Select::NAME,
                                 'componentType' => Form\Field::NAME,
+                                'component' => 'Magento_Bundle/js/components/bundle-input-type',
+                                'parentContainer' => 'product_bundle_container',
+                                'selections' => 'bundle_selections',
+                                'isDefaultIndex' => 'is_default',
+                                'userDefinedIndex' => 'selection_can_change_qty',
                                 'dataScope' => 'type',
                                 'label' => __('Input Type'),
+                                'sortOrder' => 20,
                                 'options' => [
                                     [
                                         'label' => __('Drop-down'),
@@ -463,7 +507,12 @@ class BundlePanel extends AbstractModifier
                                         'value' => 'multi'
                                     ]
                                 ],
-                                'sortOrder' => 20,
+                                'typeMap' => [
+                                    'select' => 'radio',
+                                    'radio' => 'radio',
+                                    'checkbox' => 'checkbox',
+                                    'multi' => 'checkbox'
+                                ]
                             ],
                         ],
                     ],
@@ -490,6 +539,8 @@ class BundlePanel extends AbstractModifier
                 ],
             ],
         ];
+
+        return $this->arrayManager->merge('children', $result, $this->getTitleConfiguration());
     }
 
     /**
@@ -520,15 +571,22 @@ class BundlePanel extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'component' => 'Magento_Bundle/js/components/bundle-checkbox',
-                                'componentType' => Form\Field::NAME,
-                                'dataType' => Form\Element\DataType\Boolean::NAME,
                                 'formElement' => Form\Element\Checkbox::NAME,
+                                'componentType' => Form\Field::NAME,
+                                'component' => 'Magento_Bundle/js/components/bundle-checkbox',
+                                'parentContainer' => 'product_bundle_container',
+                                'parentSelections' => 'bundle_selections',
+                                'changer' => 'option_info.type',
+                                'dataType' => Form\Element\DataType\Boolean::NAME,
                                 'label' => __('Default'),
                                 'dataScope' => 'is_default',
                                 'prefer' => 'radio',
-                                'value' => '1',
+                                'value' => '0',
                                 'sortOrder' => 50,
+                                'valueMap' => [
+                                    'false' => '0',
+                                    'true' => '1'
+                                ]
                             ],
                         ],
                     ],
@@ -569,6 +627,7 @@ class BundlePanel extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
+                                'component' => 'Magento_Bundle/js/components/bundle-option-qty',
                                 'formElement' => Form\Element\Input::NAME,
                                 'componentType' => Form\Field::NAME,
                                 'dataType' => Form\Element\DataType\Number::NAME,
@@ -577,7 +636,11 @@ class BundlePanel extends AbstractModifier
                                 'value' => '1',
                                 'sortOrder' => 100,
                                 'validation' => [
-                                    'validate-number' => true,
+                                    'required-entry' => true,
+                                    'validate-zero-or-greater' => true
+                                ],
+                                'imports' => [
+                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
                                 ],
                             ],
                         ],
@@ -679,5 +742,15 @@ class BundlePanel extends AbstractModifier
                 ],
             ],
         ];
+    }
+
+    /**
+     * Check that store is default
+     *
+     * @return bool
+     */
+    protected function isDefaultStore()
+    {
+        return $this->locator->getProduct()->getStoreId() == 0;
     }
 }

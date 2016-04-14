@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -34,6 +34,9 @@ abstract class AbstractModifier implements ModifierInterface
      */
     const CONTAINER_PREFIX = 'container_';
 
+    /**
+     * Meta config path
+     */
     const META_CONFIG_PATH = '/arguments/data/config';
 
     /**
@@ -50,8 +53,8 @@ abstract class AbstractModifier implements ModifierInterface
         $groupCodes = (array)$groupCodes;
 
         foreach ($groupCodes as $groupCode) {
-            if (isset($meta[$groupCode]['sortOrder'])) {
-                return $meta[$groupCode]['sortOrder'] + $iteration;
+            if (isset($meta[$groupCode]['arguments']['data']['config']['sortOrder'])) {
+                return $meta[$groupCode]['arguments']['data']['config']['sortOrder'] + $iteration;
             }
         }
 
@@ -143,12 +146,26 @@ abstract class AbstractModifier implements ModifierInterface
             return self::DEFAULT_GENERAL_PANEL;
         }
 
-        $min = self::GENERAL_PANEL_ORDER;
+        return $this->getFirstPanelCode($meta);
+    }
+
+    /**
+     * Retrieve first panel name
+     *
+     * @param array $meta
+     * @return string|null
+     */
+    protected function getFirstPanelCode(array $meta)
+    {
+        $min = null;
         $name = null;
 
         foreach ($meta as $fieldSetName => $fieldSetMeta) {
-            if (isset($fieldSetMeta['sortOrder']) && $fieldSetMeta['sortOrder'] <= $min) {
-                $min = $fieldSetMeta['sortOrder'];
+            if (
+                isset($fieldSetMeta['arguments']['data']['config']['sortOrder'])
+                && (null === $min || $fieldSetMeta['arguments']['data']['config']['sortOrder'] <= $min)
+            ) {
+                $min = $fieldSetMeta['arguments']['data']['config']['sortOrder'];
                 $name = $fieldSetName;
             }
         }
@@ -166,46 +183,14 @@ abstract class AbstractModifier implements ModifierInterface
     protected function getGroupCodeByField(array $meta, $field)
     {
         foreach ($meta as $groupCode => $groupData) {
-            if (isset($groupData['children'][$field]) || isset($groupData['children']['container_' . $field])) {
+            if (
+                isset($groupData['children'][$field])
+                || isset($groupData['children'][static::CONTAINER_PREFIX . $field])
+            ) {
                 return $groupCode;
             }
         }
 
         return false;
-    }
-
-    /**
-     * Get path string for specific element
-     *
-     * @param array $meta
-     * @param string $element
-     * @param string $delimiter
-     * @return string|null
-     */
-    protected function getElementArrayPath(array $meta, $element, $delimiter = ArrayManager::DEFAULT_PATH_DELIMITER)
-    {
-        $checkList = ['' => $meta];
-
-        while (!empty($checkList)) {
-            $nextCheckList = [];
-
-            foreach ($checkList as $path => $children) {
-                foreach ($children as $index => $config) {
-                    $childPath = $path . ($path ? $delimiter . 'children' . $delimiter : '') . $index;
-
-                    if ($index === $element) {
-                        return $childPath;
-                    }
-
-                    if (!empty($config['children']) && is_array($config['children'])) {
-                        $nextCheckList[$childPath] = $config['children'];
-                    }
-                }
-            }
-
-            $checkList = $nextCheckList;
-        }
-
-        return null;
     }
 }

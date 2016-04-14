@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options;
@@ -18,14 +18,14 @@ class Type extends OptgroupselectElement
      *
      * @var string
      */
-    protected $optGroup = './/*/*/*/ul/li/div/label/span/ancestor::li/ul/li/div/label[text() = "%s"]';
+    protected $optGroup = './/*[@data-role="option-group" and *//*[contains(.,"%s")]]//span';
 
     /**
      * Option group locator.
      *
      * @var string
      */
-    protected $optGroupValue = './/*/*/*/ul/li/div/label/span[text()="%s"]/ancestor::li/ul/li/div/label[text() = "%s"]';
+    protected $optGroupValue = './/*[@data-role="option-group" and div[contains(.,"%s")]]//label[text()="%s"]';
 
     /**
      * Locator for Advanced Select element
@@ -35,6 +35,13 @@ class Type extends OptgroupselectElement
     protected $advancedSelect = '[data-role="advanced-select"]';
 
     /**
+     * Selector for selected option.
+     *
+     * @var string
+     */
+    protected $selectedOption = '[data-role="selected-option"]';
+
+    /**
      * Get element data.
      *
      * @param ElementInterface $element
@@ -42,7 +49,8 @@ class Type extends OptgroupselectElement
      */
     protected function getData(ElementInterface $element)
     {
-        return trim($element->getValue(), chr(0xC2) . chr(0xA0));
+        $this->find($this->advancedSelect)->click();
+        return trim($element->getText());
     }
 
     /**

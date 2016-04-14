@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Pack\Writer\File;
@@ -143,7 +143,7 @@ abstract class AbstractFile implements WriterInterface
      * @param bool $recursive Allows the creation of nested directories specified in the $destinationPath
      * @return void
      */
-    protected function _createDirectoryIfNotExist($destinationPath, $mode = 0750, $recursive = true)
+    protected function _createDirectoryIfNotExist($destinationPath, $mode = 0777, $recursive = true)
     {
         if (!is_dir($destinationPath)) {
             mkdir($destinationPath, $mode, $recursive);

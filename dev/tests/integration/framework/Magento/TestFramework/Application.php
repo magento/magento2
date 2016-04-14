@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework;
@@ -577,7 +577,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            mkdir($dir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            mkdir($dir);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));

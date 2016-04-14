@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -27,7 +27,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var \Magento\Setup\Model\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filePermissions;
 
@@ -150,7 +150,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filePermissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
+        $this->filePermissions = $this->getMock('Magento\Framework\Setup\FilePermissions', [], [], '', false);
         $this->configWriter = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
         $this->configReader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
         $this->config = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
@@ -233,7 +233,14 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'encryption_key',
             ConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME => 'backend',
         ];
-        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+        $this->config->expects($this->atLeastOnce())
+            ->method('get')
+            ->willReturnMap(
+                [
+                    [ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT, null, true],
+                    [ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY, null, true],
+                ]
+            );
         $allModules = ['Foo_One' => [], 'Bar_Two' => []];
         $this->moduleLoader->expects($this->any())->method('load')->willReturn($allModules);
         $setup = $this->getMock('Magento\Setup\Module\Setup', [], [], '', false);
@@ -299,8 +306,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(39))->method('log')->with('Caches clearing:');
         $this->logger->expects($this->at(42))->method('log')->with('Disabling Maintenance Mode:');
         $this->logger->expects($this->at(44))->method('log')->with('Post installation file permissions check...');
-        $this->logger->expects($this->at(46))->method('logSuccess')->with('Magento installation complete.');
-        $this->logger->expects($this->at(48))->method('log')
+        $this->logger->expects($this->at(46))->method('log')->with('Write installation date...');
+        $this->logger->expects($this->at(48))->method('logSuccess')->with('Magento installation complete.');
+        $this->logger->expects($this->at(50))->method('log')
             ->with('Sample Data is installed with errors. See log file for details');
         $this->object->install($request);
     }
@@ -371,7 +379,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUninstall()
     {
-        $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->configReader->expects($this->once())->method('getFiles')->willReturn(['ConfigOne.php', 'ConfigTwo.php']);
         $configDir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $configDir
@@ -436,7 +443,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanupDb()
     {
-        $this->config->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->config->expects($this->once())
             ->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT)
@@ -455,7 +461,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareForUpdateModulesTests()
     {
-
         $allModules = [
             'Foo_One' => [],
             'Bar_Two' => [],
@@ -482,7 +487,10 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+        $this->config->expects($this->atLeastOnce())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::KEY_MODULES)
+            ->willReturn(true);
 
         $newObject = $this->createObject(false, false);
         $this->configReader->expects($this->once())->method('load')

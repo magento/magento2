@@ -1,21 +1,3 @@
-None,None
-Close,Close
-Cancel,Cancel
-Product,Product
-Price,Price
-ID,ID
-SKU,SKU
-Qty,Qty
-"Excl. Tax","Excl. Tax"
-Total,Total
-"Incl. Tax","Incl. Tax"
-"Total incl. tax","Total incl. tax"
-Delete,Delete
-Name,Name
-From,From
-To,To
-Required,Required
-Position,Position
 "Percent Discount","Percent Discount"
 "-- Select --","-- Select --"
 Dynamic,Dynamic
@@ -23,40 +5,77 @@ Fixed,Fixed
 "Create New Option","Create New Option"
 "Bundle Items","Bundle Items"
 "Add Products to Option","Add Products to Option"
+Close,Close
 "Delete Option","Delete Option"
-"Please enter search conditions to view products.","Please enter search conditions to view products."
+"What are you looking for?","What are you looking for?"
+ID,ID
+Product,Product
+SKU,SKU
+Price,Price
+Delete,Delete
 "Use Default Value","Use Default Value"
 "There is no defined renderer for ""%1"" option type.","There is no defined renderer for ""%1"" option type."
-"As Low as","As Low as"
+"Only implemented for bundle product","Only implemented for bundle product"
+"Product with specified sku: ""%1"" is not a bundle product","Product with specified sku: ""%1"" is not a bundle product"
+"Bundle product could not contain another composite product","Bundle product could not contain another composite product"
+"Id field of product link is required","Id field of product link is required"
+"Can not find product link with id ""%1""","Can not find product link with id ""%1"""
+"Could not save child: ""%1""","Could not save child: ""%1"""
+"Product with specified sku: ""%1"" does not contain option: ""%2""","Product with specified sku: ""%1"" does not contain option: ""%2"""
+"Child with specified sku: ""%1"" already assigned to product: ""%2""","Child with specified sku: ""%1"" already assigned to product: ""%2"""
+"Product with specified sku: %1 is not a bundle product","Product with specified sku: %1 is not a bundle product"
+"Requested bundle option product doesn\'t exist","Requested bundle option product doesn\'t exist"
+"Requested option doesn\'t exist","Requested option doesn\'t exist"
+"Cannot delete option with id %1","Cannot delete option with id %1"
+"Could not save option","Could not save option"
 "Price Range","Price Range"
+"As Low as","As Low as"
+Together,Together
+Separately,Separately
 "Please specify product option(s).","Please specify product option(s)."
-"Please select all required options.","Please select all required options."
+"The options you selected are not available.","The options you selected are not available."
 "The required options you selected are not available.","The required options you selected are not available."
-"We cannot add this item to your shopping cart.","We cannot add this item to your shopping cart."
+"Please select all required options.","Please select all required options."
+"We can\'t add this item to your shopping cart right now.","We can\'t add this item to your shopping cart right now."
 N/A,N/A
 Percent,Percent
-Qty:,Qty:
-"Choose a selection...","Choose a selection..."
 "Ship Bundle Items","Ship Bundle Items"
-Separately,Separately
-Together,Together
-"Option Title","Option Title"
-"Store View Title","Store View Title"
-"Input Type","Input Type"
-"There are no products in this option.","There are no products in this option."
+"We can\'t save custom-defined options for bundles with dynamic pricing.","We can\'t save custom-defined options for bundles with dynamic pricing."
+Cancel,Cancel
+"Add Selected Products","Add Selected Products"
+[GLOBAL],[GLOBAL]
+"Add Option","Add Option"
 "New Option","New Option"
+"Option Title","Option Title"
+"Input Type","Input Type"
+Drop-down,Drop-down
+"Radio Buttons","Radio Buttons"
+Checkbox,Checkbox
+"Multiple Select","Multiple Select"
+Required,Required
 Default,Default
-"Price Type","Price Type"
+Name,Name
 "Default Quantity","Default Quantity"
 "User Defined","User Defined"
+"Price Type","Price Type"
+"Dynamic Price","Dynamic Price"
+"Dynamic SKU","Dynamic SKU"
+"Dynamic Weight","Dynamic Weight"
+None,None
+Quantity:,Quantity:
+"Choose a selection...","Choose a selection..."
+"Store View Title","Store View Title"
+Position,Position
+"There are no products in this option.","There are no products in this option."
 Ordered,Ordered
 Invoiced,Invoiced
 Shipped,Shipped
 Refunded,Refunded
 Canceled,Canceled
 "As low as","As low as"
-From:,From:
-To:,To:
+"Regular Price","Regular Price"
+From,From
+To,To
 "Buy %1 with %2 discount each","Buy %1 with %2 discount each"
 "Go back to product details","Go back to product details"
 "Customize and Add to Cart","Customize and Add to Cart"
@@ -68,13 +87,22 @@ Availability,Availability
 Summary,Summary
 "%1 x %2","%1 x %2"
 Availability:,Availability:
+Quantity,Quantity
 "Customize %1","Customize %1"
 "No options of this product are available.","No options of this product are available."
 "Gift Message","Gift Message"
+From:,From:
+To:,To:
 Message:,Message:
-"Excl. Tax:","Excl. Tax:"
-"Incl. Tax:","Incl. Tax:"
-"Total Incl. Tax","Total Incl. Tax"
+"Product Name","Product Name"
+Subtotal,Subtotal
+"Discount Amount","Discount Amount"
+"Row Total","Row Total"
+"Qty Invoiced","Qty Invoiced"
+"Qty Shipped","Qty Shipped"
 "Add Products to New Option","Add Products to New Option"
 "Add Products to Option ""%1""","Add Products to Option ""%1"""
-"Add Selected Products","Add Selected Products"
+Select...,Select...
+Status,Status
+Thumbnail,Thumbnail
+Type,Type

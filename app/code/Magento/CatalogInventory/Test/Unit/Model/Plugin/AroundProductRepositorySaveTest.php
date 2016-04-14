@@ -154,11 +154,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->willReturn(null);
 
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->disableOriginalConstructor()->getMock();
-        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn(1);
-        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
-
+        $this->stockConfiguration->expects($this->once())->method('getDefaultScopeId')->willReturn(1);
         $this->stockRegistry->expects($this->once())->method('getStockItem')->willReturn($this->stockItem);
         $this->stockRegistry->expects($this->once())->method('updateStockItemBySku');
 
@@ -180,11 +176,10 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
     public function testAroundSave()
     {
         $productId = 5494;
-        $websiteId = 1;
         $storeId = 2;
         $sku = 'my product that needs saving';
         $defaultScopeId = 100;
-        $this->stockConfiguration->expects($this->once())
+        $this->stockConfiguration->expects($this->exactly(2))
             ->method('getDefaultScopeId')
             ->willReturn($defaultScopeId);
         $this->stockRegistry->expects($this->once())
@@ -209,17 +204,12 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->willReturn($storedStockItem);
 
-        $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->disableOriginalConstructor()->getMock();
-        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
-        $this->storeManager->expects($this->once())->method('getStore')->with($storeId)->willReturn($storeMock);
-
         $this->product->expects(($this->exactly(2)))->method('getId')->willReturn($productId);
         $this->product->expects(($this->atLeastOnce()))->method('getStoreId')->willReturn($storeId);
         $this->product->expects($this->atLeastOnce())->method('getSku')->willReturn($sku);
 
         $this->stockItem->expects($this->once())->method('setProductId')->with($productId);
-        $this->stockItem->expects($this->once())->method('setWebsiteId')->with($websiteId);
+        $this->stockItem->expects($this->once())->method('setWebsiteId')->with($defaultScopeId);
 
         $this->stockRegistry->expects($this->once())
             ->method('updateStockItemBySku')

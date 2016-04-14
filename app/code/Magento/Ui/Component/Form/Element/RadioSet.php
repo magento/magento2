@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element;
@@ -13,12 +13,18 @@ class RadioSet extends AbstractOptionsField
     const NAME = 'radioset';
 
     /**
-     * Get component name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getComponentName()
     {
         return static::NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsSelected($optionValue)
+    {
+        return $this->getValue() == $optionValue;
     }
 }

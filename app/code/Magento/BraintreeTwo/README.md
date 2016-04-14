@@ -1,1 +1,0 @@
-Module Magento\BraintreeTwo implements integration with the Braintree payment system.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\ResourceModel\Design\Config\Scope;
@@ -113,9 +113,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->valueProcessor->expects($this->atLeastOnce())
             ->method('process')
             ->withConsecutive(
-                ['DefaultValue', 'second/field/path'],
-                ['WebsiteValue', 'second/field/path'],
-                ['WebsiteValue', 'second/field/path']
+                ['DefaultValue', 'default', null, ['path' => 'second/field/path', 'use_in_grid' => 1]],
+                ['WebsiteValue', 'website', 1, ['path' => 'second/field/path', 'use_in_grid' => 1]],
+                ['WebsiteValue', 'store', 1, ['path' => 'second/field/path', 'use_in_grid' => 1]]
             )
             ->willReturnOnConsecutiveCalls(
                 'DefaultValue',

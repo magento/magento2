@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\ResourceModel\Quote;
@@ -55,7 +55,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock class dependencies
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);

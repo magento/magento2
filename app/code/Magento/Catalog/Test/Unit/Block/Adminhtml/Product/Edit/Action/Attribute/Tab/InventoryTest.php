@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Action\Attribute\Tab;
@@ -176,5 +176,15 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
     public function testIsHidden()
     {
         $this->assertFalse($this->inventory->isHidden());
+    }
+
+    /**
+     * Run test isEnabled method
+     *
+     * @return void
+     */
+    public function testIsEnabled()
+    {
+        $this->assertEquals(true, $this->inventory->isAvailable('field'));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -9,7 +9,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Newsletter\Model\Subscriber;
+use Magento\Customer\Model\EmailNotification;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -108,7 +108,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          */
         $this->assertEquals(
             $post,
-            $this->objectManager->get('Magento\Backend\Model\Session')->getCustomerData()
+            $this->objectManager->get('Magento\Backend\Model\Session')->getCustomerFormData()
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
@@ -144,7 +144,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
          */
         $this->assertEquals(
             $post,
-            $this->objectManager->get('Magento\Backend\Model\Session')->getCustomerData()
+            $this->objectManager->get('Magento\Backend\Model\Session')->getCustomerFormData()
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new'));
     }
@@ -183,7 +183,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParam('back', '1');
 
         // Emulate setting customer data to session in editAction
-        $this->objectManager->get('Magento\Backend\Model\Session')->setCustomerData($post);
+        $this->objectManager->get('Magento\Backend\Model\Session')->setCustomerFormData($post);
 
         $this->dispatch('backend/customer/index/save');
         /**
@@ -382,7 +382,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $customerId,
             $newEmail
         );
-        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+        $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
             'customer' => ['entity_id' => $customerId,
                 'middlename' => 'test middlename',
@@ -428,7 +428,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $customerId,
             $newEmail
         );
-        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+        $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
             'items' => [
                 $customerId => [
@@ -480,7 +480,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
         $this->assertEquals(
             $post,
-            Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getCustomerData()
+            Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->getCustomerFormData()
         );
         $this->assertRedirect($this->stringStartsWith($this->_baseControllerUrl . 'new/key/'));
     }
@@ -489,68 +489,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * @magentoDataFixture Magento/Customer/_files/customer_sample.php
      */
     public function testEditAction()
-    {
-        $customerData = [
-            'customer_id' => '1',
-            'account' => [
-                'middlename' => 'new middlename',
-                'group_id' => 1,
-                'website_id' => 1,
-                'firstname' => 'new firstname',
-                'lastname' => 'new lastname',
-                'email' => 'customer@example.com',
-                'default_shipping' => '_item1',
-                'new_password' => 'auto',
-                'sendemail_store_id' => '1',
-                'sendemail' => '1',
-                'created_at' => '2000-01-01 00:00:00',
-                'customer_address' => [
-                    '1' => [
-                        'firstname' => 'update firstname',
-                        'lastname' => 'update lastname',
-                        'street' => ['update street'],
-                        'city' => 'update city',
-                        'country_id' => 'US',
-                        'postcode' => '01001',
-                        'telephone' => '+7000000001',
-                    ],
-                    '_item1' => [
-                        'firstname' => 'default firstname',
-                        'lastname' => 'default lastname',
-                        'street' => ['default street'],
-                        'city' => 'default city',
-                        'country_id' => 'US',
-                        'postcode' => '01001',
-                        'telephone' => '+7000000001',
-                    ],
-                    '_template_' => [
-                        'firstname' => '',
-                        'lastname' => '',
-                        'street' => [],
-                        'city' => '',
-                        'country_id' => 'US',
-                        'postcode' => '',
-                        'telephone' => '',
-                    ],
-                ],
-            ],
-        ];
-        /**
-         * set customer data
-         */
-        Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->setCustomerData($customerData);
-        $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/edit');
-        $body = $this->getResponse()->getBody();
-
-        // verify
-        $this->assertContains('<h1 class="page-title">new firstname new lastname</h1>', $body);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
-     */
-    public function testEditActionNoSessionData()
     {
         $this->getRequest()->setParam('id', 1);
         $this->dispatch('backend/customer/index/edit');

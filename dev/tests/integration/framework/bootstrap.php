@@ -1,17 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Autoload\AutoloaderRegistry;
 
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
-
-$updateAppBootstrap = __DIR__ . '/../../../../update/app/bootstrap.php';
-if (file_exists($updateAppBootstrap)) {
-    require_once $updateAppBootstrap;
-}
 
 $testsBaseDir = dirname(__DIR__);
 $fixtureBaseDir = $testsBaseDir. '/testsuite';

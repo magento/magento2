@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,6 +30,7 @@ $product->setTypeId('bundle')
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setPriceView(1)
     ->setPriceType(1)
+    ->setShipmentType(1)
     ->setPrice(10.0)
     ->setBundleOptionsData(
         [

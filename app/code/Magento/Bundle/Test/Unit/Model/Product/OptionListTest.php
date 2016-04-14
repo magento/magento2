@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product;
@@ -104,14 +104,16 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
         $optionMock->expects($this->exactly(2))->method('getOptionId')->willReturn($optionId);
         $optionMock->expects($this->once())->method('getData')->willReturn($optionData);
         $optionMock->expects($this->once())->method('getTitle')->willReturn(null);
-        $optionMock->expects($this->once())->method('getDefaultTitle')->willReturn($optionData['title']);
+        $optionMock->expects($this->exactly(2))->method('getDefaultTitle')->willReturn($optionData['title']);
 
         $linkMock = $this->getMock('\Magento\Bundle\Api\Data\LinkInterface');
         $this->linkListMock->expects($this->once())
             ->method('getItems')
             ->with($productMock, $optionId)
             ->willReturn([$linkMock]);
-        $newOptionMock = $this->getMock('\Magento\Bundle\Api\Data\OptionInterface');
+        $newOptionMock = $this->getMockBuilder('\Magento\Bundle\Api\Data\OptionInterface')
+            ->setMethods(['setDefaultTitle'])
+            ->getMockForAbstractClass();
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($newOptionMock, $optionData, '\Magento\Bundle\Api\Data\OptionInterface')
@@ -119,6 +121,10 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
         $newOptionMock->expects($this->once())->method('setOptionId')->with($optionId)->willReturnSelf();
         $newOptionMock->expects($this->once())
             ->method('setTitle')
+            ->with($optionData['title'])
+            ->willReturnSelf();
+        $newOptionMock->expects($this->once())
+            ->method('setDefaultTitle')
             ->with($optionData['title'])
             ->willReturnSelf();
         $newOptionMock->expects($this->once())->method('setSku')->with($productSku)->willReturnSelf();

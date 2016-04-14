@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -72,13 +72,13 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
     public function testModifyData($typeId, $isDownloadable)
     {
         $productId = 1;
-        $this->locatorMock->expects($this->once())
+        $this->locatorMock->expects(static::once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects($this->once())
+        $this->productMock->expects(static::once())
             ->method('getId')
             ->willReturn($productId);
-        $this->productMock->expects($this->once())
+        $this->productMock->expects(static::once())
             ->method('getTypeId')
             ->willReturn($typeId);
         $resultData = [
@@ -106,12 +106,12 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifyMeta()
     {
-        $this->locatorMock->expects($this->exactly(2))
+        $this->locatorMock->expects(static::once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects($this->any())
+        $this->productMock->expects(static::any())
             ->method('getTypeId');
-        $this->arrayManagerMock->expects($this->exactly(3))
+        $this->arrayManagerMock->expects(static::exactly(3))
             ->method('set')
             ->willReturn([]);
 

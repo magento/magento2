@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable;
@@ -127,7 +127,6 @@ class Links extends Form
         while ($this->_rootElement->find(sprintf($this->rowBlock, $index))->isVisible()) {
             $rowBlock = $this->getRowBlock($index - 1);
             $rowBlock->clickDeleteButton();
-            ++$index;
         }
     }
 

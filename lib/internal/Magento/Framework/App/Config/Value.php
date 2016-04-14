@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Config;
@@ -121,5 +121,19 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         }
 
         return parent::afterSave();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     *
+     * @return $this
+     */
+    public function afterDelete()
+    {
+        $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+
+        return parent::afterDelete();
     }
 }

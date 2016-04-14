@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultLayout;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->catalogSessionMock = $this->getMock('Magento\Catalog\Model\Session',
