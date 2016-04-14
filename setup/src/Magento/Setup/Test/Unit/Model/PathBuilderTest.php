@@ -70,7 +70,7 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase
         $this->pathBuilder->build();
     }
 
-    // Error scenario: ["extra"]["map"] is absent within magento/magento2-base/composer.json file
+    // Scenario: ["extra"]["map"] is absent within magento/magento2-base/composer.json file
     public function testBuildNoExtraMapSectionInComposerJsonFile()
     {
         $this->readerMock->expects($this->once())->method('isExist')->willReturn(true);
@@ -85,14 +85,9 @@ class PathBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->readerMock->expects($this->once())->method('readFile')->willReturn($jsonData);
-        $this->setExpectedException(
-            'Magento\Setup\Exception',
-            sprintf(
-                'Could not find "extra" => "map" section within %s file.',
-                PathBuilder::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE
-            )
-        );
-        $this->pathBuilder->build();
+        $expectedList = [];
+        $actualList = $this->pathBuilder->build();
+        $this->assertEquals($expectedList, $actualList);
     }
 
     // Success scenario
