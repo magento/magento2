@@ -95,6 +95,13 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected $sessionConfig;
 
     /**
+     * Request
+     *
+     * @var \Magento\Framework\App\Request\Http
+     */
+    protected $request;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
@@ -379,11 +386,26 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
             ->setDuration($duration)
             ->setPath($path)
+            ->setSecure($this->getRequest()->isSecure())
             ->setHttpOnly(true);
         $this->_cookieManager->setPublicCookie(
             self::COOKIE_NAME,
             $value,
             $publicCookieMetadata
         );
+    }
+
+    /**
+     * Get request object
+     *
+     * @return \Magento\Framework\App\Request\Http
+     */
+    private function getRequest()
+    {
+        if ($this->request == null) {
+            $this->request = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\App\Request\Http');
+        }
+        return $this->request;
     }
 }
