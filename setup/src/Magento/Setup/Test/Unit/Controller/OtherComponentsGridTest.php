@@ -125,4 +125,10 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
     }
+
+    public function testIndexAction()
+    {
+        $model = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $model);
+    }
 }
