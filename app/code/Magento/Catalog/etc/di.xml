@@ -534,18 +534,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\EntityManager\OperationPool">
-        <arguments>
-            <argument name="operations" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="string">Magento\Framework\EntityManager\Operation\Read</item>
-                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Create</item>
-                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Delete</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
