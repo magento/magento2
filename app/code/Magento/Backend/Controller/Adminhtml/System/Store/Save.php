@@ -51,20 +51,13 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                         if ($postData['group']['group_id'] == '') {
                             $groupModel->setId(null);
                         }
-
-                        if (!empty($postData['group']['default_store_id'])) {
-                            $defaultStoreId = $postData['group']['default_store_id'];
-                            if (!empty($groupModel->getStores()[$defaultStoreId]) &&
-                                !$groupModel->getStores()[$defaultStoreId]->isActive()) {
-                                throw new \Magento\Framework\Exception\LocalizedException(
-                                    __('An inactive store view cannot be saved as default store view')
-                                );
-                            }
+                        if (!$this->isSelectedDefaultStoreActive($postData, $groupModel)) {
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                __('An inactive store view cannot be saved as default store view')
+                            );
                         }
                         $groupModel->save();
-
                         $this->_eventManager->dispatch('store_group_save', ['group' => $groupModel]);
-
                         $this->messageManager->addSuccess(__('You saved the store.'));
                         break;
 
@@ -93,11 +86,8 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
                             );
                         }
                         $storeModel->save();
-
                         $this->_objectManager->get('Magento\Store\Model\StoreManager')->reinitStores();
-
                         $this->_eventManager->dispatch($eventName, ['store' => $storeModel]);
-
                         $this->messageManager->addSuccess(__('You saved the store view.'));
                         break;
                     default:
@@ -121,5 +111,25 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store
         }
         $redirectResult->setPath('adminhtml/*/');
         return $redirectResult;
+    }
+
+    /**
+     * Verify if selected default store is active
+     *
+     * @param array $postData
+     * @param \Magento\Store\Model\Group $groupModel
+     * @return bool
+     */
+    private function isSelectedDefaultStoreActive(array $postData, \Magento\Store\Model\Group $groupModel)
+    {
+        if (!empty($postData['group']['default_store_id'])) {
+            $defaultStoreId = $postData['group']['default_store_id'];
+            if (!empty($groupModel->getStores()[$defaultStoreId]) &&
+                !$groupModel->getStores()[$defaultStoreId]->isActive()
+            ) {
+                return false;
+            }
+        }
+        return true;
     }
 }
