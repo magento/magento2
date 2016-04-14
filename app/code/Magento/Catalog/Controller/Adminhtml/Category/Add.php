@@ -53,10 +53,10 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
         /**
          * Check if we have data in session (if during category save was exception)
          */
-        $data = $this->_getSession()->getCategoryData(true);
-        if (isset($data['general'])) {
-            unset($data['general']['image']);
-            $category->addData($data['general']);
+        $categoryData = $this->_getSession()->getCategoryData(true);
+        if (is_array($categoryData)) {
+            unset($categoryData['image']);
+            $category->addData($categoryData);
         }
 
         $resultPageFactory = $this->_objectManager->get('Magento\Framework\View\Result\PageFactory');

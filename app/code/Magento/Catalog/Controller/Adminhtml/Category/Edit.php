@@ -82,14 +82,14 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         /**
          * Check if we have data in session (if during category save was exception)
          */
-        $data = $this->_getSession()->getCategoryData(true);
-        if (isset($data['general'])) {
-            if (isset($data['general']['image']['delete'])) {
-                $data['general']['image'] = null;
+        $categoryData = $this->_getSession()->getCategoryData(true);
+        if (is_array($categoryData)) {
+            if (isset($categoryData['image']['delete'])) {
+                $categoryData['image'] = null;
             } else {
-                unset($data['general']['image']);
+                unset($categoryData['image']);
             }
-            $category->addData($data['general']);
+            $category->addData($categoryData);
         }
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
