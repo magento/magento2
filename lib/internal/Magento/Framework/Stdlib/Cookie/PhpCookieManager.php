@@ -220,7 +220,7 @@ class PhpCookieManager implements CookieManagerInterface
             }
         }
 
-        return $expireTime;
+        return min($expireTime, PHP_INT_MAX);
     }
 
     /**
