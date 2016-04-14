@@ -22,3 +22,21 @@
         <?php echo $block->getForm()->toHtml() ?>
     </div>
 </fieldset>
+<script>
+    require([
+        'jquery'
+    ], function (jQuery) {
+        jQuery(function() {
+                var setRegion = function() {
+                    jQuery('#region').attr('value', jQuery('#region_id option:selected').text());
+                };
+
+                setRegion();
+
+                jQuery('#region_id').on('change', function() {
+                    setRegion();
+                });
+            }
+        )
+    })
+</script>
