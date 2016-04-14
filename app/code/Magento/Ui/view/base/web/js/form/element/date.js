@@ -113,10 +113,11 @@ define([
                 }
 
                 shiftedValue = shiftedValue.format(this.datetimeFormat);
-
-                if (shiftedValue !== this.shiftedValue()) {
-                    this.shiftedValue(shiftedValue);
-                }
+            } else {
+                shiftedValue = '';
+            }
+            if (shiftedValue !== this.shiftedValue()) {
+                this.shiftedValue(shiftedValue);
             }
         },
 
@@ -137,10 +138,11 @@ define([
                     value = moment(shiftedValue, this.datetimeFormat);
                     value = value.format(this.outputDateFormat);
                 }
-
-                if (value !== this.value()) {
-                    this.value(value);
-                }
+            } else {
+                value = '';
+            }
+            if (value !== this.value()) {
+                this.value(value);
             }
         },
 
