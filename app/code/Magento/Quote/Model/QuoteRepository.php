@@ -150,7 +150,8 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     public function save(\Magento\Quote\Api\Data\CartInterface $quote)
     {
         if ($quote->getId()) {
-            $currentQuote = $this->get($quote->getId());
+            $currentQuote = $this->get($quote->getId(), [$quote->getStoreId()]);
+            $currentQuote->setStoreId($quote->getStoreId());
             // This part has to be refactored
             if ($quote->getBillingAddress()) {
                 $currentQuote->setBillingAddress($quote->getBillingAddress());

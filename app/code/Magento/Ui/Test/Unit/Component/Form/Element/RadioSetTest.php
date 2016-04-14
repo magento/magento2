@@ -9,8 +9,10 @@ use Magento\Ui\Component\Form\Element\RadioSet;
 
 /**
  * Class RadioSetTest
+ *
+ * @method RadioSet getModel
  */
-class RadioSetTest extends AbstractOptionsFieldTest
+class RadioSetTest extends AbstractElementTest
 {
     /**
      * {@inheritdoc}
