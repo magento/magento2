@@ -14,7 +14,7 @@
     <?php foreach ($block->getFeeds() as $feed): ?>
         <?php if (!isset($feed['group'])): ?>
         <tr>
-            <td class="col feed"><?php /* @escapeNotVerified */ echo $feed['label'] ?></td>
+            <td class="col feed"><?php echo $block->escapeHtml($feed['label']) ?></td>
             <td class="col action">
                 <a href="<?php /* @escapeNotVerified */ echo $feed['link'] ?>" class="action get"><span><?php /* @escapeNotVerified */ echo __('Get Feed'); ?></span></a>
             </td>
@@ -23,7 +23,7 @@
             <th colspan="2" scope="col"><?php /* @escapeNotVerified */ echo $feed['group'] ?></th>
             <?php foreach ($feed['feeds'] as $item) :?>
                 <tr>
-                    <td class="col feed"><?php /* @escapeNotVerified */ echo $item['label'] ?></td>
+                    <td class="col feed"><?php echo $block->escapeHtml($item['label']) ?></td>
                     <td class="col action">
                         <a href="<?php /* @escapeNotVerified */ echo $item['link'] ?>" class="action get"><span><?php /* @escapeNotVerified */ echo __('Get Feed'); ?></span></a>
                     </td>

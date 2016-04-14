@@ -97,4 +97,13 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('static', $attributeMetadata->getBackendType(), 'Backend type is invalid');
         $this->assertEquals('Company', $attributeMetadata->getFrontendLabel(), 'Frontend label is invalid');
     }
+
+    protected function tearDown()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /* @var \Magento\Framework\Config\CacheInterface $cache */
+        $cache = $objectManager->create('Magento\Framework\Config\CacheInterface');
+        $cache->remove('extension_attributes_config');
+    }
 }
