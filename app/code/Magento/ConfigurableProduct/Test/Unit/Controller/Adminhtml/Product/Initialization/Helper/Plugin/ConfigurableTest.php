@@ -203,9 +203,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
 
-    /**
-     * @covers Configurable::afterInitialize
-     */
     public function testAfterInitializeWithAttributesAndWithoutVariations()
     {
         $attributes = [
@@ -268,9 +265,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
 
-    /**
-     * @covers Configurable::afterInitialize
-     */
     public function testAfterInitializeIfAttributesEmpty()
     {
         $this->product->expects(static::once())
@@ -291,9 +285,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
 
-    /**
-     * @covers Configurable::afterInitialize
-     */
     public function testAfterInitializeForNotConfigurableProduct()
     {
         $this->product->expects(static::once())
