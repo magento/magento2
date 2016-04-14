@@ -58,6 +58,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function loginDataProvider()
     {
-        return [[true], [false]];
+        return [[false], [true]];
     }
 }
