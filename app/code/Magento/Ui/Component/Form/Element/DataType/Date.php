@@ -70,14 +70,6 @@ class Date extends AbstractDataType
             ))->getOffset();
         }
 
-        if (!isset($config['timeFormat'])) {
-            $config['timeFormat'] = $this->localeDate->getTimeFormat(\IntlDateFormatter::SHORT);
-        }
-
-        if (!isset($config['dateFormat'])) {
-            $config['dateFormat'] = $this->localeDate->getDateFormat(\IntlDateFormatter::MEDIUM);
-        }
-
         $this->setData('config', $config);
 
         parent::prepare();
