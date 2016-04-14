@@ -40,7 +40,8 @@ define([
         'onCheckedChanged': function (newChecked) {
             var valueFromConfig = this.valueFromConfig();
 
-            if (newChecked && (_.isArray(valueFromConfig) || valueFromConfig === '1')) {
+            if (newChecked
+                && ((_.isArray(valueFromConfig) && valueFromConfig.length === 0) || valueFromConfig === '1')) {
                 this.changeVisibleDisabled(this.inputField, true, true, 1);
             } else if (newChecked && _.isObject(valueFromConfig)) {
                 this.changeVisibleDisabled(this.inputField, false, true, null);
@@ -66,7 +67,7 @@ define([
                 function (currentComponent) {
                     var initialValue = currentComponent.initialValue;
 
-                    if (_.isString(initialValue) || valueFromConfig === 1) {
+                    if (_.isString(initialValue) || initialValue === 0 || valueFromConfig === 1) {
                         currentComponent.value(1);
                     } else if (initialValue) {
                         currentComponent.value(initialValue);
