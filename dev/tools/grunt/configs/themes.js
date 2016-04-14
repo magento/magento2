@@ -41,16 +41,6 @@ module.exports = {
         ],
         dsl: 'less'
     },
-    test: {
-        area: 'frontend',
-        name: 'Magento/test',
-        locale: 'en_US',
-        files: [
-            'css/styles-m',
-            'css/styles-l'
-        ],
-        dsl: 'less'
-    },
     backend: {
         area: 'adminhtml',
         name: 'Magento/backend',
