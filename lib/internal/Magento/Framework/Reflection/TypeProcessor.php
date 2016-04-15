@@ -14,6 +14,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class TypeProcessor
 {
@@ -417,6 +418,18 @@ class TypeProcessor
     public function isArrayType($type)
     {
         return (bool)preg_match('/(\[\]$|^ArrayOf)/', $type);
+    }
+
+    /**
+     * Check if given type is valid to use as an argument type declaration
+     *
+     * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+     * @param string $type
+     * @return bool
+     */
+    public function isValidTypeDeclaration($type)
+    {
+        return !($this->isTypeSimple($type) || $this->isTypeAny($type) || $this->isArrayType($type));
     }
 
     /**
