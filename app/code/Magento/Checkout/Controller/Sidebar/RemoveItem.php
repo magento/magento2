@@ -104,7 +104,7 @@ class RemoveItem extends Action
      */
     private function getFormKeyValidator()
     {
-        if(!$this->formKeyValidator) {
+        if (!$this->formKeyValidator) {
             $this->formKeyValidator = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\Data\Form\FormKey\Validator::class);
         }

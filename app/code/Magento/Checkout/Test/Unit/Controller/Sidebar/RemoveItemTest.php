@@ -8,6 +8,9 @@ namespace Magento\Checkout\Test\Unit\Controller\Sidebar;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RemoveItemTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Checkout\Controller\Sidebar\RemoveItem */
