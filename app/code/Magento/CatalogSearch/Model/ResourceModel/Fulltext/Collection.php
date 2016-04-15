@@ -15,7 +15,6 @@ use Magento\Framework\Api\Search\SearchResultFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
 
-
 /**
  * Fulltext Collection
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
