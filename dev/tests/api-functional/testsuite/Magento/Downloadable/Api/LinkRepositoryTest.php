@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Api;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Link;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -34,7 +35,6 @@ class LinkRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
-        $this->markTestSkipped('Test skiped due to MAGETWO-46832');
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links',
@@ -101,7 +101,14 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
         if ($linkId !== null) {
-            return isset($links[$linkId]) ? $links[$linkId] : null;
+            if (!empty($links)) {
+                foreach ($links as $link) {
+                    if ($link->getId() == $linkId) {
+                        return $link;
+                    }
+                }
+            }
+            return null;
         }
 
         // return first link
@@ -905,6 +912,7 @@ class LinkRepositoryTest extends WebapiAbstract
         foreach ($expectations['fields'] as $index => $value) {
             $this->assertEquals($value, $link[$index]);
         }
+        $this->assertContains('jellyfish_1_3.jpg', $link['sample_file']);
     }
 
     public function getListForAbsentProductProvider()
@@ -914,7 +922,6 @@ class LinkRepositoryTest extends WebapiAbstract
                 'is_shareable' => 2,
                 'price' => 15,
                 'number_of_downloads' => 15,
-                'sample_file' => '/n/d/jellyfish_1_3.jpg',
                 'sample_type' => 'file',
                 'link_file' => '/j/e/jellyfish_2_4.jpg',
                 'link_type' => 'file'
