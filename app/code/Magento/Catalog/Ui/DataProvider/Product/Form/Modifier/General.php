@@ -339,6 +339,7 @@ class General extends AbstractModifier
                     'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
                     'handleSizeChanges' => '${$.provider}:data.product.size'
                 ],
+                'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
             if (!in_array($listener, $textListeners)) {
@@ -353,8 +354,7 @@ class General extends AbstractModifier
             $skuPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'autoImportIfEmpty' => true,
-                'allowImport' => $this->locator->getProduct()->getId() ? false : true,
+                'autoImportIfEmpty' => true
             ]
         );
 
