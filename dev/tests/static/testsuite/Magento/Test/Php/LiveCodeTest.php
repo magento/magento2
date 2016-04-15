@@ -51,7 +51,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private static function getBaseFliesFolder() {
+    private static function getBaseFilesFolder() {
         return __DIR__;
     }
 
@@ -74,7 +74,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
     {
-        $globPatternsFolder = self::getBaseFliesFolder();
+        $globPatternsFolder = self::getBaseFilesFolder();
         if ('' !== $baseFilesFolder) {
             $globPatternsFolder = $baseFilesFolder ;
         }
