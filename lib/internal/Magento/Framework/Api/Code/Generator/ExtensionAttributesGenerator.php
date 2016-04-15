@@ -25,6 +25,11 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     protected $config;
 
     /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
+    protected $typeProcessor;
+
+    /**
      * @var array
      */
     protected $allCustomAttributes;
@@ -33,6 +38,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Api\ExtensionAttribute\Config $config
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io $ioObject
@@ -41,6 +47,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttribute\Config $config,
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
@@ -49,6 +56,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     ) {
         $sourceClassName .= 'Interface';
         $this->config = $config;
+        $this->typeProcessor = $typeProcessor;
         parent::__construct(
             $sourceClassName,
             $resultClassName,
@@ -90,9 +98,15 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
                 'body' => "return \$this->_get('{$attributeName}');",
                 'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType . '|null']]],
             ];
+            $parameters = ['name' => $propertyName];
+            // If the attribute type is a valid type declaration (e.g., interface, class, array) then use it to enforce
+            // constraints on the generated setter methods
+            if ($this->typeProcessor->isValidTypeDeclaration($attributeType)) {
+                $parameters['type'] = $attributeType;
+            }
             $methods[] = [
                 'name' => $setterName,
-                'parameters' => [['name' => $propertyName]],
+                'parameters' => [$parameters],
                 'body' => "\$this->setData('{$attributeName}', \${$propertyName});" . PHP_EOL . "return \$this;",
                 'docblock' => [
                     'tags' => [
