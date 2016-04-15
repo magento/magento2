@@ -12,6 +12,7 @@ use Magento\Downloadable\Model\Product\TypeHandler\Link as LinkHandler;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -169,7 +170,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             return $this->updateLink($product, $link, $isGlobalScopeContent);
         } else {
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
-                throw new InputException(__('Product type of the product must be \'downloadable\'.'));
+                throw new InputException(__('Provided product must be type \'downloadable\'.'));
             }
             if (!$this->contentValidator->isValid($link)) {
                 throw new InputException(__('Provided link information is invalid.'));
@@ -198,7 +199,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         $isGlobalScopeContent
     ) {
         $linkData = [
-            'link_id' => $link->getid() === null ? 0 : $link->getid(),
+            'link_id' => (int)$link->getid(),
             'is_delete' => 0,
             'type' => $link->getLinkType(),
             'sort_order' => $link->getSortOrder(),
@@ -310,7 +311,11 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         if (!$link->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable link with provided ID.'));
         }
-        $link->delete();
+        try {
+            $link->delete();
+        } catch (\Exception $exception) {
+            throw new StateException(__('Cannot delete link with id %1', $link->getId()), $exception);
+        }
         return true;
     }
 

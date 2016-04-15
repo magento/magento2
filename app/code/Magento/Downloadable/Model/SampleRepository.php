@@ -16,6 +16,7 @@ use Magento\Downloadable\Model\Sample\ContentValidator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\App\ObjectManager;
 
@@ -178,7 +179,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             return $this->updateSample($product, $sample, $isGlobalScopeContent);
         } else {
             if ($product->getTypeId() !== Type::TYPE_DOWNLOADABLE) {
-                throw new InputException(__('Product type of the product must be \'downloadable\'.'));
+                throw new InputException(__('Provided product must be type \'downloadable\'.'));
             }
             if (!$this->contentValidator->isValid($sample)) {
                 throw new InputException(__('Provided sample information is invalid.'));
@@ -209,7 +210,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         $isGlobalScopeContent
     ) {
         $sampleData = [
-            'sample_id' => $sample->getid() === null ? 0 : $sample->getid(),
+            'sample_id' => (int)$sample->getid(),
             'is_delete' => 0,
             'type' => $sample->getSampleType(),
             'sort_order' => $sample->getSortOrder(),
@@ -310,7 +311,11 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         if (!$sample->getId()) {
             throw new NoSuchEntityException(__('There is no downloadable sample with provided ID.'));
         }
-        $sample->delete();
+        try {
+            $sample->delete();
+        } catch (\Exception $exception) {
+            throw new StateException(__('Cannot delete sample with id %1', $sample->getId()), $exception);
+        }
         return true;
     }
 
