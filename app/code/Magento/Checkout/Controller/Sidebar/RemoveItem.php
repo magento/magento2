@@ -37,12 +37,16 @@ class RemoveItem extends Action
     protected $resultPageFactory;
 
     /**
+     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param Context $context
      * @param Sidebar $sidebar
      * @param LoggerInterface $logger
      * @param Data $jsonHelper
      * @param PageFactory $resultPageFactory
-     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
@@ -63,6 +67,9 @@ class RemoveItem extends Action
      */
     public function execute()
     {
+        if (!$this->getFormKeyValidator()->validate($this->getRequest())) {
+            return $this->resultRedirectFactory->create()->setPath('*/*/');
+        }
         $itemId = (int)$this->getRequest()->getParam('item_id');
         try {
             $this->sidebar->checkQuoteItem($itemId);
@@ -89,5 +96,18 @@ class RemoveItem extends Action
         return $this->getResponse()->representJson(
             $this->jsonHelper->jsonEncode($response)
         );
+    }
+
+    /**
+     * @return \Magento\Framework\Data\Form\FormKey\Validator
+     * @deprecated
+     */
+    private function getFormKeyValidator()
+    {
+        if(!$this->formKeyValidator) {
+            $this->formKeyValidator = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Data\Form\FormKey\Validator::class);
+        }
+        return $this->formKeyValidator;
     }
 }
