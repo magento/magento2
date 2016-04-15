@@ -15,10 +15,10 @@
             <thead>
             <tr id="swatch-text-options-table">
                 <th class="col-draggable"></th>
-                <th class="col-default"><?php /* @escapeNotVerified */ echo __('Is Default') ?></th>
+                <th class="col-default"><span><?php /* @escapeNotVerified */ echo __('Is Default') ?></span></th>
                 <?php $stores = $block->getStores(); foreach ($stores as $_store): ?>
-                    <th class="col-swatch col-<%- data.id %>"><?php /* @escapeNotVerified */ echo __('Swatch'); ?></th>
-                    <th><?php /* @escapeNotVerified */ echo $_store->getName() ?></th>
+                    <th class="col-swatch col-<%- data.id %>"><span><?php /* @escapeNotVerified */ echo __('Swatch'); ?></span></th>
+                    <th><span><?php /* @escapeNotVerified */ echo $_store->getName() ?></span></th>
                 <?php endforeach; ?>
                 <?php $colTotal = count($stores) * 2 + 3; ?>
                 <th class="col-delete">&nbsp;</th>
