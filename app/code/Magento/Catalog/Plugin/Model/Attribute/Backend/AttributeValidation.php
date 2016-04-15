@@ -14,6 +14,7 @@ class AttributeValidation
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param array $allowedEntityTypes
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -34,7 +35,7 @@ class AttributeValidation
         \Closure $proceed,
         \Magento\Framework\DataObject $entity
     ) {
-        $isAllowedType = !empty(array_filter(array_map(function($allowedEntity) use ($entity) {
+        $isAllowedType = !empty(array_filter(array_map(function ($allowedEntity) use ($entity) {
             return $entity instanceof $allowedEntity;
         }, $this->allowedEntityTypes)));
 
