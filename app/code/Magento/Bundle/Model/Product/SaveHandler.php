@@ -59,16 +59,26 @@ class SaveHandler implements ExtensionInterface
         if ($entity->getTypeId() !== 'bundle' || empty($bundleProductOptions)) {
             return $entity;
         }
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-        foreach ($this->optionRepository->getList($entity->getSku()) as $option) {
-            $this->removeOptionLinks($entity->getSku(), $option);
-            $this->optionRepository->delete($option);
-        }
 
-        $options = $bundleProductOptions ?: [];
-        foreach ($options as $option) {
-            $option->setOptionId(null);
-            $this->optionRepository->save($entity, $option);
+        if (!$entity->getCopyFromView()) {
+            /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
+            foreach ($this->optionRepository->getList($entity->getSku()) as $option) {
+                $this->removeOptionLinks($entity->getSku(), $option);
+                $this->optionRepository->delete($option);
+            }
+
+            $options = $bundleProductOptions ?: [];
+            foreach ($options as $option) {
+                $option->setOptionId(null);
+                $this->optionRepository->save($entity, $option);
+            }
+        } else {
+            //save only labels and not selections + product links
+            $options = $bundleProductOptions ?: [];
+            foreach ($options as $option) {
+                $this->optionRepository->save($entity, $option);
+                $entity->setCopyFromView(false);
+            }
         }
         return $entity;
     }
