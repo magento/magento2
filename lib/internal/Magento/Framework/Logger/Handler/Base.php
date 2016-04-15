@@ -46,17 +46,17 @@ class Base extends StreamHandler
             $filePath ? $filePath . $this->fileName : BP . DIRECTORY_SEPARATOR . $this->fileName,
             $this->loggerType
         );
-        
+
         $this->setFormatter(new LineFormatter(null, null, true));
     }
 
     /**
-     * @param $fileName
+     * @param string $fileName
      *
      * @return string
      * @throws \InvalidArgumentException
      */
-    public function sanitizeFileName($fileName)
+    protected function sanitizeFileName($fileName)
     {
         if (!is_string($fileName)) {
             throw  new \InvalidArgumentException('Filename expected to be a string');

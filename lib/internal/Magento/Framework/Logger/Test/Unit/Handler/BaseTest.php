@@ -10,31 +10,43 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Logger\Handler\Base */
     protected $_model;
 
+    protected $_sanitizeMethod;
+
     public function setUp()
     {
         $this->_model = new \Magento\Framework\Logger\Handler\Base(
             $this->getMock('Magento\Framework\Filesystem\DriverInterface')
         );
+
+        $class = new \ReflectionClass($this->_model);
+        $this->_sanitizeMethod = $class->getMethod('sanitizeFileName');
+        $this->_sanitizeMethod->setAccessible(true);
     }
 
     public function testSanitizeEmpty()
     {
-        $this->assertEquals('', $this->_model->sanitizeFileName(''));
+        $this->assertEquals('', $this->_sanitizeMethod->invokeArgs($this->_model, ['']));
     }
 
     public function testSanitizeSimpleFilename()
     {
-        $this->assertEquals('custom.log', $this->_model->sanitizeFileName('custom.log'));
+        $this->assertEquals('custom.log', $this->_sanitizeMethod->invokeArgs($this->_model, ['custom.log']));
     }
 
     public function testSanitizeLeadingSlashFilename()
     {
-        $this->assertEquals('customfolder/custom.log', $this->_model->sanitizeFileName('/customfolder/custom.log'));
+        $this->assertEquals(
+            'customfolder/custom.log',
+            $this->_sanitizeMethod->invokeArgs($this->_model, ['/customfolder/custom.log'])
+        );
     }
 
     public function testSanitizeParentLevelFolder()
     {
-        $this->assertEquals('var/hack/custom.log', $this->_model->sanitizeFileName('../../../var/hack/custom.log'));
+        $this->assertEquals(
+            'var/hack/custom.log',
+            $this->_sanitizeMethod->invokeArgs($this->_model, ['../../../var/hack/custom.log'])
+        );
     }
 
     /**
@@ -43,6 +55,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSanitizeFileException()
     {
-        $this->_model->sanitizeFileName(['filename' => 'notValid']);
+        $this->_sanitizeMethod->invokeArgs($this->_model, [['filename' => 'notValid']]);
     }
 }
