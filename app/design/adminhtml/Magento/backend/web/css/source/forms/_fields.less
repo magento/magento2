@@ -81,12 +81,25 @@
     .fieldset-wrapper {
         &.admin__fieldset-section {
             > .fieldset-wrapper-title {
-                margin: @indent__s 0;
                 padding-left: @indent__s;
 
                 strong {
                     font-size: @collapsible-title__font-size;
                     font-weight: @font-weight__semibold;
+                }
+            }
+
+            .admin__fieldset-wrapper-content {
+                > .admin__fieldset {
+                    padding-top: @indent__s;
+                }
+            }
+
+            &:last-child {
+                .admin__fieldset-wrapper-content {
+                    > .admin__fieldset {
+                        padding-bottom: 0;
+                    }
                 }
             }
         }
@@ -119,6 +132,15 @@
 
             > .admin__field-control {
                 &:extend(.abs-field-no-label all);
+            }
+        }
+
+        //  Field with empty table and no thead
+        + .admin__field {
+            &._empty {
+                &._no-header {
+                    margin-top: -@indent__l;
+                }
             }
         }
     }
@@ -658,7 +680,7 @@
 
 .admin_field-complex {
     &:extend(.abs-clearfix all);
-    margin-bottom: 3rem;
+    margin: @indent__s 0 @indent__l;
     padding-left: @indent__s;
 
     .admin__field:not(._hidden) + & {
@@ -686,6 +708,15 @@
     .admin_field-complex-content {
         max-width: 60%;
         overflow: hidden;
+    }
+
+    //  Field with empty table and no thead
+    + .admin__field {
+        &._empty {
+            &._no-header {
+                margin-top: -@indent__l;
+            }
+        }
     }
 }
 
