@@ -108,6 +108,6 @@ class Theme extends Value
     public function afterDelete()
     {
         $this->invalidateCache(true);
-        parent::afterDelete();
+        return parent::afterDelete();
     }
 }
