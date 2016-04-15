@@ -35,7 +35,7 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     public function tearDown()
     {
-        //$this->deleteProductBySku(self::PRODUCT_SKU);
+        $this->deleteProductBySku(self::PRODUCT_SKU);
         parent::tearDown();
     }
 
