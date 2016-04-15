@@ -132,7 +132,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $quoteFactory;
 
     /**
-     * @var QuoteIdMaskFactory
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
 
@@ -561,13 +561,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * @return QuoteIdMaskFactory
+     * @return \Magento\Quote\Model\QuoteIdMaskFactory
      * @deprecated
      */
     private function getQuoteIdMaskFactory()
     {
         if (!$this->quoteIdMaskFactory) {
-            $this->quoteIdMaskFactory = ObjectManager::getInstance()->get(QuoteIdMaskFactory::class);
+            $this->quoteIdMaskFactory = ObjectManager::getInstance()
+                ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
         }
         return $this->quoteIdMaskFactory;
     }
