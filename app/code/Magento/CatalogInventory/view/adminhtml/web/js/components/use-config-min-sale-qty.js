@@ -40,8 +40,8 @@ define([
         'onCheckedChanged': function (newChecked) {
             var valueFromConfig = this.valueFromConfig();
 
-            if (newChecked && ((_.isArray(valueFromConfig) && valueFromConfig.length === 0)
-                || valueFromConfig === '1')) {
+            if (newChecked && ((_.isArray(valueFromConfig) && valueFromConfig.length === 0) ||
+                valueFromConfig === '1')) {
                 this.changeVisibleDisabled(this.inputField, true, true, 1);
             } else if (newChecked && _.isObject(valueFromConfig)) {
                 this.changeVisibleDisabled(this.inputField, false, true, null);
