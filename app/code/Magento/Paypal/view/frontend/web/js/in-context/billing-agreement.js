@@ -24,7 +24,7 @@ define([
             if (this.options.invalidateOnCreate) {
                 this.invalidate();
             }
-            this.element.on('click', $.proxy(function () {
+            $(this.options.cancelButtonSelector).on('click', $.proxy(function () {
                 if (confirm(this.options.cancelMessage)) {
                     this.invalidate();
                     window.location.href = this.options.cancelUrl;
