@@ -110,19 +110,27 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $sampleFactory = $objectManager->create('Magento\Downloadable\Api\Data\SampleInterfaceFactory');
         $linkFactory = $objectManager->create('Magento\Downloadable\Api\Data\LinkInterfaceFactory');
         $extension = $product->getExtensionAttributes();
+        $expectedLink = [
+            'is_shareable' => '2',
+            'link_type' => 'file',
+            'link_file' => '/j/e/jellyfish_2_4.jpg',
+            'number_of_downloads' => '15',
+            'price' => '15.0000',
+            'sample_type' => 'file',
+            'sort_order' => '1',
+            'title' => 'Updated downloadable link #1',
+        ];
         $links = [];
         foreach ($downloadableData['link'] as $linkData) {
             if (!$linkData || (isset($linkData['is_delete']) && (bool)$linkData['is_delete'])) {
                 continue;
             } else {
                 $link = $linkFactory->create(['data' => $linkData]);
-                $link->setId(null);
-                if (isset($linkData['link_id'])) {
-                    $link->setId($linkData['link_id']);
-                }
+                $link->setId($linkData['link_id']);
                 if (isset($linkData['sample'])) {
                     $link->setSampleType($linkData['sample']['type']);
                     $link->setSampleFileData($linkData['sample']['file']);
+                    $expectedLink['sample_file'] = $linkData['sample']['file'];
                     $link->setSampleUrl($linkData['sample']['url']);
                 }
                 $link->setLinkType($linkData['type']);
@@ -150,9 +158,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 if (!$sampleData || (isset($sampleData['is_delete']) && (bool)$sampleData['is_delete'])) {
                     continue;
                 } else {
-                    unset($sampleData['sample_id']);
                     $sample = $sampleFactory->create(['data' => $sampleData]);
-                    $sample->setId(null);
+                    $sample->setId($sampleData['sample_id']);
                     $sample->setStoreId($product->getStoreId());
                     $sample->setSampleType($sampleData['type']);
                     $sample->setSampleUrl($sampleData['sample_url']);
@@ -172,8 +179,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             $product->setTypeHasRequiredOptions(false)->setRequiredOptions(false);
         }
 
-
-
         $product->save();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -181,17 +186,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         );
         $product->load(1);
 
-        $expectedLink = [
-            'is_shareable' => '2',
-            'link_type' => 'file',
-            'link_file' => '/j/e/jellyfish_2_4.jpg',
-            'number_of_downloads' => '15',
-            'price' => '15.0000',
-            'sample_file' => '/n/d/jellyfish_1_3.jpg',
-            'sample_type' => 'file',
-            'sort_order' => '1',
-            'title' => 'Updated downloadable link #1',
-        ];
         $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
 
         $this->assertNotEmpty($links);
