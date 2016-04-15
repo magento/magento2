@@ -15,12 +15,12 @@
             <thead>
                 <tr id="attribute-options-table">
                     <th class="col-draggable"></th>
-                    <th class="col-default control-table-actions-th"><?php /* @escapeNotVerified */ echo __('Is Default') ?></th>
+                    <th class="col-default control-table-actions-th"><span><?php /* @escapeNotVerified */ echo __('Is Default') ?></span></th>
                     <?php
                     $storelist = $block->getStores();
                     foreach ($storelist as $_store):
                         ?>
-                        <th><?php /* @escapeNotVerified */ echo __($_store->getName()) ?></th>
+                        <th><span><?php /* @escapeNotVerified */ echo __($_store->getName()) ?></span></th>
                     <?php endforeach;
                     $storetotal = count($storelist) + 3;
                     ?>
