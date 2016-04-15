@@ -617,16 +617,16 @@
 @abs-form-field-column-2: {
     .fieldset {
         .field {
+            .lib-form-field-column(@_column: true);
+
             &:nth-last-child(1),
             &:nth-last-child(2) {
                 margin-bottom: 0;
             }
 
-            .lib-form-field-column(@_column: true);
-
             .field {
-                width: 100%;
                 padding: 0;
+                width: 100%;
             }
         }
     }
@@ -1475,7 +1475,8 @@
 
 //
 //  Remove bottom border
-//--------------------------------------
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .abs-no-border-bottom {
         border-bottom: 0;

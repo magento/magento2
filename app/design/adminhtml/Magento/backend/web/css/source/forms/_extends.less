@@ -29,8 +29,8 @@
 
 .abs-field-rows[class] {
     > .admin__field-control {
-        float: none;
         clear: left;
+        float: none;
         text-align: left;
         width: auto;
     }
@@ -40,7 +40,7 @@
             display: block;
             line-height: @field-label__font-size;
             margin-bottom: 1rem - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2 , 2); // Try to Calculate margin offset considering line-height;
-            margin-top: 0rem - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2, 2);
+            margin-top: 0 - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2, 2);
             text-align: left;
             width: auto;
 

@@ -55,14 +55,14 @@
 
     > span {
         &:nth-child(@{_spinner-spin-count}) {
-            -webkit-animation-delay: @_spinner-delay;
             -moz-animation-delay: @_spinner-delay;
             -ms-animation-delay: @_spinner-delay;
+            -webkit-animation-delay: @_spinner-delay;
             animation-delay: @_spinner-delay;
 
-            -webkit-transform: ~'rotate(@{_spinner-rotate}deg)';
             -moz-transform: ~'rotate(@{_spinner-rotate}deg)';
             -ms-transform: ~'rotate(@{_spinner-rotate}deg)';
+            -webkit-transform: ~'rotate(@{_spinner-rotate}deg)';
             transform: ~'rotate(@{_spinner-rotate}deg)';
         }
     }

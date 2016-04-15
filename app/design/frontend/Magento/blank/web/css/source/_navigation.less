@@ -79,6 +79,7 @@
     }
 
     .nav-sections {
+        -webkit-overflow-scrolling: touch;
         .lib-css(transition, left .3s, 1);
         height: 100%;
         left: -80%;
@@ -88,7 +89,6 @@
         top: 0;
         width: 80%;
         width: calc(~'100% - @{active-nav-indent}');
-        -webkit-overflow-scrolling: touch;
 
         .switcher {
             border-top: 1px solid @color-gray82;
