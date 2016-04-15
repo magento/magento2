@@ -2171,7 +2171,7 @@
             font-weight: bold;
         }
         .webiste-groups {
-            margin: 5px 0 20px 18px;
+            margin: 5px 0 20px 25px;
 
             dt {
                 font-weight: bold;
@@ -2195,7 +2195,8 @@
 
     //
     //  Tree Store Scope
-    //  --------------------------------------
+    //  ---------------------------------------------
+
     .tree-store-scope {
         .buttons-set {
             margin-bottom: 9px;
@@ -2206,12 +2207,14 @@
         }
 
         .field {
-            margin: 0 0 5px;
+            margin: 0 0 @indent__s;
 
-            input[type="checkbox"]:not(.banner-content-checkbox) {
-                margin-right: 8px;
-                position: relative;
-                top: 2px;
+            input[type="checkbox"] {
+                &:not(.banner-content-checkbox) {
+                    margin-right: 8px;
+                    position: relative;
+                    top: 2px;
+                }
             }
 
             .addafter {
@@ -2220,23 +2223,10 @@
             }
         }
 
-        [class^="field field-website_"] .label,
-        [class^="field field-group_"] .label,
-        [class^="field field-w_"] .label,
-        [class^="field field-sg_"] .label {
-            text-align: left;
-            font-size: 18px;
-            padding-right: 0;
-            width: auto;
-        }
-
-        [class^="field field-group_"] .label,
-        [class^="field field-sg_"] .label {
-            padding-left: 20px;
-        }
-
-        .tooltip .help {
-            margin-top: 11px;
+        .tooltip {
+            .help {
+                margin-top: 11px;
+            }
         }
     }
 
