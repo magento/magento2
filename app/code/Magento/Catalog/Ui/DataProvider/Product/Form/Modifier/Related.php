@@ -627,6 +627,7 @@ class Related extends AbstractModifier
                         'componentType' => Field::NAME,
                         'formElement' => Input::NAME,
                         'elementTmpl' => 'ui/dynamic-rows/cells/text',
+                        'component' => 'Magento_Ui/js/form/element/text',
                         'dataType' => Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,
