@@ -67,7 +67,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $storeManagerMock;
 
-    /** @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $storeMock;
 
     /**
@@ -82,13 +82,24 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->deploymentConfigMock = $this->getMock(
-            'Magento\Framework\App\DeploymentConfig', [], [], '', false, false
+            'Magento\Framework\App\DeploymentConfig',
+            [],
+            [],
+            '',
+            false,
+            false
         );
         $this->_requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Request')
             ->setMethods(
                 [
-                    'isSecure', 'getRequestData', 'getParams', 'getParam', 'getRequestedServices', 'getPathInfo',
-                    'getHttpHost', 'getMethod',
+                    'isSecure',
+                    'getRequestData',
+                    'getParams',
+                    'getParam',
+                    'getRequestedServices',
+                    'getPathInfo',
+                    'getHttpHost',
+                    'getMethod',
                 ]
             )->disableOriginalConstructor()->getMock();
         $this->_requestMock->expects($this->any())
@@ -134,7 +145,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
 
         /** Init SUT. */
         $this->_restController =
-            $objectManager->getObject('Magento\Webapi\Controller\Rest',
+            $objectManager->getObject(
+                'Magento\Webapi\Controller\Rest',
                 [
                     'request' => $this->_requestMock,
                     'response' => $this->_responseMock,
@@ -216,101 +228,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->swaggerGeneratorMock->expects($this->any())->method('generate')->willReturn($schema);
         $this->swaggerGeneratorMock->expects($this->once())->method('getListOfServices')
             ->willReturn(['listOfServices']);
-
         $this->_restController->dispatch($this->_requestMock);
         $this->assertEquals($schema, $this->_responseMock->getBody());
-    }
-
-    /**
-     * Test Secure Request and Secure route combinations
-     *
-     * @dataProvider dataProviderSecureRequestSecureRoute
-     */
-    public function testSecureRouteAndRequest($isSecureRoute, $isSecureRequest)
-    {
-
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('get')
-            ->with('x-frame-options')
-            ->willReturn('SAMEORIGIN');
-
-        $this->_responseMock->expects($this->once())->method('setHeader')->with('X-Frame-Options', 'SAMEORIGIN');
-
-        $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue([]));
-        $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
-        $this->_routeMock->expects($this->once())->method('getParameters')->will($this->returnValue([]));
-        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue([]));
-        $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
-        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $this->serviceInputProcessorMock->expects($this->any())->method('process')->will($this->returnValue([]));
-        $this->_restController->dispatch($this->_requestMock);
-        $this->assertFalse($this->_responseMock->isException());
-    }
-
-    /**
-     * Data provider for testSecureRouteAndRequest.
-     *
-     * @return array
-     */
-    public function dataProviderSecureRequestSecureRoute()
-    {
-        // Each array contains return type for isSecure method of route and request objects.
-        return [[true, true], [false, true], [false, false]];
-    }
-
-    /**
-     * Test insecure request for a secure route
-     */
-    public function testInSecureRequestOverSecureRoute()
-    {
-        $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue([]));
-        $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(true));
-        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
-        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-
-        // Override default prepareResponse. It should never be called in this case
-        $this->_responseMock->expects($this->never())->method('prepareResponse');
-
-        $this->_restController->dispatch($this->_requestMock);
-        $this->assertTrue($this->_responseMock->isException());
-        $exceptionArray = $this->_responseMock->getException();
-        $this->assertEquals('Operation allowed only in HTTPS', $exceptionArray[0]->getMessage());
-        $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $exceptionArray[0]->getHttpCode());
-    }
-
-    public function testAuthorizationFailed()
-    {
-        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
-        $this->_oauthServiceMock->expects(
-            $this->any())->method('validateAccessTokenRequest')->will($this->returnValue('fred')
-            );
-        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['5', '6']));
-
-        $this->_restController->dispatch($this->_requestMock);
-        /** Ensure that response contains proper error message. */
-        $expectedMsg = 'Consumer is not authorized to access 5, 6';
-        AuthorizationException::NOT_AUTHORIZED;
-        $this->assertTrue($this->_responseMock->isException());
-        $exceptionArray = $this->_responseMock->getException();
-        $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
-    }
-
-    public function testGetMethodAllStoresInvalid()
-    {
-        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->_authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->storeMock->expects($this->once())->method('getCode')->willReturn('admin');
-        $this->_requestMock->expects($this->once())->method('getMethod')->willReturn('get');
-
-        $this->_restController->dispatch($this->_requestMock);
-
-        $this->assertTrue($this->_responseMock->isException());
-        $this->assertSame(
-            "Cannot perform GET operation with store code 'all'",
-            $this->_responseMock->getException()[0]->getMessage()
-        );
     }
 }
 
