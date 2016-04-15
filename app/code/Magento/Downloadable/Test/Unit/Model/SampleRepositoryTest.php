@@ -112,7 +112,6 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->service = new \Magento\Downloadable\Model\SampleRepository(
             $this->repositoryMock,
             $this->productTypeMock,
@@ -435,7 +434,6 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->service->delete($sampleId);
     }
-
 
     public function testGetList()
     {

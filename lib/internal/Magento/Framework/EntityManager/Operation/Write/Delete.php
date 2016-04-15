@@ -17,6 +17,7 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
  * Class Delete
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Delete
 {

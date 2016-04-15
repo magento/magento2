@@ -19,7 +19,6 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $contentValidatorMock;
 
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -357,7 +356,8 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
                             'link_url' => $linkData['link_url'],
                         ],
                     ],
-                ]);
+                ]
+            );
 
         $this->assertEquals($linkId, $this->service->save($productSku, $linkMock));
     }
@@ -435,7 +435,8 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
                             'file' => $encodedFiles,
                         ],
                     ],
-                ]);
+                ]
+            );
 
         $this->assertEquals($linkId, $this->service->save($productSku, $linkMock));
     }
