@@ -115,10 +115,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             if (!$linkData || (isset($linkData['is_delete']) && (bool)$linkData['is_delete'])) {
                 continue;
             } else {
-                unset($linkData['link_id']);
-                // TODO: need to implement setLinkFileContent()
                 $link = $linkFactory->create(['data' => $linkData]);
                 $link->setId(null);
+                if (isset($linkData['link_id'])) {
+                    $link->setId($linkData['link_id']);
+                }
                 if (isset($linkData['sample'])) {
                     $link->setSampleType($linkData['sample']['type']);
                     $link->setSampleFileData($linkData['sample']['file']);
