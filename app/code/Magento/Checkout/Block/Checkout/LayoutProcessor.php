@@ -96,7 +96,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         ];
 
         $codes = array_keys($attributesToConvert);
-        foreach ($elements as $code => $element) {
+        foreach (array_keys($elements) as $code) {
             if (!in_array($code, $codes)) {
                 continue;
             }
