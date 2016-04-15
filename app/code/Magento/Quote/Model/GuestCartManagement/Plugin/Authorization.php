@@ -35,7 +35,9 @@ class Authorization
      */
     public function beforeAssignCustomer(
         \Magento\Quote\Model\GuestCart\GuestCartManagement $subject,
-        $cartId, $customerId, $storeId
+        $cartId,
+        $customerId,
+        $storeId
     ) {
         if ($customerId !== (int)$this->userContext->getUserId()) {
             throw new StateException(
