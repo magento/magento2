@@ -56,6 +56,10 @@ class Cleaner
         $requestData = $this->requestData;
         $this->clear();
 
+        if (empty($requestData['queries']) && empty($requestData['filters'])) {
+            throw new EmptyRequestDataException(__('Request query and filter is not set'));
+        }
+
         return $requestData;
     }
 

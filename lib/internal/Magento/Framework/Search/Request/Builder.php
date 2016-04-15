@@ -130,7 +130,7 @@ class Builder
         /** @var array $data */
         $data = $this->config->get($requestName);
         if ($data === null) {
-            throw new \InvalidArgumentException("Request name '{$requestName}' doesn't exist.");
+            throw new NonExistingRequestNameException(__("Request name '{$requestName}' doesn't exist."));
         }
 
         $data = $this->binder->bind($data, $this->data);
