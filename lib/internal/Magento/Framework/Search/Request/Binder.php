@@ -70,7 +70,9 @@ class Binder
      */
     private function processData($data, $bindData)
     {
-        array_walk_recursive($bindData, function (&$item) { $item = trim($item);});
+        array_walk_recursive($bindData, function (&$item) {
+            $item = trim($item);
+        });
         $bindData = array_filter($bindData);
         foreach ($data as $key => $value) {
             if (is_array($value)) {
