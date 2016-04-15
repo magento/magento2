@@ -110,6 +110,10 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new AfterAddressSaveObserver(
             $this->vat,
             $this->helperAddress,
@@ -118,17 +122,9 @@ class AfterAddressSaveObserverTest extends \PHPUnit_Framework_TestCase
             $this->scopeConfig,
             $this->messageManager,
             $this->escaper,
-            $this->appState
+            $this->appState,
+            $this->customerSessionMock
         );
-
-        $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $reflection = new \ReflectionClass(get_class($this->model));
-        $reflectionProperty = $reflection->getProperty('customerSession');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->model, $this->customerSessionMock);
     }
 
     /**
