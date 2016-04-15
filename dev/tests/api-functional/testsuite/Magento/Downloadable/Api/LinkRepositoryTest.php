@@ -539,7 +539,7 @@ class LinkRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @expectedException \Exception
-     * @expectedExceptionMessage Product type of the product must be 'downloadable'.
+     * @expectedExceptionMessage Provided product must be type 'downloadable'.
      */
     public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
