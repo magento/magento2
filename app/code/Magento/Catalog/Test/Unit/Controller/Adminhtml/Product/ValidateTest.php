@@ -43,6 +43,10 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
     /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJsonFactory;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     protected function setUp()
     {
         $this->productBuilder = $this->getMock(
