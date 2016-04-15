@@ -10,7 +10,6 @@ namespace Magento\Framework\Webapi\Rest;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
-use Magento\Framework\Reflection\MethodsMap;
 
 class Request extends \Magento\Framework\Webapi\Request
 {
@@ -46,11 +45,6 @@ class Request extends \Magento\Framework\Webapi\Request
     protected $_deserializerFactory;
 
     /**
-     * @var MethodsMap
-     */
-    private $methodsMap;
-
-    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader
@@ -58,7 +52,6 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Webapi\Rest\Request\DeserializerFactory $deserializerFactory
-     * @param MethodsMap $methodsMap
      * @param null|string $uri
      */
     public function __construct(
@@ -67,12 +60,10 @@ class Request extends \Magento\Framework\Webapi\Request
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Webapi\Rest\Request\DeserializerFactory $deserializerFactory,
-        MethodsMap $methodsMap,
         $uri = null
     ) {
         parent::__construct($cookieReader, $converter, $areaList, $configScope, $uri);
         $this->_deserializerFactory = $deserializerFactory;
-        $this->methodsMap = $methodsMap;
     }
 
     /**
@@ -185,11 +176,9 @@ class Request extends \Magento\Framework\Webapi\Request
     /**
      * Fetch and return parameter data from the request.
      *
-     * @param string|null $serviceClassName name of the service class that we are trying to call
-     * @param string|null $serviceMethodName name of the method that we are trying to call
      * @return array
      */
-    public function getRequestData($serviceClassName = null, $serviceMethodName = null)
+    public function getRequestData()
     {
         $requestBodyParams = [];
         $params = $this->getParams();
@@ -199,17 +188,6 @@ class Request extends \Magento\Framework\Webapi\Request
             $httpMethod == self::HTTP_METHOD_PUT
         ) {
             $requestBodyParams = $this->getBodyParams();
-        }
-
-        /*
-         * Valid only for updates using PUT when passing id value both in URL and body
-         */
-        if ($httpMethod == self::HTTP_METHOD_PUT && !empty($params)) {
-            $requestBodyParams = $this->overrideRequestBodyIdWithPathParam(
-                $params,
-                $serviceClassName,
-                $serviceMethodName
-            );
         }
 
         return array_merge($requestBodyParams, $params);
@@ -228,15 +206,12 @@ class Request extends \Magento\Framework\Webapi\Request
      * Only the last path parameter value will be substituted from the url in case of multiple parameters.
      *
      * @param array $urlPathParams url path parameters as array
-     * @param string|null $serviceClassName name of the service class that we are trying to call
-     * @param string|null $serviceMethodName name of the method that we are trying to call
      * @return array
+     *
+     * @deprecated
      */
-    protected function overrideRequestBodyIdWithPathParam(
-        $urlPathParams,
-        $serviceClassName = null,
-        $serviceMethodName = null
-    ) {
+    protected function overrideRequestBodyIdWithPathParam($urlPathParams)
+    {
         $requestBodyParams = $this->getBodyParams();
         $pathParamValue = end($urlPathParams);
         // Self apis should not be overridden
@@ -247,16 +222,7 @@ class Request extends \Magento\Framework\Webapi\Request
         // Check if the request data is a top level object of body
         if (count($requestBodyParams) == 1 && is_array(end($requestBodyParams))) {
             $requestDataKey = key($requestBodyParams);
-            if ($this->isPropertyExistsInParameterObject(
-                $serviceClassName,
-                $serviceMethodName,
-                $requestDataKey,
-                $pathParamKey
-            )) {
-                $this->substituteParameters($requestBodyParams[$requestDataKey], $pathParamKey, $pathParamValue);
-            } else {
-                $this->substituteParameters($requestBodyParams, $pathParamKey, $pathParamValue);
-            }
+            $this->substituteParameters($requestBodyParams[$requestDataKey], $pathParamKey, $pathParamValue);
         } else { // Else parameters passed as scalar values in body will be overridden
             $this->substituteParameters($requestBodyParams, $pathParamKey, $pathParamValue);
         }
@@ -271,6 +237,8 @@ class Request extends \Magento\Framework\Webapi\Request
      * @param string $key
      * @param string $value
      * @return void
+
+     * @deprecated
      */
     protected function substituteParameters(&$requestData, $key, $value)
     {
@@ -282,44 +250,5 @@ class Request extends \Magento\Framework\Webapi\Request
         } else {
             $requestData[$snakeCaseKey] = $value;
         }
-    }
-
-    /**
-     * Verify property in parameter's object
-     *
-     * @param string|null $serviceClassName name of the service class that we are trying to call
-     * @param string|null $serviceMethodName name of the method that we are trying to call
-     * @param string $serviceMethodParamName
-     * @param string $objectProperty
-     * @return bool
-     */
-    private function isPropertyExistsInParameterObject(
-        $serviceClassName,
-        $serviceMethodName,
-        $serviceMethodParamName,
-        $objectProperty
-    ) {
-        if ($serviceClassName && $serviceMethodName) {
-            $methodParams = $this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName);
-            $ind = array_search($serviceMethodParamName, array_column($methodParams, 'name'));
-            if ($ind !== false) {
-                $paramObjectType = $methodParams[$ind][MethodsMap::METHOD_META_TYPE];
-                $getter = 'get' . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($objectProperty));
-                if (array_key_exists(
-                    $getter,
-                    $this->methodsMap->getMethodsMap($paramObjectType)
-                )) {
-                    return true;
-                }
-                $setter = 'set' . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($objectProperty));
-                if (array_key_exists(
-                    $setter,
-                    $this->methodsMap->getMethodsMap($paramObjectType)
-                )) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
