@@ -219,7 +219,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
                 $product->getStoreId()
             );
             $this->extensionAttributesJoinProcessor->process($sampleCollection);
-            $product->setDownloadableSamples($sampleCollection);
+            $samplesCollectionById = [];
+            foreach ($sampleCollection as $sample) {
+                /* @var \Magento\Downloadable\Model\Link $sample */
+                $sample->setProduct($product);
+                $samplesCollectionById[$sample->getId()] = $sample;
+            }
+            $product->setDownloadableSamples($samplesCollectionById);
         }
 
         return $product->getDownloadableSamples();
