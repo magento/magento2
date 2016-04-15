@@ -64,6 +64,32 @@ class Theme extends Value
     }
 
     /**
+     * Invalidate cache
+     *
+     * @param bool $forceInvalidate
+     */
+    protected function invalidateCache($forceInvalidate = false)
+    {
+        $types = array_keys(
+            $this->_config->getValue(
+                self::XML_PATH_INVALID_CACHES,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
+        if ($forceInvalidate || $this->isValueChanged()) {
+            $this->cacheTypeList->invalidate($types);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->getData('value') != '' ? $this->getData('value') : null;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * {@inheritdoc}. In addition, it sets status 'invalidate' for blocks and other output caches
@@ -72,16 +98,16 @@ class Theme extends Value
      */
     public function afterSave()
     {
-        $types = array_keys(
-            $this->_config->getValue(
-                self::XML_PATH_INVALID_CACHES,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            )
-        );
-        if ($this->isValueChanged()) {
-            $this->cacheTypeList->invalidate($types);
-        }
-
+        $this->invalidateCache();
         return parent::afterSave();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function afterDelete()
+    {
+        $this->invalidateCache(true);
+        parent::afterDelete();
     }
 }
