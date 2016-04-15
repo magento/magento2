@@ -28,6 +28,7 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $assetMinificationMock;
+
     /**
      * {@inheritDoc}
      */
