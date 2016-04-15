@@ -201,7 +201,7 @@
         }
     }
 
-    .required > &, //  ToDo UI: change classes 'required' to '_required'.
+    .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
         span {
             &:after {
@@ -273,7 +273,7 @@
             }
         }
 
-        .admin__field-control &:nth-child(n+2):before {
+        .admin__field-control &:nth-child(n + 2):before {
             content: '';
         }
     }
@@ -489,7 +489,7 @@
         width: 100%;
     }
 
-    .admin__field:nth-child(n+2):not(.admin__field-option):not(.admin__field-group-show-label) {
+    .admin__field:nth-child(n + 2):not(.admin__field-option):not(.admin__field-group-show-label) {
         > .admin__field-label {
             &:extend(.abs-visually-hidden all);
         }
@@ -530,7 +530,7 @@
 
         &:extend(.abs-field-sizes all);
 
-        &:nth-child(n+2) {
+        &:nth-child(n + 2) {
             padding-left: @field-group-label__padding;
 
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
@@ -609,7 +609,7 @@
             }
         }
 
-        &:nth-child(n+2) {
+        &:nth-child(n + 2) {
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label[class] {
                     &:extend(.abs-visually-hidden-reset all);
