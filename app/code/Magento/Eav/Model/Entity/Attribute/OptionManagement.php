@@ -51,12 +51,10 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
 
         $optionId = $option->getValue() ?: 'new_option';
         $options = [];
-        $options['value'][$optionId][0] = $option->getLabel();
-        $options['order'][$optionId] = $option->getSortOrder();
-
+        $optionValue[0] = $option->getLabel();
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
-                $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
+                $optionValue[$label->getStoreId()] = $label->getLabel();
             }
         }
 
@@ -64,6 +62,8 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             $attribute->setDefault([$optionId]);
         }
 
+        $options['order'][$optionId] = $option->getSortOrder();
+        $options['value'][$optionId] = $optionValue;
         $attribute->setOption($options);
         try {
             $this->resourceModel->save($attribute);
