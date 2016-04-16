@@ -115,32 +115,34 @@
     <?php if ($block->getQuote()->hasVirtualItems()): ?>
     <div class="block block-other">
         <div class="block-title"><strong><?php /* @escapeNotVerified */ echo __('Other items in your order') ?></strong></div>
+        <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
         <div class="block-content">
-            <strong class="subtitle">
-                <span><?php /* @escapeNotVerified */ echo __('Items') ?></span>
-                <a href="<?php /* @escapeNotVerified */ echo $block->getVirtualProductEditUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Edit Items') ?></span></a>
-            </strong>
-            <?php $mergedCells = ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 2 : 1); ?>
-            <div class="order-review-wrapper table-wrapper">
-                <table class="items data table table-order-review" id="virtual-overview-table">
-                    <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items') ?></caption>
-                    <thead>
-                        <tr>
-                            <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
-                            <th class="col price" scope="col"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
-                            <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
-                            <th class="col subtotal" scope="col"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($block->getVirtualItems() as $_item): ?>
-                            <?php echo $block->getRowItemHtml($_item); ?>
-                        <?php endforeach; ?>
-                    </tbody>
-                    <tfoot>
-                    <?php /* @escapeNotVerified */ echo $block->renderTotals($block->getBillinAddressTotals()); ?>
-                    </tfoot>
-                </table>
+            <div class="box box-items">
+                <div class="box-content">
+                    <div class="order-review-wrapper table-wrapper">
+                        <table class="items data table table-order-review" id="virtual-overview-table">
+                            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items') ?></caption>
+                            <thead>
+                                <tr>
+                                    <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Items') ?>
+                                        <a href="<?php /* @escapeNotVerified */ echo $block->getVirtualProductEditUrl() ?>" class="action edit"><span><?php /* @escapeNotVerified */ echo __('Edit') ?></span></a>
+                                    </th>
+                                    <th class="col price" scope="col"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                                    <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                                    <th class="col subtotal" scope="col"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($block->getVirtualItems() as $_item): ?>
+                                    <?php echo $block->getRowItemHtml($_item); ?>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                            <?php /* @escapeNotVerified */ echo $block->renderTotals($block->getBillinAddressTotals()); ?>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
