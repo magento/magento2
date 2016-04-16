@@ -49,12 +49,14 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('Attribute %1 doesn\'t work with options', $attributeCode));
         }
 
-        $optionId = $option->getValue() ?: 'new_option';
+        $optionId = $this->getOptionId($option);
         $options = [];
-        $optionValue[0] = $option->getLabel();
+        $options['value'][$optionId][0] = $option->getLabel();
+        $options['order'][$optionId] = $option->getSortOrder();
+
         if (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
-                $optionValue[$label->getStoreId()] = $label->getLabel();
+                $options['value'][$optionId][$label->getStoreId()] = $label->getLabel();
             }
         }
 
@@ -62,8 +64,6 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             $attribute->setDefault([$optionId]);
         }
 
-        $options['order'][$optionId] = $option->getSortOrder();
-        $options['value'][$optionId] = $optionValue;
         $attribute->setOption($options);
         try {
             $this->resourceModel->save($attribute);
@@ -137,5 +137,14 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
                 __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $optionId)
             );
         }
+    }
+
+    /**
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @return string
+     */
+    private function getOptionId($option)
+    {
+        return $option->getValue() ?: 'new_option';
     }
 }
