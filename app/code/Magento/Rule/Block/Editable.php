@@ -75,6 +75,7 @@ class Editable extends AbstractBlock implements RendererInterface
                 );
             }
 
+            $element->setData('data-form-part', $element->getDataFormPart());
             $html .= '</a><span class="element"> ' . $element->getElementHtml();
 
             if ($element->getExplicitApply()) {
