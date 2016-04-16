@@ -317,7 +317,8 @@ define([
          */
         _onGetVideoInformationSuccess: function (e, data) {
             var self = this;
-            self.element.on('finish_update_video finish_create_video', $.proxy(function (e, playerData) {
+
+            self.element.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
                     if (!self._onlyVideoPlayer ||
                         !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
                         playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
@@ -330,6 +331,7 @@ define([
                             }
                         });
                     }
+
                     if (playerData.oldVideoId !== playerData.newVideoId) {
                         this._loadRemotePreview(data.thumbnail);
                     }
