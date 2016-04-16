@@ -49,8 +49,11 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
-        if ($productId && !$product->getEntityId()) {
-            $this->_forward('noroute');
+        if (($productId && !$product->getEntityId()) || $productId === 0) {
+            $this->messageManager->addError(__('This product no longer exists.'));
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('catalog/*/');
         }
 
         $this->_eventManager->dispatch('catalog_product_edit_action', ['product' => $product]);
