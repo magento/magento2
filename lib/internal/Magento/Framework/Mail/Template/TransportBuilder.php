@@ -221,8 +221,6 @@ class TransportBuilder
      * Creates a Zend_Mime_Part attachment and attaches it to the current message scope.
      * Attachment is automatically added to the mail object after creation.
      *
-     * See also: http://framework.zend.com/manual/1.12/de/zend.mail.attachments.html
-     *
      * @param  string $body
      * @param  string $mimeType
      * @param  string $disposition

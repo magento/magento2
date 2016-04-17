@@ -96,4 +96,25 @@ interface MessageInterface
      * @return $this
      */
     public function setMessageType($type);
+
+    /**
+     * Creates a \Zend_Mime_Part attachment
+     *
+     * Attachment is automatically added to the mail object after creation. The
+     * attachment object is returned to allow for further manipulation.
+     *
+     * @param  string $body
+     * @param  string $mimeType
+     * @param  string $disposition
+     * @param  string $encoding
+     * @param  string $filename OPTIONAL A filename for the attachment
+     * @return \Zend_Mime_Part Newly created \Zend_Mime_Part object (to allow
+     * advanced settings)
+     */
+    public function createAttachment(
+        $body,
+        $mimeType = \Zend_Mime::TYPE_OCTETSTREAM,
+        $disposition = \Zend_Mime::DISPOSITION_ATTACHMENT,
+        $encoding = \Zend_Mime::ENCODING_BASE64,
+        $filename = null);
 }
