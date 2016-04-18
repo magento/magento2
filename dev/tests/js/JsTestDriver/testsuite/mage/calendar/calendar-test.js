@@ -75,7 +75,7 @@ CalendarTest.prototype.testDateTimeMapping = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar({dateFormat: 'M/d/yy', timeFormat: 'h:mm a'});
     assertEquals('mm/d/yy', calendar.calendar('option', 'dateFormat'));
-    assertEquals('h:mm tt', calendar.calendar('option', 'timeFormat'));
+    assertEquals('h:mm TT', calendar.calendar('option', 'timeFormat'));
     calendar.calendar('destroy');
     calendar.calendar({dateFormat: 'MMMM/EEEE/yyyy', timeFormat: 'HH:mm'});
     assertEquals('MM/DD/yy', calendar.calendar('option', 'dateFormat'));
