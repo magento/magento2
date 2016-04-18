@@ -15,7 +15,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products/attributes';
 
+    /**
+     * @var array
+     */
     private $createdAttributes = [];
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
      */
