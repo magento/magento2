@@ -44,11 +44,10 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $getPathMap
      * @param array $isDirectoryMap
-     * @param bool $delete
      * @param array $deleteMap
      * @dataProvider regenerateDataProvider
      */
-    public function testRegenerate($getPathMap, $isDirectoryMap, $delete, $deleteMap)
+    public function testRegenerate($getPathMap, $isDirectoryMap, $deleteMap)
     {
 
         $this->writeInterface
@@ -57,8 +56,9 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
             ->with(GeneratedFiles::REGENERATE_FLAG)
             ->willReturn(true);
         $this->directoryList->expects($this->exactly(2))->method('getPath')->willReturnMap($getPathMap);
+        $this->writeInterface->expects($this->exactly(2))->method('getRelativePath')->willReturnMap($getPathMap);
         $this->writeInterface->expects($this->exactly(2))->method('isDirectory')->willReturnMap($isDirectoryMap);
-        $this->writeInterface->expects($this->exactly($delete))->method('delete')->willReturnMap($deleteMap);
+        $this->writeInterface->expects($this->exactly(1))->method('delete')->willReturnMap($deleteMap);
         $this->model->regenerate();
     }
 
@@ -79,13 +79,13 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
 
         return [
             'runAll' => [ $getPathMap, [[BP . '/' . $pathToGeneration, true],
-                [BP . '/' . $pathToDi, true]], 3, $deleteMap ],
+                [BP . '/' . $pathToDi, true]], $deleteMap ],
             'noDIfolder' => [ $getPathMap, [[BP . '/' . $pathToGeneration, true],
-                [BP . '/' . $pathToDi, false]], 2, $deleteMap],
+                [BP . '/' . $pathToDi, false]], $deleteMap],
             'noGenerationfolder' => [$getPathMap, [[BP . '/' . $pathToGeneration, false],
-                [BP . '/' . $pathToDi, true]], 2 ,$deleteMap],
+                [BP . '/' . $pathToDi, true]], $deleteMap],
             'nofolders' => [ $getPathMap, [[BP . '/' . $pathToGeneration, false],
-                [BP . '/' . $pathToDi, false]], 1, $deleteMap],
+                [BP . '/' . $pathToDi, false]], $deleteMap],
         ];
     }
 
