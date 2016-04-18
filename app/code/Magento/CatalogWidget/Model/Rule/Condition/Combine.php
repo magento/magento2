@@ -71,7 +71,9 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     public function collectValidatedAttributes($productCollection)
     {
+        $alias = array_keys($productCollection->getSelect()->getPart('from'))[0];
         foreach ($this->getConditions() as $condition) {
+            $condition->setData('attribute', $alias . '.' . $condition->getData('attribute'));
             $condition->addToCollection($productCollection);
         }
         return $this;

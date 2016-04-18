@@ -227,6 +227,10 @@ class ConfigurablePanel extends AbstractModifier
                                             . 'configurable_associated_product_listing.product_columns.ids',
                                         'modalWithGrid' => 'ns=' . $this->formName . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
+                                        'productsFilters' => $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing'
+                                            . '.' . $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing.listing_top.listing_filters',
                                     ],
                                 ],
                             ],
@@ -306,10 +310,8 @@ class ConfigurablePanel extends AbstractModifier
                                 'title' => __('Add Products Manually'),
                                 'sortOrder' => 10,
                                 'imports' => [
-                                    'visible' => '!ns = ${ $.ns }, index = '
-                                        . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                    'disabled' => 'ns = ${ $.ns }, index = '
-                                        . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                    'visible' => 'ns = ${ $.ns }, index = '
+                                        . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isShowAddProductButton',
                                 ],
                             ],
                         ],
@@ -439,9 +441,10 @@ class ConfigurablePanel extends AbstractModifier
                             'elementTmpl' => 'Magento_ConfigurableProduct/components/file-uploader',
                             'fileInputName' => 'image',
                             'isMultipleFiles' => false,
-                            'imports' => [
+                            'links' => [
                                 'thumbnailUrl' => '${$.provider}:${$.parentScope}.thumbnail_image',
-                                'thumbnail' => '${$.provider}:${$.parentScope}.thumbnail'
+                                'thumbnail' => '${$.provider}:${$.parentScope}.thumbnail',
+                                'smallImage' => '${$.provider}:${$.parentScope}.small_image',
                             ],
                             'uploaderConfig' => [
                                 'url' => $this->urlBuilder->addSessionParam()->getUrl(
@@ -498,6 +501,7 @@ class ConfigurablePanel extends AbstractModifier
                                 'config' => [
                                     'componentType' => Form\Field::NAME,
                                     'formElement' => Form\Element\Input::NAME,
+                                    'component' => 'Magento_Ui/js/form/element/text',
                                     'elementTmpl' => 'ui/dynamic-rows/cells/text',
                                     'dataType' => Form\Element\DataType\Text::NAME,
                                     'label' => __('Attributes'),
