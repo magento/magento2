@@ -11,7 +11,7 @@ define([
 
     describe('ui/js/modal/modal', function () {
         var element = $('<div>some element</div>'),
-            modal = element.modal({}).data('modal');
+            modal = element.modal({}).data('mage-modal');
 
         it('Check for modal definition', function () {
             expect(modal).toBeDefined();
