@@ -14,7 +14,7 @@ class Post extends \Magento\Contact\Controller\Index
     /**
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    private $dataPersistor;
 
     /**
      * Post user question
@@ -98,6 +98,7 @@ class Post extends \Magento\Contact\Controller\Index
             $this->dataPersistor = ObjectManager::getInstance()
                 ->get(DataPersistorInterface::class);
         }
+
         return $this->dataPersistor;
     }
 }

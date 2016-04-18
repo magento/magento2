@@ -39,7 +39,7 @@ class CheckContactUsFormObserver implements ObserverInterface
     /**
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    private $dataPersistor;
 
     /**
      * @param \Magento\Captcha\Helper\Data $helper
@@ -95,6 +95,7 @@ class CheckContactUsFormObserver implements ObserverInterface
             $this->dataPersistor = ObjectManager::getInstance()
                 ->get(DataPersistorInterface::class);
         }
+
         return $this->dataPersistor;
     }
 }

@@ -33,12 +33,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var DataPersistorInterface
      */
-    protected $dataPersistor;
+    private $dataPersistor;
 
     /**
      * @var array
      */
-    protected $postData = [];
+    private $postData = null;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -82,6 +82,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
          * @var \Magento\Customer\Api\Data\CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
+
         return trim($this->_customerViewHelper->getCustomerName($customer));
     }
 
@@ -99,6 +100,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
          * @var CustomerInterface $customer
          */
         $customer = $this->_customerSession->getCustomerDataObject();
+
         return $customer->getEmail();
     }
 
@@ -110,7 +112,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPostValue($key)
     {
-        if (!$this->postData) {
+        if (null === $this->postData) {
             $this->postData = (array) $this->getDataPersistor()->get('contact_us');
             $this->getDataPersistor()->clear('contact_us');
         }
@@ -133,6 +135,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->dataPersistor = ObjectManager::getInstance()
                 ->get(DataPersistorInterface::class);
         }
+
         return $this->dataPersistor;
     }
 }
