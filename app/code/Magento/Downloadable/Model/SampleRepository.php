@@ -42,6 +42,11 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     protected $downloadableType;
 
     /**
+     * @var SampleFactory
+     */
+    protected $sampleFactory;
+
+    /**
      * @var SampleInterfaceFactory
      */
     protected $sampleDataObjectFactory;
@@ -90,7 +95,6 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
         $this->fileContentUploader = $fileContentUploader;
         $this->jsonEncoder = $jsonEncoder;
         $this->sampleFactory = $sampleFactory;
-        $this->downloadableType = $downloadableType;
         $this->sampleDataObjectFactory = $sampleDataObjectFactory;
     }
 
