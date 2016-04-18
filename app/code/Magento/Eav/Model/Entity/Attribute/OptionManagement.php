@@ -49,7 +49,7 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
             throw new StateException(__('Attribute %1 doesn\'t work with options', $attributeCode));
         }
 
-        $optionId = $option->getValue() ?: 'new_option';
+        $optionId = $this->getOptionId($option);
         $options = [];
         $options['value'][$optionId][0] = $option->getLabel();
         $options['order'][$optionId] = $option->getSortOrder();
@@ -137,5 +137,14 @@ class OptionManagement implements \Magento\Eav\Api\AttributeOptionManagementInte
                 __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $optionId)
             );
         }
+    }
+
+    /**
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @return string
+     */
+    private function getOptionId($option)
+    {
+        return $option->getValue() ?: 'new_option';
     }
 }
