@@ -23,7 +23,7 @@ define([
         widget = content.modal(config);
 
         $(el).on(config.toggleEvent, function () {
-            var state = widget.data('modal').options.isOpen;
+            var state = widget.data('mage-modal').options.isOpen;
 
             if (state) {
                 widget.modal('closeModal');
