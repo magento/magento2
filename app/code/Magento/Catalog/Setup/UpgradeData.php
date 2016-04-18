@@ -257,6 +257,12 @@ class UpgradeData implements UpgradeDataInterface
                 'frontend_label',
                 'Small'
             );
+            $categorySetup->updateAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                'image',
+                'frontend_input_renderer',
+                null
+            );
 
             //Design tab
             $categorySetup->updateAttribute(
@@ -332,7 +338,20 @@ class UpgradeData implements UpgradeDataInterface
                 ]
             );
         }
+        
+        if (version_compare($context->getVersion(), '2.0.7') < 0) {
+            /** @var EavSetup $eavSetupF */
+            $eavSetup= $this->eavSetupFactory->create(['setup' => $setup]);
 
+            $eavSetup->updateAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                'meta_description',
+                [
+                    'note' => 'Maximum 255 chars. Meta Description should optimally be between 150-160 characters'
+                ]
+            );
+        }
+        
         $setup->endSetup();
     }
 }

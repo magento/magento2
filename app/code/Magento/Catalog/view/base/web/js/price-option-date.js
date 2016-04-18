@@ -11,9 +11,12 @@ define([
     'use strict';
 
     var globalOptions = {
-        fromSelector: 'form',
-        dropdownsSelector: '[data-role=calendar-dropdown]'
-    };
+            fromSelector: 'form',
+            dropdownsSelector: '[data-role=calendar-dropdown]'
+        },
+        optionHandler = {};
+
+    optionHandler.optionHandlers = {};
 
     $.widget('mage.priceOptionDate', {
         options: globalOptions,
@@ -26,13 +29,11 @@ define([
             var field = this.element,
                 form = field.closest(this.options.fromSelector),
                 dropdowns = $(this.options.dropdownsSelector, field),
-                optionHandler = {},
                 dateOptionId;
 
             if (dropdowns.length) {
                 dateOptionId = this.options.dropdownsSelector + dropdowns.attr('name');
 
-                optionHandler.optionHandlers = {};
                 optionHandler.optionHandlers[dateOptionId] = onCalendarDropdownChange(dropdowns);
 
                 form.priceOptions(optionHandler);

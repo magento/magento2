@@ -114,6 +114,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
             ->willReturn('source/file.min.js');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getFilePath')
+            ->willReturn('source/file.min.js');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)

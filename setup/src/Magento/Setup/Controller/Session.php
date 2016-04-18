@@ -34,6 +34,19 @@ class Session extends AbstractActionController
     }
 
     /**
+     * No index action, return 404 error page
+     * 
+     * @return ViewModel|\Zend\Http\Response
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
+    }
+
+    /**
      * Prolong session
      *
      * @return string
