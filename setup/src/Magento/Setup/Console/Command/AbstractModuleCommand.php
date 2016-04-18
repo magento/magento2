@@ -87,11 +87,13 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
         $output->writeln('<info>Generated classes cleared successfully. Please re-run Magento compile command</info>');
         if ($input->getOption(self::INPUT_KEY_CLEAR_STATIC_CONTENT)) {
             $cleanupFiles->clearMaterializedViewFiles();
-            $output->writeln('<info>Generated static view files cleared successfully.</info>');
+            $output->writeln('<info>Generated static view files cleared successfully. You should compile classes now '
+                . 'using magento setup:di:compile.</info>');
         } else {
             $output->writeln(
-                '<info>Info: Some modules might require static view files to be cleared. Use the optional --' .
-                self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option to clear them.</info>'
+                '<info>Info: Some modules might require static view files to be cleared. To do this, run magento '
+                    . 'module:enable with --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT
+                    . ' option to clear them.</info>'
             );
         }
     }
