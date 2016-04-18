@@ -473,6 +473,14 @@
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
         <plugin name="attributeValidation" type="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation"/>
     </type>
+    <type name="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation">
+        <arguments>
+            <argument name="allowedEntityTypes" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Api\Data\CategoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
             <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Proxy</argument>
