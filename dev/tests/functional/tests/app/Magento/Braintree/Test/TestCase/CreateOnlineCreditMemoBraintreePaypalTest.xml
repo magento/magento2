@@ -18,8 +18,8 @@
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="payment/method" xsi:type="string">braintreetwo_paypal</data>
-            <data name="configData" xsi:type="string">braintreetwo, braintreetwo_paypal_sale</data>
+            <data name="payment/method" xsi:type="string">braintree_paypal</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal_sale</data>
             <data name="paymentAction" xsi:type="string">sale</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
@@ -39,8 +39,8 @@
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
-            <data name="payment/method" xsi:type="string">braintreetwo_paypal</data>
-            <data name="configData" xsi:type="string">braintreetwo, braintreetwo_paypal</data>
+            <data name="payment/method" xsi:type="string">braintree_paypal</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="data/items_data/0/qty" xsi:type="string">2</data>
             <data name="refundData/items_data/0/qty" xsi:type="string">1</data>
