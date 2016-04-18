@@ -137,7 +137,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
                 if (file_exists($designPath)) {
                     try {
                         $iterator = $this->getParentConfigs($this->currentTheme, []);
-
                     } catch (\Exception $e) {
                         throw new \Magento\Framework\Exception\LocalizedException(
                             new \Magento\Framework\Phrase('Could not read config file')
