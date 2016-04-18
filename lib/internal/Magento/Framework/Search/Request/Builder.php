@@ -132,7 +132,7 @@ class Builder
         /** @var array $data */
         $data = $this->config->get($requestName);
         if ($data === null) {
-            throw new NonExistingRequestNameException(new Phrase("Request name '{$requestName}' doesn't exist."));
+            throw new NonExistingRequestNameException(new Phrase("Request name '%1' doesn't exist.", [$requestName]));
         }
 
         $data = $this->binder->bind($data, $this->data);
