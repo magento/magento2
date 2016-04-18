@@ -16,6 +16,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     const RESOURCE_PATH = '/V1/products/attributes';
 
     /**
+     * @var array
+     */
+    private $createdAttributes = [];
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
      */
     public function testGet()
@@ -367,7 +372,11 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        return $this->_webApiCall($serviceInfo, $attributeData);
+        $attribute = $this->_webApiCall($serviceInfo, $attributeData);
+        if (isset($attribute['attribute_id']) && $attribute['attribute_id']) {
+            $this->createdAttributes[] = $attributeCode;
+        }
+        return $attribute;
     }
 
     /**
@@ -436,5 +445,12 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             ],
         ];
         return $this->_webApiCall($serviceInfo, $attributeData);
+    }
+
+    protected function tearDown()
+    {
+        foreach ($this->createdAttributes as $attributeCode) {
+            $this->deleteAttribute($attributeCode);
+        }
     }
 }
