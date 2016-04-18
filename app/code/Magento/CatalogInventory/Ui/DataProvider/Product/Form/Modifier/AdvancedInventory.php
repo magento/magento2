@@ -188,6 +188,7 @@ class AdvancedInventory extends AbstractModifier
                 'validation' => [
                     'validate-number' => true,
                     'validate-digits' => true,
+                    'less-than-equals-to' => 99999999,
                 ],
                 'imports' => [
                     'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
