@@ -7,6 +7,7 @@ namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
+use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Api\Data\File\ContentUploaderInterface;
 use Magento\Downloadable\Model\Product\TypeHandler\Link as LinkHandler;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -41,6 +42,11 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
      * @var \Magento\Downloadable\Model\Link\ContentValidator
      */
     protected $contentValidator;
+
+    /**
+     * @var Type
+     */
+    protected $downloadableType;
 
     /**
      * @var ContentUploaderInterface
