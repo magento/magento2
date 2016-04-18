@@ -3,37 +3,18 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Controller\Adminhtml;
-
-use Magento\Backend\App\Action;
+namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 /**
- * Adminhtml search synonyms controller
+ * Result page builder class
  *
  */
-abstract class Synonyms extends Action
+class ResultPageBuilder
 {
-    /**
-     * Authorization level of a basic admin session
-     *
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
-
     /**
      * @var \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     protected $resultPageFactory;
-
-    /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
-     */
-    protected $forwardFactory;
-
-    /**
-     * @var \Magento\Framework\Registry $registry
-     */
-    protected $registry;
 
     /**
      * @var \Magento\Search\Model\EngineResolver $engineResolver
@@ -46,37 +27,36 @@ abstract class Synonyms extends Action
     protected $searchFeatureConfig;
 
     /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * Constructor
      *
-     * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
-     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Search\Model\EngineResolver $engineResolver
      * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory,
-        \Magento\Framework\Registry $registry,
         \Magento\Search\Model\EngineResolver $engineResolver,
-        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
+        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        $this->forwardFactory = $forwardFactory;
-        $this->registry = $registry;
         $this->engineResolver = $engineResolver;
         $this->searchFeatureConfig = $searchFeatureConfig;
-        parent::__construct($context);
+        $this->messageManager = $messageManager;
     }
 
     /**
-     * Init layout, menu and breadcrumb
+     * Build the initial page layout, menu and breadcrumb trail
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initAction()
+    public function build()
     {
         $this->checkSearchEngineSupport();
         /** @var \Magento\Backend\Model\View\Result\Page  $resultPage **/

@@ -39,7 +39,7 @@ define([
     function applyComponents(el, ctx) {
         ko.utils.arrayForEach(el.childNodes, ko.cleanNode);
         ko.applyBindingsToDescendants(ctx, el);
-        mage.apply();
+        mage.apply(el);
     }
 
     ko.bindingHandlers.bindHtml = {
