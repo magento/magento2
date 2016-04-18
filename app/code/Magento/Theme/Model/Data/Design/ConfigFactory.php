@@ -17,6 +17,9 @@ use Magento\Theme\Api\Data\DesignConfigExtensionFactory;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigFactory
 {
     /**
