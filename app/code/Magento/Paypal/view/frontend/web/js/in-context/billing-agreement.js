@@ -27,7 +27,7 @@ define([
             if (this.options.invalidateOnCreate) {
                 this.invalidate();
             }
-            this.element.on('click', function () {
+            $(this.options.cancelButtonSelector).on('click', function () {
                 confirm({
                     content: self.options.cancelMessage,
                     actions: {
