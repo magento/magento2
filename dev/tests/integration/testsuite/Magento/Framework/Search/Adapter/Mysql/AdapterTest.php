@@ -109,6 +109,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             $actualIds[] = $document->getId();
         }
         sort($actualIds);
+        sort($expectedIds);
         $this->assertEquals($expectedIds, $actualIds);
     }
 
