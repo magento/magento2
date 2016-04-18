@@ -4,8 +4,9 @@
  */
 define([
     'jquery',
+    'Magento_Ui/js/modal/confirm',
     'Magento_Customer/js/customer-data'
-], function ($, customerData) {
+], function ($, confirm, customerData) {
     'use strict';
 
     $.widget('mage.billingAgreement', {
@@ -21,17 +22,27 @@ define([
          * @private
          */
         _create: function () {
+            var self = this;
+
             if (this.options.invalidateOnCreate) {
                 this.invalidate();
             }
-            $(this.options.cancelButtonSelector).on('click', $.proxy(function () {
-                if (confirm(this.options.cancelMessage)) {
-                    this.invalidate();
-                    window.location.href = this.options.cancelUrl;
-                }
+            this.element.on('click', function () {
+                confirm({
+                    content: self.options.cancelMessage,
+                    actions: {
+                        /**
+                         * 'Confirm' action handler.
+                         */
+                        confirm: function () {
+                            self.invalidate();
+                            window.location.href = self.options.cancelUrl;
+                        }
+                    }
+                });
 
                 return false;
-            }, this));
+            });
         },
 
         /**
