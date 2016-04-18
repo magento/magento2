@@ -240,7 +240,7 @@ class RemoveItemTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWhenFormKeyValidationFailed()
     {
         $resultRedirect = $this->getMock(\Magento\Framework\Controller\Result\Redirect::class, [], [], '', false);
-        $resultRedirect->expects($this->once())->method('setPath')->with('*/*/')->willReturnSelf();
+        $resultRedirect->expects($this->once())->method('setPath')->with('*/cart/')->willReturnSelf();
         $this->resultRedirectFactory->expects($this->once())->method('create')->willReturn($resultRedirect);
         $this->getPropertyValue($this->removeItem, 'formKeyValidator')
             ->expects($this->once())
