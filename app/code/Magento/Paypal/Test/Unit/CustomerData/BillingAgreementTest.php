@@ -60,7 +60,6 @@ class BillingAgreementTest extends \PHPUnit_Framework_TestCase
 
         $this->paypalData = $this->getMock(Data::class, [], [], '', false);
 
-
         $helper = new ObjectManager($this);
         $this->billingAgreement = $helper->getObject(
             BillingAgreement::class,
@@ -86,7 +85,6 @@ class BillingAgreementTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('confirmMessage', $result);
         $this->assertTrue($result['askToCreate']);
     }
-
 
     public function testGetSectionDataNotNeedToCreateBillingAgreement()
     {
