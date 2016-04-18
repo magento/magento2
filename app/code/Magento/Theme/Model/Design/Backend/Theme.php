@@ -67,6 +67,7 @@ class Theme extends Value
      * Invalidate cache
      *
      * @param bool $forceInvalidate
+     * @return void
      */
     protected function invalidateCache($forceInvalidate = false)
     {
