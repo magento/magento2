@@ -15,6 +15,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
 
+/**
+ * Class FileResolver
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface, DesignResolverInterface
 {
     /**
