@@ -62,7 +62,7 @@ class BillingAgreement implements SectionSourceInterface
      * @param ConfigFactory $paypalConfigFactory
      * @param UrlInterface $urlBuilder
      * @param Escaper $escaper
-     * @param $startAction
+     * @param string $startAction
      */
     public function __construct(
         CurrentCustomer $currentCustomer,
