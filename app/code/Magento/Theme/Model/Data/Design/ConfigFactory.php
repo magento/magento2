@@ -97,7 +97,7 @@ class ConfigFactory
             $configDataObject->setPath($metadata['path']);
             $configDataObject->setFieldConfig($metadata);
             if (isset($data[$name])) {
-                $configDataObject->setValue(isset($data[$name]));
+                $configDataObject->setValue($data[$name]);
             }
             $configData[] = $configDataObject;
         }
