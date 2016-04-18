@@ -73,7 +73,7 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([['css', $isEnabled]]);
         $this->assetMinificationMock
             ->expects($this->any())
-            ->method('addMinifiedSign')
+            ->method('removeMinifiedSign')
             ->with($requested)
             ->willReturn($alternative);
 
