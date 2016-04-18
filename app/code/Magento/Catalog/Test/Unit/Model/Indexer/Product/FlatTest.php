@@ -29,6 +29,11 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     private $productFlatIndexerFull;
 
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheContextMock;
+
     protected function setUp()
     {
         $this->productFlatIndexerRow = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Product\Flat\Action\Row')
@@ -52,20 +57,49 @@ class FlatTest extends \PHPUnit_Framework_TestCase
                 'productFlatIndexerFull' => $this->productFlatIndexerFull
             ]
         );
+
+        $this->cacheContextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
+
+        $cacheContextProperty = new \ReflectionProperty(
+            \Magento\Catalog\Model\Indexer\Product\Flat::class,
+            'cacheContext'
+        );
+        $cacheContextProperty->setAccessible(true);
+        $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 
-    public function testExecuteAndExecuteList()
+    public function testExecute()
     {
-        $except = ['test'];
-        $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($this->equalTo($except));
+        $ids = [1, 2, 3];
+        $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($this->equalTo($ids));
 
-        $this->model->execute($except);
-        $this->model->executeList($except);
+        $this->cacheContextMock->expects($this->once())
+            ->method('registerEntities')
+            ->with(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
+
+        $this->model->execute($ids);
+    }
+
+    public function testExecuteList()
+    {
+        $ids = [1, 2, 3];
+        $this->productFlatIndexerRows->expects($this->any())->method('execute')->with($this->equalTo($ids));
+
+        $this->model->executeList($ids);
     }
 
     public function testExecuteFull()
     {
         $this->productFlatIndexerFull->expects($this->any())->method('execute');
+
+        $this->cacheContextMock->expects($this->once())
+            ->method('registerTags')
+            ->with(
+                [
+                    \Magento\Catalog\Model\Category::CACHE_TAG,
+                    \Magento\Catalog\Model\Product::CACHE_TAG
+                ]
+            );
 
         $this->model->executeFull();
     }

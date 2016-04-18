@@ -162,7 +162,7 @@ class ConfigModel
     {
         $results = $this->filePermissions->getMissingWritablePathsForInstallation();
         if ($results) {
-            $errorMsg = "Missing write permissions to the following paths: '" . implode("', '", $results) . "'";
+            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $results);
             throw new \Exception($errorMsg);
         }
     }
