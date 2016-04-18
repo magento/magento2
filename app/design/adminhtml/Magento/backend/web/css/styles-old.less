@@ -5012,6 +5012,32 @@
     }
 }
 
+//  Stores -> Product Attribute Edit
+.catalog-product-attribute-edit {
+    .admin__scope-old {
+        .data-table {
+            th {
+                &._required {
+                    span {
+                        &:after {
+                            content: '*';
+                            .lib-typography(
+                            @_font-size: @form-field-label-asterisk__font-size,
+                            @_color: @form-field-label-asterisk__color,
+                            @_font-family: @form-field-label-asterisk__font-family,
+                            @_font-weight: @form-field-label-asterisk__font-weight,
+                            @_line-height: @form-field-label-asterisk__line-height,
+                            @_font-style: @form-field-label-asterisk__font-style
+                            );
+                            .lib-css(margin, @form-field-label-asterisk__margin);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .catalog-product-set-index {
     .admin__scope-old {
         .col-set_name {
