@@ -5,34 +5,26 @@
  */
 namespace Magento\Checkout\Controller\Sidebar;
 
-use Magento\Checkout\Model\Sidebar;
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Response\Http;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\View\Result\PageFactory;
-use Psr\Log\LoggerInterface;
 
-class RemoveItem extends Action
+class RemoveItem extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var Sidebar
+     * @var \Magento\Checkout\Model\Sidebar
      */
     protected $sidebar;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
 
     /**
-     * @var PageFactory
+     * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $resultPageFactory;
 
@@ -42,18 +34,18 @@ class RemoveItem extends Action
     private $formKeyValidator;
 
     /**
-     * @param Context $context
-     * @param Sidebar $sidebar
-     * @param LoggerInterface $logger
-     * @param Data $jsonHelper
-     * @param PageFactory $resultPageFactory
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Checkout\Model\Sidebar $sidebar
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     public function __construct(
-        Context $context,
-        Sidebar $sidebar,
-        LoggerInterface $logger,
-        Data $jsonHelper,
-        PageFactory $resultPageFactory
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Checkout\Model\Sidebar $sidebar,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory
     ) {
         $this->sidebar = $sidebar;
         $this->logger = $logger;
@@ -75,7 +67,7 @@ class RemoveItem extends Action
             $this->sidebar->checkQuoteItem($itemId);
             $this->sidebar->removeQuoteItem($itemId);
             return $this->jsonResponse();
-        } catch (LocalizedException $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             return $this->jsonResponse($e->getMessage());
         } catch (\Exception $e) {
             $this->logger->critical($e);
@@ -87,7 +79,7 @@ class RemoveItem extends Action
      * Compile JSON response
      *
      * @param string $error
-     * @return Http
+     * @return \Magento\Framework\App\Response\Http
      */
     protected function jsonResponse($error = '')
     {
