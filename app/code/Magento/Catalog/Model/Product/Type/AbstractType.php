@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -25,7 +25,6 @@ abstract class AbstractType
     protected $_typeId;
 
     /**
-     *
      * @var array
      */
     protected $_editableAttributes;
@@ -294,15 +293,7 @@ abstract class AbstractType
      */
     public function getEditableAttributes($product)
     {
-        $cacheKey = '_cache_editable_attributes';
-        if (!$product->hasData($cacheKey)) {
-            $editableAttributes = [];
-            foreach ($this->getSetAttributes($product) as $attributeCode => $attribute) {
-                $editableAttributes[$attributeCode] = $attribute;
-            }
-            $product->setData($cacheKey, $editableAttributes);
-        }
-        return $product->getData($cacheKey);
+        return $this->getSetAttributes($product);
     }
 
     /**

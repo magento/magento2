@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -796,7 +796,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getAttributes($groupId = null, $skipSuper = false)
     {
-        $productAttributes = $this->getTypeInstance()->getEditableAttributes($this);
+        $productAttributes = $this->getTypeInstance()->getSetAttributes($this);
         if ($groupId) {
             $attributes = [];
             foreach ($productAttributes as $attribute) {
@@ -1212,9 +1212,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         return $this->_getData('special_to_date');
     }
 
-    /*******************************************************************************
-     ** Linked products API
-     */
     /**
      * Retrieve array of related products
      *
@@ -1461,9 +1458,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         return $this;
     }
 
-    /*******************************************************************************
-     ** Media API
-     */
     /**
      * Retrieve attributes for media gallery
      *
@@ -1490,7 +1484,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getMediaAttributeValues()
     {
-        $mediaAttributeCodes = array_keys($this->getMediaAttributes());
+        $mediaAttributeCodes = $this->_catalogProductMediaConfig->getMediaAttributeCodes();
         $mediaAttributeValues = [];
         foreach ($mediaAttributeCodes as $attributeCode) {
             $mediaAttributeValues[$attributeCode] = $this->getData($attributeCode);
@@ -2386,7 +2380,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         return $dataArray;
     }
 
-    //@codeCoverageIgnoreEnd
     /**
      * Set product sku
      *

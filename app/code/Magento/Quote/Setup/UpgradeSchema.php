@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Setup;
@@ -26,6 +26,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $setup->getTable('quote_id_mask'),
                 $setup->getIdxName('quote_id_mask', ['masked_id']),
                 ['masked_id']
+            );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.2', '<')) {
+            $setup->getConnection()->changeColumn(
+                $setup->getTable('quote_address'),
+                'street',
+                'street',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 255,
+                    'comment' => 'Street'
+                ]
             );
         }
 
