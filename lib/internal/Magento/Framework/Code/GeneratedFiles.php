@@ -49,8 +49,8 @@ class GeneratedFiles
     public function regenerate()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
-            $generationPath = BP . '/' . $this->directoryList->getPath(DirectoryList::GENERATION);
-            $diPath = BP . '/' . $this->directoryList->getPath(DirectoryList::DI);
+            $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
+            $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
 
             if ($this->write->isDirectory($generationPath)) {
                 $this->write->delete($generationPath);
@@ -58,7 +58,7 @@ class GeneratedFiles
             if ($this->write->isDirectory($diPath)) {
                 $this->write->delete($diPath);
             }
-            $this->write->delete(BP . self::REGENERATE_FLAG);
+            $this->write->delete(self::REGENERATE_FLAG);
         }
     }
 
