@@ -73,8 +73,8 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('category_id'));
 
         $modelMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
-        $metadataMock = $this->getMock('\Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $metadataMock = $this->getMock('\Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
+        $metadataPoolMock = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $metadataMock->expects($this->once())
             ->method('getLinkField')
             ->will($this->returnValue('Field Id Name'));
@@ -82,7 +82,7 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             ['Magento\CatalogRule\Model\Rule', $modelMock],
             ['Magento\Catalog\Model\Category', $categoryMock],
-            ['Magento\Framework\Model\Entity\MetadataPool', $metadataPoolMock]
+            ['Magento\Framework\EntityManager\MetadataPool', $metadataPoolMock]
         ];
         $metadataPoolMock
             ->expects($this->once())

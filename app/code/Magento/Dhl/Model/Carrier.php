@@ -1123,9 +1123,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     throw new \Magento\Framework\Exception\LocalizedException($responseError);
                 }
                 $this->debugErrors($this->_errors);
-
-                return false;
             }
+            $result->append($this->getErrorMessage());
         }
 
         return $result;

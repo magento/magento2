@@ -130,19 +130,7 @@ class DownloadablePanel extends AbstractModifier
             'samplesFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_SAMPLES,
             'linksFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_LINKS,
         ];
-        $hideConfig['arguments']['data']['config'] = [
-            'dataType' => Form\Element\DataType\Number::NAME,
-            'formElement' => Form\Element\Hidden::NAME,
-            'componentType' => Form\Field::NAME,
-            'value' => '1',
-            'dataScope' => ProductAttributeInterface::CODE_IS_DOWNLOADABLE,
-            'sortOrder' => 10,
-        ];
 
-        $this->meta = $this->arrayManager->set(
-            $checkboxPath,
-            $this->meta,
-            $this->locator->getProduct()->getTypeId() === Type::TYPE_DOWNLOADABLE ? $hideConfig : $checkboxConfig
-        );
+        $this->meta = $this->arrayManager->set($checkboxPath, $this->meta, $checkboxConfig);
     }
 }
