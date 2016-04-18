@@ -24,12 +24,14 @@ define([
             insertDataFromWizard: [],
             map: null,
             isEmpty: true,
+            isShowAddProductButton: false,
             cacheGridData: [],
             unionInsertData: [],
             deleteProperty: false,
             dataLength: 0,
             identificationProperty: 'id',
             'attribute_set_id': '',
+            attributesTmp: [],
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
@@ -118,7 +120,9 @@ define([
             tmpArray.splice(index, 1);
 
             if (!tmpArray.length) {
+                this.attributesTmp = this.source.get('data.attributes');
                 this.source.set('data.attributes', []);
+                this.cacheGridData = [];
             }
 
             if (parseInt(this.currentPage(), 10) === this.pages()) {
@@ -166,7 +170,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'actionsListOpened'
+                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'isShowAddProductButton', 'actionsListOpened'
                 ]);
 
             return this;
@@ -197,9 +201,13 @@ define([
             var dataCount,
                 elemsCount,
                 tmpData,
-                path;
+                path,
+                attributeCodes = this.source.get('data.attribute_codes');
 
             this.isEmpty(data.length === 0);
+            this.isShowAddProductButton(
+                (!attributeCodes || data.length > 0 ? data.length : attributeCodes.length) > 0
+            );
 
             tmpData = data.slice(this.pageSize * (this.currentPage() - 1),
                                  this.pageSize * (this.currentPage() - 1) + this.pageSize);
@@ -260,6 +268,10 @@ define([
                 tmpArray.push(mappedData);
             }, this);
 
+            // Attributes cannot be changed before regeneration thought wizard
+            if (!this.source.get('data.attributes').length) {
+                this.source.set('data.attributes', this.attributesTmp);
+            }
             this.unionInsertData(tmpArray);
         },
 
