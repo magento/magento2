@@ -52,6 +52,41 @@ class Minification implements ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
+        $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+
+        if ($fileExtension === 'js') {
+            return $this->resolveJsMinification($type, $file, $area, $theme, $locale, $module);
+        }
+
+        // Leave BC way of resolving
+        $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
+
+        if (!$path && $file != ($newFile = $this->minification->removeMinifiedSign($file))) {
+            $path = $this->fallback->resolve($type, $newFile, $area, $theme, $locale, $module);
+        }
+
+        return $path;
+    }
+
+    /**
+     * Get path of file after using fallback rules
+     *
+     * @param string $type
+     * @param string $file
+     * @param string|null $area
+     * @param ThemeInterface|null $theme
+     * @param string|null $locale
+     * @param string|null $module
+     * @return string|false
+     */
+    private function resolveJsMinification(
+        $type,
+        $file,
+        $area = null,
+        ThemeInterface $theme = null,
+        $locale = null,
+        $module = null
+    ) {
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
 
         /**
@@ -64,7 +99,7 @@ class Minification implements ResolverInterface
         /**
          * If minification is disabled - return already found path
          */
-        if (!$this->minification->isEnabled(pathinfo($file, PATHINFO_EXTENSION))) {
+        if (!$this->minification->isEnabled('js')) {
             return $path;
         }
 
