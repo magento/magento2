@@ -75,8 +75,6 @@ class UpdatePackagesCache
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->objectManager = $objectManagerProvider->get();
-        $this->dateTime = $objectManagerProvider->get()
-            ->get('Magento\Setup\Model\DateTime\DateTimeProvider')->get();
         $this->composerInformation = $composerInformation;
     }
 
