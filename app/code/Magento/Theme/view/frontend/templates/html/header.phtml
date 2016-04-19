@@ -15,7 +15,8 @@ $welcomeMessage = $block->getWelcome();
     case 'welcome': ?>
         <li class="greet welcome" data-bind="scope: 'customer'">
             <!-- ko if: customer().fullname  -->
-            <span data-bind="text: new String('<?php /* @escapeNotVerified */ echo __('Welcome, %1!');?>').replace('%1', customer().firstname)"></span>
+            <span><?php /* @noEscape */ echo __('Welcome, ');?></span>
+            <span><!-- ko text: customer().firstname + '!' --><!-- /ko --></span>
             <!-- /ko -->
             <!-- ko ifnot: customer().fullname  -->
             <span data-bind="html:'<?=$block->escapeHtml($welcomeMessage) ?>'"></span>
