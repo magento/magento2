@@ -113,10 +113,11 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Catalog\Api\Data\ProductInterface $duplicate
     ) {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         return $this->optionResource->duplicate(
             $this->getOptionFactory()->create([]),
-            $product->getId(),
-            $duplicate->getId()
+            $product->getData($metadata->getLinkField()),
+            $duplicate->getData($metadata->getLinkField())
         );
     }
 
@@ -189,6 +190,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Catalog\Model\Product\OptionFactory
+     * @deprecated
      */
     private function getOptionFactory()
     {
@@ -201,6 +203,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
+     * @deprecated
      */
     private function getCollectionFactory()
     {
@@ -213,6 +216,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
 
     /**
      * @return \Magento\Framework\EntityManager\MetadataPool
+     * @deprecated
      */
     private function getMetadataPool()
     {
