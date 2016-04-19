@@ -83,13 +83,13 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * Convert prefix and suffix from inputs to selects when necessary
+     * Convert elements(like prefix and suffix) from inputs to selects when necessary
      *
      * @param array $elements address attributes
      * @param array $attributesToConvert fields and their callbacks
      * @return array
      */
-    private function convertPrefixSuffix($elements, $attributesToConvert)
+    private function convertElementsToSelect($elements, $attributesToConvert)
     {
         $codes = array_keys($attributesToConvert);
         foreach (array_keys($elements) as $code) {
@@ -128,7 +128,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         ];
 
         $elements = $this->getAddressAttributes();
-        $elements = $this->convertPrefixSuffix($elements, $attributesToConvert);
+        $elements = $this->convertElementsToSelect($elements, $attributesToConvert);
         // The following code is a workaround for custom address attributes
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']
