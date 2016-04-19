@@ -97,16 +97,16 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         );
 
         $countriesCollection = $this->directoryHelper->getCountryCollection($store)->load();
+        $regions = $this->directoryHelper->getRegionData();
+        $country = $countriesCollection->getItemById($countryId);
 
-        if ($countriesCollection->count() == 0) {
+        if (!$country) {
             throw new NoSuchEntityException(
                 __(
                     'Requested country is not available.'
                 )
             );
         }
-        $regions = $this->directoryHelper->getRegionData();
-        $country = $countriesCollection->getItemById($countryId);
         $countryInfo = $this->setCountryInfo($country, $regions, $storeLocale);
 
         return $countryInfo;
