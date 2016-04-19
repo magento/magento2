@@ -123,7 +123,7 @@ Hour,Hour
 Minute,Minute
 "We could not detect a size.","We could not detect a size."
 "We don't recognize this file extension.","We don't recognize this file extension."
-"Welcome, %1!","--Welcome, %1!"
+"Welcome, %1!","Welcome, %1!"
 Empty,Empty
 "1 column","1 column"
 Configuration,Configuration
