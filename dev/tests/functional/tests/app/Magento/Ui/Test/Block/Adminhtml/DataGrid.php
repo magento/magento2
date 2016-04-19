@@ -236,6 +236,8 @@ class DataGrid extends Grid
         } else {
             throw new \Exception('Searched item was not found.');
         }
+        $this->waitForElementNotVisible($this->searchButton);
+        $this->waitLoader();
     }
 
     /**
