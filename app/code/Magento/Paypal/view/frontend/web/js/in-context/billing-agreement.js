@@ -11,7 +11,7 @@ define([
 
     $.widget('mage.billingAgreement', {
         options: {
-            invalidateOnCreate: false,
+            invalidateOnLoad: false,
             cancelButtonSelector: '.block-billing-agreements-view button.cancel',
             cancelMessage: '',
             cancelUrl: ''
@@ -24,7 +24,7 @@ define([
         _create: function () {
             var self = this;
 
-            if (this.options.invalidateOnCreate) {
+            if (this.options.invalidateOnLoad) {
                 this.invalidate();
             }
             $(this.options.cancelButtonSelector).on('click', function () {
