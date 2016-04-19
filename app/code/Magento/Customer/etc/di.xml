@@ -87,7 +87,7 @@
     <type name="Magento\Customer\Model\ResourceModel\Address">
         <arguments>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
-            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entitySnapshot" xsi:type="object">CustomerAddressSnapshot</argument>
             <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
         </arguments>
     </type>
@@ -148,6 +148,11 @@
         </arguments>
     </type>
     <virtualType name="EavVersionControlSnapshot" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerAddressSnapshot" type="Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot">
         <arguments>
             <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
         </arguments>
@@ -301,5 +306,10 @@
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
+    </type>
+    <type name="Magento\Customer\Observer\AfterAddressSaveObserver">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
     </type>
 </config>
