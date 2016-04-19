@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\HydratorPool;
 
 /**
  * Class Repository
@@ -41,6 +42,11 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      * @var MetadataPool
      */
     protected $metadataPool;
+
+    /**
+     * @var HydratorPool
+     */
+    protected $hydratorPool;
 
     /**
      * @var Converter
@@ -113,11 +119,12 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Catalog\Api\Data\ProductInterface $duplicate
     ) {
+        $hydrator = $this->getHydratorPool()->getHydrator(ProductInterface::class);
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         return $this->optionResource->duplicate(
             $this->getOptionFactory()->create([]),
-            $product->getData($metadata->getLinkField()),
-            $duplicate->getData($metadata->getLinkField())
+            $hydrator->extract($product)[$metadata->getLinkField()],
+            $hydrator->extract($duplicate)[$metadata->getLinkField()]
         );
     }
 
@@ -225,5 +232,18 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
                 ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\HydratorPool
+     * @deprecated
+     */
+    private function getHydratorPool()
+    {
+        if (null === $this->hydratorPool) {
+            $this->hydratorPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\HydratorPool');
+        }
+        return $this->hydratorPool;
     }
 }
