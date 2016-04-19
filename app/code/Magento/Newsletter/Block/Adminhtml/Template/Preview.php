@@ -58,8 +58,8 @@ class Preview extends \Magento\Backend\Block\Widget
         if ($id = (int)$this->getRequest()->getParam('id')) {
             $this->loadTemplate($template, $id);
         } else {
-            $previewData = $this->_backendSession->getPreviewData();
-            
+            $previewData = $this->getPreviewData();
+
             $template->setTemplateType($previewData['type']);
             $template->setTemplateText($previewData['text']);
             $template->setTemplateStyles($previewData['styles']);
@@ -88,6 +88,32 @@ class Preview extends \Magento\Backend\Block\Widget
         \Magento\Framework\Profiler::stop($this->profilerName);
 
         return $templateProcessed;
+    }
+
+    /**
+     * Return template preview data
+     *
+     * @return array
+     */
+    private function getPreviewData()
+    {
+        $previewData = [];
+        $previewParams = ['type', 'text', 'styles'];
+
+        $sessionData = [];
+        if ($this->_backendSession->hasPreviewData()) {
+            $sessionData = $this->_backendSession->getPreviewData();
+        }
+
+        foreach ($previewParams as $param) {
+            if (isset($sessionData[$param])) {
+                $previewData[$param] = $sessionData[$param];
+            } else {
+                $previewData[$param] = $this->getRequest()->getParam($param);
+            }
+        }
+
+        return $previewData;
     }
 
     /**
