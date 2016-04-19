@@ -125,7 +125,11 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        $product = $this->productRepository->get($option->getProductSku());
+        $productSku = $option->getProductSku();
+        if (!$productSku) {
+            throw new CouldNotSaveException(__('ProductSku should be specified'));
+        }
+        $product = $this->productRepository->get($productSku);
         $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $option->setData('product_id', $product->getData($metadata->getLinkField()));
         $option->setOptionId(null);
