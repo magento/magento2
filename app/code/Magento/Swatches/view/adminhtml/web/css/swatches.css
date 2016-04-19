@@ -142,7 +142,7 @@
 }
 
 .col-swatch {
-    .width: 50px;
+    width: 50px;
 }
 
 .swatches-visual-col.unavailable:after {
