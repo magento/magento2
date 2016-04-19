@@ -1087,16 +1087,16 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
-     * Check if store can be disabled
+     * Check if store is default
      *
      * @return boolean
      */
-    public function isCanDisable()
+    public function isDefault()
     {
-        if ($this->getWebsite()->getIsDefault() && $this->getWebsite()->getStoresCount() < 2) {
-            return false;
+        if (!$this->getId() && $this->getWebsite() && $this->getWebsite()->getStoresCount() == 0) {
+            return true;
         }
-        return true;
+        return $this->getGroup()->getDefaultStoreId() == $this->getId();
     }
 
     /**
