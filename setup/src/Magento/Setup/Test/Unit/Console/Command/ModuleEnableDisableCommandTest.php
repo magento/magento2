@@ -43,7 +43,13 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerProviderMock = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->objectManagerProviderMock = $this->getMock(
+            'Magento\Setup\Model\ObjectManagerProvider',
+            [],
+            [],
+            '',
+            false
+        );
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->objectManagerProviderMock->expects($this->any())
             ->method('get')
@@ -108,13 +114,15 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
                 true,
                 false,
                 '%amodules have been enabled%aMagento_Module1%a'
-                    . 'Info: Some modules might require static view files to be cleared.%a'
+                    . "Info: Some modules might require static view files to be cleared. To do this, run "
+                    . "'module:enable' with --clear-static-content%a"
             ],
             'disable, do not clear static content' => [
                 false,
                 false,
                 '%amodules have been disabled%aMagento_Module1%a'
-                    . 'Info: Some modules might require static view files to be cleared.%a'
+                    . "Info: Some modules might require static view files to be cleared. To do this, run "
+                    . "'module:disable' with --clear-static-content%a"
             ],
             'enable, clear static content' => [
                 true,
