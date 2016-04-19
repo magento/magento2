@@ -307,9 +307,4 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
-    <type name="Magento\Customer\Observer\AfterAddressSaveObserver">
-        <arguments>
-            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
-        </arguments>
-    </type>
 </config>
