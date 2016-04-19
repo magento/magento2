@@ -287,7 +287,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect(['name', 'visibility'])
+            ->addAttributeToSelect(['name', 'visibility', 'links_purchased_separately'])
             ->addOptionsToResult()
             ->addUrlRewrite();
 
