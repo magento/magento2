@@ -10,14 +10,16 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Config;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Model\Entity\EntityMetadata;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class \Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\ConfigurableTest
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,6 +88,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     private $cache;
 
     /**
+     * @var Config
+     */
+    protected $catalogConfig;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -149,6 +156,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->entityMetadata);
         $this->cache = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
             ->getMockForAbstractClass();
+        $this->catalogConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = $this->_objectHelper->getObject(
             Configurable::class,
@@ -164,7 +174,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'cache' => $this->cache
+                'cache' => $this->cache,
+                'catalogConfig' => $this->catalogConfig,
             ]
         );
         $refClass = new \ReflectionClass(Configurable::class);
