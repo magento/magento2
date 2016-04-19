@@ -78,7 +78,7 @@ define([
             var $form,
                 ppCheckoutInput;
 
-            if (this.options.isCatalogProduct && originalForm) {
+            if (this.options.isCatalogProduct) {
                 // find the form from which the button was clicked
                 $form = originalForm ? $(originalForm) : $($(this.options.shortcutContainerClass).closest('form'));
 
