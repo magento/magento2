@@ -499,7 +499,7 @@ class TypeProcessor
         } elseif ($isArrayType && $value === null) {
             return null;
         } elseif (!$isArrayType && !is_array($value)) {
-            if ($value !== null && $type !== self::ANY_TYPE && !$this->setType($value, $type)) {
+            if ($value !== null && !$this->isTypeAny($type) && !$this->setType($value, $type)) {
                 throw new SerializationException(
                     new Phrase(
                         SerializationException::TYPE_MISMATCH,
@@ -507,7 +507,7 @@ class TypeProcessor
                     )
                 );
             }
-        } else {
+        } elseif (!$this->isTypeAny($type)) {
             throw new SerializationException(
                 new Phrase(
                     SerializationException::TYPE_MISMATCH,
