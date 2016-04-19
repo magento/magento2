@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\EntityManager\Operation\Write;
 
-use Magento\Framework\EntityManager\Operation\Write\Delete\ValidateDelete;
 use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteMain;
 use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteAttributes;
 use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteExtensions;
@@ -17,6 +16,8 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
  * Class Delete
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Delete
 {
