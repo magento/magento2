@@ -15,6 +15,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class UpdatePackagesCache manages information about available for update packages though the cache file.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdatePackagesCache
 {
@@ -95,6 +97,7 @@ class UpdatePackagesCache
      * Set datetime
      *
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @return void
      * @throws \Exception
      */
     public function setDateTime(\Magento\Framework\Stdlib\DateTime\DateTime $dateTime)

@@ -19,6 +19,8 @@ use Magento\Setup\Model\MarketplaceManager;
  * @deprecated
  *
  * @link setup/src/Magento/Setup/Test/Unit/Controller/ComponentGridTest.php
+ *
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
@@ -114,6 +116,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
      * Prepare the timezone mock to expect calls and return formatted date and time
      *
      * @return none
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function setupTimezoneMock()
     {

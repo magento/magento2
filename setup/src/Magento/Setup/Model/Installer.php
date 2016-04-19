@@ -1118,6 +1118,8 @@ class Installer
      *
      * @throws \Magento\Setup\Exception
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function assertDeploymentConfigExists()
     {

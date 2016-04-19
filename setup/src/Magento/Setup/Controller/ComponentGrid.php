@@ -96,6 +96,7 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
      * Set timezone
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @return void
      * @throws \Exception
      */
     public function setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone)
