@@ -567,7 +567,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     public function getProductSku()
     {
         $productSku = $this->_getData(self::KEY_PRODUCT_SKU);
-        if (!$productSku) {
+        if (!$productSku && $this->getProduct()) {
             $productSku = $this->getProduct()->getSku();
         }
         return $productSku;

@@ -74,7 +74,7 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
 
             $this->fullPageCacheMock->expects($this->once())
                 ->method('clean')
-                ->with(\Zend_Cache::CLEANING_MODE_ALL, $this->equalTo($expectedTags));
+                ->with(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $this->equalTo($expectedTags));
         }
 
         $this->_model->execute($observerObject);
