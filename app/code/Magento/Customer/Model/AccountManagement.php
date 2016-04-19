@@ -632,10 +632,10 @@ class AccountManagement implements AccountManagementInterface
     {
         // load customer by id
         $customer = $this->customerRepository->getById($customerId);
-        if (!$customer->getConfirmation()) {
-            return self::ACCOUNT_CONFIRMED;
-        }
         if ($this->isConfirmationRequired($customer)) {
+            if (!$customer->getConfirmation()) {
+                return self::ACCOUNT_CONFIRMED;
+            }
             return self::ACCOUNT_CONFIRMATION_REQUIRED;
         }
         return self::ACCOUNT_CONFIRMATION_NOT_REQUIRED;
@@ -673,6 +673,7 @@ class AccountManagement implements AccountManagementInterface
             }
             // Existing password hash will be used from secured customer data registry when saving customer
         }
+
         // Make sure we have a storeId to associate this customer with.
         if (!$customer->getStoreId()) {
             if ($customer->getWebsiteId()) {
@@ -680,14 +681,18 @@ class AccountManagement implements AccountManagementInterface
             } else {
                 $storeId = $this->storeManager->getStore()->getId();
             }
-
             $customer->setStoreId($storeId);
+        }
+
+        // Associate website_id with customer
+        if (!$customer->getWebsiteId()) {
+            $websiteId = $this->storeManager->getStore($customer->getStoreId())->getWebsiteId();
+            $customer->setWebsiteId($websiteId);
         }
 
         // Update 'created_in' value with actual store name
         if ($customer->getId() === null) {
-            $storeName = $this->storeManager->getStore($customer->getStoreId())
-                ->getName();
+            $storeName = $this->storeManager->getStore($customer->getStoreId())->getName();
             $customer->setCreatedIn($storeName);
         }
 
@@ -1084,9 +1089,12 @@ class AccountManagement implements AccountManagementInterface
         if ($this->canSkipConfirmation($customer)) {
             return false;
         }
-        $storeId = $customer->getStoreId() ? $customer->getStoreId() : null;
 
-        return (bool)$this->scopeConfig->getValue(self::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_STORE, $storeId);
+        return (bool)$this->scopeConfig->getValue(
+            self::XML_PATH_IS_CONFIRM,
+            ScopeInterface::SCOPE_WEBSITES,
+            $customer->getWebsiteId()
+        );
     }
 
     /**

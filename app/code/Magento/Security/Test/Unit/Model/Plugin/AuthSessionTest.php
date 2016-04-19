@@ -102,14 +102,6 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->requestMock->expects($this->any())
-            ->method('getModuleName')
-            ->willReturn('notSecurity');
-
-        $this->requestMock->expects($this->any())
-            ->method('getActionName')
-            ->willReturn('notCheck');
-
         $this->adminSessionsManagerMock->expects($this->any())
             ->method('getCurrentSession')
             ->willReturn($this->currentSessionMock);
