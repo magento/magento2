@@ -40,6 +40,16 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
     }
 
+    /**
+     * @deprecated
+     */
+    public function testCreateInstallConfig()
+    {
+        $returnValue = $this->configGeneratorObject->createInstallConfig([]);
+        $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $returnValue);
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+    }
+
     public function testCreateSessionConfigWithInput()
     {
         $testData = [ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE => 'files'];

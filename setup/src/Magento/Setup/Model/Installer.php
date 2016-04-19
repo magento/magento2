@@ -1112,6 +1112,24 @@ class Installer
     }
 
     /**
+     * Validates that deployment configuration exists
+     *
+     * @deprecated
+     *
+     * @throws \Magento\Setup\Exception
+     * @return void
+     */
+    private function assertDeploymentConfigExists()
+    {
+        if (!$this->deploymentConfig->isAvailable()) {
+            throw new \Magento\Setup\Exception(
+                "Can't run this operation: deployment configuration is absent."
+                . " Run 'magento setup:config:set --help' for options."
+            );
+        }
+    }
+
+    /**
      * Validates that MySQL is accessible and MySQL version is supported
      *
      * @return void

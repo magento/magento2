@@ -62,6 +62,23 @@ class ConfigGenerator
     }
 
     /**
+     * Creates install segment config data
+     *
+     * @deprecated
+     *
+     * @return ConfigData
+     */
+    public function createInstallConfig()
+    {
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+
+        if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE) === null) {
+            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE, date('r'));
+        }
+        return $configData;
+    }
+
+    /**
      * Creates encryption key config data
      * @param array $data
      * @return ConfigData

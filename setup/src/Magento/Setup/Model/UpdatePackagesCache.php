@@ -11,6 +11,7 @@ use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class UpdatePackagesCache manages information about available for update packages though the cache file.
@@ -52,12 +53,18 @@ class UpdatePackagesCache
     private $pathToCacheFile = 'update_composer_packages.json';
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * Constructor
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param ComposerInformation $composerInformation
      * @param ObjectManagerProvider $objectManagerProvider
+     * @throws \Exception
      */
     public function __construct(
         MagentoComposerApplicationFactory $applicationFactory,
@@ -67,9 +74,37 @@ class UpdatePackagesCache
     ) {
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->objectManager = $objectManagerProvider->get();
         $this->dateTime = $objectManagerProvider->get()
             ->get('Magento\Setup\Model\DateTime\DateTimeProvider')->get();
         $this->composerInformation = $composerInformation;
+    }
+
+    /**
+     * Get datetime
+     *
+     * @return \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private function getDateTime()
+    {
+        if ($this->dateTime === null) {
+            $this->dateTime = $this->objectManager->get('Magento\Setup\Model\DateTime\DateTimeProvider')->get();
+        }
+        return $this->dateTime;
+    }
+
+    /**
+     * Set datetime
+     *
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @throws \Exception
+     */
+    public function setDateTime(\Magento\Framework\Stdlib\DateTime\DateTime $dateTime)
+    {
+        if ($this->dateTime !== null) {
+            throw new \Exception('dateTime is already set');
+        }
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -172,7 +207,7 @@ class UpdatePackagesCache
     private function savePackagesForUpdateToCache($availableVersions)
     {
         $syncInfo = [];
-        $syncInfo['lastSyncDate'] = $this->dateTime->gmtTimestamp();
+        $syncInfo['lastSyncDate'] = $this->getDateTime()->gmtTimestamp();
         $syncInfo['packages'] = $availableVersions;
         $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
         try {
