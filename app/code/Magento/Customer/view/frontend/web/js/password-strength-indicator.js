@@ -8,9 +8,10 @@
  */
 define([
     'jquery',
+    'Magento_Customer/js/zxcvbn',
     'mage/translate',
-    'Magento_Customer/js/zxcvbn'
-], function ($, $t, zxcvbn) {
+    'mage/validation'
+], function ($, zxcvbn, $t, validation) {
     'use strict';
 
     $.widget('mage.passwordStrengthIndicator', {
@@ -50,6 +51,8 @@ define([
                 className = this._getClassName(score);
 
             this._displayStrength(className, score);
+            //update error messages
+            $.validator.validateSingleElement(this.element.find('input[type="password"]'));
         },
 
         /**
