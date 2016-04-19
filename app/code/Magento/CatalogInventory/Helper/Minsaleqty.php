@@ -75,9 +75,6 @@ class Minsaleqty
                     $data[$groupId] = $this->fixQty($qty);
                 }
             }
-            if (count($data) == 1 && array_key_exists($this->getAllCustomersGroupId(), $data)) {
-                return (string) $data[$this->getAllCustomersGroupId()];
-            }
             return serialize($data);
         } else {
             return '';

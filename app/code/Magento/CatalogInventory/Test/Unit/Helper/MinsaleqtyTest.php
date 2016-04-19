@@ -148,7 +148,7 @@ class MinsaleqtyTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 [['customer_group_id' => 32000, 'min_sale_qty' => 2.5]],
-                '2.5'
+                'a:1:{i:32000;d:2.5;}'
             ],
             [
                 [['customer_group_id' => 2, 'min_sale_qty' => 2.5]],
