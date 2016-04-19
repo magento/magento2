@@ -18,13 +18,12 @@ $allowedResources = [];
 $configCacheFile = BP . '/var/resource_config.json';
 
 $isAllowed = function ($resource, array $allowedResources) {
-    $isResourceAllowed = false;
     foreach ($allowedResources as $allowedResource) {
         if (0 === stripos($resource, $allowedResource)) {
-            $isResourceAllowed = true;
+            return true;
         }
     }
-    return $isResourceAllowed;
+    return false;
 };
 
 $request = new \Magento\MediaStorage\Model\File\Storage\Request(
