@@ -428,7 +428,7 @@
                         <item name="config" xsi:type="array">
                             <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
-                            <item name="dataScope" xsi:type="string">use_config_enable_qty_increments</item>
+                            <item name="dataScope" xsi:type="string">use_config_enable_qty_inc</item>
                             <item name="valueMap" xsi:type="array">
                                 <item name="true" xsi:type="string">1</item>
                                 <item name="false" xsi:type="string">0</item>
