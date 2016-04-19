@@ -76,9 +76,9 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     {
         $globPatternsFolder = self::getBaseFilesFolder();
         if ('' !== $baseFilesFolder) {
-            $globPatternsFolder = $baseFilesFolder ;
+            $globPatternsFolder = $baseFilesFolder;
         }
-        $directoriesToCheck = Files::init()->readLists($globPatternsFolder. '/_files/whitelist/common.txt');
+        $directoriesToCheck = Files::init()->readLists($globPatternsFolder . '/_files/whitelist/common.txt');
 
         $changedFiles = [];
         $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
