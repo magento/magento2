@@ -189,39 +189,6 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
     }
 
-    public function testDeleteAttributeOption()
-    {
-        $attributeCode = uniqid('attr_code');
-        $attribute = $this->createAttribute($attributeCode);
-
-        /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $optionsCollection */
-        $optionsCollection = Bootstrap::getObjectManager()->create(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory::class
-        );
-        $options = $optionsCollection->create()->setAttributeFilter($attribute['attribute_id'])->getItems();
-
-        foreach ($options as $option) {
-            $serviceInfo = [
-                'rest' => [
-                    'resourcePath' => self::RESOURCE_PATH . '/' . $attributeCode . '/options/' . $option['option_id'],
-                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
-                ],
-                'soap' => [
-                    'service' => self::SERVICE_NAME,
-                    'serviceVersion' => self::SERVICE_VERSION,
-                    'operation' => self::SERVICE_NAME . 'delete',
-                ],
-            ];
-            $result = $this->_webApiCall(
-                $serviceInfo,
-                ['attributeCode' => $attributeCode, 'optionId' => $option['option_id']]
-            );
-            $this->assertTrue($result);
-        }
-        $attribute = $this->getAttribute($attributeCode);
-        $this->assertEquals(1, count($attribute['options']));
-    }
-
     /**
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
      */
