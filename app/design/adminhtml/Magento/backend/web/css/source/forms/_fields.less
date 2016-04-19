@@ -225,7 +225,7 @@
 
     .required > &, //  ToDo UI: change classes "required" to "_required".
     ._required > & {
-        span {
+        > span {
             &:after {
                 color: @field-label__required__color;
                 content: '*';
@@ -383,7 +383,7 @@
             padding: 1.7rem 0;
             width: calc(100% - @indent__l);
         }
-        
+
         .admin__field-option {
             padding-top: 0;
         }
@@ -607,7 +607,7 @@
             }
         }
     }
-    
+
     .ui-datepicker-trigger {
         top: 0;
         left: 100%;
