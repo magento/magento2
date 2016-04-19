@@ -130,6 +130,7 @@ class Composite extends AbstractModifier
                     'position' => $option->getPosition(),
                     'option_id' => $option->getOptionId(),
                     'title' => $option->getTitle(),
+                    'default_title' => $option->getDefaultTitle(),
                     'type' => $option->getType(),
                     'required' => ($option->getRequired()) ? '1' : '0',
                     'bundle_selections' => $selections,

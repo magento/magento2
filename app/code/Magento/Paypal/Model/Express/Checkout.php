@@ -756,6 +756,12 @@ class Checkout
             if ($methodCode != $shippingAddress->getShippingMethod()) {
                 $this->ignoreAddressValidation();
                 $shippingAddress->setShippingMethod($methodCode)->setCollectShippingRates(true);
+                $cartExtension = $this->_quote->getExtensionAttributes();
+                if ($cartExtension && $cartExtension->getShippingAssignments()) {
+                    $cartExtension->getShippingAssignments()[0]
+                        ->getShipping()
+                        ->setMethod($methodCode);
+                }
                 $this->_quote->collectTotals();
                 $this->quoteRepository->save($this->_quote);
             }
