@@ -15,7 +15,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 /**
  * @magentoDbIsolation enabled
- * magentoDataFixture Magento/Elasticsearch/_files/indexer.php
+ * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,9 +79,6 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        //remember to add @ on line 18 when MAGETWO-44489 is done
-        $this->markTestSkipped('Skipping until Bamboo parallel builds issue gets resolved (CICD-2073).');
-
         $this->connectionManager = Bootstrap::getObjectManager()->create(
             'Magento\Elasticsearch\SearchAdapter\ConnectionManager'
         );
@@ -111,6 +108,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test reindex process
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix IndexHandlerTest
      */
     public function testReindexAll()
     {
@@ -127,6 +125,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix IndexHandlerTest
      */
     public function testReindexRowAfterEdit()
     {
@@ -149,6 +148,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix IndexHandlerTest
      */
     public function testReindexRowAfterMassAction()
     {
@@ -188,6 +188,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix IndexHandlerTest
      * @magentoAppArea adminhtml
      */
     public function testReindexRowAfterDelete()
