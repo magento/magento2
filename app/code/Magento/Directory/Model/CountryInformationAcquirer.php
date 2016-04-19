@@ -130,7 +130,6 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         $countryInfo->setFullNameLocale($country->getName($storeLocale));
         $countryInfo->setFullNameEnglish($country->getName('en_US'));
 
-
         if (array_key_exists($countryId, $regions)) {
             $regionsInfo = [];
             foreach ($regions[$countryId] as $id => $regionData) {
