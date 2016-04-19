@@ -138,6 +138,10 @@
         width: 10rem;
     }
 
+    .control-table-options-cell {
+        text-align: center;
+    }
+
     //  Static text in row
     .control-table-text {
         line-height: 3.2rem;
@@ -204,8 +208,13 @@
             padding: 0;
         }
     }
+}
 
-    .admin__field-option {
-        text-align: center;
+.admin__control-table-pagination {
+    &:extend(.abs-clearfix all);
+    padding-bottom: @indent__s;
+
+    .admin__data-grid-pager {
+        float: right;
     }
 }

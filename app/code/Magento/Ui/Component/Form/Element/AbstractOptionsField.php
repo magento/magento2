@@ -56,7 +56,7 @@ abstract class AbstractOptionsField extends AbstractElement
             if (!isset($config['rawOptions']) || $config['rawOptions'] === false) {
                 $options = $this->convertOptionsValueToString($options);
             }
-            $config['options'] = array_values(array_merge_recursive($options, $config['options']));
+            $config['options'] = array_values(array_merge_recursive($config['options'], $options));
         }
         $this->setData('config', (array)$config);
         parent::prepare();
@@ -69,10 +69,7 @@ abstract class AbstractOptionsField extends AbstractElement
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getIsSelected($optionValue)
-    {
-        return $this->getValue() == $optionValue;
-    }
+    abstract public function getIsSelected($optionValue);
 
     /**
      * Convert options value to string
