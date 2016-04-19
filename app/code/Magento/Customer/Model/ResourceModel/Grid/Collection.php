@@ -14,6 +14,9 @@ use Psr\Log\LoggerInterface as Logger;
 
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
+    /**
+     * @inheritdoc
+     */
     protected $document = Document::class;
 
     /**
