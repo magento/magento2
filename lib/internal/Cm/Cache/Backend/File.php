@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @copyright  Copyright (c) 2013 Colin Mollenhour (http://colin.mollenhour.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ *
+ * Modified by Magento, Modifications Copyright © 2016 Magento.
  */
 class Cm_Cache_Backend_File extends Zend_Cache_Backend_File
 {
@@ -59,11 +61,6 @@ class Cm_Cache_Backend_File extends Zend_Cache_Backend_File
      */
     public function __construct(array $options = array())
     {
-        // Magento-friendly cache dir
-        if (empty($options['cache_dir']) && class_exists('Mage', false)) {
-            $options['cache_dir'] = Mage::getBaseDir('cache');
-        }
-
         // Backwards compatibility ZF 1.11 and ZF 1.12
         if (isset($options['hashed_directory_umask'])) {
             $options['directory_mode'] = $options['hashed_directory_umask'];
