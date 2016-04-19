@@ -98,7 +98,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         ManagerInterface $messageManager,
         Escaper $escaper,
         AppState $appState,
-        CustomerSession $customerSession = null
+        CustomerSession $customerSession
     ) {
         $this->_customerVat = $customerVat;
         $this->_customerAddress = $customerAddress;
@@ -109,9 +109,6 @@ class AfterAddressSaveObserver implements ObserverInterface
         $this->escaper = $escaper;
         $this->appState = $appState;
         $this->customerSession = $customerSession;
-        if ($this->customerSession === null) {
-            $this->customerSession = \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerSession::class);
-        }
     }
 
     /**
