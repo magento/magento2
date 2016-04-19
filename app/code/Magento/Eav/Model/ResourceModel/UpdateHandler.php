@@ -99,6 +99,7 @@ class UpdateHandler implements AttributeInterface
      * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {
@@ -121,7 +122,8 @@ class UpdateHandler implements AttributeInterface
                 /**
                  * Only scalar values can be stored in generic tables
                  */
-                if (isset($data[$attribute->getAttributeCode()]) && !is_scalar($data[$attribute->getAttributeCode()])) {
+                if (isset($entityData[$attribute->getAttributeCode()])
+                    && !is_scalar($entityData[$attribute->getAttributeCode()])) {
                     continue;
                 }
                 if (isset($snapshot[$attribute->getAttributeCode()])
