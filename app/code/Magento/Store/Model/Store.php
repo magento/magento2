@@ -310,7 +310,7 @@ class Store extends AbstractExtensibleModel implements
     /**
      * @var StoreManagerInterface
      */
-    protected $_storeManager;
+    private $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
