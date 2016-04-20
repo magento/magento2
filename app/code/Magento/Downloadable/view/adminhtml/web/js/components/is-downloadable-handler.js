@@ -22,7 +22,7 @@ define([
          * Change visibility for samplesFieldset & linksFieldset based on current statuses of checkbox.
          */
         changeVisibility: function () {
-            if (this.samplesFieldset && this.linksFieldset) {
+            if (this.samplesFieldset() && this.linksFieldset()) {
                 if (this.checked() && !this.disabled()) {
                     this.samplesFieldset().visible(true);
                     this.linksFieldset().visible(true);
