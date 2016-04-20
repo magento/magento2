@@ -578,7 +578,7 @@ class BundlePanel extends AbstractModifier
                                 'parentSelections' => 'bundle_selections',
                                 'changer' => 'option_info.type',
                                 'dataType' => Form\Element\DataType\Boolean::NAME,
-                                'label' => __('Default'),
+                                'label' => __('Is Default'),
                                 'dataScope' => 'is_default',
                                 'prefer' => 'radio',
                                 'value' => '0',
