@@ -39,14 +39,22 @@ class SaveHandler implements ExtensionInterface
         if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return $entity;
         }
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-        foreach ($this->sampleRepository->getList($entity->getSku()) as $sample) {
-            $this->sampleRepository->delete($sample->getId());
-        }
+
+        $oldSamples = $this->sampleRepository->getList($entity->getSku());
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples() ?: [];
+        $updatedSampleIds = [];
         foreach ($samples as $sample) {
+            if ($sample->getId()) {
+                $updatedSampleIds[] = $sample->getId();
+            }
             $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
         }
+        foreach ($oldSamples as $sample) {
+            if (!in_array($sample->getId(), $updatedSampleIds)) {
+                $this->sampleRepository->delete($sample->getId());
+            }
+        }
+
         return $entity;
     }
 }
