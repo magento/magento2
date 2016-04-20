@@ -16,24 +16,24 @@ use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 
 /**
- * InputParamsResolver
+ * This class is responsible for retrieving resolved input data
  */
 class InputParamsResolver
 {
     /**
      * @var RestRequest
      */
-    protected $request;
+    private $request;
 
     /**
      * @var ParamsOverrider
      */
-    protected $paramsOverrider;
+    private $paramsOverrider;
 
     /**
      * @var ServiceInputProcessor
      */
-    protected $serviceInputProcessor;
+    private $serviceInputProcessor;
 
     /**
      * @var Router
@@ -90,7 +90,7 @@ class InputParamsResolver
     public function resolve()
     {
         $this->validateRequest();
-        $route = $this->getCurrentRoute();
+        $route = $this->getRoute();
         $serviceMethodName = $route->getServiceMethod();
         $serviceClassName = $route->getServiceClass();
 
@@ -119,7 +119,7 @@ class InputParamsResolver
      *
      * @return Route
      */
-    public function getCurrentRoute()
+    public function getRoute()
     {
         if (!$this->route) {
             $this->route = $this->router->match($this->request);
@@ -137,7 +137,7 @@ class InputParamsResolver
     private function validateRequest()
     {
         $this->checkPermissions();
-        if ($this->getCurrentRoute()->isSecure() && !$this->request->isSecure()) {
+        if ($this->getRoute()->isSecure() && !$this->request->isSecure()) {
             throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
         }
         if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
@@ -155,7 +155,7 @@ class InputParamsResolver
      */
     private function checkPermissions()
     {
-        $route = $this->getCurrentRoute();
+        $route = $this->getRoute();
         if (!$this->authorization->isAllowed($route->getAclResources())) {
             $params = ['resources' => implode(', ', $route->getAclResources())];
             throw new AuthorizationException(

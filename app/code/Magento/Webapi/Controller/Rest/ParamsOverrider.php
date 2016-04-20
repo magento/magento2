@@ -183,8 +183,8 @@ class ParamsOverrider
     /**
      * Verify property in parameter's object
      *
-     * @param string|null $serviceClassName name of the service class that we are trying to call
-     * @param string|null $serviceMethodName name of the method that we are trying to call
+     * @param string $serviceClassName name of the service class that we are trying to call
+     * @param string $serviceMethodName name of the method that we are trying to call
      * @param string $serviceMethodParamName
      * @param string $objectProperty
      * @return bool
