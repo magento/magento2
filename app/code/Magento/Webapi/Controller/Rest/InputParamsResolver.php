@@ -10,10 +10,6 @@ use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Store;
-use Magento\Framework\Webapi\Authorization;
-use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * This class is responsible for retrieving resolved input data
@@ -46,14 +42,9 @@ class InputParamsResolver
     private $route;
 
     /**
-     * @var StoreManagerInterface
+     * @var RequestValidator
      */
-    private $storeManager;
-
-    /**
-     * @var Authorization
-     */
-    private $authorization;
+    private $requestValidator;
 
     /**
      * Initialize dependencies
@@ -62,23 +53,20 @@ class InputParamsResolver
      * @param ParamsOverrider $paramsOverrider
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param Router $router
-     * @param StoreManagerInterface $storeManager
-     * @param Authorization $authorization
+     * @param RequestValidator $requestValidator
      */
     public function __construct(
         RestRequest $request,
         ParamsOverrider $paramsOverrider,
         ServiceInputProcessor $serviceInputProcessor,
         Router $router,
-        StoreManagerInterface $storeManager,
-        Authorization $authorization
+        RequestValidator $requestValidator
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->router = $router;
-        $this->storeManager = $storeManager;
-        $this->authorization = $authorization;
+        $this->requestValidator = $requestValidator;
     }
 
     /**
@@ -89,7 +77,7 @@ class InputParamsResolver
      */
     public function resolve()
     {
-        $this->validateRequest();
+        $this->requestValidator->validate();
         $route = $this->getRoute();
         $serviceMethodName = $route->getServiceMethod();
         $serviceClassName = $route->getServiceClass();
@@ -125,42 +113,5 @@ class InputParamsResolver
             $this->route = $this->router->match($this->request);
         }
         return $this->route;
-    }
-
-    /**
-     * Validate request
-     *
-     * @throws AuthorizationException
-     * @throws \Magento\Framework\Webapi\Exception
-     * @return void
-     */
-    private function validateRequest()
-    {
-        $this->checkPermissions();
-        if ($this->getRoute()->isSecure() && !$this->request->isSecure()) {
-            throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
-        }
-        if ($this->storeManager->getStore()->getCode() === Store::ADMIN_CODE
-            && strtoupper($this->request->getMethod()) === RestRequest::HTTP_METHOD_GET
-        ) {
-            throw new \Magento\Framework\Webapi\Exception(__('Cannot perform GET operation with store code \'all\''));
-        }
-    }
-
-    /**
-     * Perform authentication and authorization.
-     *
-     * @throws \Magento\Framework\Exception\AuthorizationException
-     * @return void
-     */
-    private function checkPermissions()
-    {
-        $route = $this->getRoute();
-        if (!$this->authorization->isAllowed($route->getAclResources())) {
-            $params = ['resources' => implode(', ', $route->getAclResources())];
-            throw new AuthorizationException(
-                __(AuthorizationException::NOT_AUTHORIZED, $params)
-            );
-        }
     }
 }
