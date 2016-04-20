@@ -54,17 +54,16 @@ define([
                              * Cancel confirmation handler
                              *
                              */
-                            cancel: function () {
-                                self._redirect(returnUrl);
+                            cancel: function (event) {
+                                if (event && !$(event.target).hasClass('action-close')) {
+                                    self._redirect(returnUrl);
+                                }
                             }
                         }
                     });
-
-                    return false;
+                } else {
+                    this._redirect(returnUrl, originalForm);
                 }
-
-                this._redirect(returnUrl, originalForm);
-
             }, this));
         },
 
