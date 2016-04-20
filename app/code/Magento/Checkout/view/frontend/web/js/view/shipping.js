@@ -67,7 +67,7 @@ define(
             isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
-            saveInAddressBook: true,
+            saveInAddressBook: 1,
             quoteIsVirtual: quote.isVirtual(),
 
             /**
@@ -296,7 +296,7 @@ define(
                     }
 
                     if (customer.isLoggedIn()) {
-                        shippingAddress.save_in_address_book = true;
+                        shippingAddress.save_in_address_book = 1;
                     }
                     selectShippingAddress(shippingAddress);
                 }
