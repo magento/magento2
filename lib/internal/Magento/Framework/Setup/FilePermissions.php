@@ -161,7 +161,7 @@ class FilePermissions
         try {
             foreach ($directoryIterator as $subDirectory) {
                 if (!$subDirectory->isWritable() && !$subDirectory->isLink()) {
-                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory;
+                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory->getPathname();
                     $foundNonWritable = true;
                 }
             }

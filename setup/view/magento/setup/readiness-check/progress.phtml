@@ -13,7 +13,7 @@
 
         <div class="message message-error" ng-switch-when="true">
             <span class="message-text">
-                <strong>Completed!</strong> You need to resolve these issues to continue.
+               <strong>Error!</strong> You need to resolve these issues to continue.
             </span>
         </div>
 
@@ -444,23 +444,19 @@
                         </a>
                     </p>
                     <p ng-show="permissions.expanded">
-                        The best way to resolve this is to allow write permissions for the following Magento
-                        directories and their sub-directories. The exact fix depends on your server, your host,
+                        The best way to resolve this is to allow write permissions in. The exact fix depends on your server, your host,
                         and other system variables.
                         <br>
-                        Our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a> can get you started.
-                    </p>
-                    <p ng-show="permissions.expanded">
-                        If you need more help, please call your hosting provider.
+                        For help, see our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a> or call your hosting provider.
                     </p>
                     <ul class="list" ng-show="permissions.expanded" ng-init="showDetails=false">
                         <li
                             class="list-item-icon"
-                            ng-repeat="(name, missing) in permissions.data.required"
-                            ng-switch="hasItem(permissions.data.current, name)">
+                            ng-repeat="name in permissions.data.required"
+                            ng-switch="hasItem(permissions.data.current, name.path)">
                             <span ng-switch-when="true" class="icon-success"></span>
                             <span ng-switch-default class="icon-failed"></span>
-                            <span>"{{name}}"</span>
+                            <span>"{{name.path}}"</span>
                             <span ng-switch-when="true">
                                  - Writable.
                             </span>
@@ -470,7 +466,7 @@
                                     <span ng-hide="showDetails">Show details</span>
                                     <span ng-show="showDetails">Hide details</span>
                                 </a>
-                                <ul ng-show="showDetails" ng-repeat="file in missing">
+                                <ul ng-show="showDetails" ng-repeat="file in name.missing">
                                     <li class="icon-failed">
                                         {{file}}<br>
                                     </li>
