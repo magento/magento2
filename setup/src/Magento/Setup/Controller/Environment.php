@@ -152,17 +152,19 @@ class Environment extends AbstractActionController
         $requiredPaths = $this->permissions->getInstallationWritableDirectories();
         if ($missingWritePermissionPaths) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-            $requiredPaths = array_flip($requiredPaths);
 
-            foreach (array_keys($requiredPaths) as $requiredPath) {
+            foreach ($requiredPaths as $index => $requiredPath) {
                 $missingPaths = [];
                 foreach ($missingWritePermissionPaths as $missingWritePermissionPath) {
                     if (strpos($missingWritePermissionPath, $requiredPath) === 0) {
-                        array_push($missingPaths, $missingWritePermissionPath);
+                        $missingPaths[] = $missingWritePermissionPath;
                     }
                 }
+                unset($requiredPaths[$index]);
                 if (!empty($missingPaths)) {
-                    $requiredPaths[$requiredPath] = $missingPaths;
+                    $requiredPaths[$index] = ['path' => $requiredPath, 'missing' => $missingPaths];
+                } else {
+                    $requiredPaths[$index] = ['path' => $requiredPath];
                 }
             }
         }
