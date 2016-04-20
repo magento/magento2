@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails;
 
 use Magento\Mtf\Client\Element\MultisuggestElement;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Typified element class for category element.
@@ -21,14 +22,22 @@ class CategoryIds extends MultisuggestElement
     protected $resultItem = './/label[contains(@class, "admin__action-multiselect-label")]/span[text() = "%s"]';
 
     /**
-     * Set value.
+     * Select searched item.
      *
-     * @param array|string $values
+     * @param string $value
      * @return void
      */
-    public function setValue($values)
+    protected function selectSearchedItem($value)
     {
-        $this->getContext()->hover();
-        parent::setValue($values);
+        $this->keys([$value]);
+        $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
+        if ($searchedItem->isVisible()) {
+            try {
+                $searchedItem->click();
+            } catch (\Exception $e) {
+                // In parallel run on windows change the focus is lost on element
+                // that causes disappearing of category suggest list.
+            }
+        }
     }
 }
