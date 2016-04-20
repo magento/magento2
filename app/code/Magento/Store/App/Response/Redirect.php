@@ -208,15 +208,20 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     {
         if (strpos($url, 'http') !== false) {
             $directLinkType = \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK;
-            $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
-            $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
-            $internal = (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0);
+            $currentStore = $this->_storeManager->getStore();
+            $currentStoreUnsecureBaseUrl = $currentStore
+                ->getBaseUrl($directLinkType, false);
+            $currentStoreSecureBaseUrl = $currentStore
+                ->getBaseUrl($directLinkType, true);
+            $internal = (
+                strpos($url, $currentStoreUnsecureBaseUrl) === 0
+                || strpos($url, $currentStoreSecureBaseUrl) === 0
+            );
             if (true === $internal) {
                 /**
                  * check if the referer belongs to another storeview
                  */
                 $linkFromOtherStoreview = false;
-                $currentStore = $this->_storeManager->getStore();
                 $stores = $this->_storeManager->getStores(true);
                 foreach ($stores as $store) {
                     if ($currentStore->getId() !== $store->getId())
@@ -225,11 +230,33 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
                             ->getBaseUrl($directLinkType, false);
                         $secureBaseUrl = $store
                             ->getBaseUrl($directLinkType, true);
-                        $fromOtherStoreview = (
-                            strpos($url, $unsecureBaseUrl) === 0)
-                            || (strpos($url, $secureBaseUrl) === 0
+                        // does the beginning of the url matches another
+                        // store in this system
+                        // indicating the other store is just an additional
+                        // item in the url path
+                        //
+                        // example:
+                        // basestore = http://example.com/
+                        // german store = http://example.com/de/
+                        $canMatchOtherStoreView = (
+                            strpos($url, $unsecureBaseUrl) === 0
+                            || strpos($url, $secureBaseUrl) === 0
                         );
-                        if (true === $fromOtherStoreview
+                        // check if the other store's baseurl could be the
+                        // 'parent' of the current stores baseurl unless the
+                        // baseurl is exactly the same.
+                        $otherStoreViewSubCurrentStore = (
+                            (strpos($unsecureBaseUrl, $currentStoreUnsecureBaseUrl) === 0
+                            || strpos($secureBaseUrl, $currentStoreSecureBaseUrl) === 0)
+                            && ($currentStoreUnsecureBaseUrl !== $unsecureBaseUrl
+                            && $currentStoreSecureBaseUrl !== $secureBaseUrl)
+                        );
+                        // when the url can also match the other store
+                        // and the other store's baseurl is a 'child' of the
+                        // current store's baseurl state the link is coming
+                        // from external (other store)
+                        if (true === $canMatchOtherStoreView
+                            && true === $otherStoreViewSubCurrentStore
                             && false === $linkFromOtherStoreview) {
                             $linkFromOtherStoreview = true;
                         }
