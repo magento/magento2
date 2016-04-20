@@ -532,7 +532,7 @@ class Product extends AbstractResource
                     $select,
                     $tableName,
                     ['attribute_id', 'store_id', $this->getLinkField(), 'value'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
                 )
             );
         }
