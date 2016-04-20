@@ -3,13 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
+use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Driver\File;
 
 class FilePermissions
 {
@@ -22,11 +21,6 @@ class FilePermissions
      * @var DirectoryList
      */
     protected $directoryList;
-
-    /**
-     * @var File
-     */
-    protected $driverFile;
 
     /**
      * List of required writable directories for installation
@@ -66,16 +60,13 @@ class FilePermissions
     /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
-     * @param File $driverFile
      */
     public function __construct(
         Filesystem $filesystem,
-        DirectoryList $directoryList,
-        File $driverFile
+        DirectoryList $directoryList
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
-        $this->driverFile = $driverFile;
     }
 
     /**
@@ -152,10 +143,18 @@ class FilePermissions
         );
         $noWritableFilesFolders = [
             $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) .'/'
+            $this->directoryList->getPath(DirectoryList::DI) . '/',
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
+
+        $directoryIterator = new ExcludeFilter(
+            $directoryIterator,
+            [
+                $this->directoryList->getPath(DirectoryList::SESSION) . '/',
+            ]
+        );
+
         $foundNonWritable = false;
 
         try {
@@ -210,28 +209,6 @@ class FilePermissions
     {
         $directory = $this->filesystem->getDirectoryWrite($code);
         return $this->isReadableDirectory($directory) && !$directory->isWritable();
-    }
-
-    /**
-     * Checks if var/generation/* has read and execute permissions
-     *
-     * @return bool
-     */
-    public function checkDirectoryPermissionForCLIUser()
-    {
-        $varGenerationDir = $this->directoryList->getPath(DirectoryList::GENERATION);
-        $dirs = $this->driverFile->readDirectory($varGenerationDir);
-        array_unshift($dirs, $varGenerationDir);
-
-        foreach ($dirs as $dir) {
-            if (!is_dir($dir)
-                || !is_readable($dir)
-                || !is_executable($dir)
-            ) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
