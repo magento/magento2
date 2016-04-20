@@ -49,7 +49,9 @@ class PostDataProcessorTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->postDataProcessor = (new ObjectManager($this))->getObject(PostDataProcessor::class, [
+        $this->postDataProcessor = (new ObjectManager($this))->getObject(
+            PostDataProcessor::class,
+            [
                 'dateFilter' => $this->dateFilterMock,
                 'messageManager' => $this->messageManagerMock,
                 'validatorFactory' => $this->validatorFactoryMock
