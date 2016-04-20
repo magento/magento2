@@ -445,15 +445,13 @@
             }
         }
 
-        // Fix for Chrome (Tooltip dropped to the bottom after select of text input)
-        select,
-        input[type="text"],
+        select, // Fix for Chrome (Tooltip dropped to the bottom after select of text input)
+        input[type='text'],
         input[type='password'] {
             float: left;
         }
 
-        // Fix for Chrome (Tooltip dropped to the bottom after select of text input)
-        .note {
+        .note { // Fix for Chrome (Tooltip dropped to the bottom after select of text input)
             clear: both;
             margin: 0;
             padding: @indent__xs 0;
