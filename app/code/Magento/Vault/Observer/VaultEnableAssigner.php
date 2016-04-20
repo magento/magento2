@@ -22,7 +22,7 @@ class VaultEnableAssigner extends AbstractDataAssignObserver
 
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
-        if (!is_array($additionalData) || !isset($additionalData[VaultConfigProvider::IS_ACTIVE_CODE])) {
+        if (!is_array($additionalData)) {
             return;
         }
 

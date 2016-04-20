@@ -49,7 +49,7 @@ class PayflowProAddCcData extends AbstractDataAssignObserver
 
         // CC data should be stored explicitly
         foreach ($ccData as $ccKey => $ccValue) {
-            $paymentModel->setData($ccData, $ccValue);
+            $paymentModel->setData($ccKey, $ccValue);
         }
     }
 
