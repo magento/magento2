@@ -89,18 +89,6 @@ class RequestPreprocessor
                         return $response;
                     }
                 }
-
-                if (isset($uri['path']) && '/' !== $uri['path']) {
-                    $newPath = str_replace(
-                        $uri['path'],
-                        '',
-                        $request->getPathInfo()
-                    );
-                    if ('/' !== substr($newPath, 0 ,1)) {
-                        $newPath = '/' . $newPath;
-                    }
-                    $request->setPathInfo($newPath);
-                }
             }
         }
         $request->setDispatched(false);
