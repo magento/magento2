@@ -41,12 +41,10 @@ class DataAssignObserver extends AbstractDataAssignObserver
         $paymentInfo = $this->readPaymentModelArgument($observer);
 
         foreach ($this->additionalInformationList as $additionalInformationKey) {
-            if ($data->getDataByKey($additionalInformationKey) !== null) {
+            if (isset($additionalData[$additionalInformationKey])) {
                 $paymentInfo->setAdditionalInformation(
                     $additionalInformationKey,
-                    isset($additionalData[$additionalInformationKey])
-                        ? $additionalData[$additionalInformationKey]
-                        : null
+                    $additionalData[$additionalInformationKey]
                 );
             }
         }
