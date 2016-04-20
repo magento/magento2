@@ -582,7 +582,7 @@ abstract class AbstractType
                         ->setRequest($buyRequest)
                         ->setProcessMode($processMode)
                         ->validateUserValue($buyRequest->getOptions());
-                } catch (\Exception $e) {
+                } catch (LocalizedException $e) {
                     $result[] = $e->getMessage();
                     continue;
                 }
