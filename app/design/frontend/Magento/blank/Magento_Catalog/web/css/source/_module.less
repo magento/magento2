@@ -48,26 +48,30 @@
         text-decoration: line-through;
     }
 
-    .price-tier_price {
-        .price-including-tax + .price-excluding-tax {
-            &:before {
-                content: '(' attr(data-label) ': ';
+    .prices-tier {
+        .price-container {
+            .price-including-tax {
+                + .price-excluding-tax {
+                    &:before {
+                        content: '(' attr(data-label) ': ';
+                    }
+
+                    &:last-child:after {
+                        content: ')';
+                    }
+                }
             }
 
-            &:last-child:after {
-                content: ')';
-            }
-        }
+            .weee[data-label] {
+                display: inline;
 
-        .weee[data-label] {
-            display: inline;
+                .price {
+                    .lib-font-size(11);
+                }
 
-            .price {
-                .lib-font-size(11);
-            }
-
-            &:before {
-                content: ' +' attr(data-label) ': ';
+                &:before {
+                    content: ' +' attr(data-label) ': ';
+                }
             }
         }
     }
@@ -359,7 +363,7 @@
         margin: @indent__s 0;
         padding: @indent__s (.75 * @indent__base);
 
-        .price-tier_price {
+        .price-container {
             display: inline-block;
         }
 
