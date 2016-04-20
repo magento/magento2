@@ -102,9 +102,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
                     'getMethod',
                 ]
             )->disableOriginalConstructor()->getMock();
-        $this->_requestMock->expects($this->any())
-            ->method('getHttpHost')
-            ->willReturn('testHostName.com');
+        $this->_requestMock->expects($this->any())->method('getHttpHost')->willReturn('testHostName.com');
         $this->_responseMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Response')
             ->setMethods(['sendResponse', 'prepareResponse', 'setHeader'])->disableOriginalConstructor()->getMock();
         $routerMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router')->setMethods(['match'])
@@ -178,7 +176,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->with(self::SERVICE_ID, self::SERVICE_METHOD)
             ->will($this->returnValue('null'));
         $paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
-
         parent::setUp();
     }
 

@@ -5,16 +5,16 @@
  */
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
-class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
+class RequestValidatorTest extends \PHPUnit_Framework_TestCase
 {
     const SERVICE_METHOD = 'testMethod';
 
     const SERVICE_ID = 'Magento\Webapi\Controller\Rest\TestService';
 
     /**
-     * @var \Magento\Webapi\Controller\Rest\InputParamsResolver
+     * @var \Magento\Webapi\Controller\Rest\RequestValidator
      */
-    private $inputParamsResolver;
+    private $requestValidator;
 
     /**
      * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
@@ -26,11 +26,6 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Store\Api\Data\StoreInterface |\PHPUnit_Framework_MockObject_MockObject */
     private $storeMock;
-
-    /**
-     * @var \Magento\Framework\Webapi\ServiceInputProcessor|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serviceInputProcessorMock;
 
     /**
      * @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject
@@ -67,26 +62,18 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
             ->disableOriginalConstructor()->getMock();
-        $paramsOverriderMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\ParamsOverrider')
-            ->setMethods(['overrideParams'])
-            ->disableOriginalConstructor()->getMock();
-
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->serviceInputProcessorMock = $this->getMockBuilder('\Magento\Framework\Webapi\ServiceInputProcessor')
-            ->disableOriginalConstructor()->setMethods(['process'])->getMock();
         $this->storeMock = $this->getMock('\Magento\Store\Api\Data\StoreInterface');
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
-        $this->inputParamsResolver =
+        $this->requestValidator =
             $objectManager->getObject(
-                \Magento\Webapi\Controller\Rest\InputParamsResolver::class,
+                \Magento\Webapi\Controller\Rest\RequestValidator::class,
                 [
                     'request' => $this->requestMock,
                     'router' => $routerMock,
                     'authorization' => $this->authorizationMock,
-                    'serviceInputProcessor' => $this->serviceInputProcessorMock,
-                    'paramsOverrider' => $paramsOverriderMock,
                     'storeManager' => $this->storeManagerMock
                 ]
             );
@@ -96,7 +83,6 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
         $this->routeMock->expects($this->any())->method('getServiceMethod')
             ->will($this->returnValue(self::SERVICE_METHOD));
         $routerMock->expects($this->any())->method('match')->will($this->returnValue($this->routeMock));
-        $paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
 
         parent::setUp();
     }
@@ -109,13 +95,11 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
     public function testSecureRouteAndRequest($isSecureRoute, $isSecureRequest)
     {
         $this->routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
-        $this->routeMock->expects($this->once())->method('getParameters')->will($this->returnValue([]));
         $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
         $this->requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue([]));
         $this->requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
         $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $this->serviceInputProcessorMock->expects($this->any())->method('process')->will($this->returnValue([]));
-        $this->assertInternalType('array',$this->inputParamsResolver->resolve());
+        $this->requestValidator->validate();
     }
 
     /**
@@ -142,7 +126,7 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
         $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
 
-        $this->inputParamsResolver->resolve();
+        $this->requestValidator->validate();
     }
 
     /**
@@ -153,7 +137,7 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
         $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['5', '6']));
-        $this->inputParamsResolver->resolve();
+        $this->requestValidator->validate();
     }
 
     /**
@@ -166,7 +150,6 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
         $this->authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
         $this->storeMock->expects($this->once())->method('getCode')->willReturn('admin');
         $this->requestMock->expects($this->once())->method('getMethod')->willReturn('get');
-
-        $this->inputParamsResolver->resolve();
+        $this->requestValidator->validate();
     }
 }
