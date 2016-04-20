@@ -67,6 +67,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Get type processor
      *
      * @return \Magento\Framework\Reflection\TypeProcessor
+     * @deprecated
      */
     private function getTypeProcessor()
     {
