@@ -14,6 +14,10 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 /**
+ * Important: Please make sure that each integration test file works with unique elastic search index. In order to
+ * achieve this, use @magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
+ * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest'
+ *
  * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
