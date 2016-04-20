@@ -44,7 +44,7 @@ class SaveHandler implements ExtensionInterface
         $oldLinks = $this->linkRepository->getList($entity->getSku());
         foreach ($links as $link) {
             if ($link->getId()) {
-                $updatedLinks[$link->getId()] = $link->getId();
+                $updatedLinks[$link->getId()] = true;
             }
             $this->linkRepository->save($entity->getSku(), $link, !(bool)$entity->getStoreId());
         }
