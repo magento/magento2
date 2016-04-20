@@ -71,8 +71,10 @@
         <relation target=":self">
             <rule type="simpleMarkEnable" event="activate-rule"/>
             <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
             <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="payflowBmlDisable" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
             <rule type="payflowExpressDisableConditional" event=":load"/>
             <rule type="payflowBmlDisableConditional" event=":load"/>
             <rule type="conflict" event=":load">
@@ -154,8 +156,10 @@
         <relation target=":self">
             <rule type="simpleMarkEnable" event="activate-rule"/>
             <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
             <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="payflowBmlDisable" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
             <rule type="payflowExpressDisableConditional" event=":load"/>
             <rule type="payflowBmlDisableConditional" event=":load"/>
             <rule type="conflict" event=":load">
@@ -202,8 +206,10 @@
         <relation target=":self">
             <rule type="simpleMarkEnable" event="activate-rule"/>
             <rule type="paypalBmlEnable" event="activate-rule"/>
+            <rule type="paypalShowSortOrder" event="activate-rule"/>
             <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="paypalBmlDisable" event="deactivate-rule"/>
+            <rule type="paypalHideSortOrder" event="deactivate-rule"/>
             <rule type="paypalBmlDisableConditional" event=":load"/>
             <rule type="conflict" event=":load">
                 <argument name="payflow_advanced">payflow_advanced</argument>
@@ -278,8 +284,10 @@
         <relation target=":self">
             <rule type="simpleMarkEnable" event="activate-rule"/>
             <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
             <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="payflowBmlDisable" event="deactivate-rule"/>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
             <rule type="payflowExpressDisableConditional" event=":load"/>
             <rule type="payflowBmlDisableConditional" event=":load"/>
             <rule type="conflict" event=":load">
@@ -342,6 +350,7 @@
             <rule type="simpleMarkEnable" event="activate-rule"/>
             <rule type="payflowExpressEnable" event="activate-rule"/>
             <rule type="payflowBmlEnable" event="activate-rule"/>
+            <rule type="payflowShowSortOrder" event="activate-rule"/>
             <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="payflowExpressEnableConditional" event="deactivate-rule">
                 <argument name="payflow_advanced">payflow_advanced</argument>
@@ -353,6 +362,7 @@
                 <argument name="wpp_usuk">wpp_usuk</argument>
                 <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
             </rule>
+            <rule type="payflowHideSortOrder" event="deactivate-rule"/>
             <rule type="payflowBmlDisableConditionalExpress" event="deactivate-express"/>
             <rule type="payflowBmlDisableConditionalExpress" event=":load"/>
             <rule type="payflowBmlEnable" event="activate-express"/>
@@ -402,6 +412,8 @@
             <rule type="inContextDisable" event="deactivate-rule"/>
             <rule type="inContextShowMerchantId" event="activate-rule"/>
             <rule type="inContextHideMerchantId" event="deactivate-rule"/>
+            <rule type="paypalShowSortOrder" event="activate-rule"/>
+            <rule type="paypalHideSortOrder" event="deactivate-rule"/>
             <rule type="inContextActivate" event="activate-in-context-api"/>
             <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
             <rule type="inContextDisableConditional" event=":load"/>
