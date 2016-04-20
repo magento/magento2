@@ -25,22 +25,26 @@
         .lib-css(color, @text__color__muted);
     }
 
-    .price-tier_price {
-        .price-including-tax + .price-excluding-tax {
-            &:before {
-                content: '(' attr(data-label) ':';
+    .prices-tier {
+        .price-container {
+            .price-including-tax {
+                + .price-excluding-tax {
+                    &:before {
+                        content: '(' attr(data-label) ':';
+                    }
+
+                    &:last-child:after {
+                        content: ')';
+                    }
+                }
             }
 
-            &:last-child:after {
-                content: ')';
-            }
-        }
+            .weee[data-label] {
+                display: inline;
 
-        .weee[data-label] {
-            display: inline;
-
-            &:before {
-                content: ' +' attr(data-label) ':';
+                &:before {
+                    content: ' +' attr(data-label) ':';
+                }
             }
         }
     }
@@ -177,12 +181,14 @@
                 vertical-align: top;
                 width: 1px;
 
-                .price-final_price > span {
-                    display: block;
-                    margin-bottom: @indent__xs;
+                .price-container {
+                    > span {
+                        display: block;
+                        margin-bottom: @indent__xs;
 
-                    &:last-child {
-                        margin-bottom: 0;
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
                     }
                 }
             }
