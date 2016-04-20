@@ -19,76 +19,9 @@ use Magento\Setup\Model\MarketplaceManager;
  * @deprecated
  *
  * @link setup/src/Magento/Setup/Test/Unit/Controller/ComponentGridTest.php
- *
- * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $composerInformationMock;
-
-    /**
-     * @var UpdatePackagesCache|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $updatePackagesCacheMock;
-
-    /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
-     *
-     */
-    private $timezoneMock;
-
-    /**
-     * @var FullModuleList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $fullModuleListMock;
-
-    /**
-     * @var ModuleList|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $enabledModuleListMock;
-
-    /**
-     * @var PackageInfoFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $packageInfoFactoryMock;
-
-    /**
-     * Module package info
-     *
-     * @var PackageInfo
-     */
-    private $packageInfo;
-
-    /**
-     * Controller
-     *
-     * @var ComponentGrid
-     */
-    private $controller;
-
-    /**
-     * @var MarketplaceManager
-     */
-    private $marketplaceManagerMock;
-
-    /**
-     * @var array
-     */
-    private $componentData = [];
-
-    /**
-     * @var array
-     */
-    private $lastSyncData = [];
-
-    /**
-     * @var array
-     */
-    private $convertedLastSyncDate = [];
-
     /**#@+
      * Canned formatted date and time to return from mock
      */
@@ -109,16 +42,6 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testSyncAction()
-    {
-    }
-
-    /**
-     * Prepare the timezone mock to expect calls and return formatted date and time
-     *
-     * @return none
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function setupTimezoneMock()
     {
     }
 }
