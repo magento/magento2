@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails;
 
 use Magento\Mtf\Client\Element\MultisuggestElement;
-use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Typified element class for category element.
@@ -22,22 +21,14 @@ class CategoryIds extends MultisuggestElement
     protected $resultItem = './/label[contains(@class, "admin__action-multiselect-label")]/span[text() = "%s"]';
 
     /**
-     * Locator for new category button.
+     * Set value.
      *
-     * @var string
-     */
-    protected $newCategory = '[data-index="create_category_button"]';
-
-    /**
-     * Click on searched category item.
-     *
-     * @param ElementInterface $searchedItem
+     * @param array|string $values
      * @return void
      */
-    protected function clickOnSearchedItem(ElementInterface $searchedItem)
+    public function setValue($values)
     {
-        $searchedItem->hover();
-        $this->getContext()->find($this->newCategory)->hover();
-        parent::clickOnSearchedItem($searchedItem);
+        $this->getContext()->hover();
+        parent::setValue($values);
     }
 }

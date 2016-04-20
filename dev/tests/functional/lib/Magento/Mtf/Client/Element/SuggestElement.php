@@ -6,7 +6,6 @@
 
 namespace Magento\Mtf\Client\Element;
 
-use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 
 /**
@@ -81,7 +80,7 @@ class SuggestElement extends SimpleElement
             $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
             if ($searchedItem->isVisible()) {
                 try {
-                    $this->clickOnSearchedItem($searchedItem);
+                    $searchedItem->click();
                     break;
                 } catch (\Exception $e) {
                     // In parallel run on windows change the focus is lost on element
@@ -93,17 +92,6 @@ class SuggestElement extends SimpleElement
         if ($closeButton->isVisible()) {
             $closeButton->click();
         }
-    }
-
-    /**
-     * Click on searched item.
-     *
-     * @param ElementInterface $searchedItem
-     * @return void
-     */
-    protected function clickOnSearchedItem(ElementInterface $searchedItem)
-    {
-        $searchedItem->click();
     }
 
     /**
