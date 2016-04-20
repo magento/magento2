@@ -9,6 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Product validate
@@ -19,6 +20,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     *
      * @deprecated
      */
     protected $_dateFilter;
@@ -45,6 +47,11 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @var Initialization\Helper
      */
     protected $initializationHelper;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @param Action\Context $context
@@ -90,10 +97,12 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             if ($productData && !isset($productData['stock_data']['use_config_manage_stock'])) {
                 $productData['stock_data']['use_config_manage_stock'] = 0;
             }
+            $storeId = $this->getRequest()->getParam('store', 0);
+            $store = $this->getStoreManager()->getStore($storeId);
+            $this->getStoreManager()->setCurrentStore($store->getCode());
             /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productFactory->create();
             $product->setData('_edit_mode', true);
-            $storeId = $this->getRequest()->getParam('store');
             if ($storeId) {
                 $product->setStoreId($storeId);
             }
@@ -134,6 +143,19 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         return $this->resultJsonFactory->create()->setData($response);
+    }
+
+    /**
+     * @return StoreManagerInterface
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if (null === $this->storeManager) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreManagerInterface');
+        }
+        return $this->storeManager;
     }
 
     /**
