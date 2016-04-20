@@ -75,6 +75,21 @@ class SuggestElement extends SimpleElement
         if ($value == '') {
             return;
         }
+        $this->selectSearchedItem($value);
+        $closeButton = $this->find($this->closeButton);
+        if ($closeButton->isVisible()) {
+            $closeButton->click();
+        }
+    }
+
+    /**
+     * Select searched item.
+     *
+     * @param string $value
+     * @return void
+     */
+    protected function selectSearchedItem($value)
+    {
         foreach (str_split($value) as $symbol) {
             $this->keys([$symbol]);
             $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
@@ -87,10 +102,6 @@ class SuggestElement extends SimpleElement
                     // that causes disappearing of category suggest list.
                 }
             }
-        }
-        $closeButton = $this->find($this->closeButton);
-        if ($closeButton->isVisible()) {
-            $closeButton->click();
         }
     }
 
