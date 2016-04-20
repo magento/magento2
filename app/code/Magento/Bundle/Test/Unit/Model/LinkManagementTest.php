@@ -417,6 +417,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with($this->linkField)
             ->willReturn($this->linkField);
+        $productMock->expects($this->any())->method('getCopyFromView')->will($this->returnValue(false));
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getEntityId')->will($this->returnValue(13));

@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Test\Unit\Adapter\Mysql\Query\Preprocessor;
+namespace Magento\Search\Test\Unit\Adapter\Query\Preprocessor;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -15,7 +15,7 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
     private $synonymAnalyzer;
 
     /**
-     * @var \Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms
+     * @var \Magento\Search\Adapter\Query\Preprocessor\Synonyms
      */
     private $synonymPreprocessor;
 
@@ -29,7 +29,7 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->synonymPreprocessor = $objectManager->getObject(
-            'Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms',
+            'Magento\Search\Adapter\Query\Preprocessor\Synonyms',
             [
                 'synonymsAnalyzer' => $this->synonymAnalyzer
             ]
