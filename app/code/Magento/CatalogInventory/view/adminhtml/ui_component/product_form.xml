@@ -51,6 +51,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">manage_stock</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -314,6 +315,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">backorders</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -361,6 +363,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">deferred_stock_update</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -460,6 +463,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">enable_qty_increments</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -471,7 +475,7 @@
                         <item name="config" xsi:type="array">
                             <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
-                            <item name="dataScope" xsi:type="string">use_config_enable_qty_increments</item>
+                            <item name="dataScope" xsi:type="string">use_config_enable_qty_inc</item>
                             <item name="valueMap" xsi:type="array">
                                 <item name="true" xsi:type="string">1</item>
                                 <item name="false" xsi:type="string">0</item>
