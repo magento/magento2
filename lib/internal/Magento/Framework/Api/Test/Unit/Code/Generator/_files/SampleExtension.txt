@@ -50,8 +50,7 @@ class ProductExtension extends \Magento\Framework\Api\AbstractSimpleObject imple
     }
 
     /**
-     * @param \Magento\Bundle\Api\Data\BundleOptionInterface
-     * $complexObjectAttributeWithTypeDeclaration
+     * @param \Magento\Bundle\Api\Data\BundleOptionInterface $complexObjectAttributeWithTypeDeclaration
      * @return $this
      */
     public function setComplexObjectAttributeWithTypeDeclaration(\Magento\Bundle\Api\Data\BundleOptionInterface $complexObjectAttributeWithTypeDeclaration)

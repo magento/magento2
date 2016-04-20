@@ -33,8 +33,7 @@ interface ProductExtensionInterface extends \Magento\Framework\Api\ExtensionAttr
     public function getComplexObjectAttributeWithTypeDeclaration();
 
     /**
-     * @param \Magento\Bundle\Api\Data\BundleOptionInterface
-     * $complexObjectAttributeWithTypeDeclaration
+     * @param \Magento\Bundle\Api\Data\BundleOptionInterface $complexObjectAttributeWithTypeDeclaration
      * @return $this
      */
     public function setComplexObjectAttributeWithTypeDeclaration(\Magento\Bundle\Api\Data\BundleOptionInterface $complexObjectAttributeWithTypeDeclaration);
