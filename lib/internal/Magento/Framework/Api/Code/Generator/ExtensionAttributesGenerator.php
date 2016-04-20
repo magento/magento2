@@ -27,7 +27,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     /**
      * @var \Magento\Framework\Reflection\TypeProcessor
      */
-    protected $typeProcessor;
+    private $typeProcessor;
 
     /**
      * @var array
@@ -38,7 +38,6 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Api\ExtensionAttribute\Config $config
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io $ioObject
@@ -47,7 +46,6 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttribute\Config $config,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
@@ -56,7 +54,6 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     ) {
         $sourceClassName .= 'Interface';
         $this->config = $config;
-        $this->typeProcessor = $typeProcessor;
         parent::__construct(
             $sourceClassName,
             $resultClassName,
@@ -64,6 +61,21 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
             $classGenerator,
             $definedClasses
         );
+    }
+
+    /**
+     * Get type processor
+     *
+     * @return \Magento\Framework\Reflection\TypeProcessor
+     */
+    private function getTypeProcessor()
+    {
+        if ($this->typeProcessor === null) {
+            $this->typeProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Reflection\TypeProcessor::class
+            );
+        }
+        return $this->typeProcessor;
     }
 
     /**
@@ -101,7 +113,7 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
             $parameters = ['name' => $propertyName];
             // If the attribute type is a valid type declaration (e.g., interface, class, array) then use it to enforce
             // constraints on the generated setter methods
-            if ($this->typeProcessor->isValidTypeDeclaration($attributeType)) {
+            if ($this->getTypeProcessor()->isValidTypeDeclaration($attributeType)) {
                 $parameters['type'] = $attributeType;
             }
             $methods[] = [

@@ -21,7 +21,6 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Api\ExtensionAttribute\Config $config
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param string|null $sourceClassName
      * @param string|null $resultClassName
      * @param Io $ioObject
@@ -30,7 +29,6 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
      */
     public function __construct(
         \Magento\Framework\Api\ExtensionAttribute\Config $config,
-        \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
         $sourceClassName = null,
         $resultClassName = null,
         Io $ioObject = null,
@@ -42,7 +40,6 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
         }
         parent::__construct(
             $config,
-            $typeProcessor,
             $sourceClassName,
             $resultClassName,
             $ioObject,
