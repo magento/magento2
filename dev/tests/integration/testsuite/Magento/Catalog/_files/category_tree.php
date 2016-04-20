@@ -55,5 +55,6 @@ foreach ($categories as $data) {
         ->setDefaultSortBy($data['default_sort_by'])
         ->setIsActive($data['is_active'])
         ->setPosition($data['position'])
+        ->setStoreId(0)
         ->save();
 }
