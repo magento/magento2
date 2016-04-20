@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-
+use Magento\Framework\Exception\LocalizedException;
 /**
  * @api
  * Abstract model for product type implementation
@@ -561,6 +561,7 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array
+     * @throws LocalizedException
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -571,19 +572,28 @@ abstract class AbstractType
             $options = $product->getOptions();
         }
         if ($options !== null) {
+            $result = [];
             foreach ($options as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
-                $group = $option->groupFactory($option->getType())
-                    ->setOption($option)
-                    ->setProduct($product)
-                    ->setRequest($buyRequest)
-                    ->setProcessMode($processMode)
-                    ->validateUserValue($buyRequest->getOptions());
+                try {
+                    $group = $option->groupFactory($option->getType())
+                        ->setOption($option)
+                        ->setProduct($product)
+                        ->setRequest($buyRequest)
+                        ->setProcessMode($processMode)
+                        ->validateUserValue($buyRequest->getOptions());
+                } catch (\Exception $e) {
+                    $result[] = $e->getMessage();
+                    continue;
+                }
 
                 $preparedValue = $group->prepareForCart();
                 if ($preparedValue !== null) {
                     $transport->options[$option->getId()] = $preparedValue;
                 }
+            }
+            if (count($result) > 0) {
+                throw new LocalizedException(__(implode("\n", $result)));
             }
         }
 
