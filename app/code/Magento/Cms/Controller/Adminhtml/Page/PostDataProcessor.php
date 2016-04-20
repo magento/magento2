@@ -46,13 +46,7 @@ class PostDataProcessor
      */
     public function filter($data)
     {
-        $inputFilter = new \Zend_Filter_Input(
-            ['custom_theme_from' => $this->dateFilter, 'custom_theme_to' => $this->dateFilter],
-            [],
-            $data
-        );
-        $data = $inputFilter->getUnescaped();
-        return $data;
+        return (new \Zend_Filter_Input([], [], $data))->getUnescaped();
     }
 
     /**
