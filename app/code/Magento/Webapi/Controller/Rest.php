@@ -296,7 +296,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     {
         $inputParams = $this->getInputParamsResolver()->resolve();
 
-        $route = $this->getInputParamsResolver()->getCurrentRoute();
+        $route = $this->getInputParamsResolver()->getRoute();
         $serviceMethodName = $route->getServiceMethod();
         $serviceClassName = $route->getServiceClass();
 

@@ -170,14 +170,3 @@ class InputParamsResolverTest extends \PHPUnit_Framework_TestCase
         $this->inputParamsResolver->resolve();
     }
 }
-
-class TestService
-{
-    /**
-     * @return null
-     */
-    public function testMethod()
-    {
-        return null;
-    }
-}
