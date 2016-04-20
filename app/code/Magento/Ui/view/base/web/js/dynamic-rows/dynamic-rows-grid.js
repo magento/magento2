@@ -16,8 +16,10 @@ define([
             map: null,
             cacheGridData: [],
             deleteProperty: false,
+            positionProvider: 'position',
             dataLength: 0,
             identificationProperty: 'id',
+            identificationDRProperty: 'id',
             listens: {
                 'insertData': 'processingInsertData',
                 'recordData': 'initElements setToInsertData'
@@ -63,7 +65,7 @@ define([
          */
         initChildren: function () {
             this.getChildItems().each(function (data, index) {
-                this.processingAddChild(data, this.startIndex + index, data.id);
+                this.processingAddChild(data, this.startIndex + index, data[this.identificationDRProperty]);
             }, this);
 
             return this;
@@ -83,7 +85,7 @@ define([
 
             if (newData.length) {
                 if (this.insertData().length) {
-                    this.processingAddChild(newData[0], data.length - 1, newData[0].id);
+                    this.processingAddChild(newData[0], data.length - 1, newData[0][this.identificationProperty]);
                 }
             }
 
@@ -98,11 +100,12 @@ define([
          * @param {String|Number} recordId
          */
         deleteRecord: function (index, recordId) {
-            var data = this.getElementData(this.insertData(), recordId);
+            var data = this.getElementData(this.insertData(), recordId),
+                prop = this.map[this.identificationDRProperty];
 
             this._super();
             this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
-                return parseInt(recordData[this.map.id], 10) === parseInt(data[this.map.id], 10);
+                return ~~recordData[prop] === ~~data[prop];
             }, this));
         },
 
@@ -119,9 +122,15 @@ define([
             var obj = {},
                 result;
 
-            property ? obj[property] = index : obj[this.map.id] = index;
+            property ? obj[property] = index : obj[this.map[this.identificationDRProperty]] = index;
             result = _.findWhere(array, obj);
-            !result ? property ? obj[property] = index.toString() : obj[this.map.id] = index.toString() : false;
+
+            if (!result) {
+                property ?
+                    obj[property] = index.toString() :
+                    obj[this.map[this.identificationDRProperty]] = index.toString();
+            }
+
             result = _.findWhere(array, obj);
 
             return result;
@@ -151,13 +160,14 @@ define([
          * @returns {Array} changed data
          */
         getNewData: function (data) {
-            var changes = [];
+            var changes = [],
+                tmpObj = {};
 
             if (data.length !== this.relatedData) {
                 data.each(function (obj) {
-                    if (!_.findWhere(this.relatedData, {
-                            id: obj.id
-                        })) {
+                    tmpObj[this.identificationDRProperty] = obj[this.identificationDRProperty];
+
+                    if (!_.findWhere(this.relatedData, tmpObj)) {
                         changes.push(obj);
                     }
                 }, this);
@@ -188,16 +198,20 @@ define([
          * @param {Array} data
          */
         mappingValue: function (data) {
-            var obj = {};
+            var obj = {},
+                tmpObj = {};
 
             _.each(this.map, function (prop, index) {
-                obj[index] = data[prop];
+                obj[index] = !_.isUndefined(data[prop]) ? data[prop] : '';
             }, this);
 
-            if (_.findWhere(this.recordData(), {
-                    id: obj.id
-                })) {
+            tmpObj[this.identificationDRProperty] = obj[this.identificationDRProperty];
 
+            if (!obj.hasOwnProperty(this.positionProvider)) {
+                obj[this.positionProvider] = 9999;
+            }
+
+            if (_.findWhere(this.recordData(), tmpObj)) {
                 return false;
             }
 
@@ -218,7 +232,7 @@ define([
                 obj = {};
 
             max.each(function (record, index) {
-                obj[this.map.id] = record[this.map.id];
+                obj[this.map[this.identificationDRProperty]] = record[this.map[this.identificationDRProperty]];
 
                 if (!_.where(this.cacheGridData, obj).length) {
                     changes.push(data[index]);

@@ -71,8 +71,9 @@ define([
          * @param {Number} position - element position
          */
         initPosition: function (position) {
-            var pos = parseInt(position, 10);
+            var pos = ~~position;
 
+            pos = pos !== 9999 ? pos : false;
             this.parentComponent().setMaxPosition(pos, this);
 
             if (!pos) {
@@ -187,7 +188,7 @@ define([
          */
         setVisibilityColumn: function (index, state) {
             var elems = this.elems(),
-                curElem = parseInt(index, 10),
+                curElem = ~~index,
                 label;
 
             if (!this.parentComponent()) {
@@ -225,7 +226,7 @@ define([
          * @param {Boolean} state
          */
         setDisabledColumn: function (index, state) {
-            index = parseInt(index, 10);
+            index = ~~index;
             this.elems()[index].disabled(state);
         }
     });

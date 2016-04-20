@@ -68,7 +68,7 @@ define([
                 dnd: '${ $.dndConfig.name }'
             },
             pages: 1,
-            pageSize: 5,
+            pageSize: 20,
             relatedData: [],
             currentPage: 1,
             startIndex: 0
@@ -236,7 +236,7 @@ define([
             }
 
             sorted = this.elems().sort(function (propOne, propTwo) {
-                return parseInt(propOne.position, 10) - parseInt(propTwo.position, 10);
+                return ~~propOne.position - ~~propTwo.position;
             });
 
             updatedCollection = this.updatePosition(sorted, position, elem.name);
@@ -277,7 +277,7 @@ define([
          * @returns {Array} data
          */
         getChildItems: function () {
-            this.startIndex = (parseInt(this.currentPage(), 10) - 1) * this.pageSize;
+            this.startIndex = (~~this.currentPage() - 1) * this.pageSize;
 
             return this.relatedData.slice(this.startIndex, this.startIndex + this.pageSize);
         },
@@ -294,7 +294,7 @@ define([
                 this.clear();
                 this.pages(this.pages() + 1);
                 this.currentPage(this.pages());
-            } else if (parseInt(this.currentPage(), 10) !== this.pages()) {
+            } else if (~~this.currentPage() !== this.pages()) {
                 this.currentPage(this.pages());
             }
 
@@ -310,7 +310,7 @@ define([
         processingDeleteRecord: function (index, recordId) {
             this.deleteRecord(index, recordId);
 
-            if (this.getChildItems().length <= 0) {
+            if (this.getChildItems().length <= 0 && this.pages() !== 1) {
                 this.pages(this.pages() - 1);
                 this.currentPage(this.pages());
             }
@@ -326,11 +326,11 @@ define([
                 return false;
             }
 
-            if (parseInt(page, 10) > this.pages()) {
+            if (~~page > this.pages()) {
                 this.currentPage(this.pages());
 
                 return false;
-            } else if (parseInt(page, 10) < 1) {
+            } else if (~~page < 1) {
                 this.currentPage(1);
 
                 return false;
@@ -383,9 +383,9 @@ define([
          */
         updatePosition: function (collection, position, elemName) {
             var curPos,
-                parsePosition = parseInt(position, 10),
+                parsePosition = ~~position,
                 result = _.filter(collection, function (record) {
-                    return parseInt(record.position, 10) === parsePosition;
+                    return ~~record.position === parsePosition;
                 });
 
             if (result[1]) {
@@ -407,7 +407,7 @@ define([
                 pos;
 
             this.elems.each(function (record) {
-                pos = parseInt(record.position, 10);
+                pos = ~~record.position;
                 pos > max ? max = pos : false;
             });
 
@@ -421,7 +421,7 @@ define([
         removeMaxPosition: function () {
             this.maxPosition = 0;
             this.elems.each(function (record) {
-                this.maxPosition < record.position ? this.maxPosition = parseInt(record.position, 10) : false;
+                this.maxPosition < record.position ? this.maxPosition = ~~record.position : false;
             }, this);
         },
 
@@ -446,20 +446,28 @@ define([
         deleteRecord: function (index, recordId) {
             var recordInstance,
                 lastRecord,
-                recordsData;
+                recordsData,
+                childs;
 
             if (this.deleteProperty) {
                 recordInstance = _.find(this.elems(), function (elem) {
                     return elem.index === index;
                 });
                 recordInstance.destroy();
+                this.elems([]);
+                this._updateCollection();
                 this.removeMaxPosition();
                 this.recordData()[recordInstance.index][this.deleteProperty] = this.deleteValue;
                 this.recordData.valueHasMutated();
+                childs = this.getChildItems();
+
+                if (childs.length > this.elems().length) {
+                    this.addChild(false, childs[childs.length - 1][this.identificationProperty], false);
+                }
             } else {
                 this.update = true;
 
-                if (parseInt(this.currentPage(), 10) === this.pages()) {
+                if (~~this.currentPage() === this.pages()) {
                     lastRecord =
                         _.findWhere(this.elems(), {
                             index: this.startIndex + this.getChildItems().length - 1
@@ -477,7 +485,7 @@ define([
                 this.update = false;
             }
 
-            if (this.pages() < parseInt(this.currentPage(), 10)) {
+            if (this.pages() < ~~this.currentPage()) {
                 this.currentPage(this.pages());
             }
 
@@ -494,7 +502,7 @@ define([
             prop = prop || this.identificationProperty;
 
             return _.reject(this.getChildItems(), function (recordData) {
-                return parseInt(recordData[prop], 10) === parseInt(id, 10);
+                return ~~recordData[prop] === ~~id;
             }, this);
         },
 
@@ -503,7 +511,7 @@ define([
          */
         _sort: function () {
             this.elems(this.elems().sort(function (propOne, propTwo) {
-                return parseInt(propOne.position, 10) - parseInt(propTwo.position, 10);
+                return ~~propOne.position - ~~propTwo.position;
             }));
         },
 
@@ -617,7 +625,7 @@ define([
          */
         initChildren: function () {
             this.showSpinner(true);
-            this.getChildItems().each(function (data, index) {
+            this.getChildItems().forEach(function (data, index) {
                 this.addChild(data, this.startIndex + index);
             }, this);
 
