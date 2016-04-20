@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
  * Quote payment information
@@ -34,7 +35,7 @@ namespace Magento\Quote\Model\Quote;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\Data\PaymentInterface
+class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
 {
     /**
      * @var string
@@ -167,6 +168,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         }
 
         $method->assignData($data);
+        $data->unsetData(PaymentInterface::KEY_ADDITIONAL_DATA);
+
         /*
          * validating the payment data
          */
