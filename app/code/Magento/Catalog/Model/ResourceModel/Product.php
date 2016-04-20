@@ -522,9 +522,6 @@ class Product extends AbstractResource
             )->where(
                 $this->getLinkField() . ' = ?',
                 $oldId
-            )->where(
-                'store_id >= ?',
-                0
             );
 
             $connection->query(
@@ -541,7 +538,6 @@ class Product extends AbstractResource
         $statusAttribute = $this->getAttribute('status');
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
-        $updateCond[] = 'store_id >= 0';
         $updateCond[] = $connection->quoteInto($this->getLinkField() . ' = ?', $newId);
         $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
         $connection->update(
