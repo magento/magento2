@@ -613,6 +613,9 @@ class TypeProcessor
             $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
             return true;
         }
+        if (($type == 'int' || $type == 'float') && !is_numeric($value)) {
+            return false;
+        }
         return settype($value, $type);
     }
 

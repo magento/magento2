@@ -91,9 +91,6 @@ class UpdateAdminUserRoleEntityTest extends Injectable
         Role $role,
         User $user
     ) {
-        $this->markTestIncomplete(
-            "MAGETWO-50406: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
-        );
 
         // Preconditions
         $roleInit->persist();

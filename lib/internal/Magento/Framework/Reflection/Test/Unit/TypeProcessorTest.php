@@ -7,6 +7,7 @@
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Zend\Code\Reflection\ClassReflection;
+use Magento\Framework\Exception\SerializationException;
 
 /**
  * Type processor Test
@@ -203,6 +204,25 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $value = ['1', '2', '3', '4', '5'];
         $type = 'int[]';
         $this->assertSame([1, 2, 3, 4, 5], $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    /**
+     * @dataProvider processSimpleTypeExceptionProvider
+     */
+    public function testProcessSimpleTypeException($value, $type)
+    {
+        $this->setExpectedException(
+            SerializationException::class, 'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+        );
+        $this->_typeProcessor->processSimpleAndAnyType($value, $type);
+    }
+
+    public static function processSimpleTypeExceptionProvider()
+    {
+        return [
+            "int type, string value" => ['test', 'int'],
+            "float type, string value" => ['test', 'float'],
+        ];
     }
 
     /**
