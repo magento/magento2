@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\EntityManager\Operation\Write;
 
-use Magento\Framework\EntityManager\Operation\Write\Delete\ValidateDelete;
 use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteMain;
 use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteAttributes;
 use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteExtensions;
@@ -17,6 +16,8 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
  * Class Delete
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Delete
 {
@@ -105,9 +106,9 @@ class Delete
                 ]
             );
             $this->eventManager->dispatchEntityEvent($entityType, 'delete_before', ['entity' => $entity]);
-            $entity = $this->deleteMain->execute($entityType, $entity, $arguments);
-            $entity = $this->deleteAttributes->execute($entityType, $entity, $arguments);
             $entity = $this->deleteExtensions->execute($entityType, $entity, $arguments);
+            $entity = $this->deleteAttributes->execute($entityType, $entity, $arguments);
+            $entity = $this->deleteMain->execute($entityType, $entity, $arguments);
             $this->eventManager->dispatchEntityEvent($entityType, 'delete_after', ['entity' => $entity]);
             $this->eventManager->dispatch(
                 'entity_manager_delete_before',

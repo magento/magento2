@@ -148,7 +148,12 @@
                        data-validate="{required:true, 'validate-customer-password':true}"
                        autocomplete="off">
                 <div id="password-strength-meter-container">
-                    <p id="password-strength-meter">&nbsp;</p>
+                    <div id="password-strength-meter" class="password-strength-meter">
+                        <?php /* @escapeNotVerified */ echo __('Password Strength'); ?>:
+                        <span id="password-strength-meter-label">
+                            <?php /* @escapeNotVerified */ echo __('No password'); ?>
+                        </span>
+                    </div>
                 </div>
             </div>
 
