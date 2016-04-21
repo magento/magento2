@@ -50,8 +50,6 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
         }
 
         $this->_webApiCall($serviceInfo, $this->getRequestData());
-
-
     }
 
     protected function getRequestData()
