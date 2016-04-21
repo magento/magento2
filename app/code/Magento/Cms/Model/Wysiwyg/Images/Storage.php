@@ -197,8 +197,7 @@ class Storage extends \Magento\Framework\DataObject
             $subDirectories = $this->_directoryDatabaseFactory->create();
             $directories = $subDirectories->getSubdirectories($path);
             foreach ($directories as $directory) {
-                $fullPath = rtrim($path, '/') . '/' . $directory['name'];
-                $this->_directory->create($fullPath);
+                $this->_directory->create($directory['name']);
             }
         }
     }
