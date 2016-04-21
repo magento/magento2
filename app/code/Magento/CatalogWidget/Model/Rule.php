@@ -19,8 +19,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param Rule\Condition\CombineFactory $conditionsFactory
@@ -32,8 +30,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogWidget\Model\Rule\Condition\CombineFactory $conditionsFactory,
@@ -45,8 +41,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         parent::__construct(
             $context,
             $registry,
-            $extensionFactory,
-            $customAttributeFactory,
+            $this->getExtensionFactory(),
+            $this->getCustomAttributeFactory(),
             $formFactory,
             $localeDate,
             $resource,
@@ -69,5 +65,23 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getActionsInstance()
     {
         return null;
+    }
+
+    /**
+     * @return \Magento\Framework\Api\ExtensionAttributesFactory
+     */
+    private function getExtensionFactory()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\ExtensionAttributesFactory::class);
+    }
+
+    /**
+     * @return \Magento\Framework\Api\AttributeValueFactory
+     */
+    private function getCustomAttributeFactory()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\AttributeValueFactory::class);
     }
 }
