@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\Quote;
@@ -85,7 +85,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $this->calculator->initTotals($items, $address);
 
         $address->setDiscountDescription([]);
-        $items = $this->calculator->sortItemsByPriority($items);
+        $items = $this->calculator->sortItemsByPriority($items, $address);
 
         /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($items as $item) {
@@ -201,6 +201,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {

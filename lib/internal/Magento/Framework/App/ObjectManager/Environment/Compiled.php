@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -73,7 +73,7 @@ class Compiled extends AbstractEnvironment implements EnvironmentInterface
      */
     protected function getConfigData()
     {
-        $this->getObjectManagerConfigLoader()->load(Area::AREA_GLOBAL);
+        return $this->getObjectManagerConfigLoader()->load(Area::AREA_GLOBAL);
     }
 
     /**

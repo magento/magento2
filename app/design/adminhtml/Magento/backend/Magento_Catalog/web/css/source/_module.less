@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -23,63 +23,47 @@
     }
 }
 
-//  Change Attribute Set
-#product_info_tabs li.removed,
-div.removed,
-.field.removed {
-    display: none !important;
+//
+//  Create attribute panel
+//  ---------------------------------------------
+
+//  Panel description
+.admin_field-complex-attributes {
+    .admin_field-complex-content {
+        font-size: 2.4rem;
+        padding: .5rem 0;
+    }
+
+    [class^='action-'] {
+        &:extend(.abs-action-l all);
+    }
 }
 
-.ie9 {
-    .catalog-product-new {
-        .page-main-actions {
-            .action-default {
-                margin-right: 0;
-            }
-        }
+//  Grid search result summary
+.attributes-summary {
+    &:extend(.abs-list-reset-styles all);
+
+    .attributes-selected,
+    .attributes-found {
+        display: block;
     }
 }
 
 //
-//  Product weight switcher
+//  Category page sidebar
 //  ---------------------------------------------
 
-.weight-switcher {
-    .field-weight & {
-        .admin__control-switcher {
-            > .admin__field-label {
-                float: none;
-                padding-top: 7px;
-                text-align: left;
-                width: 100%;
-            }
-        }
-    }
+.sidebar-actions {
+    margin-bottom: @indent__base;
 
-    .admin__control-radio[type=radio] {
-        margin: 0;
-        position: absolute;
-    }
-
-    .admin__control-addon {
-        width: auto; // IE9 width fix
+    [class*='action-'] {
+        margin-bottom: @indent__xs;
     }
 }
 
-//
-//  Create attribute panel iframe page configuration
-//  ---------------------------------------------
-
-.catalog-product-attribute-edit {
-    min-width: 0;
-
-    &.attribute-popup {
-        .page-wrapper {
-            width: 100%;
-
-            .page-content {
-                padding-left: 0;
-            }
-        }
+.catalog-category-edit {
+    // TODO: refactor trees
+    .x-tree.tree-wrapper {
+        overflow-x: auto;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,13 +49,13 @@ return [
         ],
         [
             'id'          => 'root.upgrade',
-            'url'         => 'select-version',
-            'templateUrl' => "$base/select-version",
+            'url'         => 'marketplace-credentials',
+            'templateUrl' => "$base/marketplace-credentials",
             'title'       => 'System Upgrade',
-            'controller'  => 'selectVersionController',
-            'header'      => 'Step 1: Select Version',
+            'controller'  => 'MarketplaceCredentialsController',
             'order'       => 1,
-            'nav'         => true,
+            'nav'         => false,
+            'noMenu'      => true,
             'type'        => 'upgrade'
         ],
     ],

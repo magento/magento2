@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Report;
@@ -38,7 +38,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock]);
+        $selectRenderer = $this->getMockBuilder('Magento\Framework\DB\Select\SelectRenderer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock, $selectRenderer]);
         $select->expects(
             $this->once()
         )->method(

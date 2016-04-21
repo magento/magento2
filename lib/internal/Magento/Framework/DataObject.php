@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -394,7 +394,7 @@ class DataObject implements \ArrayAccess
                 return isset($this->_data[$key]);
         }
         throw new \Magento\Framework\Exception\LocalizedException(
-            new \Magento\Framework\Phrase('Invalid method %1::%2(%3)', [get_class($this), $method, print_r($args, 1)])
+            new \Magento\Framework\Phrase('Invalid method %1::%2', [get_class($this), $method])
         );
     }
 

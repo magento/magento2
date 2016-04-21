@@ -1,7 +1,7 @@
 <?php
 /**
  * @api
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,6 +14,13 @@ use Magento\Mtf\Block\Block;
  */
 class Template extends Block
 {
+    /**
+     * Magento new loader.
+     *
+     * @var string
+     */
+    protected $spinner = '[data-role="spinner"]';
+
     /**
      * Magento loader.
      *
@@ -35,6 +42,7 @@ class Template extends Block
      */
     public function waitLoader()
     {
+        $this->waitForElementNotVisible($this->spinner);
         $this->waitForElementNotVisible($this->loader);
         $this->waitForElementNotVisible($this->loaderOld);
     }

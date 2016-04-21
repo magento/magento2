@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,7 @@ class Adapter extends \Magento\Framework\App\Config\Value
         try {
             $this->_imageFactory->create($this->getValue());
         } catch (\Exception $e) {
-            $message = __('The specified image adapter cannot be used because of: ' . $e->getMessage());
+            $message = __('The specified image adapter cannot be used because of: %1', $e->getMessage());
             throw new \Magento\Framework\Exception\LocalizedException($message);
         }
 

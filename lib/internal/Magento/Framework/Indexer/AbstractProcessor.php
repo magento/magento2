@@ -2,7 +2,7 @@
 /**
  * @category    Magento
  * @package     Magento_Indexer
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,7 +45,7 @@ abstract class AbstractProcessor
      */
     public function reindexRow($id)
     {
-        if ($this->getIndexer()->isScheduled()) {
+        if ($this->isIndexerScheduled()) {
             return;
         }
         $this->getIndexer()->reindexRow($id);
@@ -59,7 +59,7 @@ abstract class AbstractProcessor
      */
     public function reindexList($ids)
     {
-        if ($this->getIndexer()->isScheduled()) {
+        if ($this->isIndexerScheduled()) {
             return;
         }
         $this->getIndexer()->reindexList($ids);

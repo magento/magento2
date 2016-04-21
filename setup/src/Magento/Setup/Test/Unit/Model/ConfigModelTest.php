@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,7 +37,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     private $configData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\FilePermissions
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\FilePermissions
      */
     private $filePermissions;
 
@@ -53,7 +53,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->configOptionsList = $this->getMock('Magento\Backend\Setup\ConfigOptionsList', [], [], '', false);
         $this->configData = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
-        $this->filePermissions = $this->getMock('\Magento\Setup\Model\FilePermissions', [], [], '', false);
+        $this->filePermissions = $this->getMock('\Magento\Framework\Setup\FilePermissions', [], [], '', false);
 
         $this->deploymentConfig->expects($this->any())->method('get');
 
@@ -105,10 +105,18 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $testSetExpected = [
+        $testSetExpected1 = [
             ConfigFilePool::APP_CONFIG => [
                 'segment' => [
                     'someKey' => 'value',
+                    'test' => 'value1'
+                ]
+            ]
+        ];
+
+        $testSetExpected2 = [
+            ConfigFilePool::APP_CONFIG => [
+                'segment' => [
                     'test' => 'value2'
                 ]
             ]
@@ -121,11 +129,13 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->will($this->returnValue($testSet1[ConfigFilePool::APP_CONFIG]));
         $configData1->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
+        $configData1->expects($this->once())->method('isOverrideWhenSave')->willReturn(false);
 
         $configData2->expects($this->any())
             ->method('getData')
             ->will($this->returnValue($testSet2[ConfigFilePool::APP_CONFIG]));
         $configData2->expects($this->any())->method('getFileKey')->will($this->returnValue(ConfigFilePool::APP_CONFIG));
+        $configData2->expects($this->once())->method('isOverrideWhenSave')->willReturn(false);
 
         $configOption = $this->configOptionsList;
         $configOption->expects($this->once())
@@ -139,7 +149,8 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
             ->method('collectOptionsLists')
             ->will($this->returnValue($configOptionsList));
 
-        $this->writer->expects($this->once())->method('saveConfig')->with($testSetExpected);
+        $this->writer->expects($this->at(0))->method('saveConfig')->with($testSetExpected1);
+        $this->writer->expects($this->at(1))->method('saveConfig')->with($testSetExpected2);
 
         $this->configModel->process([]);
     }
@@ -166,11 +177,11 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following directories: '/a/ro/dir', '/media'
+     * @expectedExceptionMessage Missing write permissions to the following paths:
      */
     public function testWritePermissionErrors()
     {
-        $this->filePermissions->expects($this->once())->method('getMissingWritableDirectoriesForInstallation')
+        $this->filePermissions->expects($this->once())->method('getMissingWritablePathsForInstallation')
             ->willReturn(['/a/ro/dir', '/media']);
         $this->configModel->process([]);
     }

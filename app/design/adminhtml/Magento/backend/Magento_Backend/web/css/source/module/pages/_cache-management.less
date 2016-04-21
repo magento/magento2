@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -88,5 +88,22 @@
         font-size: @additional-cache-management-text-size;
         font-weight: @additional-cache-management-font-weight;
         margin: 5px 0 6px;
+    }
+}
+
+.adminhtml-cache-index {
+    .data-grid-checkbox-cell {
+        &.col-select.col-massaction {
+            cursor: pointer;
+        }
+    }
+
+    .data-grid-checkbox-cell-inner {
+        margin: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+        padding: 0;
+
+        &:before {
+            content: none;
+        }
     }
 }

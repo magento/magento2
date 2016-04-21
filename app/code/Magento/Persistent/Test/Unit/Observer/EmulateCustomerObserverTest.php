@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,7 +57,9 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
             'setDefaultTaxBillingAddress',
             'setCustomerId',
             'setCustomerGroupId',
-            'isLoggedIn'
+            'isLoggedIn',
+            'setIsCustomerEmulated',
+            '__wakeUp'
         ];
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', $methods, [], '', false);
         $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
@@ -168,7 +170,15 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerId')
             ->with($customerId)
             ->will($this->returnSelf());
-        $this->customerSessionMock->expects($this->once())->method('setCustomerGroupId')->with($customerGroupId);
+        $this->customerSessionMock
+            ->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with($customerGroupId)->will($this->returnSelf());
+        $this->customerSessionMock
+            ->expects($this->once())
+            ->method('setIsCustomerEmulated')
+            ->with(true)
+            ->will($this->returnSelf());
         $this->model->execute($this->observerMock);
     }
 

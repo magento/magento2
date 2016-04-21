@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -843,23 +843,14 @@ class InstallData implements InstallDataInterface
             ]
         );
 
-        /**
-         * @var $countries array
-         */
-        $countries = [];
-        foreach ($this->directoryData->getCountryCollection() as $country) {
-            if ($country->getRegionCollection()->getSize() > 0) {
-                $countries[] = $country->getId();
-            }
-        }
-
+        $countries = $this->directoryData->getCountryCollection()->getCountriesWithRequiredStates();
         $setup->getConnection()->insert(
             $setup->getTable('core_config_data'),
             [
                 'scope' => 'default',
                 'scope_id' => 0,
                 'path' => Data::XML_PATH_STATES_REQUIRED,
-                'value' => implode(',', $countries)
+                'value' => implode(',', array_keys($countries))
             ]
         );
     }

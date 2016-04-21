@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@
 </div>
 
 <script>
-    require(["jquery", "jquery/ui", "swatchRenderer"], function ($) {
+    require(["jquery", "jquery/ui", "Magento_Swatches/js/swatch-renderer"], function ($) {
         $('.swatch-layered.<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>')
             .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
             .SwatchRendererTooltip();

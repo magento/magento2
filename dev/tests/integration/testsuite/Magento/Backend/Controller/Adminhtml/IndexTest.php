@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -30,7 +31,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * Check logged state
      * @covers \Magento\Backend\Controller\Adminhtml\Index\Index::execute
-     * @magentoDbIsolation enabled
+     *
      */
     public function testLoggedIndexAction()
     {

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -590,13 +590,13 @@
 
     &:before {
         border: 6px solid;
-        border-color: transparent transparent @_dropdown-list-background transparent;
+        .lib-css(border-color, transparent transparent @_dropdown-list-background transparent);
         z-index: 99;
     }
 
     &:after {
         border: 7px solid;
-        border-color: transparent transparent @_dropdown-list-pointer-border transparent;
+        .lib-css(border-color, transparent transparent @_dropdown-list-pointer-border transparent);
         z-index: 98;
     }
 }

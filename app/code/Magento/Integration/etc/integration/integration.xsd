@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Schema for integration configuration.
+ *
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:module:Magento_Integration:etc/integration/integration_base.xsd" />
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="integration" type="integrationType" maxOccurs="unbounded" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="integrationType">
+        <xs:all>
+            <xs:element name="email" type="emailType" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="endpoint_url" type="urlType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="identity_link_url" type="urlType" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="resources" type="resourcesType" minOccurs="0" maxOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="name" type="integrationNameType" use="required"/>
+    </xs:complexType>
+</xs:schema>

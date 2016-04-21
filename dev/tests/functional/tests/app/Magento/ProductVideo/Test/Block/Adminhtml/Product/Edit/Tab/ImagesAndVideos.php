@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,6 @@ namespace Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Product images tab.
@@ -20,7 +19,7 @@ class ImagesAndVideos extends Tab
      *
      * @var string
      */
-    protected $addVideoButton = '#product_info_tabs_image-management_content #add_video_button';
+    protected $addVideoButton = '[data-role="add-video-button"]';
 
     /**
      * Video dialog CSS locator.
@@ -68,7 +67,7 @@ class ImagesAndVideos extends Tab
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (!array_key_exists('images', $fields['media_gallery']['value'])) {
             return $this;
@@ -142,7 +141,7 @@ class ImagesAndVideos extends Tab
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($tabFields = null, SimpleElement $element = null)
+    public function getFieldsData($tabFields = null, SimpleElement $element = null)
     {
         $fields = reset($tabFields);
         $name = key($tabFields);

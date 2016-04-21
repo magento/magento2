@@ -2,7 +2,7 @@
     "name": "magento/module-sales-rule",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "php": "~5.5.22|~5.6.0|~7.0.0",
         "magento/module-config": "100.0.*",
         "magento/module-store": "100.0.*",
         "magento/module-rule": "100.0.*",
@@ -18,6 +18,7 @@
         "magento/module-catalog-rule": "100.0.*",
         "magento/module-widget": "100.0.*",
         "magento/module-quote": "100.0.*",
+        "magento/module-ui": "100.0.*",
         "magento/framework": "100.0.*"
     },
     "suggest": {

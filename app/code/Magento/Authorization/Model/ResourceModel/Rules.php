@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -103,6 +103,8 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
                     $connection->insert($this->getMainTable(), $insertData);
                 } else {
+                    /** Give basic admin permissions to any admin */
+                    $postedResources[] = \Magento\Backend\App\AbstractAction::ADMIN_RESOURCE;
                     $acl = $this->_aclBuilder->getAcl();
                     /** @var $resource \Magento\Framework\Acl\AclResource */
                     foreach ($acl->getResources() as $resourceId) {

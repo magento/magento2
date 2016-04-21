@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,8 @@ var config = {
             uiClass:        'Magento_Ui/js/lib/core/class',
             uiEvents:       'Magento_Ui/js/lib/core/events',
             uiRegistry:     'Magento_Ui/js/lib/registry/registry',
-            uiLayout:       'Magento_Ui/js/core/renderer/layout'
+            uiLayout:       'Magento_Ui/js/core/renderer/layout',
+            buttonAdapter:  'Magento_Ui/js/form/button-adapter'
         }
     }
 };

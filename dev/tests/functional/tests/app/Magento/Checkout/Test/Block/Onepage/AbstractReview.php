@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -87,7 +87,7 @@ abstract class AbstractReview extends Block
      *
      * @var string
      */
-    protected $shippingExclTax = '[class="totals shipping excl"] span';
+    protected $shippingExclTax = '.totals.shipping.excl .price';
 
     /**
      * Shipping including tax search mask.

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model;
@@ -244,7 +244,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $this->applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
         try {
-            $processedResult = $processor->setStoreId($storeId)->filter($this->getTemplateSubject());
+            $processedResult = $processor->setStoreId($storeId)->filter(__($this->getTemplateSubject()));
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -14,6 +14,7 @@ use Magento\Framework\DataObject;
 /**
  * Shopping cart model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 
  */
 class Cart extends DataObject implements CartInterface
 {
@@ -321,9 +322,6 @@ class Cart extends DataObject implements CartInterface
             $request = new \Magento\Framework\DataObject($requestInfo);
         }
 
-        if (!$request->hasQty()) {
-            $request->setQty(1);
-        }
         !$request->hasFormKey() ?: $request->unsFormKey();
 
         return $request;
@@ -350,7 +348,7 @@ class Cart extends DataObject implements CartInterface
             //If product was not found in cart and there is set minimal qty for it
             if ($minimumQty
                 && $minimumQty > 0
-                && $request->getQty() < $minimumQty
+                && !$request->getQty()
                 && !$this->getQuote()->hasProductId($productId)
             ) {
                 $request->setQty($minimumQty);
@@ -690,7 +688,7 @@ class Cart extends DataObject implements CartInterface
                 // If product was not found in cart and there is set minimal qty for it
                 if ($minimumQty
                     && $minimumQty > 0
-                    && $request->getQty() < $minimumQty
+                    && !$request->getQty()
                     && !$this->getQuote()->hasProductId($productId)
                 ) {
                     $request->setQty($minimumQty);

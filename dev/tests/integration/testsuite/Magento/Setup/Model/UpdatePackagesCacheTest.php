@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -82,25 +80,19 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
 
         $this->setupDirectory('testSkeleton');
 
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManagerProvider
-            ->expects($this->any())
-            ->method('get')
-            ->willReturn($this->objectManager);
+        /** @var UpdatePackagesCache $updatePackagesCache|\PHPUnit_Framework_MockObject_MockObject */
+        $updatePackagesCache = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false);
 
-        /** @var \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache */
-        $updatePackagesCache = $this->objectManager->create(
-            'Magento\Setup\Model\UpdatePackagesCache',
-            [
-                'applicationFactory' => new MagentoComposerApplicationFactory(
-                    $this->composerJsonFinder,
-                    $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
-                'composerInformation' => $this->composerInformation,
-                'objectManagerProvider' => $objectManagerProvider,
+        $packages = [
+            'packages' => [
+                $packageName => [
+                    'latestVersion' => '1000.100.200'
+                ]
             ]
-        );
+        ];
+
+        $updatePackagesCache->expects($this->once())->method('syncPackagesForUpdate')->willReturn(true);
+        $updatePackagesCache->expects($this->once())->method('getPackagesForUpdate')->willReturn($packages);
 
         $requiredPackages = $this->composerInformation->getInstalledMagentoPackages();
         $this->assertArrayHasKey($packageName, $requiredPackages);

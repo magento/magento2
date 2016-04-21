@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(function (require) {
@@ -19,8 +19,10 @@ define(function (require) {
         .addNode('fastForEach');
 
     return {
+        resizable:      require('./resizable'),
         i18n:           require('./i18n'),
         scope:          require('./scope'),
+        range:          require('./range'),
         mageInit:       require('./mage-init'),
         keyboard:       require('./keyboard'),
         optgroup:       require('./optgroup'),
@@ -31,6 +33,9 @@ define(function (require) {
         fadeVisible:    require('./fadeVisible'),
         collapsible:    require('./collapsible'),
         staticChecked:  require('./staticChecked'),
+        simpleChecked:  require('./simple-checked'),
+        bindHtml:       require('./bind-html'),
+        tooltip:        require('./tooltip'),
         repeat:         require('knockoutjs/knockout-repeat'),
         fastForEach:    require('knockoutjs/knockout-fast-foreach')
     };

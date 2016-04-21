@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Api\Data;
@@ -10,7 +10,7 @@ namespace Magento\Vault\Api\Data;
  *
  * @api
  */
-interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface PaymentTokenInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -42,7 +42,7 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /*
      * Token expiration timestamp.
      */
-    const EXPIRE_AT = 'expire_at';
+    const EXPIRES_AT = 'expires_at';
     /*
      * Gateway token ID.
      */
@@ -55,6 +55,10 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Is vault payment record active.
      */
     const IS_ACTIVE = 'is_active';
+    /*
+     * Is vault payment token visible.
+     */
+    const IS_VISIBLE = 'is_visible';
 
     /**
      * Gets the entity ID.
@@ -151,7 +155,7 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
      *
      * @return string|null
      */
-    public function getExpireAt();
+    public function getExpiresAt();
 
     /**
      * Set token expiration timestamp
@@ -159,7 +163,7 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * @param string $timestamp
      * @return $this
      */
-    public function setExpireAt($timestamp);
+    public function setExpiresAt($timestamp);
 
     /**
      * Get gateway token ID
@@ -208,17 +212,18 @@ interface PaymentTokenInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function setIsActive($isActive);
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * Gets is vault payment record visible.
      *
-     * @return \Magento\Vault\Api\Data\PaymentTokenExtensionInterface|null
+     * @return bool Is visible.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getExtensionAttributes();
+    public function getIsVisible();
 
     /**
-     * Set an extension attributes object.
+     * Sets is vault payment record visible.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenExtensionInterface $extensionAttributes
+     * @param bool $isVisible
      * @return $this
      */
-    public function setExtensionAttributes(PaymentTokenExtensionInterface $extensionAttributes);
+    public function setIsVisible($isVisible);
 }

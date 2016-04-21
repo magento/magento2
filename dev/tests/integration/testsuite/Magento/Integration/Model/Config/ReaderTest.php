@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  *
  */
@@ -33,8 +33,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     public function testRead()
     {
         $configFiles = [
-            file_get_contents(realpath(__DIR__ . '/_files/integrationA.xml')),
-            file_get_contents(realpath(__DIR__ . '/_files/integrationB.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/configA.xml')),
+            file_get_contents(realpath(__DIR__ . '/_files/configB.xml')),
         ];
         $this->_fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($configFiles));
 

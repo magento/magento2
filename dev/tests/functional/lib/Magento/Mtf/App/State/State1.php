@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ class State1 extends AbstractState
      *
      * @var string
      */
-    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled';
+    protected $config ='admin_session_lifetime_1_hour, wysiwyg_disabled, admin_account_sharing_enable';
 
     /**
      * @construct

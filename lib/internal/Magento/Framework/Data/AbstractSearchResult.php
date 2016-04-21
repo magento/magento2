@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -262,7 +262,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
         if ($itemId !== null) {
             if (isset($this->data['items'][$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->data['items'][$itemId] = $item;

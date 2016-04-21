@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -117,6 +118,7 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
+        $productIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         /**@var $subSelect \Magento\Framework\DB\Select*/
         $subSelect = $connection->select()->from(
@@ -124,16 +126,21 @@ class Source extends AbstractEav
             ['store_id', 'website_id']
         )->joinLeft(
             ['d' => $this->getTable('catalog_product_entity_int')],
-            '1 = 1 AND (d.store_id = 0 OR d.store_id = s.store_id)',
-            ['entity_id', 'attribute_id', 'value']
+            'd.store_id = 0 OR d.store_id = s.store_id',
+            ['attribute_id', 'value']
         )->joinLeft(
             ['d2' => $this->getTable('catalog_product_entity_int')],
             sprintf(
-                'd.entity_id = d2.entity_id AND d2.attribute_id = %s AND d2.value = %s AND d.store_id = d2.store_id',
+                "d.{$productIdField} = d2.{$productIdField}"
+                . ' AND d2.attribute_id = %s AND d2.value = %s AND d.store_id = d2.store_id',
                 $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId(),
                 ProductStatus::STATUS_ENABLED
             ),
             []
+        )->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.{$productIdField} = d.{$productIdField}",
+            array_unique([$productIdField, 'entity_id'])
         )->where(
             's.store_id != 0'
         )->where(
@@ -141,11 +148,11 @@ class Source extends AbstractEav
         )->where(
             'd2.value IS NOT NULL'
         )->group([
-            's.store_id', 's.website_id', 'd.entity_id', 'd.attribute_id', 'd.value',
+            's.store_id', 's.website_id', 'cpe.entity_id', 'd.attribute_id', 'd.value',
         ]);
 
         if ($entityIds !== null) {
-            $subSelect->where('d.entity_id IN(?)', $entityIds);
+            $subSelect->where('cpe.entity_id IN(?)', $entityIds);
         }
 
         $ifNullSql = $connection->getIfNullSql('pis.value', 'pid.value');
@@ -155,7 +162,8 @@ class Source extends AbstractEav
             []
         )->joinLeft(
             ['pis' => $this->getTable('catalog_product_entity_int')],
-            'pis.entity_id = pid.entity_id AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
+            "pis.{$productIdField} = pid.{$productIdField}"
+            .' AND pis.attribute_id = pid.attribute_id AND pis.store_id = pid.store_id',
             []
         )->columns(
             [
@@ -215,16 +223,14 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
+        $productIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         // load attribute options
         $options = [];
         $select = $connection->select()->from(
             $this->getTable('eav_attribute_option'),
             ['attribute_id', 'option_id']
-        )->where(
-            'attribute_id IN(?)',
-            $attrIds
-        );
+        )->where('attribute_id IN(?)', $attrIds);
         $query = $select->query();
         while ($row = $query->fetch()) {
             $options[$row['attribute_id']][$row['option_id']] = true;
@@ -234,15 +240,20 @@ class Source extends AbstractEav
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
         $select = $connection->select()->from(
             ['pvd' => $this->getTable('catalog_product_entity_varchar')],
-            ['entity_id', 'attribute_id']
+            [$productIdField, 'attribute_id']
         )->join(
             ['cs' => $this->getTable('store')],
             '',
             ['store_id']
         )->joinLeft(
             ['pvs' => $this->getTable('catalog_product_entity_varchar')],
-            'pvs.entity_id = pvd.entity_id AND pvs.attribute_id = pvd.attribute_id' . ' AND pvs.store_id=cs.store_id',
+            "pvs.{$productIdField} = pvd.{$productIdField} AND pvs.attribute_id = pvd.attribute_id"
+            . ' AND pvs.store_id=cs.store_id',
             ['value' => $productValueExpression]
+        )->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.{$productIdField} = pvd.{$productIdField}",
+            ['entity_id']
         )->where(
             'pvd.store_id=?',
             $connection->getIfNullSql('pvs.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
@@ -255,12 +266,11 @@ class Source extends AbstractEav
         );
 
         $statusCond = $connection->quoteInto('=?', ProductStatus::STATUS_ENABLED);
-        $this->_addAttributeToSelect($select, 'status', 'pvd.entity_id', 'cs.store_id', $statusCond);
+        $this->_addAttributeToSelect($select, 'status', "pvd.{$productIdField}", 'cs.store_id', $statusCond);
 
         if ($entityIds !== null) {
-            $select->where('pvd.entity_id IN(?)', $entityIds);
+            $select->where('cpe.entity_id IN(?)', $entityIds);
         }
-
         /**
          * Add additional external limitation
          */
@@ -268,7 +278,7 @@ class Source extends AbstractEav
             'prepare_catalog_product_index_select',
             [
                 'select' => $select,
-                'entity_field' => new \Zend_Db_Expr('pvd.entity_id'),
+                'entity_field' => new \Zend_Db_Expr('cpe.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
                 'store_field' => new \Zend_Db_Expr('cs.store_id')
             ]
@@ -310,7 +320,11 @@ class Source extends AbstractEav
             return $this;
         }
         $connection = $this->getConnection();
-        $connection->insertArray($this->getIdxTable(), ['entity_id', 'attribute_id', 'store_id', 'value'], $data);
+        $connection->insertArray(
+            $this->getIdxTable(),
+            ['entity_id', 'attribute_id', 'store_id', 'value'],
+            $data
+        );
         return $this;
     }
 

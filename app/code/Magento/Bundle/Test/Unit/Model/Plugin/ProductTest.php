@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,13 +21,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /** @var  MockObject|\Magento\Catalog\Model\Product */
     private $product;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 
         $this->product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->setMethods(['getEntityId'])
             ->getMock();
         $this->type = $this->getMockBuilder('\Magento\Bundle\Model\Product\Type')
             ->disableOriginalConstructor()
@@ -59,7 +59,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             Product::CACHE_TAG . '_' . 100500,
         ];
         $this->product->expects($this->once())
-            ->method('getId')
+            ->method('getEntityId')
             ->will($this->returnValue($id));
         $this->type->expects($this->once())
             ->method('getParentIdsByChild')

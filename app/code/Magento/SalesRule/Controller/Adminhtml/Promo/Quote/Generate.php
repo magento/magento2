@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
@@ -23,7 +23,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         $this->_initRule();
 
         /** @var $rule \Magento\SalesRule\Model\Rule */
-        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         if (!$rule->getId()) {
             $result['error'] = __('Rule is not defined');

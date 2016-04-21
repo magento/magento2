@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Paypal\Test\TestCase\InContextExpressCheckoutFromShoppingCartTest" summary="In-Context Checkout with PayPal Express Checkout (API Credentials) from shopping cart " ticketId="MAGETWO-47213">
+        <variation name="InContextExpressCheckoutFromShoppingCartTestVariation1" summary="In-Context Checkout with PayPal Express Checkout (API Credentials) from shopping cart " ticketId="MAGETWO-47213">
+            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="configData" xsi:type="string">paypal_express, paypal_express_in_context</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Paypal\Test\Constraint\AssertExpressCancelledMessage" />
+        </variation>
+    </testCase>
+</config>

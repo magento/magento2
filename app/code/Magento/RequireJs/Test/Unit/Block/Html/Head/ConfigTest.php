@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -130,36 +130,5 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->minificationMock
         );
         $object->setLayout($layout);
-    }
-
-    public function testToHtml()
-    {
-        $this->context->expects($this->once())
-            ->method('getEventManager')
-            ->will($this->returnValue($this->getMockForAbstractClass('\Magento\Framework\Event\ManagerInterface')));
-        $this->context->expects($this->once())
-            ->method('getScopeConfig')
-            ->will($this->returnValue(
-                $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface')
-            ));
-        $this->config->expects($this->once())->method('getBaseConfig')->will($this->returnValue('the config data'));
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $object = new Config(
-            $this->context,
-            $this->config,
-            $this->fileManager,
-            $this->pageConfig,
-            $this->bundleConfig,
-            $this->minificationMock
-        );
-        $html = $object->toHtml();
-        $expectedFormat = <<<expected
-<script type="text/javascript">
-the config data</script>
-expected;
-        $this->assertStringMatchesFormat($expectedFormat, $html);
     }
 }

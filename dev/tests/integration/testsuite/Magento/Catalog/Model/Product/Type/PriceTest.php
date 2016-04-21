@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
@@ -31,11 +31,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFinalPrice()
     {
-        /** @var $product Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
 
         // regular & tier prices
@@ -56,10 +55,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFormatedPrice()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         // fixture
         $this->assertEquals('<span class="price">$10.00</span>', $this->_model->getFormatedPrice($product));
     }

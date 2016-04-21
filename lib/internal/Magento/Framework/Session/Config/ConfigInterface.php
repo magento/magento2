@@ -2,7 +2,7 @@
 /**
  * Session config interface
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session\Config;
@@ -170,4 +170,19 @@ interface ConfigInterface
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseCookies();
+
+    /**
+     * Get save handler name
+     *
+     * @return string
+     */
+    public function getSaveHandlerName();
+
+    /**
+     * Set session.save_handler
+     *
+     * @param string $saveHandler
+     * @return $this
+     */
+    public function setSaveHandler($saveHandler);
 }

@@ -2,7 +2,7 @@
 /**
  * Resources and connections registry and factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -150,6 +150,18 @@ class ResourceConnection
             $tableName .= '_' . $tableSuffix;
         }
         return $this->getConnection($connectionName)->getTableName($tableName);
+    }
+
+    /**
+     * Gets table placeholder by table name
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function getTablePlaceholder($tableName)
+    {
+        $tableName = preg_replace('/^' . preg_quote($this->getTablePrefix()) . '_/', '', $tableName);
+        return $tableName;
     }
 
     /**

@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Cms Page Model
  *
- * @method \Magento\Cms\Model\ResourceModel\Page _getResource()
- * @method \Magento\Cms\Model\ResourceModel\Page getResource()
+ * @method ResourceCmsPage _getResource()
+ * @method ResourceCmsPage getResource()
+ * @method Page setStoreId(array $storeId)
+ * @method array getStoreId()
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
+class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
     /**
      * No route page id
@@ -87,7 +91,7 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
      */
     public function getStores()
     {
-        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
+        return $this->hasData('stores') ? $this->getData('stores') : (array)$this->getData('store_id');
     }
 
     /**

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -9,16 +9,9 @@
 //  Variables
 //  _____________________________________________
 
-@collapsible__border-color: @color-gray80;
+@collapsible__border-color: @control-collapsible__border-color;
 
-@collapsible-title__color: @color-very-dark-gray-black;
-@collapsible-title__font-size: 1.7rem;
-@collapsible-title__padding-top: 1.9rem;
-@collapsible-title__padding-bottom: @collapsible-title__padding-top;
-@collapsible-title__hover__color: darken(@collapsible-title__color, 15%);
-@collapsible-title__disabled__color: lighten(@collapsible-title__color, 30%);
-
-@collapsible-title-icon__size: @collapsible-title__font-size;
+@collapsible-title-icon__size: 1.8rem;
 @collapsible-title-support-text__font-size: 1.4rem;
 
 @collapsible-sub-block__indent: 4rem;
@@ -29,20 +22,23 @@
 //  Mixins
 //  _____________________________________________
 
-.admin__collapsible-block-wrapper() {
+.__collapsible-block-wrapper-pattern() {
     border-bottom: 1px solid @collapsible__border-color;
+    .admin__fieldset > &:last-child {
+        border-bottom-width: 0;
+    }
 }
 
-.admin__collapsible-sub-block-wrapper() {
+.__collapsible-sub-block-wrapper-pattern() {
     margin-left: @collapsible-sub-block__indent;
 }
 
-.admin__collapsible-content() {
+.__collapsible-content-pattern() {
     border: 0;
     padding: 0 0 @collapsible-content__indent;
 }
 
-.admin__collapsible-title() {
+.__collapsible-title-pattern() {
     clear: both;
     color: @collapsible-title__color;
     cursor: pointer;
@@ -82,9 +78,15 @@
         right: 1.3rem;
         top: 2.3rem;
     }
+
+    &._loading {
+        &:before {
+            content: '';
+        }
+    }
 }
 
-.admin__collapsible-sub-title() {
+.__collapsible-sub-title-pattern() {
     padding-left: (@collapsible-title-icon__size + 1rem);
     padding-right: 0;
 
@@ -94,7 +96,7 @@
     }
 }
 
-.admin__collapsible-text() {
+.__collapsible-text-pattern() {
     margin-bottom: .5em;
     margin-top: 1rem;
 }
@@ -102,9 +104,9 @@
 //
 
 .admin__collapsible-block-wrapper {
-    .admin__collapsible-block-wrapper();
+    .__collapsible-block-wrapper-pattern();
     .admin__collapsible-title {
-        .admin__collapsible-title();
+        .__collapsible-title-pattern();
     }
 
     &.opened,
@@ -146,9 +148,47 @@
     }
 }
 
+.admin__collapsible-content {
+    max-height: 0;
+    transform-origin: 0 0;
+    transform: scaleY(0);
+    transition: transform 100ms ease-in-out, max-height 100ms ease-in-out, visibility 100ms ease-in-out;
+    visibility: hidden;
+
+    &._show {
+        max-height: 100%;
+        transform: none;
+        visibility: visible;
+    }
+
+    .admin__collapsible-title {
+        font-size: 1.6rem;
+        padding-left: (@collapsible-title-icon__size + 1rem);
+
+        &:before {
+            left: 0;
+            right: auto;
+            top: 2rem;
+        }
+
+        &._loading {
+            .admin__page-nav-item-message-loader {
+                left: 0;
+                right: auto;
+            }
+        }
+    }
+
+    .admin__collapsible-block-wrapper {
+        margin-left: @collapsible-sub-block__indent;
+    }
+}
+
 .fieldset-wrapper {
     .admin__collapsible-block-wrapper {
         .fieldset-wrapper-title {
+            .lib-css(user-select, none, 1);
+
             .actions {
                 position: absolute;
                 right: 1.3rem;
@@ -159,15 +199,14 @@
                 top: 2.4rem;
             }
         }
+    }
 
+    .modal-slide & {
         .admin__collapsible-title {
-            font-size: 1.6rem;
-            padding-left: (@collapsible-title-icon__size + 1rem);
+            .__collapsible-title-pattern();
 
             &:before {
-                left: 0;
-                right: auto;
-                top: 2.2rem;
+                left: auto;
             }
         }
     }
@@ -179,8 +218,7 @@
 
 .admin__collapsible-block {
     .comment {
-        // ToDo UI: rename to .collapsible-text
-        .admin__collapsible-text();
+        .__collapsible-text-pattern();
     }
 
     //  Second level
@@ -189,21 +227,20 @@
 
         .entry-edit-head {
             > a {
-                .admin__collapsible-sub-title();
+                .__collapsible-sub-title-pattern();
             }
         }
     }
 
     ~ .admin__collapsible-block {
-        // ToDo UI: rename to .collapsible-content
-        .admin__collapsible-content();
+        .__collapsible-content-pattern();
     }
 }
 
 .section-config > .admin__collapsible-block > a,
 .accordion > dt a,
 .accordion .admin__collapsible-block > a {
-    .admin__collapsible-title();
+    .__collapsible-title-pattern();
 
     > i {
         // ToDo UI: change to .collapsible-sub-title
@@ -371,6 +408,16 @@
 
             label {
                 padding-top: 7px;
+            }
+
+            span {
+                &[data-config-scope] {
+                    position: relative;
+
+                    &:before {
+                        &:extend(.abs-config-scope-label all);
+                    }
+                }
             }
         }
 

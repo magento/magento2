@@ -2,7 +2,7 @@
 /**
  * Grouped product type implementation
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
@@ -202,7 +202,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getAssociatedProductCollection(
                 $product
             )->addAttributeToSelect(
-                '*'
+                ['name', 'price']
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
                 $this->getStoreFilter($product)
             )->addAttributeToFilter(
@@ -217,6 +217,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $product->setData($this->_keyAssociatedProducts, $associatedProducts);
         }
         return $product->getData($this->_keyAssociatedProducts);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function flushAssociatedProductsCache($product)
+    {
+        return $product->unsData($this->_keyAssociatedProducts);
     }
 
     /**
@@ -307,23 +316,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         )->setIsStrongMode();
         $collection->setProduct($product);
         return $collection;
-    }
-
-    /**
-     * Save type related data
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return $this
-     */
-    public function save($product)
-    {
-        parent::save($product);
-
-        $data = $product->getGroupedLinkData();
-        if ($data !== null) {
-            $this->productLinks->saveGroupedLinks($product, $data);
-        }
-        return $this;
     }
 
     /**
@@ -481,6 +473,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function beforeSave($product)
     {
+        //clear cached associated links
+        $product->unsetData($this->_keyAssociatedProducts);
         if ($product->hasData('product_options') && !empty($product->getData('product_options'))) {
             throw new \Exception('Custom options for grouped product type are not supported');
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -57,5 +57,23 @@ class PageForm extends FormTabs
         $config = $contentTab->getWysiwygConfig();
 
         return $config->getAllVariables();
+    }
+
+    /**
+     * Open tab.
+     *
+     * @param string $tabName
+     * @return PageForm
+     */
+    public function openTab($tabName)
+    {
+        $this->browser->find($this->header)->hover();
+        $tab = $this->getContainerElement($tabName);
+        $tabHeader = $tab->find('.//*[contains(@class,"admin__collapsible-title")]', Locator::SELECTOR_XPATH);
+        if ($tabHeader->isVisible() && !strpos($tabHeader->getAttribute('class'), '_show')) {
+            $tabHeader->hover();
+            $tabHeader->click();
+        };
+        return $this;
     }
 }

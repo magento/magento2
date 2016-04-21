@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -35,9 +35,9 @@
         }
 
         .product-item-name {
+            display: inline-block;
             font-weight: @font-weight__regular;
             margin-bottom: @indent__s;
-            display: inline-block;
         }
 
         .price-box {
@@ -57,18 +57,19 @@
         }
 
         .stock.unavailable {
-            margin: 0;
-            white-space: nowrap;
-            text-transform: none;
             font-weight: normal;
+            margin: 0;
+            text-transform: none;
+            white-space: nowrap;
         }
     }
 
-    .page-product-grouped .product-info-price {
-        float: right;
-        display: block;
-        width: auto;
-        border: 0;
+    .page-product-grouped {
+        .product-info-main {
+            .alert {
+                clear: left;
+            }
+        }
     }
 }
 
@@ -114,11 +115,42 @@
             }
         }
     }
+
+    .page-product-grouped {
+        .minimal-price {
+            margin: 0;
+        }
+
+        .product-info-price {
+            border: 0;
+            margin-bottom: 0;
+
+            .price-box {
+                padding-bottom: 0;
+            }
+        }
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .table-wrapper.grouped {
         .lib-css(margin-left, -@layout__width-xs-indent);
         .lib-css(margin-right, -@layout__width-xs-indent);
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .page-product-grouped {
+        .product-info-price {
+            float: none;
+        }
+
+        .minimal-price {
+            margin-top: -8px;
+        }
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="vault" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Vault Provider</label>
+                <frontend_model>Magento\Vault\Block\System\Config\EmptyFieldsetDecorator</frontend_model>
+                <field id="vault_payment" type="select" translate="label comment" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Vault Provider</label>
+                    <comment>Specified provider should be enabled.</comment>
+                    <frontend_model>Magento\Vault\Block\System\Config\EmptySelectDecorator</frontend_model>
+                    <source_model>Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -148,8 +148,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSaveHandlerIsMutable()
     {
         $this->getModel($this->validatorMock);
-        $this->config->setSaveHandler('user');
+        $this->config->setSaveHandler('redis');
         $this->assertEquals('user', $this->config->getSaveHandler());
+        $this->assertEquals('redis', $this->config->getSaveHandlerName());
+        $this->config->setSaveHandler('files');
+        $this->assertEquals('files', $this->config->getSaveHandler());
+        $this->assertEquals('files', $this->config->getSaveHandlerName());
     }
 
     public function testCookieLifetimeIsMutable()
@@ -372,7 +376,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     'session.save_handler' => 'files',
                     'session.cache_limiter' => 'files',
-                    'session.cookie_lifetime' => 7200,
+                    'session.cookie_lifetime' => 0,
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
@@ -439,7 +443,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $getValueReturnMap = [
-            ['test_web/test_cookie/test_cookie_lifetime', 'store', null, 7200],
             ['web/cookie/cookie_path', 'store', null, ''],
         ];
         $this->configMock->method('getValue')

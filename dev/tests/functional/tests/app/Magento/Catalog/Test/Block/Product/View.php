@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -64,6 +64,13 @@ class View extends AbstractConfigureBlock
     protected $paypalCheckout = '[data-action=checkout-form-submit]';
 
     /**
+     * 'Check out with PayPal' button.
+     *
+     * @var string
+     */
+    protected $inContextPaypalCheckout = '#paypal-express-in-context-mini-cart';
+
+    /**
      * Product name element.
      *
      * @var string
@@ -82,14 +89,14 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productDescription = '.product.attibute.description';
+    protected $productDescription = '.product.attribute.description';
 
     /**
      * Product short-description element.
      *
      * @var string
      */
-    protected $productShortDescription = '.product.attibute.overview';
+    protected $productShortDescription = '.product.attribute.overview';
 
     /**
      * Stock Availability control.
@@ -160,6 +167,27 @@ class View extends AbstractConfigureBlock
      * @var string
      */
     protected $ajaxLoading = 'body.ajax-loading';
+
+    /**
+     * Full image selector
+     *
+     * @var string
+     */
+    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img--full';
+
+    /**
+     * Full image close selector
+     *
+     * @var string
+     */
+    protected $fullImageClose = '[data-gallery-role="fotorama__fullscreen-icon"]';
+
+    /**
+     * Base image selector
+     *
+     * @var string
+     */
+    protected $baseImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img';
 
     /**
      * Get block price.
@@ -252,6 +280,34 @@ class View extends AbstractConfigureBlock
     {
         $this->_rootElement->find($this->paypalCheckout, Locator::SELECTOR_CSS)->click();
         $this->waitForElementNotVisible($this->paypalCheckout);
+    }
+
+    /**
+     * Press 'Check out with PayPal' button.
+     *
+     * @return void
+     */
+    public function inContextPaypalCheckout()
+    {
+        $this->_rootElement->find($this->inContextPaypalCheckout, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementNotVisible($this->inContextPaypalCheckout);
+    }
+
+    /**
+     * Press 'Check out with Braintree PayPal' button.
+     *
+     * @return void
+     */
+    public function braintreePaypalCheckout()
+    {
+        /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
+        $miniCart = $this->blockFactory->create(
+            '\Magento\Checkout\Test\Block\Cart\Sidebar',
+            ['element' => $this->browser->find($this->miniCartBlock)]
+        );
+
+        $miniCart->openMiniCart();
+        $miniCart->clickBraintreePaypalButton();
     }
 
     /**
@@ -435,5 +491,66 @@ class View extends AbstractConfigureBlock
     public function isGalleryVisible()
     {
         return $this->_rootElement->find($this->mediaGallery)->isVisible();
+    }
+
+    /**
+     * Check is full image into gallery is visible for the product.
+     *
+     * @return bool
+     */
+    public function isFullImageVisible()
+    {
+        return $this->browser->find($this->fullImage)->isVisible();
+    }
+
+    /**
+     * Get full image source from media gallery into product
+     *
+     * @return string
+     */
+    public function getFullImageSource()
+    {
+        return $this->browser->find($this->fullImage)->getAttribute('src');
+    }
+
+    /**
+     * Check is base image into gallery is visible for the product.
+     *
+     * @return bool
+     */
+    public function isBaseImageVisible()
+    {
+        return $this->_rootElement->find($this->baseImage)->isVisible();
+    }
+
+    /**
+     * Get full image source from media gallery into product
+     *
+     * @return string
+     */
+    public function getBaseImageSource()
+    {
+        return $this->_rootElement->find($this->baseImage)->getAttribute('src');
+    }
+
+    /**
+     * Click link.
+     *
+     * @return void
+     */
+    public function clickBaseImage()
+    {
+        $this->_rootElement->find($this->baseImage, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementVisible($this->fullImage);
+    }
+
+    /**
+     * Click link.
+     *
+     * @return void
+     */
+    public function closeFullImage()
+    {
+        $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS)->click();
     }
 }

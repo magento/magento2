@@ -1,19 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\Vault\Api\Data\PaymentTokenExtensionInterface;
 use Magento\Vault\Model\ResourceModel;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Vault Payment Token extension attribute model
  */
-class PaymentToken extends AbstractExtensibleModel implements PaymentTokenInterface
+class PaymentToken extends AbstractModel implements PaymentTokenInterface
 {
     /**
      * @var string
@@ -99,17 +99,17 @@ class PaymentToken extends AbstractExtensibleModel implements PaymentTokenInterf
     /**
      * @inheritdoc
      */
-    public function getExpireAt()
+    public function getExpiresAt()
     {
-        return $this->getData(PaymentTokenInterface::EXPIRE_AT);
+        return $this->getData(PaymentTokenInterface::EXPIRES_AT);
     }
 
     /**
      * @inheritdoc
      */
-    public function setExpireAt($timestamp)
+    public function setExpiresAt($timestamp)
     {
-        $this->setData(PaymentTokenInterface::EXPIRE_AT, $timestamp);
+        $this->setData(PaymentTokenInterface::EXPIRES_AT, $timestamp);
         return $this;
     }
 
@@ -193,23 +193,25 @@ class PaymentToken extends AbstractExtensibleModel implements PaymentTokenInterf
     }
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * Gets is vault payment record visible.
      *
-     * @return \Magento\Vault\Api\Data\PaymentTokenExtensionInterface|null
+     * @return bool Is visible.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getExtensionAttributes()
+    public function getIsVisible()
     {
-        return $this->_getExtensionAttributes();
+        return (bool) (int) $this->getData(PaymentTokenInterface::IS_VISIBLE);
     }
 
     /**
-     * Set an extension attributes object.
+     * Sets is vault payment record visible.
      *
-     * @param \Magento\Vault\Api\Data\PaymentTokenExtensionInterface $extensionAttributes
+     * @param bool $isVisible
      * @return $this
      */
-    public function setExtensionAttributes(PaymentTokenExtensionInterface $extensionAttributes)
+    public function setIsVisible($isVisible)
     {
-        return $this->_setExtensionAttributes($extensionAttributes);
+        $this->setData(PaymentTokenInterface::IS_VISIBLE, (bool) $isVisible);
+        return $this;
     }
 }

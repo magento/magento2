@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,5 +35,15 @@ class Review extends AbstractReview
             'Magento\Paypal\Test\Block\Express\Review\ShippingoptgroupElement'
         );
         $shippingElement->setValue($shippingMethod['shipping_service'] . '/' . $shippingMethod['shipping_method']);
+        $this->waitForElementVisible('#review-please-wait');
+        $this->waitForElementNotVisible('#review-please-wait');
+    }
+
+    /**
+     * Click "Place Order" button.
+     */
+    public function placeOrder()
+    {
+        $this->_rootElement->find('#review-button')->click();
     }
 }

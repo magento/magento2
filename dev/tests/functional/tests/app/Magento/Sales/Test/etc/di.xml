@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -26,7 +26,17 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory">
+    <type name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertTransactionDetails">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>

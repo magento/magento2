@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -169,7 +169,7 @@ class Io
         }
         try {
             if (!$this->filesystemDriver->isDirectory($directory)) {
-                $this->filesystemDriver->createDirectory($directory, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+                $this->filesystemDriver->createDirectory($directory);
             }
             return true;
         } catch (FileSystemException $e) {

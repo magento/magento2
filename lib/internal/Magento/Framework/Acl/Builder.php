@@ -4,7 +4,7 @@
  * and uses them to populate provided ACL object. Acl object is put to cache after creation.
  * On consequent requests, ACL object is deserialized from cache.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl;
@@ -75,7 +75,7 @@ class Builder
                 $this->_cache->save($this->_acl);
             }
         } catch (\Exception $e) {
-            throw new \LogicException('Could not create acl object: ' . $e->getMessage());
+            throw new \LogicException('Could not create an acl object: ' . $e->getMessage());
         }
 
         return $this->_acl;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Action;
@@ -24,12 +24,10 @@ class RowTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($attr->isIndexable());
 
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-
-        $product->load(1);
+        $product = $repository->get('simple');
         $product->setWeight(11);
         $product->save();
 

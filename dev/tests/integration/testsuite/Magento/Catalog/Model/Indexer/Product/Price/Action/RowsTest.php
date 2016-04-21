@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price\Action;
@@ -37,8 +37,14 @@ class RowsTest extends \PHPUnit_Framework_TestCase
      */
     public function testProductsUpdate()
     {
-        $this->_product->load(1);
-
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
+        /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagment */
+        $linkManagment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Api\CategoryLinkManagementInterface'
+        );
+        $this->_product = $product->load(1);
+        $linkManagment->assignProductToCategories($this->_product->getSku(), [9]);
         $this->_processor->reindexList([$this->_product->getId()]);
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

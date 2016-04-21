@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Config;
 
 /**
  * Service config data reader.
+ *
+ * @deprecated
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
@@ -26,7 +28,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
-     * @param string $filename
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,

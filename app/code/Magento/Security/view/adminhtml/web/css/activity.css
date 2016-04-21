@@ -1,0 +1,49 @@
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+body {
+    min-width: 0;
+}
+
+.page-wrapper {
+    width: 600px;
+}
+
+.main-col {
+    height: 100%;
+}
+
+.page-title-wrapper {
+    margin-top: 0;
+}
+
+.page-wrapper header {
+    background-color: #F8F8F8;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    padding-bottom: 1rem;
+}
+
+.information-title {
+    font-weight: bold;
+    padding: 1rem 0;
+}
+
+.information-table td, .information-table th {
+    padding: 5px;
+    padding-left: 10px;
+}
+
+.button-container {
+    padding: 1rem 0;
+}
+
+.messages {
+    margin-top: 1rem;
+}
+
+.message {
+    margin-bottom: 0;
+}

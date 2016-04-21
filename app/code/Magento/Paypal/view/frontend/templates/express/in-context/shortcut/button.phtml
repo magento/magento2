@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Paypal\Block\Express\InContext\Minicart\Button;
+
+/**
+ * @var \Magento\Paypal\Block\Express\InContext\Minicart\Button $block
+ */
+$config = [
+    'Magento_Paypal/js/in-context/button' => [
+        'id' => $block->getContainerId(),
+        'paypalButton' => Button::PAYPAL_BUTTON_ID,
+        'addToCartSelector' => $block->getAddToCartSelector()
+    ]
+];
+
+?>
+<div data-mage-init='<?php /* @noEscape */ echo json_encode($config); ?>'
+     class="paypal checkout paypal-logo <?php /* @noEscape */ echo $block->getContainerId(); ?>-container">
+    <a id="<?php /* @noEscape */ echo $block->getContainerId(); ?>" href="#">
+        <img class="paypal-button-hidden"
+             src="<?php /* @noEscape */ echo $block->getImageUrl() ?>"
+             alt="Check out with PayPal" />
+    </a>
+</div>

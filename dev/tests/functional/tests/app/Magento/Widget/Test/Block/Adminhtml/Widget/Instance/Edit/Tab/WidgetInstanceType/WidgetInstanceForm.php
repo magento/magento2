@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,6 +35,20 @@ class WidgetInstanceForm extends Form
      * @var string
      */
     protected $templateBlock = './ancestor::body';
+
+    /**
+     * Selector for action header.
+     *
+     * @var string
+     */
+    protected $header = '.page-header';
+
+    /**
+     * Selector for footer.
+     *
+     * @var string
+     */
+    protected $footer = '.page-footer';
 
     /**
      * Filling layout form.
@@ -78,5 +92,29 @@ class WidgetInstanceForm extends Form
             'Magento\Backend\Test\Block\Template',
             ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
+    }
+
+    /**
+     * Click element on the page
+     *
+     * @param string $anchor
+     * @param string $element
+     * @param string $anchorStrategy [optional]
+     * @param string $elementStrategy [optional]
+     * @return bool
+     */
+    protected function clickOnElement(
+        $anchor,
+        $element,
+        $anchorStrategy = Locator::SELECTOR_CSS,
+        $elementStrategy = Locator::SELECTOR_CSS
+    ) {
+        try {
+            $this->browser->find($anchor, $anchorStrategy)->hover();
+            $this->_rootElement->find($element, $elementStrategy)->click();
+        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+            return false;
+        }
+        return true;
     }
 }

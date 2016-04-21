@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -33,6 +33,13 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="cronCommand" xsi:type="object">Magento\Cron\Console\Command\CronCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\AreaList">
+        <arguments>
+            <argument name="areas" xsi:type="array">
+                <item name="crontab" xsi:type="null" />
             </argument>
         </arguments>
     </type>

@@ -1,0 +1,103 @@
+// /**
+//  * Copyright © 2016 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@braintree-input-border__color: @color-gray76;
+
+@braintree-error__color: @color-red10;
+@braintree-focus__color: @color-blue2;
+@braintree-success__color: @color-dark-green1;
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .payment-method-braintree {
+
+        .hosted-date-wrap {
+            &:extend(.abs-add-clearfix all);
+        }
+
+        .hosted-control {
+            .lib-form-element-input(@_type: input-text);
+            position: relative;
+            width: 225px;
+
+            &.braintree-hosted-fields-focused {
+                border-color: @braintree-focus__color;
+            }
+
+            &.braintree-hosted-fields-invalid:not(.braintree-hosted-fields-focused) {
+                border-color: @braintree-error__color;
+
+                & ~ .hosted-error {
+                    height: auto;
+                    opacity: 1;
+                }
+            }
+
+            &.braintree-hosted-fields-valid {
+                border-color: @braintree-success__color;
+            }
+
+            &.hosted-cid {
+                width: 5rem;
+            }
+
+            &.hosted-date {
+                @distance: 50px;
+
+                float: left;
+                margin-bottom: 7px;
+                width: 6rem;
+
+                &:first-of-type {
+                    margin-right: @distance;
+
+                    &:after {
+                        content: '/';
+                        display: inline;
+                        padding-bottom: inherit;
+                        padding-top: inherit;
+                        position: absolute;
+                        right: -@distance / 2;
+                        top: 5px;
+                    }
+                }
+            }
+        }
+
+        .field-tooltip {
+            right: 0;
+        }
+
+        .hosted-error {
+            clear: both;
+            color: @braintree-error__color;
+            font-size: 1.2rem;
+            height: 0;
+            margin-top: 7px;
+            opacity: 0;
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .payment-method-braintree {
+        .cvv {
+            .field-tooltip {
+                left: 6rem;
+            }
+        }
+    }
+}

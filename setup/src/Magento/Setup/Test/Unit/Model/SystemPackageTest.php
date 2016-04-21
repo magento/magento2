@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,7 +49,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
-
 
     public function setUp()
     {
@@ -178,7 +177,36 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage System package not found
+     * @expectedExceptionMessage no components are available because you cloned the Magento 2 GitHub repository
+     */
+    public function testGetPackageVersionGitCloned()
+    {
+        $package = $this->getMock('\Composer\Package\Package', [], [], '', false);
+        $this->repository
+            ->expects($this->once())
+            ->method('getPackages')
+            ->willReturn([$package]);
+
+        $this->locker->expects($this->once())->method('getLockedRepository')->willReturn($this->repository);
+        $this->composerInformation->expects($this->any())->method('isSystemPackage')->willReturn(false);
+        $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
+        $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
+
+        $this->composerAppFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->magentoComposerApp);
+
+        $this->composerAppFactory->expects($this->once())
+            ->method('createInfoCommand')
+            ->willReturn($this->infoCommand);
+
+        $this->systemPackage = new SystemPackage($this->composerAppFactory, $this->composerInformation);
+        $this->systemPackage->getPackageVersions();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage We cannot retrieve information on magento/product-community-edition.
      */
     public function testGetPackageVersionsFailed()
     {
@@ -199,10 +227,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
         $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
         $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
-
-        $this->composerAppFactory->expects($this->once())
-            ->method('createInfoCommand')
-            ->willReturn($this->infoCommand);
 
         $this->composerAppFactory->expects($this->once())
             ->method('create')
@@ -239,7 +263,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             ->with('magento/product-enterprise-edition')
             ->willReturn(['available_versions' => ['1.0.0', '1.0.1', '1.0.2']]);
         $require = $this->getMock('\Composer\Package\Link', [], [], '', false);
-        $constraintMock = $this->getMock('\Composer\Package\LinkConstraint\VersionConstraint', [], [], '', false);
+        $constraintMock = $this->getMock('\Composer\Semver\Constraint\Constraint', [], [], '', false);
         $constraintMock->expects($this->any())->method('getPrettyString')
             ->willReturn('1.0.1');
         $require->expects($this->any())

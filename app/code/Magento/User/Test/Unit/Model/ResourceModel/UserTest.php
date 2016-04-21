@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -193,7 +193,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('from')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturn($this->selectMock);
-        $this->selectMock->expects($this->once())->method('where')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn([1, 2, 3]);
         $this->assertEquals([1, 2, 3], $this->model->getRoles($this->userMock));
     }
@@ -206,7 +206,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('from')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturn($this->selectMock);
-        $this->selectMock->expects($this->once())->method('where')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn(false);
         $this->assertEquals([], $this->model->getRoles($this->userMock));
     }

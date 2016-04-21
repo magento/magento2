@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -22,13 +22,25 @@ define([
             this._bind();
         },
         _bind: function() {
-            var changeCustomOption = 'change ' + this.options.customOptionsInfo,
-                changeQty = 'change ' + this.options.qtyInfo,
-                changeProductInfo = 'change ' + this.options[this.options.productType + 'Info'],
+            var options = this.options,
+                changeCustomOption = 'change ' + options.customOptionsInfo,
+                changeQty = 'change ' + options.qtyInfo,
                 events = {};
+
+            if ('productType' in options) {
+                if (typeof options.productType === 'string') {
+                    options.productType = [options.productType];
+                }
+            } else {
+                options.productType = [];
+            }
+
             events[changeCustomOption] = '_updateWishlistData';
-            events[changeProductInfo] = '_updateWishlistData';
             events[changeQty] = '_updateWishlistData';
+            options.productType.forEach(function (type) {
+                events['change ' + options[type + 'Info']] = '_updateWishlistData';
+            });
+
             this._on(events);
         },
         _updateWishlistData: function(event) {
@@ -90,10 +102,11 @@ define([
             return result;
         },
         _getElementData: function(element) {
+            element = $(element);
             var data = {},
-                elementName = $(element).attr('id').replace(/[^_]+/, 'options').replace(/_(\d+)/g, '[$1]'),
-                elementValue = $(element).val();
-            if ($(element).is('select[multiple]') && elementValue !== null) {
+                elementName = element.data('selector') ? element.data('selector') : element.attr('name'),
+                elementValue = element.val();
+            if (element.is('select[multiple]') && elementValue !== null) {
                 if (elementName.substr(elementName.length - 2) == '[]') {
                     elementName = elementName.substring(0, elementName.length - 2);
                 }
@@ -102,7 +115,14 @@ define([
                 });
             } else {
                 if (elementValue) {
-                    data[elementName] = elementValue;
+                    if (elementName.substr(elementName.length - 2) == '[]') {
+                        elementName = elementName.substring(0, elementName.length - 2);
+                        if (elementValue) {
+                            data[elementName + '[' + elementValue + ']'] = elementValue;
+                        }
+                    } else {
+                        data[elementName] = elementValue;
+                    }
                 }
             }
             return data;
@@ -123,6 +143,13 @@ define([
                     params = $(event.currentTarget).data('post'),
                     form = $(element).closest('form'),
                     action = params.action;
+                if (params.data.id) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'id',
+                        value: params.data.id
+                    }).appendTo(form);
+                }
                 if (params.data.uenc) {
                     action += 'uenc/' + params.data.uenc;
                 }

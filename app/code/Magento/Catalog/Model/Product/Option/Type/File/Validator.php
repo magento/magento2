@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type\File;
@@ -100,6 +100,17 @@ abstract class Validator
                         $this->fileSize->getMaxFileSizeInMb()
                     );
                     break;
+                case \Zend_Validate_File_ImageSize::NOT_DETECTED:
+                    $result[] = __(
+                        "The file '%1' is empty. Please choose another one",
+                        $fileInfo['title']
+                    );
+                    break;
+                default:
+                    $result[] = __(
+                        "The file '%1' is invalid. Please choose another one",
+                        $fileInfo['title']
+                    );
             }
         }
         return $result;

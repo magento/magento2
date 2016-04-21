@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -24,7 +24,7 @@ define([
                 var callback = map[e.keyCode];
 
                 if (callback) {
-                    callback.call(viewModel);
+                    return callback.call(viewModel, e);
                 }
             });
         }

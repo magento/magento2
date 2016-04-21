@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
+    <fixture name="credit_card_braintree"
+             module="Magento_Braintree"
+             type="virtual"
+             entity_type="credit_card_braintree"
+             repository_class="Magento\Braintree\Test\Repository\CreditCard"
+             class="Magento\Braintree\Test\Fixture\CreditCardBraintree">
+        <field name="credit_card_number" />
+        <field name="credit_card_exp_month" />
+        <field name="credit_card_exp_year" />
+        <field name="cvv" />
+    </fixture>
+</config>

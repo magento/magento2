@@ -2,7 +2,7 @@
 /**
  * Initialize application object manager.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -120,10 +120,10 @@ class ObjectManagerFactory
         $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
         $relations = $definitionFactory->createRelations();
 
-        /** @var EnvironmentFactory $enFactory */
-        $enFactory = new $this->envFactoryClassName($relations, $definitions);
+        /** @var EnvironmentFactory $envFactory */
+        $envFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
-        $env =  $enFactory->createEnvironment();
+        $env =  $envFactory->createEnvironment();
 
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
@@ -176,7 +176,15 @@ class ObjectManagerFactory
 
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
-        $definitionFactory->getCodeGenerator()->setObjectManager($objectManager);
+
+        $generatorParams = $diConfig->getArguments('Magento\Framework\Code\Generator');
+        /** Arguments are stored in different format when DI config is compiled, thus require custom processing */
+        $generatedEntities = isset($generatorParams['generatedEntities']['_v_'])
+            ? $generatorParams['generatedEntities']['_v_']
+            : (isset($generatorParams['generatedEntities']) ? $generatorParams['generatedEntities'] : []);
+        $definitionFactory->getCodeGenerator()
+            ->setObjectManager($objectManager)
+            ->setGeneratedEntities($generatedEntities);
 
         $env->configureObjectManager($diConfig, $sharedInstances);
 

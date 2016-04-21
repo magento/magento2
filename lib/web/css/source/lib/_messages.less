@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -239,13 +239,13 @@ and not (@_message-border-style = false) {
 ._lib-message-icon-lateral-border-radius(
     @_message-icon-position
 ) when (@_message-icon-position = left) and not (@message__border-radius = false) and not (@message__border-width = false) {
-    border-radius: (@message__border-radius - @message__border-width) 0 0 (@message__border-radius - @message__border-width);
+    .lib-css(border-radius, (@message__border-radius - @message__border-width) 0 0 (@message__border-radius - @message__border-width));
 }
 
 ._lib-message-icon-lateral-border-radius(
     @_message-icon-position
 ) when (@_message-icon-position = right) and not (@message__border-radius = false) and not (@message__border-width = false) {
-    border-radius: 0 (@message__border-radius - @message__border-width) (@message__border-radius - @message__border-width) 0;
+    .lib-css(border-radius, 0 (@message__border-radius - @message__border-width) (@message__border-radius - @message__border-width) 0);
 }
 
 ._lib-message-icon-inner(

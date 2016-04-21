@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -134,7 +134,8 @@
                     @_icon-font-content: @icon-trash,
                     @_icon-font-text-hide: true,
                     @_icon-font-size: 18px,
-                    @_icon-font-color: @minicart-icons-color
+                    @_icon-font-color: @minicart-icons-color,
+                    @_icon-font-margin: -4px 0 0
                     );
                     .lib-button-reset();
                 }
@@ -158,7 +159,7 @@
                 &.remove {
                     .lib-button-reset();
                     .lib-button-as-link();
-                    margin-top: 4px;
+                    margin-top: -4px;
                 }
             }
         }

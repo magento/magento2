@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -15,6 +15,7 @@ define([
 ], function($, ko, Component, selectShippingAddressAction, quote, formPopUpState, checkoutData, customerData) {
     'use strict';
     var countryData = customerData.get('directory-data');
+
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-address/address-renderer/default'

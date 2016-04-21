@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Integration:etc/integration/integration_file.xsd">
+    <integration name="TestIntegration2">
+        <!--Extension of data provided in integrationA.xml-->
+        <endpoint_url>http://example.com/integration2</endpoint_url>
+        <identity_link_url>http://www.example.com/identity2</identity_link_url>
+        <resources>
+            <resource name="Magento_SalesRule::config_promo" />
+        </resources>
+    </integration>
+</config>

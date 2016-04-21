@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Spi;
@@ -223,7 +223,8 @@ class StockRegistryProviderTest extends \PHPUnit_Framework_TestCase
 
                 'stockCriteriaFactory' => $this->stockCriteriaFactory,
                 'stockItemCriteriaFactory' => $this->stockItemCriteriaFactory,
-                'stockStatusCriteriaFactory' => $this->stockStatusCriteriaFactory
+                'stockStatusCriteriaFactory' => $this->stockStatusCriteriaFactory,
+                'stockRegistryStorage' => $this->getMock('Magento\CatalogInventory\Model\StockRegistryStorage')
             ]
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Product\View\Options\Type;
@@ -199,6 +199,7 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             $extraParams .= ' onchange="opConfig.reloadPrice()"';
         }
         $extraParams .= ' data-role="calendar-dropdown" data-calendar-role="' . $name . '"';
+        $extraParams .= ' data-selector="' . $select->getName() . '"';
         $select->setExtraParams($extraParams);
 
         if ($value === null) {

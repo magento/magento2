@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,11 @@ namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $selectMock;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -222,6 +227,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      * Retrieve resource model mock instance and its adapter
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareResourceModel()
     {
@@ -239,6 +245,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'beginTransaction',
                 'commit',
                 'rollback',
+                'select'
             ],
             [],
             '',
@@ -267,6 +274,22 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        $this->selectMock = $this->getMock(
+            '\Magento\Framework\DB\Select',
+            [],
+            [],
+            '',
+            false
+        );
+        $connectionMock->expects(
+            $this->any()
+        )->method(
+            'select'
+        )->willReturn(
+            $this->selectMock
+        );
+        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
+        $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
 
         $storeManager = $this->getMock('Magento\Store\Model\StoreManager', ['getStores'], [], '', false);
         $storeManager->expects(

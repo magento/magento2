@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup;
@@ -34,6 +34,13 @@ interface SetupInterface
      */
     public function getTable($tableName);
 
+    /**
+     * Gets table placeholder by table name
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function getTablePlaceholder($tableName);
 
     /**
      * Checks if table exists

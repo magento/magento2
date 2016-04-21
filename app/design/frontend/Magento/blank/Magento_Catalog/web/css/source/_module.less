@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -194,7 +194,7 @@
         }
 
         .product {
-            &.attibute {
+            &.attribute {
                 &.sku {
                     display: inline-block;
                     vertical-align: top;
@@ -242,7 +242,8 @@
                 padding: 0;
             }
 
-            &.required {
+            &.required,
+            &._required {
                 .legend {
                     &:after {
                         content: '*';
@@ -290,6 +291,10 @@
             .price-wrapper .price {
                 .lib-font-size(18);
                 font-weight: @font-weight__bold;
+            }
+
+            .price {
+                white-space: nowrap;
             }
         }
 
@@ -690,7 +695,7 @@
             width: 140px;
             padding: 15px;
 
-            .attibute.value {
+            .attribute.value {
                 width: 100%;
                 overflow: hidden;
             }

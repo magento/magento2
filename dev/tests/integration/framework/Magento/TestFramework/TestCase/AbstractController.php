@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -211,7 +211,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         $this->assertThat(
             $actualMessages,
             $constraint,
-            'Session messages do not meet expectations' . var_export($actualMessages, true)
+            'Session messages do not meet expectations ' . var_export($actualMessages, true)
         );
     }
 }

@@ -1,23 +1,37 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
+use Magento\Catalog\Controller\Adminhtml\Product\NewAction;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
 {
-    /** @var \Magento\Catalog\Controller\Adminhtml\Product\NewAction */
+    /** @var NewAction */
     protected $action;
+
     /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultPage;
+
     /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultForward;
+
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
     protected $productBuilder;
+
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $product;
+
+    /**
+     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $initializationHelper;
 
     protected function setUp()
     {
@@ -56,14 +70,20 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         $resultForwardFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultForward);
+        $this->initializationHelper = $this->getMock(Helper::class, [], [], '', false);
+        $stockDataFilter = $this->getMockBuilder(StockDataFilter::class)
+            ->disableOriginalConstructor()->getMock();
 
-        $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\NewAction(
-            $this->initContext(),
-            $this->productBuilder,
-            $this->getMockBuilder('Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter')
-                ->disableOriginalConstructor()->getMock(),
-            $resultPageFactory,
-            $resultForwardFactory
+        $this->action = (new ObjectManager($this))->getObject(
+            NewAction::class,
+            [
+                'context' => $this->initContext(),
+                'productBuilder' => $this->productBuilder,
+                'stockFilter' => $stockDataFilter,
+                'resultPageFactory' => $resultPageFactory,
+                'resultForwardFactory' => $resultForwardFactory,
+                'initializationHelper' => $this->initializationHelper,
+            ]
         );
 
         $this->resultPage->expects($this->atLeastOnce())
@@ -85,10 +105,15 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         $this->action->getRequest()->expects($this->any())->method('getFullActionName')
             ->willReturn('catalog_product_new');
 
+        $productData = ['name' => 'test-name', 'stock_data' => null];
         $this->session->expects($this->any())->method('getProductData')
-            ->willReturn(['product' => ['name' => 'test-name']]);
+            ->willReturn(['product' => $productData]);
 
-        $this->product->expects($this->once())->method('addData')->with(['name' => 'test-name', 'stock_data' => null]);
+        $this->initializationHelper
+            ->expects($this->once())
+            ->method('initializeFromData')
+            ->with($this->product, $productData)
+            ->willReturn($this->product);
 
         $this->action->execute();
     }

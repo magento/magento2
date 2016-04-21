@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Block;
@@ -9,6 +9,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Gateway\ConfigInterface;
 
+/**
+ * Class ConfigurableInfo
+ * @api
+ */
 class ConfigurableInfo extends \Magento\Payment\Block\Info
 {
     /**

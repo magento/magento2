@@ -1,9 +1,13 @@
-"We can't save the cron expression.","We can't save the cron expression."
+"We can\'t save the cron expression.","We can\'t save the cron expression."
 Daily,Daily
 Weekly,Weekly
 Monthly,Monthly
-"Cron (Scheduled Tasks) - all the times are in minutes","Cron (Scheduled Tasks) - all the times are in minutes"
-"For correct URLs generated during cron runs please make sure that Web > Secure and Unsecure Base URLs are explicitly set.","For correct URLs generated during cron runs please make sure that Web > Secure and Unsecure Base URLs are explicitly set."
+"Invalid cron expression: %1","Invalid cron expression: %1"
+"Invalid cron expression, expecting \'match/modulus\': %1","Invalid cron expression, expecting \'match/modulus\': %1"
+"Invalid cron expression, expecting numeric modulus: %1","Invalid cron expression, expecting numeric modulus: %1"
+"Invalid cron expression, expecting \'from-to\' structure: %1","Invalid cron expression, expecting \'from-to\' structure: %1"
+"Cron (Scheduled Tasks)","Cron (Scheduled Tasks)"
+"For correct URLs generated during cron runs please make sure that Web > Secure and Unsecure Base URLs are explicitly set. All the times are in minutes.","For correct URLs generated during cron runs please make sure that Web > Secure and Unsecure Base URLs are explicitly set. All the times are in minutes."
 "Cron configuration options for group: ","Cron configuration options for group: "
 "Generate Schedules Every","Generate Schedules Every"
 "Schedule Ahead for","Schedule Ahead for"

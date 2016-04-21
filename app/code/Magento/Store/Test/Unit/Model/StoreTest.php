@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [
@@ -585,5 +585,15 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
+    }
+
+    public function testGetScopeType()
+    {
+        $this->assertEquals(ScopeInterface::SCOPE_STORE, $this->store->getScopeType());
+    }
+
+    public function testGetScopeTypeName()
+    {
+        $this->assertEquals('Store View', $this->store->getScopeTypeName());
     }
 }

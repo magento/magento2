@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller;
@@ -54,7 +54,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider getViewActionDataProvider
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {

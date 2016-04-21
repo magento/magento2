@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,11 +15,6 @@ class Validator implements ValidatorInterface
      * @var \Magento\Paypal\Model\ConfigFactory
      */
     private $_paypalConfigFactory;
-
-    /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    private $_checkoutSession;
 
     /**
      * @var \Magento\Framework\Registry

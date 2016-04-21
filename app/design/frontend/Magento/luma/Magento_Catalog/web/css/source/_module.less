@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -214,6 +214,10 @@
                 }
             }
         }
+
+        .price {
+            white-space: nowrap;
+        }
     }
 
     .product-info-stock-sku {
@@ -234,7 +238,7 @@
         }
     }
 
-    .product.attibute.sku {
+    .product.attribute.sku {
         word-break: break-all;
         word-wrap: break-word;
     }
@@ -245,7 +249,7 @@
             padding-top: @indent__s + @indent__xs;
         }
 
-        &.attibute {
+        &.attribute {
             &.sku {
                 .type {
                     font-weight: normal;
@@ -294,7 +298,8 @@
             margin: 0 0 8px;
         }
 
-        &.required {
+        &.required,
+        &._required {
             .legend {
                 &:after {
                     content: '*';
@@ -785,7 +790,7 @@ body.catalog-product-compare-index {
         width: 180px;
         padding: 15px;
 
-        .attibute.value {
+        .attribute.value {
             width: 100%;
             overflow: hidden;
         }

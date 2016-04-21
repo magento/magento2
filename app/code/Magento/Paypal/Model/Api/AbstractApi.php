@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Api;
 
+use Magento\Payment\Helper\Formatter;
 use Magento\Payment\Model\Method\Logger;
-use Magento\Paypal\Helper\Formatter;
 
 /**
  * Abstract class for Paypal API wrappers

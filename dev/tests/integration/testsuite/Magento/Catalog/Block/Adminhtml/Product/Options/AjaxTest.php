@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Options;
@@ -35,10 +35,20 @@ class AjaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testToHtml()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->register('import_option_products', [1]);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+        $objectManager->get('Magento\Framework\Registry')
+            ->register(
+                'import_option_products',
+                [$productRepository->get('simple')->getId()]
+            );
+
         $result = json_decode($this->_block->toHtml(), true);
+
         $this->assertEquals('test_option_code_1', $result[0]['title']);
     }
 }

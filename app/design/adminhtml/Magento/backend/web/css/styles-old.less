@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,6 +22,7 @@
 .invisible {
     visibility: hidden;
 }
+
 //  DO NOT REMOVE! Can be dangerous (need for Product Creation)
 
 .admin__scope-old {
@@ -49,7 +50,7 @@
         &:not(.admin__field-label) {
             :after {
                 content: '*';
-                color: red;
+                color: #f00;
                 margin-left: 3px;
             }
         }
@@ -84,7 +85,7 @@
 
     .ie .addon textarea,
     .ie .addon select {
-        display:inline-block;
+        display: inline-block;
     }
 
     .addon textarea:first-child,
@@ -886,6 +887,11 @@
             background-color: #e9e9e9;
             border-color: #adadad;
             opacity: .5;
+
+            &.admin__control-checkbox,
+            &.admin__control-radio {
+                opacity: 0.01;
+            }
         }
 
         &:checked {
@@ -911,7 +917,7 @@
         display: none;
     }
 
-    input[type="radio"]  {
+    input[type="radio"] {
         border-radius: 8px;
         &:checked {
             &:after {
@@ -1242,12 +1248,18 @@
 
     .fieldset-wrapper .draggable-handle,
     .fieldset .draggable-handle {
-        width: 8px;
+        background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
+        color: #b2b0ad;
+        cursor: ns-resize;
         height: 14px;
         line-height: 14px;
-        background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
-        cursor: ns-resize;
-        color: #b2b0ad;
+        margin: 0;
+        vertical-align: top;
+        width: 8px;
+
+        &:before {
+            display: none;
+        }
     }
 
     .fieldset-wrapper-title > .draggable-handle {
@@ -1376,6 +1388,23 @@
             line-height: 1.33;
             vertical-align: middle;
             white-space: normal;
+            word-break: break-all;
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:before {
+                    bottom: -1.3rem;
+                    color: #808080;
+                    content: attr(data-config-scope);
+                    font-size: 1.1rem;
+                    font-weight: @font-weight__regular;
+                    min-width: 15rem;
+                    position: absolute;
+                    right: 0;
+                    text-transform: lowercase;
+                }
+            }
         }
     }
 
@@ -1384,7 +1413,7 @@
         padding-left: 1.5rem;
 
         &:after {
-            content:'';
+            content: '';
         }
 
         span {
@@ -1396,9 +1425,18 @@
                 font-weight: 500;
                 line-height: 1;
                 margin-left: 10px;
+                margin-top: 0;
                 position: absolute;
                 top: 1.2rem;
                 z-index: 1;
+            }
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:after {
+                    top: .2rem;
+                }
             }
         }
     }
@@ -1413,6 +1451,12 @@
                     left: auto;
                     margin-left: 10px;
                     top: 1.2rem;
+                }
+
+                &[data-config-scope] {
+                    &:after {
+                        top: .2rem;
+                    }
                 }
             }
         }
@@ -1995,7 +2039,7 @@
             position: absolute;
             content: "";
             background-color: #fff;
-            right:0;
+            right: 0;
             top: 0;
             bottom: 0;
             min-width: 730px;
@@ -2010,63 +2054,20 @@
 
     //
     //  Switcher
-    //  --------------------------------------
+    //  -------------------------------------
 
-    .switcher {
-        -webkit-touch-callout: none;
-        -webkit-user-select: none; // use in 41 Chrome
-        -moz-user-select: none; // use in 36 Firefox
-        -ms-user-select: none; // use in 11 IE
-        user-select: none;
-        cursor: pointer;
-        display: inline-block;
-        overflow: hidden;
+    .admin__actions-switch {
+        .admin__actions-switch-checkbox {
+            position: absolute;
+            z-index: -1;
+        }
     }
 
-    .switcher input[type="checkbox"] {
-        position: absolute;
-        left: -999em;
-    }
-
-    .switcher-label {
-        .style2();
-        text-transform: uppercase;
-    }
-
-    .switcher-label:after {
-        display: inline-block;
-        margin-left: 10px;
-        vertical-align: bottom;
-        width: 34px;
-        height: 17px;
-        background: url(../images/switcher.png) no-repeat;
-        content: '';
-    }
-
-    .switcher input[type="checkbox"] + .switcher-label:before {
-        content: attr(data-text-off);
-        background: none;
-        border-radius: 0;
-        border: none;
-        float: none;
-        font-size: 14px;
-        height: auto;
-        line-height: normal;
-        margin: 0;
-        text-align: left;
-        width: auto;
-    }
-
-    .switcher input[type="checkbox"]:focus + .switcher-label:after {
-        border-color: #007bdb;
-    }
-
-    .switcher input[type="checkbox"]:checked + .switcher-label:after {
-        background-position: -34px 0;
-    }
-
-    .switcher input[type="checkbox"]:checked + .switcher-label:before {
-        content: attr(data-text-on);
+    .admin__actions-switch {
+        .admin__actions-switch-checkbox {
+            position: absolute;
+            z-index: -1;
+        }
     }
 
     //
@@ -2170,7 +2171,7 @@
             font-weight: bold;
         }
         .webiste-groups {
-            margin: 5px 0 20px 18px;
+            margin: 5px 0 20px 25px;
 
             dt {
                 font-weight: bold;
@@ -2194,7 +2195,8 @@
 
     //
     //  Tree Store Scope
-    //  --------------------------------------
+    //  ---------------------------------------------
+
     .tree-store-scope {
         .buttons-set {
             margin-bottom: 9px;
@@ -2205,12 +2207,14 @@
         }
 
         .field {
-            margin: 0 0 5px;
+            margin: 0 0 @indent__s;
 
-            input[type="checkbox"]:not(.banner-content-checkbox) {
-                margin-right: 8px;
-                position: relative;
-                top: 2px;
+            input[type="checkbox"] {
+                &:not(.banner-content-checkbox) {
+                    margin-right: 8px;
+                    position: relative;
+                    top: 2px;
+                }
             }
 
             .addafter {
@@ -2219,23 +2223,10 @@
             }
         }
 
-        [class^="field field-website_"] .label,
-        [class^="field field-group_"] .label,
-        [class^="field field-w_"] .label,
-        [class^="field field-sg_"] .label {
-            text-align: left;
-            font-size: 18px;
-            padding-right: 0;
-            width: auto;
-        }
-
-        [class^="field field-group_"] .label,
-        [class^="field field-sg_"] .label {
-            padding-left: 20px;
-        }
-
-        .tooltip .help {
-            margin-top: 11px;
+        .tooltip {
+            .help {
+                margin-top: 11px;
+            }
         }
     }
 
@@ -2592,8 +2583,7 @@
 
     //
     //  Customer
-    //  ---------------------------------------
-
+    //  ---------------------------------------------
 
     #customer_info_tabs_account_content #_accountsendemail {
         margin-top: 8px;
@@ -2620,37 +2610,55 @@
     }
 
     .customer-information address {
-        padding-top: 4px;
-        line-height: 2.2;
         float: right;
+        line-height: 2.2;
+        padding-top: 4px;
     }
 
     .address-list {
+        float: left;
         list-style: none;
-        width: 278px;
         margin: 0 0 10px;
         padding: 0;
-        float: left;
+        width: 278px;
     }
 
     //
-    //      Configuration -> Design
-    //  --------------------------------------
+    //  Configuration -> Design
+    //  ---------------------------------------------
 
-    #row_design_theme_ua_regexp .design_theme_ua_regexp {
-        float: left;
-        width: 100%;
+    #row_design_theme_ua_regexp {
+        .design_theme_ua_regexp {
+            float: left;
+            width: 100%;
+        }
+
+        .tooltip {
+            margin-top: 8px;
+        }
+
+        .note {
+            clear: both;
+        }
     }
-    #row_design_theme_ua_regexp .tooltip {
-        margin-top: 8px;
-    }
-    #row_design_theme_ua_regexp .note {
-        clear: both;
+
+    .form-list {
+        .small-image-preview {
+            display: inline-block;
+            margin: 0 @indent__xs 0 0;
+            vertical-align: middle;
+        }
+
+        .delete-image {
+            display: block;
+            margin: @indent__xs 0;
+            white-space: nowrap;
+        }
     }
 
     //
-    //      Configuration -> Advanced -> System -> Notifications section
-    //  --------------------------------------
+    //  Configuration -> Advanced -> System -> Notifications section
+    //  ---------------------------------------------
 
     #row_system_adminnotification_last_update {
         .value {
@@ -2660,8 +2668,7 @@
 
     //
     //  CMS -> Banners
-    //  --------------------------------------
-
+    //  ---------------------------------------------
 
     // Banner Properties
     #banner_properties_customer_segment_ids {
@@ -2670,8 +2677,7 @@
 
     //
     //  CMS -> Manage Hierarchy
-    //  --------------------------------------
-
+    //  ---------------------------------------------
 
     .cms-hierarchy .cms-scope {
         float: right;
@@ -2723,8 +2729,7 @@
 
     //
     //  CMS -> Widgets
-    //  --------------------------------------
-
+    //  ---------------------------------------------
 
     #widget_instace_tabs_properties_section_content .widget-option-label {
         margin-top: 6px;
@@ -3648,7 +3653,6 @@
     //  Sales
     //  --------------------------------------
 
-
     .order-items .entry-edit-head .form-buttons {
         float: right;
     }
@@ -3720,6 +3724,7 @@
         width: 31.9149%;
     }
 
+    .edit-attribute-set,
     .attribute-set-col:first-child {
         margin-left: 0;
     }
@@ -3811,7 +3816,7 @@
         }
         .ui-datepicker-trigger {
             margin-left: 5px;
-            margin-top:-2px;
+            margin-top: -2px;
         }
     }
 
@@ -3838,7 +3843,7 @@
     .rule-chooser {
         border: solid 1px #CCC;
         margin: 20px;
-        padding: 15px 10px 5px;
+        padding: 15px 10px;
         overflow: auto;
     }
 
@@ -3898,31 +3903,70 @@
 //  ---------------------------------------------
 
 .ie9 {
-.admin__scope-old {
-    select {
-        &:not([multiple]) {
-            padding-right: 4px;
-            min-width: 0;
+    .admin__scope-old {
+        select {
+            &:not([multiple]) {
+                padding-right: 4px;
+                min-width: 0;
+            }
         }
-    }
 
-    //  Table Filters
-    .filter select {
-        &:not([multiple]) {
-            padding-right: 0;
+        //  Table Filters
+        .filter select {
+            &:not([multiple]) {
+                padding-right: 0;
+            }
         }
-    }
 
-    .adminhtml-widget-instance-edit {
-        .grid-chooser .control {
-            margin-top: -18px;
+        .adminhtml-widget-instance-edit {
+            .grid-chooser .control {
+                margin-top: -18px;
+            }
         }
-    }
-    .page-layout-admin-1column .page-columns,
-    .catalog-product-edit,
-    .catalog-product-new,
-    .catalog-category-edit {
-        table.data {
+        .page-layout-admin-1column .page-columns,
+        .catalog-product-edit,
+        .catalog-product-new,
+        .catalog-category-edit {
+            table.data {
+                table-layout: fixed;
+                word-wrap: break-word;
+
+                th {
+                    word-wrap: normal;
+                    overflow: hidden;
+                    vertical-align: top;
+
+                    > span {
+                        white-space: normal;
+                    }
+                }
+
+                th:not(.col-select):not(.col-id):not(.col-severity),
+                td:not(.col-select):not(.col-id):not(.col-severity) {
+                    width: auto;
+                }
+            }
+        }
+
+        #setGrid_table,
+        #attributeGrid_table,
+        .custom-options .data-table,
+        .ui-dialog .data,
+        .page-layout-admin-1column .page-columns .data,
+        .catalog-category-edit .data {
+            word-wrap: break-word;
+            table-layout: fixed;
+        }
+
+        .fieldset-wrapper {
+            table.data {
+                table-layout: inherit;
+                word-wrap: normal;
+            }
+        }
+
+        .sales-order-create-index table.data,
+        .sales-order-create-index .fieldset-wrapper table.data {
             table-layout: fixed;
             word-wrap: break-word;
 
@@ -3935,73 +3979,34 @@
                     white-space: normal;
                 }
             }
+        }
 
-            th:not(.col-select):not(.col-id):not(.col-severity),
-            td:not(.col-select):not(.col-id):not(.col-severity) {
-                width: auto;
+        .entry-edit .product-options .grouped-items-table {
+            table-layout: fixed;
+            word-wrap: break-word;
+
+            th {
+                word-wrap: normal;
+                overflow: hidden;
+                vertical-align: top;
+
+                > span {
+                    white-space: normal;
+                }
+            }
+        }
+
+        .catalog-category-edit,
+        .adminhtml-cache-index,
+        .adminhtml-process-list,
+        .indexer-indexer-list,
+        .adminhtml-notification-index {
+            table.data {
+                table-layout: inherit;
+                word-wrap: normal;
             }
         }
     }
-
-    #setGrid_table,
-    #attributeGrid_table,
-    .custom-options .data-table,
-    .ui-dialog .data,
-    .page-layout-admin-1column .page-columns .data,
-    .catalog-category-edit .data {
-        word-wrap: break-word;
-        table-layout: fixed;
-    }
-
-    .fieldset-wrapper {
-        table.data {
-            table-layout: inherit;
-            word-wrap: normal;
-        }
-    }
-
-    .sales-order-create-index table.data,
-    .sales-order-create-index .fieldset-wrapper table.data {
-        table-layout: fixed;
-        word-wrap: break-word;
-
-        th {
-            word-wrap: normal;
-            overflow: hidden;
-            vertical-align: top;
-
-            > span {
-                white-space: normal;
-            }
-        }
-    }
-
-    .entry-edit .product-options .grouped-items-table {
-        table-layout: fixed;
-        word-wrap: break-word;
-
-        th {
-            word-wrap: normal;
-            overflow: hidden;
-            vertical-align: top;
-
-            > span {
-                white-space: normal;
-            }
-        }
-    }
-
-    .catalog-category-edit,
-    .adminhtml-cache-index,
-    .adminhtml-process-list,
-    .indexer-indexer-list,
-    .adminhtml-notification-index {
-        table.data {
-            table-layout: inherit;
-            word-wrap: normal;
-        }
-    }
-}
 }
 
 //
@@ -4047,6 +4052,13 @@
 
             ul.options-list strong {
                 .style28();
+            }
+        }
+
+        .pp-buttons-container {
+            .action-default {
+                display: inline-block;
+                margin-bottom: @indent__xs;
             }
         }
     }
@@ -4761,7 +4773,7 @@
 
             .addon {
                 input:last-child,
-                select:last-child{
+                select:last-child {
                     border-radius: 0;
                 }
             }
@@ -4916,7 +4928,6 @@
     }
 }
 
-
 //  Stores -> Currency
 .adminhtml-system-currency-index {
     .admin__scope-old {
@@ -4993,6 +5004,32 @@
     }
 }
 
+//  Stores -> Product Attribute Edit
+.catalog-product-attribute-edit {
+    .admin__scope-old {
+        .data-table {
+            th {
+                &._required {
+                    span {
+                        &:after {
+                            content: '*';
+                            .lib-typography(
+                            @_font-size: @form-field-label-asterisk__font-size,
+                            @_color: @form-field-label-asterisk__color,
+                            @_font-family: @form-field-label-asterisk__font-family,
+                            @_font-weight: @form-field-label-asterisk__font-weight,
+                            @_line-height: @form-field-label-asterisk__line-height,
+                            @_font-style: @form-field-label-asterisk__font-style
+                            );
+                            .lib-css(margin, @form-field-label-asterisk__margin);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .catalog-product-set-index {
     .admin__scope-old {
         .col-set_name {
@@ -5029,7 +5066,7 @@
                 width: 37%;
             }
 
-            .hasDatepicker{
+            .hasDatepicker {
                 margin: 0 5px;
                 width: 32%;
             }
@@ -5068,10 +5105,9 @@
 
 //  System -> Notifications
 .adminhtml-notification-index {
-    .admin__scope-old {
-        .col-actions a {
-            &:extend(.col-actions-links);
-        }
+    .col-actions a {
+        &:extend(.col-actions-links);
+        white-space: nowrap;
     }
 }
 
@@ -5153,7 +5189,7 @@
 
 .ext-strict {
     .x-small-editor {
-        .x-form-text.x-form-field.folder  {
+        .x-form-text.x-form-field.folder {
             height: auto !important;
         }
     }
@@ -5168,7 +5204,7 @@
 @media print {
     * {
         background: transparent !important;
-        color: black !important;
+        color: #000 !important;
         box-shadow: none !important;
         text-shadow: none !important;
         filter: none !important;

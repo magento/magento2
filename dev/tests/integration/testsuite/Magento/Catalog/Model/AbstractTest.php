@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -123,7 +123,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $object = $this->_model->loadByAttribute('sku', 'simple');
         $this->assertNotSame($object, $this->_model);
-        $this->assertEquals(1, $object->getId());
         // fixture
 
         $result = $this->_model->loadByAttribute('sku', uniqid());

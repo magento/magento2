@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -65,6 +65,16 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->_checkFaultsDeclaration($wsdlContent);
     }
 
+    public function testNoAuthorizedServices()
+    {
+        $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV2';
+        $connection = curl_init($wsdlUrl);
+        curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        $responseContent = curl_exec($connection);
+        $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
+        $this->assertContains("Consumer is not authorized to access %resources", $responseContent);
+    }
+
     public function testInvalidWsdlUrlNoServices()
     {
         $responseContent = $this->_getWsdlContent($this->_getBaseWsdlUrl());
@@ -97,8 +107,10 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
      */
     protected function _getWsdlContent($wsdlUrl)
     {
+        $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials()['key'];
         $connection = curl_init($wsdlUrl);
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($connection, CURLOPT_HTTPHEADER, ['header' => "Authorization: Bearer " . $accessCredentials]);
         $responseContent = curl_exec($connection);
         $responseDom = new \DOMDocument();
         $this->assertTrue(

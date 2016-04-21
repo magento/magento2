@@ -24,9 +24,6 @@ index index.php;
 autoindex off;
 charset off;
 
-add_header 'X-Content-Type-Options' 'nosniff';
-add_header 'X-XSS-Protection' '1; mode=block';
-
 location /setup {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
@@ -83,6 +80,12 @@ location /static/ {
     if ($MAGE_MODE = "production") {
         expires max;
     }
+    
+    # Remove signature of the static files that is used to overcome the browser cache
+    location ~ ^/static/version {
+        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+    }
+    
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
@@ -141,16 +144,13 @@ location /media/import/ {
     deny all;
 }
 
-location ~ cron\.php {
-    deny all;
-}
-
 location ~ (index|get|static|report|404|503)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
+    fastcgi_buffers 1024 4k;
 
     fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
-    fastcgi_param  PHP_VALUE "memory_limit=256M \n max_execution_time=600";
+    fastcgi_param  PHP_VALUE "memory_limit=768M \n max_execution_time=600";
     fastcgi_read_timeout 600s;
     fastcgi_connect_timeout 600s;
     fastcgi_param  MAGE_MODE $MAGE_MODE;
@@ -158,4 +158,26 @@ location ~ (index|get|static|report|404|503)\.php$ {
     fastcgi_index  index.php;
     fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
     include        fastcgi_params;
+}
+
+gzip on;
+gzip_disable "msie6";
+
+gzip_comp_level 6;
+gzip_min_length 1100;
+gzip_proxied any;
+gzip_types
+    text/plain
+    text/css
+    text/js
+    text/xml
+    text/javascript
+    application/javascript
+    application/x-javascript
+    application/json
+    application/xml
+    application/xml+rss;
+
+location ~ \.php$ {
+    deny all;
 }

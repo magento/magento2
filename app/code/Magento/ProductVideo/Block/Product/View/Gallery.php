@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -72,5 +72,14 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
             'videoAutoRestart' => $this->mediaHelper->getVideoAutoRestartAttribute(),
         ];
         return $this->jsonEncoder->encode($videoSettingData);
+    }
+
+    /**
+     * Return media gallery for product options
+     * @return string
+     */
+    public function getOptionsMediaGalleryDataJson()
+    {
+        return  $this->jsonEncoder->encode([]);
     }
 }

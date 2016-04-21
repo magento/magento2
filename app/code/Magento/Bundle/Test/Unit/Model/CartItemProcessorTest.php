@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model;
@@ -79,7 +79,16 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $dataObjectMock = $this->getMock('\Magento\Framework\DataObject');
         $optionExtensionMock = $this->getMock(
             '\Magento\Quote\Api\Data\ProductOptionExtensionInterface',
-            ['getBundleOptions'],
+            [
+                'getBundleOptions',
+                'getCustomOptions',
+                'setCustomOptions',
+                'setBundleOptions',
+                'getDownloadableOption',
+                'setDownloadableOption',
+                'getConfigurableItemOptions',
+                'setConfigurableItemOptions'
+            ],
             [],
             '',
             false
@@ -128,7 +137,16 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $productOptionMock = $this->getMock('\Magento\Quote\Model\Quote\ProductOption', [], [], '', false);
         $optionExtensionMock = $this->getMock(
             '\Magento\Quote\Api\Data\ProductOptionExtensionInterface',
-            ['setBundleOptions'],
+            [
+                'getBundleOptions',
+                'getCustomOptions',
+                'setCustomOptions',
+                'setBundleOptions',
+                'getDownloadableOption',
+                'setDownloadableOption',
+                'getConfigurableItemOptions',
+                'setConfigurableItemOptions'
+            ],
             [],
             '',
             false

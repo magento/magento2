@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,9 +26,9 @@ class AssertGrandTotalOrderReview extends AbstractConstraint
         $checkoutReviewGrandTotal = $checkoutOnepage->getReviewBlock()->getGrandTotal();
 
         \PHPUnit_Framework_Assert::assertEquals(
-            $checkoutReviewGrandTotal,
             number_format($grandTotal, 2),
-            "Grand Total price: $checkoutReviewGrandTotal not equals with price from data set: " . $grandTotal
+            $checkoutReviewGrandTotal,
+            "Grand Total price: $checkoutReviewGrandTotal not equals with price from data set: $grandTotal"
         );
     }
 

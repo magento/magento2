@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Method;
@@ -59,7 +59,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eventManager = $this->getMock(
             'Magento\Framework\Event\ManagerInterface'

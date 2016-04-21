@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel;
@@ -140,6 +140,19 @@ class Bundle extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->_productRelation->processRelations($parentId, $childIds);
 
+        return $this;
+    }
+
+    /**
+     * Add product relation (duplicate will be updated)
+     *
+     * @param int $parentId
+     * @param int $childId
+     * @return $this
+     */
+    public function addProductRelation($parentId, $childId)
+    {
+        $this->_productRelation->addRelation($parentId, $childId);
         return $this;
     }
 

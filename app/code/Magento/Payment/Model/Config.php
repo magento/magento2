@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -92,8 +92,8 @@ class Config
     {
         $methods = [];
         foreach ($this->_scopeConfig->getValue('payment', ScopeInterface::SCOPE_STORE, null) as $code => $data) {
-            if (isset($data['active']) && (bool)$data['active'] && isset($data['model'])) {
-                /** @var AbstractMethod|null $methodModel Actually it's wrong interface */
+            if (isset($data['active'], $data['model']) && (bool)$data['active']) {
+                /** @var MethodInterface $methodModel Actually it's wrong interface */
                 $methodModel = $this->_paymentMethodFactory->create($data['model']);
                 $methodModel->setId($code);
                 $methodModel->setStore(null);

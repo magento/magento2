@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,8 +9,11 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Config\Dom\UrnResolver;
-
+/**
+ * Class View
+ *
+ * @property DesignResolverInterface $_fileResolver
+ */
 class View extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
@@ -209,5 +212,24 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         if ($this->data === null) {
             $this->data = $this->read();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function read($scope = null)
+    {
+        $scope = $scope ?: $this->_defaultScope;
+        $result = [];
+
+        $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
+        // Sort parents desc
+        krsort($parents);
+
+        foreach ($parents as $parent) {
+            $result = array_replace_recursive($result, $this->_readFiles([$parent]));
+        }
+
+        return array_replace_recursive($result, parent::read($scope));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
@@ -18,10 +18,12 @@ class Delete extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         $id = $this->getRequest()->getParam('id');
         if ($id) {
             try {
-                /** @var \Magento\CatalogRule\Model\Rule $model */
-                $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
-                $model->load($id);
-                $model->delete();
+                /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
+                $ruleRepository = $this->_objectManager->get(
+                    'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
+                );
+                $ruleRepository->deleteById($id);
+
                 $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(1)->save();
                 $this->messageManager->addSuccess(__('You deleted the rule.'));
                 $this->_redirect('catalog_rule/*/');

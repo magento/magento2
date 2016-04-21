@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -318,6 +318,32 @@
     color: #303030;
     opacity: .5;
     cursor: not-allowed;
+}
+
+//  ToDo: remove after "Product Attributes Mass update" implementation
+.attributes-edit-form {
+    .field {
+        .control {
+            input[type='text'][disabled] ~ .addafter,
+            select[disabled] ~ .addafter,
+            .attribute-change-checkbox {
+                background: none;
+                color: #676056;
+                cursor: inherit;
+                opacity: 1;
+
+                strong {
+                    background: none;
+                }
+            }
+        }
+    }
+
+    .weight-switcher {
+        .addafter {
+            margin-top: 30px;
+        }
+    }
 }
 
 .field .control input[type='text'][disabled] ~ .addafter strong,

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /** Creates outerClick binding and registers in to ko.bindingHandlers object */
@@ -14,6 +14,30 @@ define([
     var defaults = {
         onlyIfVisible: true
     };
+
+    /**
+     * Checks if element sis visible.
+     *
+     * @param {Element} el
+     * @returns {Boolean}
+     */
+    function isVisible(el) {
+        var style = window.getComputedStyle(el),
+            visibility = {
+                display: 'none',
+                visibility: 'hidden',
+                opacity: '0'
+            },
+            visible = true;
+
+        _.each(visibility, function (val, key) {
+            if (style[key] === val) {
+                visible = false;
+            }
+        });
+
+        return visible;
+    }
 
     /**
      * Document click handler which in case if event target is not
@@ -33,7 +57,7 @@ define([
         }
 
         if (config.onlyIfVisible) {
-            if (!_.isNull(container.offsetParent)) {
+            if (!_.isNull(container.offsetParent) && isVisible(container)) {
                 callback();
             }
         } else {
@@ -69,13 +93,22 @@ define([
          */
         init: function (element, valueAccessor) {
             var config = buildConfig(valueAccessor()),
-                outerClick = onOuterClick.bind(null, element, config);
+                outerClick = onOuterClick.bind(null, element, config),
+                isTouchDevice = typeof document.ontouchstart !== 'undefined';
 
-            $(document).on('click', outerClick);
+            if (isTouchDevice) {
+                $(document).on('touchstart', outerClick);
 
-            ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                $(document).off('click', outerClick);
-            });
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(document).off('touchstart', outerClick);
+                });
+            } else {
+                $(document).on('click', outerClick);
+
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(document).off('click', outerClick);
+                });
+            }
         }
     };
 

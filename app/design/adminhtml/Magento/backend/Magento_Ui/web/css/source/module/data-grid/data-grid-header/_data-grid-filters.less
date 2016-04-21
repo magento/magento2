@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -171,6 +171,14 @@
     }
 }
 
+.admin__action-grid-select {
+    .admin__control-select {
+        margin: .5rem .5rem 0 0;
+        padding-bottom: .6rem;
+        padding-top: .6rem;
+    }
+}
+
 //
 //  Filters content
 //  ---------------------------------------------
@@ -258,6 +266,13 @@
     .admin__control-select {
         padding-top: @action__padding-top - .1rem;
         height: @action__height;
+    }
+
+    .admin__action-multiselect {
+        &:before {
+            height: @action__height;
+            width: @action__height;
+        }
     }
 
     //  Date control

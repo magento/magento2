@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true*/
@@ -339,7 +339,7 @@ define([
                     checkbox: 'input[id$=_price_use_default]',
                     label: 'span'
                 });
-                //@TODO not work set default value for second field
+                //not work set default value for second field
                 priceType.useDefault({
                     field: '.field',
                     useDefault: 'label[for$=_price]',

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,6 +25,8 @@ $rule->setName(
     '1'
 )->setCustomerGroupIds(
     '0'
+)->setDiscountStep(
+    0
 )->setFromDate(
     date('Y-m-d')
 )->setToDate(

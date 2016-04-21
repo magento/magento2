@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Search\Test\TestCase\MergeSynonymGroupEntityTest" summary="Merge Synonym Groups" ticketId="MAGETWO-47684">
+        <variation name="MergeSynonymGroupEntityTestVariation1">
+            <data name="initialSynonymGroup/dataset" xsi:type="string">prepareMerge</data>
+            <data name="description" xsi:type="string">Merge Synonym Groups Not Successfully</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="synonymGroup/data/synonyms" xsi:type="string">synonym_test_%isolation%</data>
+            <data name="synonymGroup/data/scope_id/dataset" xsi:type="string">default_store_view</data>
+            <data name="synonymGroup/data/mergeOnConflict" xsi:type="string">No</data>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymMergeErrorMessage" />
+        </variation>
+        <variation name="MergeSynonymGroupEntityTestVariation2">
+            <data name="initialSynonymGroup/dataset" xsi:type="string">prepareMerge</data>
+            <data name="description" xsi:type="string">Merge Synonym Groups Successfully</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="synonymGroup/data/synonyms" xsi:type="string">shoes_%isolation%,foot wear_%isolation%,mens shoes_%isolation%,women shoes_%isolation%</data>
+            <data name="synonymGroup/data/scope_id/dataset" xsi:type="string">default_store_view</data>
+            <data name="synonymGroup/data/mergeOnConflict" xsi:type="string">Yes</data>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage" />
+        </variation>
+    </testCase>
+</config>

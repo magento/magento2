@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -169,9 +169,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     }
 
     /**
-     * Init collection select
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     protected function _initSelect()
     {
@@ -593,5 +591,26 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
             $item->save();
         }
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_resource', '_eventManager']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
     }
 }

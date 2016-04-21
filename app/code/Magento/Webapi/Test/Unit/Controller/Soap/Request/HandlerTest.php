@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -53,7 +53,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getServiceMethodInfo'])->disableOriginalConstructor()->getMock();
         $this->_requestMock = $this->getMock('Magento\Framework\Webapi\Request', [], [], '', false);
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface', [], [], '', false);
+        $this->_authorizationMock = $this->getMock('Magento\Framework\Webapi\Authorization', [], [], '', false);
         $this->_dataObjectConverter = $this->getMock(
             'Magento\Framework\Api\SimpleDataObjectConverter',
             ['convertStdObjectToArray'],

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,3 +16,6 @@ $tmpDirectory->create($tmpDirectory->getAbsolutePath());
 $targetTmpFilePath = $tmpDirectory->getAbsolutePath('magento_small_image.jpg');
 copy(__DIR__ . '/magento_small_image.jpg', $targetTmpFilePath);
 // Copying the image to target dir is not necessary because during product save, it will be moved there from tmp dir
+
+$targetTmpFilePath = $tmpDirectory->getAbsolutePath('magento_empty.jpg');
+copy(__DIR__ . '/magento_empty.jpg', $targetTmpFilePath);

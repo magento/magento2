@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
@@ -43,9 +43,9 @@ class Filters implements ObserverInterface
             return;
         }
 
-        $attributeIds = $component->getContext()->getRequestParam('attribute_ids');
-        if ($attributeIds) {
-            foreach ($this->getAttributes($attributeIds) as $attribute) {
+        $attributeCodes = $component->getContext()->getRequestParam('attributes_codes');
+        if ($attributeCodes) {
+            foreach ($this->getAttributes($attributeCodes) as $attribute) {
                 $filter = $this->filterFactory->create($attribute, $component->getContext());
                 $filter->prepare();
                 $component->addComponent($attribute->getAttributeCode(), $filter);
@@ -54,12 +54,12 @@ class Filters implements ObserverInterface
     }
 
     /**
-     * @param array $attributeIds
+     * @param array $attributeCodes
      * @return mixed
      */
-    protected function getAttributes($attributeIds)
+    protected function getAttributes($attributeCodes)
     {
         $attributeCollection = $this->attributeCollectionFactory->create();
-        return $attributeCollection->addFieldToFilter('attribute_code', ['in' => $attributeIds]);
+        return $attributeCollection->addFieldToFilter('attribute_code', ['in' => $attributeCodes]);
     }
 }

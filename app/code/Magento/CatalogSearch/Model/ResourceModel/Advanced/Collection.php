@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 
 /**
@@ -23,14 +25,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $filters = [];
 
     /**
-     * @var \Magento\CatalogSearch\Model\Advanced\Request\Builder
+     * @var \Magento\Search\Api\SearchInterface
      */
-    private $requestBuilder;
-
-    /**
-     * @var \Magento\Search\Model\SearchEngine
-     */
-    private $searchEngine;
+    private $search;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
@@ -38,6 +35,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $temporaryStorageFactory;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -48,10 +56,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager ,
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param Product\OptionFactory $productOptionFactory
      * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
@@ -136,19 +144,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected function _renderFiltersBefore()
     {
         if ($this->filters) {
-            $this->requestBuilder->bindDimension('scope', $this->getStoreId());
-            $this->requestBuilder->setRequestName('advanced_search_container');
             foreach ($this->filters as $attributes) {
                 foreach ($attributes as $attributeCode => $attributeValue) {
                     $attributeCode = $this->getAttributeCode($attributeCode);
-                    $this->requestBuilder->bindRequestValue($attributeCode, $attributeValue);
+                    $this->addAttributeToSearch($attributeCode, $attributeValue);
                 }
             }
-            $queryRequest = $this->requestBuilder->create();
-            $queryResponse = $this->searchEngine->search($queryRequest);
+            $searchCriteria = $this->getSearchCriteriaBuilder()->create();
+            $searchCriteria->setRequestName('advanced_search_container');
+            $searchResult = $this->getSearch()->search($searchCriteria);
 
             $temporaryStorage = $this->temporaryStorageFactory->create();
-            $table = $temporaryStorage->storeDocuments($queryResponse->getIterator());
+            $table = $temporaryStorage->storeApiDocuments($searchResult->getItems());
 
             $this->getSelect()->joinInner(
                 [
@@ -158,7 +165,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 []
             );
         }
-        return parent::_renderFiltersBefore();
+        parent::_renderFiltersBefore();
     }
 
     /**
@@ -173,5 +180,86 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         }
 
         return $attributeCode;
+    }
+
+    /**
+     * Create a filter and add it to the SearchCriteriaBuilder.
+     *
+     * @param string $attributeCode
+     * @param array|string $attributeValue
+     * @return void
+     */
+    private function addAttributeToSearch($attributeCode, $attributeValue)
+    {
+        if (isset($attributeValue['from']) || isset($attributeValue['to'])) {
+            $this->addRangeAttributeToSearch($attributeCode, $attributeValue);
+        } elseif (!is_array($attributeValue)) {
+            $this->getFilterBuilder()->setField($attributeCode)->setValue($attributeValue);
+            $this->getSearchCriteriaBuilder()->addFilter($this->getFilterBuilder()->create());
+        } elseif (isset($attributeValue['like'])) {
+            $this->getFilterBuilder()->setField($attributeCode)->setValue($attributeValue['like']);
+            $this->getSearchCriteriaBuilder()->addFilter($this->getFilterBuilder()->create());
+        } elseif (isset($attributeValue['in'])) {
+            $this->getFilterBuilder()->setField($attributeCode)->setValue($attributeValue['in']);
+            $this->getSearchCriteriaBuilder()->addFilter($this->getFilterBuilder()->create());
+        } elseif (isset($attributeValue['in_set'])) {
+            $this->getFilterBuilder()->setField($attributeCode)->setValue($attributeValue['in_set']);
+            $this->getSearchCriteriaBuilder()->addFilter($this->getFilterBuilder()->create());
+        }
+    }
+
+    /**
+     * Add attributes that have a range (from,to) to the SearchCriteriaBuilder.
+     *
+     * @param string $attributeCode
+     * @param array|string $attributeValue
+     * @return void
+     */
+    private function addRangeAttributeToSearch($attributeCode, $attributeValue)
+    {
+        if (isset($attributeValue['from']) && '' !== $attributeValue['from']) {
+            $this->getFilterBuilder()->setField("{$attributeCode}.from")->setValue($attributeValue['from']);
+            $this->getSearchCriteriaBuilder()->addFilter($this->getFilterBuilder()->create());
+        }
+        if (isset($attributeValue['to']) && '' !== $attributeValue['to']) {
+            $this->getFilterBuilder()->setField("{$attributeCode}.to")->setValue($attributeValue['to']);
+            $this->getSearchCriteriaBuilder()->addFilter($this->getFilterBuilder()->create());
+        }
+    }
+
+    /**
+     * @return \Magento\Search\Api\SearchInterface
+     */
+    private function getSearch()
+    {
+        if (null === $this->search) {
+            $this->search = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Search\Api\SearchInterface');
+        }
+        return $this->search;
+    }
+
+    /**
+     * @return SearchCriteriaBuilder
+     */
+    private function getSearchCriteriaBuilder()
+    {
+        if (null === $this->searchCriteriaBuilder) {
+            $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\Search\SearchCriteriaBuilder');
+        }
+        return $this->searchCriteriaBuilder;
+    }
+
+    /**
+     * @return FilterBuilder
+     */
+    private function getFilterBuilder()
+    {
+        if (null === $this->filterBuilder) {
+            $this->filterBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\FilterBuilder');
+        }
+        return $this->filterBuilder;
     }
 }

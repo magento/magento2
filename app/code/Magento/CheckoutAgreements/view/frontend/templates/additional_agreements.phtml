@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -33,7 +33,8 @@
                        name="agreement[<?php /* @escapeNotVerified */ echo $agreement->getAgreementId()?>]"
                        value="1"
                        title="<?php echo $block->escapeHtml($agreement->getCheckboxText()) ?>"
-                       class="checkbox""/>
+                       class="checkbox"
+                       data-validate="{required:true}"/>
                 <label class="label" for="agreement-<?php /* @escapeNotVerified */ echo $agreement->getAgreementId()?>">
                     <span><?php echo $agreement->getIsHtml() ? $agreement->getCheckboxText() : $block->escapeHtml($agreement->getCheckboxText()) ?></span>
                 </label>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
@@ -37,6 +37,13 @@ class CategoryProcessor
      * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $categoryFactory;
+
+    /**
+     * Failed categories during creation
+     *
+     * @var array
+     */
+    protected $failedCategories = [];
 
     /**
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryColFactory
@@ -112,7 +119,7 @@ class CategoryProcessor
      * Returns ID of category by string path creating nonexistent ones.
      *
      * @param string $categoryPath
-     * 
+     *
      * @return int
      */
     protected function upsertCategory($categoryPath)
@@ -149,10 +156,42 @@ class CategoryProcessor
         $categories = explode($categoriesSeparator, $categoriesString);
 
         foreach ($categories as $category) {
-            $categoriesIds[] = $this->upsertCategory($category);
+            try {
+                $categoriesIds[] = $this->upsertCategory($category);
+            } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->addFailedCategory($category, $e);
+            }
         }
 
         return $categoriesIds;
+    }
+
+    /**
+     * Add failed category
+     *
+     * @param string $category
+     * @param \Magento\Framework\Exception\AlreadyExistsException $exception
+     *
+     * @return array
+     */
+    private function addFailedCategory($category, $exception)
+    {
+        $this->failedCategories[] =
+            [
+                'category' => $category,
+                'exception' => $exception,
+            ];
+        return $this;
+    }
+
+    /**
+     * Return failed categories
+     *
+     * @return array
+     */
+    public function getFailedCategories()
+    {
+        return  $this->failedCategories;
     }
 
     /**
