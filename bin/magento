@@ -7,6 +7,7 @@
 use \Magento\Framework\App\ProductMetadata;
 use \Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Console\Cli;
 
 if (PHP_SAPI !== 'cli') {
     echo 'bin/magento must be run as a CLI application';
@@ -23,7 +24,7 @@ try {
     $handler = new \Magento\Framework\App\ErrorHandler();
     set_error_handler([$handler, 'handler']);
     $productMetadata = new ProductMetadata(new ComposerJsonFinder(new DirectoryList(BP)));
-    $application = new Magento\Framework\Console\Cli('Magento CLI', $productMetadata->getVersion());
+    $application = new Cli('Magento CLI', $productMetadata->getVersion());
     $application->run();
 } catch (\Exception $e) {
     while ($e) {
@@ -32,5 +33,5 @@ try {
         echo "\n\n";
         $e = $e->getPrevious();
     }
-    exit(1);
+    exit(Cli::RETURN_FAILURE);
 }
