@@ -113,17 +113,17 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
-        $result = parent::assignData($data);
+        parent::assignData($data);
 
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
         if (!is_array($additionalData) || !isset($additionalData[self::TRANSPORT_BILLING_AGREEMENT_ID])) {
-            return $result;
+            return $this;
         }
 
         $id = $additionalData[self::TRANSPORT_BILLING_AGREEMENT_ID];
         if (!$id || !is_numeric($id)) {
-            return $result;
+            return $this;
         }
 
         $info = $this->getInfoInstance();
@@ -131,17 +131,17 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
         $ba = $this->_agreementFactory->create();
         $ba->load($id);
 
-        if ($ba->getId() && $ba->getCustomerId() === $info->getQuote()->getCustomerId()) {
+        if ($ba->getId() && $ba->getCustomerId() == $info->getQuote()->getCustomerId()) {
             $info->setAdditionalInformation(self::TRANSPORT_BILLING_AGREEMENT_ID, $id);
             $info->setAdditionalInformation(self::PAYMENT_INFO_REFERENCE_ID, $ba->getReferenceId());
         }
 
-        return $result;
+        return $this;
     }
 
     /**
      * @param object $quote
-     * @return void
+     * @return bool
      */
     abstract protected function _isAvailable($quote);
 }

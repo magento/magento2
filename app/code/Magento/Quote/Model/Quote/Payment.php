@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote;
+
 use Magento\Quote\Api\Data\PaymentInterface;
 
 /**
