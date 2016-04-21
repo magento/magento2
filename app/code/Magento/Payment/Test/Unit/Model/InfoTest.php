@@ -90,7 +90,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function testGetMethodInstanceWithRealMethod()
     {
         $method = 'real_method';
@@ -107,7 +106,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
         $this->info->getMethodInstance();
     }
-
 
     public function testGetMethodInstanceWithUnrealMethod()
     {
@@ -131,7 +129,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->info->getMethodInstance();
     }
 
-
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage The payment method you requested is not available.
@@ -141,8 +138,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $this->info->setData('method', false);
         $this->info->getMethodInstance();
     }
-
-
+    
     public function testGetMethodInstanceRequestedMethod()
     {
         $code = 'real_method';

@@ -672,7 +672,10 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
-        if (!is_array($additionalData) || !isset($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT])) {
+        if (
+            !is_array($additionalData)
+            || !isset($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT])
+        ) {
             return $result;
         }
 
