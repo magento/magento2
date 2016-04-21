@@ -668,7 +668,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
-        $result = parent::assignData($data);
+        parent::assignData($data);
         
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
@@ -676,7 +676,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             !is_array($additionalData)
             || !isset($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT])
         ) {
-            return $result;
+            return $this;
         }
 
         $this->getInfoInstance()
@@ -684,7 +684,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
                 $additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT]
             );
-        return $result;
+        
+        return $this;
     }
 
     /**
