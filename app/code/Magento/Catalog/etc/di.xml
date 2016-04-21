@@ -717,4 +717,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\ResourceModel\CreateHandler">
+        <arguments>
+            <argument name="attributePersistor" xsi:type="object" shared="false">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
+        </arguments>
+    </type>
 </config>
