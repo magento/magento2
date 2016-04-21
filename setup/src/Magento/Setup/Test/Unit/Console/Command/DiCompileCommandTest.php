@@ -93,20 +93,6 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecuteDiExists()
-    {
-        $diPath = '/root/magento/var/di';
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('get')
-            ->with(\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES)
-            ->willReturn(['Magento_Catalog' => 1]);
-        $this->fileDriverMock->expects($this->atLeastOnce())->method('isExists')->with($diPath)->willReturn(true);
-        $this->directoryListMock->expects($this->atLeastOnce())->method('getPath')->willReturn($diPath);
-        $tester = new CommandTester($this->command);
-        $tester->execute([]);
-        $this->assertContains("delete '/root/magento/var/di'", $tester->getDisplay());
-    }
-
     public function testExecuteModulesNotEnabled()
     {
         $this->deploymentConfigMock->expects($this->once())
