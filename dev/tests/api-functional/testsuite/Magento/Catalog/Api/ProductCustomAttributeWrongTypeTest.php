@@ -128,48 +128,6 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
                         "attribute_code"=> "meta_title",
                         "value"=> [1,2,3]
                     ],
-                    [
-                        "attribute_code"=> "meta_keyword",
-                        "value"=> "Test"
-                    ],
-                    [
-                        "attribute_code"=> "meta_description",
-                        "value"=> "Test"
-                    ],
-                    [
-                        "attribute_code"=> "category_ids",
-                        "value"=> [
-                            "3"
-                        ]
-                    ],
-                    [
-                        "attribute_code"=> "options_container",
-                        "value"=> "container2"
-                    ],
-                    [
-                        "attribute_code"=> "required_options",
-                        "value"=> "1"
-                    ],
-                    [
-                        "attribute_code"=> "has_options",
-                        "value"=> "1"
-                    ],
-                    [
-                        "attribute_code"=> "url_key",
-                        "value"=> "test"
-                    ],
-                    [
-                        "attribute_code"=> "tax_class_id",
-                        "value"=> "2"
-                    ],
-                    [
-                        "attribute_code"=> "gift_wrapping_price",
-                        "value"=> "0.0000"
-                    ],
-                    [
-                        "attribute_code"=> "is_returnable",
-                        "value"=> "2"
-                    ],
                 ],
             ],
         ];
