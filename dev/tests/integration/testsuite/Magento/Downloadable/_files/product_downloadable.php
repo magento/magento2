@@ -53,4 +53,6 @@ $extension = $product->getExtensionAttributes();
 $extension->setDownloadableProductLinks($links);
 $product->setExtensionAttributes($extension);
 
-$product->save();
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$productRepository->save($product);
