@@ -91,8 +91,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\EntityManager\EntityManager $entityManager
-     * @param array $associatedEntitiesMap
      * @param null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -107,8 +105,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\EntityManager\EntityManager $entityManager,
-        array $associatedEntitiesMap = [],
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
@@ -120,8 +116,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
-        $this->entityManager = $entityManager;
-        $this->_associatedEntitiesMap = $associatedEntitiesMap;
         parent::__construct($context, $connectionName);
     }
 
@@ -232,7 +226,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        $this->entityManager->load($object, $value, \Magento\CatalogRule\Api\Data\RuleInterface::class);
+        $this->getEntityManager()->load($object, $value, \Magento\CatalogRule\Api\Data\RuleInterface::class);
         return $this;
     }
 
@@ -243,7 +237,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->entityManager->save(
+        $this->getEntityManager()->save(
             $object,
             \Magento\CatalogRule\Api\Data\RuleInterface::class
         );
@@ -259,7 +253,32 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function delete(AbstractModel $object)
     {
-        $this->entityManager->delete($object, \Magento\CatalogRule\Api\Data\RuleInterface::class);
+        $this->getEntityManager()->delete($object, \Magento\CatalogRule\Api\Data\RuleInterface::class);
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+        }
+        return $this->entityManager;
     }
 }
