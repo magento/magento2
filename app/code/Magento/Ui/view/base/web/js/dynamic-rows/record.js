@@ -188,7 +188,7 @@ define([
          */
         setVisibilityColumn: function (index, state) {
             var elems = this.elems(),
-                curElem = ~~index,
+                curElem = parseInt(index, 10),
                 label;
 
             if (!this.parentComponent()) {
