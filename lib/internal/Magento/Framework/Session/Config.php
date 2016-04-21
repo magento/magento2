@@ -42,6 +42,10 @@ class Config implements ConfigInterface
     /** Cookie default lifetime */
     const COOKIE_LIFETIME_DEFAULT = 3600;
 
+    const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
+
+    const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
+
     /**
      * All options
      *
@@ -109,7 +113,6 @@ class Config implements ConfigInterface
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
         $this->lifetimePath = $lifetimePath;
-        $this->setCookieSecure($this->_httpRequest->isSecure());
 
         /**
          * Session handler
@@ -162,6 +165,11 @@ class Config implements ConfigInterface
         $this->setCookieHttpOnly(
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)
         );
+
+        $secureURL = $this->_scopeConfig->getValue(self::XML_PATH_SECURE_BASE_URL, $this->_scopeType);
+        $unSecureURL = $this->_scopeConfig->getValue(self::XML_PATH_UNSECURE_BASE_URL, $this->_scopeType);
+        $isFullySecuredURL = $secureURL == $unSecureURL;
+        $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
     }
 
     /**
