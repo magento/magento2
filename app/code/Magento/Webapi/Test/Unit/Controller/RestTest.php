@@ -229,14 +229,3 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($schema, $this->_responseMock->getBody());
     }
 }
-
-class TestService
-{
-    /**
-     * @return null
-     */
-    public function testMethod()
-    {
-        return null;
-    }
-}

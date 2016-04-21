@@ -237,6 +237,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      *
      * @return Route
      * @deprecated
+     * @see \Magento\Webapi\Controller\Rest\InputParamsResolver::getRoute
      */
     protected function getCurrentRoute()
     {
@@ -252,6 +253,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws \Magento\Framework\Exception\AuthorizationException
      * @return void
      * @deprecated
+     * @see \Magento\Webapi\Controller\Rest\RequestValidator::checkPermissions
      */
     protected function checkPermissions()
     {
@@ -325,6 +327,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @throws \Magento\Framework\Webapi\Exception
      * @return void
      * @deprecated
+     * @see \Magento\Webapi\Controller\Rest\RequestValidator::validate
      */
     protected function validateRequest()
     {
@@ -340,7 +343,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     }
 
     /**
-     * The getter function to get the new dependency for real application code
+     * The getter function to get InputParamsResolver object
      *
      * @return \Magento\Webapi\Controller\Rest\InputParamsResolver
      *
