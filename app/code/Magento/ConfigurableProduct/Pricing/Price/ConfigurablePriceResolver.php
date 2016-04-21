@@ -44,13 +44,17 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {
         $price = null;
-        foreach ($this->configurable->getUsedProducts($product) as $subProduct) {
+        $configurableProducts = $this->configurable->getUsedProductCollection($product)
+            ->setFlag('has_stock_status_filter', true)
+            ->addAttributeToSelect('price');
+
+        foreach ($configurableProducts as $subProduct) {
             $productPrice = $this->priceResolver->resolvePrice($subProduct);
             $price = $price ? min($price, $productPrice) : $productPrice;
         }
         if ($price === null) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Configurable product "%1" does not have sub-products', $product->getName())
+                __('Configurable product "%1" does not have sub-products', $product->getSku())
             );
         }
         return (float)$price;
