@@ -102,8 +102,8 @@ define([
                 this.element.find(this.options.updateOrderSelector).fadeTo(0, 0.5)
                     .end().find(this.options.waitLoadingContainer).show()
                     .end().submit();
+                this._updateOrderSubmit(true);
             }
-            this._updateOrderSubmit(true);
         },
 
         /**
@@ -242,19 +242,16 @@ define([
                 shippingMethod = $.trim($(this.options.shippingSelector).val());
             this._shippingTobilling();
 
-            var validateFormResult = this._validateForm();
-            var isShippingUpdate = url == $(this.options.shippingSubmitFormSelector).prop('action') && shippingMethod;
-
-            if (url && resultId && (validateFormResult || isShippingUpdate)) {
-                this._updateOrderSubmit(validateFormResult);
-                this._toggleButton(this.options.updateOrderSelector, !validateFormResult);
+            if (url && resultId && shippingMethod) {
+                this._updateOrderSubmit(true);
+                this._toggleButton(this.options.updateOrderSelector, true);
 
                 // form data and callBack updated based on the shippping Form element
                 if (this.isShippingSubmitForm) {
                     formData = $(this.options.shippingSubmitFormSelector).serialize() + "&isAjax=true";
                     callBackResponseHandler = function (response) {
                         $(resultId).html(response);
-                        this._updateOrderSubmit(!validateFormResult);
+                        this._updateOrderSubmit(false);
                         this._ajaxComplete();
                     };
                 } else {
