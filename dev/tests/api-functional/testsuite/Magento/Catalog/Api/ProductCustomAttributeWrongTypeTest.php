@@ -8,7 +8,6 @@ namespace Magento\Catalog\Api;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-
 class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductRepositoryV1';
