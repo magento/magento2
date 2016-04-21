@@ -107,7 +107,8 @@ class HideUnsupportedAttributeTypesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $target->execute($event));
     }
 
-    public function executeDataProvider() {
+    public function executeDataProvider()
+    {
         return [
             'testWithDefaultTypes' => [
                 'supportedTypes' => [],

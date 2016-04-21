@@ -38,7 +38,7 @@ class HideUnsupportedAttributeTypes implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        if (!$this->isVariationsPopupUsed() ) {
+        if (!$this->isVariationsPopupUsed()) {
             return;
         }
 
