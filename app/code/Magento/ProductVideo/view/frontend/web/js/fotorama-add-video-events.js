@@ -655,7 +655,7 @@ define([
                 return;
             }
 
-            if (activeIndexIsBase && number === 0 && $(window).width() > this.MobileMaxWidth) {
+            if (activeIndexIsBase && number === 1 && $(window).width() > this.MobileMaxWidth) {
                 if (this.options.videoData[fotorama.activeIndex].provider === this.VI) {
                     waitForFroogaloop = setInterval($.proxy(function () {
                         if (window.Froogaloop) {

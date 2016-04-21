@@ -387,6 +387,7 @@ body._in-resize {
     }
 
     .data-grid-checkbox-cell {
+        overflow: hidden;
         padding: 0;
         vertical-align: top;
         width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
@@ -774,10 +775,21 @@ body._in-resize {
 .data-grid-checkbox-cell-inner {
     display: block;
     padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+    position: relative;
     text-align: right;
 
     &:hover {
         cursor: pointer;
+    }
+
+    &:before {
+        bottom: 0;
+        content: '';
+        height: 500%;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 }
 
