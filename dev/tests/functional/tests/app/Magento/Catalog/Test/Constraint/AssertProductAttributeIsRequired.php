@@ -47,7 +47,8 @@ class AssertProductAttributeIsRequired extends AbstractConstraint
         $productForm->getAttributeElement($attribute)->setValue('');
         $catalogProductEdit->getFormPageActions()->save();
         $validationErrors = $productForm->getSection($sectionName)->getValidationErrors();
-        $actualMessage = $validationErrors[$attribute->getFrontendLabel()];
+        $actualMessage = isset($validationErrors[$attribute->getFrontendLabel()])
+            ? $validationErrors[$attribute->getFrontendLabel()] : '';
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::REQUIRE_MESSAGE,
