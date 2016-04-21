@@ -168,7 +168,6 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
         }
 
         $method->assignData($data);
-        $data->unsetData(PaymentInterface::KEY_ADDITIONAL_DATA);
 
         /*
          * validating the payment data
