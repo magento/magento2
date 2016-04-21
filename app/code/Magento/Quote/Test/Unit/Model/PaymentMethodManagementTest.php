@@ -111,7 +111,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 100;
         $paymentId = 200;
         $methodDataWithAdditionalData = ['method' => 'data', 'additional_data' => ['additional' => 'value']];
-        $methodData = ['method' => 'data', 'additional' => 'value'];
+        $methodData = $methodDataWithAdditionalData;
         $paymentMethod = 'checkmo';
 
         $quoteMock = $this->getMock(
