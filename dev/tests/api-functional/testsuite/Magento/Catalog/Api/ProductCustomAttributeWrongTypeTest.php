@@ -28,8 +28,6 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
      * @expectedException \Exception
-     * @expectedExceptionMessage
-     * Attribute "meta_title" has invalid value. Invalid type for value: "array". Expected Type: "string"
      */
     public function testCustomAttributeWrongType()
     {
@@ -45,7 +43,15 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
             ],
         ];
 
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $this->setExpectedException('Exception', 'Attribute "meta_title" has invalid value.');
+        } else {
+            $this->setExpectedException('Exception', 'Attribute \"meta_title\" has invalid value.');
+        }
+
         $this->_webApiCall($serviceInfo, $this->getRequestData());
+
+
     }
 
     protected function getRequestData()
