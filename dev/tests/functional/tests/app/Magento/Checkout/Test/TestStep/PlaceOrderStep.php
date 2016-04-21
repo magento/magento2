@@ -69,7 +69,7 @@ class PlaceOrderStep implements TestStepInterface
         AssertGrandTotalOrderReview $assertGrandTotalOrderReview,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         FixtureFactory $fixtureFactory,
-        array $products,
+        array $products = [],
         array $prices = []
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
