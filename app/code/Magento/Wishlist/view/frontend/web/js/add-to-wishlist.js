@@ -115,7 +115,14 @@ define([
                 });
             } else {
                 if (elementValue) {
-                    data[elementName] = elementValue;
+                    if (elementName.substr(elementName.length - 2) == '[]') {
+                        elementName = elementName.substring(0, elementName.length - 2);
+                        if (elementValue) {
+                            data[elementName + '[' + elementValue + ']'] = elementValue;
+                        }
+                    } else {
+                        data[elementName] = elementValue;
+                    }
                 }
             }
             return data;
