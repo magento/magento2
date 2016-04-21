@@ -165,6 +165,22 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
     }
 
+    public function testCreateInvalidPriceFormat()
+    {
+        $this->_markTestAsRestOnly("In case of SOAP type casting is handled by PHP SoapServer, no need to test it");
+        $expectedMessage = 'Error occurred during "price" processing. '
+            . 'Invalid type for value: "invalid_format". Expected Type: "float".';
+
+        try {
+            $this->saveProduct(['name' => 'simple', 'price' => 'invalid_format', 'sku' => 'simple']);
+            $this->fail("Expected exception was not raised");
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+        }
+    }
+
     /**
      * @param array $fixtureProduct
      *
