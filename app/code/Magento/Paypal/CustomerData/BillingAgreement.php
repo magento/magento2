@@ -54,7 +54,7 @@ class BillingAgreement implements SectionSourceInterface
      *
      * @var string
      */
-    private $startAction = '';
+    private $startAction = 'paypal/express/start/button/1';
 
     /**
      * @param CurrentCustomer $currentCustomer
@@ -62,21 +62,18 @@ class BillingAgreement implements SectionSourceInterface
      * @param ConfigFactory $paypalConfigFactory
      * @param UrlInterface $urlBuilder
      * @param Escaper $escaper
-     * @param string $startAction
      */
     public function __construct(
         CurrentCustomer $currentCustomer,
         Data $paypalData,
         ConfigFactory $paypalConfigFactory,
         UrlInterface $urlBuilder,
-        Escaper $escaper,
-        $startAction
+        Escaper $escaper
     ) {
         $this->currentCustomer = $currentCustomer;
         $this->paypalData = $paypalData;
         $this->urlBuilder = $urlBuilder;
         $this->escaper = $escaper;
-        $this->startAction = $startAction;
         $this->config = $paypalConfigFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
     }
