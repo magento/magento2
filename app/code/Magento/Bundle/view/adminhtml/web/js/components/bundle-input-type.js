@@ -26,36 +26,42 @@ define([
 
             if (type !== this.previousType) {
                 this.previousType = type;
-
-                if (type === 'radio') {
-                    this.clearValues();
-                }
+                this.processSelections(type === 'radio');
             }
 
             this._super();
         },
 
         /**
-         * Clears values in components like this.
+         * Toggle 'User Defined' column and clears values
+         * @param {Boolean} isRadio
          */
-        clearValues: function () {
+        processSelections: function (isRadio) {
             var records = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.selections),
                 checkedFound = false;
 
             records.elems.each(function (record) {
                 record.elems.filter(function (comp) {
-                    return comp.index === this.targetIndex;
+                    return comp.index === this.userDefinedIndex;
                 }, this).each(function (comp) {
-                    if (comp.checked()) {
-                        if (checkedFound) {
-                            comp.clearing = true;
-                            comp.clear();
-                            comp.clearing = false;
-                        }
-
-                        checkedFound = true;
-                    }
+                    comp.visible(isRadio);
                 });
+
+                if (isRadio) {
+                    record.elems.filter(function (comp) {
+                        return comp.index === this.isDefaultIndex;
+                    }, this).each(function (comp) {
+                        if (comp.checked()) {
+                            if (checkedFound) {
+                                comp.clearing = true;
+                                comp.clear();
+                                comp.clearing = false;
+                            }
+
+                            checkedFound = true;
+                        }
+                    });
+                }
             }, this);
         },
 

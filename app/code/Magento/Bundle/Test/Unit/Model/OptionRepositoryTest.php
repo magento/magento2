@@ -97,7 +97,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->linkManagementMock = $this->getMock('\Magento\Bundle\Api\ProductLinkManagementInterface');
         $this->optionListMock = $this->getMock('\Magento\Bundle\Model\Product\OptionList', [], [], '', false);
         $this->linkListMock = $this->getMock('\Magento\Bundle\Model\Product\LinksList', [], [], '', false);
-        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
 
         $this->model = new OptionRepository(
             $this->productRepositoryMock,
@@ -295,7 +295,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -352,7 +352,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -416,7 +416,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',

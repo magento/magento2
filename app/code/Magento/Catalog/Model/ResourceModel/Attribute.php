@@ -28,7 +28,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
     protected $attrLockValidator;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -38,7 +38,6 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -47,12 +46,10 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
-        $this->metadataPool = $metadataPool;
         parent::__construct($context, $storeManager, $eavEntityType, $connectionName);
     }
 
@@ -113,11 +110,11 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
     /**
      * Delete entity
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteEntity(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $object)
+    public function deleteEntity(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getEntityAttributeId()) {
             return $this;
@@ -140,7 +137,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
             $backendTable = $attribute->getBackend()->getTable();
             if ($backendTable) {
-                $linkField = $this->metadataPool
+                $linkField = $this->getMetadataPool()
                     ->getMetadata(ProductInterface::class)
                     ->getLinkField();
 
@@ -164,5 +161,17 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         $this->getConnection()->delete($this->getTable('eav_entity_attribute'), $condition);
 
         return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }
