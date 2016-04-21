@@ -43,6 +43,7 @@ class StoreScopeProvider implements ScopeProviderInterface
      * @param string $entityType
      * @param array $entityData
      * @return \Magento\Framework\Model\Entity\ScopeInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getContext($entityType, $entityData = [])
     {
