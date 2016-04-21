@@ -572,7 +572,7 @@ abstract class AbstractType
             $options = $product->getOptions();
         }
         if ($options !== null) {
-            $result = [];
+            $results = [];
             foreach ($options as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
                 try {
@@ -583,7 +583,7 @@ abstract class AbstractType
                         ->setProcessMode($processMode)
                         ->validateUserValue($buyRequest->getOptions());
                 } catch (LocalizedException $e) {
-                    $result[] = $e->getMessage();
+                    $results[] = $e->getMessage();
                     continue;
                 }
 
@@ -592,8 +592,8 @@ abstract class AbstractType
                     $transport->options[$option->getId()] = $preparedValue;
                 }
             }
-            if (count($result) > 0) {
-                throw new LocalizedException(__(implode("\n", $result)));
+            if (count($results) > 0) {
+                throw new LocalizedException(__(implode("\n", $results)));
             }
         }
 
