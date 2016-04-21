@@ -216,7 +216,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = $content;
+        $this->metadata[$name] = $this->prepareMetaTagContent($content);
     }
 
     /**
@@ -336,6 +336,17 @@ class Config
     public function setKeywords($keywords)
     {
         $this->setMetadata('keywords', $keywords);
+    }
+
+    /**
+     * Prepare content for meta tag attribute
+     *
+     * @param $content
+     * @return string
+     */
+    protected function prepareMetaTagContent($content)
+    {
+        return htmlentities($content);
     }
 
     /**
