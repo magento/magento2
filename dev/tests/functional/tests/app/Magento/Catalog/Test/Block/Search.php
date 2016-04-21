@@ -118,6 +118,7 @@ class Search extends Block
     public function clickSuggestedText($text)
     {
         $searchAutocomplete = sprintf($this->searchAutocomplete, $text);
+        $this->waitForElementVisible($searchAutocomplete, Locator::SELECTOR_XPATH);
         $this->_rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->click();
     }
 }
