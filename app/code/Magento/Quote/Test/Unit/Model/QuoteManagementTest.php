@@ -518,7 +518,10 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $customerId = 455;
         $storeId = 5;
 
-        $this->getPropertyValue($this->model, 'quoteIdMaskFactory')->expects($this->once())->method('create')->willReturn($this->quoteIdMock);
+        $this->getPropertyValue($this->model, 'quoteIdMaskFactory')
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->quoteIdMock);
         $this->quoteIdMock->expects($this->once())->method('load')->with($cartId, 'quote_id')->willReturnSelf();
         $this->quoteIdMock->expects($this->once())->method('getId')->willReturn(10);
         $this->quoteIdMock->expects($this->once())->method('delete');
