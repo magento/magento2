@@ -105,12 +105,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Paypal\CustomerData\BillingAgreement">
-        <arguments>
-            <argument name="startAction" xsi:type="string">paypal/express/start/button/1</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+    <type name="Magento\Customer\CustomerData\SectionPool">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="paypal-billing-agreement" xsi:type="string">Magento\Paypal\CustomerData\BillingAgreement</item>
