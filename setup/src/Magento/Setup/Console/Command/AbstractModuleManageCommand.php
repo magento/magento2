@@ -6,8 +6,9 @@
 namespace Magento\Setup\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Magento\Framework\App\DeploymentConfig;
 
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {
@@ -16,6 +17,11 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      */
     const INPUT_KEY_ALL = 'all';
     const INPUT_KEY_FORCE = 'force';
+
+    /**
+     * @var DeploymentConfig
+     */
+    protected $deploymentConfig;
 
     /**
      * {@inheritdoc}
@@ -91,10 +97,12 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                 $output->writeln('<info>The following modules have been enabled:</info>');
                 $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
                 $output->writeln('');
-                $output->writeln(
-                    '<info>To make sure that the enabled modules are properly registered,'
-                    . " run 'setup:upgrade'.</info>"
-                );
+                if ($this->getDeploymentConfig()->isAvailable()) {
+                    $output->writeln(
+                        '<info>To make sure that the enabled modules are properly registered,'
+                        . " run 'setup:upgrade'.</info>"
+                    );
+                }
             } else {
                 $output->writeln('<info>The following modules have been disabled:</info>');
                 $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
@@ -134,4 +142,18 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * @return bool
      */
     abstract protected function isEnable();
+
+    /**
+     * Get deployment config
+     * 
+     * @return DeploymentConfig
+     * @deprecated
+     */
+    private function getDeploymentConfig()
+    {
+        if (!($this->deploymentConfig instanceof DeploymentConfig)) {
+            return $this->objectManager->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
+    }
 }
