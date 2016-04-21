@@ -77,7 +77,6 @@ class Downloadable
                     if (!$linkData || (isset($linkData['is_delete']) && (bool)$linkData['is_delete'])) {
                         continue;
                     } else {
-                        //unset($linkData['link_id']);
                         // TODO: need to implement setLinkFileContent()
                         $link = $this->linkFactory->create(['data' => $linkData]);
                         if (isset($linkData['type'])) {
@@ -89,6 +88,7 @@ class Downloadable
                         if (isset($linkData['file_content'])) {
                             $link->setLinkFileContent($linkData['file_content']);
                         }
+                        $link->setId(null);
                         if (isset($linkData['link_id'])) {
                             $link->setId($linkData['link_id']);
                         }
@@ -128,10 +128,11 @@ class Downloadable
                         continue;
                     } else {
                         $sample = $this->sampleFactory->create(['data' => $sampleData]);
-                        $sample->setStoreId($product->getStoreId());
+                        $sample->setId(null);
                         if (isset($sampleData['sample_id'])) {
                             $sample->setId($sampleData['sample_id']);
                         }
+                        $sample->setStoreId($product->getStoreId());
                         if (isset($sampleData['type'])) {
                             $sample->setSampleType($sampleData['type']);
                         }
