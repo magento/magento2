@@ -73,7 +73,15 @@ class Collection extends ConfigCollection
     protected function _afterLoad()
     {
         foreach ($this->_items as $item) {
-            $item->setData('value', $this->valueProcessor->process($item->getData('value'), $item->getData('path')));
+            $item->setData(
+                'value',
+                $this->valueProcessor->process(
+                    $item->getData('value'),
+                    $this->getData('scope'),
+                    $this->getData('scope_id'),
+                    $item->getData('path')
+                )
+            );
         }
         parent::_afterLoad();
     }

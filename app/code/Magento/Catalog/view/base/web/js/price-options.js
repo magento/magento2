@@ -18,7 +18,7 @@ define([
         optionsSelector: '.product-custom-option',
         optionConfig: {},
         optionHandlers: {},
-        optionTemplate: '<%- data.label %>' +
+        optionTemplate: '<%= data.label %>' +
         '<% if (data.finalPrice.value) { %>' +
         ' +<%- data.finalPrice.formatted %>' +
         '<% } %>',

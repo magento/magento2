@@ -21,7 +21,7 @@ class FormPageActions extends \Magento\Catalog\Test\Block\Adminhtml\Product\Form
      *
      * @var string
      */
-    protected $affectedAttributeSetForm = '//div[@data-role="affected-attribute-set-selector"]/ancestor::*[@data-role="modal"]';
+    protected $affectedAttributeSetForm = '.product_form_product_form_configurable_attribute_set_handler_modal [data-role="focusable-scope"]';
     // @codingStandardsIgnoreEnd
 
     /**
@@ -48,7 +48,7 @@ class FormPageActions extends \Magento\Catalog\Test\Block\Adminhtml\Product\Form
     {
         return $this->blockFactory->create(
             '\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AffectedAttributeSet',
-            ['element' => $this->browser->find($this->affectedAttributeSetForm, Locator::SELECTOR_XPATH)]
+            ['element' => $this->browser->find($this->affectedAttributeSetForm)]
         );
     }
 }
