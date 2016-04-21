@@ -54,6 +54,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
