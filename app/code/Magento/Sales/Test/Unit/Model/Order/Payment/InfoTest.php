@@ -89,8 +89,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ['cc_cid', 'cc_cid_enc']
         ];
     }
-
-
+    
     public function testGetMethodInstanceWithRealMethod()
     {
         $method = 'real_method';
@@ -107,7 +106,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
         $this->info->getMethodInstance();
     }
-
 
     public function testGetMethodInstanceWithUnrealMethod()
     {
@@ -130,7 +128,6 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
         $this->info->getMethodInstance();
     }
-
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
