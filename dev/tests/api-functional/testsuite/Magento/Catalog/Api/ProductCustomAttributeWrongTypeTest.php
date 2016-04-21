@@ -150,5 +150,4 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
         $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
-
 }

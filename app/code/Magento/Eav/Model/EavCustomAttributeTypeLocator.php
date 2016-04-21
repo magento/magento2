@@ -97,8 +97,8 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
         }
 
         $dataInterface = $this->getComplexTypeLocator()->getType(
-            $attribute, 
-            $serviceClass, 
+            $attribute,
+            $serviceClass,
             $this->serviceBackendModelDataInterfaceMap
         );
         return $dataInterface ?: $this->getSimpleTypeLocator()->getType($attribute);
