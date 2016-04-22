@@ -61,6 +61,27 @@ class TypeProcessor
     protected $_types = [];
 
     /**
+     * @var NameFinder
+     */
+    private $nameFinder;
+
+    /**
+     * The getter function to get the new NameFinder dependency
+     *
+     * @return NameFinder
+     *
+     * @deprecated
+     */
+    private function getNameFinder()
+    {
+        if ($this->nameFinder === null) {
+            $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\Reflection\NameFinder');
+        }
+        return $this->nameFinder;
+    }
+
+    /**
      * Retrieve processed types data.
      *
      * @return array
@@ -195,11 +216,11 @@ class TypeProcessor
         /** Field will not be added to WSDL if getter has params */
         if ($isGetter && !$methodReflection->getNumberOfRequiredParameters()) {
             $returnMetadata = $this->getGetterReturnType($methodReflection);
-            $fieldName = $this->dataObjectGetterNameToFieldName($methodReflection->getName());
+            $fieldName = $this->getNameFinder()->dataObjectGetterNameToFieldName($methodReflection->getName());
             if ($returnMetadata['description']) {
                 $description = $returnMetadata['description'];
             } else {
-                $description = $this->dataObjectGetterDescriptionToFieldDescription(
+                $description = $this->getNameFinder()->dataObjectGetterDescriptionToFieldDescription(
                     $methodReflection->getDocBlock()->getShortDescription()
                 );
             }
@@ -237,22 +258,12 @@ class TypeProcessor
      *
      * @param string $getterName
      * @return string
+     * 
+     * @deprecated
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
-        if ((strpos($getterName, 'get') === 0)) {
-            /** Remove 'get' prefix and make the first letter lower case */
-            $fieldName = substr($getterName, strlen('get'));
-        } elseif ((strpos($getterName, 'is') === 0)) {
-            /** Remove 'is' prefix and make the first letter lower case */
-            $fieldName = substr($getterName, strlen('is'));
-        } elseif ((strpos($getterName, 'has') === 0)) {
-            /** Remove 'has' prefix and make the first letter lower case */
-            $fieldName = substr($getterName, strlen('has'));
-        } else {
-            $fieldName = $getterName;
-        }
-        return lcfirst($fieldName);
+        return $this->getNameFinder()->dataObjectGetterNameToFieldName($getterName);
     }
 
     /**
@@ -260,10 +271,12 @@ class TypeProcessor
      *
      * @param string $shortDescription
      * @return string
+     *
+     * @deprecated
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
-        return ucfirst(substr(strstr($shortDescription, " "), 1));
+        return $this->getNameFinder()->dataObjectGetterDescriptionToFieldDescription($shortDescription);
     }
 
     /**
@@ -578,12 +591,12 @@ class TypeProcessor
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
+     * 
+     * @deprecated 
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
-        $getterName = 'get' . $camelCaseProperty;
-        $boolGetterName = 'is' . $camelCaseProperty;
-        return $this->findAccessorMethodName($class, $camelCaseProperty, $getterName, $boolGetterName);
+        return $this->getNameFinder()->findGetterMethodName($class, $camelCaseProperty);
     }
 
     /**
@@ -614,12 +627,12 @@ class TypeProcessor
      * @param string $camelCaseProperty
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     * 
+     * @deprecated 
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
-        $setterName = 'set' . $camelCaseProperty;
-        $boolSetterName = 'setIs' . $camelCaseProperty;
-        return $this->findAccessorMethodName($class, $camelCaseProperty, $setterName, $boolSetterName);
+        return $this->getNameFinder()->findSetterMethodName($class, $camelCaseProperty);
     }
 
     /**
@@ -631,6 +644,8 @@ class TypeProcessor
      * @param bool $boolAccessorName
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     * 
+     * @deprecated 
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -638,21 +653,8 @@ class TypeProcessor
         $accessorName,
         $boolAccessorName
     ) {
-        if ($this->classHasMethod($class, $accessorName)) {
-            $methodName = $accessorName;
-            return $methodName;
-        } elseif ($this->classHasMethod($class, $boolAccessorName)) {
-            $methodName = $boolAccessorName;
-            return $methodName;
-        } else {
-            throw new \LogicException(
-                sprintf(
-                    'Property "%s" does not have corresponding setter in class "%s".',
-                    $camelCaseProperty,
-                    $class->getName()
-                )
-            );
-        }
+        return $this->getNameFinder()
+            ->findAccessorMethodName($class, $camelCaseProperty, $accessorName, $boolAccessorName);
     }
 
     /**
@@ -663,10 +665,12 @@ class TypeProcessor
      * @param ClassReflection $class
      * @param string $methodName
      * @return bool
+     * 
+     * @deprecated 
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {
-        return $class->hasMethod($methodName) && ($class->getMethod($methodName)->getName() == $methodName);
+        return $this->getNameFinder()->classHasMethod($class, $methodName);
     }
 
     /**
