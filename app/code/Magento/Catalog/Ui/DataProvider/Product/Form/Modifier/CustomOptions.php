@@ -168,8 +168,6 @@ class CustomOptions extends AbstractModifier
             }
         }
 
-        $a = 111;
-
         return array_replace_recursive(
             $data,
             [
@@ -499,10 +497,7 @@ class CustomOptions extends AbstractModifier
      */
     protected function getCommonContainerConfig($sortOrder)
     {
-        $canDisplayService = $this->locator->getProduct()->getStoreId();
-        $usedDefault = $this->locator->getProduct()->getAttributeDefaultValue(static::FIELD_TITLE_NAME) === false;
-
-        $commonContainer = [
+        return [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -536,21 +531,6 @@ class CustomOptions extends AbstractModifier
                 static::FIELD_IS_REQUIRE_NAME => $this->getIsRequireFieldConfig(40)
             ]
         ];
-
-        if ($canDisplayService) {
-            $useDefaultConfig = [
-                'usedDefault' => $usedDefault,
-                'disabled' => $usedDefault,
-                'service' => [
-                    'template' => 'ui/form/element/helper/service',
-                ]
-            ];
-            $titlePath = $this->arrayManager->findPath(static::FIELD_TITLE_NAME, $commonContainer, null)
-                . static::META_CONFIG_PATH;
-            $commonContainer = $this->arrayManager->merge($titlePath, $commonContainer, $useDefaultConfig);
-        }
-
-        return $commonContainer;
     }
 
     /**
