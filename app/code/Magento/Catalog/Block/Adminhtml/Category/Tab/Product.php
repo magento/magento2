@@ -104,8 +104,6 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'sku'
         )->addAttributeToSelect(
             'price'
-        )->addStoreFilter(
-            $this->getRequest()->getParam('store')
         )->joinField(
             'position',
             'catalog_category_product',
@@ -114,6 +112,9 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'category_id=' . (int)$this->getRequest()->getParam('id', 0),
             'left'
         );
+        if ($this->getRequest()->getParam('store', 0) > 0) {
+            $collection->addStoreFilter($this->getRequest()->getParam('store'));
+        }
         $this->setCollection($collection);
 
         if ($this->getCategory()->getProductsReadonly()) {
