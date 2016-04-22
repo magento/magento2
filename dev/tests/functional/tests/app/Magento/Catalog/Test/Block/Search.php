@@ -51,6 +51,20 @@ class Search extends Block
     protected $placeholder = '//input[@id="search" and contains(@placeholder, "%s")]';
 
     /**
+     * Locator value for list items.
+     *
+     * @var string
+     */
+    protected $searchListItems = './/div[@id="search_autocomplete"]//li';
+
+    /**
+     * Locator value for body with aria-busy attribute.
+     *
+     * @var string
+     */
+    protected $selectorAriaBusy = './/body[@aria-busy="false"]';
+
+    /**
      * Perform search by a keyword.
      *
      * @param string $keyword
@@ -73,6 +87,18 @@ class Search extends Block
     public function fillSearch($text)
     {
         $this->_rootElement->find($this->searchInput)->setValue($text);
+        $searchListItems = $this->searchListItems;
+        $selectorAriaBusy = $this->selectorAriaBusy;
+        $browser = $this->browser;
+        $browser->waitUntil(
+            function () use ($searchListItems, $browser, $selectorAriaBusy) {
+                $count = count($this->_rootElement->getElements($searchListItems, Locator::SELECTOR_XPATH));
+                sleep(0.2);
+                return $browser->find($selectorAriaBusy, Locator::SELECTOR_XPATH)->isVisible() &&
+                    count($this->_rootElement->getElements($searchListItems, Locator::SELECTOR_XPATH)) == $count
+                    ? true : null;
+            }
+        );
     }
 
     /**
@@ -118,7 +144,7 @@ class Search extends Block
     public function clickSuggestedText($text)
     {
         $searchAutocomplete = sprintf($this->searchAutocomplete, $text);
-        sleep(10);
+        $this->waitForElementVisible($searchAutocomplete, Locator::SELECTOR_XPATH);
         $this->_rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->click();
     }
 }
