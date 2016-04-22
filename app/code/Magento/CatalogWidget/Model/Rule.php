@@ -69,6 +69,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return \Magento\Framework\Api\ExtensionAttributesFactory
+     * @deprecated
      */
     private function getExtensionFactory()
     {
@@ -78,6 +79,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 
     /**
      * @return \Magento\Framework\Api\AttributeValueFactory
+     * @deprecated
      */
     private function getCustomAttributeFactory()
     {

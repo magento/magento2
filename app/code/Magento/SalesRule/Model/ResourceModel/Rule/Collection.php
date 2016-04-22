@@ -318,6 +318,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return array
+     * @deprecated
      */
     protected function getAssociatedEntitiesMap()
     {
@@ -331,6 +332,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
     /**
      * @return DateApplier
+     * @deprecated
      */
     private function getDateApplier()
     {
