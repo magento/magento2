@@ -123,7 +123,11 @@ class Content extends \Magento\Backend\Block\Widget
     public function getImagesJson()
     {
         $value = $this->getElement()->getImages();
-        if (is_array($value) && is_array($value['images']) && count($value['images'])) {
+        if (is_array($value) &&
+            array_key_exists('images', $value) &&
+            is_array($value['images']) &&
+            count($value['images'])
+        ) {
             $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
