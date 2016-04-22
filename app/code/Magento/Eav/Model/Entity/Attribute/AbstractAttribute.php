@@ -584,7 +584,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     protected function _getDefaultSourceModel()
     {
-        return $this->getEntity()->getDefaultAttributeSourceModel();
+        return $this->getEntityType()->getEntity()->getDefaultAttributeSourceModel();
     }
 
     /**
