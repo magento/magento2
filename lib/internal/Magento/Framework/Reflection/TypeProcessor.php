@@ -8,13 +8,14 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Reflection\DocBlockReflection;
+use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
 
 /**
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class TypeProcessor
 {
@@ -189,7 +190,7 @@ class TypeProcessor
             $reflection = new ClassReflection($class);
             $docBlock = $reflection->getDocBlock();
             $this->_types[$typeName]['documentation'] = $docBlock ? $this->getDescription($docBlock) : '';
-            /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
+            /** @var MethodReflection $methodReflection */
             foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodReflection) {
                 if ($methodReflection->class === "Magento\Framework\Model\AbstractModel") {
                     continue;
@@ -204,11 +205,11 @@ class TypeProcessor
     /**
      * Collect metadata for virtual field corresponding to current method if it is a getter (used in WSDL generation).
      *
-     * @param \Zend\Code\Reflection\MethodReflection $methodReflection
+     * @param MethodReflection $methodReflection
      * @param string $typeName
      * @return void
      */
-    protected function _processMethod(\Zend\Code\Reflection\MethodReflection $methodReflection, $typeName)
+    protected function _processMethod(MethodReflection $methodReflection, $typeName)
     {
         $isGetter = (strpos($methodReflection->getName(), 'get') === 0)
             || (strpos($methodReflection->getName(), 'is') === 0)
@@ -235,10 +236,10 @@ class TypeProcessor
     /**
      * Get short and long description from docblock and concatenate.
      *
-     * @param \Zend\Code\Reflection\DocBlockReflection $doc
+     * @param DocBlockReflection $doc
      * @return string
      */
-    public function getDescription(\Zend\Code\Reflection\DocBlockReflection $doc)
+    public function getDescription(DocBlockReflection $doc)
     {
         $shortDescription = $doc->getShortDescription();
         $longDescription = $doc->getLongDescription();
@@ -282,7 +283,7 @@ class TypeProcessor
     /**
      * Identify getter return type by its reflection.
      *
-     * @param \Zend\Code\Reflection\MethodReflection $methodReflection
+     * @param MethodReflection $methodReflection
      * @return array <pre>array(
      *     'type' => <string>$type,
      *     'isRequired' => $isRequired,
@@ -335,7 +336,7 @@ class TypeProcessor
     /**
      * Get possible method exceptions
      *
-     * @param \Zend\Code\Reflection\MethodReflection $methodReflection
+     * @param MethodReflection $methodReflection
      * @return array
      */
     public function getExceptions($methodReflection)
