@@ -24,18 +24,21 @@
 </fieldset>
 <script>
     require([
-        'jquery'
-    ], function (jQuery) {
-        jQuery(function() {
-                var setRegion = function() {
-                    jQuery('#region').val(jQuery('#region_id:visible option:selected').text());
+        'jquery',
+        'domReady'
+    ], function ($, domReady) {
+        domReady(function() {
+                var regionId = $('#region_id'),
+                    setRegion = function() {
+                    $('#region').val(regionId.filter(':visible').find(':selected').text());
                 };
 
-                setRegion();
-
-                jQuery('#region_id').on('change', function() {
+                if (regionId.is('visible')) {
                     setRegion();
-                });
+                }
+
+                regionId.on('change', setRegion);
+                $('#country_id').on('change', setRegion);
             }
         )
     })
