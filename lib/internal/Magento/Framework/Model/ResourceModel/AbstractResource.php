@@ -136,7 +136,8 @@ abstract class AbstractResource
         $value = $object->getData($field);
 
         if ($value) {
-            $value = @unserialize($value) !== false || $value === 'b:0;' ? unserialize($value) : $value;
+            $unserializedValue = @unserialize($value);
+            $value = $unserializedValue !== false || $value === 'b:0;' ? $unserializedValue : $value;
         }
 
         if (empty($value)) {
