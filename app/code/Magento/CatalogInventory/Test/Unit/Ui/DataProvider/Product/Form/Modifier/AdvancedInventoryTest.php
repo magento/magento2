@@ -69,7 +69,8 @@ class AdvancedInventoryTest extends AbstractModifierTest
         return $this->objectManager->getObject(AdvancedInventory::class, [
             'locator' => $this->locatorMock,
             'stockRegistry' => $this->stockRegistryMock,
-            'stockConfiguration' => $this->stockConfigurationMock
+            'stockConfiguration' => $this->stockConfigurationMock,
+            'arrayManager' => $this->arrayManagerMock,
         ]);
     }
 
@@ -100,6 +101,11 @@ class AdvancedInventoryTest extends AbstractModifierTest
         $this->stockItemMock->expects($this->once())->method('getEnableQtyIncrements')->willReturn($someData);
         $this->stockItemMock->expects($this->once())->method('getQtyIncrements')->willReturn($someData);
         $this->stockItemMock->expects($this->once())->method('getIsInStock')->willReturn($someData);
+
+        $this->arrayManagerMock->expects($this->once())
+            ->method('set')
+            ->with('1/product/stock_data/min_qty_allowed_in_shopping_cart')
+            ->willReturnArgument(1);
 
         $this->assertArrayHasKey($modelId, $this->getModel()->modifyData([]));
     }

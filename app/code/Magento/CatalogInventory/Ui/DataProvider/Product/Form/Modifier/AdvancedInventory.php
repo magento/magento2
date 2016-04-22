@@ -37,7 +37,7 @@ class AdvancedInventory extends AbstractModifier
     /**
      * @var StockConfigurationInterface
      */
-    protected $stockConfiguration;
+    private $stockConfiguration;
 
     /**
      * @var array
@@ -87,21 +87,26 @@ class AdvancedInventory extends AbstractModifier
                 (int)$stockData['is_in_stock'];
         }
 
-        if (null !== $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY)) {
-            // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
-            $minSaleQtyValue = @unserialize(
-                $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY)
-            );
-            $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
-            if ($minSaleQtyValue !== false) {
+        if (!empty($this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY))) {
+            $minSaleQtyData = null;
+            $defaultConfigValue = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
+
+            if (strpos($defaultConfigValue, 'a:') !== false) {
+                // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
+                $minSaleQtyValue = unserialize($defaultConfigValue);
+
                 foreach ($minSaleQtyValue as $group => $qty) {
-                    $minSaleQtyData[] = ['customer_group_id' => $group, StockItemInterface::MIN_SALE_QTY => $qty];
-                    $data = $this->arrayManager->set($path, $data, $minSaleQtyData);
+                    $minSaleQtyData[] = [
+                        StockItemInterface::CUSTOMER_GROUP_ID => $group,
+                        StockItemInterface::MIN_SALE_QTY => $qty
+                    ];
                 }
             } else {
-                $minSaleQtyData = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
-                $data = $this->arrayManager->set($path, $data, $minSaleQtyData);
+                $minSaleQtyData = $defaultConfigValue;
             }
+
+            $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
+            $data = $this->arrayManager->set($path, $data, $minSaleQtyData);
         }
 
         return $data;
