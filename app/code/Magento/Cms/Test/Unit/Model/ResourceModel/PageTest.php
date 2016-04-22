@@ -18,6 +18,7 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class PageTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
