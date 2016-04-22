@@ -216,11 +216,11 @@ class TypeProcessor
         /** Field will not be added to WSDL if getter has params */
         if ($isGetter && !$methodReflection->getNumberOfRequiredParameters()) {
             $returnMetadata = $this->getGetterReturnType($methodReflection);
-            $fieldName = $this->getNameFinder()->dataObjectGetterNameToFieldName($methodReflection->getName());
+            $fieldName = $this->getNameFinder()->getFieldNameFromGetterName($methodReflection->getName());
             if ($returnMetadata['description']) {
                 $description = $returnMetadata['description'];
             } else {
-                $description = $this->getNameFinder()->dataObjectGetterDescriptionToFieldDescription(
+                $description = $this->getNameFinder()->getFieldDescriptionFromGetterDescription(
                     $methodReflection->getDocBlock()->getShortDescription()
                 );
             }
@@ -263,7 +263,7 @@ class TypeProcessor
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
-        return $this->getNameFinder()->dataObjectGetterNameToFieldName($getterName);
+        return $this->getNameFinder()->getFieldNameFromGetterName($getterName);
     }
 
     /**
@@ -276,7 +276,7 @@ class TypeProcessor
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
-        return $this->getNameFinder()->dataObjectGetterDescriptionToFieldDescription($shortDescription);
+        return $this->getNameFinder()->getFieldDescriptionFromGetterDescription($shortDescription);
     }
 
     /**
@@ -670,7 +670,7 @@ class TypeProcessor
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {
-        return $this->getNameFinder()->classHasMethod($class, $methodName);
+        return $this->getNameFinder()->hasMethod($class, $methodName);
     }
 
     /**
