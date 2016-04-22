@@ -50,7 +50,7 @@ class NameFinder
      * @param ClassReflection $class
      * @param string $camelCaseProperty
      * @return string processed method name
-     * @throws \Exception If $camelCaseProperty has no corresponding getter method
+     * @throws \LogicException If $camelCaseProperty has no corresponding getter method
      */
     public function getGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -65,7 +65,7 @@ class NameFinder
      * @param ClassReflection $class
      * @param string $camelCaseProperty
      * @return string processed method name
-     * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     * @throws \LogicException If $camelCaseProperty has no corresponding setter method
      */
     public function getSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -82,7 +82,7 @@ class NameFinder
      * @param string $accessorName
      * @param bool $boolAccessorName
      * @return string processed method name
-     * @throws \Exception If $camelCaseProperty has no corresponding setter method
+     * @throws \LogicException If $camelCaseProperty has no corresponding setter method
      */
     public function findAccessorMethodName(
         ClassReflection $class,
