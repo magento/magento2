@@ -14,7 +14,6 @@ use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Test class for Magento\Customer\Api\CustomerRepositoryInterface
@@ -149,17 +148,15 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * validate update by invalid customer.
-     *
+     * Validate update by invalid customer.
      * @expectedException \Exception
      * @expectedExceptionMessage Consumer is not authorized to access %resources
-     *
-    */
+     */
     public function testInvalidCustomerUpdate()
     {
         //Create customer 1 and retrieve customer token.
         $customerData1 = $this->_createCustomer();
-        $this->resetTokenForCustomer(($customerData1[Customer::EMAIL]), 'test@123');
+        $this->generateCustomerToken(($customerData1[Customer::EMAIL]), 'test@123');
 
         //Create customer 2 and update lastname.
         $customerData = $this->_createCustomer();
@@ -806,16 +803,12 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Sets the test's access token for a particular username and password.
-     *
+     * Set the test's access token for a particular username and password.
      * @param string $username
      * @param string $password
      */
-
-    protected function resetTokenForCustomer($username, $password)
+    protected function generateCustomerToken($username, $password)
     {
-
-        // get customer ID token
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_CUSTOMER_TOKEN,
@@ -826,3 +819,4 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->token = $this->_webApiCall($serviceInfo, $requestData);
     }
 }
+
