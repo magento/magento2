@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Braintree\Test\TestCase\CreateOnlineCreditMemoBraintreePaypalTest" summary="Create online credit memo for Braintree credit card" ticketId="MAGETWO-38324">
+        <variation name="CreateCreditMemoBraintreePaypalTestVariation1" summary="Full refund of order placed within Braintree PayPal" ticketId="MAGETWO-48689">
+            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="refundedPrices" xsi:type="array">
+                <item name="0" xsi:type="string">139.9</item>
+            </data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree_paypal</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal_sale</data>
+            <data name="paymentAction" xsi:type="string">sale</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
+            <data name="data/items_data/0/qty" xsi:type="string">-</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
+        </variation>
+        <variation name="CreateOnlineCreditMemoBraintreePaypalTestVariation2" summary="Partial refund of order placed within Braintree PayPal" ticketId="MAGETWO-48698">
+            <data name="products" xsi:type="string">catalogProductSimple::simple_for_sales</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="refundedPrices" xsi:type="array">
+                <item name="0" xsi:type="string">621.2</item>
+            </data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="payment/method" xsi:type="string">braintree_paypal</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal</data>
+            <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
+            <data name="data/items_data/0/qty" xsi:type="string">2</data>
+            <data name="refundData/items_data/0/qty" xsi:type="string">1</data>
+            <data name="order/dataset" xsi:type="string">default</data>
+            <data name="isCreditMemoPartial" xsi:type="string">Yes</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundSuccessCreateMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCreditMemoTab" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertRefundInCommentsHistory" />
+        </variation>
+    </testCase>
+</config>
