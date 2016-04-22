@@ -48,7 +48,10 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             [[$dataObject, 'array', null, false], serialize($dataObject->getDataByKey('array'))],
             [[$dataObject, 'string', null, false], serialize($dataObject->getDataByKey('string'))],
             [[$dataObject, 'int', null, false], serialize($dataObject->getDataByKey('int'))],
-            [[$dataObject, 'serialized_object', null, false], serialize($dataObject->getDataByKey('serialized_object'))],
+            [
+                [$dataObject, 'serialized_object', null, false],
+                serialize($dataObject->getDataByKey('serialized_object'))
+            ],
             [[$dataObject, 'empty_value', null, true], null],
             [[$dataObject, 'empty_value_with_default', new \stdClass(), false], 'O:8:"stdClass":0:{}'],
         ];
