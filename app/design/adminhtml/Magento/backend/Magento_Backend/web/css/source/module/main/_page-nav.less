@@ -209,7 +209,6 @@
 }
 
 //  Messages in tooltip
-
 .admin__page-nav-item-messages {
     display: inline-block;
 
@@ -299,29 +298,29 @@
         padding-left: .8em;
         vertical-align: baseline;
 
-            &:after {
-                color: @admin__page-nav-link__changed__color;
-                content: @admin__page-nav-icon-changed__content;
-            }
+        &:after {
+            color: @admin__page-nav-link__changed__color;
+            content: @admin__page-nav-icon-changed__content;
+        }
+    }
+}
+
+&._changed {
+    ._changed:not(._error) > .admin__page-nav-item-messages & {
+        display: inline-block;
+    }
+}
+
+&._error {
+    .admin__page-nav-item-message-icon {
+        &:after {
+            color: @admin__page-nav-icon-error__color;
+            content: @admin__page-nav-icon-error__content;
         }
     }
 
-    &._changed {
-        ._changed:not(._error) > .admin__page-nav-item-messages & {
-            display: inline-block;
-        }
-    }
-
-    &._error {
-        .admin__page-nav-item-message-icon {
-            &:after {
-                color: @admin__page-nav-icon-error__color;
-                content: @admin__page-nav-icon-error__content;
-            }
-        }
-
-        ._error > .admin__page-nav-item-messages & {
-            display: inline-block;
+    ._error > .admin__page-nav-item-messages & {
+        display: inline-block;
 
         .spinner {
             font-size: @admin__page-nav-item-message-loader__font-size;
