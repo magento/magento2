@@ -117,17 +117,10 @@ abstract class AbstractResource
     protected function _serializeField(\Magento\Framework\DataObject $object, $field, $defaultValue = null, $unsetEmpty = false)
     {
         $value = $object->getData($field);
-        if (empty($value)) {
-            if ($unsetEmpty) {
-                $object->unsetData($field);
-            } else {
-                if (is_object($defaultValue) || is_array($defaultValue)) {
-                    $defaultValue = serialize($defaultValue);
-                }
-                $object->setData($field, $defaultValue);
-            }
-        } elseif (is_array($value) || is_object($value)) {
-            $object->setData($field, serialize($value));
+        if (empty($value) && $unsetEmpty) {
+            $object->unsetData($field);
+        } else {
+            $object->setData($field, serialize($value ?: $defaultValue));
         }
 
         return $this;
@@ -144,10 +137,13 @@ abstract class AbstractResource
     protected function _unserializeField(\Magento\Framework\DataObject $object, $field, $defaultValue = null)
     {
         $value = $object->getData($field);
+
+        $value = $value ? unserialize($value) : $value;
+
         if (empty($value)) {
             $object->setData($field, $defaultValue);
-        } elseif (!is_array($value) && !is_object($value)) {
-            $object->setData($field, unserialize($value));
+        } else {
+            $object->setData($field, $value);
         }
     }
 
