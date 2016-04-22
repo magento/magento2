@@ -52,6 +52,7 @@
                         <item name="config" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Manage Stock</item>
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">manage_stock</item>
                             <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
@@ -70,6 +71,13 @@
                                 <item name="false" xsi:type="string">0</item>
                             </item>
                             <item name="value" xsi:type="string">1</item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">manage_stock</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                            </item>
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.manage_stock:disabled</item>
                             </item>
@@ -141,6 +149,13 @@
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.min_qty:disabled</item>
                             </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">min_qty</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.min_qty</item>
+                            </item>
                         </item>
                     </argument>
                 </field>
@@ -190,6 +205,13 @@
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.min_sale_qty:disabled</item>
                             </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">min_sale_qty</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.min_sale_qty</item>
+                            </item>
                         </item>
                     </argument>
                 </field>
@@ -233,6 +255,13 @@
                             <item name="value" xsi:type="string">1</item>
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.max_sale_qty:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">max_sale_qty</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.max_sale_qty</item>
                             </item>
                         </item>
                     </argument>
@@ -294,9 +323,8 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Backorders</item>
-                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/backorders</item>
-                            <item name="deferredStockUpdate" xsi:type="string">ns = ${ $.ns }, index=container_deferred_stock_update</item>
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">backorders</item>
                             <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
@@ -317,6 +345,13 @@
                             <item name="value" xsi:type="string">1</item>
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.backorders:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">backorders</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.backorders</item>
                             </item>
                         </item>
                     </argument>
@@ -340,6 +375,7 @@
                             <item name="label" xsi:type="string" translate="true">Use Deferred Stock Update</item>
                             <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">deferred_stock_update</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -359,6 +395,13 @@
                             <item name="value" xsi:type="string">1</item>
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.deferred_stock_update:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">deferred_stock_update</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.deferred_stock_update</item>
                             </item>
                         </item>
                     </argument>
@@ -407,6 +450,13 @@
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.notify_stock_qty:disabled</item>
                             </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.notify_stock_qty</item>
+                            </item>
                         </item>
                     </argument>
                 </field>
@@ -428,6 +478,7 @@
                         <item name="config" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Enable Qty Increments</item>
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="dataScope" xsi:type="string">enable_qty_increments</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
@@ -440,7 +491,7 @@
                         <item name="config" xsi:type="array">
                             <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
-                            <item name="dataScope" xsi:type="string">use_config_enable_qty_increments</item>
+                            <item name="dataScope" xsi:type="string">use_config_enable_qty_inc</item>
                             <item name="valueMap" xsi:type="array">
                                 <item name="true" xsi:type="string">1</item>
                                 <item name="false" xsi:type="string">0</item>
@@ -448,6 +499,13 @@
                             <item name="value" xsi:type="string">1</item>
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.enable_qty_increments:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">enable_qty_increments</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.enable_qty_increments</item>
                             </item>
                         </item>
                     </argument>
@@ -500,6 +558,13 @@
                             <item name="value" xsi:type="string">1</item>
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.qty_increments:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">qty_increments</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.qty_increments</item>
                             </item>
                         </item>
                     </argument>
