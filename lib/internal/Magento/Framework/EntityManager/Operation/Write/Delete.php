@@ -106,9 +106,9 @@ class Delete
                 ]
             );
             $this->eventManager->dispatchEntityEvent($entityType, 'delete_before', ['entity' => $entity]);
-            $entity = $this->deleteMain->execute($entityType, $entity, $arguments);
-            $entity = $this->deleteAttributes->execute($entityType, $entity, $arguments);
             $entity = $this->deleteExtensions->execute($entityType, $entity, $arguments);
+            $entity = $this->deleteAttributes->execute($entityType, $entity, $arguments);
+            $entity = $this->deleteMain->execute($entityType, $entity, $arguments);
             $this->eventManager->dispatchEntityEvent($entityType, 'delete_after', ['entity' => $entity]);
             $this->eventManager->dispatch(
                 'entity_manager_delete_before',
