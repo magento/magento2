@@ -31,7 +31,6 @@ abstract class AbstractResource
      */
     abstract protected function _construct();
 
-
     /**
      * Get connection
      *
