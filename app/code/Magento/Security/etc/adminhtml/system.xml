@@ -22,11 +22,17 @@
                     <label>Max Number of Password Reset Requests</label>
                     <comment>Limit the number of password reset request per hour. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
                 </field>
                 <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Min Time Between Password Reset Requests</label>
                     <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
                 </field>
             </group>
         </section>
@@ -40,11 +46,17 @@
                     <label>Max Number of Password Reset Requests</label>
                     <comment>Limit the number of password reset request per hour. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
                 </field>
                 <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Min Time Between Password Reset Requests</label>
                     <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
                 </field>
             </group>
         </section>
