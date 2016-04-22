@@ -6,6 +6,7 @@
 /**
  * jshint browser:true
  */
+/*eslint no-unused-vars: 0*/
 define([
     'jquery',
     'Magento_Customer/js/zxcvbn',
