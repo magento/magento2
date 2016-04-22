@@ -104,7 +104,6 @@ class Categories extends AbstractModifier
                         'config' => [
                             'isTemplate' => false,
                             'componentType' => 'modal',
-                            'dataScope' => 'data.new_category',
                             'options' => [
                                 'title' => __('New Category'),
                             ],
@@ -193,7 +192,6 @@ class Categories extends AbstractModifier
                                     'levelsVisibility' => '1',
                                     'elementTmpl' => 'ui/grid/filters/elements/ui-select',
                                     'options' => $this->getCategoriesTree(),
-                                    'scopeLabel' => null,
                                     'listens' => [
                                         'index=create_category:responseData' => 'setParsed',
                                         'newOption' => 'toggleOptionSelected'
