@@ -100,7 +100,6 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function testResolveJs()
     {
         $this->resolverMock
