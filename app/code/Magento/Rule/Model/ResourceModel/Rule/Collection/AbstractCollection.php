@@ -145,6 +145,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
 
     /**
      * @return array
+     * @deprecated
      */
     protected function getAssociatedEntitiesMap()
     {

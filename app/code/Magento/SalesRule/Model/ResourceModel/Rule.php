@@ -381,6 +381,7 @@ class Rule extends AbstractResource
 
     /**
      * @return array
+     * @deprecated
      */
     protected function getAssociatedEntitiesMap()
     {
@@ -394,6 +395,7 @@ class Rule extends AbstractResource
 
     /**
      * @return \Magento\Framework\EntityManager\EntityManager
+     * @deprecated
      */
     private function getEntityManager()
     {

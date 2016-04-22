@@ -771,6 +771,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
 
     /**
      * @return \Magento\Framework\Api\ExtensionAttributesFactory
+     * @deprecated
      */
     private function getExtensionFactory()
     {
@@ -780,6 +781,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
 
     /**
      * @return \Magento\Framework\Api\AttributeValueFactory
+     * @deprecated
      */
     private function getCustomAttributeFactory()
     {
@@ -789,6 +791,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
 
     /**
      * @return Data\Condition\Converter
+     * @deprecated
      */
     private function getRuleConditionConverter()
     {

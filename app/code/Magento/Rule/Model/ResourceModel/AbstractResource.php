@@ -248,6 +248,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
 
     /**
      * @return array
+     * @deprecated
      */
     protected function getAssociatedEntitiesMap()
     {
