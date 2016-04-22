@@ -596,7 +596,7 @@ class TypeProcessor
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
-        return $this->getNameFinder()->findGetterMethodName($class, $camelCaseProperty);
+        return $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
     }
 
     /**
@@ -632,7 +632,7 @@ class TypeProcessor
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
-        return $this->getNameFinder()->findSetterMethodName($class, $camelCaseProperty);
+        return $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
     }
 
     /**
