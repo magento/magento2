@@ -16,7 +16,7 @@ class NameFinder
      * @param string $getterName
      * @return string
      */
-    public function dataObjectGetterNameToFieldName($getterName)
+    public function getFieldNameFromGetterName($getterName)
     {
         if ((strpos($getterName, 'get') === 0)) {
             /** Remove 'get' prefix and make the first letter lower case */
@@ -39,7 +39,7 @@ class NameFinder
      * @param string $shortDescription
      * @return string
      */
-    public function dataObjectGetterDescriptionToFieldDescription($shortDescription)
+    public function getFieldDescriptionFromGetterDescription($shortDescription)
     {
         return ucfirst(substr(strstr($shortDescription, " "), 1));
     }
@@ -90,10 +90,10 @@ class NameFinder
         $accessorName,
         $boolAccessorName
     ) {
-        if ($this->classHasMethod($class, $accessorName)) {
+        if ($this->hasMethod($class, $accessorName)) {
             $methodName = $accessorName;
             return $methodName;
-        } elseif ($this->classHasMethod($class, $boolAccessorName)) {
+        } elseif ($this->hasMethod($class, $boolAccessorName)) {
             $methodName = $boolAccessorName;
             return $methodName;
         } else {
@@ -116,7 +116,7 @@ class NameFinder
      * @param string $methodName
      * @return bool
      */
-    public function classHasMethod(ClassReflection $class, $methodName)
+    public function hasMethod(ClassReflection $class, $methodName)
     {
         return $class->hasMethod($methodName) && ($class->getMethod($methodName)->getName() == $methodName);
     }
