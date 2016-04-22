@@ -28,7 +28,7 @@
     ], function (jQuery) {
         jQuery(function() {
                 var setRegion = function() {
-                    jQuery('#region').attr('value', jQuery('#region_id option:selected').text());
+                    jQuery('#region').val(jQuery('#region_id:visible option:selected').text());
                 };
 
                 setRegion();
