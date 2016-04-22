@@ -9,7 +9,7 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Save
- * 
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
@@ -34,15 +34,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @var array
      */
     protected $stringToBoolInputs = [
-        'general' => [
-            'custom_use_parent_settings',
-            'custom_apply_to_products',
-            'is_active',
-            'include_in_menu',
-            'is_anchor',
-            'use_default' => ['url_key'],
-            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by']
-        ]
+        'custom_use_parent_settings',
+        'custom_apply_to_products',
+        'is_active',
+        'include_in_menu',
+        'is_anchor',
+        'use_default' => ['url_key'],
+        'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by']
     ];
 
     /**
@@ -110,15 +108,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         $data['general'] = $this->getRequest()->getPostValue();
-        $isNewCategory = !isset($data['general']['entity_id']);
-        $data = $this->stringToBoolConverting($data);
-        $data = $this->imagePreprocessing($data);
-        $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
+        $categoryPostData = $data['general'];
+
+        $isNewCategory = !isset($categoryPostData['entity_id']);
+        $categoryPostData = $this->stringToBoolConverting($categoryPostData);
+        $categoryPostData = $this->imagePreprocessing($categoryPostData);
+        $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
+        $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
         $store = $this->storeManager->getStore($storeId);
         $this->storeManager->setCurrentStore($store->getCode());
-        $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
-        if ($data['general']) {
-            $category->addData($this->_filterCategoryPostData($data['general']));
+        $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
+        if ($categoryPostData) {
+            $category->addData($this->_filterCategoryPostData($categoryPostData));
             if ($isNewCategory) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
@@ -128,10 +129,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Process "Use Config Settings" checkboxes
              */
-            $generalPost = $data['general'];
+
             $useConfig = [];
-            if (isset($generalPost['use_config']) && !empty($generalPost['use_config'])) {
-                foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
+            if (isset($categoryPostData['use_config']) && !empty($categoryPostData['use_config'])) {
+                foreach ($categoryPostData['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $useConfig[] = $attributeCode;
                         $category->setData($attributeCode, null);
@@ -141,11 +142,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
-            if (isset($data['general']['category_products'])
-                && is_string($data['general']['category_products'])
+            if (isset($categoryPostData['category_products'])
+                && is_string($categoryPostData['category_products'])
                 && !$category->getProductsReadonly()
             ) {
-                $products = json_decode($data['general']['category_products'], true);
+                $products = json_decode($categoryPostData['category_products'], true);
                 $category->setPostedProducts($products);
             }
             $this->_eventManager->dispatch(
@@ -156,8 +157,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Check "Use Default Value" checkboxes values
              */
-            if (isset($generalPost['use_default']) && !empty($generalPost['use_default'])) {
-                foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
+            if (isset($categoryPostData['use_default']) && !empty($categoryPostData['use_default'])) {
+                foreach ($categoryPostData['use_default'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $category->setData($attributeCode, null);
                     }
@@ -197,15 +198,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->_getSession()->setCategoryData($data);
+                $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->_getSession()->setCategoryData($data);
+                $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->_getSession()->setCategoryData($data);
+                $this->_getSession()->setCategoryData($categoryPostData);
             }
         }
 
@@ -248,9 +249,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function imagePreprocessing($data)
     {
-        if (empty($data['general']['image'])) {
-            unset($data['general']['image']);
-            $data['general']['image']['delete'] = true;
+        if (empty($data['image'])) {
+            unset($data['image']);
+            $data['image']['delete'] = true;
         }
         return $data;
     }

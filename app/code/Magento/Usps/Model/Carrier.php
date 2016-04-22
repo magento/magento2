@@ -68,6 +68,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_code = self::CODE;
 
     /**
+     * Weight precision
+     *
+     * @var int
+     */
+    private static $weightPrecision = 10;
+
+    /**
      * Rate request data
      *
      * @var \Magento\Quote\Model\Quote\Address\RateRequest|null
@@ -324,7 +331,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $weight = $this->getTotalNumOfBoxes($request->getPackageWeight());
         $r->setWeightPounds(floor($weight));
-        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, 10));
+        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, self::$weightPrecision));
         if ($request->getFreeMethodWeight() != $request->getPackageWeight()) {
             $r->setFreeMethodWeight($request->getFreeMethodWeight());
         }
@@ -371,7 +378,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $weight = $this->getTotalNumOfBoxes($r->getFreeMethodWeight());
         $r->setWeightPounds(floor($weight));
-        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, 10));
+        $r->setWeightOunces(round(($weight - floor($weight)) * self::OUNCES_POUND, self::$weightPrecision));
         $r->setService($freeMethod);
     }
 
