@@ -197,7 +197,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             //Check if type is defined, else default to string
             $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
             $type = $type ? $type : TypeProcessor::ANY_TYPE;
-            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
+            if (!isset($customAttribute[AttributeValue::VALUE])) {
+                throw new SerializationException(new Phrase('Value is not set'));
+            } else {
+                $customAttributeValue = $customAttribute[AttributeValue::VALUE];
+            }
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible
                 if ($type === TypeProcessor::ANY_TYPE) {
