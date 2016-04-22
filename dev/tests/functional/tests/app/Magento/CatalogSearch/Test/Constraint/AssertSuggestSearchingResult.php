@@ -49,7 +49,7 @@ class AssertSuggestSearchingResult extends AbstractConstraint
             $isVisible,
             'Block "Suggest Search" when searching was not found'
         );
-        $cmsIndex->getSearchBlock()->clickSuggestedText($queryText);
+        $searchBlock->clickSuggestedText($queryText);
         $assertCatalogSearchResult->processAssert($catalogSearch, $resultPage);
     }
 
