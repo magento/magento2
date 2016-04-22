@@ -112,8 +112,9 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'category_id=' . (int)$this->getRequest()->getParam('id', 0),
             'left'
         );
-        if ($this->getRequest()->getParam('store', 0) > 0) {
-            $collection->addStoreFilter($this->getRequest()->getParam('store'));
+        $storeId = (int)$this->getRequest()->getParam('store', 0);
+        if ($storeId > 0) {
+            $collection->addStoreFilter($storeId);
         }
         $this->setCollection($collection);
 
