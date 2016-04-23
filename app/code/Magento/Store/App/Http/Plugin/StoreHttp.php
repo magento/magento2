@@ -38,7 +38,7 @@ class StoreHttp
         $this->_request = $request;
     }
 
-	public function beforeLaunch(\Magento\Framework\App\Http $subject)
+    public function beforeLaunch(\Magento\Framework\App\Http $subject)
     {
         $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
             UrlInterface::URL_TYPE_WEB,
@@ -52,7 +52,7 @@ class StoreHttp
                     '',
                     $this->_request->getPathInfo()
                 );
-                if ('/' !== substr($newPath, 0 ,1)) {
+                if ('/' !== substr($newPath, 0, 1)) {
                     $newPath = '/' . $newPath;
                 }
                 $this->_request->setPathInfo($newPath);
