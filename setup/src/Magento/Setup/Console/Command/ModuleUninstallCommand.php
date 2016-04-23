@@ -307,8 +307,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         $this->moduleUninstaller->uninstallData($output, $modules);
     }
 
-
-
     /**
      * Validate list of modules against installed composer packages and return error messages
      *
