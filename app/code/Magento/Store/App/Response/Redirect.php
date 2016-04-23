@@ -224,8 +224,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
                 $linkFromOtherStoreview = false;
                 $stores = $this->_storeManager->getStores(true);
                 foreach ($stores as $store) {
-                    if ($currentStore->getId() !== $store->getId())
-                    {
+                    if ($currentStore->getId() !== $store->getId()) {
                         $unsecureBaseUrl = $store
                             ->getBaseUrl($directLinkType, false);
                         $secureBaseUrl = $store
