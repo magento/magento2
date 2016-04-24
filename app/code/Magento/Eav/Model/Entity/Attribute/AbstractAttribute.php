@@ -597,11 +597,23 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $isEmpty = (is_array($value) && count($value) == 0) ||
             $value === null ||
             $value === false && $attrType != 'int' ||
-            $value === '' && ($attrType == 'int' ||
-            $attrType == 'decimal' ||
-            $attrType == 'datetime');
+            $value === '' && ($attrType == 'int' || $attrType == 'decimal' || $attrType == 'datetime');
 
         return $isEmpty;
+    }
+
+    /**
+     * @param array|null|bool|int|float|string $value
+     * @return bool
+     */
+    public function isApplicable($value)
+    {
+        $attrType = $this->getBackend()->getType();
+        $isApplicable = true;
+        if (!is_scalar($value) && ($attrType == 'int' || $attrType == 'decimal')) {
+            $isApplicable = false;
+        }
+        return $isApplicable;
     }
 
     /**
