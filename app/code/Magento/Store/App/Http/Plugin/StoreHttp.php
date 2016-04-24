@@ -38,7 +38,15 @@ class StoreHttp
         $this->_request = $request;
     }
 
-    public function beforeLaunch(\Magento\Framework\App\Http $subject)
+    /**
+     * Update the request's pathInfo if we have a store on a url path
+     *
+     * This will make sure we match the correct area and so the requested url
+     * will be routed via the correct path.
+     *
+     * @return void
+     */
+    public function beforeLaunch()
     {
         $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
             UrlInterface::URL_TYPE_WEB,
