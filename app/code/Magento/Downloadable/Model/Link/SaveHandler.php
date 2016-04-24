@@ -36,26 +36,24 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entityType, $entity, $arguments = [])
     {
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         if ($entity->getTypeId() !== 'downloadable') {
             return $entity;
         }
-
-        $oldLinks = $this->linkRepository->getList($entity->getSku());
         $links = $entity->getExtensionAttributes()->getDownloadableProductLinks() ?: [];
-        $updatedLinkIds = [];
+        $updatedLinks = [];
+        $oldLinks = $this->linkRepository->getList($entity->getSku());
         foreach ($links as $link) {
             if ($link->getId()) {
-                $updatedLinkIds[] = $link->getId();
+                $updatedLinks[$link->getId()] = true;
             }
             $this->linkRepository->save($entity->getSku(), $link, !(bool)$entity->getStoreId());
         }
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($oldLinks as $link) {
-            if (!in_array($link->getId(), $updatedLinkIds)) {
+            if (!isset($updatedLinks[$link->getId()])) {
                 $this->linkRepository->delete($link->getId());
             }
         }
-
         return $entity;
     }
 }
