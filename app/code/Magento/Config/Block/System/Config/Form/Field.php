@@ -123,9 +123,9 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      */
     protected function _isInheritCheckboxRequired(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        return $element->getCanUseWebsiteValue() ||
-                $element->getCanUseDefaultValue() ||
-                $element->getCanRestoreToDefault();
+        return $element->getCanUseWebsiteValue()
+            || $element->getCanUseDefaultValue()
+            || $element->isCanRestoreToDefault();
     }
 
     /**
