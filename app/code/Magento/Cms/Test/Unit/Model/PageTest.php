@@ -129,11 +129,42 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(
-                \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE,
-                ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-                null
-            )->willReturn('no-route');
+            ->willReturnMap(
+                [
+                    [
+                        \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'no-route'
+                    ]
+                ]
+            );
+
+        $this->model->beforeSave();
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage This identifier is reserved for home page in configuration.
+     */
+    public function testBeforeSaveHomeIdentifier()
+    {
+        $this->model->setId(1);
+        $this->model->setOrigData('identifier', 'home');
+        $this->model->setIdentifier('home2');
+
+        $this->scopeConfigMock->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        \Magento\Cms\Helper\Page::XML_PATH_HOME_PAGE,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'home'
+                    ]
+                ]
+            );
 
         $this->model->beforeSave();
     }

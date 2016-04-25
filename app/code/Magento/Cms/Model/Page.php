@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Cms\Helper\Page as PageHelper;
 
 /**
  * Cms Page Model
@@ -520,16 +521,16 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     {
         $originalIdentifier = $this->getOrigData('identifier');
         $currentIdentifier = $this->getIdentifier();
-        $scopeConfigIdentifier = $this->getScopeConfig()->getValue(
-            \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE
-        );
 
-        if (
-            $this->getId()
-            && $originalIdentifier !== $currentIdentifier
-            && $originalIdentifier === $scopeConfigIdentifier
-        ) {
-            throw new LocalizedException(__('This identifier is reserved for 404 error page in configuration.'));
+        if (!$this->getId() || $originalIdentifier === $currentIdentifier) {
+            return parent::beforeSave();
+        }
+
+        switch ($originalIdentifier) {
+            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_ROUTE_PAGE):
+                throw new LocalizedException(__('This identifier is reserved for 404 error page in configuration.'));
+            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_HOME_PAGE):
+                throw new LocalizedException(__('This identifier is reserved for home page in configuration.'));
         }
 
         return parent::beforeSave();
