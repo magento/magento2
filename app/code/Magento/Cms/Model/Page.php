@@ -513,6 +513,9 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
         return $this->setData(self::IS_ACTIVE, $isActive);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function beforeSave()
     {
         $originalIdentifier = $this->getOrigData('identifier');
