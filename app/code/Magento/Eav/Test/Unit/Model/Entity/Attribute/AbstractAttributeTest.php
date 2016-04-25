@@ -33,7 +33,6 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ->with(['options'])
             ->willReturn('expected value');
 
-
         $this->assertEquals('expected value', $model->getOptions());
     }
 
