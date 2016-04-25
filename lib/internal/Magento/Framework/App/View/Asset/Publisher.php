@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,12 +42,31 @@ class Publisher
      */
     public function publish(Asset\LocalInterface $asset)
     {
-        $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        if ($dir->isExist($asset->getPath())) {
+        if ($this->isFileEquals($asset)) {
             return true;
         }
 
         return $this->publishAsset($asset);
+    }
+
+    public function isFileEquals(Asset\LocalInterface $asset)
+    {
+        $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+        if ($dir->isExist($asset->getPath()) === false) {
+            return false;
+        }
+
+        $source = $asset->getSourceFile();
+        $destination = $dir->getAbsolutePath($asset->getPath());
+
+        $sourceSum = md5_file($source);
+        $destinationSum = md5_file($destination);
+
+        if ($sourceSum !== $destinationSum) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
