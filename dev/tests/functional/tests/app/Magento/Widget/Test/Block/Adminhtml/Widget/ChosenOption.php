@@ -34,7 +34,7 @@ class ChosenOption extends SimpleElement
      *
      * @var string
      */
-    protected $selectBlock = "//ancestor::body//div[contains(@style,'display: block')]//*[contains(@id,'responseCntoptions')]";
+    protected $selectBlock = "//ancestor::body//aside[contains(@class,'_show')]//*[contains(@id,'responseCntoptions')]";
     // @codingStandardsIgnoreEnd
 
     /**
