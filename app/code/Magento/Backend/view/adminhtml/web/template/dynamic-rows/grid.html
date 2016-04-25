@@ -15,7 +15,7 @@
         <button attr="{disabled: disabled}"
                 class="action-secondary"
                 type="button"
-                click="addChild.bind($data, false, false)">
+                click="processingAddChild.bind($data, false, false, false)">
             <span text="addButtonLabel"/>
         </button>
     </div>
@@ -59,7 +59,7 @@
                     </tr>
                 </thead>
 
-                <tbody data-bind="foreach: elems">
+                <tbody>
                     <tr repeat="foreach: elems, item: '$record'"
                         class="data-row"
                         css="'_odd-row': $index % 2">
