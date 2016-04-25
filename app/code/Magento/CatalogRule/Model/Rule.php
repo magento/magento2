@@ -195,8 +195,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         parent::__construct(
             $context,
             $registry,
-            $this->getExtensionFactory(),
-            $this->getCustomAttributeFactory(),
             $formFactory,
             $localeDate,
             $resource,
@@ -767,26 +765,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     public function setExtensionAttributes(\Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * @return \Magento\Framework\Api\ExtensionAttributesFactory
-     * @deprecated
-     */
-    private function getExtensionFactory()
-    {
-        return \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Api\ExtensionAttributesFactory::class);
-    }
-
-    /**
-     * @return \Magento\Framework\Api\AttributeValueFactory
-     * @deprecated
-     */
-    private function getCustomAttributeFactory()
-    {
-        return \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Api\AttributeValueFactory::class);
     }
 
     /**
