@@ -23,22 +23,10 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     {
         if ($attribute instanceof CatalogEavAttribute) {
             $useDefault = $useDefault || $attribute->isScopeGlobal();
+            if ($scope->getValue() == Store::DISTRO_STORE_ID) {
+                $useDefault = true;
+            }
         }
         return parent::getScopeValue($scope, $attribute, $useDefault);
-    }
-    
-    /**
-     * @param string $entityType
-     * @param int $link
-     * @param string $attributeCode
-     * @param mixed $value
-     * @return void
-     */
-    public function registerInsert($entityType, $link, $attributeCode, $value)
-    {
-        if ($attributeCode == Store::STORE_ID) {
-            $value = Store::DEFAULT_STORE_ID;
-        }
-        $this->insert[$entityType][$link][$attributeCode] = $value;
     }
 }
