@@ -19,7 +19,10 @@ define([
             messagesSelector: '[data-placeholder="messages"]',
             productStatusSelector: '.stock.available',
             addToCartButtonSelector: '.action.tocart',
-            addToCartButtonDisabledClass: 'disabled'
+            addToCartButtonDisabledClass: 'disabled',
+            addToCartButtonTextWhileAdding: '',
+            addToCartButtonTextAdded: '',
+            addToCartButtonTextDefault: ''
         },
 
         _create: function() {
@@ -94,7 +97,7 @@ define([
         },
 
         disableAddToCartButton: function(form) {
-            var addToCartButtonTextWhileAdding = $t('Adding...');
+            var addToCartButtonTextWhileAdding = this.options.addToCartButtonTextWhileAdding || $t('Adding...');
             var addToCartButton = $(form).find(this.options.addToCartButtonSelector);
             addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
             addToCartButton.find('span').text(addToCartButtonTextWhileAdding);
@@ -102,7 +105,7 @@ define([
         },
 
         enableAddToCartButton: function(form) {
-            var addToCartButtonTextAdded = $t('Added');
+            var addToCartButtonTextAdded = this.options.addToCartButtonTextAdded || $t('Added');
             var self = this,
                 addToCartButton = $(form).find(this.options.addToCartButtonSelector);
 
@@ -110,7 +113,7 @@ define([
             addToCartButton.attr('title', addToCartButtonTextAdded);
 
             setTimeout(function() {
-                var addToCartButtonTextDefault = $t('Add to Cart');
+                var addToCartButtonTextDefault = self.options.addToCartButtonTextDefault || $t('Add to Cart');
                 addToCartButton.removeClass(self.options.addToCartButtonDisabledClass);
                 addToCartButton.find('span').text(addToCartButtonTextDefault);
                 addToCartButton.attr('title', addToCartButtonTextDefault);
