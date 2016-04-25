@@ -587,7 +587,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Invalid value of "bad-email" provided for the email field.']),
+            $this->equalTo(['"Email" is not a valid email address.']),
             MessageInterface::TYPE_ERROR
         );
     }
