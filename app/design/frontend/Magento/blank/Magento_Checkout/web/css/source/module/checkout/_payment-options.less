@@ -89,14 +89,11 @@
 
                     img {
                         -webkit-filter: grayscale(0%);
-                        filter: grayscale(0%);
-                        filter: none;
                     }
                 }
 
                 &._inactive {
                     opacity: .4;
-                    filter: alpha(opacity=40);
                 }
 
                 span {
@@ -109,8 +106,6 @@
             img {
                 -webkit-filter: grayscale(100%); // For Webkit browsers
                 -webkit-transition: all .6s ease; // Fade to color for Chrome and Safari
-                filter: grayscale(100%);
-                filter: gray; // For IE 6 - 9
             }
         }
 
