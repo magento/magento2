@@ -13,6 +13,7 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\ResourceConnection\Config;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
@@ -26,6 +27,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
@@ -220,6 +222,11 @@ class Installer
     private $componentRegistrar;
 
     /**
+     * @var PhpReadinessCheck
+     */
+    private $phpReadinessCheck;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -242,6 +249,7 @@ class Installer
      * @param DataSetupFactory $dataSetupFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
+     * @param PhpReadinessCheck $phpReadinessCheck
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -265,7 +273,8 @@ class Installer
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrar $componentRegistrar,
+        PhpReadinessCheck $phpReadinessCheck
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -288,6 +297,7 @@ class Installer
         $this->dataSetupFactory = $dataSetupFactory;
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
+        $this->phpReadinessCheck = $phpReadinessCheck;
     }
 
     /**
@@ -300,6 +310,7 @@ class Installer
     public function install($request)
     {
         $script[] = ['File permissions check...', 'checkInstallationFilePermissions', []];
+        $script[] = ['Required extensions check...', 'checkExtensions', []];
         $script[] = ['Enabling Maintenance Mode...', 'setMaintenanceMode', [1]];
         $script[] = ['Installing deployment configuration...', 'installDeploymentConfig', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
@@ -320,6 +331,7 @@ class Installer
         $script[] = ['Caches clearing:', 'cleanCaches', []];
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
+        $script[] = ['Write installation date...', 'writeInstallationDate', []];
 
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
@@ -345,6 +357,20 @@ class Installer
         if ($this->sampleDataState->hasError()) {
             $this->log->log('Sample Data is installed with errors. See log file for details');
         }
+    }
+
+    /**
+     * Writes installation date to the configuration
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     */
+    private function writeInstallationDate()
+    {
+        $dateData = new ConfigData(ConfigFilePool::APP_ENV);
+        $dateData->set(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE, date('r'));
+        $configData = [$dateData->getFileKey() => $dateData->getData()];
+        $this->deploymentConfigWriter->saveConfig($configData);
     }
 
     /**
@@ -436,7 +462,25 @@ class Installer
     {
         $results = $this->filePermissions->getMissingWritablePathsForInstallation();
         if ($results) {
-            $errorMsg = "Missing write permissions to the following paths: '" . implode("' '", $results) . "'";
+            $errorMsg = "Missing write permissions to the following paths:" . PHP_EOL . implode(PHP_EOL, $results);
+            throw new \Exception($errorMsg);
+        }
+    }
+
+    /**
+     * Check required extensions for installation
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function checkExtensions()
+    {
+        $phpExtensionsCheckResult = $this->phpReadinessCheck->checkPhpExtensions();
+        if ($phpExtensionsCheckResult['responseType'] === ResponseTypeInterface::RESPONSE_TYPE_ERROR
+            && isset($phpExtensionsCheckResult['data']['missing'])
+        ) {
+            $errorMsg = "Missing following extensions: '"
+                . implode("' '", $phpExtensionsCheckResult['data']['missing']) . "'";
             throw new \Exception($errorMsg);
         }
     }
@@ -469,11 +513,9 @@ class Installer
         $this->createModulesConfig($data);
         $userData = is_array($data) ? $data : $data->getArrayCopy();
         $this->setupConfigModel->process($userData);
-        if ($this->deploymentConfig->isAvailable()) {
-            $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
-            if (isset($deploymentConfigData)) {
-                $this->installInfo[ConfigOptionsListConstants::KEY_ENCRYPTION_KEY] = $deploymentConfigData;
-            }
+        $deploymentConfigData = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        if (isset($deploymentConfigData)) {
+            $this->installInfo[ConfigOptionsListConstants::KEY_ENCRYPTION_KEY] = $deploymentConfigData;
         }
         // reset object manager now that there is a deployment config
         $this->objectManagerProvider->reset();
@@ -728,6 +770,8 @@ class Installer
      */
     public function installSchema()
     {
+        $this->assertDbConfigExists();
+        $this->assertDbAccessible();
         $setup = $this->setupFactory->create($this->context->getResources());
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
@@ -743,6 +787,8 @@ class Installer
      */
     public function installDataFixtures()
     {
+        $this->assertDbConfigExists();
+        $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkInstallationFilePermissions();
         $this->log->log('Data install/update:');
@@ -765,10 +811,6 @@ class Installer
         if (!(($type === 'schema') || ($type === 'data'))) {
             throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
         }
-
-        $this->assertDeploymentConfigExists();
-        $this->assertDbAccessible();
-
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
         $installType = $type . '-install';
@@ -797,12 +839,12 @@ class Installer
             } elseif ($configVer) {
                 $installer = $this->getSchemaDataHandler($moduleName, $installType);
                 if ($installer) {
-                    $this->log->logInline("Installing $type.. ");
+                    $this->log->logInline("Installing $type... ");
                     $installer->install($setup, $moduleContextList[$moduleName]);
                 }
                 $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                 if ($upgrader) {
-                    $this->log->logInline("Upgrading $type.. ");
+                    $this->log->logInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
                 if ($type === 'schema') {
@@ -829,6 +871,20 @@ class Installer
                 $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
             $this->logProgress();
+        }
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Setup\Exception
+     */
+    private function assertDbConfigExists()
+    {
+        $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
+        if (!$config) {
+            throw new \Magento\Setup\Exception(
+                "Can't run this operation: configuration for DB connection is absent."
+            );
         }
     }
 
@@ -929,7 +985,7 @@ class Installer
      */
     public function installAdminUser($data)
     {
-        $this->assertDeploymentConfigExists();
+        $this->assertDbConfigExists();
         $setup = $this->setupFactory->create($this->context->getResources());
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
@@ -940,13 +996,18 @@ class Installer
      *
      * @param bool $keepGeneratedFiles Cleanup generated classes and view files and reset ObjectManager
      * @return void
+     * @throws \Magento\Setup\Exception
      */
     public function updateModulesSequence($keepGeneratedFiles = false)
     {
-        $this->assertDeploymentConfigExists();
-
+        $config = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_MODULES);
+        if (!$config) {
+            throw new \Magento\Setup\Exception(
+                "Can't run this operation: deployment configuration is absent."
+                . " Run 'magento setup:config:set --help' for options."
+            );
+        }
         $this->cleanCaches();
-
         if (!$keepGeneratedFiles) {
             $this->cleanupGeneratedFiles();
         }
@@ -1042,27 +1103,24 @@ class Installer
      */
     public function cleanupDb()
     {
-        // stops cleanup if configuration does not exist
-        if ($this->deploymentConfig->isAvailable()) {
-            $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
-            if ($config) {
-                try {
-                    $connection = $this->connectionFactory->create($config);
-                    if (!$connection) {
-                        $this->log->log("Can't create connection to database - skipping database cleanup");
-                    }
-                } catch (\Exception $e) {
-                    $this->log->log($e->getMessage() . ' - skipping database cleanup');
-                    return;
+        $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
+        if ($config) {
+            try {
+                $connection = $this->connectionFactory->create($config);
+                if (!$connection) {
+                    $this->log->log("Can't create connection to database - skipping database cleanup");
                 }
-                $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
-                $this->log->log("Cleaning up database {$dbName}");
-                $connection->query("DROP DATABASE IF EXISTS {$dbName}");
-                $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+            } catch (\Exception $e) {
+                $this->log->log($e->getMessage() . ' - skipping database cleanup');
                 return;
             }
+            $dbName = $connection->quoteIdentifier($config[ConfigOptionsListConstants::KEY_NAME]);
+            $this->log->log("Cleaning up database {$dbName}");
+            $connection->query("DROP DATABASE IF EXISTS {$dbName}");
+            $connection->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+        } else {
+            $this->log->log('No database connection defined - skipping database cleanup');
         }
-        $this->log->log('No database connection defined - skipping database cleanup');
     }
 
     /**
@@ -1086,22 +1144,6 @@ class Installer
             } catch (FileSystemException $e) {
                 $this->log->log($e->getMessage());
             }
-        }
-    }
-
-    /**
-     * Validates that deployment configuration exists
-     *
-     * @throws \Magento\Setup\Exception
-     * @return void
-     */
-    private function assertDeploymentConfigExists()
-    {
-        if (!$this->deploymentConfig->isAvailable()) {
-            throw new \Magento\Setup\Exception(
-                "Can't run this operation: deployment configuration is absent."
-                . " Run 'magento setup:config:set --help' for options."
-            );
         }
     }
 

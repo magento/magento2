@@ -6,7 +6,7 @@
 namespace Magento\Wishlist\Model\ResourceModel\Item;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Wishlist item collection
@@ -217,7 +217,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         if ($this->metadataPool == null) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
     }
@@ -284,10 +284,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $productCollection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
         }
 
+        $attributesToSelect = [
+            'name',
+            'visibility',
+            'small_image',
+            'thumbnail',
+            'links_purchased_separately',
+            'links_title',
+        ];
+
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect(['name', 'visibility'])
+            ->addAttributeToSelect($attributesToSelect)
             ->addOptionsToResult()
             ->addUrlRewrite();
 

@@ -228,6 +228,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                                 ->setStoreId($copyFrom)
                                 ->load($productId)
                                 ->setStoreId($copyTo)
+                                ->setCopyFromView(true)
                                 ->save();
                         }
                     }
@@ -250,6 +251,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
+     * @deprecated
      */
     private function getStoreManager()
     {
@@ -264,6 +266,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * Retrieve data persistor
      *
      * @return DataPersistorInterface|mixed
+     * @deprecated
      */
     protected function getDataPersistor()
     {
