@@ -44,7 +44,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getHtmlId', 'getElementHtml', 'getName']
+            ['getHtmlId', 'getElementHtml', 'getName', 'isCanRestoreToDefault']
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
