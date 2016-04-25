@@ -603,20 +603,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * @param array|null|bool|int|float|string $value
-     * @return bool
-     */
-    public function isApplicable($value)
-    {
-        $attrType = $this->getBackend()->getType();
-        $isApplicable = true;
-        if (!is_scalar($value) && ($attrType == 'int' || $attrType == 'decimal')) {
-            $isApplicable = false;
-        }
-        return $isApplicable;
-    }
-
-    /**
      * Check if attribute in specified set
      *
      * @param int|int[] $setId
