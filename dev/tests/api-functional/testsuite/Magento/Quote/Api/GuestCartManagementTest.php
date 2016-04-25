@@ -77,6 +77,12 @@ class GuestCartManagementTest extends WebapiAbstract
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
         $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
         /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
@@ -87,11 +93,13 @@ class GuestCartManagementTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => '/V1/guest-carts/' . $cartId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $token
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',
                 'operation' => self::SERVICE_NAME . 'AssignCustomer',
+                'token' => $token
             ],
         ];
 
@@ -193,60 +201,24 @@ class GuestCartManagementTest extends WebapiAbstract
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
 
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
+
         $serviceInfo = [
             'rest' => [
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
                 'resourcePath' => '/V1/guest-carts/' . $cartId,
+                'token' => $token
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'serviceVersion' => 'V1',
                 'operation' => self::SERVICE_NAME . 'AssignCustomer',
-            ],
-        ];
-
-        $requestData = [
-            'cartId' => $cartId,
-            'customerId' => $customerId,
-            'storeId' => 1,
-        ];
-        $this->_webApiCall($serviceInfo, $requestData);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Sales/_files/quote.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer_non_default_website_id.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot assign customer to the given cart. The cart belongs to different store.
-     */
-    public function testAssignCustomerThrowsExceptionIfCartIsAssignedToDifferentStore()
-    {
-        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-        /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
-        $customer = $repository->getById(1);
-        /** @var $quote \Magento\Quote\Model\Quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
-
-        $customerId = $customer->getId();
-        $cartId = $quote->getId();
-
-        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->create();
-        $quoteIdMask->load($cartId, 'quote_id');
-        //Use masked cart Id
-        $cartId = $quoteIdMask->getMaskedId();
-
-        $serviceInfo = [
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => 'V1',
-                'operation' => self::SERVICE_NAME . 'AssignCustomer',
-            ],
-            'rest' => [
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-                'resourcePath' => '/V1/guest-carts/' . $cartId,
+                'token' => $token
             ],
         ];
 
@@ -288,15 +260,23 @@ class GuestCartManagementTest extends WebapiAbstract
 
         $customerId = $customer->getId();
 
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken('customer@example.com', 'password');
         $serviceInfo = [
             'soap' => [
                 'service' => self::SERVICE_NAME,
                 'operation' => self::SERVICE_NAME . 'AssignCustomer',
                 'serviceVersion' => 'V1',
+                'token' => $token
             ],
             'rest' => [
                 'resourcePath' => '/V1/guest-carts/' . $cartId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $token
             ],
         ];
 
@@ -343,5 +323,51 @@ class GuestCartManagementTest extends WebapiAbstract
         $items = $order->getAllItems();
         $this->assertCount(1, $items);
         $this->assertEquals('Simple Product', $items[0]->getName());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/quote.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cannot assign customer to the given cart. You don't have permission for this operation.
+     */
+    public function testAssignCustomerByGuestUser()
+    {
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
+        $cartId = $quote->getId();
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMaskFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Quote\Model\QuoteIdMaskFactory');
+        $quoteIdMask = $quoteIdMaskFactory->create();
+        $quoteIdMask->load($cartId, 'quote_id');
+        //Use masked cart Id
+        $cartId = $quoteIdMask->getMaskedId();
+        $repository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        /** @var $customer \Magento\Customer\Api\Data\CustomerInterface */
+        $customer = $repository->getById(1);
+        $customerId = $customer->getId();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/guest-carts/' . $cartId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => 'V1',
+                'operation' => self::SERVICE_NAME . 'AssignCustomer',
+            ],
+        ];
+
+        $requestData = [
+            'cartId' => $cartId,
+            'customerId' => $customerId,
+            'storeId' => 1,
+        ];
+        // Cart must be anonymous (see fixture)
+        $this->assertEmpty($quote->getCustomerId());
+
+        $this->_webApiCall($serviceInfo, $requestData);
     }
 }
