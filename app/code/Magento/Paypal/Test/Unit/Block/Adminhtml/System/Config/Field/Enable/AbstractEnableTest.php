@@ -39,6 +39,7 @@ class AbstractEnableTest extends \PHPUnit_Framework_TestCase
                     'getHtmlId',
                     'getTooltip',
                     'getForm',
+                    'isCanRestoreToDefault'
                 ]
             )->disableOriginalConstructor()
             ->getMockForAbstractClass();
