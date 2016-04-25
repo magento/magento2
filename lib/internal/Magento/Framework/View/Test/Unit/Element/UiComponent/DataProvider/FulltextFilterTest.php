@@ -78,12 +78,11 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
         $this->selectMock = $this->getMock(Select::class, ['getPart', 'where'], [], '', false);
 
         $this->resourceModelAbstractDb = $this->getMockBuilder(ResourceModelAbstractDb::class)
-            ->setMethods(['getMainTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->collectionAbstractDbMock = $this->getMockBuilder(CollectionAbstractDb::class)
-            ->setMethods(['getConnection', 'getResource', 'getSelect'])
+            ->setMethods(['getConnection', 'getSelect', 'getMainTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -95,7 +94,7 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
         $filter = new Filter();
         $filter->setValue('test');
 
-        $this->resourceModelAbstractDb->expects($this->any())
+        $this->collectionAbstractDbMock->expects($this->any())
             ->method('getMainTable')
             ->willReturn('testTable');
 
@@ -117,9 +116,6 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->willReturn(null);
 
-        $this->collectionAbstractDbMock->expects($this->once())
-            ->method('getResource')
-            ->willReturn($this->resourceModelAbstractDb);
         $this->collectionAbstractDbMock->expects($this->exactly(2))
             ->method('getSelect')
             ->willReturn($this->selectMock);
