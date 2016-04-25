@@ -115,14 +115,14 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
                 false,
                 '%amodules have been enabled%aMagento_Module1%a'
                     . "Info: Some modules might require static view files to be cleared. To do this, run "
-                    . "'module:enable' with --clear-static-content%a"
+                    . "'module:enable' with the --clear-static-content%a"
             ],
             'disable, do not clear static content' => [
                 false,
                 false,
                 '%amodules have been disabled%aMagento_Module1%a'
                     . "Info: Some modules might require static view files to be cleared. To do this, run "
-                    . "'module:disable' with --clear-static-content%a"
+                    . "'module:disable' with the --clear-static-content%a"
             ],
             'enable, clear static content' => [
                 true,
@@ -162,7 +162,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isEnable
+     * @param bool $isEnab
      * @param string $expectedMessage
      * @param bool $isInstalled
      *

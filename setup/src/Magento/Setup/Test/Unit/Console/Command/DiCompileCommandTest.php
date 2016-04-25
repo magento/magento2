@@ -103,7 +103,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertEquals(
-            'You cannot run this command because modules are not enabled. You can enable modules by running \'module:'
+            'You cannot run this command because modules are not enabled. You can enable modules by running the \'module:'
             . 'enable --all\' command.' . PHP_EOL,
             $tester->getDisplay()
         );
