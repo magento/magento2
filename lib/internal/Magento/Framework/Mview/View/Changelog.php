@@ -100,7 +100,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException("Table {$changelogTableName} does not exist");
+            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
         }
 
         $this->connection->dropTable($changelogTableName);
@@ -117,7 +117,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException("Table {$changelogTableName} does not exist");
+            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
         }
 
         $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
@@ -137,7 +137,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException("Table {$changelogTableName} does not exist");
+            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
         }
 
         $select = $this->connection->select()->distinct(
@@ -166,7 +166,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException("Table {$changelogTableName} does not exist");
+            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
         }
         $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
         if (isset($row['Auto_increment'])) {
