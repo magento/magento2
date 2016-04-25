@@ -14,6 +14,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class TypeProcessor
 {
@@ -599,6 +600,9 @@ class TypeProcessor
         if ($type == 'bool' || $type == 'boolean') {
             $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
             return true;
+        }
+        if (($type == 'int' || $type == 'float') && !is_numeric($value)) {
+            return false;
         }
         return settype($value, $type);
     }

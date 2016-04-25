@@ -7,6 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
+    <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
+    <preference for="Magento\Framework\EntityManager\EntityHydratorInterface" type="Magento\Framework\Model\Entity\Hydrator" />
     <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
     <preference for="Magento\Framework\Model\Entity\ScopeInterface" type="Magento\Framework\Model\Entity\Scope" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
@@ -94,7 +96,7 @@
     <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
     <preference for="Magento\Framework\App\Rss\UrlBuilderInterface" type="Magento\Framework\App\Rss\UrlBuilder"/>
-    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\File"/>
+    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Quiet"/>
     <preference for="Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface" type="Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
@@ -1170,14 +1172,15 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\OrchestratorPool">
+    <type name="Magento\Framework\EntityManager\OperationPool">
         <arguments>
             <argument name="operations" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="object">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="object">Magento\Framework\Model\Operation\Write\Create</item>
-                    <item name="update" xsi:type="object">Magento\Framework\Model\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="object">Magento\Framework\Model\Operation\Write\Delete</item>
+                    <item name="checkIsExists" xsi:type="string">Magento\Framework\EntityManager\Operation\Read\CheckIsExists</item>
+                    <item name="read" xsi:type="string">Magento\Framework\EntityManager\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Delete</item>
                 </item>
             </argument>
         </arguments>

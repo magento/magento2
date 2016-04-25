@@ -240,7 +240,7 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        disable: function() {
+        disable: function () {
             this.disabled(true);
 
             return this;
@@ -251,7 +251,7 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        enable: function() {
+        enable: function () {
             this.disabled(false);
 
             return this;
@@ -268,7 +268,7 @@ define([
                 changed;
 
             if (_.isObject(rule)) {
-                _.extend(this.validation, rule)
+                _.extend(this.validation, rule);
             } else {
                 this.validation[rule] = options;
             }
@@ -332,10 +332,14 @@ define([
 
         /**
          * Sets value observable to initialValue property.
+         *
+         * @returns {Abstract} Chainable.
          */
         reset: function () {
             this.value(this.initialValue);
             this.error(false);
+
+            return this;
         },
 
         /**
@@ -376,7 +380,7 @@ define([
          */
         validate: function () {
             var value   = this.value(),
-                result  = validator(this.validation, value),
+                result  = validator(this.validation, value, this.validationParams),
                 message = !this.disabled() && this.visible() ? result.message : '',
                 isValid = this.disabled() || !this.visible() || result.passed;
 
