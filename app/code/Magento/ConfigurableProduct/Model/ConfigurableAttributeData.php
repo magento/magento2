@@ -30,7 +30,7 @@ class ConfigurableAttributeData
             if ($attributeOptionsData) {
                 $productAttribute = $attribute->getProductAttribute();
                 $attributeId = $productAttribute->getId();
-                $attributes[$attributeId] = [
+                $attributes['swatch_' . $attributeId] = [
                     'id' => $attributeId,
                     'code' => $productAttribute->getAttributeCode(),
                     'label' => $productAttribute->getStoreLabel($product->getStoreId()),
