@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Module\Status;
 
 abstract class AbstractModuleManageCommand extends AbstractModuleCommand
 {
@@ -71,12 +72,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             $output->writeln(implode(PHP_EOL, $messages));
             return;
         }
-        /**
-         * @var \Magento\Framework\Module\Status $status
-         */
-        $status = $this->objectManager->get('Magento\Framework\Module\Status');
         try {
-            $modulesToChange = $status->getModulesToChange($isEnable, $modules);
+            $modulesToChange = $this->getStatus()->getModulesToChange($isEnable, $modules);
         } catch (\LogicException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             return;
@@ -84,7 +81,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         if (!empty($modulesToChange)) {
             $force = $input->getOption(self::INPUT_KEY_FORCE);
             if (!$force) {
-                $constraints = $status->checkConstraints($isEnable, $modulesToChange);
+                $constraints = $this->getStatus()->checkConstraints($isEnable, $modulesToChange);
                 if ($constraints) {
                     $output->writeln(
                         "<error>Unable to change status of modules because of the following constraints:</error>"
@@ -93,22 +90,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                     return;
                 }
             }
-            $status->setIsEnabled($isEnable, $modulesToChange);
-            if ($isEnable) {
-                $output->writeln('<info>The following modules have been enabled:</info>');
-                $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
-                $output->writeln('');
-                if ($this->getDeploymentConfig()->isAvailable()) {
-                    $output->writeln(
-                        '<info>To make sure that the enabled modules are properly registered,'
-                        . " run 'setup:upgrade'.</info>"
-                    );
-                }
-            } else {
-                $output->writeln('<info>The following modules have been disabled:</info>');
-                $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
-                $output->writeln('');
-            }
+            $this->setIsEnabled($isEnable, $modulesToChange, $output);
             $this->cleanup($input, $output);
             if ($force) {
                 $output->writeln(
@@ -119,6 +101,43 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         } else {
             $output->writeln('<info>No modules were changed.</info>');
         }
+    }
+
+    /**
+     * Enable/disable modules
+     *
+     * @param bool $isEnable
+     * @param string[] $modulesToChange
+     * @param OutputInterface $output
+     */
+    private function setIsEnabled($isEnable, $modulesToChange, $output)
+    {
+        $this->getStatus()->setIsEnabled($isEnable, $modulesToChange);
+        if ($isEnable) {
+            $output->writeln('<info>The following modules have been enabled:</info>');
+            $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
+            $output->writeln('');
+            if ($this->getDeploymentConfig()->isAvailable()) {
+                $output->writeln(
+                    '<info>To make sure that the enabled modules are properly registered,'
+                    . " run 'setup:upgrade'.</info>"
+                );
+            }
+        } else {
+            $output->writeln('<info>The following modules have been disabled:</info>');
+            $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
+            $output->writeln('');
+        }
+    }
+
+    /**
+     * Get module status
+     *
+     * @return Status
+     */
+    private function getStatus()
+    {
+        return $this->objectManager->get(Status::class);
     }
 
     /**
