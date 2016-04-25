@@ -435,31 +435,6 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                     ['entityId' => 15, 'name' => 'Second'],
                 ]),
             ],
-            'customAttributeNonExistentCustomAttributeCode' => [
-                'customAttributeType' => 'integer',
-                'inputData' => [
-                    'param' => [
-                        'customAttributes' => [
-                            [
-                                'non_existent_attribute_code_' => TestService::CUSTOM_ATTRIBUTE_CODE,
-                                'value' => TestService::DEFAULT_VALUE
-                            ]
-                        ]
-                    ]
-                ],
-                'expectedObject'=>   $this->getObjectWithCustomAttributes('emptyData')
-            ],
-            'customAttributeObjectNonExistentCustomAttributeCodeValue' => [
-                'customAttributeType' => 'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray',
-                'inputData' => [
-                    'param' => [
-                        'customAttributes' => [
-                            ['attribute_code' => 'nonExistentAttributeCode', 'value' => ['ids' => [1, 2, 3, 4]]]
-                        ]
-                    ]
-                ],
-                'expectedObject'=>   $this->getObjectWithCustomAttributes('emptyData')
-            ],
         ];
     }
 
@@ -519,5 +494,57 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 ]
             ]]
         );
+    }
+
+    /**
+     * Cover invalid custom attribute data
+     *
+     * @dataProvider invalidCustomAttributesDataProvider
+     * @expectedException \Magento\Framework\Webapi\Exception
+     */
+    public function testCustomAttributesExceptions($inputData)
+    {
+        $this->serviceInputProcessor->process(
+            'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
+            'ObjectWithCustomAttributesMethod',
+            $inputData
+        );
+    }
+
+    public function invalidCustomAttributesDataProvider()
+    {
+        return [
+            [
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            []
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            [
+                                'value' => TestService::DEFAULT_VALUE
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            [
+                                'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }

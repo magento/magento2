@@ -179,29 +179,21 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $result = [];
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
-        $camelCaseAttributeCodeKey = lcfirst(
-            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
-        );
         foreach ($customAttributesValueArray as $key => $customAttribute) {
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-            if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
-                $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
-            } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
-                $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
-            } else {
-                $customAttributeCode = null;
+
+            $customAttributeCode = $this->getCustomAttributeCode($customAttribute);
+            if (!$customAttributeCode || !isset($customAttribute[AttributeValue::VALUE])) {
+                $this->throwException($customAttributeCode, isset($customAttribute[AttributeValue::VALUE]));
             }
+            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
 
             //Check if type is defined, else default to string
             $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
             $type = $type ? $type : TypeProcessor::ANY_TYPE;
-            if (!isset($customAttribute[AttributeValue::VALUE])) {
-                throw new SerializationException(new Phrase('Value is not set'));
-            } else {
-                $customAttributeValue = $customAttribute[AttributeValue::VALUE];
-            }
+
             if (is_array($customAttributeValue)) {
                 //If type for AttributeValue's value as array is mixed, further processing is not possible
                 if ($type === TypeProcessor::ANY_TYPE) {
@@ -219,6 +211,47 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Get the custom attribute code
+     *
+     * @param string[] $customAttribute
+     * @return string|null
+     */
+    protected function getCustomAttributeCode($customAttribute)
+    {
+        $camelCaseAttributeCodeKey = lcfirst(
+            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
+        );
+        if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
+            return $customAttribute[AttributeValue::ATTRIBUTE_CODE];
+        } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
+            return $customAttribute[$camelCaseAttributeCodeKey];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Throws an exception based on the incorrect custom attribute specified.
+     *
+     * @param string $customAttributeCode
+     * @param boolean $hasAttributeValue
+     * @return void
+     * @throws SerializationException
+     */
+    protected function throwException($customAttributeCode, $hasAttributeValue)
+    {
+        if (!$customAttributeCode && !$hasAttributeValue) {
+            throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
+        } else if (!$customAttributeCode) {
+            throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
+        } else if (!$hasAttributeValue) {
+            throw new SerializationException(
+                new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
+            );
+        }
     }
 
     /**
