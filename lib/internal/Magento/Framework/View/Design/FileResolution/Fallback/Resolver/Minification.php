@@ -38,6 +38,7 @@ class Minification implements ResolverInterface
         $this->fallback = $fallback;
         $this->minification = $minification;
     }
+
     /**
      * Get path of file after using fallback rules
      *
@@ -51,10 +52,68 @@ class Minification implements ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
+        $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+
+        if ($fileExtension === 'js') {
+            return $this->resolveJsMinification($type, $file, $area, $theme, $locale, $module);
+        }
+
+        // Leave BC way of resolving
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
+
         if (!$path && $file != ($newFile = $this->minification->removeMinifiedSign($file))) {
             $path = $this->fallback->resolve($type, $newFile, $area, $theme, $locale, $module);
         }
+
         return $path;
+    }
+
+    /**
+     * Get path of file after using fallback rules
+     *
+     * @param string $type
+     * @param string $file
+     * @param string|null $area
+     * @param ThemeInterface|null $theme
+     * @param string|null $locale
+     * @param string|null $module
+     * @return string|false
+     */
+    private function resolveJsMinification(
+        $type,
+        $file,
+        $area = null,
+        ThemeInterface $theme = null,
+        $locale = null,
+        $module = null
+    ) {
+        $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
+
+        /**
+         * Minified version as priority one
+         */
+        if ($path && $this->minification->isMinifiedFilename($path)) {
+            return $path;
+        }
+
+        /**
+         * If minification is disabled - return already found path
+         */
+        if (!$this->minification->isEnabled('js')) {
+            return $path;
+        }
+
+        /**
+         * Try to find minified version of file,
+         * or return already found path
+         */
+        return $this->fallback->resolve(
+            $type,
+            $this->minification->addMinifiedSign($file),
+            $area,
+            $theme,
+            $locale,
+            $module
+        ) ?: $path;
     }
 }

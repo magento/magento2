@@ -28,6 +28,7 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $assetMinificationMock;
+
     /**
      * {@inheritDoc}
      */
@@ -97,5 +98,83 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
             [true, 'file.min.css', 'file.css', 'found.css', false, 'found.css'],
             [false, 'file.min.css', 'file.min.css', false, false, 'found.css']
         ];
+    }
+
+    public function testResolveJs()
+    {
+        $this->resolverMock
+            ->expects($this->once())
+            ->method('resolve')
+            ->willReturn('/var/test.min.js');
+        $this->assetMinificationMock->expects($this->once())
+            ->method('isMinifiedFilename')
+            ->willReturn(true);
+
+        $this->assertEquals('/var/test.min.js', $this->minification->resolve('', 'test.min.js'));
+    }
+
+    public function testResolveJsWithDisabledMinification()
+    {
+        $this->resolverMock
+            ->expects($this->once())
+            ->method('resolve')
+            ->willReturn('/var/test.js');
+        $this->assetMinificationMock->expects($this->once())
+            ->method('isMinifiedFilename')
+            ->willReturn(false);
+
+        $this->assertEquals('/var/test.js', $this->minification->resolve('', 'test.js'));
+    }
+
+    public function testResolveJsToFindMinifiedVersion()
+    {
+        $this->resolverMock
+            ->expects($this->exactly(2))
+            ->method('resolve')
+            ->willReturnMap(
+                [
+                    ['', 'test.js', null, null, null, null, '/var/test.js'],
+                    ['', 'test.min.js', null, null, null, null, '/var/test.min.js']
+                ]
+            );
+        $this->assetMinificationMock->expects($this->once())
+            ->method('isMinifiedFilename')
+            ->willReturn(false);
+        $this->assetMinificationMock->expects($this->once())
+            ->method('isEnabled')
+            ->with('js')
+            ->willReturn(true);
+        $this->assetMinificationMock->expects($this->once())
+            ->method('addMinifiedSign')
+            ->with('test.js')
+            ->willReturn('test.min.js');
+
+        $this->assertEquals('/var/test.min.js', $this->minification->resolve('', 'test.js'));
+    }
+
+    public function testResolveJsToNotFindMinifiedVersion()
+    {
+        $this->resolverMock
+            ->expects($this->exactly(2))
+            ->method('resolve')
+            ->willReturnMap(
+                [
+                    ['', 'test.js', null, null, null, null, '/var/test.js'],
+                    ['', 'test.min.js', null, null, null, null, false]
+                ]
+            );
+        $this->assetMinificationMock->expects($this->once())
+            ->method('isMinifiedFilename')
+            ->willReturn(false);
+        $this->assetMinificationMock->expects($this->once())
+            ->method('isEnabled')
+            ->with('js')
+            ->willReturn(true);
+        $this->assetMinificationMock->expects($this->once())
+            ->method('addMinifiedSign')
+            ->with('test.js')
+            ->willReturn('test.min.js');
+
+        $this->assertEquals('/var/test.js', $this->minification->resolve('', 'test.js'));
     }
 }
