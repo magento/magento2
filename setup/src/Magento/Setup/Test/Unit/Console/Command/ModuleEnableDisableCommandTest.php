@@ -162,7 +162,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $isEnab
+     * @param bool $isEnable
      * @param string $expectedMessage
      * @param bool $isInstalled
      *
