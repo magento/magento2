@@ -45,6 +45,9 @@ define([
             } else if (newChecked && _.isObject(valueFromConfig)) {
                 this.changeVisibleDisabled(this.inputField, false, true, null);
                 this.changeVisibleDisabled(this.dynamicRowsField, true, true, null);
+            } else if (newChecked && _.isNumber(valueFromConfig)) {
+                this.changeVisibleDisabled(this.inputField, true, true, null);
+                this.changeVisibleDisabled(this.dynamicRowsField, false, true, null);
             } else {
                 this.changeVisibleDisabled(this.inputField, true, false, null);
                 this.changeVisibleDisabled(this.dynamicRowsField, false, true, null);
