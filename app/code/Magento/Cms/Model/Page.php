@@ -7,7 +7,9 @@ namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 
 /**
@@ -48,6 +50,11 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      * @var string
      */
     protected $_eventPrefix = 'cms_page';
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * Initialize resource model
@@ -504,5 +511,36 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     public function setIsActive($isActive)
     {
         return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    public function beforeSave()
+    {
+        $originalIdentifier = $this->getOrigData('identifier');
+        $currentIdentifier = $this->getIdentifier();
+        $scopeConfigIdentifier = $this->getScopeConfig()->getValue(
+            \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE
+        );
+
+        if (
+            $this->getId()
+            && $originalIdentifier !== $currentIdentifier
+            && $originalIdentifier === $scopeConfigIdentifier
+        ) {
+            throw new LocalizedException(__('This identifier is reserved for 404 error page in configuration.'));
+        }
+
+        return parent::beforeSave();
+    }
+
+    /**
+     * @return ScopeConfigInterface
+     */
+    private function getScopeConfig()
+    {
+        if (null === $this->scopeConfig) {
+            $this->scopeConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        }
+
+        return $this->scopeConfig;
     }
 }
