@@ -64,14 +64,14 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $fieldName = 'field';
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
 
-        $collectionMock = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Collection', [], [], '', false);
+        $collectionMock = $this->getMock('\Magento\Sales\Model\ResourceModel\Order\Collection', [], [], '', false);
 
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filterGroupFilterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
-        $itemsMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $itemsMock = $this->getMock('\Magento\Sales\Model\Order', ['getExtensionAttributes'], [], '', false);
 
         $extensionAttributes = $this->getMock(
             '\Magento\Sales\Api\Data\OrderExtension',
