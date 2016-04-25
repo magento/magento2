@@ -110,7 +110,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $customerName = "CONCAT_WS('firstname', 'lastname')";
         $customerTableName = 'customer_entity';
         $customerId = ['customer_id' => ['test_id']];
-        $customersData = [['item_1']];
+        $customersData = [['entity_id' => 'test_id', 'name' => 'item_1']];
         $itemData = ['test'];
 
         $this->selectMock->expects($this->any())
@@ -118,7 +118,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->connectionMock);
         $this->selectMock->expects($this->once())
             ->method('from')
-            ->with(['customer' => $customerTableName], ['email'])
+            ->with(['customer' => $customerTableName], ['entity_id', 'email'])
             ->willReturnSelf();
         $this->selectMock->expects($this->once())
             ->method('columns')
@@ -158,9 +158,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $itemMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
             ->disableOriginalConstructor()
             ->getMock();
-        $itemMock->expects($this->once())
-            ->method('getData')
-            ->willReturn($itemData);
 
         $this->entityFactoryMock->expects($this->any())
             ->method('create')
