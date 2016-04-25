@@ -367,18 +367,7 @@ class Renderer implements RendererInterface
      * @param \Magento\Framework\View\Asset\AssetInterface $asset
      * @return string
      */
-    protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
-    {
-        return $asset->getSourceContentType();
-    }
-
-    /**
-     * Get asset content type
-     * 
-     * @param \Magento\Framework\View\Asset\AssetInterface $asset
-     * @return string
-     */
-    protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
+    protected function  getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {
         return $asset->getSourceContentType();
     }
