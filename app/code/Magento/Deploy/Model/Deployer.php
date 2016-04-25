@@ -98,6 +98,27 @@ class Deployer
      */
     private $alternativeSources;
 
+    /** @var array **/
+    private $fileExtensionsJs = ['js', 'map'];
+
+    /** @var array **/
+    private $fileExtensionsCss = ['css'];
+
+    /** @var array **/
+    private $fileExtensionsLess = ['less'];
+
+    /** @var array **/
+    private $fileExtensionsHtml = ['html', 'htm'];
+
+    /** @var array **/
+    private $fileExtensionsImages = ['jpg', 'jpeg', 'gif', 'png', 'ico', 'svg'];
+
+    /** @var array **/
+    private $fileExtensionsFonts = ['eot', 'svg', 'ttf', 'woff', 'woff2'];
+
+    /** @var array **/
+    private $fileExtensionsMisc = ['md', 'txt', 'jbf', 'csv', 'json', 'txt', 'htc', 'swf', 'LICENSE', ''];
+
     /**
      * Constructor
      *
@@ -163,26 +184,27 @@ class Deployer
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function checkSkip($filePath) {
+    private function checkSkip($filePath)
+    {
         $path = $filePath;
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
         $check = ($this->isJavaScript || $this->isCss || $this->isLess || $this->isHtml || $this->isImages || $this->isFonts || $this->isMisc);
 
         if ($check && $filePath != '.') {
-            if ($this->isJavaScript && in_array($ext, array('js', 'map'))) {
+            if ($this->isJavaScript && in_array($ext, $this->fileExtensionsJs)) {
                 return true;
-            } else if ($this->isCss && $ext == 'css') {
+            } elseif ($this->isCss && in_array($ext, $this->fileExtensionsCss)) {
                 return true;
-            } else if ($this->isLess && $ext == 'less') {
+            } elseif ($this->isLess && in_array($ext, $this->fileExtensionsLess)) {
                 return true;
-            } else  if ($this->isHtml && in_array($ext, array('html', 'htm'))) {
+            } elseif ($this->isHtml && in_array($ext, $this->fileExtensionsJs)) {
                 return true;
-            } else  if ($this->isImages && in_array($ext, array('jpg', 'jpeg', 'gif', 'png', 'ico', 'svg'))) {
+            } elseif ($this->isImages && in_array($ext, $this->fileExtensionsImages)) {
                 return true;
-            } else  if ($this->isFonts && in_array($ext, array('eot', 'svg', 'ttf', 'woff', 'woff2'))) {
+            } elseif ($this->isFonts && in_array($ext, $this->fileExtensionsFonts)) {
                 return true;
-            } else  if ($this->isMisc && in_array($ext, array('md', 'txt', 'jbf', 'csv', 'json', 'txt', 'htc', 'swf', 'LICENSE', ''))) {
+            } elseif ($this->isMisc && in_array($ext, $this->fileExtensionsMisc)) {
                 return true;
             }
 
