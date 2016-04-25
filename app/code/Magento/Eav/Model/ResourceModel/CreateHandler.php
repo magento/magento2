@@ -102,7 +102,7 @@ class CreateHandler implements AttributeInterface
                     continue;
                 }
                 if (isset($entityData[$attribute->getAttributeCode()])
-                    && $attribute->isApplicable($entityData[$attribute->getAttributeCode()])
+                    && !is_array($entityData[$attribute->getAttributeCode()])
                     && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerInsert(
