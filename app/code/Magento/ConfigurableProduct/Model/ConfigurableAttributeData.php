@@ -30,11 +30,12 @@ class ConfigurableAttributeData
             if ($attributeOptionsData) {
                 $productAttribute = $attribute->getProductAttribute();
                 $attributeId = $productAttribute->getId();
-                $attributes[] = [
+                $attributes[$attributeId] = [
                     'id' => $attributeId,
                     'code' => $productAttribute->getAttributeCode(),
                     'label' => $productAttribute->getStoreLabel($product->getStoreId()),
                     'options' => $attributeOptionsData,
+                    'position' => $attribute->getPosition(),
                 ];
                 $defaultValues[$attributeId] = $this->getAttributeConfigValue($attributeId, $product);
             }
