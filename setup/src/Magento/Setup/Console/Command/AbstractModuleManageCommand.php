@@ -109,6 +109,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * @param bool $isEnable
      * @param string[] $modulesToChange
      * @param OutputInterface $output
+     * @return void
      */
     private function setIsEnabled($isEnable, $modulesToChange, $output)
     {
