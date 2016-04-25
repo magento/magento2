@@ -66,8 +66,7 @@
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
                 } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest(this.radioCheckboxClosest
-                    ).removeClass(errorClass);
+                    $(element).closest(this.radioCheckboxClosest).removeClass(errorClass);
                 } else {
                     $(element).removeClass(errorClass);
                 }
