@@ -23,32 +23,32 @@ class AttributePersistor
     /**
      * @var AttributeRepositoryInterface
      */
-    protected $attributeRepository;
+    private $attributeRepository;
 
     /**
      * @var FormatInterface
      */
-    protected $localeFormat;
+    private $localeFormat;
 
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @var array
      */
-    protected $insert = [];
+    private $insert = [];
 
     /**
      * @var array
      */
-    protected $update = [];
+    private $update = [];
 
     /**
      * @var array
      */
-    protected $delete = [];
+    private $delete = [];
 
     /**
      * @param FormatInterface $localeFormat
@@ -160,7 +160,7 @@ class AttributePersistor
                     'value' => $this->prepareValue($entityType, $attributeValue, $attribute)
                 ];
                 foreach ($context as $scope) {
-                    $data[$scope->getIdentifier()] = $this->getScopeValue($scope, $attribute, true);
+                    $data[$scope->getIdentifier()] = $this->getScopeValue($scope, $attribute);
                 }
                 $metadata->getEntityConnection()->insertOnDuplicate($attribute->getBackend()->getTable(), $data);
             }
