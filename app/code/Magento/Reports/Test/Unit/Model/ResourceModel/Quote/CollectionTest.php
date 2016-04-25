@@ -111,7 +111,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $customerTableName = 'customer_entity';
         $customerId = ['customer_id' => ['test_id']];
         $customersData = [['entity_id' => 'test_id', 'name' => 'item_1']];
-        $itemData = ['test'];
 
         $this->selectMock->expects($this->any())
             ->method('getConnection')
