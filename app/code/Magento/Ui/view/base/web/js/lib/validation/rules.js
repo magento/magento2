@@ -703,26 +703,20 @@ define([
         "less-than-equals-to": [
             function(value, params) {
                 if ($.isNumeric(params) && $.isNumeric(value)) {
-                    this.lteToVal = params;
                     return parseFloat(value) <= parseFloat(params);
                 }
                 return true;
             },
-            function() {
-                return $.mage.__('Please enter a value less than or equal to {0}.');
-            }
+            $.mage.__('Please enter a value less than or equal to {0}.')
         ],
         "greater-than-equals-to": [
             function(value, params) {
                 if ($.isNumeric(params) && $.isNumeric(value)) {
-                    this.gteToVal = params;
                     return parseFloat(value) >= parseFloat(params);
                 }
                 return true;
             },
-            function() {
-                return $.mage.__('Please enter a value greater than or equal to {0}.');
-            }
+            $.mage.__('Please enter a value greater than or equal to {0}.')
         ],
         "validate-emails": [
             function(value) {
