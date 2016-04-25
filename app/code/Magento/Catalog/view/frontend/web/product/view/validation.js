@@ -19,12 +19,25 @@
         options: {
             radioCheckboxClosest: 'ul, ol',
             errorPlacement: function (error, element) {
+                var messageBox,
+                    dataValidate;
+
+                if ($(element).hasClass('datetime-picker')) {
+                    element = $(element).parent();
+
+                    if (element.parent().find('[generated=true].mage-error').length) {
+                        return false;
+                    }
+                }
+
                 if (element.attr('data-errors-message-box')) {
-                    var messageBox = $(element.attr('data-errors-message-box'));
+                    messageBox = $(element.attr('data-errors-message-box'));
                     messageBox.html(error);
                     return;
                 }
-                var dataValidate = element.attr('data-validate');
+
+                dataValidate = element.attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-one-checkbox-required-by-name') > 0) {
                     error.appendTo('#links-advice-container');
                 } else if (element.is(':radio, :checkbox')) {
@@ -53,7 +66,8 @@
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
                 } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest(this.radioCheckboxClosest).removeClass(errorClass);
+                    $(element).closest(this.radioCheckboxClosest
+                    ).removeClass(errorClass);
                 } else {
                     $(element).removeClass(errorClass);
                 }
