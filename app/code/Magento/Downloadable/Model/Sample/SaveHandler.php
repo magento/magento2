@@ -40,17 +40,18 @@ class SaveHandler implements ExtensionInterface
             return $entity;
         }
 
-        $oldSamples = $this->sampleRepository->getList($entity->getSku());
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples() ?: [];
-        $updatedSampleIds = [];
+        $updatedSamples = [];
+        $oldSamples = $this->sampleRepository->getList($entity->getSku());
         foreach ($samples as $sample) {
             if ($sample->getId()) {
-                $updatedSampleIds[] = $sample->getId();
+                $updatedSamples[$sample->getId()] = $sample->getId();
             }
             $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
         }
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($oldSamples as $sample) {
-            if (!in_array($sample->getId(), $updatedSampleIds)) {
+            if (!isset($updatedSamples[$sample->getId()])) {
                 $this->sampleRepository->delete($sample->getId());
             }
         }
