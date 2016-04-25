@@ -165,7 +165,7 @@ class Environment extends AbstractActionController
         $requiredPaths = [];
         if ($missingWritePermissionPaths) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-            foreach($missingWritePermissionPaths as $key => $value) {
+            foreach ($missingWritePermissionPaths as $key => $value) {
                 $requiredPaths[] = ['path' => $key, 'missing' => $value];
             }
         }
