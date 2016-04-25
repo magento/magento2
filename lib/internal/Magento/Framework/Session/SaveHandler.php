@@ -145,7 +145,7 @@ class SaveHandler implements SaveHandlerInterface
     }
 
     /**
-     * Set session.save_handler option in ini config
+     * Set session.save_handler option
      *
      * @param string $saveHandler
      * @return $this
