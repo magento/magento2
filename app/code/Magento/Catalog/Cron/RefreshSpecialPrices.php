@@ -6,6 +6,9 @@
 namespace Magento\Catalog\Cron;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ObjectManager;
 
 class RefreshSpecialPrices
 {
@@ -43,6 +46,11 @@ class RefreshSpecialPrices
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
+
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -131,11 +139,13 @@ class RefreshSpecialPrices
         $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attrCode);
         $attributeId = $attribute->getAttributeId();
 
+        $linkField = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getLinkField();
+
         $connection = $this->_getConnection();
 
         $select = $connection->select()->from(
             $this->_resource->getTableName(['catalog_product_entity', 'datetime']),
-            ['entity_id']
+            [$linkField]
         )->where(
             'attribute_id = ?',
             $attributeId
@@ -147,6 +157,20 @@ class RefreshSpecialPrices
             $attrConditionValue
         );
 
-        $this->_processor->getIndexer()->reindexList($connection->fetchCol($select, ['entity_id']));
+        $this->_processor->getIndexer()->reindexList($connection->fetchCol($select, [$linkField]));
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     *
+     * @deprecated
+     */
+    protected function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }
