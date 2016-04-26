@@ -46,12 +46,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/create');
         $body = $this->getResponse()->getBody();
 
-        $this->assertRegExp('~input type="text"[^>]*id="firstname"~', $body);
-        $this->assertRegExp('~input type="text"[^>]*id="lastname"~', $body);
-        $this->assertRegExp('~input type="checkbox"[^>]*id="is_subscribed"~', $body);
-        $this->assertRegExp('~input type="email"[^>]*id="email_address"~', $body);
-        $this->assertRegExp('~input type="password"[^>]*id="password"~', $body);
-        $this->assertRegExp('~input type="password"[^>]*id="password-confirmation"~', $body);
+        $this->assertRegExp('~<input type="text"[^>]*id="firstname"~', $body);
+        $this->assertRegExp('~<input type="text"[^>]*id="lastname"~', $body);
+        $this->assertRegExp('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
+        $this->assertRegExp('~<input type="email"[^>]*id="email_address"~', $body);
+        $this->assertRegExp('~<input type="password"[^>]*id="password"~', $body);
+        $this->assertRegExp('~<input type="password"[^>]*id="password-confirmation"~', $body);
     }
 
     /**
