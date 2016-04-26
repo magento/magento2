@@ -156,13 +156,16 @@ class Helper
 
         $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $productData);
         $productData = $inputFilter->getUnescaped();
+        $productOptions = [];
 
         if (isset($productData['options'])) {
-            $productOptions = $productData['options'];
+            foreach ($productData['options'] as $option) {
+                $productOptions[$option['option_id']] = $option;
+            }
+
             unset($productData['options']);
-        } else {
-            $productOptions = [];
         }
+
         $product->addData($productData);
 
         if ($wasLockedMedia) {
@@ -307,20 +310,24 @@ class Helper
     public function mergeProductOptions($productOptions, $overwriteOptions)
     {
         if (!is_array($productOptions)) {
-            $productOptions = [];
-        }
-        if (is_array($overwriteOptions)) {
-            $options = array_replace_recursive($productOptions, $overwriteOptions);
-            array_walk_recursive($options, function (&$item) {
-                if ($item === "") {
-                    $item = null;
-                }
-            });
-        } else {
-            $options = $productOptions;
+            return [];
         }
 
-        return $options;
+        if (!is_array($overwriteOptions)) {
+            return $productOptions;
+        }
+        
+        foreach ($productOptions as $optionId => $option) {
+            if (isset($overwriteOptions[$optionId])) {
+                foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                    if (!empty($overwrite) && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                        $productOptions[$optionId][$fieldName] = $option['default_' . $fieldName];
+                    }
+                }
+            }
+        }
+
+        return $productOptions;
     }
 
     /**
