@@ -1836,7 +1836,7 @@
 }
 
 //
-//  Shopping cart and payment disaount codes block
+//  Shopping cart and payment discount codes block
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -1902,26 +1902,18 @@
     .abs-discount-block-desktop {
         .block {
             &:extend(.abs-blocks-2columns all);
-            width: 48%;
 
             > .title {
                 border: 0;
-                cursor: default;
                 padding: 0 0 @indent__s;
 
                 strong {
                     .lib-font-size(16);
-                    color: @text__color;
-                }
-
-                &:after {
-                    display: none;
                 }
             }
 
             .content {
-                display: block !important; // Need for overwriting collapsible widget
-                padding: 0;
+                .lib-css(padding, 0 0 @indent__base);
             }
         }
 
