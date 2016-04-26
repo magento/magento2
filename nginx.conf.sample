@@ -1,6 +1,10 @@
 # Magento Vars
 # set $MAGE_ROOT /path/to/magento/root;
-# set $MAGE_MODE default; # or production or developer
+#
+# ############################################
+## Optional override of deployment mode. We recommend you use the
+## command bin/magento deploy:mode:set to switch modes instead
+## set $MAGE_MODE default; # or production or developer
 #
 # Example configuration:
 # upstream fastcgi_backend {
@@ -13,7 +17,6 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
-#    set $MAGE_MODE developer;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 
