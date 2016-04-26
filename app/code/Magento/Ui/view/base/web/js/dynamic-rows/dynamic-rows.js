@@ -568,14 +568,7 @@ define([
          * @returns {Object} Chainable.
          */
         clear: function () {
-            var copyElems = utils.copy(this.elems());
-
-            this._elems = [];
-            this.elems(this._elems);
-
-            copyElems.forEach(function (elem) {
-                elem.destroy();
-            });
+            this.destroyChildren();
 
             return this;
         },
