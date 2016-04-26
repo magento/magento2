@@ -602,7 +602,9 @@ define([
             _.extend(data.additionalClasses, {
                 '_fit': data.fit,
                 '_required': data.required,
-                '_error': data.error
+                '_error': data.error,
+                '_empty': !this.elems().length,
+                '_no-header': this.columnsHeaderAfterRender || this.collapsibleHeader
             });
 
             return data.additionalClasses;
@@ -615,7 +617,7 @@ define([
          */
         initChildren: function () {
             this.showSpinner(true);
-            this.getChildItems().each(function (data, index) {
+            this.getChildItems().forEach(function (data, index) {
                 this.addChild(data, this.startIndex + index);
             }, this);
 
