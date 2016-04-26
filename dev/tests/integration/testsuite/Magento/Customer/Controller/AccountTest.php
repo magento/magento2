@@ -47,7 +47,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $body = $this->getResponse()->getBody();
         $this->assertContains('<input type="text" id="firstname"', $body);
         $this->assertContains('<input type="text" id="lastname"', $body);
-        $this->assertContains('<input type="email" name="email" id="email_address"', $body);
+        $this->assertRegExp('/input type="email"\s*name="email"\s*id="email_address"/', $body);
         $this->assertContains('<input type="checkbox" name="is_subscribed"', $body);
         $this->assertContains('<input type="password" name="password" id="password"', $body);
         $this->assertContains('<input type="password" name="password_confirmation" title="Confirm Password"', $body);
