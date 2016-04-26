@@ -15,7 +15,14 @@ use Magento\Mtf\Client\Locator;
 class AddressesDefault extends Block
 {
     /**
-     * Selector for change billing address
+     * Content of default address block.
+     *
+     * @var string
+     */
+    protected $defaultAddressContent = '.block-content';
+
+    /**
+     * Selector for change billing address.
      *
      * @var string
      */
@@ -28,5 +35,15 @@ class AddressesDefault extends Block
     {
         $this->waitForElementVisible($this->changeBillingAddressSelector, Locator::SELECTOR_CSS);
         $this->_rootElement->find($this->changeBillingAddressSelector, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Get block text.
+     *
+     * @return string
+     */
+    public function getBlockText()
+    {
+        return $this->_rootElement->find($this->defaultAddressContent)->getText();
     }
 }
