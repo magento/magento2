@@ -73,7 +73,6 @@ define([
         initPosition: function (position) {
             var pos = ~~position;
 
-            pos = pos !== 9999 ? pos : false;
             this.parentComponent().setMaxPosition(pos, this);
 
             if (!pos) {
