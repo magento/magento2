@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\EntityManager\Operation\Write;
 
-use Magento\Framework\EntityManager\Operation\Write\Update\ValidateUpdate;
 use Magento\Framework\EntityManager\Operation\Write\Update\UpdateMain;
 use Magento\Framework\EntityManager\Operation\Write\Update\UpdateAttributes;
 use Magento\Framework\EntityManager\Operation\Write\Update\UpdateExtensions;
