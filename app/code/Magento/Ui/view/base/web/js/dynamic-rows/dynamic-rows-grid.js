@@ -182,14 +182,23 @@ define([
          * @param {Array} data
          */
         processingInsertData: function (data) {
-            var changes;
+            var changes,
+                obj = {};
 
             changes = this._checkGridData(data);
             this.cacheGridData = data;
 
-            changes.each(function (changedObject) {
-                this.mappingValue(changedObject);
-            }, this);
+            if (changes.length) {
+                obj[this.identificationDRProperty] = changes[0][this.map[this.identificationProperty]];
+
+                if (_.findWhere(this.recordData(), obj)) {
+                    return false;
+                }
+
+                changes.each(function (changedObject) {
+                    this.mappingValue(changedObject);
+                }, this);
+            }
         },
 
         /**
@@ -208,7 +217,8 @@ define([
             tmpObj[this.identificationDRProperty] = obj[this.identificationDRProperty];
 
             if (!obj.hasOwnProperty(this.positionProvider)) {
-                obj[this.positionProvider] = 9999;
+                this.setMaxPosition();
+                obj[this.positionProvider] = this.maxPosition;
             }
 
             if (_.findWhere(this.recordData(), tmpObj)) {

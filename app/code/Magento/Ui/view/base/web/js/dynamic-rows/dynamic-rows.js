@@ -227,6 +227,13 @@ define([
                 sorted,
                 updatedCollection;
 
+            if (this.elems().filter(function (el) {
+                    return el.position;
+                }).length !== this.getChildItems().length) {
+
+                return false;
+            }
+
             if (!elem.containers.length) {
                 registry.get(elem.name, function () {
                     that.sort(position, elem);
@@ -240,8 +247,6 @@ define([
             });
 
             updatedCollection = this.updatePosition(sorted, position, elem.name);
-
-            this.elems([]);
             this.elems(updatedCollection);
         },
 
@@ -563,9 +568,14 @@ define([
          * @returns {Object} Chainable.
          */
         clear: function () {
-            this.elems.each(function (elem) {
+            var copyElems = utils.copy(this.elems());
+
+            this._elems = [];
+            this.elems(this._elems);
+
+            copyElems.forEach(function (elem) {
                 elem.destroy();
-            }, this);
+            });
 
             return this;
         },
