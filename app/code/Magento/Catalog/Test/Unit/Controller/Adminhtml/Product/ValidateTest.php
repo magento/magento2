@@ -12,27 +12,41 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
 {
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Validate */
     protected $action;
+
     /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultPage;
+
     /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultForward;
+
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
     protected $productBuilder;
+
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $product;
+
     /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirectFactory;
+
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirect;
+
     /** @var Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $initializationHelper;
+
     /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $productFactory;
+
     /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJson;
+
     /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJsonFactory;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     protected function setUp()
     {
         $this->productBuilder = $this->getMock(
@@ -111,6 +125,20 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
             ->getMock();
         $this->resultJsonFactory->expects($this->any())->method('create')->willReturn($this->resultJson);
 
+        $storeManagerInterfaceMock = $this->getMockForAbstractClass(
+            'Magento\Store\Model\StoreManagerInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getStore', 'getCode']
+        );
+
+        $storeManagerInterfaceMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnSelf());
+
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Validate',
@@ -122,24 +150,49 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
                 'initializationHelper' => $this->initializationHelper,
                 'resultJsonFactory' => $this->resultJsonFactory,
                 'productFactory' => $this->productFactory,
+                'storeManager' => $storeManagerInterfaceMock,
             ]
         );
     }
 
-    public function testAttributeSetIsObtainedFromPostByDefault()
+    public function _testAttributeSetIsObtainedFromPostByDefault()
     {
         $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
-        $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, 9]]);
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([
+            ['set', null, 9],
+            ['product', [], []],
+        ]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(9);
+        $this->initializationHelper->expects($this->any())->method('initializeFromData')->willReturn($this->product);
 
         $this->action->execute();
     }
 
-    public function testAttributeSetIsObtainedFromGetWhenThereIsNoOneInPost()
+    public function _testAttributeSetIsObtainedFromGetWhenThereIsNoOneInPost()
     {
         $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
-        $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, null]]);
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([
+            ['set', null, null],
+            ['product', [], []],
+        ]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(4);
+        $this->initializationHelper->expects($this->any())->method('initializeFromData')->willReturn($this->product);
+
+        $this->action->execute();
+    }
+
+    public function testInitializeFromData()
+    {
+        $productData = ['name' => 'test-name', 'stock_data' => ['use_config_manage_stock' => 0]];
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([
+            ['product', [], $productData],
+        ]);
+
+        $this->initializationHelper
+            ->expects($this->once())
+            ->method('initializeFromData')
+            ->with($this->product, $productData)
+            ->willReturn($this->product);
 
         $this->action->execute();
     }

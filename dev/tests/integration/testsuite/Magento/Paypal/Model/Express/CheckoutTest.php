@@ -102,7 +102,6 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($order->getShippingAddress());
     }
 
-
     /**
      * @param Quote $quote
      * @return Checkout
@@ -187,9 +186,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $paymentAdditionalInformation);
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_TOKEN, $paymentAdditionalInformation);
         $this->assertTrue($quote->getPayment()->hasMethod());
-
         $this->assertTrue($quote->getTotalsCollectedFlag());
-        $this->assertFalse($quote->hasDataChanges());
     }
 
     /**

@@ -11,9 +11,4 @@
             <schedule>0 0 * * *</schedule>
         </job>
     </group>
-    <group id="index">
-        <job name="update_last_visit_at" instance="Magento\Customer\Model\Observer\Grid" method="syncCustomerGrid">
-            <schedule>*/5 * * * *</schedule>
-        </job>
-    </group>
 </config>
