@@ -10,6 +10,7 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     const DEFAULT_NUMBER_SET = 'latn';
+
     /**
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
