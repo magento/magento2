@@ -78,7 +78,7 @@ class UpgradeCommand extends AbstractSetupCommand
     {
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = $this->objectManagerProvider->get();
-        $areaCode = 'adminhtml';
+        $areaCode = 'setup';
         /** @var \Magento\Framework\App\State $appState */
         $appState = $objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
