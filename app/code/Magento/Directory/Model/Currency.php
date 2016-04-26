@@ -409,7 +409,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      * @param string $string
      * @return $this
      */
-    protected function trimUnicodeDirectionMark($string)
+    private function trimUnicodeDirectionMark($string)
     {
         if (preg_match('/^\x{200E}/u', $string)) {
             $string = preg_replace('/^\x{200E}/u', '', $string);
