@@ -125,7 +125,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
     {
         return $element->getCanUseWebsiteValue()
             || $element->getCanUseDefaultValue()
-            || $element->isCanRestoreToDefault();
+            || $element->getCanRestoreToDefault();
     }
 
     /**

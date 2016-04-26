@@ -71,7 +71,6 @@ class FieldTest extends \PHPUnit_Framework_TestCase
                 'getInherit',
                 'getCanUseWebsiteValue',
                 'getCanUseDefaultValue',
-                'isCanRestoreToDefault',
                 'setDisabled',
                 'getTooltip',
             ],
