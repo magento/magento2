@@ -10,8 +10,12 @@ use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class FinalPriceTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Bundle\Pricing\Price\FinalPrice */
@@ -45,8 +49,8 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
     protected $customOptionPriceMock;
 
     /**
- * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
- */
+     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $priceCurrencyMock;
 
     /**
