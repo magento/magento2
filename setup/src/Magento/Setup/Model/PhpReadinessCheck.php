@@ -107,6 +107,32 @@ class PhpReadinessCheck
     }
 
     /**
+     * Checks PHP settings for cron
+     *
+     * @return array
+     */
+    public function checkPhpCronSettings()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+
+        $settings = array_merge(
+            $this->checkXDebugNestedLevel(),
+            $this->checkMemoryLimit()
+        );
+
+        foreach ($settings as $setting) {
+            if ($setting['error']) {
+                $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            }
+        }
+
+        return [
+            'responseType' => $responseType,
+            'data' => $settings
+        ];
+    }
+
+    /**
      * Checks PHP extensions
      *
      * @return array
@@ -137,6 +163,38 @@ class PhpReadinessCheck
                 'missing' => $missing,
             ],
         ];
+    }
+
+    /**
+     * Checks php memory limit
+     * @return array
+     */
+    private function checkMemoryLimit()
+    {
+        $data = [];
+        $error = false;
+        $minimumRequiredMemoryLimit = '2G';
+
+        $currentMemoryLimit = ini_get('memory_limit');
+
+        if ($this->memoryToInteger($currentMemoryLimit) < $this->memoryToInteger($minimumRequiredMemoryLimit)) {
+            $error = true;
+        }
+
+        $message = sprintf(
+            'Your current PHP memory limit is memory_limit=%s.
+             Magento 2 requires it to be set to %s or more.
+             Edit your config, restart web server, and try again.',
+            $currentMemoryLimit,
+            $minimumRequiredMemoryLimit
+        );
+
+        $data['memory_limit'] = [
+            'message' => $message,
+            'error' => $error
+        ];
+
+        return $data;
     }
 
     /**
@@ -236,5 +294,24 @@ class PhpReadinessCheck
             $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
         }
         return $normalizedPhpVersion;
+    }
+
+    /**
+     * Converts memory to integer
+     *
+     * @param $string
+     * @return mixed
+     */
+    private function memoryToInteger($string) {
+
+        $suffix = '';
+
+        sscanf ($string, '%u%c', $number, $suffix);
+
+        if (!empty($suffix)) {
+            $number = $number * bcpow (1024, strpos (' KMG', strtoupper($suffix)));
+        }
+
+        return $number;
     }
 }
