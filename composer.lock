@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bf2c89e347ccaa2666b266414a3ee2a9",
-    "content-hash": "89c54eeb2840525b6f8706c940757d51",
+    "hash": "5f85b22465dcfe3bcfd3880a5a8eeb8c",
+    "content-hash": "ce60cfdeecf3d6c595b56c4de3dbdf85",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -53,6 +53,68 @@
             ],
             "description": "Braintree PHP Client Library",
             "time": "2015-11-19 19:14:47"
+        },
+        {
+            "name": "colinmollenhour/cache-backend-file",
+            "version": "1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_File.git",
+                "reference": "458700fc6925559459e96c184fb44dbbadf00f1d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_File/zipball/458700fc6925559459e96c184fb44dbbadf00f1d",
+                "reference": "458700fc6925559459e96c184fb44dbbadf00f1d",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Mollenhour"
+                }
+            ],
+            "description": "The stock Zend_Cache_Backend_File backend has extremely poor performance for cleaning by tags making it become unusable as the number of cached items increases. This backend makes many changes resulting in a huge performance boost, especially for tag cleaning.",
+            "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_File",
+            "time": "2014-08-15 15:50:30"
+        },
+        {
+            "name": "colinmollenhour/cache-backend-redis",
+            "version": "1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis.git",
+                "reference": "da52aa0c27e9ec72e9b1f1110cfb8a304dea6da8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colinmollenhour/Cm_Cache_Backend_Redis/zipball/da52aa0c27e9ec72e9b1f1110cfb8a304dea6da8",
+                "reference": "da52aa0c27e9ec72e9b1f1110cfb8a304dea6da8",
+                "shasum": ""
+            },
+            "require": {
+                "magento-hackathon/magento-composer-installer": "*"
+            },
+            "type": "magento-module",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Mollenhour"
+                }
+            ],
+            "description": "Zend_Cache backend using Redis with full support for tags.",
+            "homepage": "https://github.com/colinmollenhour/Cm_Cache_Backend_Redis",
+            "time": "2016-03-24 16:02:15"
         },
         {
             "name": "colinmollenhour/credis",
@@ -923,16 +985,16 @@
         },
         {
             "name": "seld/cli-prompt",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/cli-prompt.git",
-                "reference": "b27db1514f7d7bb7a366ad95d4eb2b17140a0691"
+                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/b27db1514f7d7bb7a366ad95d4eb2b17140a0691",
-                "reference": "b27db1514f7d7bb7a366ad95d4eb2b17140a0691",
+                "url": "https://api.github.com/repos/Seldaek/cli-prompt/zipball/8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
+                "reference": "8cbe10923cae5bcd7c5a713f6703fc4727c8c1b4",
                 "shasum": ""
             },
             "require": {
@@ -967,7 +1029,7 @@
                 "input",
                 "prompt"
             ],
-            "time": "2016-01-09 17:55:27"
+            "time": "2016-04-18 09:31:41"
         },
         {
             "name": "seld/jsonlint",
@@ -3185,20 +3247,20 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.4.2",
+            "version": "2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9"
+                "reference": "2b9c2417a18696dfb578b38c116cd0ddc19b256e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
-                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/2b9c2417a18696dfb578b38c116cd0ddc19b256e",
+                "reference": "2b9c2417a18696dfb578b38c116cd0ddc19b256e",
                 "shasum": ""
             },
             "require": {
-                "pdepend/pdepend": "~2.0",
+                "pdepend/pdepend": "^2.0.4",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -3246,7 +3308,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2016-03-10 17:17:44"
+            "time": "2016-04-04 11:52:04"
         },
         {
             "name": "phpunit/php-code-coverage",
