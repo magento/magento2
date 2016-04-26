@@ -16,7 +16,7 @@ use Magento\Mtf\Client\Locator;
 class AddAttribute extends FormSections
 {
     /**
-     * Xpath selector for "Create New Attribute" button.
+     * Selector for "Create New Attribute" button.
      *
      * @var string
      */
