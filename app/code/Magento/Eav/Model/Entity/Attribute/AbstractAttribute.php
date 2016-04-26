@@ -599,7 +599,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
             $value === false && $attrType != 'int' ||
             $value === '' && ($attrType == 'int' ||
             $attrType == 'decimal' ||
-            $attrType == 'datetime');
+            $attrType == 'datetime' ||
+            $attrType == 'static');
 
         return $isEmpty;
     }
