@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\ComplexType as ComplexTypeLocator;
 use Magento\Eav\Model\EavCustomAttributeTypeLocator\SimpleType as SimpleTypeLocator;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
  * Class to locate types for Eav custom attributes
@@ -48,7 +49,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @codeCoverageIgnore
      * @param AttributeRepositoryInterface $attributeRepository Attribute repository service
-     * @param \Magento\Framework\Stdlib\StringUtils $stringUtility [deprecated]
+     * @param \Magento\Framework\Stdlib\StringUtils $stringUtility
      * @param array $serviceEntityTypeMap Service Entity Map
      * <pre>
      * [
@@ -80,20 +81,19 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getType($attributeCode, $serviceClass)
     {
         if (!$serviceClass || !$attributeCode || !isset($this->serviceEntityTypeMap[$serviceClass])
             || !isset($this->serviceBackendModelDataInterfaceMap[$serviceClass])
         ) {
-            return null;
+            return TypeProcessor::ANY_TYPE;
         }
 
         try {
             $attribute = $this->attributeRepository->get($this->serviceEntityTypeMap[$serviceClass], $attributeCode);
         } catch (NoSuchEntityException $e) {
-            return null;
+            return TypeProcessor::ANY_TYPE;
         }
 
         $dataInterface = $this->getComplexTypeLocator()->getType(

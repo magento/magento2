@@ -164,6 +164,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $customAttributesValueArray
      * @param string $dataObjectClassName
      * @return AttributeValue[]
+     * @throws SerializationException
      */
     protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
@@ -186,7 +187,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             }
 
             $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
-            $type = $type ? $type : TypeProcessor::ANY_TYPE;
             $customAttributeValue = $customAttribute[AttributeValue::VALUE];
 
             if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
@@ -196,7 +196,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     $attributeValue = $this->convertValue($customAttributeValue, $type);
                 } catch (SerializationException $e) {
                     throw new SerializationException(
-                        __(
+                        new Phrase(
                             'Attribute "%attribute_code" has invalid value. %details',
                             ['attribute_code' => $customAttributeCode, 'details' => $e->getMessage()]
                         )
