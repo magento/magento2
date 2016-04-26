@@ -497,7 +497,7 @@ class CustomOptions extends AbstractModifier
      */
     protected function getCommonContainerConfig($sortOrder)
     {
-        return [
+        $commonContainer = [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -522,6 +522,9 @@ class CustomOptions extends AbstractModifier
                                     'label' => __('Option Title'),
                                     'component' => 'Magento_Catalog/component/static-type-input',
                                     'valueUpdate' => 'input',
+                                    'imports' => [
+                                        'optionId' => '${ $.provider }:${ $.parentScope }.option_id'
+                                    ]
                                 ],
                             ],
                         ],
@@ -531,6 +534,19 @@ class CustomOptions extends AbstractModifier
                 static::FIELD_IS_REQUIRE_NAME => $this->getIsRequireFieldConfig(40)
             ]
         ];
+
+        if ($this->locator->getProduct()->getStoreId()) {
+            $useDefaultConfig = [
+                'service' => [
+                    'template' => 'Magento_Catalog/form/element/helper/custom-option-service',
+                ]
+            ];
+            $titlePath = $this->arrayManager->findPath(static::FIELD_TITLE_NAME, $commonContainer, null)
+                . static::META_CONFIG_PATH;
+            $commonContainer = $this->arrayManager->merge($titlePath, $commonContainer, $useDefaultConfig);
+        }
+
+        return $commonContainer;
     }
 
     /**
