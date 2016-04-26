@@ -90,11 +90,15 @@ define([
             });
 
             if (!elem) {
-                return false;
+                return;
             }
 
             this.childVisibleListener(elem);
-            !elem.visibleListener ? elem.on('visible', this.childVisibleListener.bind(this, elem)) : false;
+
+            if (!elem.visibleListener) {
+                elem.on('visible', this.childVisibleListener.bind(this, elem));
+            }
+
             elem.visibleListener = true;
         },
 
