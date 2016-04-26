@@ -626,7 +626,7 @@ define([
          */
         initChildren: function () {
             this.showSpinner(true);
-            this.getChildItems().each(function (data, index) {
+            this.getChildItems().forEach(function (data, index) {
                 this.addChild(data, this.startIndex + index);
             }, this);
 
