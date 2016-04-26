@@ -7,12 +7,12 @@
 namespace Magento\SalesRule\Test\Constraint;
 
 /**
- * Assert that Catalog Price Rule is applied in Shopping Cart.
+ * Assert that Cart Price Rule is applied in Shopping Cart.
  */
 class AssertCartPriceRuleConditionIsApplied extends AssertCartPriceRuleApplying
 {
     /**
-     * Assert that Catalog Price Rule is applied in Shopping Cart.
+     * Assert that Cart Price Rule is applied in Shopping Cart.
      *
      * @return void
      */
