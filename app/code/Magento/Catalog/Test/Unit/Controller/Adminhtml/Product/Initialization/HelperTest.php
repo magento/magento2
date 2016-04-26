@@ -212,8 +212,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('setOptionId');
 
         $optionsData = [
-            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1'],
-            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1'],
+            'option1' => ['option_id' => 1, 'is_delete' => true, 'name' => 'name1', 'price' => 'price1'],
+            'option2' => ['option_id' => 2, 'is_delete' => false, 'name' => 'name1', 'price' => 'price1'],
         ];
         $productData = [
             'stock_data' => ['stock_data'],
@@ -337,14 +337,14 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 ['key' => 'val'],
             ],
             [
-                ['key' => ['key' => 'val']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
+                ['key' => ['key1' => 'val1', 'key2' => 'val2', 'default_key' => 'val3', 'default_key2' => 'val4']],
+                ['key' => ['key1' => '0', 'key2' => '1']],
+                ['key' => ['key1' => 'val1', 'key2' => 'val4', 'default_key' => 'val3', 'default_key2' => 'val4']],
             ],
             [
-                ['key' => ['key' => 'val', 'another_key' => 'another_value']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
-                ['key' => ['key' => 'val2', 'another_key' => 'another_value', 'key2' => 'val2',]],
+                ['key' => ['key1' => 'val1', 'key2' => 'val2', 'default_key1' => 'val3']],
+                ['key' => ['key1' => '1', 'key2' => '1']],
+                ['key' => ['key1' => 'val3', 'key2' => 'val2', 'default_key1' => 'val3']],
             ],
         ];
     }
