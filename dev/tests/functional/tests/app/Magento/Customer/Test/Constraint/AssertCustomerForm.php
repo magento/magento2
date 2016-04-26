@@ -41,26 +41,18 @@ class AssertCustomerForm extends AbstractConstraint
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerIndexEdit $pageCustomerIndexEdit
      * @param Address $address[optional]
-     * @param Customer $initialCustomer [optional]
      * @return void
      */
     public function processAssert(
         Customer $customer,
         CustomerIndex $pageCustomerIndex,
         CustomerIndexEdit $pageCustomerIndexEdit,
-        Address $address = null,
-        Customer $initialCustomer = null
+        Address $address = null
     ) {
         $data = [];
         $filter = [];
 
-        if ($initialCustomer) {
-            $data['customer'] = $customer->hasData()
-                ? array_merge($initialCustomer->getData(), $customer->getData())
-                : $initialCustomer->getData();
-        } else {
-            $data['customer'] = $customer->getData();
-        }
+        $data['customer'] = $customer->getData();
         if ($address) {
             $data['addresses'][1] = $address->hasData() ? $address->getData() : [];
         } else {
