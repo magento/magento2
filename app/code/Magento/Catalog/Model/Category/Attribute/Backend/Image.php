@@ -111,6 +111,9 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
+        } elseif (isset($value[0]['name'])) {
+            $object->setData($this->getAttribute()->getName(), $value[0]['name']);
+            $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
         }
         return $this;
     }

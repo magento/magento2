@@ -11,7 +11,7 @@
 <div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
     <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 2: Attribute Values') ?></h2>
     <div class="steps-wizard-info">
-        <span><?= /* @escapeNotVerified */  __('Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU.') ?></span>
+        <span><?= $block->escapeHtml(__('Select from the following attribute values for this product. Each unique combination of values creates a unique product SKU.')) ?></span>
     </div>
     <div data-bind="foreach: attributes, sortableList: attributes">
 

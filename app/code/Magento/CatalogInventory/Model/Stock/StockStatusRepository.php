@@ -57,22 +57,19 @@ class StockStatusRepository implements StockStatusRepositoryInterface
      * @param StockStatusCollectionInterfaceFactory $collectionFactory
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param MapperFactory $mapperFactory
-     * @param StockRegistryStorage $stockRegistryStorage
      */
     public function __construct(
         StockStatusResource $resource,
         StatusFactory $stockStatusFactory,
         StockStatusCollectionInterfaceFactory $collectionFactory,
         QueryBuilderFactory $queryBuilderFactory,
-        MapperFactory $mapperFactory,
-        StockRegistryStorage $stockRegistryStorage
+        MapperFactory $mapperFactory
     ) {
         $this->resource = $resource;
         $this->stockStatusFactory = $stockStatusFactory;
         $this->stockStatusCollectionFactory = $collectionFactory;
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->mapperFactory = $mapperFactory;
-        $this->stockRegistryStorage = $stockRegistryStorage;
     }
 
     /**
@@ -124,7 +121,7 @@ class StockStatusRepository implements StockStatusRepositoryInterface
     {
         try {
             $this->resource->delete($stockStatus);
-            $this->stockRegistryStorage->removeStockStatus($stockStatus->getProductId());
+            $this->getStockRegistryStorage()->removeStockStatus($stockStatus->getProductId());
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock Status for product %1', $stockStatus->getProductId()),
@@ -151,5 +148,17 @@ class StockStatusRepository implements StockStatusRepositoryInterface
             );
         }
         return true;
+    }
+
+    /**
+     * @return StockRegistryStorage
+     */
+    private function getStockRegistryStorage()
+    {
+        if (null === $this->stockRegistryStorage) {
+            $this->stockRegistryStorage = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Model\StockRegistryStorage');
+        }
+        return $this->stockRegistryStorage;
     }
 }

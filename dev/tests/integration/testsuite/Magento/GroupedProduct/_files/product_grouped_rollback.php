@@ -18,7 +18,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 try {
     /** @var $simpleProduct \Magento\Catalog\Model\Product */
-    $simpleProduct = $productRepository->get('simple-1', false, null, true);
+    $simpleProduct = $productRepository->get('simple', false, null, true);
     $simpleProduct->delete();
 } catch (NoSuchEntityException $e) {
     //already deleted

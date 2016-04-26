@@ -107,8 +107,9 @@ define(
              */
             objectToArray: function (object) {
                 var convertedArray = [];
+
                 $.each(object, function (key) {
-                    return object[key].length ? convertedArray.push(object[key]) : false;
+                    return typeof object[key] === 'string' ? convertedArray.push(object[key]) : false;
                 });
 
                 return convertedArray.slice(0);

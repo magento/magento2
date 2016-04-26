@@ -12,7 +12,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Locale\FormatInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AttributePersistor
@@ -123,7 +124,7 @@ class AttributePersistor
                 ];
                 foreach ($context as $scope) {
                     $conditions[$metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' = ?']
-                        = $scope->getValue();
+                        = $this->getScopeValue($scope, $attribute);
                 }
                 $metadata->getEntityConnection()->delete(
                     $attribute->getBackend()->getTable(),
@@ -159,9 +160,9 @@ class AttributePersistor
                     'value' => $this->prepareValue($entityType, $attributeValue, $attribute)
                 ];
                 foreach ($context as $scope) {
-                    $data[$scope->getIdentifier()] = $scope->getValue();
+                    $data[$scope->getIdentifier()] = $this->getScopeValue($scope, $attribute);
                 }
-                $metadata->getEntityConnection()->insert($attribute->getBackend()->getTable(), $data);
+                $metadata->getEntityConnection()->insertOnDuplicate($attribute->getBackend()->getTable(), $data);
             }
         }
     }
@@ -192,7 +193,7 @@ class AttributePersistor
                 ];
                 foreach ($context as $scope) {
                     $conditions[$metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' = ?']
-                        = $scope->getValue();
+                        = $this->getScopeValue($scope, $attribute);
                 }
                 $metadata->getEntityConnection()->update(
                     $attribute->getBackend()->getTable(),
@@ -240,5 +241,20 @@ class AttributePersistor
         }
         $describe = $metadata->getEntityConnection()->describeTable($attribute->getBackendTable());
         return $metadata->getEntityConnection()->prepareColumnValue($describe['value'], $value);
+    }
+
+    /**
+     * @param ScopeInterface $scope
+     * @param AbstractAttribute $attribute
+     * @param bool $useDefault
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function getScopeValue(ScopeInterface $scope, AbstractAttribute $attribute, $useDefault = false)
+    {
+        if ($useDefault && $scope->getFallback()) {
+            return $this->getScopeValue($scope->getFallback(), $attribute, $useDefault);
+        }
+        return $scope->getValue();
     }
 }

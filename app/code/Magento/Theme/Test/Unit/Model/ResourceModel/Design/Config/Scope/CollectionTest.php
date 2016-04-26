@@ -113,9 +113,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->valueProcessor->expects($this->atLeastOnce())
             ->method('process')
             ->withConsecutive(
-                ['DefaultValue', 'second/field/path'],
-                ['WebsiteValue', 'second/field/path'],
-                ['WebsiteValue', 'second/field/path']
+                ['DefaultValue', 'default', null, ['path' => 'second/field/path', 'use_in_grid' => 1]],
+                ['WebsiteValue', 'website', 1, ['path' => 'second/field/path', 'use_in_grid' => 1]],
+                ['WebsiteValue', 'store', 1, ['path' => 'second/field/path', 'use_in_grid' => 1]]
             )
             ->willReturnOnConsecutiveCalls(
                 'DefaultValue',

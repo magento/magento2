@@ -49,6 +49,8 @@
                 type="Magento\Customer\Model\EmailNotification" />
     <preference for="Magento\Customer\Api\CustomerNameGenerationInterface"
                 type="Magento\Customer\Helper\View" />
+    <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
+                type="Magento\Customer\Model\Address\CustomAttributeList" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -85,7 +87,7 @@
     <type name="Magento\Customer\Model\ResourceModel\Address">
         <arguments>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
-            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entitySnapshot" xsi:type="object">CustomerAddressSnapshot</argument>
             <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
         </arguments>
     </type>
@@ -150,6 +152,11 @@
             <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
         </arguments>
     </virtualType>
+    <virtualType name="CustomerAddressSnapshot" type="Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="CustomerRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
@@ -180,12 +187,6 @@
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Customer\Model\ResourceModel\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Customer</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
