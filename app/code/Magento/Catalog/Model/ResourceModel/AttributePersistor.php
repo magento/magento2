@@ -22,10 +22,7 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
     protected function getScopeValue(ScopeInterface $scope, AbstractAttribute $attribute, $useDefault = false)
     {
         if ($attribute instanceof CatalogEavAttribute) {
-            $useDefault = $useDefault || $attribute->isScopeGlobal();
-            if ($scope->getValue() == Store::DISTRO_STORE_ID) {
-                $useDefault = true;
-            }
+            $useDefault = $useDefault || $attribute->isScopeGlobal() || $scope->getValue() == Store::DISTRO_STORE_ID;
         }
         return parent::getScopeValue($scope, $attribute, $useDefault);
     }
