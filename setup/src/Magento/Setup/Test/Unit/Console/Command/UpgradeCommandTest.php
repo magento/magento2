@@ -18,6 +18,7 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
         $configLoader = $this->getMockForAbstractClass('Magento\Framework\ObjectManager\ConfigLoaderInterface');
         $configLoader->expects($this->once())->method('load')->willReturn(['some_key' => 'some_value']);
         $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $state->expects($this->once())->method('setAreaCode')->with('setup');
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $objectManager->expects($this->exactly(2))
             ->method('get')
