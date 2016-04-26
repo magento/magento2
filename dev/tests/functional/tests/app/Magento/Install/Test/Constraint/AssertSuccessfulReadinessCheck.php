@@ -27,7 +27,7 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
     /**
      * File permission message.
      */
-    const FILE_PERMISSION_REGEXP = 'File permissions does not meet requirements.';
+    const FILE_PERMISSION_REGEXP = '/You meet (\d+) out of \1 writable file permission requirements\./';
 
     /**
      * Assert that PHP Version, PHP Extensions and File Permission are ok.
@@ -47,7 +47,7 @@ class AssertSuccessfulReadinessCheck extends AbstractConstraint
             $installPage->getReadinessBlock()->getPhpExtensionsCheck(),
             'PHP extensions missed.'
         );
-        \PHPUnit_Framework_Assert::assertContains(
+        \PHPUnit_Framework_Assert::assertRegExp(
             self::FILE_PERMISSION_REGEXP,
             $installPage->getReadinessBlock()->getFilePermissionCheck(),
             'File permissions does not meet requirements.'
