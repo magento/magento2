@@ -88,6 +88,11 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
         return $this->maximalPrice;
     }
 
+    /**
+     * Return ProductCustomOptionRepository
+     *
+     * @return ProductCustomOptionRepositoryInterface
+     */
     private function getProductOptionRepository()
     {
         if (!$this->productOptionRepository) {
@@ -131,7 +136,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice implements Fi
     /**
      * Load product custom options
      *
-     * return @void
+     * @return void
      */
     private function loadProductCustomOptions()
     {
