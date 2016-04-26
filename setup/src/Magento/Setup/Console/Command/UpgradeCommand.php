@@ -33,9 +33,9 @@ class UpgradeCommand extends AbstractSetupCommand
     /**
      * Object Manager
      *
-     * @var ObjectManagerInterface
+     * @var ObjectManagerProvider
      */
-    private $objectManager;
+    private $objectManagerProvider;
 
     /**
      * Constructor
@@ -46,7 +46,7 @@ class UpgradeCommand extends AbstractSetupCommand
     public function __construct(InstallerFactory $installerFactory, ObjectManagerProvider $objectManagerProvider)
     {
         $this->installerFactory = $installerFactory;
-        $this->objectManager = $objectManagerProvider->get();
+        $this->objectManagerProvider = $objectManagerProvider;
         parent::__construct();
     }
 
@@ -76,10 +76,16 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = $this->objectManagerProvider->get();
         $areaCode = 'adminhtml';
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState = $objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $objectManager->configure($configLoader->load($areaCode));
+
         $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->updateModulesSequence($keepGenerated);
