@@ -144,12 +144,19 @@ class Bestsellers extends AbstractReport
                 ['order_item' => $this->getTable('sales_order_item')],
                 'order_item.order_id = source_table.entity_id',
                 []
+            )->joinInner(
+                ['order_item_price' => $this->getTable('sales_order_item')],
+                'order_item_price.sku = order_item.sku',
+                []
             )->where(
                 'source_table.state != ?',
                 \Magento\Sales\Model\Order::STATE_CANCELED
             )->where(
                 'order_item.product_type NOT IN(?)',
                 $this->ignoredProductTypes
+            )->where(
+                'order_item_price.price > ?',
+                0
             );
 
             if ($subSelect !== null) {
