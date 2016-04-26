@@ -88,8 +88,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
                 'serialized_object' => serialize('O:8:"stdClass":0:{}'),
                 'empty_value_with_default' => serialize(''),
                 'not_serialized_string' => 'i am string',
-                'serialized_boolean_false' => serialize(false),
-                'olol' => 'a:1:{s:22:"additional_information";O:8:"stdClaes":0:{}}'
+                'serialized_boolean_false' => serialize(false)
             ]
         );
 
@@ -103,8 +102,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             [[$dataObject, 'serialized_object', null], unserialize($dataObject->getDataByKey('serialized_object'))],
             [[$dataObject, 'empty_value_with_default', $defaultValue], $defaultValue],
             [[$dataObject, 'not_serialized_string', null], 'i am string'],
-            [[$dataObject, 'serialized_boolean_false', null], false],
-            [[$dataObject, 'olol', null], false],
+            [[$dataObject, 'serialized_boolean_false', null], false]
         ];
     }
 }
