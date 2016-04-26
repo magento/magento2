@@ -52,7 +52,7 @@
         }
     }
 
-    #catalog_category_merchandiser_list {
+    .catalog-category-merchandiser-list {
         overflow: hidden;
 
         > li {
@@ -158,28 +158,37 @@
         }
     }
 
-    .mode-tile:before, .mode-grid:before, .icon-gripper:before, .icon-close-mage:before,
-    .icon-backward:before, .icon-forward:before, .block-search .label:before {
-        -webkit-font-smoothing: antialiased;
-        font-family: 'Admin Icons';
-        font-size: 17px;
-        speak: none;
+    .mode-tile,
+    .mode-grid,
+    .icon-gripper,
+    .icon-close-mage,
+    .icon-backward,
+    .icon-forward,
+    .block-search .label {
+        &:before {
+            -webkit-font-smoothing: antialiased;
+            font-family: 'Admin Icons';
+            font-size: 17px;
+            speak: none;
+        }
     }
 
-    .mode-grid > span,
-    .mode-tile > span,
-    .icon-backward > span,
-    .icon-forward > span,
-    .icon-close-mage > span,
-    .icon-gripper > span {
-        border: 0;
-        clip: rect(0, 0, 0, 0);
-        height: 1px;
-        margin: -1px;
-        overflow: hidden;
-        padding: 0;
-        position: absolute;
-        width: 1px;
+    .mode-grid,
+    .mode-tile,
+    .icon-backward,
+    .icon-forward,
+    .icon-close-mage,
+    .icon-gripper {
+        > span {
+            border: 0;
+            clip: rect(0, 0, 0, 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
     }
 
     .mode-tile {
@@ -213,7 +222,7 @@
     }
 
     .icon-forward {
-        :before {
+        &:before {
             content: '\e618';
         }
     }
@@ -243,13 +252,13 @@
         margin: 5px;
     }
 
-    .automatic_sorting {
+    .automatic-sorting {
         margin-bottom: 5px;
         margin-top: 5px;
     }
 }
 
-#catalog_category_add_product_tabs_content {
+.catalog-category-add-product-tabs-content {
     .admin__data-grid-header {
         .admin__data-grid-pager-wrap {
             float: right;
@@ -257,7 +266,9 @@
     }
 
     .data-grid-search-control-wrap {
-        .massassign_textarea, .massassign_buttons, .massassign_messages {
+        .massassign-textarea,
+        .massassign-buttons,
+        .massassign-messages {
             display: block;
             margin: 5px;
         }
