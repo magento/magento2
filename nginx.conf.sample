@@ -24,7 +24,7 @@ index index.php;
 autoindex off;
 charset off;
 
-location /setup/ {
+location ~* ^/setup($|/) {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
         fastcgi_pass   fastcgi_backend;
@@ -42,11 +42,7 @@ location /setup/ {
     }
 }
 
-location ~*/setup$ {
-    root $MAGE_ROOT;
-}
-
-location /update/ {
+location ~* ^/update($|/) {
     root $MAGE_ROOT;
 
     location ~ ^/update/index.php {
@@ -66,10 +62,6 @@ location /update/ {
     location ~ ^/update/pub/ {
         add_header X-Frame-Options "SAMEORIGIN";
     }
-}
-
-location ~*/update$ {
-    root $MAGE_ROOT;
 }
 
 
