@@ -7,6 +7,7 @@
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Zend\Code\Reflection\ClassReflection;
+use Magento\Framework\Exception\SerializationException;
 
 /**
  * Type processor Test
@@ -186,6 +187,25 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider processSimpleTypeExceptionProvider
+     */
+    public function testProcessSimpleTypeException($value, $type)
+    {
+        $this->setExpectedException(
+            SerializationException::class, 'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+        );
+        $this->_typeProcessor->processSimpleAndAnyType($value, $type);
+    }
+
+    public static function processSimpleTypeExceptionProvider()
+    {
+        return [
+            "int type, string value" => ['test', 'int'],
+            "float type, string value" => ['test', 'float'],
+        ];
+    }
+
+    /**
      * @expectedException \Magento\Framework\Exception\SerializationException
      * @expectedExceptionMessage Invalid type for value: "integer". Expected Type: "int[]".
      */
@@ -194,36 +214,6 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $value = 1;
         $type = 'int[]';
         $this->_typeProcessor->processSimpleAndAnyType($value, $type);
-    }
-
-    public function testFindSetterMethodName()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $setterName = $this->_typeProcessor->findSetterMethodName($class, 'AttrName');
-        $this->assertEquals("setAttrName", $setterName);
-
-        $booleanSetterName = $this->_typeProcessor->findSetterMethodName($class, 'Active');
-        $this->assertEquals("setIsActive", $booleanSetterName);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameInvalidAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'InvalidAttribute');
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameWrongCamelCasedAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'ActivE');
     }
 
     /**
