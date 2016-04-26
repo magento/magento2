@@ -6,6 +6,7 @@
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Phrase;
 
 class Changelog implements ChangelogInterface
 {
@@ -100,7 +101,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
+            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
         $this->connection->dropTable($changelogTableName);
@@ -117,7 +118,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
+            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
         $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
@@ -137,7 +138,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
+            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
         $select = $this->connection->select()->distinct(
@@ -166,7 +167,7 @@ class Changelog implements ChangelogInterface
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException(__("Table %1 does not exist", [$changelogTableName]));
+            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
         $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
         if (isset($row['Auto_increment'])) {
