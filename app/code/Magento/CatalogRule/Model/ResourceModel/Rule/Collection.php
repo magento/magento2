@@ -35,7 +35,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
-
     /**
      * Set resource model
      *
