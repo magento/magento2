@@ -17,6 +17,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Downloadable\Model\Product\Type
      */
     private $target;
+
     /**
      * @var TypeHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
