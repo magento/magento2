@@ -825,13 +825,9 @@ define([
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if (_.size($widget) < 1) {
+            if (_.size($widget) < 1 || !support(response)) {
                 this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
 
-                return;
-            }
-
-            if (!support(response)) {
                 return;
             }
 
