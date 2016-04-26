@@ -79,7 +79,7 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $deleteVariation = '[data-bind*="deleteRecord"]';
+    protected $deleteVariation = '[data-bind*="Remove Product"]';
 
     /**
      * Choose a different Product button selector.
@@ -194,11 +194,22 @@ class Matrix extends Form
     public function deleteVariations()
     {
         $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
-        foreach (array_reverse($variations) as $variation) {
-            $variation->find($this->actionMenu)->hover();
-            $variation->find($this->actionMenu)->click();
-            $variation->find($this->deleteVariation)->click();
+        while (count($variations) > 1) {
+            $variation = array_pop($variations);
+            $this->deleteVariation($variation);
+            $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
         }
+        $this->deleteVariation(array_pop($variations));
+    }
+
+    /**
+     * @param \Magento\Mtf\Client\ElementInterface $variation
+     */
+    private function deleteVariation($variation)
+    {
+        $variation->find($this->actionMenu)->hover();
+        $variation->find($this->actionMenu)->click();
+        $variation->find($this->deleteVariation)->click();
     }
 
     /**
