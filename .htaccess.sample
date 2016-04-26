@@ -1,8 +1,9 @@
 ############################################
-## overrides deployment configuration mode value
-## use command bin/magento deploy:mode:set to switch modes
-
+## Optional override of deployment mode. We recommend you use the
+## command bin/magento deploy:mode:set to switch modes instead
 #   SetEnv MAGE_MODE developer
+
+############################################
 
 ############################################
 ## uncomment these lines for CGI mode
