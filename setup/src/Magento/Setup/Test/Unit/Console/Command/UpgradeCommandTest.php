@@ -18,7 +18,7 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
         $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $objectManager->expects($this->once())->method('get')->willReturn($state);
-        $state->expects($this->once())->method('setAreaCode')->with('adminhtml');
+        $state->expects($this->once())->method('setAreaCode')->with('setup');
         $installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
         $installer->expects($this->at(0))->method('updateModulesSequence');
         $installer->expects($this->at(1))->method('installSchema');
