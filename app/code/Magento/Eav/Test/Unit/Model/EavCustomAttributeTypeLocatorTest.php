@@ -152,7 +152,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => $eavEntityType],
                 'serviceBackendModelDataInterfaceMapData' => $serviceBackendModelDataInterfaceMapData,
-                'expected' => null
+                'expected' => 'mixed'
             ],
             [
                 'attributeCode' => 'media_galley',
@@ -161,7 +161,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => $eavEntityType],
                 'serviceBackendModelDataInterfaceMapData' => $serviceBackendModelDataInterfaceMapData,
-                'expected' => null
+                'expected' => 'mixed'
             ],
             [
                 'attributeCode' => 'media_galley',
@@ -170,7 +170,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [],
                 'serviceBackendModelDataInterfaceMapData' => [],
-                'expected' => null
+                'expected' => 'mixed'
             ],
             [
                 'attributeCode' => 'media_galley',
@@ -179,7 +179,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
                 'stringUtility' => $stringUtility,
                 'serviceEntityTypeMapData' => [$serviceInterface => $eavEntityType],
                 'serviceBackendModelDataInterfaceMapData' => [],
-                'expected' => null
+                'expected' => 'mixed'
             ],
             [
                 'attributeCode' => 'image',
@@ -213,7 +213,8 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             []
         );
 
-        $this->assertNull(
+        $this->assertEquals(
+            'mixed',
             $this->eavCustomAttributeTypeLocator->getType('media_galley', 'Magento\Catalog\Api\Data\ProductInterface')
         );
     }
