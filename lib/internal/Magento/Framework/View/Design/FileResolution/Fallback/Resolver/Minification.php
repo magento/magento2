@@ -52,34 +52,11 @@ class Minification implements ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
-        $fileExtension = pathinfo($file, PATHINFO_EXTENSION);
+        $file = $this->minification->addMinifiedSign($file);
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);
-
-        /**
-         * Minified version as priority one
-         */
-        if ($path && $this->minification->isMinifiedFilename($path)) {
-            return $path;
+        if (!$path && ($newFile = $this->minification->removeMinifiedSign($file))) {
+            $path = $this->fallback->resolve($type, $newFile, $area, $theme, $locale, $module);
         }
-
-        /**
-         * If minification is disabled - return already found path
-         */
-        if (!$this->minification->isEnabled($fileExtension)) {
-            return $path;
-        }
-
-        /**
-         * Try to find minified version of file,
-         * or return already found path
-         */
-        return $this->fallback->resolve(
-            $type,
-            $this->minification->addMinifiedSign($file),
-            $area,
-            $theme,
-            $locale,
-            $module
-        ) ?: $path;
+        return $path;
     }
 }
