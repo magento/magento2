@@ -235,7 +235,6 @@ define([
          * @param {Object} curInstance - current element instance
          * @param {Number} position
          */
-
         getDepElement: function (curInstance, position, row) {
             var tableSelector = this.tableClass + ' tr',
                 $table = $(row).parents('table').eq(0),
