@@ -20,6 +20,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     const TRANSACTION_ID = 'ewr34fM49V0';
 
     private $mockContext;
+    
     /**
      * @var Payment
      */
@@ -857,7 +858,6 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
 
         $this->mockInvoice($this->transactionId);
         $this->mockResultTrueMethods($this->transactionId, $baseGrandTotal, $message);
-
 
         $this->orderMock->expects($this->once())
             ->method('getStoreId')
