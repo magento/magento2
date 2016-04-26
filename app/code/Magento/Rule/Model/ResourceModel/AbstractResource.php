@@ -236,22 +236,12 @@ abstract class AbstractResource extends \Magento\Framework\Model\ResourceModel\D
      */
     protected function _getAssociatedEntityInfo($entityType)
     {
-        $associatedEntityMap = $this->getAssociatedEntitiesMap();
-        if (isset($associatedEntityMap[$entityType])) {
-            return $associatedEntityMap[$entityType];
+        if (isset($this->_associatedEntitiesMap[$entityType])) {
+            return $this->_associatedEntitiesMap[$entityType];
         }
 
         throw new \Magento\Framework\Exception\LocalizedException(
             __('There is no information about associated entity type "%1".', $entityType)
         );
-    }
-
-    /**
-     * @return array
-     * @deprecated
-     */
-    protected function getAssociatedEntitiesMap()
-    {
-        return $this->_associatedEntitiesMap;
     }
 }

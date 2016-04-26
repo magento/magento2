@@ -65,6 +65,7 @@ class Rule extends AbstractResource
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
         parent::__construct($context, $connectionName);
     }
 
@@ -383,7 +384,7 @@ class Rule extends AbstractResource
      * @return array
      * @deprecated
      */
-    protected function getAssociatedEntitiesMap()
+    private function getAssociatedEntitiesMap()
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()

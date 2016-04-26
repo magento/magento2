@@ -116,6 +116,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
         parent::__construct($context, $connectionName);
     }
 
@@ -261,7 +262,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @return array
      * @deprecated
      */
-    protected function getAssociatedEntitiesMap()
+    private function getAssociatedEntitiesMap()
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
