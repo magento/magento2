@@ -276,6 +276,9 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     protected function isAddressMultilineAttribute($code)
     {
+        if ($code === 'attributes') {
+            return false;
+        }
         return $code == 'street' || in_array($code, $this->getCustomAttributesCodes());
     }
 
@@ -288,7 +291,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected function _implodeArrayField(array $data)
     {
         foreach ($data as $key => $value) {
-            if (is_array($value) && $this->isAddressMultilineAttribute($key)) {
+            if (is_array($value) && !empty($value) && $this->isAddressMultilineAttribute($key)) {
                 $data[$key] = $this->_implodeArrayValues($data[$key]);
             }
         }
