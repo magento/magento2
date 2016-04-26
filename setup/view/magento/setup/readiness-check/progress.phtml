@@ -253,7 +253,7 @@
             <span class="readiness-check-icon icon-success-round"></span>
 
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
                 <p>
                     Your PHP settings are correct.
                 </p>
@@ -265,7 +265,7 @@
 
             <span class="readiness-check-icon icon-failed-round"></span>
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
 
                 <div ng-show="settings.isRequestError">
                     <p>Server failed to respond. Please try again.</p>
@@ -464,8 +464,7 @@
                             <span>"{{name}}" writable directory permission.</span>
                         </li>
                     </ul>
-
-
+                    
                 </div>
 
             </div>
@@ -474,4 +473,8 @@
 
     </div>
 
+</div>
+
+<div class="readiness-check-item" id="warning-message" ng-show="true">
+    * - Make sure you have the same PHP configuration for Web and CLI, it can be specified in different config files. Please use this link to find more details regarding <a href="http://php.net/manual/en/configuration.file.php" target="_blank">PHP configuration</a>
 </div>
