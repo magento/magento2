@@ -132,7 +132,7 @@ class Bestsellers extends AbstractReport
                 'product_id' => 'order_item.product_id',
                 'product_name' => new \Zend_Db_Expr('MIN(order_item.name)'),
                 'product_price' => new \Zend_Db_Expr(
-                    'SUM(IF(order_item_parent.base_price, order_item_parent.base_price, order_item.base_price))' .
+                    'MIN(IF(order_item_parent.base_price, order_item_parent.base_price, order_item.base_price))' .
                     '* MIN(source_table.base_to_global_rate)'
                 ),
                 'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
