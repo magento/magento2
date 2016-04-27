@@ -72,6 +72,11 @@ abstract class AbstractHelper
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
+    
+    /**
+     * @var \Magento\Framework\Cache\ConfigInterface
+     */
+    protected $_cacheConfig;    
 
     /**
      * @param Context $context
