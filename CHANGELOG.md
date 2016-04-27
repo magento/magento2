@@ -1,3 +1,22 @@
+2.0.5
+=============
+* Fixed bugs:
+    * Fixed issue with HTML minification and comments
+    * Fixed issue with cached CAPTCHA
+    * Fixed issue with images not changing on swatches
+    * Fixed issue with admin URL being indexed in search engines
+    * Fixed issue with viewing products from shared wishlists
+    * Fixed inconsistent data during installation
+    * Fixed issue with saving custom customer attributes during checkout
+    * Fixed issue with multiple newsletter subscriptions for same email
+    * Fixed import issue for products with store code
+* GitHub requests:
+    * [#2795](https://github.com/magento/magento2/pull/2795) -- Fix Notice: Undefined property: Magento\Backend\Helper\Dashboard\Order::$_storeManager
+    * [#2989](https://github.com/magento/magento2/issues/2989) -- Custom Options not working after editing product
+* Various improvements:
+    * Improved export performance
+    * Fixed several performance issue with duplicated queries on category and CMS pages
+
 2.0.3
 =============
 * Fixed bugs:
