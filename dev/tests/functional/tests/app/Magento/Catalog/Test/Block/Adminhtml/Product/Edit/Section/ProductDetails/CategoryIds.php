@@ -71,8 +71,10 @@ class CategoryIds extends MultisuggestElement
      */
     public function setValue($value)
     {
-        $this->browser->find($this->pageFooter)->hover();
-        $this->browser->find($this->advancedInventoryButton)->hover();
+        if ($this->browser->find($this->pageFooter)->isVisible()) {
+            $this->browser->find($this->pageFooter)->hover();
+            $this->browser->find($this->advancedInventoryButton)->hover();
+        }
         parent::setValue($value);
     }
 }
