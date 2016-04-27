@@ -132,7 +132,8 @@ class Bestsellers extends AbstractReport
                 'product_id' => 'order_item.product_id',
                 'product_name' => new \Zend_Db_Expr('MIN(order_item.name)'),
                 'product_price' => new \Zend_Db_Expr(
-                    'MIN(order_item_price.base_price) * MIN(source_table.base_to_global_rate)'
+                    'SUM(IF(order_item_parent.base_price, order_item_parent.base_price, order_item.base_price))' .
+                    '* MIN(source_table.base_to_global_rate)'
                 ),
                 'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
             ];
@@ -144,9 +145,9 @@ class Bestsellers extends AbstractReport
                 ['order_item' => $this->getTable('sales_order_item')],
                 'order_item.order_id = source_table.entity_id',
                 []
-            )->joinInner(
-                ['order_item_price' => $this->getTable('sales_order_item')],
-                'order_item_price.sku = order_item.sku',
+            )->joinLeft(
+                ['order_item_parent' => $this->getTable('sales_order_item')],
+                'order_item.parent_item_id = order_item_parent.item_id',
                 []
             )->where(
                 'source_table.state != ?',
@@ -154,9 +155,6 @@ class Bestsellers extends AbstractReport
             )->where(
                 'order_item.product_type NOT IN(?)',
                 $this->ignoredProductTypes
-            )->where(
-                'order_item_price.price > ?',
-                0
             );
 
             if ($subSelect !== null) {
