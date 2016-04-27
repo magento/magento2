@@ -15,7 +15,7 @@ class HideUnsupportedAttributeTypes implements ObserverInterface
     /**
      * @var string[]
      */
-    protected $supportedTypes = ['select', 'multiselect'];
+    protected $supportedTypes = [];
 
     /**
      * @var RequestInterface
@@ -23,13 +23,13 @@ class HideUnsupportedAttributeTypes implements ObserverInterface
     private $request;
 
     /**
-     * @param RequestInterface $request
      * @param string[] $supportedTypes
+     * @param RequestInterface $request
      */
-    public function __construct(RequestInterface $request, array $supportedTypes = [])
+    public function __construct(array $supportedTypes, RequestInterface $request)
     {
+        $this->supportedTypes = $supportedTypes;
         $this->request = $request;
-        $this->supportedTypes = array_merge($this->supportedTypes, $supportedTypes);
     }
 
     /**
