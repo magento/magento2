@@ -193,23 +193,18 @@ class Matrix extends Form
 
     public function deleteVariations()
     {
-        $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
-        while (count($variations) > 1) {
-            $variation = array_pop($variations);
-            $this->deleteVariation($variation);
-            $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
+        $rowLocator = sprintf($this->variationRowByNumber, 1);
+        $variationText = '';
+        while ($this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH)->isVisible()) {
+            $variation = $this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH);
+            if ($variationText == $variation->getText()) {
+                throw new \Exception("Failed to delete configurable product variation");
+            }
+            $variationText = $variation->getText();
+            $variation->find($this->actionMenu)->hover();
+            $variation->find($this->actionMenu)->click();
+            $variation->find($this->deleteVariation)->click();
         }
-        $this->deleteVariation(array_pop($variations));
-    }
-
-    /**
-     * @param \Magento\Mtf\Client\ElementInterface $variation
-     */
-    private function deleteVariation($variation)
-    {
-        $variation->find($this->actionMenu)->hover();
-        $variation->find($this->actionMenu)->click();
-        $variation->find($this->deleteVariation)->click();
     }
 
     /**
