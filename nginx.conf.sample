@@ -57,7 +57,7 @@ location ~* ^/update($|/) {
         include        fastcgi_params;
     }
 
-    # deny everything but index.php
+    # Deny everything but index.php
     location ~ ^/update/(?!pub/). {
         deny all;
     }
@@ -66,7 +66,6 @@ location ~* ^/update($|/) {
         add_header X-Frame-Options "SAMEORIGIN";
     }
 }
-
 
 location / {
     try_files $uri $uri/ /index.php?$args;
