@@ -44,7 +44,7 @@ class DateTime extends Date
             $value = new \DateTime($value);
             return $value->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Exception("Invalid input date format '$value'");
+            throw new \Exception("Invalid input datetime format '$value'");
         }
     }
 }
