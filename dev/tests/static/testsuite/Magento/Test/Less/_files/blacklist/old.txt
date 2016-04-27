@@ -9,6 +9,7 @@ app/design/adminhtml/Magento/backend/Magento_Theme/web/css/source/_module-old.le
 app/design/adminhtml/Magento/backend/Magento_Ui/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/web/app/setup/styles/less/lib/utilities/_grid-framework.less
 app/design/adminhtml/Magento/backend/web/css/source/_grid.less
+app/design/adminhtml/Magento/backend/web/css/source/components/_popups-old.less
 app/design/adminhtml/Magento/backend/web/css/source/utilities/_grid-framework.less
 app/design/adminhtml/Magento/backend/web/css/source/utilities/_spinner.less
 app/design/adminhtml/Magento/backend/web/css/source/utilities/_spinner.less
