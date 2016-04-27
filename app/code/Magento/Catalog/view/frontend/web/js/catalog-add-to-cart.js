@@ -44,10 +44,20 @@ define([
             return this.options.processStart && this.options.processStop;
         },
 
-        submitForm: function(form) {
-            var self = this;
+        /**
+         * Handler for the form 'submit' event
+         *
+         * @param {Object} form
+         */
+        submitForm: function (form) {
+            var addToCartButton, self = this;
+
             if (form.has('input[type="file"]').length && form.find('input[type="file"]').val() !== '') {
                 self.element.off('submit');
+                // disable 'Add to Cart' button
+                addToCartButton = $(form).find(this.options.addToCartButtonSelector);
+                addToCartButton.prop('disabled', true);
+                addToCartButton.addClass(this.options.addToCartButtonDisabledClass);
                 form.submit();
             } else {
                 self.ajaxSubmit(form);
