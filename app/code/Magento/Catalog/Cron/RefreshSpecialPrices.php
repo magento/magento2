@@ -140,24 +140,34 @@ class RefreshSpecialPrices
         $attributeId = $attribute->getAttributeId();
 
         $linkField = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getLinkField();
+        $identifierField = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getIdentifierField();
 
         $connection = $this->_getConnection();
 
         $select = $connection->select()->from(
-            $this->_resource->getTableName(['catalog_product_entity', 'datetime']),
-            [$linkField]
+            ['attr' => $this->_resource->getTableName(['catalog_product_entity', 'datetime'])],
+            [
+                $identifierField => 'cat.'.$identifierField,
+            ]
+        )->joinLeft(
+            ['cat' => $this->_resource->getTableName('catalog_product_entity')],
+            'cat.'.$linkField . '= attr.'.$linkField,
+            ''
         )->where(
-            'attribute_id = ?',
+            'attr.attribute_id = ?',
             $attributeId
         )->where(
-            'store_id = ?',
+            'attr.store_id = ?',
             $storeId
         )->where(
-            'value = ?',
+            'attr.value = ?',
             $attrConditionValue
         );
 
-        $this->_processor->getIndexer()->reindexList($connection->fetchCol($select, [$linkField]));
+        if (!empty($connection->fetchCol($select))) {
+            $this->_processor->getIndexer()->reindexList($connection->fetchCol($select, $identifierField));
+        }
+
     }
 
     /**
@@ -166,7 +176,7 @@ class RefreshSpecialPrices
      *
      * @deprecated
      */
-    protected function getMetadataPool()
+    private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
