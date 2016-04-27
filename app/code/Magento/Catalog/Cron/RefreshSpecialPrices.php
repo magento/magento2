@@ -147,11 +147,11 @@ class RefreshSpecialPrices
         $select = $connection->select()->from(
             ['attr' => $this->_resource->getTableName(['catalog_product_entity', 'datetime'])],
             [
-                $identifierField => 'cat.'.$identifierField,
+                $identifierField => 'cat.' . $identifierField,
             ]
         )->joinLeft(
             ['cat' => $this->_resource->getTableName('catalog_product_entity')],
-            'cat.'.$linkField . '= attr.'.$linkField,
+            'cat.' . $linkField . '= attr.' . $linkField,
             ''
         )->where(
             'attr.attribute_id = ?',
@@ -164,8 +164,10 @@ class RefreshSpecialPrices
             $attrConditionValue
         );
 
-        if (!empty($connection->fetchCol($select))) {
-            $this->_processor->getIndexer()->reindexList($connection->fetchCol($select, $identifierField));
+        $selectData = $connection->fetchCol($select, $identifierField);
+
+        if (!empty($selectData)) {
+            $this->_processor->getIndexer()->reindexList($selectData);
         }
 
     }
