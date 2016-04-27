@@ -712,13 +712,6 @@
         right: -@indent__s;
         top: 3px;
     }
-
-    &-expanded {
-        .lib-icon-font-symbol(
-        @_icon-font-content: @icon-up,
-        @_icon-font-position: after
-        );
-    }
 }
 
 .abs-tax-total-expanded {
@@ -1000,6 +993,8 @@
 .abs-shopping-cart-items {
     .action {
         &.continue {
+            border-radius: 3px;
+            font-weight: bold;
             .lib-link-as-button();
             .lib-button(
             @_button-padding: 7px 15px 7px 0,
@@ -1009,8 +1004,6 @@
             @_button-icon-font-line-height: 16px,
             @_button-icon-font-position: before
             );
-            border-radius: 3px;
-            font-weight: bold;
 
             &:active {
                 .lib-css(box-shadow, @button__shadow);
@@ -1027,6 +1020,7 @@
         }
     }
 }
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-shopping-cart-items-mobile {
         .actions {
