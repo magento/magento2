@@ -108,7 +108,10 @@ class Renderer extends Config\Renderer
      */
     protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {
+        if (!in_array($asset->getContentType(), ['css', 'less'])) {
+            return parent::getAssetContentType($asset);
+        }
         $asset->getSourceFile();
-        return parent::getAssetContentType($asset);
+        return $asset->getSourceContentType();
     }
 }
