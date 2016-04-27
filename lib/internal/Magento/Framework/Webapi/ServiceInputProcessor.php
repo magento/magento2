@@ -184,11 +184,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
 
-            $customAttributeCode = $this->getCustomAttributeCode($customAttribute);
-            if (!$customAttributeCode || !isset($customAttribute[AttributeValue::VALUE])) {
-                $this->throwException($customAttributeCode, isset($customAttribute[AttributeValue::VALUE]));
-            }
-            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
+            list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
 
             //Check if type is defined, else default to string
             $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
@@ -214,44 +210,36 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     }
 
     /**
-     * Get the custom attribute code
+     * Derive the custom attribute code and value.
      *
      * @param string[] $customAttribute
-     * @return string|null
+     * @return string[]
      */
-    protected function getCustomAttributeCode($customAttribute)
+    private function processCustomAttribute($customAttribute)
     {
         $camelCaseAttributeCodeKey = lcfirst(
             SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
         );
+        // attribute code key could be snake or camel case, depending on whether SOAP or REST is used.
         if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
-            return $customAttribute[AttributeValue::ATTRIBUTE_CODE];
+            $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
         } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
-            return $customAttribute[$camelCaseAttributeCodeKey];
+            $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
         } else {
-            return null;
+            $customAttributeCode = null;
         }
-    }
 
-    /**
-     * Throws an exception based on the incorrect custom attribute specified.
-     *
-     * @param string $customAttributeCode
-     * @param boolean $hasAttributeValue
-     * @return void
-     * @throws SerializationException
-     */
-    protected function throwException($customAttributeCode, $hasAttributeValue)
-    {
-        if (!$customAttributeCode && !$hasAttributeValue) {
+        if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
         } else if (!$customAttributeCode) {
             throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
-        } else if (!$hasAttributeValue) {
+        } else if (!isset($customAttribute[AttributeValue::VALUE])) {
             throw new SerializationException(
                 new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
             );
         }
+
+        return [$customAttributeCode, $customAttribute[AttributeValue::VALUE]];
     }
 
     /**
