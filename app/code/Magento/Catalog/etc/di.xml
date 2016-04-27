@@ -689,9 +689,36 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\EntityManager\MetadataPool" type="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_product</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Catalog\Model\Entity\DefaultStoreScopeProvider</item>
+                    </item>
+                </item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Catalog\Model\Entity\DefaultStoreScopeProvider</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\Entity\ScopeResolver" type="Magento\Framework\Model\Entity\ScopeResolver">
+        <arguments>
+            <argument name="metadataPool" xsi:type="object">Magento\Catalog\EntityManager\MetadataPool</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Catalog\Model\ResourceModel\CreateHandler" type="Magento\Eav\Model\ResourceModel\CreateHandler">
         <arguments>
-            <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
+            <argument name="scopeResolver" xsi:type="object">Magento\Catalog\Model\Entity\ScopeResolver</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Catalog\Model\ResourceModel\UpdateHandler" type="Magento\Eav\Model\ResourceModel\UpdateHandler">
