@@ -21,6 +21,14 @@
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
         <plugin name="add_swatch_attributes_to_configurable" type="Magento\Swatches\Model\Plugin\Configurable" />
     </type>
+    <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                <item name="swatch_text" xsi:type="string">swatch_text</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Eav\Model\Attribute\FrontendType">
         <arguments>
             <argument name="config" xsi:type="array">
