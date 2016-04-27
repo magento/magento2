@@ -24,6 +24,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->addMetaTitleField($setup);
         }
     }
+
+    /**
+     * Add meta title
+     *
+     * @param SchemaSetupInterface $setup
+     * @return $this
+     */
     protected function addMetaTitleField(SchemaSetupInterface $setup)
     {
         $setup->getConnection()->addColumn(
