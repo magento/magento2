@@ -334,10 +334,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->getPayment()->setQuote($quote);
 
             $data = $paymentMethod->getData();
-            if (isset($data['additional_data'])) {
-                $data = array_merge($data, (array)$data['additional_data']);
-                unset($data['additional_data']);
-            }
             $quote->getPayment()->importData($data);
         }
 
