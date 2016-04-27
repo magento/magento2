@@ -99,7 +99,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      *
      * @var \Magento\Framework\App\Request\Http
      */
-    protected $request;
+    private $request;
 
     /**
      * Constructor
@@ -399,6 +399,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * Get request object
      *
      * @return \Magento\Framework\App\Request\Http
+     * @deprecated
      */
     private function getRequest()
     {
