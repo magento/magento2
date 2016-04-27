@@ -11,6 +11,7 @@ class ServerFactory
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
+     * @deprecated
      */
     protected $_objectManager;
 
