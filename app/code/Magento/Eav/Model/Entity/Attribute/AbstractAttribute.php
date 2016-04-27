@@ -589,6 +589,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
 
     /**
      * @param array|null|bool|int|float|string $value
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return bool
      */
     public function isValueEmpty($value)
