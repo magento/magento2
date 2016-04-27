@@ -291,7 +291,6 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_restController->dispatch($this->_requestMock);
         /** Ensure that response contains proper error message. */
         $expectedMsg = 'Consumer is not authorized to access 5, 6';
-        AuthorizationException::NOT_AUTHORIZED;
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());

@@ -105,11 +105,11 @@ class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'singleFields' => [
-                NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                'No such entity with %fieldName = %fieldValue',
                 'No such entity with %fieldName = %fieldValue',
             ],
             'doubleFields' => [
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                 'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
             ]
         ];
