@@ -114,7 +114,7 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
         return $this->_dateHelper;
     }
 
-    /*
+    /**
      * {@inheritdoc}
      */
     public function createConsumer($consumerData)
