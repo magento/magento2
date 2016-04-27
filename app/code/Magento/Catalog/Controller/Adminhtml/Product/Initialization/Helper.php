@@ -317,12 +317,14 @@ class Helper
         
         foreach ($productOptions as $index => $option) {
             $optionId = $option['option_id'];
-            
-            if (isset($overwriteOptions[$optionId])) {
-                foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
-                    if (!empty($overwrite) && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
-                        $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
-                    }
+
+            if (!isset($overwriteOptions[$optionId])) {
+                continue;
+            }
+
+            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                    $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
                 }
             }
         }
