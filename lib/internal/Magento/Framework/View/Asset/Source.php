@@ -173,6 +173,16 @@ class Source
     }
 
     /**
+     * Set source content type
+     * 
+     * @param string|null $type
+     */
+    public function setSourceContentType($type)
+    {
+        $this->sourceContentType = $type;
+    }
+
+    /**
      * @param LocalInterface $asset
      * @return bool|string
      */

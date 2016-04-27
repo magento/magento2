@@ -14,6 +14,8 @@ use Magento\Framework\View\Asset\LocalInterface;
  */
 class Chain
 {
+    private $contentTypesFriends = ['less', 'css'];
+
     /**
      * @var LocalInterface
      */
@@ -178,7 +180,8 @@ class Chain
      */
     public function assertValid()
     {
-        if ($this->contentType !== $this->targetContentType) {
+        if ($this->contentType !== $this->targetContentType
+            && !array_intersect([$this->contentType, $this->targetContentType], $this->contentTypesFriends)) {
             throw new \LogicException(
                 "The requested asset type was '{$this->targetContentType}', but ended up with '{$this->contentType}'"
             );

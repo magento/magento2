@@ -347,6 +347,7 @@ class Renderer implements RendererInterface
             /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
             foreach ($assets as $asset) {
                 $attributes = $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes);
+                $asset->setSourceContentType(null);
 
                 $template = $this->getAssetTemplate(
                     $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
@@ -367,9 +368,20 @@ class Renderer implements RendererInterface
      * @param \Magento\Framework\View\Asset\AssetInterface $asset
      * @return string
      */
-    protected function  getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
+    protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {
-        return $asset->getSourceContentType();
+        return $asset->getContentType();
+    }
+
+    /**
+     * Set asset content type
+     *
+     * @param \Magento\Framework\View\Asset\AssetInterface $asset
+     * @param string|null $type
+     */
+    protected function setAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset, $type)
+    {
+        $asset->setSourceContentType($type);
     }
 
     /**

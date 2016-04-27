@@ -59,4 +59,15 @@ class Remote implements AssetInterface
     {
         return $this->getContentType();
     }
+
+    /**
+     * Set source content type
+     *
+     * @param string|null $type
+     * @return void
+     */
+    public function setSourceContentType($type)
+    {
+        $this->contentType = $type;
+    }
 }
