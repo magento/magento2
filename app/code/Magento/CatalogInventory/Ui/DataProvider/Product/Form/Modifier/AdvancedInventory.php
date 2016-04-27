@@ -176,6 +176,8 @@ class AdvancedInventory extends AbstractModifier
                 'visible' => '1',
                 'require' => '0',
                 'additionalClasses' => 'admin__field-small',
+                'label' => __('Quantity'),
+                'scopeLabel' => '[GLOBAL]',
                 'dataScope' => 'qty',
                 'validation' => [
                     'validate-number' => true,
