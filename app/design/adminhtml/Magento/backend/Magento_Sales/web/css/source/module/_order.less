@@ -248,6 +248,20 @@
     }
 }
 
+.options-list {
+    &.nested {
+        .admin__field-option {
+            .admin__field-label {
+                > span {
+                    &:after {
+                        content: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
 //  ToDo UI: review the collapsible block
 //.order-subtotal {
 //    .summary-collapse {
