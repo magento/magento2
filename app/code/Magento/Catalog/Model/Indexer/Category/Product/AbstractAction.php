@@ -368,6 +368,8 @@ abstract class AbstractAction
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
+        $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
+
         $productMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $categoryMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         $productLinkField = $productMetadata->getLinkField();
@@ -377,17 +379,15 @@ abstract class AbstractAction
             ['cc' => $this->getTable('catalog_category_entity')],
             []
         )->joinInner(
-            ['cc2' => $this->getTable('catalog_category_entity')],
-            'cc2.path LIKE ' . $this->connection->getConcatSql(
-                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
-            ) . ' AND cc.entity_id NOT IN (' . implode(
+            ['cc2' => $temporaryTreeTable],
+            'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (' . implode(
                 ',',
                 $rootCatIds
             ) . ')',
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],
-            'ccp.category_id = cc2.entity_id',
+            'ccp.category_id = cc2.child_id',
             []
         )->joinInner(
             ['cpe' => $this->getTable('catalog_product_entity')],
@@ -456,6 +456,75 @@ abstract class AbstractAction
                 'store_id' => new \Zend_Db_Expr($store->getId()),
                 'visibility' => new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value')),
             ]
+        );
+    }
+
+    /**
+     * Build and populate the temporary category tree index table
+     *
+     * Returns the name of the temporary table to use in queries.
+     *
+     * @return string
+     */
+    protected function makeTempCategoryTreeIndex()
+    {
+        // Note: this temporary table is per-connection, so won't conflict by prefix.
+        $temporaryName = $this->connection->getTableName('temp_catalog_category_tree_index');
+
+        $temporaryTable = $this->connection->newTable($temporaryName);
+        $temporaryTable->addColumn(
+            'parent_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'unsigned' => true]
+        );
+        $temporaryTable->addColumn(
+            'child_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['nullable' => false, 'unsigned' => true]
+        );
+        // Each entry will be unique.
+        $temporaryTable->addIndex(
+            'idx_primary',
+            ['parent_id', 'child_id'],
+            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY]
+        );
+
+        // Drop the temporary table in case it already exists on this (persistent?) connection.
+        $this->connection->dropTemporaryTable($temporaryName);
+        $this->connection->createTemporaryTable($temporaryTable);
+
+        $this->fillTempCategoryTreeIndex($temporaryName);
+
+        return $temporaryName;
+    }
+
+    /**
+     * Populate the temporary category tree index table
+     *
+     * @param string $temporaryName
+     */
+    protected function fillTempCategoryTreeIndex($temporaryName)
+    {
+        // This finds all children (cc2) that descend from a parent (cc) by path.
+        // For example, cc.path may be '1/2', and cc2.path may be '1/2/3/4/5'.
+        $temporarySelect = $this->connection->select()->from(
+            ['cc' => $this->getTable('catalog_category_entity')],
+            ['parent_id' => 'entity_id']
+        )->joinInner(
+            ['cc2' => $this->getTable('catalog_category_entity')],
+            'cc2.path LIKE ' . $this->connection->getConcatSql(
+                [$this->connection->quoteIdentifier('cc.path'), $this->connection->quote('/%')]
+            ),
+            ['child_id' => 'entity_id']
+        );
+
+        $this->connection->query(
+            $temporarySelect->insertFromSelect(
+                $temporaryName,
+                ['parent_id', 'child_id']
+            )
         );
     }
 
