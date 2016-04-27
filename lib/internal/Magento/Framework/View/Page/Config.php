@@ -118,6 +118,27 @@ class Config
     ];
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    private $areaResolver;
+
+    /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return \Magento\Framework\App\State
+     *
+     * @deprecated
+     */
+    private function getAreaResolver()
+    {
+        if ($this->areaResolver === null) {
+            $this->areaResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\App\State');
+        }
+        return $this->areaResolver;
+    }
+
+    /**
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\Asset\GroupedCollection $pageAssets
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -350,6 +371,9 @@ class Config
      */
     public function getRobots()
     {
+        if ($this->getAreaResolver()->getAreaCode() !== 'frontend') {
+            return 'NOINDEX,NOFOLLOW';
+        }
         $this->build();
         if (empty($this->metadata['robots'])) {
             $this->metadata['robots'] = $this->scopeConfig->getValue(

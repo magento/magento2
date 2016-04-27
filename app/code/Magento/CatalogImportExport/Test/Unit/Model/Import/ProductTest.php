@@ -520,18 +520,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->_connection->expects($this->any())
             ->method('quoteInto')
             ->willReturnCallback([$this, 'returnQuoteCallback']);
-        $this->_connection
-            ->expects($this->once())
-            ->method('delete')
-            ->with(
-                $this->equalTo($testTable),
-                $this->equalTo(
-                    '(store_id NOT IN ('
-                    . $storeId . ') AND attribute_id = '
-                    . $attributeId . ' AND entity_id = '
-                    . self::ENTITY_ID . ')'
-                )
-            );
 
         $tableData[] = [
             'entity_id' => self::ENTITY_ID,

@@ -109,7 +109,7 @@
             <group id="dashboard" translate="label,comment" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Dashboard</label>
                 <field id="use_aggregated_data" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Use Aggregated Data (beta)</label>
+                    <label>Use Aggregated Data</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Improves dashboard performance but provides non-realtime data.</comment>
                 </field>

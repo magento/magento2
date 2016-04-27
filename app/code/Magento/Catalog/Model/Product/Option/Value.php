@@ -211,7 +211,6 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
             if ($this->getData('is_delete') == '1') {
                 if ($this->getId()) {
                     $this->deleteValues($this->getId());
-                    $this->delete();
                 }
             } else {
                 $this->save();
