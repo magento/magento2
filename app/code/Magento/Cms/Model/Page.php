@@ -528,9 +528,15 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
 
         switch ($originalIdentifier) {
             case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_ROUTE_PAGE):
-                throw new LocalizedException(__('This identifier is reserved for 404 error page in configuration.'));
+                throw new LocalizedException(
+                    __('This identifier is reserved for "CMS No Route Page" in configuration.')
+                );
             case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_HOME_PAGE):
-                throw new LocalizedException(__('This identifier is reserved for home page in configuration.'));
+                throw new LocalizedException(__('This identifier is reserved for "CMS Home Page" in configuration.'));
+            case $this->getScopeConfig()->getValue(PageHelper::XML_PATH_NO_COOKIES_PAGE):
+                throw new LocalizedException(
+                    __('This identifier is reserved for "CMS No Cookies Page" in configuration.')
+                );
         }
 
         return parent::beforeSave();

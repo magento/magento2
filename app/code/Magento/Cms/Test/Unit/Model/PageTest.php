@@ -119,7 +119,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for 404 error page in configuration.
+     * @expectedExceptionMessage This identifier is reserved for "CMS No Route Page" in configuration.
      */
     public function testBeforeSave404Identifier()
     {
@@ -145,7 +145,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This identifier is reserved for home page in configuration.
+     * @expectedExceptionMessage This identifier is reserved for "CMS Home Page" in configuration.
      */
     public function testBeforeSaveHomeIdentifier()
     {
@@ -162,6 +162,32 @@ class PageTest extends \PHPUnit_Framework_TestCase
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
                         'home'
+                    ]
+                ]
+            );
+
+        $this->model->beforeSave();
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage This identifier is reserved for "CMS No Cookies Page" in configuration.
+     */
+    public function testBeforeSaveNoCookiesIdentifier()
+    {
+        $this->model->setId(1);
+        $this->model->setOrigData('identifier', 'no-cookies');
+        $this->model->setIdentifier('no-cookies2');
+
+        $this->scopeConfigMock->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        \Magento\Cms\Helper\Page::XML_PATH_NO_COOKIES_PAGE,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'no-cookies'
                     ]
                 ]
             );
