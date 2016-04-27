@@ -208,10 +208,20 @@ define([
          */
         _init: function () {
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
+                this._sortAttributes();
                 this._RenderControls();
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+        },
+
+        /**
+         * @private
+         */
+        _sortAttributes: function () {
+            this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
+                return attribute.position;
+            });
         },
 
         /**
