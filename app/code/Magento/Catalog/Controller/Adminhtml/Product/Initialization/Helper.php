@@ -156,14 +156,12 @@ class Helper
 
         $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $productData);
         $productData = $inputFilter->getUnescaped();
-        $productOptions = [];
 
         if (isset($productData['options'])) {
-            foreach ($productData['options'] as $option) {
-                $productOptions[$option['option_id']] = $option;
-            }
-
+            $productOptions = $productData['options'];
             unset($productData['options']);
+        } else {
+            $productOptions = [];
         }
 
         $product->addData($productData);
@@ -317,11 +315,13 @@ class Helper
             return $productOptions;
         }
         
-        foreach ($productOptions as $optionId => $option) {
+        foreach ($productOptions as $index => $option) {
+            $optionId = $option['option_id'];
+            
             if (isset($overwriteOptions[$optionId])) {
                 foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
                     if (!empty($overwrite) && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
-                        $productOptions[$optionId][$fieldName] = $option['default_' . $fieldName];
+                        $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
                     }
                 }
             }
