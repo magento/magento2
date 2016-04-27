@@ -15,7 +15,6 @@ use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config implements ConfigInterface
 {
