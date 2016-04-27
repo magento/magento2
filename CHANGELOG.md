@@ -11,8 +11,8 @@
     * Fixed issue with multiple newsletter subscriptions for same email
     * Fixed import issue for products with store code
 * GitHub requests:
-    * [Pull Request #2795](https://github.com/magento/magento2/pull/2795) -- Fixed errors on Admin dashboard
-    * [Issue #2989](https://github.com/magento/magento2/issues/2989) -- Fixed issue with deleting custom options
+    * [#2795](https://github.com/magento/magento2/pull/2795) -- Fix Notice: Undefined property: Magento\Backend\Helper\Dashboard\Order::$_storeManager
+    * [#2989](https://github.com/magento/magento2/issues/2989) -- Custom Options not working after editing product
 * Various improvements:
     * Improved export performance
     * Fixed several performance issue with duplicated queries on category and CMS pages
