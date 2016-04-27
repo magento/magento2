@@ -115,7 +115,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
                 ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
-
+        $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
         foreach ($searchResult->getItems() as $order) {
