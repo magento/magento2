@@ -50,7 +50,7 @@ class RefreshSpecialPrices
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
