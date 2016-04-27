@@ -111,8 +111,8 @@ class Page extends AbstractDb
          * type NULL so in DB they will be empty and not some default value
          */
         foreach (['custom_theme_from', 'custom_theme_to'] as $field) {
-            $value = !$object->getData($field) ? null : $object->getData($field);
-            $object->setData($field, $this->dateTime->formatDate($value));
+            $value = !$object->getData($field) ? null : $this->dateTime->formatDate($object->getData($field));
+            $object->setData($field, $value);
         }
 
         if (!$this->isValidPageIdentifier($object)) {
