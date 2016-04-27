@@ -1,3 +1,5 @@
 \Magento\Framework\Exception\LocalizedException
 \Magento\Framework\View\Asset\File\NotFoundException
 \Magento\Framework\Config\Dom\ValidationException
+\Magento\Framework\Search\Request\EmptyRequestDataException
+\Magento\Framework\Search\Request\NonExistingRequestNameException
