@@ -120,7 +120,7 @@ class CustomerRegistry
             // customer does not exist
             throw new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     [
                     'fieldName' => 'email',
                         'fieldValue' => $customerEmail,

@@ -138,7 +138,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
         if (!$order) {
             throw new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue',
                     [
                         'fieldName' => 'orderId',
                         'fieldValue' => $orderId,

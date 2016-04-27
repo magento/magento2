@@ -46,7 +46,7 @@ class AttributeResolver
         } else {
             throw new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     [
                         'fieldName' => 'entityType',
                         'fieldValue' => $entityType,

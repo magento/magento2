@@ -7,7 +7,6 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -333,11 +332,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
     {
         $exception = new InputException();
         if (!\Zend_Validate::is(trim($customer->getFirstname()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'firstname']));
         }
 
         if (!\Zend_Validate::is(trim($customer->getLastname()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'lastname']));
         }
 
         $isEmailAddress = \Zend_Validate::is(
@@ -348,7 +347,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         if (!$isEmailAddress) {
             $exception->addError(
                 __(
-                    InputException::INVALID_FIELD_VALUE,
+                    'Invalid value of "%value" provided for the %fieldName field.',
                     ['fieldName' => 'email', 'value' => $customer->getEmail()]
                 )
             );
@@ -356,17 +355,17 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
         $dob = $this->getAttributeMetadata('dob');
         if ($dob !== null && $dob->isRequired() && '' == trim($customer->getDob())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'dob']));
         }
 
         $taxvat = $this->getAttributeMetadata('taxvat');
         if ($taxvat !== null && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'taxvat']));
         }
 
         $gender = $this->getAttributeMetadata('gender');
         if ($gender !== null && $gender->isRequired() && '' == trim($customer->getGender())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'gender']));
         }
 
         if ($exception->wasErrorAdded()) {

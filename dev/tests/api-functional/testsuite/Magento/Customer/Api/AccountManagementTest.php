@@ -183,7 +183,7 @@ class AccountManagementTest extends WebapiAbstract
                 $expectedException = new InputException();
                 $expectedException->addError(
                     __(
-                        InputException::INVALID_FIELD_VALUE,
+                        'Invalid value of "%value" provided for the %fieldName field.',
                         ['fieldName' => 'email', 'value' => $invalidEmail]
                     )
                 );
@@ -198,7 +198,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => InputException::INVALID_FIELD_VALUE,
+                    'message' => 'Invalid value of "%value" provided for the %fieldName field.',
                     'parameters' => [
                         'fieldName' => 'email',
                         'value' => $invalidEmail,
@@ -360,16 +360,16 @@ class AccountManagementTest extends WebapiAbstract
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => InputException::DEFAULT_MESSAGE,
+                'message' => 'One or more input exceptions have occurred.',
                 'errors' => [
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'email',
                         ],
                     ],
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'template',
                         ]
@@ -438,7 +438,7 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -447,7 +447,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
@@ -531,7 +531,7 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -540,7 +540,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
