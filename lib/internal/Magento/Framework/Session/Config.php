@@ -15,6 +15,7 @@ use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Config implements ConfigInterface
 {
@@ -41,10 +42,6 @@ class Config implements ConfigInterface
 
     /** Cookie default lifetime */
     const COOKIE_LIFETIME_DEFAULT = 3600;
-
-    const XML_PATH_UNSECURE_BASE_URL = 'web/unsecure/base_url';
-
-    const XML_PATH_SECURE_BASE_URL = 'web/secure/base_url';
 
     /**
      * All options
@@ -166,9 +163,9 @@ class Config implements ConfigInterface
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)
         );
 
-        $secureURL = $this->_scopeConfig->getValue(self::XML_PATH_SECURE_BASE_URL, $this->_scopeType);
-        $unSecureURL = $this->_scopeConfig->getValue(self::XML_PATH_UNSECURE_BASE_URL, $this->_scopeType);
-        $isFullySecuredURL = $secureURL == $unSecureURL;
+        $secureURL = $this->_scopeConfig->getValue('web/secure/base_url', $this->_scopeType);
+        $unsecureURL = $this->_scopeConfig->getValue('web/unsecure/base_url', $this->_scopeType);
+        $isFullySecuredURL = $secureURL == $unsecureURL;
         $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
     }
 
