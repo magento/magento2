@@ -187,7 +187,7 @@ class Chain
     public function assertValid()
     {
         if ($this->contentType !== $this->targetContentType
-            && !in_array($this->contentType, $this->compatibleTypes[$this->targetContentType])) {
+                && empty($this->compatibleTypes[$this->targetContentType][$this->contentType])) {
 
             throw new \LogicException(
                 "The requested asset type was '{$this->targetContentType}', but ended up with '{$this->contentType}'"
