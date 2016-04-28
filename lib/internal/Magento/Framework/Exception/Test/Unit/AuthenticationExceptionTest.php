@@ -11,8 +11,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class AuthenticationExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class AuthenticationExceptionTest extends \PHPUnit_Framework_TestCase
 {

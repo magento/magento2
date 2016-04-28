@@ -105,8 +105,8 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
         // product tax class ids is required
         if (($value->getProductTaxClassIds() === null) || !$value->getProductTaxClassIds()) {
             $this->addErrorMessage(
-                $messages, 
-                '%fieldName is a required field.', 
+                $messages,
+                '%fieldName is a required field.',
                 ['fieldName' => 'product_tax_class_ids']
             );
         } else { // see if the product tax class ids exist
