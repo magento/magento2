@@ -101,7 +101,6 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
             $quote = $this->loadQuote('load', 'cartId', $cartId, $sharedStoreIds);
             $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
-            $this->quotesByCustomerId[$quote->getCustomerId()] = $quote;
         }
         return $this->quotesById[$cartId];
     }
