@@ -29,15 +29,12 @@ class ParamsOverrider
     /**
      * Initialize dependencies
      *
-     * @param MethodsMap $methodsMap
      * @param ParamOverriderInterface[] $paramOverriders
      */
     public function __construct(
-        MethodsMap $methodsMap,
         array $paramOverriders = []
     ) {
         $this->paramOverriders = $paramOverriders;
-        $this->methodsMap = $methodsMap;
     }
 
     /**
@@ -196,19 +193,35 @@ class ParamsOverrider
         $objectProperty
     ) {
         if ($serviceClassName && $serviceMethodName) {
-            $methodParams = $this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName);
+            $methodParams = $this->getMethodsMap()->getMethodParams($serviceClassName, $serviceMethodName);
             $index = array_search($serviceMethodParamName, array_column($methodParams, 'name'));
             if ($index !== false) {
                 $paramObjectType = $methodParams[$index][MethodsMap::METHOD_META_TYPE];
                 $setter = 'set' . ucfirst(SimpleDataObjectConverter::snakeCaseToCamelCase($objectProperty));
                 if (array_key_exists(
                     $setter,
-                    $this->methodsMap->getMethodsMap($paramObjectType)
+                    $this->getMethodsMap()->getMethodsMap($paramObjectType)
                 )) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    /**
+     * The getter function to get MethodsMap object
+     *
+     * @return \Magento\Framework\Reflection\MethodsMap
+     *
+     * @deprecated
+     */
+    private function getMethodsMap()
+    {
+        if ($this->methodsMap === null) {
+            $this->methodsMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(MethodsMap::class);
+        }
+        return $this->methodsMap;
     }
 }
