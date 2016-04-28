@@ -85,6 +85,11 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManager,
             ]
         );
+
+        $reflection = new \ReflectionClass(get_class($this->productUrlRewriteGenerator));
+        $reflectionProperty = $reflection->getProperty('anchorUrlRewriteGenerator');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->productUrlRewriteGenerator, $this->anchorUrlRewriteGenerator);
     }
 
     /**
