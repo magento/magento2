@@ -62,7 +62,7 @@ class SaveHandler
         /** @var \Magento\Quote\Model\Quote $quote */
         // Quote Item processing
         $items = $quote->getItems();
-        if ($items) {
+        if ($items && $quote->getIsActive()) {
             foreach ($items as $item) {
                 /** @var \Magento\Quote\Model\Quote\Item $item */
                 if (!$item->isDeleted()) {
