@@ -372,17 +372,6 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Set asset content type
-     *
-     * @param \Magento\Framework\View\Asset\AssetInterface $asset
-     * @param string|null $type
-     */
-    protected function setAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset, $type)
-    {
-        $asset->setSourceContentType($type);
-    }
-
-    /**
      * @return array
      */
     public function getAvailableResultGroups()
