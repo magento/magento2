@@ -3,32 +3,39 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Test\Unit\Pricing\Price;
+namespace Magento\Wishlist\Test\Unit\Pricing\ConfiguredPrice;
 
-class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Wishlist\Pricing\ConfiguredPrice\DownloadablePrice;
+
+class DownloadablePriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $saleableItem;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $calculator;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $priceCurrency;
 
     /**
-     * @var \Magento\Downloadable\Pricing\Price\ConfiguredPrice
+     * @var DownloadablePrice
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $priceInfoMock;
 
@@ -55,7 +62,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Downloadable\Pricing\Price\ConfiguredPrice(
+        $this->model = new DownloadablePrice(
             $this->saleableItem,
             null,
             $this->calculator,
@@ -97,7 +104,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
+            ->with(BasePrice::PRICE_CODE)
             ->willReturn($priceMock);
 
         $this->saleableItem->expects($this->once())
@@ -111,8 +118,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeInstance')
             ->willReturn($productTypeMock);
 
-        $result = $this->model->getValue();
-        $this->assertEquals(20, $result);
+        $this->assertEquals(20, $this->model->getValue());
     }
 
     public function testGetValueNoLinksPurchasedSeparately()
@@ -127,15 +133,14 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
+            ->with(BasePrice::PRICE_CODE)
             ->willReturn($priceMock);
 
         $this->saleableItem->expects($this->once())
             ->method('getLinksPurchasedSeparately')
             ->willReturn(false);
 
-        $result = $this->model->getValue();
-        $this->assertEquals($priceValue, $result);
+        $this->assertEquals($priceValue, $this->model->getValue());
     }
 
     public function testGetValueNoOptions()
@@ -150,7 +155,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
 
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
+            ->with(BasePrice::PRICE_CODE)
             ->willReturn($priceMock);
 
         $wishlistItemOptionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
@@ -179,7 +184,30 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeInstance')
             ->willReturn($productTypeMock);
 
-        $result = $this->model->getValue();
-        $this->assertEquals($priceValue, $result);
+        $this->assertEquals($priceValue, $this->model->getValue());
+    }
+
+    public function testGetValueWithNoCustomOption()
+    {
+        $priceMock = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
+            ->getMockForAbstractClass();
+        $priceMock->expects($this->once())
+            ->method('getValue')
+            ->willReturn(0);
+
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrice')
+            ->with(BasePrice::PRICE_CODE)
+            ->willReturn($priceMock);
+
+        $this->saleableItem->expects($this->once())
+            ->method('getLinksPurchasedSeparately')
+            ->willReturn(true);
+        $this->saleableItem->expects($this->once())
+            ->method('getCustomOption')
+            ->with('downloadable_link_ids')
+            ->willReturn(null);
+
+        $this->assertEquals(0, $this->model->getValue());
     }
 }

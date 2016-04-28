@@ -3,13 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Pricing\Price;
+namespace Magento\Wishlist\Pricing\ConfiguredPrice;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 
-class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
+class DownloadablePrice extends FinalPrice implements ConfiguredPriceInterface
 {
     /**
      * Price type configured
@@ -37,12 +37,13 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     private function getLinkPrice()
     {
         $result = 0;
-        if ($this->product->getLinksPurchasedSeparately()) {
-            /** @var \Magento\Wishlist\Model\Item\Option $linksIds */
-            $linksIds = $this->product->getCustomOption('downloadable_link_ids');
-            if ($linksIds) {
+        if ($this->getProduct()->getLinksPurchasedSeparately()) {
+            /** @var \Magento\Wishlist\Model\Item\Option $customOption */
+            $customOption = $this->getProduct()->getCustomOption('downloadable_link_ids');
+            if ($customOption) {
                 $links = $this->getLinks();
-                foreach (explode(',', $linksIds->getValue()) as $linkId) {
+                $linkIds = explode(',', $customOption->getValue());
+                foreach ($linkIds as $linkId) {
                     if (isset($links[$linkId])) {
                         $result += $links[$linkId]->getPrice();
                     }
@@ -58,8 +59,8 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     private function getLinks()
     {
         /** @var \Magento\Downloadable\Model\Product\Type $productType */
-        $productType = $this->product->getTypeInstance();
-        $links = $productType->getLinks($this->product);
+        $productType = $this->getProduct()->getTypeInstance();
+        $links = $productType->getLinks($this->getProduct());
         return $links;
     }
 
