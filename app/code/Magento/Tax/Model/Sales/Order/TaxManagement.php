@@ -139,10 +139,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
             throw new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
-                    [
-                        'fieldName' => 'orderId',
-                        'fieldValue' => $orderId,
-                    ]
+                    ['fieldName' => 'orderId', 'fieldValue' => $orderId]
                 )
             );
         }

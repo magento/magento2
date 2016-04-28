@@ -84,7 +84,7 @@ class CustomerMetadata implements CustomerMetadataInterface
                         'fieldName' => 'entityType',
                         'fieldValue' => self::ENTITY_TYPE_CUSTOMER,
                         'field2Name' => 'attributeCode',
-                        'field2Value' => $attributeCode,
+                        'field2Value' => $attributeCode
                     ]
                 )
             );
