@@ -166,9 +166,13 @@ class ObjectManager
                 $reflectionProperty = $reflectionClass->getProperty($key);
                 $reflectionProperty->setAccessible(true);
                 $reflectionProperty->setValue($newObject, $value);
+            } elseif ($reflectionClass->getParentClass() && $reflectionClass->getParentClass()->hasProperty($key)) {
+                //catch use case when private property is declared in parent class
+                $reflectionProperty = $reflectionClass->getParentClass()->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($newObject, $value);
             }
         }
-
         return $newObject;
     }
 
