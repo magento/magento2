@@ -398,13 +398,15 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             $order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
             !$amountCompared
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Payment error. %s was not found.', 'Order'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Payment error. %value was not found.', ['value' => 'Order'])
+            );
         }
 
         $fetchData = $this->fetchTransactionInfo($order->getPayment(), $response->getPnref());
         if (!isset($fetchData['custref']) || $fetchData['custref'] != $order->getIncrementId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Payment error. %s was not found.', 'Transaction')
+                __('Payment error. %value was not found.', ['value' => 'Transaction'])
             );
         }
 

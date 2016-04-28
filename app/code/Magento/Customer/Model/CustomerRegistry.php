@@ -122,10 +122,10 @@ class CustomerRegistry
                 __(
                     'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     [
-                    'fieldName' => 'email',
+                        'fieldName' => 'email',
                         'fieldValue' => $customerEmail,
                         'field2Name' => 'websiteId',
-                        'field2Value' => $websiteId,
+                        'field2Value' => $websiteId
                     ]
                 )
             );

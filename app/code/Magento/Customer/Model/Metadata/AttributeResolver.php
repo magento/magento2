@@ -51,7 +51,7 @@ class AttributeResolver
                         'fieldName' => 'entityType',
                         'fieldValue' => $entityType,
                         'field2Name' => 'attributeCode',
-                        'field2Value' => $attribute->getAttributeCode(),
+                        'field2Value' => $attribute->getAttributeCode()
                     ]
                 )
             );
