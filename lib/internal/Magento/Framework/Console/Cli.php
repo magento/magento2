@@ -122,8 +122,8 @@ class Cli extends SymfonyApplication
             }
 
             if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
-                /** @var \Magento\Framework\Console\CommandList $commandList */
-                $commandList = $objectManager->create('Magento\Framework\Console\CommandList');
+                /** @var \Magento\Framework\Console\CommandListInterface */
+                $commandList = $objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
                 $commands = array_merge($commands, $commandList->getCommands());
             }
 
