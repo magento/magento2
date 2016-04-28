@@ -13,6 +13,11 @@ use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Store\Model\Store;
 
+/**
+ * Class ProductUrlRewriteGenerator
+ * @package Magento\CatalogUrlRewrite\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductUrlRewriteGenerator
 {
     /**
