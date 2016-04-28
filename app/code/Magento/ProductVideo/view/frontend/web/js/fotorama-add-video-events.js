@@ -249,11 +249,7 @@ define([
                     tmpVideoData.videoUrl = tmpInputData.videoUrl;
                 }
 
-                if (tmpVideoData.isBase) {
-                    videoData.unshift(tmpVideoData);
-                } else {
-                    videoData.push(tmpVideoData);
-                }
+                videoData.push(tmpVideoData);
             }
 
             return videoData;
