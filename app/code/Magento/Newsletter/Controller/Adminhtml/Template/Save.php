@@ -63,7 +63,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 
             $this->messageManager->addSuccess(__('The newsletter template has been saved.'));
             $this->_getSession()->setFormData(false);
-
+            $this->_getSession()->unsPreviewData();
             $this->_redirect('*/template');
             return;
         } catch (LocalizedException $e) {
