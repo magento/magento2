@@ -36,7 +36,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $requestConfig = __DIR__ . '/../../_files/requests.xml';
+    protected $requestConfig;
 
     /**
      * @var string
@@ -45,6 +45,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->requestConfig = __DIR__ . '/../../_files/requests.xml';
+
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
