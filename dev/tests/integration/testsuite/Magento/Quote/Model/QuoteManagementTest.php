@@ -17,7 +17,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSubmit()
     {
-        $this->markTestSkipped('MAGETWO-50989');
         /**
          * Preconditions:
          * Load quote with Bundle product that has at least to child products
