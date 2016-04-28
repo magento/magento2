@@ -330,7 +330,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     {
         $formatted = $this->formatTxt(0);
         $number = $this->formatTxt(0, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-        return str_replace($number, '%s', $formatted);
+        return str_replace($this->trimUnicodeDirectionMark($number), '%s', $formatted);
     }
 
     /**
@@ -401,5 +401,21 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     {
         $this->_getResource()->saveRates($rates);
         return $this;
+    }
+
+    /**
+     * This method removes LRM and RLM marks from string
+     *
+     * @param string $string
+     * @return $this
+     */
+    private function trimUnicodeDirectionMark($string)
+    {
+        if (preg_match('/^\x{200E}/u', $string)) {
+            $string = preg_replace('/^\x{200E}/u', '', $string);
+        } elseif (preg_match('/^\x{200F}/u', $string)) {
+            $string = preg_replace('/^\x{200F}/u', '', $string);
+        }
+        return $string;
     }
 }
