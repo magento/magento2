@@ -47,6 +47,7 @@ class CategoryIds extends MultisuggestElement
     protected $advancedInventoryButton = '[data-index="advanced_inventory_button"]';
 
     /**
+     * @constructor
      * @param BrowserInterface $browser
      * @param DriverInterface $driver
      * @param EventManagerInterface $eventManager
@@ -68,9 +69,11 @@ class CategoryIds extends MultisuggestElement
      * Set category value.
      *
      * @param array|string $value
+     * @return void
      */
     public function setValue($value)
     {
+        // Align Category ids select element to the center of the browser for created categories
         if ($this->browser->find($this->pageFooter)->isVisible()) {
             $this->browser->find($this->pageFooter)->hover();
             $this->browser->find($this->advancedInventoryButton)->hover();
