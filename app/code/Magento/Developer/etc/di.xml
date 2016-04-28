@@ -241,4 +241,14 @@
             <argument name="subDir" xsi:type="string">web</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Framework\View\Asset\PreProcessor\Chain">
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="css" xsi:type="array">
+                    <item name="less" xsi:type="string">less</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

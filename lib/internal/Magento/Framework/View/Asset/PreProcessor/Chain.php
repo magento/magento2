@@ -14,7 +14,10 @@ use Magento\Framework\View\Asset\LocalInterface;
  */
 class Chain
 {
-    private $contentTypesFriends = ['less', 'css'];
+    /**
+     * @var array
+     */
+    private $compatibleTypes;
 
     /**
      * @var LocalInterface
@@ -61,12 +64,14 @@ class Chain
      * @param string $origContent
      * @param string $origContentType
      * @param string $origAssetPath
+     * @param array $compatibleTypes
      */
     public function __construct(
         LocalInterface $asset,
         $origContent,
         $origContentType,
-        $origAssetPath
+        $origAssetPath,
+        array $compatibleTypes = []
     ) {
         $this->asset = $asset;
         $this->origContent = $origContent;
@@ -76,6 +81,7 @@ class Chain
         $this->targetContentType = $asset->getContentType();
         $this->targetAssetPath = $asset->getPath();
         $this->origAssetPath = $origAssetPath;
+        $this->compatibleTypes = $compatibleTypes;
     }
 
     /**
@@ -181,7 +187,8 @@ class Chain
     public function assertValid()
     {
         if ($this->contentType !== $this->targetContentType
-            && !array_intersect([$this->contentType, $this->targetContentType], $this->contentTypesFriends)) {
+            && !in_array($this->contentType, $this->compatibleTypes[$this->targetContentType])) {
+
             throw new \LogicException(
                 "The requested asset type was '{$this->targetContentType}', but ended up with '{$this->contentType}'"
             );
