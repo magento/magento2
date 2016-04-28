@@ -4,22 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\Entity;
+namespace Magento\Catalog\Model\Entity;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Phrase;
+use Magento\Framework\Model\Entity\ScopeResolverInterface;
+use Magento\Catalog\Model\Entity\DefaultStoreScopeProvider;
 
 /**
- * Class ScopeResolver
+ * Class DefaultScopeResolver
  */
-class ScopeResolver implements ScopeResolverInterface
+class DefaultScopeResolver implements ScopeResolverInterface
 {
     /**
-     * @var ObjectManagerInterface
+     * @var DefaultStoreScopeProvider
      */
-    private $objectManager;
+    private $storeScopeProvider;
 
     /**
      * @var MetadataPool
@@ -28,14 +29,14 @@ class ScopeResolver implements ScopeResolverInterface
 
     /**
      * ScopeResolver constructor.
-     * @param ObjectManagerInterface $objectManager
+     * @param DefaultStoreScopeProvider $storeScopeProvider
      * @param MetadataPool $metadataPool
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
+        DefaultStoreScopeProvider $storeScopeProvider,
         MetadataPool $metadataPool
     ) {
-        $this->objectManager = $objectManager;
+        $this->storeScopeProvider = $storeScopeProvider;
         $this->metadataPool = $metadataPool;
     }
 
@@ -50,12 +51,8 @@ class ScopeResolver implements ScopeResolverInterface
     {
         $entityContext = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
-        foreach ($metadata->getEntityContext() as $contextProviderClass) {
-            $contextProvider =  $this->objectManager->get($contextProviderClass);
-            if (!$contextProvider instanceof ScopeProviderInterface) {
-                throw new ConfigurationMismatchException(new Phrase('Wrong configuration for type %1', [$entityType]));
-            }
-            $entityContext[] = $contextProvider->getContext($entityType, $entityData);
+        for ($count=0; $count < count($metadata->getEntityContext()); $count++) {
+            $entityContext[] = $this->storeScopeProvider->getContext($entityType, $entityData);
         }
         return $entityContext;
     }
