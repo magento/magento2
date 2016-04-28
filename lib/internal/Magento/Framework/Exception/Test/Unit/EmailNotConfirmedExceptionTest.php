@@ -11,8 +11,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class EmailNotConfirmedExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class EmailNotConfirmedExceptionTest extends \PHPUnit_Framework_TestCase
 {

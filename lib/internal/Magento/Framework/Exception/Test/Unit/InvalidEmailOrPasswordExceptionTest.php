@@ -11,8 +11,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class InvalidEmailOrPasswordExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class InvalidEmailOrPasswordExceptionTest extends \PHPUnit_Framework_TestCase
 {
