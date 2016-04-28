@@ -547,6 +547,12 @@ define([
                     this.setMaxPosition();
                 }
 
+                elems.forEach(function (record) {
+                    _.where(record.elems(), {formElement: 'select'}).forEach(function (elem) {
+                        elem.value(undefined)
+                    });
+                });
+
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + idx);
                 this.source.set(path, rec);
             }, this);
