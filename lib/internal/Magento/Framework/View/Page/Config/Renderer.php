@@ -346,14 +346,12 @@ class Renderer implements RendererInterface
         try {
             /** @var $asset \Magento\Framework\View\Asset\AssetInterface */
             foreach ($assets as $asset) {
-                $attributes = $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes);
-                $asset->setSourceContentType(null);
-
                 $template = $this->getAssetTemplate(
                     $group->getProperty(GroupedCollection::PROPERTY_CONTENT_TYPE),
-                    $attributes
+                    $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes)
                 );
                 $result .= sprintf($template, $asset->getUrl());
+                $asset->setSourceContentType(null);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);
