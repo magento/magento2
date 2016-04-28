@@ -169,7 +169,12 @@ class ToModel
             }
         } else {
             $ruleModel = $this->ruleFactory->create();
-            $this->formattingDate($dataModel);
+            $dataModel->setFromDate(
+                $this->formattingDate($dataModel->getFromDate())
+            );
+            $dataModel->setToDate(
+                $this->formattingDate($dataModel->getToDate())
+            );
         }
 
         $modelData = $ruleModel->getData();
@@ -202,13 +207,16 @@ class ToModel
     /**
      * Convert date to ISO8601
      * 
-     * @param RuleDataModel $dataModel
+     * @param string|null $date
+     * @return string|null
      */
-    public function formattingDate(RuleDataModel $dataModel)
+    private function formattingDate($date)
     {
-        $fromDate = new \DateTime($dataModel->getFromDate());
-        $toDate = new \DateTime($dataModel->getToDate());
-        $dataModel->setFromDate($fromDate->format(\DateTime::ISO8601));
-        $dataModel->setToDate($toDate->format(\DateTime::ISO8601));
+        if ($date) {
+            $fromDate = new \DateTime($date);
+            $date = $fromDate->format(\DateTime::ISO8601);
+        }
+
+        return $date;
     }
 }
