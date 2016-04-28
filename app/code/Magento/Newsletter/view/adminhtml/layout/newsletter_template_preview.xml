@@ -10,6 +10,7 @@
         <attribute name="id" value="html-body"/>
         <attribute name="class" value="preview-window"/>
         <referenceContainer name="backend.page" remove="true"/>
+        <referenceContainer name="menu.wrapper" remove="true"/>
         <referenceContainer name="root">
             <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_Newsletter::preview/iframeswitcher.phtml">
                 <block class="Magento\Newsletter\Block\Adminhtml\Template\Preview\Form" name="preview_form"/>
