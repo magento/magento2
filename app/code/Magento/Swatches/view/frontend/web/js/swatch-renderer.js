@@ -723,6 +723,13 @@ define([
                 productId = 0,
                 mediaCallData,
                 mediaCacheKey,
+
+                /**
+                 * Processes product media data
+                 *
+                 * @param {Object} data
+                 * @returns void
+                 */
                 mediaSuccessCallback = function (data) {
                     if (!(mediaCacheKey in $widget.options.mediaCache)) {
                         $widget.options.mediaCache[mediaCacheKey] = data;
@@ -751,9 +758,9 @@ define([
             }
 
             mediaCallData = {
-                product_id: productId,
-                attributes: attributes,
-                additional: $.parseQuery()
+                'product_id': productId,
+                'attributes': attributes,
+                'additional': $.parseQuery()
             };
             mediaCacheKey = JSON.stringify(mediaCallData);
 
@@ -897,6 +904,7 @@ define([
 
             if (isProductViewExist) {
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+
                 if (this.options.onlyMainImg) {
                     updateImg = imagesToUpdate.filter(function (img) {
                         return img.isMain;
