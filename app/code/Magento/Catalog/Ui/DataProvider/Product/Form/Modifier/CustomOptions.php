@@ -238,8 +238,8 @@ class CustomOptions extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::FIELD_ENABLE => $this->getEnableFieldConfig(10),
-                        static::CONTAINER_HEADER_NAME => $this->getHeaderContainerConfig(20),
+                        static::CONTAINER_HEADER_NAME => $this->getHeaderContainerConfig(10),
+                        static::FIELD_ENABLE => $this->getEnableFieldConfig(20),
                         static::GRID_OPTIONS_NAME => $this->getOptionsGridConfig(30)
                     ]
                 ]
@@ -319,8 +319,7 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => static::FORM_NAME . '.' . static::FORM_NAME . '.'
-                                            . static::GROUP_CUSTOM_OPTIONS_NAME . '.' . static::GRID_OPTIONS_NAME,
+                                        'targetName' => 'ns = ${ $.ns }, index = ' . static::GRID_OPTIONS_NAME,
                                         'actionName' => 'addChild',
                                     ]
                                 ]

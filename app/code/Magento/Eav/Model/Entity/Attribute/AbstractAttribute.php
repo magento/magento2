@@ -584,7 +584,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     protected function _getDefaultSourceModel()
     {
-        return $this->getEntity()->getDefaultAttributeSourceModel();
+        return $this->getEntityType()->getEntity()->getDefaultAttributeSourceModel();
     }
 
     /**
@@ -593,15 +593,13 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function isValueEmpty($value)
     {
-        $attrType = $this->getBackend()->getType();
-        $isEmpty = (is_array($value) && count($value) == 0) ||
-            $value === null ||
-            $value === false && $attrType != 'int' ||
-            $value === '' && ($attrType == 'int' ||
-            $attrType == 'decimal' ||
-            $attrType == 'datetime');
-
-        return $isEmpty;
+        /** @var array $emptyStringTypes list of attribute types that treat empty string as a possible value */
+        $emptyStringTypes = ['int', 'decimal', 'datetime', 'varchar', 'text'];
+        $attributeType = $this->getBackend()->getType();
+        return (is_array($value) && count($value) == 0)
+            || $value === null
+            || ($value === false && $attributeType != 'int')
+            || ($value === '' && in_array($attributeType, $emptyStringTypes));
     }
 
     /**

@@ -19,7 +19,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Currency\Base</backend_model>
                     <comment>
-                        <![CDATA[Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]>
+                        <![CDATA[Base currency is used for all online payment transactions. The base currency scope is defined by the catalog price scope ("Catalog" > "Price" > "Catalog Price Scope").]]>
                     </comment>
                 </field>
                 <field id="default" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">

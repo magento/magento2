@@ -9,11 +9,12 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
  */
-class SaveHandler
+class SaveHandler implements ExtensionInterface
 {
     /**
      * @var OptionRepositoryInterface
@@ -42,11 +43,11 @@ class SaveHandler
     /**
      * @param string $entityType
      * @param ProductInterface $entity
+     * @param array $arguments
      * @return ProductInterface
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, ProductInterface $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         if ($entity->getTypeId() !== Configurable::TYPE_CODE) {
             return $entity;
