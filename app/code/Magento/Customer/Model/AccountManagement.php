@@ -908,8 +908,10 @@ class AccountManagement implements AccountManagementInterface
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
         if (empty($customerId) || $customerId < 0) {
-            $params = ['value' => $customerId, 'fieldName' => 'customerId'];
-            throw new InputException(__('Invalid value of "%value" provided for the %fieldName field.', $params));
+            throw new InputException(__(
+                'Invalid value of "%value" provided for the %fieldName field.',
+                ['value' => $customerId, 'fieldName' => 'customerId']
+            ));
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
