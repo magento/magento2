@@ -161,7 +161,12 @@ class Edit extends \Magento\Backend\Block\Template
      */
     public function getPreviewUrl()
     {
-        return $this->getUrl('*/*/preview');
+        if ($this->getTemplateId()) {
+            $params = ['template_id' => $this->getTemplateId()];
+        } else {
+            $params = ['id' => $this->getRequest()->getParam('id')];
+        }
+        return $this->getUrl('*/*/preview', $params);
     }
 
     /**
