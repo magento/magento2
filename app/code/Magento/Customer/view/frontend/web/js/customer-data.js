@@ -188,6 +188,7 @@ define([
         init: function() {
             var countryData,
                 privateContent = $.cookieStorage.get('private_content_version');
+            console.log('update_customer_session', $.cookieStorage.get('update_customer_session'));
 
             if (_.isEmpty(storage.keys())) {
                 if (!_.isEmpty(privateContent)) {

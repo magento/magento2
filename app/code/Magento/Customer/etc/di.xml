@@ -307,4 +307,12 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
+    </type>
+    <type name="\Magento\Customer\Model\Customer\NotificationStorage">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
 </config>
