@@ -149,6 +149,7 @@
     <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple" />
     <preference for="Cm\RedisSession\Handler\ConfigInterface" type="Magento\Framework\Session\SaveHandler\Redis\Config"/>
     <preference for="Cm\RedisSession\Handler\LoggerInterface" type="Magento\Framework\Session\SaveHandler\Redis\Logger"/>
+    <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
