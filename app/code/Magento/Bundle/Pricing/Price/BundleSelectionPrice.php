@@ -147,7 +147,11 @@ class BundleSelectionPrice extends AbstractPrice
             if ($this->getProduct()->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
                 $exclude = $this->excludeAdjustment;
             }
-            $this->amount[$this->getValue()] = $this->calculator->getAmount($this->getValue(), $this->getProduct(), $exclude);
+            $this->amount[$this->getValue()] = $this->calculator->getAmount(
+                $this->getValue(),
+                $this->getProduct(),
+                $exclude
+            );
         }
         return $this->amount[$this->getValue()];
     }
