@@ -9,7 +9,12 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
+/**
+ * Class Save
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -36,6 +41,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
+
+    /**
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
 
     /**
      * @var StoreManagerInterface
@@ -110,6 +120,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->copyToStores($data, $productId);
 
                 $this->messageManager->addSuccess(__('You saved the product.'));
+                $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
                         __(
@@ -131,11 +142,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
+                $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
+                $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
         } else {
@@ -215,6 +228,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                                 ->setStoreId($copyFrom)
                                 ->load($productId)
                                 ->setStoreId($copyTo)
+                                ->setCopyFromView(true)
                                 ->save();
                         }
                     }
@@ -237,6 +251,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @return StoreManagerInterface
+     * @deprecated
      */
     private function getStoreManager()
     {
@@ -245,5 +260,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 ->get('Magento\Store\Model\StoreManagerInterface');
         }
         return $this->storeManager;
+    }
+
+    /**
+     * Retrieve data persistor
+     *
+     * @return DataPersistorInterface|mixed
+     * @deprecated
+     */
+    protected function getDataPersistor()
+    {
+        if (null === $this->dataPersistor) {
+            $this->dataPersistor = $this->_objectManager->get(DataPersistorInterface::class);
+        }
+
+        return $this->dataPersistor;
     }
 }

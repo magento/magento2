@@ -5,22 +5,18 @@
  */
 namespace Magento\Quote\Model\QuoteRepository;
 
-use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
-use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
-use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Quote\Model\ResourceModel\Quote;
 
 class SaveHandler
 {
     /**
-     * @var CartItemPersister
+     * @var \Magento\Quote\Model\Quote\Item\CartItemPersister
      */
     private $cartItemPersister;
 
     /**
-     * @var BillingAddressPersister
+     * @var \Magento\Quote\Model\Quote\Address\BillingAddressPersister
      */
     private $billingAddressPersister;
 
@@ -30,21 +26,21 @@ class SaveHandler
     private $quoteResourceModel;
 
     /**
-     * @var ShippingAssignmentPersister
+     * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister
      */
     private $shippingAssignmentPersister;
 
     /**
-     * @param Quote $quoteResource
-     * @param CartItemPersister $cartItemPersister
-     * @param BillingAddressPersister $billingAddressPersister
-     * @param ShippingAssignmentPersister $shippingAssignmentPersister
+     * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
+     * @param \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister
+     * @param \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister
+     * @param \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
      */
     public function __construct(
-        Quote $quoteResource,
-        CartItemPersister $cartItemPersister,
-        BillingAddressPersister $billingAddressPersister,
-        ShippingAssignmentPersister $shippingAssignmentPersister
+        \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
+        \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister,
+        \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister,
+        \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
     ) {
         $this->quoteResourceModel = $quoteResource;
         $this->cartItemPersister = $cartItemPersister;
@@ -65,8 +61,9 @@ class SaveHandler
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         // Quote Item processing
-        if ($quote->getItems()) {
-            foreach ($quote->getItems() as $item) {
+        $items = $quote->getItems();
+        if ($items && $quote->getIsActive()) {
+            foreach ($items as $item) {
                 /** @var \Magento\Quote\Model\Quote\Item $item */
                 if (!$item->isDeleted()) {
                     $quote->setLastAddedItem($this->cartItemPersister->save($quote, $item));
@@ -75,20 +72,32 @@ class SaveHandler
         }
 
         // Billing Address processing
-        if ($quote->getBillingAddress() && $quote->getIsActive()) {
-            $this->billingAddressPersister->save($quote, $quote->getBillingAddress());
+        $billingAddress = $quote->getBillingAddress();
+        if ($billingAddress && $quote->getIsActive()) {
+            $this->billingAddressPersister->save($quote, $billingAddress);
         }
 
+        $this->processShippingAssignment($quote);
+
+        $this->quoteResourceModel->save($quote->collectTotals());
+        return $quote;
+    }
+
+    /**
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return void
+     * @throws InputException
+     */
+    private function processShippingAssignment($quote)
+    {
         // Shipping Assignments processing
-        if ($quote->getExtensionAttributes() && $quote->getExtensionAttributes()->getShippingAssignments()) {
-            $shippingAssignments = $quote->getExtensionAttributes()->getShippingAssignments();
+        $extensionAttributes = $quote->getExtensionAttributes();
+        if (!$quote->isVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
+            $shippingAssignments = $extensionAttributes->getShippingAssignments();
             if (count($shippingAssignments) > 1) {
                 throw new InputException(__("Only 1 shipping assignment can be set"));
             }
             $this->shippingAssignmentPersister->save($quote, $shippingAssignments[0]);
         }
-
-        $this->quoteResourceModel->save($quote->collectTotals());
-        return $quote;
     }
 }

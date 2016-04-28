@@ -59,7 +59,7 @@ class Product extends AbstractResource
     protected $typeFactory;
 
     /**
-     * @var \Magento\Framework\Model\EntityManager
+     * @var \Magento\Framework\EntityManager\EntityManager
      */
     protected $entityManager;
 
@@ -299,7 +299,7 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $this->getEntityManager()->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
+        $this->getEntityManager()->delete($object, \Magento\Catalog\Api\Data\ProductInterface::class, []);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
@@ -315,7 +315,11 @@ class Product extends AbstractResource
      */
     protected function _saveWebsiteIds($product)
     {
+        if (empty(array_diff($product->getWebsiteIds(), [0]))) {
+            $product->setWebsiteIds([1]);
+        }
         $websiteIds = $product->getWebsiteIds();
+
         $oldWebsiteIds = [];
 
         $product->setIsChangedWebsites(false);
@@ -518,9 +522,6 @@ class Product extends AbstractResource
             )->where(
                 $this->getLinkField() . ' = ?',
                 $oldId
-            )->where(
-                'store_id > ?',
-                0
             );
 
             $connection->query(
@@ -528,7 +529,7 @@ class Product extends AbstractResource
                     $select,
                     $tableName,
                     ['attribute_id', 'store_id', $this->getLinkField(), 'value'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
                 )
             );
         }
@@ -537,7 +538,6 @@ class Product extends AbstractResource
         $statusAttribute = $this->getAttribute('status');
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
-        $updateCond[] = 'store_id > 0';
         $updateCond[] = $connection->quoteInto($this->getLinkField() . ' = ?', $newId);
         $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
         $connection->update(
@@ -651,7 +651,7 @@ class Product extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->loadAttributesMetadata($attributes);
-        $this->getEntityManager()->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
+        $this->getEntityManager()->load($object, $entityId, \Magento\Catalog\Api\Data\ProductInterface::class, []);
         return $this;
     }
 
@@ -691,18 +691,18 @@ class Product extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->getEntityManager()->save(ProductInterface::class, $object);
+        $this->getEntityManager()->save($object, ProductInterface::class, []);
         return $this;
     }
 
     /**
-     * @return \Magento\Framework\Model\EntityManager
+     * @return \Magento\Framework\EntityManager\EntityManager
      */
     private function getEntityManager()
     {
         if (null === $this->entityManager) {
             $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\EntityManager');
+                ->get('Magento\Framework\EntityManager\EntityManager');
         }
         return $this->entityManager;
     }

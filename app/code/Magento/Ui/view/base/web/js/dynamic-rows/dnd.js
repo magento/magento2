@@ -395,7 +395,7 @@ define([
          * @returns {Object} draggable record context
          */
         getRecord: function (elem) {
-            return this.recordsCache()[getContext(elem).$index()];
+            return this.recordsCache()[getContext(elem).$index];
         }
 
     });

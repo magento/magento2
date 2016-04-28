@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -46,7 +46,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         /**
-         * @var $entityMetadata \Magento\Framework\Model\Entity\EntityMetadata
+         * @var $entityMetadata \Magento\Framework\EntityManager\EntityMetadata
          */
         $entityMetadata = $this->objectManager
             ->get(MetadataPool::class)
@@ -64,10 +64,11 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('media_gallery', $data);
         $this->assertArrayHasKey('images', $data['media_gallery']);
+        $image = array_shift($data['media_gallery']['images']);
 
         $this->assertEquals(
             'Image Alt Text',
-            $data['media_gallery']['images'][0]['label']
+            $image['label']
         );
     }
 }

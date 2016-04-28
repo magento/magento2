@@ -53,59 +53,107 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testBeforeDispatch()
-    {
-        $theme = $this->getMock(
-            'Magento\Theme\Model\Theme',
-            [
-                'setParentId',
+    /**
+     * @param bool $hasParentTheme
+     * @dataProvider dataProviderBeforeDispatch
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function testBeforeDispatch(
+        $hasParentTheme
+    ) {
+        $themeId = 1;
+        $themeTitle = 'Theme title';
+
+        $themeFromConfigMock = $this->getMockBuilder('Magento\Theme\Model\Theme')
+            ->disableOriginalConstructor()
+            ->setMethods([
                 'getArea',
                 'getThemePath',
                 'getParentTheme',
-                'getId',
-                'getFullPath',
-                'toArray',
-                'addData',
-                'save',
-            ],
-            [],
-            '',
-            false
-        );
-        $this->appState->expects($this->once())->method('getMode')->willReturn('default');
-        $this->themeRegistration->expects($this->once())->method('register');
-        $this->themeCollection->expects($this->once())->method('loadData')->willReturn([$theme]);
-        $theme->expects($this->once())->method('getArea')->willReturn('frontend');
-        $theme->expects($this->once())->method('getThemePath')->willReturn('Magento/luma');
-        $theme->expects($this->exactly(2))->method('getParentTheme')->willReturnSelf();
-        $theme->expects($this->once())->method('getId')->willReturn(1);
-        $theme->expects($this->once())->method('getFullPath')->willReturn('frontend/Magento/blank');
-        $theme->expects($this->once())->method('setParentId')->with(1);
-        $this->themeLoader->expects($this->exactly(2))
-            ->method('getThemeByFullPath')
-            ->withConsecutive(
-                ['frontend/Magento/blank'],
-                ['frontend/Magento/luma']
-            )
-            ->will($this->onConsecutiveCalls(
-                $theme,
-                $theme
-            ));
-        $theme->expects($this->once())
-            ->method('toArray')
-            ->willReturn([
-                'title' => 'Magento Luma'
-            ]);
-        $theme->expects($this->once())
-            ->method('addData')
-            ->with([
-                'title' => 'Magento Luma'
+                'getThemeTitle',
             ])
+            ->getMock();
+
+        $themeFromDbMock = $this->getMockBuilder('Magento\Theme\Model\Theme')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'setParentId',
+                'setThemeTitle',
+                'save',
+            ])
+            ->getMock();
+
+        $parentThemeFromDbMock = $this->getMockBuilder('Magento\Theme\Model\Theme')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $parentThemeFromConfigMock = $this->getMockBuilder('Magento\Theme\Model\Theme')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn('default');
+
+        $this->themeRegistration->expects($this->once())
+            ->method('register');
+
+        $this->themeCollection->expects($this->once())
+            ->method('loadData')
+            ->willReturn([$themeFromConfigMock]);
+
+        $this->themeLoader->expects($hasParentTheme ? $this->exactly(2) : $this->once())
+            ->method('getThemeByFullPath')
+            ->willReturnMap([
+                ['frontend/Magento/blank', $parentThemeFromDbMock],
+                ['frontend/Magento/luma', $themeFromDbMock],
+            ]);
+
+        $themeFromConfigMock->expects($this->once())
+            ->method('getArea')
+            ->willReturn('frontend');
+        $themeFromConfigMock->expects($this->once())
+            ->method('getThemePath')
+            ->willReturn('Magento/luma');
+        $themeFromConfigMock->expects($hasParentTheme ? $this->exactly(2) : $this->once())
+            ->method('getParentTheme')
+            ->willReturn($hasParentTheme ? $parentThemeFromConfigMock : null);
+        $themeFromConfigMock->expects($this->once())
+            ->method('getThemeTitle')
+            ->willReturn($themeTitle);
+
+        $parentThemeFromDbMock->expects($hasParentTheme ? $this->once() : $this->never())
+            ->method('getId')
+            ->willReturn($themeId);
+
+        $parentThemeFromConfigMock->expects($hasParentTheme ? $this->once() : $this->never())
+            ->method('getFullPath')
+            ->willReturn('frontend/Magento/blank');
+
+        $themeFromDbMock->expects($hasParentTheme ? $this->once() : $this->never())
+            ->method('setParentId')
+            ->with($themeId)
             ->willReturnSelf();
-        $theme->expects($this->once())
-            ->method('save');
+        $themeFromDbMock->expects($this->once())
+            ->method('setThemeTitle')
+            ->with($themeTitle)
+            ->willReturnSelf();
+        $themeFromDbMock->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
 
         $this->plugin->beforeDispatch($this->abstractAction, $this->request);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderBeforeDispatch()
+    {
+        return [
+            [true],
+            [false],
+        ];
     }
 
     public function testBeforeDispatchWithProductionMode()
