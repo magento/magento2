@@ -10,6 +10,7 @@ use Magento\Braintree\Model\Adapter\BraintreeCreditCard;
 use \Braintree_Exception;
 use \Braintree_Transaction;
 use \Braintree_Result_Successful;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Payment\Model\InfoInterface;
@@ -152,8 +153,18 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
+        $additionalData = $data->getAdditionalData();
+
+        if (!is_array($data->getAdditionalData())) {
+            return $this;
+        }
+        $additionalData = new DataObject($additionalData);
+
         $infoInstance = $this->getInfoInstance();
-        $infoInstance->setAdditionalInformation('payment_method_nonce', $data->getPaymentMethodNonce());
+        $infoInstance->setAdditionalInformation(
+            'payment_method_nonce',
+            $additionalData->getData('payment_method_nonce')
+        );
         return $this;
     }
 
