@@ -180,7 +180,7 @@ class PhpReadinessCheck
      * Checks php memory limit
      * @return array
      */
-    private function checkMemoryLimit()
+    public function checkMemoryLimit()
     {
         $data = [];
         $warning = false;
