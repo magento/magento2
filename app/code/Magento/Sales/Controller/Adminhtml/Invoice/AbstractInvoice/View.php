@@ -71,7 +71,7 @@ abstract class View extends \Magento\Backend\App\Action
             return false;
         }
         /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-        $invoice = $this->_objectManager->create('Magento\Sales\Api\InvoiceRepositoryInterface')->get($invoiceId);
+        $invoice = $this->_objectManager->create(\Magento\Sales\Api\InvoiceRepositoryInterface::class)->get($invoiceId);
         if (!$invoice) {
             return false;
         }

@@ -74,27 +74,27 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resultForwardFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\ForwardFactory')
+        $resultForwardFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder('\Magento\Framework\Controller\Result\Forward')
+        $this->resultForwardMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Forward::class)
             ->disableOriginalConstructor()
             ->setMethods(['forward'])
             ->getMock();
         $resultForwardFactoryMock->expects($this->any())->method('create')->willReturn($this->resultForwardMock);
 
-        $this->downloadMock = $this->getMockBuilder('Magento\Sales\Model\Download')
+        $this->downloadMock = $this->getMockBuilder(\Magento\Sales\Model\Download::class)
             ->disableOriginalConstructor()
             ->setMethods(['downloadFile'])
             ->getMock();
 
-        $this->unserializeMock = $this->getMockBuilder('Magento\Framework\Unserialize\Unserialize')
+        $this->unserializeMock = $this->getMockBuilder(\Magento\Framework\Unserialize\Unserialize::class)
             ->disableOriginalConstructor()
             ->setMethods(['unserialize'])
             ->getMock();
 
-        $requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMock();
@@ -108,17 +108,17 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->itemOptionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
+        $this->itemOptionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', 'getCode', 'getProductId', 'getValue'])
             ->getMock();
 
-        $this->productOptionMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+        $this->productOptionMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', 'getProductId', 'getType'])
             ->getMock();
 
-        $objectManagerMock = $this->getMockBuilder('Magento\Sales\Model\Download')
+        $objectManagerMock = $this->getMockBuilder(\Magento\Sales\Model\Download::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -126,13 +126,13 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        ['Magento\Quote\Model\Quote\Item\Option', $this->itemOptionMock],
-                        ['Magento\Catalog\Model\Product\Option', $this->productOptionMock],
+                        [\Magento\Quote\Model\Quote\Item\Option::class, $this->itemOptionMock],
+                        [\Magento\Catalog\Model\Product\Option::class, $this->productOptionMock],
                     ]
                 )
             );
 
-        $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -144,7 +144,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())->method('getObjectManager')->willReturn($objectManagerMock);
         $contextMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
 
-        $this->objectMock = $this->getMockBuilder('Magento\Sales\Controller\Download\DownloadCustomOption')
+        $this->objectMock = $this->getMockBuilder(\Magento\Sales\Controller\Download\DownloadCustomOption::class)
             ->setMethods(['endExecute'])
             ->setConstructorArgs(
                 [

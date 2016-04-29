@@ -32,12 +32,12 @@ class Form extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
+        if ($this->_objectManager->get(\Magento\Customer\Model\Session::class)->isLoggedIn()) {
             return $this->resultRedirectFactory->create()->setPath('customer/account/');
         }
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->set(__('Orders and Returns'));
-        $this->_objectManager->get('Magento\Sales\Helper\Guest')->getBreadcrumbs($resultPage);
+        $this->_objectManager->get(\Magento\Sales\Helper\Guest::class)->getBreadcrumbs($resultPage);
         return $resultPage;
     }
 }

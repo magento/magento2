@@ -19,7 +19,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Tax', 'Magento\Sales\Model\ResourceModel\Order\Tax');
+        $this->_init(\Magento\Sales\Model\Order\Tax::class, \Magento\Sales\Model\ResourceModel\Order\Tax::class);
     }
 
     /**

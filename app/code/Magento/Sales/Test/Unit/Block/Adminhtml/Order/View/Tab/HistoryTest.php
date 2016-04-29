@@ -34,11 +34,11 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->coreRegistryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->adminHelperMock = $this->getMock('\Magento\Sales\Helper\Admin', [], [], '', false);
+        $this->coreRegistryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $this->adminHelperMock = $this->getMock(\Magento\Sales\Helper\Admin::class, [], [], '', false);
 
         $this->commentsHistory = $this->objectManager->getObject(
-            'Magento\Sales\Block\Adminhtml\Order\View\Tab\History',
+            \Magento\Sales\Block\Adminhtml\Order\View\Tab\History::class,
             [
                 'adminHelper' => $this->adminHelperMock,
                 'registry' => $this->coreRegistryMock

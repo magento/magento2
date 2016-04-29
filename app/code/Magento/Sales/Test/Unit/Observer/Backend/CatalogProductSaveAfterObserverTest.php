@@ -31,10 +31,10 @@ class CatalogProductSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_quoteMock = $this->getMock('Magento\Quote\Model\ResourceModel\Quote', [], [], '', false);
-        $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->_quoteMock = $this->getMock(\Magento\Quote\Model\ResourceModel\Quote::class, [], [], '', false);
+        $this->_observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $this->_eventMock = $this->getMock(
-            'Magento\Framework\Event',
+            \Magento\Framework\Event::class,
             ['getProduct', 'getStatus', 'getProductId'],
             [],
             '',
@@ -52,7 +52,7 @@ class CatalogProductSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
     public function testSaveProduct($productId, $productStatus)
     {
         $productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getId', 'getStatus', '__wakeup'],
             [],
             '',

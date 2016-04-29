@@ -83,7 +83,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Shipment\Item');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Shipment\Item::class);
     }
 
     /**

@@ -81,7 +81,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item::class);
     }
 
     /**
@@ -582,6 +582,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */

@@ -142,7 +142,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Product', 'Magento\Catalog\Model\ResourceModel\Product');
+        $this->_init(\Magento\Catalog\Model\Product::class, \Magento\Catalog\Model\ResourceModel\Product::class);
         $this->setRowIdFieldName('review_id');
         $this->_reviewStoreTable = $this->_resource->getTableName('review_store');
         $this->_initTables();

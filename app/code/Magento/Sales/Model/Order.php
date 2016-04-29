@@ -364,7 +364,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order::class);
     }
 
     /**
@@ -1451,6 +1451,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /*********************** STATUSES ***************************/
+
     /**
      * Return collection of order status history items.
      *
@@ -2004,6 +2005,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns adjustment_negative
      *

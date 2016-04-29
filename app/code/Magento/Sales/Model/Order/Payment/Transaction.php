@@ -179,7 +179,7 @@ class Transaction extends AbstractModel implements TransactionInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Payment\Transaction');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class);
         parent::_construct();
     }
 

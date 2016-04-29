@@ -33,7 +33,10 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection\Abs
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order\Address', 'Magento\Sales\Model\ResourceModel\Order\Address');
+        $this->_init(
+            \Magento\Sales\Model\Order\Address::class,
+            \Magento\Sales\Model\ResourceModel\Order\Address::class
+        );
     }
 
     /**

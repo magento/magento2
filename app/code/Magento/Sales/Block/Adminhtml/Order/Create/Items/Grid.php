@@ -544,7 +544,9 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $options['title'] = __('This product does not have any configurable options');
         }
 
-        return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')->setData($options)->toHtml();
+        return $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Widget\Button::class
+        )->setData($options)->toHtml();
     }
 
     /**

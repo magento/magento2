@@ -39,7 +39,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->appResource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             [],
             [],
             '',
@@ -47,7 +47,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceHelper = $this->getMock(
-            'Magento\Reports\Model\ResourceModel\Helper',
+            \Magento\Reports\Model\ResourceModel\Helper::class,
             [],
             [],
             '',
@@ -55,7 +55,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->connectionMock = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [],
             [],
             '',
@@ -63,7 +63,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->helper = $objectManager->getObject(
-            'Magento\Sales\Model\ResourceModel\Helper',
+            \Magento\Sales\Model\ResourceModel\Helper::class,
             [
                 'resource' => $this->appResource,
                 'reportsResourceHelper' => $this->resourceHelper

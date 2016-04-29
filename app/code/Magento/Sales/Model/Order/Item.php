@@ -143,7 +143,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Item');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Item::class);
     }
 
     /**
@@ -689,6 +689,7 @@ class Item extends AbstractModel implements OrderItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns additional_data
      *

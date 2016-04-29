@@ -98,7 +98,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Address');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Address::class);
     }
 
     /**

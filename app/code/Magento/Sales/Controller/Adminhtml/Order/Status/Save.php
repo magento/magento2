@@ -24,7 +24,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
 
             //filter tags in labels/status
             /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-            $filterManager = $this->_objectManager->get('Magento\Framework\Filter\FilterManager');
+            $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
             if ($isNew) {
                 $statusCode = $data['status'] = $filterManager->stripTags($data['status']);
             }
@@ -33,7 +33,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
                 $label = $filterManager->stripTags($label);
             }
 
-            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->load($statusCode);
+            $status = $this->_objectManager->create(\Magento\Sales\Model\Order\Status::class)->load($statusCode);
             // check if status exist
             if ($isNew && $status->getStatus()) {
                 $this->messageManager->addError(__('We found another order status with the same order status code.'));

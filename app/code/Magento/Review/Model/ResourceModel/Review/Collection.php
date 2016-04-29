@@ -110,7 +110,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Review', 'Magento\Review\Model\ResourceModel\Review');
+        $this->_init(\Magento\Review\Model\Review::class, \Magento\Review\Model\ResourceModel\Review::class);
     }
 
     /**

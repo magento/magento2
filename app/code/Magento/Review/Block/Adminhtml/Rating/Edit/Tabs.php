@@ -34,7 +34,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 'label' => __('Rating Information'),
                 'title' => __('Rating Information'),
                 'content' => $this->getLayout()
-                        ->createBlock('Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form')
+                        ->createBlock(\Magento\Review\Block\Adminhtml\Rating\Edit\Tab\Form::class)
                         ->toHtml()
             ]
         );

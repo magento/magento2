@@ -18,7 +18,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Sales\Model\Order');
+        $this->model = $objectManager->getObject(\Magento\Sales\Model\Order::class);
     }
 
     public function testGetEventPrefix()

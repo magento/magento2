@@ -44,20 +44,27 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false, false);
+        $this->context = $this->getMock(
+            \Magento\Framework\View\Element\Template\Context::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
         $this->orderCollectionFactory =
-            $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\CollectionFactory')
+            $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class)
             ->disableOriginalConstructor()->setMethods(['create'])->getMock();
 
-        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->setMethods(['getCustomerId'])->disableOriginalConstructor()->getMock();
 
-        $this->orderConfig = $this->getMockBuilder('Magento\Sales\Model\Order\Config')
+        $this->orderConfig = $this->getMockBuilder(\Magento\Sales\Model\Order\Config::class)
             ->setMethods(['getVisibleOnFrontStatuses'])->disableOriginalConstructor()->getMock();
 
-        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()->getMock();
-        $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -77,7 +84,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($statuses));
 
         $orderCollection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Collection::class,
             ['addFieldToSelect', 'addFieldToFilter', 'setOrder'],
             [],
             '',

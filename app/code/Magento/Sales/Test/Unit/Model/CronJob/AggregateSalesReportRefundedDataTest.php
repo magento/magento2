@@ -34,15 +34,17 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->refundedFactoryMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\RefundedFactory')
+        $this->refundedFactoryMock = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Report\RefundedFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,7 +58,7 @@ class AggregateSalesReportRefundedDataTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $refundedMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\Refunded')
+        $refundedMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\Refunded::class)
             ->disableOriginalConstructor()
             ->getMock();
         $refundedMock->expects($this->once())

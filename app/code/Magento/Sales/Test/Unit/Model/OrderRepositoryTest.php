@@ -12,6 +12,8 @@ use Magento\Framework\Api\SortOrder;
 
 /**
  * Class OrderRepositoryTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,14 +44,14 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $className = 'Magento\Sales\Model\ResourceModel\Metadata';
+        $className = \Magento\Sales\Model\ResourceModel\Metadata::class;
         $this->metadata = $this->getMock($className, [], [], '', false);
 
-        $className = 'Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory';
+        $className = \Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class;
         $this->searchResultFactory = $this->getMock($className, ['create'], [], '', false);
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Sales\Model\OrderRepository',
+            \Magento\Sales\Model\OrderRepository::class,
             [
                 'metadata' => $this->metadata,
                 'searchResultFactory' => $this->searchResultFactory,
@@ -64,24 +66,24 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $fieldName = 'field';
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteria', [], [], '', false);
+        $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
 
-        $collectionMock = $this->getMock('Magento\Sales\Model\ResourceModel\Order\Collection', [], [], '', false);
+        $collectionMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [], [], '', false);
 
-        $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
-        $filterGroupFilterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
-        $itemsMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
+        $filterGroupFilterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
+        $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
+        $itemsMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
 
         $extensionAttributes = $this->getMock(
-            '\Magento\Sales\Api\Data\OrderExtension',
+            \Magento\Sales\Api\Data\OrderExtension::class,
             ['getShippingAssignments'],
             [],
             '',
             false
         );
         $shippingAssignmentBuilder = $this->getMock(
-            '\Magento\Sales\Model\Order\ShippingAssignmentBuilder',
+            \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class,
             [],
             [],
             '',

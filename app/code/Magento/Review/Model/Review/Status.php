@@ -29,6 +29,6 @@ class Status extends \Magento\Framework\Model\AbstractModel
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_init('Magento\Review\Model\ResourceModel\Review\Status');
+        $this->_init(\Magento\Review\Model\ResourceModel\Review\Status::class);
     }
 }

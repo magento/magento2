@@ -28,14 +28,14 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\Status\Options',
+            \Magento\Sales\Ui\Component\Listing\Column\Status\Options::class,
             ['collectionFactory' => $this->collectionFactoryMock]
         );
     }
@@ -43,7 +43,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $collectionMock =
-            $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
+            $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Status\Collection::class, [], [], '', false);
         $options = ['options'];
 
         $this->collectionFactoryMock->expects($this->once())

@@ -21,7 +21,7 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         if ($this->getCustomerId()) {
             $button = $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Update Changes'),

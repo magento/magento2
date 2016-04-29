@@ -176,7 +176,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Creditmemo');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Creditmemo::class);
     }
 
     /**
