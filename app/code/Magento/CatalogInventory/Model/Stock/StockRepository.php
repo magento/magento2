@@ -163,7 +163,7 @@ class StockRepository implements StockRepositoryInterface
     {
         if (null === $this->stockRegistryStorage) {
             $this->stockRegistryStorage = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogInventory\Model\StockRegistryStorage');
+                ->get(\Magento\CatalogInventory\Model\StockRegistryStorage::class);
         }
         return $this->stockRegistryStorage;
     }

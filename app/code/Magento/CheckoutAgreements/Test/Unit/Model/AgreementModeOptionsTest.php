@@ -17,7 +17,7 @@ class AgreementModeOptionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\CheckoutAgreements\Model\AgreementModeOptions');
+        $this->model = $objectManager->getObject(\Magento\CheckoutAgreements\Model\AgreementModeOptions::class);
     }
 
     public function testGetOptionsArray()

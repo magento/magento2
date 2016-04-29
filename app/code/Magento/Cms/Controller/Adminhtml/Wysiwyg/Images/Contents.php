@@ -43,7 +43,7 @@ class Contents extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     protected function _saveSessionCurrentPath()
     {
         $this->getStorage()->getSession()->setCurrentPath(
-            $this->_objectManager->get('Magento\Cms\Helper\Wysiwyg\Images')->getCurrentPath()
+            $this->_objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath()
         );
         return $this;
     }

@@ -23,7 +23,8 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
             try {
                 foreach ($data as $currencyCode => $rate) {
                     foreach ($rate as $currencyTo => $value) {
-                        $value = abs($this->_objectManager->get('Magento\Framework\Locale\FormatInterface')->getNumber($value));
+                        $value = abs($this->_objectManager->get(
+                            \Magento\Framework\Locale\FormatInterface::class)->getNumber($value));
                         $data[$currencyCode][$currencyTo] = $value;
                         if ($value == 0) {
                             $this->messageManager->addWarning(
@@ -33,7 +34,7 @@ class SaveRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Curr
                     }
                 }
 
-                $this->_objectManager->create('Magento\Directory\Model\Currency')->saveRates($data);
+                $this->_objectManager->create(\Magento\Directory\Model\Currency::class)->saveRates($data);
                 $this->messageManager->addSuccess(__('All valid rates have been saved.'));
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());

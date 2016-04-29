@@ -22,11 +22,11 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->criteria = $this->getMockBuilder('Magento\CatalogInventory\Api\StockItemCriteriaInterface')
+        $this->criteria = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockItemCriteriaInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $criteriaFactory = $this->getMockBuilder('Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory')
+        $criteriaFactory = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -34,7 +34,7 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\CatalogInventory\Model\StockRegistry',
+            \Magento\CatalogInventory\Model\StockRegistry::class,
             [
                 'criteriaFactory' => $criteriaFactory
             ]

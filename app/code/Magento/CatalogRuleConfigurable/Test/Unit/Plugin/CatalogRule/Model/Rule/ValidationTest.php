@@ -38,17 +38,16 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configurableMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             ['getParentIdsByChild'],
             [],
             '',
             false
         );
 
-
-        $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
-        $this->ruleConditionsMock = $this->getMock('Magento\Rule\Model\Condition\Combine', [], [], '', false);
-        $this->productMock = $this->getMock('Magento\Framework\DataObject', ['getId']);
+        $this->ruleMock = $this->getMock(\Magento\CatalogRule\Model\Rule::class, [], [], '', false);
+        $this->ruleConditionsMock = $this->getMock(\Magento\Rule\Model\Condition\Combine::class, [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Framework\DataObject::class, ['getId']);
 
         $this->validation = new Validation(
             $this->configurableMock

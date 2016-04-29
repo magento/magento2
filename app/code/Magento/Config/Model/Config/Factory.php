@@ -32,6 +32,6 @@ class Factory
      */
     public function create(array $data = [])
     {
-        return $this->_objectManager->create('Magento\Config\Model\Config', $data);
+        return $this->_objectManager->create(\Magento\Config\Model\Config::class, $data);
     }
 }

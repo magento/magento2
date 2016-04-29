@@ -19,7 +19,7 @@ class TimezoneTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->listMock = $this->getMockBuilder('Magento\Framework\Locale\TranslatedLists')
+        $this->listMock = $this->getMockBuilder(\Magento\Framework\Locale\TranslatedLists::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new \Magento\Config\Model\Config\Source\Locale\Timezone($this->listMock);

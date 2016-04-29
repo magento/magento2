@@ -103,7 +103,7 @@ class Router implements \Magento\Framework\App\RouterInterface
         if ($condition->getRedirectUrl()) {
             $this->_response->setRedirect($condition->getRedirectUrl());
             $request->setDispatched(true);
-            return $this->actionFactory->create('Magento\Framework\App\Action\Redirect');
+            return $this->actionFactory->create(\Magento\Framework\App\Action\Redirect::class);
         }
 
         if (!$condition->getContinue()) {
@@ -120,6 +120,6 @@ class Router implements \Magento\Framework\App\RouterInterface
         $request->setModuleName('cms')->setControllerName('page')->setActionName('view')->setParam('page_id', $pageId);
         $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
 
-        return $this->actionFactory->create('Magento\Framework\App\Action\Forward');
+        return $this->actionFactory->create(\Magento\Framework\App\Action\Forward::class);
     }
 }

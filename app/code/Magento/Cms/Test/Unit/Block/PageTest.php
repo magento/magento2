@@ -23,8 +23,8 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject('Magento\Cms\Block\Page');
-        $this->page = $objectManager->getObject('Magento\Cms\Model\Page');
+        $this->block = $objectManager->getObject(\Magento\Cms\Block\Page::class);
+        $this->page = $objectManager->getObject(\Magento\Cms\Model\Page::class);
         $reflection = new \ReflectionClass($this->page);
         $reflectionProperty = $reflection->getProperty('_idFieldName');
         $reflectionProperty->setAccessible(true);

@@ -19,13 +19,13 @@ class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencys
         if (is_array($symbolsDataArray)) {
             foreach ($symbolsDataArray as &$symbolsData) {
                 /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-                $filterManager = $this->_objectManager->get('Magento\Framework\Filter\FilterManager');
+                $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
                 $symbolsData = $filterManager->stripTags($symbolsData);
             }
         }
 
         try {
-            $this->_objectManager->create('Magento\CurrencySymbol\Model\System\Currencysymbol')
+            $this->_objectManager->create(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
                 ->setCurrencySymbolsData($symbolsDataArray);
             $this->messageManager->addSuccess(__('You applied the custom currency symbols.'));
         } catch (\Exception $e) {

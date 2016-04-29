@@ -47,7 +47,7 @@ class Services extends \Magento\Backend\Block\Template
         $this->setChild(
             'import_services',
             $this->getLayout()->createBlock(
-                'Magento\Framework\View\Element\Html\Select'
+                \Magento\Framework\View\Element\Html\Select::class
             )->setOptions(
                 $this->_srcCurrencyFactory->create()->toOptionArray()
             )->setId(

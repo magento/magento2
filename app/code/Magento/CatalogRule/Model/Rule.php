@@ -217,7 +217,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\CatalogRule\Model\ResourceModel\Rule');
+        $this->_init(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
         $this->setIdFieldName('rule_id');
     }
 
@@ -780,7 +780,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     {
         if (null === $this->ruleConditionConverter) {
             $this->ruleConditionConverter = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogRule\Model\Data\Condition\Converter');
+                ->get(\Magento\CatalogRule\Model\Data\Condition\Converter::class);
         }
         return $this->ruleConditionConverter;
     }

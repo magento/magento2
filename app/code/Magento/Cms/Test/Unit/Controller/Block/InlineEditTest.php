@@ -35,33 +35,33 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false
         );
         $this->cmsBlock = $this->getMock(
-            'Magento\Cms\Model\Block',
+            \Magento\Cms\Model\Block::class,
             [],
             [],
             '',
             false
         );
         $this->context = $helper->getObject(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             [
                 'request' => $this->request
             ]
         );
         $this->blockRepository = $this->getMockForAbstractClass(
-            'Magento\Cms\Api\BlockRepositoryInterface',
+            \Magento\Cms\Api\BlockRepositoryInterface::class,
             [],
             '',
             false
         );
-        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
+        $this->resultJson = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
         $this->jsonFactory = $this->getMock(
-            'Magento\Framework\Controller\Result\JsonFactory',
+            \Magento\Framework\Controller\Result\JsonFactory::class,
             ['create'],
             [],
             '',

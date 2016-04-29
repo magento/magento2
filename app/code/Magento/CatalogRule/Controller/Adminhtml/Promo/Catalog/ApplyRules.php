@@ -21,17 +21,17 @@ class ApplyRules extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         $errorMessage = __('We can\'t apply the rules.');
         try {
             /** @var Job $ruleJob */
-            $ruleJob = $this->_objectManager->get('Magento\CatalogRule\Model\Rule\Job');
+            $ruleJob = $this->_objectManager->get(\Magento\CatalogRule\Model\Rule\Job::class);
             $ruleJob->applyAll();
 
             if ($ruleJob->hasSuccess()) {
                 $this->messageManager->addSuccess($ruleJob->getSuccess());
-                $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(0)->save();
+                $this->_objectManager->create(\Magento\CatalogRule\Model\Flag::class)->loadSelf()->setState(0)->save();
             } elseif ($ruleJob->hasError()) {
                 $this->messageManager->addError($errorMessage . ' ' . $ruleJob->getError());
             }
         } catch (\Exception $e) {
-            $this->_objectManager->create('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->create(\Psr\Log\LoggerInterface::class)->critical($e);
             $this->messageManager->addError($errorMessage);
         }
 

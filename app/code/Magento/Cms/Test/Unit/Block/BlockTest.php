@@ -15,7 +15,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject('Magento\Cms\Block\Block');
+        $this->block = $objectManager->getObject(\Magento\Cms\Block\Block::class);
     }
 
     protected function tearDown()
