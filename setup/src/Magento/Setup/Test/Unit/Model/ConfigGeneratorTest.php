@@ -20,11 +20,11 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->deploymentConfigMock = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
+        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
-            'Magento\Setup\Model\ConfigGenerator',
+            \Magento\Setup\Model\ConfigGenerator::class,
             ['deploymentConfig' => $this->deploymentConfigMock]
         );
     }

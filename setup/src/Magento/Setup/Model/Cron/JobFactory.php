@@ -9,6 +9,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory class to create jobs
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JobFactory
 {
@@ -47,20 +49,20 @@ class JobFactory
      */
     public function create($name, array $params = [])
     {
-        $cronStatus = $this->serviceLocator->get('Magento\Setup\Model\Cron\Status');
+        $cronStatus = $this->serviceLocator->get(\Magento\Setup\Model\Cron\Status::class);
         $statusStream = fopen($cronStatus->getStatusFilePath(), 'a+');
         $logStream = fopen($cronStatus->getLogFilePath(), 'a+');
         $multipleStreamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
-        $objectManagerProvider = $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider');
+        $objectManagerProvider = $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class);
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = $objectManagerProvider->get();
         switch ($name) {
             case self::JOB_UPGRADE:
                 return new JobUpgrade(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
+                    $this->serviceLocator->get(\Magento\Setup\Console\Command\UpgradeCommand::class),
                     $objectManagerProvider,
                     $multipleStreamOutput,
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
+                    $this->serviceLocator->get(\Magento\Setup\Model\Cron\Queue::class),
                     $cronStatus,
                     $name,
                     $params
@@ -68,7 +70,7 @@ class JobFactory
                 break;
             case self::JOB_DB_ROLLBACK:
                 return new JobDbRollback(
-                    $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
+                    $objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class),
                     $multipleStreamOutput,
                     $cronStatus,
                     $objectManagerProvider,
@@ -87,30 +89,30 @@ class JobFactory
                 break;
             case self::JOB_COMPONENT_UNINSTALL:
                 $moduleUninstall = new Helper\ModuleUninstall(
-                    $this->serviceLocator->get('Magento\Setup\Model\ModuleUninstaller'),
-                    $this->serviceLocator->get('Magento\Setup\Model\ModuleRegistryUninstaller'),
-                    $objectManager->get('Magento\Framework\Module\PackageInfoFactory')
+                    $this->serviceLocator->get(\Magento\Setup\Model\ModuleUninstaller::class),
+                    $this->serviceLocator->get(\Magento\Setup\Model\ModuleRegistryUninstaller::class),
+                    $objectManager->get(\Magento\Framework\Module\PackageInfoFactory::class)
                 );
                 $themeUninstall = new Helper\ThemeUninstall(
-                    $objectManager->get('Magento\Theme\Model\Theme\ThemeUninstaller'),
-                    $objectManager->get('Magento\Theme\Model\Theme\ThemePackageInfo')
+                    $objectManager->get(\Magento\Theme\Model\Theme\ThemeUninstaller::class),
+                    $objectManager->get(\Magento\Theme\Model\Theme\ThemePackageInfo::class)
                 );
                 return new JobComponentUninstall(
-                    $objectManager->get('Magento\Framework\Composer\ComposerInformation'),
+                    $objectManager->get(\Magento\Framework\Composer\ComposerInformation::class),
                     $moduleUninstall,
                     $themeUninstall,
                     $objectManagerProvider,
                     $multipleStreamOutput,
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
+                    $this->serviceLocator->get(\Magento\Setup\Model\Cron\Queue::class),
                     $cronStatus,
-                    $this->serviceLocator->get('Magento\Setup\Model\Updater'),
+                    $this->serviceLocator->get(\Magento\Setup\Model\Updater::class),
                     $name,
                     $params
                 );
                 break;
             case self::JOB_MODULE_ENABLE:
                 return new JobModule(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
+                    $this->serviceLocator->get(\Magento\Setup\Console\Command\ModuleEnableCommand::class),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,
@@ -120,7 +122,7 @@ class JobFactory
                 break;
             case self::JOB_MODULE_DISABLE:
                 return new JobModule(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleDisableCommand'),
+                    $this->serviceLocator->get(\Magento\Setup\Console\Command\ModuleDisableCommand::class),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,

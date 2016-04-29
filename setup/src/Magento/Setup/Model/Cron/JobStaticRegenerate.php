@@ -53,8 +53,8 @@ class JobStaticRegenerate extends AbstractJob
         $params = []
     ) {
         $this->objectManager = $objectManagerProvider->get();
-        $this->cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $this->objectManager->get('Magento\Framework\App\Cache');
+        $this->cleanupFiles = $this->objectManager->get(\Magento\Framework\App\State\CleanupFiles::class);
+        $this->cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
         $this->output = $output;
         $this->status = $status;
 
@@ -135,7 +135,7 @@ class JobStaticRegenerate extends AbstractJob
      */
     public function getFilesystem()
     {
-        return $this->objectManager->create('Magento\Deploy\Model\Filesystem');
+        return $this->objectManager->create(\Magento\Deploy\Model\Filesystem::class);
     }
 
     /**
@@ -146,7 +146,7 @@ class JobStaticRegenerate extends AbstractJob
     public function getModeObject()
     {
         return $this->objectManager->create(
-            'Magento\Deploy\Model\Mode',
+            \Magento\Deploy\Model\Mode::class,
             [
                 'input' => new ArrayInput([]),
                 'output' => $this->output,

@@ -39,7 +39,7 @@ class Success extends AbstractActionController
     {
         if ($this->moduleList->has('Magento_SampleData')) {
             /** @var \Magento\Framework\Setup\SampleData\State $sampleData */
-            $sampleData = $this->objectManagerProvider->get()->get('Magento\Framework\Setup\SampleData\State');
+            $sampleData = $this->objectManagerProvider->get()->get(\Magento\Framework\Setup\SampleData\State::class);
             $isSampleDataErrorInstallation = $sampleData->hasError();
         } else {
             $isSampleDataErrorInstallation = false;

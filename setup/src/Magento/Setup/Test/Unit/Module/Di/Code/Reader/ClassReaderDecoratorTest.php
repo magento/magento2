@@ -21,7 +21,7 @@ class ClassReaderDecoratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->classReaderMock = $this->getMockBuilder('\Magento\Framework\Code\Reader\ClassReader')
+        $this->classReaderMock = $this->getMockBuilder(\Magento\Framework\Code\Reader\ClassReader::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

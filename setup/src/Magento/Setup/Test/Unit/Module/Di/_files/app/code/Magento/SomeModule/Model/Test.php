@@ -21,6 +21,6 @@ class Test
      */
     public function testModel(\Magento\SomeModule\ModelFactory $factory, array $data = [])
     {
-        $factory->create('Magento\SomeModule\Model\BlockFactory', ['data' => $data]);
+        $factory->create(\Magento\SomeModule\Model\BlockFactory::class, ['data' => $data]);
     }
 }

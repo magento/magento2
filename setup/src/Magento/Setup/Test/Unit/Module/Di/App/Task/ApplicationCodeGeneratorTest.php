@@ -29,13 +29,14 @@ class ApplicationCodeGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->directoryScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner')
+        $this->directoryScannerMock = $this->getMockBuilder(
+            \Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->phpScannerMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Scanner\PhpScanner::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->phpScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Scanner\PhpScanner')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->classesScannerMock = $this->getMockBuilder('Magento\Setup\Module\Di\Code\Reader\ClassesScanner')
+        $this->classesScannerMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

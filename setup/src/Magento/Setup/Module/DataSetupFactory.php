@@ -35,6 +35,6 @@ class DataSetupFactory
     public function create()
     {
         $objectManager = $this->objectManagerProvider->get();
-        return new DataSetup($objectManager->get('Magento\Framework\Module\Setup\Context'));
+        return new DataSetup($objectManager->get(\Magento\Framework\Module\Setup\Context::class));
     }
 }

@@ -22,19 +22,19 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fixtureModelMock = $this->getMock('\Magento\Setup\Fixtures\FixtureModel', [], [], '', false);
+        $this->fixtureModelMock = $this->getMock(\Magento\Setup\Fixtures\FixtureModel::class, [], [], '', false);
 
         $this->model = new SimpleProductsFixture($this->fixtureModelMock);
     }
 
     public function testExecute()
     {
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $storeMock->expects($this->once())
             ->method('getRootCategoryId')
             ->willReturn(1);
 
-        $websiteMock = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
+        $websiteMock = $this->getMock(\Magento\Store\Model\Website::class, [], [], '', false);
         $websiteMock->expects($this->once())
             ->method('getCode')
             ->willReturn('website_code');
@@ -42,16 +42,16 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getGroups')
             ->willReturn([$storeMock]);
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
             ->willReturn([$websiteMock]);
 
-        $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
+        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
 
-        $contextMock = $this->getMock('\Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\Model\ResourceModel\Db\Context::class, [], [], '', false);
         $abstractDbMock = $this->getMockForAbstractClass(
-            '\Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [$contextMock],
             '',
             true,
@@ -63,7 +63,7 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getAllChildren')
             ->will($this->returnValue([1]));
 
-        $categoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $categoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $categoryMock->expects($this->once())
             ->method('getResource')
             ->willReturn($abstractDbMock);
@@ -79,7 +79,7 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
 
         $valueMap = [
             [
-                'Magento\ImportExport\Model\Import',
+                \Magento\ImportExport\Model\Import::class,
                 [
                     'data' => [
                         'entity' => 'catalog_product',
@@ -89,10 +89,10 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
                 ],
                 $importMock
             ],
-            ['Magento\Store\Model\StoreManager', [], $storeManagerMock]
+            [\Magento\Store\Model\StoreManager::class, [], $storeManagerMock]
         ];
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValueMap($valueMap));
@@ -114,14 +114,14 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $importMock = $this->getMock('\Magento\ImportExport\Model\Import', [], [], '', false);
+        $importMock = $this->getMock(\Magento\ImportExport\Model\Import::class, [], [], '', false);
         $importMock->expects($this->never())->method('validateSource');
         $importMock->expects($this->never())->method('importSource');
 
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('create')
-            ->with($this->equalTo('Magento\ImportExport\Model\Import'))
+            ->with($this->equalTo(\Magento\ImportExport\Model\Import::class))
             ->willReturn($importMock);
 
         $this->fixtureModelMock

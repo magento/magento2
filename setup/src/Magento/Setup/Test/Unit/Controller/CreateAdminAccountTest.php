@@ -14,7 +14,7 @@ class CreateAdminAccountTest extends \PHPUnit_Framework_TestCase
     {
         $controller = new CreateAdminAccount();
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 }

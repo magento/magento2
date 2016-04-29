@@ -20,7 +20,7 @@ class ProgressFactoryTest extends \PHPUnit_Framework_TestCase
             '[Progress: 3 / 5] Installing C...',
             'Output from C...',
         ];
-        $logger = $this->getMock('Magento\Setup\Model\WebLogger', [], [], '', false);
+        $logger = $this->getMock(\Magento\Setup\Model\WebLogger::class, [], [], '', false);
         $logger->expects($this->once())->method('get')->will($this->returnValue($contents));
 
         $progressFactory = new ProgressFactory();

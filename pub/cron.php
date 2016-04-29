@@ -29,7 +29,7 @@ try {
     $params[Store::CUSTOM_ENTRY_POINT_PARAM] = true;
     $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
     /** @var \Magento\Framework\App\Cron $app */
-    $app = $bootstrap->createApplication('Magento\Framework\App\Cron', ['parameters' => $opt]);
+    $app = $bootstrap->createApplication(\Magento\Framework\App\Cron::class, ['parameters' => $opt]);
     $bootstrap->run($app);
 } catch (\Exception $e) {
     echo $e;

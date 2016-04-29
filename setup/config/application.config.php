@@ -18,10 +18,10 @@ return [
             __DIR__ . '/autoload/{,*.}{global,local}.php',
         ],
     ],
-    'listeners' => ['Magento\Setup\Mvc\Bootstrap\InitParamListener'],
+    'listeners' => [\Magento\Setup\Mvc\Bootstrap\InitParamListener::class],
     'service_manager' => [
         'factories' => [
-            InitParamListener::BOOTSTRAP_PARAM => 'Magento\Setup\Mvc\Bootstrap\InitParamListener',
+            InitParamListener::BOOTSTRAP_PARAM => \Magento\Setup\Mvc\Bootstrap\InitParamListener::class,
         ],
     ],
 ];

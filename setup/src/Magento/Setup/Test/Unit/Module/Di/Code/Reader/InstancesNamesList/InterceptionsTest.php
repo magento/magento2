@@ -41,22 +41,22 @@ class InterceptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->logMock = $this->getMockBuilder('Magento\Setup\Module\Di\Compiler\Log\Log')
+        $this->logMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Log\Log::class)
             ->disableOriginalConstructor()
             ->setMethods(['add', 'report'])
             ->getMock();
 
-        $this->classesScanner = $this->getMockBuilder('\Magento\Setup\Module\Di\Code\Reader\ClassesScanner')
+        $this->classesScanner = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
             ->getMock();
 
-        $this->classReaderMock = $this->getMockBuilder('\Magento\Framework\Code\Reader\ClassReader')
+        $this->classReaderMock = $this->getMockBuilder(\Magento\Framework\Code\Reader\ClassReader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParents'])
             ->getMock();
 
-        $this->validatorMock = $this->getMockBuilder('\Magento\Framework\Code\Validator')
+        $this->validatorMock = $this->getMockBuilder(\Magento\Framework\Code\Validator::class)
             ->disableOriginalConstructor()
             ->setMethods(['validate', 'add'])
             ->getMock();

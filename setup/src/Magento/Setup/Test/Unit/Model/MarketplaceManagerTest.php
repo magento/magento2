@@ -721,7 +721,7 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getServiceLocatorMock()
     {
-        return $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
+        return $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class);
     }
 
     /**
@@ -732,7 +732,7 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getComposerInformationMock($methods = null)
     {
-        return $this->getMock('Magento\Framework\Composer\ComposerInformation', $methods, [], '', false);
+        return $this->getMock(\Magento\Framework\Composer\ComposerInformation::class, $methods, [], '', false);
     }
 
     /**
@@ -743,7 +743,7 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getCurlClientMock($methods = null)
     {
-        return $this->getMock('Magento\Framework\HTTP\Client\Curl', $methods, [], '', false);
+        return $this->getMock(\Magento\Framework\HTTP\Client\Curl::class, $methods, [], '', false);
     }
 
     /**
@@ -754,7 +754,7 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getFilesystemMock($methods = null)
     {
-        return $this->getMock('Magento\Framework\Filesystem', $methods, [], '', false);
+        return $this->getMock(\Magento\Framework\Filesystem::class, $methods, [], '', false);
     }
 
     /**
@@ -764,7 +764,7 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getDirectoryMock()
     {
-        return $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
+        return $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
     }
 
     /**
@@ -775,6 +775,6 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getMarketplaceManagerMock($methods = null, $arguments = [])
     {
-        return $this->getMock('Magento\Setup\Model\MarketplaceManager', $methods, $arguments, '', false);
+        return $this->getMock(\Magento\Setup\Model\MarketplaceManager::class, $methods, $arguments, '', false);
     }
 }

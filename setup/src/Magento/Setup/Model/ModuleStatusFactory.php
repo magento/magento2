@@ -35,6 +35,6 @@ class ModuleStatusFactory
      */
     public function create()
     {
-        return $this->objectManagerProvider->get()->get('Magento\Framework\Module\Status');
+        return $this->objectManagerProvider->get()->get(\Magento\Framework\Module\Status::class);
     }
 }

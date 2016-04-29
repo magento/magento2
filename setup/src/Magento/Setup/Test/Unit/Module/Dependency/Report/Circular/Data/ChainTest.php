@@ -16,7 +16,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new ObjectManager($this);
         /** @var \Magento\Setup\Module\Dependency\Report\Circular\Data\Chain $chain */
         $chain = $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Dependency\Report\Circular\Data\Chain',
+            \Magento\Setup\Module\Dependency\Report\Circular\Data\Chain::class,
             ['modules' => $modules]
         );
 
