@@ -53,7 +53,7 @@ class Links extends Form
     {
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
-            'Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\LinkRow',
+            \Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\LinkRow::class,
             ['element' => $element->find(sprintf($this->rowBlock, ++$index))]
         );
     }

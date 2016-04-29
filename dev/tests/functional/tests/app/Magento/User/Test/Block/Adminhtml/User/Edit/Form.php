@@ -42,7 +42,7 @@ class Form extends FormTabs
     public function getRolesGrid()
     {
         return $this->blockFactory->create(
-            'Magento\User\Test\Block\Adminhtml\User\Edit\Tab\Roles',
+            \Magento\User\Test\Block\Adminhtml\User\Edit\Tab\Roles::class,
             ['element' => $this->_rootElement->find('#permissionsUserRolesGrid')]
         );
     }

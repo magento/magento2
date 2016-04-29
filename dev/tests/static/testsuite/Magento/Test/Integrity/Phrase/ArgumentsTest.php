@@ -33,7 +33,7 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
         $this->_phraseCollector = new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector(
             new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer(),
             true,
-            'Magento\Framework\Phrase'
+            \Magento\Framework\Phrase::class
         );
 
         $componentRegistrar = new ComponentRegistrar();

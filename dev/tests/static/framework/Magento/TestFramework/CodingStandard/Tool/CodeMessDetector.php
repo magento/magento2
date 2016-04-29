@@ -46,7 +46,7 @@ class CodeMessDetector implements ToolInterface
      */
     public function canRun()
     {
-        return class_exists('PHPMD\TextUI\Command');
+        return class_exists(\PHPMD\TextUI\Command::class);
     }
 
     /**

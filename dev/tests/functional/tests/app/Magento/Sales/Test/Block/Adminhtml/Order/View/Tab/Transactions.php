@@ -30,7 +30,7 @@ class Transactions extends Tab
     public function getGridBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Transactions\Grid',
+            \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Transactions\Grid::class,
             ['element' => $this->_rootElement->find($this->grid, Locator::SELECTOR_XPATH)]
         );
     }

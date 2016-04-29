@@ -84,7 +84,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
     protected function importCurrencyRate($configData)
     {
         $this->objectManager->getInstance()->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
 
@@ -110,7 +110,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->getInstance()->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'config_currency_symbols_usd']
         )->run();
     }

@@ -39,18 +39,18 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
     public function setUp()
     {
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
         $this->filterBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
         $objectManager = Bootstrap::getObjectManager();
 
         $this->searchCriteriaBuilder = $objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
         $this->filterBuilder = $objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
 
         /** Initialize tax classes, tax rates and tax rules defined in fixture Magento/Tax/_files/tax_classes.php */
@@ -100,7 +100,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $this->assertTrue($result);
         /** Ensure that tax rule was actually removed from DB */
         /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
-        $taxRate = Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation\Rate');
+        $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
         $this->assertNull($taxRate->load($taxRuleId)->getId(), 'Tax rule was not deleted from DB.');
     }
 
@@ -136,7 +136,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($requestData['rule'], $taxRuleData, "Tax rule is created with invalid data.");
         /** Ensure that tax rule was actually created in DB */
         /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
-        $taxRule = Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation\Rule');
+        $taxRule = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rule::class);
         $this->assertEquals($taxRuleId, $taxRule->load($taxRuleId)->getId(), 'Tax rule was not created in DB.');
         $taxRule->delete();
     }
@@ -220,7 +220,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
 
         // Clean up the new tax rule so it won't affect other tests
         /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
-        $taxRule = Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation\Rule');
+        $taxRule = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rule::class);
         $taxRule->load($newTaxRuleData['id']);
         $taxRule->delete();
     }
@@ -259,6 +259,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $result = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals($expectedRuleData, $result);
     }
+
     /**
      * @magentoApiDataFixture Magento/Tax/_files/tax_classes.php
      */
@@ -400,6 +401,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             );
         }
     }
+
     /**
      * @magentoApiDataFixture Magento/Tax/_files/tax_classes.php
      */
@@ -433,10 +435,10 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
         $expectedRuleData = $requestData['rule'];
         /** Ensure that tax rule was actually updated in DB */
         /** @var \Magento\Tax\Model\Calculation $taxCalculation */
-        $taxCalculation = Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation');
+        $taxCalculation = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation::class);
         /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
         $taxRule = Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Model\Calculation\Rule',
+            \Magento\Tax\Model\Calculation\Rule::class,
             ['calculation' => $taxCalculation]
         );
         $taxRuleModel = $taxRule->load($fixtureRule->getId());
@@ -518,7 +520,6 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
     {
         $fixtureRule = $this->getFixtureTaxRules()[0];
 
-
         $filter = $this->filterBuilder->setField('code')
             ->setValue($fixtureRule->getCode())
             ->create();
@@ -555,7 +556,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 $taxRateIds = (array)$this->getFixtureTaxRules()[0]->getRates();
                 foreach ($taxRateIds as $taxRateId) {
                     /** @var \Magento\Tax\Model\Calculation\Rate $taxRate */
-                    $taxRate = Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation\Rate');
+                    $taxRate = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rate::class);
                     $this->fixtureTaxRates[] = $taxRate->load($taxRateId);
                 }
             }
@@ -579,7 +580,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
                 );
                 foreach ($taxClassIds as $taxClassId) {
                     /** @var \Magento\Tax\Model\ClassModel $taxClass */
-                    $taxClass = Bootstrap::getObjectManager()->create('Magento\Tax\Model\ClassModel');
+                    $taxClass = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\ClassModel::class);
                     $this->fixtureTaxClasses[] = $taxClass->load($taxClassId);
                 }
             }
@@ -599,7 +600,7 @@ class TaxRuleRepositoryInterfaceTest extends WebapiAbstract
             $taxRuleCodes = ['Test Rule Duplicate', 'Test Rule'];
             foreach ($taxRuleCodes as $taxRuleCode) {
                 /** @var \Magento\Tax\Model\Calculation\Rule $taxRule */
-                $taxRule = Bootstrap::getObjectManager()->create('Magento\Tax\Model\Calculation\Rule');
+                $taxRule = Bootstrap::getObjectManager()->create(\Magento\Tax\Model\Calculation\Rule::class);
                 $taxRule->load($taxRuleCode, 'code');
                 if ($taxRule->getId()) {
                     $this->fixtureTaxRules[] = $taxRule;

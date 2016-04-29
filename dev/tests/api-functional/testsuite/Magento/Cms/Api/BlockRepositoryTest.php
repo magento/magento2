@@ -48,11 +48,12 @@ class BlockRepositoryTest extends WebapiAbstract
      */
     public function setUp()
     {
-        $this->blockFactory = Bootstrap::getObjectManager()->create('Magento\Cms\Api\Data\BlockInterfaceFactory');
-        $this->blockRepository = Bootstrap::getObjectManager()->create('Magento\Cms\Api\BlockRepositoryInterface');
-        $this->dataObjectHelper = Bootstrap::getObjectManager()->create('Magento\Framework\Api\DataObjectHelper');
+        $this->blockFactory = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\Data\BlockInterfaceFactory::class);
+        $this->blockRepository = Bootstrap::getObjectManager()
+            ->create(\Magento\Cms\Api\BlockRepositoryInterface::class);
+        $this->dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
         $this->dataObjectProcessor = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Reflection\DataObjectProcessor');
+            ->create(\Magento\Framework\Reflection\DataObjectProcessor::class);
     }
 
     /**
@@ -152,11 +153,11 @@ class BlockRepositoryTest extends WebapiAbstract
         $this->dataObjectHelper->populateWithArray(
             $this->currentBlock,
             [BlockInterface::TITLE => $newBlockTitle],
-            'Magento\Cms\Api\Data\BlockInterface'
+            \Magento\Cms\Api\Data\BlockInterface::class
         );
         $blockData = $this->dataObjectProcessor->buildOutputDataArray(
             $this->currentBlock,
-            'Magento\Cms\Api\Data\BlockInterface'
+            \Magento\Cms\Api\Data\BlockInterface::class
         );
 
         $serviceInfo = [
@@ -221,10 +222,10 @@ class BlockRepositoryTest extends WebapiAbstract
             ->setIdentifier($blockIdentifier);
         $this->currentBlock = $this->blockRepository->save($blockDataObject);
 
-        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $filter = $filterBuilder
             ->setField(BlockInterface::IDENTIFIER)
             ->setValue($blockIdentifier)

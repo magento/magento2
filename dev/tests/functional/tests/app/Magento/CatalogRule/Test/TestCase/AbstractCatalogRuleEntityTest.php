@@ -73,6 +73,6 @@ abstract class AbstractCatalogRuleEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep')->run();
+        $this->objectManager->create(\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep::class)->run();
     }
 }

@@ -56,7 +56,7 @@ class Products extends WidgetInstanceForm
 
         /** @var Grid $productGrid */
         $productGrid = $this->blockFactory->create(
-            'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\Product\Grid',
+            \Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\Product\Grid::class,
             [
                 'element' => $this->_rootElement
                     ->find($this->productGrid, Locator::SELECTOR_XPATH)

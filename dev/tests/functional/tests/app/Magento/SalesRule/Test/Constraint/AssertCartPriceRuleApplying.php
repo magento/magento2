@@ -195,7 +195,7 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
     protected function login()
     {
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
         )->run();
     }

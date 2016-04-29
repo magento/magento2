@@ -82,9 +82,12 @@ class LinkRepositoryTest extends WebapiAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         if ($isScopeGlobal) {
-            $product = $objectManager->get('Magento\Catalog\Model\ProductFactory')->create()->setStoreId(0)->load(1);
+            $product = $objectManager->get(\Magento\Catalog\Model\ProductFactory::class)
+                ->create()
+                ->setStoreId(0)
+                ->load(1);
         } else {
-            $product = $objectManager->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
+            $product = $objectManager->get(\Magento\Catalog\Model\ProductFactory::class)->create()->load(1);
         }
 
         return $product;

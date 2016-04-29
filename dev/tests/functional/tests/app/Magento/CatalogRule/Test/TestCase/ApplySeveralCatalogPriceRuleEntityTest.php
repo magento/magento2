@@ -58,7 +58,7 @@ class ApplySeveralCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTe
         }
         // Create product
         $products = $this->objectManager->create(
-            '\Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => 'catalogProductSimple::simple_for_salesrule_1']
         )->run();
 

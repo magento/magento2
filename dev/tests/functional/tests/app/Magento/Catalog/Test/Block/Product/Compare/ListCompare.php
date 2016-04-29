@@ -201,7 +201,7 @@ class ListCompare extends Block
         $this->waitForElementVisible(sprintf($this->removeButton, 1), Locator::SELECTOR_XPATH);
         /** @var \Magento\Backend\Test\Block\Messages $messageBlock */
         $messageBlock = $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Messages',
+            \Magento\Backend\Test\Block\Messages::class,
             ['element' => $this->browser->find($this->messageBlock)]
         );
 

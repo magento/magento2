@@ -40,7 +40,7 @@ class Shipment extends Block
     {
         $selector = sprintf($this->shipmentItemBlock, $id) . $this->shipmentContent;
         return $this->blockFactory->create(
-            'Magento\Shipping\Test\Block\Order\Shipment\Items',
+            \Magento\Shipping\Test\Block\Order\Shipment\Items::class,
             ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
         );
     }

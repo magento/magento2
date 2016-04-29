@@ -35,7 +35,7 @@ class CatalogCategoryLink extends ParametersForm
             $this->getTemplateBlock()->waitLoader();
             /** @var Form $catalogCategoryLinkForm */
             $catalogCategoryLinkForm = $this->blockFactory->create(
-                'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CatalogCategoryLink\Form',
+                Form::class,
                 ['element' => $this->_rootElement->find($this->cmsCategoryLink, Locator::SELECTOR_XPATH)]
             );
             $elementNew = $this->_rootElement->find($this->cmsCategoryLink, Locator::SELECTOR_XPATH);

@@ -25,7 +25,7 @@ class AssertSalesPrintOrderBillingAddress extends AbstractConstraint
     public function processAssert(SalesGuestPrint $salesGuestPrint, Address $billingAddress)
     {
         $addressRenderer = $this->objectManager->create(
-            'Magento\Customer\Test\Block\Address\Renderer',
+            \Magento\Customer\Test\Block\Address\Renderer::class,
             ['address' => $billingAddress, 'type' => 'html']
         );
         $expectedBillingAddress = $addressRenderer->render();

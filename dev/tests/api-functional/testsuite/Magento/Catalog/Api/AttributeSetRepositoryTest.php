@@ -218,7 +218,7 @@ class AttributeSetRepositoryTest extends WebapiAbstract
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
-        $attributeSet = $objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+        $attributeSet = $objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
             ->load($attributeSetName, 'attribute_set_name');
         if ($attributeSet->getId() === null) {
             return null;

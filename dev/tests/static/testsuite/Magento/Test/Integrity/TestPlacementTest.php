@@ -31,7 +31,7 @@ class TestPlacementTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
         /** @var \Magento\Framework\Data\Collection\Filesystem $filesystem */
-        $filesystem = $objectManager->get('Magento\Framework\Data\Collection\Filesystem');
+        $filesystem = $objectManager->get(\Magento\Framework\Data\Collection\Filesystem::class);
         $filesystem->setCollectDirs(false)
             ->setCollectFiles(true)
             ->setCollectRecursively(true);

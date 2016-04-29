@@ -84,7 +84,7 @@ class ApplyVatIdTest extends AbstractApplyVatIdTest
         $this->configData = $configData;
         $this->customer = $customer;
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
         $this->customer->persist();
@@ -92,7 +92,7 @@ class ApplyVatIdTest extends AbstractApplyVatIdTest
 
         // Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
         )->run();
         $this->customerAccountIndex->getDashboardAddress()->editBillingAddress();

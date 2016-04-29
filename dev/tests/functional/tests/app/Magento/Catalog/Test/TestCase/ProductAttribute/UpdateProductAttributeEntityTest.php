@@ -92,7 +92,7 @@ class UpdateProductAttributeEntityTest extends Injectable
         $product->persist();
 
         $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\AddAttributeToAttributeSetStep',
+            \Magento\Catalog\Test\TestStep\AddAttributeToAttributeSetStep::class,
             [
                 'attribute' => $productAttributeOriginal,
                 'attributeSet' => $attributeSet

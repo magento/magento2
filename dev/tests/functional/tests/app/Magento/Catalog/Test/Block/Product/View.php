@@ -197,7 +197,7 @@ class View extends AbstractConfigureBlock
     public function getPriceBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\Price',
+            \Magento\Catalog\Test\Block\Product\Price::class,
             ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
         );
     }
@@ -212,7 +212,7 @@ class View extends AbstractConfigureBlock
     {
         /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
         $miniCart = $this->blockFactory->create(
-            '\Magento\Checkout\Test\Block\Cart\Sidebar',
+            \Magento\Checkout\Test\Block\Cart\Sidebar::class,
             ['element' => $this->browser->find($this->miniCartBlock)]
         );
         /** @var CatalogProductSimple $product */
@@ -302,7 +302,7 @@ class View extends AbstractConfigureBlock
     {
         /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
         $miniCart = $this->blockFactory->create(
-            '\Magento\Checkout\Test\Block\Cart\Sidebar',
+            \Magento\Checkout\Test\Block\Cart\Sidebar::class,
             ['element' => $this->browser->find($this->miniCartBlock)]
         );
 
@@ -428,7 +428,7 @@ class View extends AbstractConfigureBlock
     {
         /** @var \Magento\Backend\Test\Block\Messages $messageBlock */
         $messageBlock = $this->blockFactory->create(
-            'Magento\Backend\Test\Block\Messages',
+            \Magento\Backend\Test\Block\Messages::class,
             ['element' => $this->browser->find($this->messageBlock)]
         );
         $this->_rootElement->find($this->clickAddToCompare, Locator::SELECTOR_CSS)->click();

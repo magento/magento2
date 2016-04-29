@@ -142,7 +142,7 @@ class CustomerReviewReportEntityTest extends Injectable
         $this->cmsIndex->open();
         if ($customerLogin == 'Yes') {
             $this->objectManager->create(
-                'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
                 ['customer' => $customer]
             )->run();
         }

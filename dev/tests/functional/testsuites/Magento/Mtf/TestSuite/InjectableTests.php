@@ -74,7 +74,7 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
     public function prepareSuite()
     {
         $this->init();
-        return $this->objectManager->create('Magento\Mtf\TestSuite\AppState');
+        return $this->objectManager->create(\Magento\Mtf\TestSuite\AppState::class);
     }
 
     /**
@@ -97,11 +97,11 @@ class InjectableTests extends \PHPUnit_Framework_TestSuite
             $configFilePath = realpath(MTF_BP . '/testsuites/' . $_ENV['testsuite_rule_path']);
 
             /** @var \Magento\Mtf\Config\DataInterface $configData */
-            $configData = $objectManagerFactory->getObjectManager()->create('Magento\Mtf\Config\TestRunner');
+            $configData = $objectManagerFactory->getObjectManager()->create(\Magento\Mtf\Config\TestRunner::class);
             $configData->setFileName($configFileName . '.xml')->load($configFilePath);
 
             $this->objectManager = $objectManagerFactory->create(
-                ['Magento\Mtf\Config\TestRunner' => $configData]
+                [\Magento\Mtf\Config\TestRunner::class => $configData]
             );
         }
     }

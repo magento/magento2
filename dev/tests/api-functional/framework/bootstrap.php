@@ -91,9 +91,9 @@ $application->initialize();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Framework\Component\DirSearch');
+    ->create(\Magento\Framework\Component\DirSearch::class);
 $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Framework\View\Design\Theme\ThemePackageList');
+    ->create(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
 \Magento\Framework\App\Utility\Files::setInstance(
     new \Magento\Framework\App\Utility\Files(
         new \Magento\Framework\Component\ComponentRegistrar(),

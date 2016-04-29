@@ -13,4 +13,7 @@
             <property name="absoluteLineLimit" value="120"/>
         </properties>
     </rule>
+    <rule ref="Magento.LiteralNamespaces.LiteralNamespaces">
+        <exclude-pattern>*/_files/*</exclude-pattern>
+    </rule>
 </ruleset>

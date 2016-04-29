@@ -82,6 +82,6 @@ class CreateTaxRuleEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep', [])->run();
+        $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class, [])->run();
     }
 }

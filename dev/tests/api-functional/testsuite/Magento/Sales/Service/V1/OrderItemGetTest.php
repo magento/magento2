@@ -32,7 +32,7 @@ class OrderItemGetTest extends WebapiAbstract
     public function testGet()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId(self::ORDER_INCREMENT_ID);
         /** @var \Magento\Sales\Model\Order\Item $orderItem */
         $orderItem = current($order->getItems());

@@ -54,7 +54,8 @@ class Fixture extends AbstractFactory
             $this->factoryContent .= "\n";
         }
 
-        $this->factoryContent .= "        return \$this->objectManager->create('{$realClass}', "
+        $this->factoryContent .= "        return \$this->objectManager->create(
+            {$realClass}::class, "
             . "array('placeholders' => \$placeholders));\n";
         $this->factoryContent .= "    }\n";
 

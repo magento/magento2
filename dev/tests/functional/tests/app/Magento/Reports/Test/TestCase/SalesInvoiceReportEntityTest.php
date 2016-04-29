@@ -58,7 +58,10 @@ class SalesInvoiceReportEntityTest extends Injectable
         $initialInvoiceResult = $salesInvoiceReport->getGridBlock()->getLastResult();
         $initialInvoiceTotalResult = $salesInvoiceReport->getGridBlock()->getTotalResult();
         $order->persist();
-        $invoice = $this->objectManager->create('Magento\Sales\Test\TestStep\CreateInvoiceStep', ['order' => $order]);
+        $invoice = $this->objectManager->create(
+            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
+            ['order' => $order]
+        );
         $invoice->run();
 
         return [

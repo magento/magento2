@@ -133,7 +133,7 @@ class ConfigurableOptions extends CustomOptions
     protected function getPriceBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\Price',
+            \Magento\Catalog\Test\Block\Product\Price::class,
             ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
         );
     }

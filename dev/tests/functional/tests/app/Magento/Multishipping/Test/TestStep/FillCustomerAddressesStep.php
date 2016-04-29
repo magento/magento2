@@ -60,7 +60,7 @@ class FillCustomerAddressesStep implements TestStepInterface
         $this->products = $products;
         $this->objectManeger = $objectManager;
         $this->objectManeger->configure(
-            ['\Magento\Customer\Test\Block\Address\Renderer' => ['shared' => false]]
+            [\Magento\Customer\Test\Block\Address\Renderer::class => ['shared' => false]]
         );
     }
 
@@ -77,7 +77,7 @@ class FillCustomerAddressesStep implements TestStepInterface
         foreach ($this->products as $key => $product) {
             $productName = $product->getName();
             $addressRender = $this->objectManeger->create(
-                '\Magento\Customer\Test\Block\Address\Renderer',
+                \Magento\Customer\Test\Block\Address\Renderer::class,
                 ['address' => $addresses[$key], 'type' => 'oneline']
             );
             $bindings[$productName] = $addressRender->render();

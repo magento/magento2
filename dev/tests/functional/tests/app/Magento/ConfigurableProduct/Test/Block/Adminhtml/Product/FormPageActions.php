@@ -47,7 +47,7 @@ class FormPageActions extends \Magento\Catalog\Test\Block\Adminhtml\Product\Form
     protected function getAffectedAttributeSetForm()
     {
         return $this->blockFactory->create(
-            '\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AffectedAttributeSet',
+            \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AffectedAttributeSet::class,
             ['element' => $this->browser->find($this->affectedAttributeSetForm)]
         );
     }

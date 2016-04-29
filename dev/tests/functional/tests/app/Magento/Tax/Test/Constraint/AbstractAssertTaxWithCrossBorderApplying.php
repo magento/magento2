@@ -183,7 +183,7 @@ abstract class AbstractAssertTaxWithCrossBorderApplying extends AbstractConstrai
     protected function loginCustomer($customer)
     {
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
     }

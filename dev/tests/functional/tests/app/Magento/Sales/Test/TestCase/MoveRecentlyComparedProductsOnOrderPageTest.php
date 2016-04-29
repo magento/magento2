@@ -104,7 +104,7 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         $customer->persist();
         // Login under customer
         $this->objectManager
-            ->create('Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep', ['customer' => $customer])
+            ->create(\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class, ['customer' => $customer])
             ->run();
         $this->browser = $browser;
 
@@ -150,7 +150,7 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         // Preconditions
         // Create product
         $products = $this->objectManager->create(
-            '\Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $products]
         )->run()['products'];
         foreach ($products as $itemProduct) {

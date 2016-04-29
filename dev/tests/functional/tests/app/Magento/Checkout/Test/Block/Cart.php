@@ -129,7 +129,7 @@ class Cart extends Block
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(
-                'Magento\Checkout\Test\Block\Cart\CartItem',
+                \Magento\Checkout\Test\Block\Cart\CartItem::class,
                 ['element' => $cartItemBlock]
             );
         }

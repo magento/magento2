@@ -37,7 +37,7 @@ class CouponRepositoryTest extends WebapiAbstract
         $inputData = $this->getCouponData();
 
         /** @var $registry \Magento\Framework\Registry */
-        $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
         /** @var $salesRule \Magento\SalesRule\Model\Rule */
         $salesRule = $registry->registry('_fixture/Magento_SalesRule_Api_RuleRepository');
         $ruleId = $salesRule->getRuleId();
