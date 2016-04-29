@@ -101,27 +101,27 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getStore',
             ])
             ->getMockForAbstractClass();
 
-        $this->storeInterface = $this->getMockBuilder('\Magento\Store\Api\Data\StoreInterface')
+        $this->storeInterface = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getWebsiteId',
             ])
             ->getMockForAbstractClass();
 
-        $this->productRepository = $this->getMockBuilder('\Magento\Catalog\Api\ProductRepositoryInterface')
+        $this->productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
             ->getMockForAbstractClass();
 
-        $this->categoryRepository = $this->getMockBuilder('\Magento\Catalog\Api\CategoryRepositoryInterface')
+        $this->categoryRepository = $this->getMockBuilder(\Magento\Catalog\Api\CategoryRepositoryInterface::class)
             ->getMockForAbstractClass();
 
-        $this->eavConfig = $this->getMockBuilder('\Magento\Eav\Model\Config')
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getEntityAttributeCodes',
@@ -129,11 +129,11 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->fullText = $this->getMockBuilder('\Magento\CatalogSearch\Model\ResourceModel\Fulltext')
+        $this->fullText = $this->getMockBuilder(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getTransactionManager',
@@ -142,29 +142,29 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->eventManager = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+        $this->eventManager = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->setMethods(['dispatch'])
             ->getMock();
 
-        $this->product = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductInterface')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getData',
             ])
             ->getMockForAbstractClass();
 
-        $this->category = $this->getMockBuilder('\Magento\Catalog\Api\Data\CategoryInterface')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Api\Data\CategoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getName',
             ])
             ->getMockForAbstractClass();
 
-        $this->connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
+        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'distinct',
@@ -175,7 +175,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->resources = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
+        $this->resources = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getConnection',
@@ -184,7 +184,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->metadataPool = $this->getMockBuilder('\Magento\Framework\EntityManager\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getMetadata',
@@ -211,7 +211,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\ResourceModel\Index',
+            \Magento\Elasticsearch\Model\ResourceModel\Index::class,
             [
                 'context' => $this->context,
                 'storeManager' => $this->storeManager,
@@ -412,7 +412,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
                 'name',
             ]);
 
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getFrontendInput',
@@ -435,7 +435,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->method('getFrontendInput')
             ->willReturn($frontendInput);
 
-        $attributeOption = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Option', [], [], '', false);
+        $attributeOption = $this->getMock(\Magento\Eav\Model\Entity\Attribute\Option::class, [], [], '', false);
         $attributeOption->expects($this->any())->method('getValue')->willReturn('240-LV04');
         $attributeOption->expects($this->any())->method('getLabel')->willReturn('label');
 

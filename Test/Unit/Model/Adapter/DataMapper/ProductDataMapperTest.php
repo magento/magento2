@@ -21,6 +21,8 @@ use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class ProductDataMapperTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -89,17 +91,18 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->builderMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Document\Builder')
+        $this->builderMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\Document\Builder::class)
             ->setMethods(['addField', 'addFields', 'build'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attributeContainerMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Container\Attribute')
-            ->setMethods(['getAttribute', 'setStoreId', 'getBackendType', 'getFrontendInput'])
+        $this->attributeContainerMock = $this->getMockBuilder(
+            \Magento\Elasticsearch\Model\Adapter\Container\Attribute::class
+        )->setMethods(['getAttribute', 'setStoreId', 'getBackendType', 'getFrontendInput'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceIndex = $this->getMockBuilder('Magento\Elasticsearch\Model\ResourceModel\Index')
+        $this->resourceIndex = $this->getMockBuilder(\Magento\Elasticsearch\Model\ResourceModel\Index::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getPriceIndexData',
@@ -108,43 +111,43 @@ class ProductDataMapperTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->fieldMapperMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+        $this->fieldMapperMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->setMethods(['getFieldName', 'getAllAttributesTypes'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
+        $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
             ->setMethods(['isEmptyDate', 'setTimezone', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->advancedSearchIndex = $this->getMockBuilder('Magento\AdvancedSearch\Model\ResourceModel\Index')
+        $this->advancedSearchIndex = $this->getMockBuilder(\Magento\AdvancedSearch\Model\ResourceModel\Index::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $this->attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeInterface = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->storeInterface = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper',
+            \Magento\Elasticsearch\Model\Adapter\DataMapper\ProductDataMapper::class,
             [
                 'builder' => $this->builderMock,
                 'attributeContainer' => $this->attributeContainerMock,

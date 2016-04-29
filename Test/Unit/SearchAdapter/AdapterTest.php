@@ -49,27 +49,29 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mapper = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Mapper')
+        $this->mapper = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Mapper::class)
             ->setMethods([
                 'buildQuery',
             ])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->responseFactory = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ResponseFactory')
+        $this->responseFactory = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ResponseFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aggregationBuilder = $this->getMockBuilder('\Magento\Elasticsearch\SearchAdapter\Aggregation\Builder')
+        $this->aggregationBuilder = $this->getMockBuilder(
+            \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder::class
+        )
             ->setMethods([
                 'build',
             ])
@@ -78,7 +80,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\Adapter',
+            \Magento\Elasticsearch\SearchAdapter\Adapter::class,
             [
                 'connectionManager' => $this->connectionManager,
                 'mapper' => $this->mapper,
@@ -95,7 +97,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testQuery()
     {
-        $client = $this->getMockBuilder('Magento\Elasticsearch\Model\Client\Elasticsearch')
+        $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
             ->setMethods(['query'])
             ->disableOriginalConstructor()
             ->getMock();

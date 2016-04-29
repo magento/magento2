@@ -43,10 +43,10 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientFactory = $this->getMockBuilder('\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface')
+        $this->clientFactory = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -67,7 +67,7 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\ConnectionManager',
+            \Magento\Elasticsearch\SearchAdapter\ConnectionManager::class,
             [
                 'clientFactory' => $this->clientFactory,
                 'clientConfig' => $this->clientConfig,
@@ -81,7 +81,7 @@ class ConnectionManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionSuccessfull()
     {
-        $client = $this->getMockBuilder('Magento\Elasticsearch\Model\Client\Elasticsearch')
+        $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->clientFactory->expects($this->once())

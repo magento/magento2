@@ -38,21 +38,23 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->documentFactory = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\DocumentFactory')
+        $this->documentFactory = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\DocumentFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aggregationFactory = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\AggregationFactory')
+        $this->aggregationFactory = $this->getMockBuilder(
+            \Magento\Elasticsearch\SearchAdapter\AggregationFactory::class
+        )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\ResponseFactory',
+            \Magento\Elasticsearch\SearchAdapter\ResponseFactory::class,
             [
                 'objectManager' => $this->objectManager,
                 'documentFactory' => $this->documentFactory,
@@ -115,7 +117,7 @@ class ResponseFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\Search\Response\QueryResponse'),
+                $this->equalTo(\Magento\Framework\Search\Response\QueryResponse::class),
                 $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => 'aggregationsData'])
             )
             ->will($this->returnValue('QueryResponseObject'));

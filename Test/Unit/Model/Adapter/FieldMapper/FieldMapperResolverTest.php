@@ -38,10 +38,12 @@ class FieldMapperResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldMapperEntity = $this->getMockBuilder('\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+        $this->fieldMapperEntity = $this->getMockBuilder(
+            \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->fieldMappers = [
@@ -49,7 +51,7 @@ class FieldMapperResolverTest extends \PHPUnit_Framework_TestCase
         ];
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver',
+            \Magento\Elasticsearch\Model\Adapter\FieldMapper\FieldMapperResolver::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'fieldMappers' => $this->fieldMappers

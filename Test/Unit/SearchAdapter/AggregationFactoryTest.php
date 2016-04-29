@@ -31,13 +31,13 @@ class AggregationFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\AggregationFactory',
+            \Magento\Elasticsearch\SearchAdapter\AggregationFactory::class,
             [
                 'objectManager' => $this->objectManager
             ]

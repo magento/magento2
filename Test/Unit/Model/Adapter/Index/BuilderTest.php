@@ -33,20 +33,22 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->localeResolver = $this->getMockBuilder('Magento\Framework\Locale\Resolver')
+        $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'emulate',
                 'getLocale'
             ])
             ->getMock();
-        $this->esConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface')
+        $this->esConfig = $this->getMockBuilder(
+            \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Index\Builder',
+            \Magento\Elasticsearch\Model\Adapter\Index\Builder::class,
             [
                 'localeResolver' => $this->localeResolver,
                 'esConfig' => $this->esConfig

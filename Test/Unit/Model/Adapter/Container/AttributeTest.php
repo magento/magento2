@@ -34,7 +34,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->attribute = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Container\Attribute',
+            \Magento\Elasticsearch\Model\Adapter\Container\Attribute::class,
             [
                 'attributeCollection' => $this->collectionMock,
             ]
@@ -224,7 +224,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private function createAttributeMock($attributeId, $attributeCode)
     {
-        $attribute = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getAttributeCode', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();

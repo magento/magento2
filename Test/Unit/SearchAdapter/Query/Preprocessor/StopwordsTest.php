@@ -13,6 +13,9 @@ use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StopwordsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -52,30 +55,30 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->localeResolver = $this->getMockBuilder('Magento\Framework\Locale\Resolver')
+        $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'emulate',
                 'getLocale',
             ])
             ->getMock();
-        $this->readFactory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadFactory')
+        $this->readFactory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->configCache = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Config')
+        $this->configCache = $this->getMockBuilder(\Magento\Framework\App\Cache\Type\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->esConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->esConfig = $this->getMockBuilder(
+            \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface::class
+        )->disableOriginalConstructor()->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords',
+            \Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\Stopwords::class,
             [
                 'storeManager' => $this->storeManager,
                 'localeResolver' => $this->localeResolver,
@@ -97,7 +100,7 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 'default' => 'default.csv',
             ]);
-        $storeInterface = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $storeInterface = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager->expects($this->once())
@@ -110,7 +113,7 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             ->method('getLocale')
             ->willReturn('en_US');
 
-        $read = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\Read')
+        $read = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->readFactory->expects($this->once())
@@ -145,7 +148,7 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 'default' => 'default.csv',
             ]);
-        $storeInterface = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $storeInterface = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager->expects($this->once())
@@ -158,7 +161,7 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
             ->method('getLocale')
             ->willReturn('en_US');
 
-        $read = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\Read')
+        $read = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->readFactory->expects($this->once())

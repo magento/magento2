@@ -34,11 +34,11 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->reader = $this->getMockBuilder('Magento\Framework\Config\ReaderInterface')
+        $this->reader = $this->getMockBuilder(\Magento\Framework\Config\ReaderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cache = $this->getMockBuilder('Magento\Framework\Config\CacheInterface')
+        $this->cache = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -48,7 +48,7 @@ class EsConfigTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->config = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig',
+            \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfig::class,
             [
                 'reader' => $this->reader,
                 'cache' => $this->cache

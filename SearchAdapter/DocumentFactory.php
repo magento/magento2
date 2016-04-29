@@ -54,14 +54,14 @@ class DocumentFactory
                 $documentId = $value;
             } elseif ($fieldName === '_score') {
                 $fields['score'] = $this->objectManager->create(
-                    'Magento\Framework\Search\DocumentField',
+                    \Magento\Framework\Search\DocumentField::class,
                     ['name' => 'score', 'value' => $value]
                 );
             }
         }
 
         return $this->objectManager->create(
-            'Magento\Framework\Search\Document',
+            \Magento\Framework\Search\Document::class,
             [
                 'documentId' => $documentId,
                 'documentFields' => $fields

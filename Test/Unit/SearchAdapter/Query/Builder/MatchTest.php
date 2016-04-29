@@ -40,22 +40,22 @@ class MatchTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->queryInterface = $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')
+        $this->queryInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->preprocessorInterface = $this
-            ->getMockBuilder('Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface')
+            ->getMockBuilder(\Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\Query\Builder\Match',
+            \Magento\Elasticsearch\SearchAdapter\Query\Builder\Match::class,
             [
                 'fieldMapper' => $this->fieldMapper,
                 'preprocessorContainer' => [$this->preprocessorInterface],
@@ -68,7 +68,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild()
     {
-        $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Match')
+        $query = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Match::class)
             ->setMethods(['getValue', 'getMatches'])
             ->disableOriginalConstructor()
             ->getMock();

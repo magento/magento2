@@ -59,30 +59,30 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->eavConfig = $this->getMockBuilder('\Magento\Eav\Model\Config')
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEntityType', 'getAttribute', 'getEntityAttributeCodes'])
             ->getMock();
 
-        $this->fieldType = $this->getMockBuilder('\Magento\Elasticsearch\Model\Adapter\FieldType')
+        $this->fieldType = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldType::class)
             ->disableOriginalConstructor()
             ->setMethods(['getFieldType'])
             ->getMock();
 
-        $this->customerSession = $this->getMockBuilder('\Magento\Customer\Model\Session')
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerGroupId'])
             ->getMock();
 
         $this->storeManager = $this->storeManager = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             false
         );
 
         $this->store = $this->getMockForAbstractClass(
-            'Magento\Store\Api\Data\StoreInterface',
+            \Magento\Store\Api\Data\StoreInterface::class,
             [],
             '',
             false,
@@ -91,12 +91,12 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
             ['getWebsiteId', 'getRootCategoryId']
         );
 
-        $this->coreRegistry = $this->getMock('\Magento\Framework\Registry');
+        $this->coreRegistry = $this->getMock(\Magento\Framework\Registry::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
         $this->eavAttributeResource = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             [
                 '__wakeup',
                 'getBackendType',
@@ -108,7 +108,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->mapper = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper',
+            \Magento\Elasticsearch\Model\Adapter\FieldMapper\ProductFieldMapper::class,
             [
                 'eavConfig' => $this->eavConfig,
                 'storeManager' => $this->storeManager,
@@ -130,7 +130,7 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFieldName($attributeCode, $fieldName, $fieldType, $context = [])
     {
-        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getBackendType', 'getFrontendInput', 'getAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -189,12 +189,12 @@ class ProductFieldMapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAllAttributesTypes($attributeCode)
     {
-        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getBackendType', 'getFrontendInput'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $store = $this->getMockBuilder('\Magento\Store\Model\Store')
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getId', '__wakeup'])->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));

@@ -40,22 +40,22 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->dateTime = $this->getMockBuilder('\Magento\Framework\Stdlib\DateTime')
+        $this->dateTime = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
             ->disableOriginalConstructor()
             ->setMethods(['isEmptyDate'])
             ->getMock();
 
-        $this->localeDate = $this->getMockBuilder('\Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->localeDate = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\FieldType\Date',
+            \Magento\Elasticsearch\Model\Adapter\FieldType\Date::class,
             [
                 'dateTime' => $this->dateTime,
                 'localeDate' => $this->localeDate,

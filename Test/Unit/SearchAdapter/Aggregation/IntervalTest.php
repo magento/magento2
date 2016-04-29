@@ -16,6 +16,9 @@ use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IntervalTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -70,35 +73,35 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->setMethods(['getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
+        $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->setMethods([
                 'getIndexName',
                 'getEntityType',
             ])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->setMethods(['getCustomerGroupId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerSession->expects($this->any())
             ->method('getCustomerGroupId')
             ->willReturn(1);
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchIndexNameResolver = $this
-            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
+            ->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock->expects($this->any())
@@ -113,7 +116,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
-        $this->clientMock = $this->getMockBuilder('Magento\Elasticsearch\Model\Client\Elasticsearch')
+        $this->clientMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
             ->setMethods(['query'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -123,7 +126,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\Aggregation\Interval',
+            \Magento\Elasticsearch\SearchAdapter\Aggregation\Interval::class,
             [
                 'connectionManager' => $this->connectionManager,
                 'fieldMapper' => $this->fieldMapper,
@@ -146,7 +149,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad($limit, $offset, $lower, $upper)
     {
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchIndexNameResolver->expects($this->any())
@@ -201,7 +204,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchIndexNameResolver->expects($this->any())
@@ -233,7 +236,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
     {
         $queryResult = ['hits' => ['total'=> '0']];
 
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchIndexNameResolver->expects($this->any())
@@ -273,7 +276,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchIndexNameResolver->expects($this->any())
@@ -305,7 +308,7 @@ class IntervalTest extends \PHPUnit_Framework_TestCase
     {
         $queryResult = ['hits' => ['total'=> '0']];
 
-        $this->storeMock = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->searchIndexNameResolver->expects($this->any())

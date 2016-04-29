@@ -37,19 +37,19 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->adapter = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Elasticsearch')
+        $this->adapter = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\Elasticsearch::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->scopeResolver = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ScopeResolverInterface',
+            \Magento\Framework\App\ScopeResolverInterface::class,
             [],
             '',
             false
         );
 
         $this->scopeInterface = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ScopeInterface',
+            \Magento\Framework\App\ScopeInterface::class,
             [],
             '',
             false
@@ -58,7 +58,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
-            'Magento\Elasticsearch\Model\Indexer\IndexStructure',
+            \Magento\Elasticsearch\Model\Indexer\IndexStructure::class,
             [
                 'adapter' => $this->adapter,
                 'scopeResolver' => $this->scopeResolver
@@ -69,7 +69,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $scopeId = 9;
-        $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
+        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -88,7 +88,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $scopeId = 9;
-        $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
+        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->adapter->expects($this->any())

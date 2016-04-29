@@ -12,6 +12,9 @@ use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -62,14 +65,14 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new ObjectManagerHelper($this);
 
-        $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getConnection',
             ])
             ->getMock();
 
-        $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
+        $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIndexPrefix',
@@ -78,11 +81,11 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $elasticsearchClientMock = $this->getMockBuilder('\Elasticsearch\Client')
+        $elasticsearchClientMock = $this->getMockBuilder(\Elasticsearch\Client::class)
             ->setMethods([
                 'indices',
                 'ping',
@@ -93,7 +96,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $indicesMock = $this->getMockBuilder('\Elasticsearch\Namespaces\IndicesNamespace')
+        $indicesMock = $this->getMockBuilder(\Elasticsearch\Namespaces\IndicesNamespace::class)
             ->setMethods([
                 'exists',
                 'getSettings',
@@ -109,7 +112,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
         $elasticsearchClientMock->expects($this->any())
             ->method('indices')
             ->willReturn($indicesMock);
-        $this->client = $this->getMockBuilder('Magento\Elasticsearch\Model\Client\Elasticsearch')
+        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
             ->setConstructorArgs([
                 'options' => $this->getClientOptions(),
                 'elasticsearchClient' => $elasticsearchClientMock
@@ -131,7 +134,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver',
+            \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver::class,
             [
                 'connectionManager' => $this->connectionManager,
                 'clientConfig' => $this->clientConfig,
@@ -227,7 +230,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectException()
     {
-        $connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+        $connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getConnection',
@@ -239,7 +242,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('Something went wrong'));
 
         $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver',
+            \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver::class,
             [
                 'connectionManager' => $connectionManager,
                 'clientConfig' => $this->clientConfig,

@@ -66,7 +66,7 @@ class ResponseFactory
         /** @var \Magento\Framework\Search\Response\Aggregation $aggregations */
         $aggregations = $this->aggregationFactory->create($response['aggregations']);
         return $this->objectManager->create(
-            'Magento\Framework\Search\Response\QueryResponse',
+            \Magento\Framework\Search\Response\QueryResponse::class,
             [
                 'documents' => $documents,
                 'aggregations' => $aggregations,

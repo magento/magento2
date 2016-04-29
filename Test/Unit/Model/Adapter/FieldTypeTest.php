@@ -32,7 +32,7 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->eavConfig = $this->getMockBuilder('\Magento\Eav\Model\Config')
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEntityType', 'getAttribute', 'getEntityAttributeCodes'])
             ->getMock();
@@ -40,7 +40,7 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->eavAttributeResource = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             [
                 '__wakeup',
                 'getBackendType',
@@ -52,7 +52,7 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->type = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\FieldType',
+            \Magento\Elasticsearch\Model\Adapter\FieldType::class,
             [
                 'eavConfig' => $this->eavConfig,
             ]
@@ -70,7 +70,7 @@ class FieldTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFieldType($attributeCode, $backendType, $frontendType)
     {
-        $attributeMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->setMethods(['getBackendType', 'getFrontendInput', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -55,25 +55,25 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->entityMetadata = $this->getMockBuilder('Magento\Framework\Search\EntityMetadata')
+        $this->entityMetadata = $this->getMockBuilder(\Magento\Framework\Search\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
-        $this->document = $this->getMockBuilder('Magento\Framework\Search\Document')
+        $this->document = $this->getMockBuilder(\Magento\Framework\Search\Document::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->documentField = $this->getMockBuilder('\Magento\Framework\Search\DocumentField')
+        $this->documentField = $this->getMockBuilder(\Magento\Framework\Search\DocumentField::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->instanceName = '\Magento\Framework\Search\Document';
+        $this->instanceName = \Magento\Framework\Search\Document::class;
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\DocumentFactory',
+            \Magento\Elasticsearch\SearchAdapter\DocumentFactory::class,
             [
                 'objectManager' => $this->objectManager,
                 'entityMetadata' => $this->entityMetadata
@@ -94,9 +94,9 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
          */
         $closure = function ($class) {
             switch ($class) {
-                case 'Magento\Framework\Search\DocumentField':
+                case \Magento\Framework\Search\DocumentField::class:
                     return $this->documentField;
-                case 'Magento\Framework\Search\Document':
+                case \Magento\Framework\Search\Document::class:
                     return $this->document;
             }
             return null;

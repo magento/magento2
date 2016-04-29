@@ -36,11 +36,11 @@ class TermTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterInterface = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Term')
+        $this->filterInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getValue',
@@ -50,7 +50,7 @@ class TermTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term',
+            \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term::class,
             [
                 'fieldMapper' => $this->fieldMapper
             ]

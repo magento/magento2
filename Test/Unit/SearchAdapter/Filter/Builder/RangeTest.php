@@ -36,11 +36,11 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filterInterface = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Range')
+        $this->filterInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Range::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getField',
@@ -51,7 +51,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range',
+            \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range::class,
             [
                 'fieldMapper' => $this->fieldMapper
             ]

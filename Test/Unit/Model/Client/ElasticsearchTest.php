@@ -37,7 +37,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->elasticsearchClientMock = $this->getMockBuilder('\Elasticsearch\Client')
+        $this->elasticsearchClientMock = $this->getMockBuilder(\Elasticsearch\Client::class)
             ->setMethods([
                 'indices',
                 'ping',
@@ -48,7 +48,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indicesMock = $this->getMockBuilder('\Elasticsearch\Namespaces\IndicesNamespace')
+        $this->indicesMock = $this->getMockBuilder(\Elasticsearch\Namespaces\IndicesNamespace::class)
             ->setMethods([
                 'exists',
                 'getSettings',
@@ -72,7 +72,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = new ObjectManagerHelper($this);
         $this->model = $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
             [
                 'options' => $this->getOptions(),
                 'elasticsearchClient' => $this->elasticsearchClientMock
@@ -86,7 +86,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testConstructorOptionsException()
     {
         $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
             [
                 'options' => []
             ]
@@ -99,7 +99,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testConstructorWithOptions()
     {
         $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
             [
                 'options' => $this->getOptions()
             ]
@@ -139,7 +139,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testTestConnectionPing()
     {
         $this->model = $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Client\Elasticsearch',
+            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
             [
                 'options' => $this->getEmptyIndexOption(),
                 'elasticsearchClient' => $this->elasticsearchClientMock

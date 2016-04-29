@@ -15,6 +15,9 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 use Magento\Search\Model\QueryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SuggestionsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -64,43 +67,43 @@ class SuggestionsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->config = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
+        $this->config = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isElasticsearchEnabled'])
             ->getMock();
 
-        $this->queryResultFactory = $this->getMockBuilder('Magento\Search\Model\QueryResultFactory')
+        $this->queryResultFactory = $this->getMockBuilder(\Magento\Search\Model\QueryResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->searchIndexNameResolver = $this
-            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver')
+            ->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIndexName'])
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->query = $this->getMockBuilder('Magento\Search\Model\QueryInterface')
+        $this->query = $this->getMockBuilder(\Magento\Search\Model\QueryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
-            'Magento\Elasticsearch\Model\DataProvider\Suggestions',
+            \Magento\Elasticsearch\Model\DataProvider\Suggestions::class,
             [
                 'queryResultFactory' => $this->queryResultFactory,
                 'connectionManager' => $this->connectionManager,
@@ -125,7 +128,7 @@ class SuggestionsTest extends \PHPUnit_Framework_TestCase
             ->method('isElasticsearchEnabled')
             ->willReturn(1);
 
-        $store = $this->getMockBuilder('Magento\Store\Api\Data\StoreInterface')
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -145,7 +148,7 @@ class SuggestionsTest extends \PHPUnit_Framework_TestCase
             ->method('getQueryText')
             ->willReturn('query');
 
-        $client = $this->getMockBuilder('Magento\Elasticsearch\Model\Client\Elasticsearch')
+        $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -169,7 +172,7 @@ class SuggestionsTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $query = $this->getMockBuilder('Magento\Search\Model\QueryResult')
+        $query = $this->getMockBuilder(\Magento\Search\Model\QueryResult::class)
             ->disableOriginalConstructor()
             ->getMock();
 

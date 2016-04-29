@@ -38,10 +38,10 @@ class DataMapperResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataMapperEntity = $this->getMockBuilder('\Magento\Elasticsearch\Model\Adapter\DataMapperInterface')
+        $this->dataMapperEntity = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\DataMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataMappers = [
@@ -49,7 +49,7 @@ class DataMapperResolverTest extends \PHPUnit_Framework_TestCase
         ];
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver',
+            \Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'dataMappers' => $this->dataMappers

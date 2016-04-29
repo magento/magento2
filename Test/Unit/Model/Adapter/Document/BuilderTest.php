@@ -25,7 +25,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->builder = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Document\Builder'
+            \Magento\Elasticsearch\Model\Adapter\Document\Builder::class
         );
     }
 

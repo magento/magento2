@@ -18,6 +18,8 @@ use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 
 /**
  * Class ElasticsearchTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ElasticsearchTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,29 +81,29 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMock();
-        $this->documentDataMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\DataMapperInterface')
+        $this->documentDataMapper = $this->getMockBuilder(
+            \Magento\Elasticsearch\Model\Adapter\DataMapperInterface::class
+        )->disableOriginalConstructor()->getMock();
+        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
+        $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIndexPrefix',
                 'getEntityType',
             ])->getMock();
-        $this->indexBuilder = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface')
+        $this->indexBuilder = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $elasticsearchClientMock = $this->getMockBuilder('\Elasticsearch\Client')
+        $elasticsearchClientMock = $this->getMockBuilder(\Elasticsearch\Client::class)
             ->setMethods([
                 'indices',
                 'ping',
@@ -110,7 +112,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ])
             ->disableOriginalConstructor()
             ->getMock();
-        $indicesMock = $this->getMockBuilder('\Elasticsearch\Namespaces\IndicesNamespace')
+        $indicesMock = $this->getMockBuilder(\Elasticsearch\Namespaces\IndicesNamespace::class)
             ->setMethods([
                 'exists',
                 'getSettings',
@@ -126,7 +128,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $elasticsearchClientMock->expects($this->any())
             ->method('indices')
             ->willReturn($indicesMock);
-        $this->client = $this->getMockBuilder('Magento\Elasticsearch\Model\Client\Elasticsearch')
+        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
             ->setConstructorArgs([
                 'options' => $this->getClientOptions(),
                 'elasticsearchClient' => $elasticsearchClientMock
@@ -146,7 +148,9 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
         $this->clientConfig->expects($this->any())
             ->method('getEntityType')
             ->willReturn('product');
-        $this->indexNameResolver = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver')
+        $this->indexNameResolver = $this->getMockBuilder(
+            \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver::class
+        )
             ->setMethods([
                 'getIndexName',
                 'getIndexNamespace',
@@ -157,7 +161,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
+            \Magento\Elasticsearch\Model\Adapter\Elasticsearch::class,
             [
                 'connectionManager' => $this->connectionManager,
                 'documentDataMapper' => $this->documentDataMapper,
@@ -343,7 +347,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
     public function testUpdateAliasEmpty()
     {
         $model = $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
+            \Magento\Elasticsearch\Model\Adapter\Elasticsearch::class,
             [
                 'connectionManager' => $this->connectionManager,
                 'documentDataMapper' => $this->documentDataMapper,
@@ -367,7 +371,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      */
     public function testConnectException()
     {
-        $connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
+        $connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getConnection',
@@ -379,7 +383,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Exception('Something went wrong'));
 
         $this->objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Elasticsearch',
+            \Magento\Elasticsearch\Model\Adapter\Elasticsearch::class,
             [
                 'connectionManager' => $connectionManager,
                 'documentDataMapper' => $this->documentDataMapper,

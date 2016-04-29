@@ -37,11 +37,11 @@ class EngineTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIfNullSql'])
             ->getMockForAbstractClass();
-        $resource = $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
+        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getTableName'])
             ->getMock();
@@ -53,19 +53,21 @@ class EngineTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName')
             ->will($this->returnArgument(0));
 
-        $this->catalogProductVisibility = $this->getMockBuilder('\Magento\Catalog\Model\Product\Visibility')
+        $this->catalogProductVisibility = $this->getMockBuilder(\Magento\Catalog\Model\Product\Visibility::class)
             ->disableOriginalConstructor()
             ->setMethods(['getVisibleInSiteIds'])
             ->getMock();
 
-        $this->indexScopeResolver = $this->getMockBuilder('\Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver')
+        $this->indexScopeResolver = $this->getMockBuilder(
+            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['getVisibleInSiteIds'])
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\ResourceModel\Engine',
+            \Magento\Elasticsearch\Model\ResourceModel\Engine::class,
             [
                 'catalogProductVisibility' => $this->catalogProductVisibility,
                 'indexScopeResolver' => $this->indexScopeResolver

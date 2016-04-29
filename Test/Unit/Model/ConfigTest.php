@@ -31,13 +31,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Config',
+            \Magento\Elasticsearch\Model\Config::class,
             [
                 'scopeConfig' => $this->scopeConfig
             ]

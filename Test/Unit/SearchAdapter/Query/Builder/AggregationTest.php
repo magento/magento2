@@ -39,20 +39,20 @@ class AggregationTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->fieldMapper = $this->getMockBuilder('Magento\Elasticsearch\Model\Adapter\FieldMapperInterface')
+        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestInterface = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
+        $this->requestInterface = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestBucketInterface = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+        $this->requestBucketInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $helper->getObject(
-            'Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation',
+            \Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation::class,
             [
                 'fieldMapper' =>$this->fieldMapper,
             ]

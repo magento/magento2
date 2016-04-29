@@ -26,7 +26,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->moduleReaderMock = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
+        $this->moduleReaderMock = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
         $this->moduleReaderMock->expects(
             $this->any()
         )->method(
@@ -40,7 +40,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Elasticsearch\Model\Adapter\Index\Config\SchemaLocator',
+            \Magento\Elasticsearch\Model\Adapter\Index\Config\SchemaLocator::class,
             [
                 'moduleReader' => $this->moduleReaderMock
             ]

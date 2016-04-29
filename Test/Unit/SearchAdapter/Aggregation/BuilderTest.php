@@ -44,17 +44,19 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->dataProviderContainer = $this->getMockBuilder('Magento\Framework\Search\Dynamic\DataProviderInterface')
+        $this->dataProviderContainer = $this->getMockBuilder(
+            \Magento\Framework\Search\Dynamic\DataProviderInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
         $this->aggregationContainer = $this
-            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface')
+            ->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\Aggregation\Builder',
+            \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder::class,
             [
                 'dataProviderContainer' => ['indexName' => $this->dataProviderContainer],
                 'aggregationContainer' => ['bucketType' => $this->aggregationContainer],
@@ -67,11 +69,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild()
     {
-        $this->requestInterface = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
+        $this->requestInterface = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestBuckedInterface = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+        $this->requestBuckedInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -79,7 +81,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getIndex')
             ->willReturn('indexName');
 
-        $dimensionMock = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
+        $dimensionMock = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
             ->disableOriginalConstructor()
             ->getMock();
             

@@ -30,7 +30,6 @@ class TermTest extends \PHPUnit_Framework_TestCase
      */
     protected $bucket;
 
-
     /**
      * Set up test environment.
      *
@@ -38,15 +37,17 @@ class TermTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->requestBuckedInterface = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+        $this->requestBuckedInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dataProviderContainer = $this->getMockBuilder('Magento\Framework\Search\Dynamic\DataProviderInterface')
+        $this->dataProviderContainer = $this->getMockBuilder(
+            \Magento\Framework\Search\Dynamic\DataProviderInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->bucket = $this->getMockBuilder('Magento\Framework\Search\Request\Aggregation\TermBucket')
+        $this->bucket = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\TermBucket::class)
             ->setMethods(['getName'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -54,7 +55,7 @@ class TermTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->model = $objectManagerHelper->getObject(
-            '\Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term',
+            \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term::class,
             []
         );
     }
