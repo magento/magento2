@@ -10,6 +10,9 @@ namespace Magento\Wishlist\Test\Unit\Model\Rss;
 
 use Magento\Directory\Helper\Data;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class WishlistTest extends \PHPUnit_Framework_TestCase
 {
     /**
