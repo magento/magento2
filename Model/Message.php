@@ -15,6 +15,6 @@ class Message extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\MysqlMq\Model\ResourceModel\Message');
+        $this->_init(\Magento\MysqlMq\Model\ResourceModel\Message::class);
     }
 }

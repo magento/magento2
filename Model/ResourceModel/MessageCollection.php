@@ -17,6 +17,6 @@ class MessageCollection extends \Magento\Framework\Model\ResourceModel\Db\Collec
      */
     protected function _construct()
     {
-        $this->_init('Magento\MysqlMq\Model\Message', 'Magento\MysqlMq\Model\ResourceModel\Message');
+        $this->_init(\Magento\MysqlMq\Model\Message::class, \Magento\MysqlMq\Model\ResourceModel\Message::class);
     }
 }

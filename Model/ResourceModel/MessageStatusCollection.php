@@ -17,6 +17,9 @@ class MessageStatusCollection extends \Magento\Framework\Model\ResourceModel\Db\
      */
     protected function _construct()
     {
-        $this->_init('Magento\MysqlMq\Model\MessageStatus', 'Magento\MysqlMq\Model\ResourceModel\MessageStatus');
+        $this->_init(
+            \Magento\MysqlMq\Model\MessageStatus::class,
+            \Magento\MysqlMq\Model\ResourceModel\MessageStatus::class
+        );
     }
 }
