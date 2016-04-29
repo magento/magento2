@@ -21,11 +21,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMockBuilder('Magento\PageCache\Model\Config')
+        $this->config = $this->getMockBuilder(\Magento\PageCache\Model\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isEnabled'])
             ->getMock();
-        $this->typeList = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
+        $this->typeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['invalidate'])
             ->getMockForAbstractClass();
@@ -35,10 +35,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundSaveWithoutInvalidate()
     {
-        $subject = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Attribute')
+        $subject = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $self = $this;
@@ -58,10 +58,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundSave()
     {
-        $subject = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Attribute')
+        $subject = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
 

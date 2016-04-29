@@ -190,7 +190,7 @@ class Front extends Generic
         $this->setChild(
             'form_after',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Form\Element\Dependence'
+                \Magento\Backend\Block\Widget\Form\Element\Dependence::class
             )->addFieldMap(
                 "is_wysiwyg_enabled",
                 'wysiwyg_enabled'

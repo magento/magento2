@@ -50,7 +50,7 @@ class SuggestAttributes extends \Magento\Backend\App\Action
         $resultJson = $this->resultJsonFactory->create();
         $resultJson->setData(
             $this->layoutFactory->create()
-                ->createBlock('Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search')
+                ->createBlock(\Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search::class)
                 ->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
         );
         return $resultJson;

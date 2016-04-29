@@ -37,7 +37,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false,
@@ -45,9 +45,9 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->subject = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
+        $this->subject = $this->getMock(\Magento\Store\Model\ResourceModel\Group::class, [], [], '', false);
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get'],
             [],
             '',
@@ -61,7 +61,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockIndexerMethods();
         $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
             [],
             '',
@@ -76,7 +76,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockIndexerMethods();
         $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
             [],
             '',
@@ -98,7 +98,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveNoNeed()
     {
         $storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['isObjectNew', 'dataHasChangedFor', '__wakeup'],
             [],
             '',
@@ -123,7 +123,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected function getStateMock()
     {
         $stateMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer\State',
+            \Magento\Indexer\Model\Indexer\State::class,
             ['setStatus', 'save', '__wakeup'],
             [],
             '',

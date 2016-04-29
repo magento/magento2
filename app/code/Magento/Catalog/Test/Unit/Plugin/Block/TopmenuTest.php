@@ -45,7 +45,7 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_catalogCategory = $this->getMock(
-            '\Magento\Catalog\Helper\Category',
+            \Magento\Catalog\Helper\Category::class,
             ['getStoreCategories', 'getCategoryUrl'],
             [],
             '',
@@ -53,19 +53,19 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->menuCategoryData = $this->getMock(
-            'Magento\Catalog\Observer\MenuCategoryData',
+            \Magento\Catalog\Observer\MenuCategoryData::class,
             ['getMenuCategoryData'],
             [],
             '',
             false
         );
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->setMethods(['getRootCategoryId', 'getFilters', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -75,12 +75,13 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
         $this->store->expects($this->any())->method('getRootCategoryId')
             ->will($this->returnValue(1));
 
-        $collectionFactory = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory')
+        $collectionFactory = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $collection =  $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\Collection')
+        $collection =  $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category\Collection::class)
             ->setMethods(
                 [
                     'addIsActiveFilter',
@@ -125,7 +126,7 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
     protected function _preparationData()
     {
         $this->_childrenCategory = $this->getMock(
-            '\Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             ['getIsActive', '__wakeup'],
             [],
             '',
@@ -134,14 +135,14 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
 
 
         $this->_category = $this->getMock(
-            '\Magento\Catalog\Model\Category',
+            \Magento\Catalog\Model\Category::class,
             ['getIsActive', '__wakeup', 'getName', 'getChildren', 'getUseFlatResource', 'getChildrenNodes'],
             [],
             '',
             false
         );
 
-        $blockMock = $this->_getCleanMock('\Magento\Theme\Block\Html\Topmenu');
+        $blockMock = $this->_getCleanMock(\Magento\Theme\Block\Html\Topmenu::class);
         return $blockMock;
     }
 

@@ -97,14 +97,17 @@ class ValidateTest extends AttributeTest
      */
     protected function getModel()
     {
-        return $this->objectManager->getObject(Validate::class, [
-            'context' => $this->contextMock,
-            'attributeLabelCache' => $this->attributeLabelCacheMock,
-            'coreRegistry' => $this->coreRegistryMock,
-            'resultPageFactory' => $this->resultPageFactoryMock,
-            'resultJsonFactory' => $this->resultJsonFactoryMock,
-            'layoutFactory' => $this->layoutFactoryMock,
-        ]);
+        return $this->objectManager->getObject(
+            Validate::class,
+            [
+                'context' => $this->contextMock,
+                'attributeLabelCache' => $this->attributeLabelCacheMock,
+                'coreRegistry' => $this->coreRegistryMock,
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'layoutFactory' => $this->layoutFactoryMock,
+            ]
+        );
     }
 
     public function testExecute()
@@ -119,8 +122,8 @@ class ValidateTest extends AttributeTest
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->willReturnMap([
-                ['Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], $this->attributeMock],
-                ['Magento\Eav\Model\Entity\Attribute\Set', [], $this->attributeSetMock]
+                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
+                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
             ]);
         $this->attributeMock->expects($this->once())
             ->method('loadByCode')

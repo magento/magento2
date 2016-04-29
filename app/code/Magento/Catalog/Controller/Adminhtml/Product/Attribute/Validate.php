@@ -58,7 +58,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel[0]);
         $attributeId = $this->getRequest()->getParam('attribute_id');
         $attribute = $this->_objectManager->create(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
         )->loadByCode(
             $this->_entityTypeId,
             $attributeCode
@@ -77,10 +77,10 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         if ($this->getRequest()->has('new_attribute_set_name')) {
             $setName = $this->getRequest()->getParam('new_attribute_set_name');
             /** @var $attributeSet \Magento\Eav\Model\Entity\Attribute\Set */
-            $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set');
+            $attributeSet = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class);
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
-                $setName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($setName);
+                $setName = $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($setName);
                 $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $setName));
 
                 $layout = $this->layoutFactory->create();

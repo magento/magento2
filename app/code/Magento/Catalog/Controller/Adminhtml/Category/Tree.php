@@ -47,7 +47,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
         if ($storeId) {
             if (!$categoryId) {
                 $store = $this->_objectManager
-                    ->get('Magento\Store\Model\StoreManagerInterface')
+                    ->get(\Magento\Store\Model\StoreManagerInterface::class)
                     ->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
                 $this->getRequest()->setParam('id', $rootId);
@@ -61,7 +61,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
-        $block = $this->layoutFactory->create()->createBlock('Magento\Catalog\Block\Adminhtml\Category\Tree');
+        $block = $this->layoutFactory->create()->createBlock(\Magento\Catalog\Block\Adminhtml\Category\Tree::class);
         $root = $block->getRoot();
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();

@@ -45,7 +45,7 @@ abstract class Set extends \Magento\Backend\App\Action
     {
         $this->_coreRegistry->register(
             'entityType',
-            $this->_objectManager->create('Magento\Catalog\Model\Product')->getResource()->getTypeId()
+            $this->_objectManager->create(\Magento\Catalog\Model\Product::class)->getResource()->getTypeId()
         );
     }
 }

@@ -10,7 +10,7 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
     public function testConstructorRequestVarIsOverwrittenCorrectlyInParent()
     {
         $attributeModel = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getAttributeCode', '__wakeup'],
             [],
             '',
@@ -20,12 +20,14 @@ class DecimalTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $dataProviderFactory = $this->getMockBuilder('\Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory')
+        $dataProviderFactory = $this->getMockBuilder(
+            \Magento\Catalog\Model\Layer\Filter\DataProvider\DecimalFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $instance = $objectManager->getObject(
-            'Magento\Catalog\Model\Layer\Filter\Decimal',
+            \Magento\Catalog\Model\Layer\Filter\Decimal::class,
             [
                 'data' => [
                     'attribute_model' => $attributeModel,

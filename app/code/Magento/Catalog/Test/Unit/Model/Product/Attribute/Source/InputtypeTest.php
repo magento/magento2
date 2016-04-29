@@ -21,11 +21,11 @@ class InputtypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->getMock('Magento\Framework\Registry');
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->inputtypeModel = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product\Attribute\Source\Inputtype',
+            \Magento\Catalog\Model\Product\Attribute\Source\Inputtype::class,
             [
                 'coreRegistry' => $this->registry
             ]

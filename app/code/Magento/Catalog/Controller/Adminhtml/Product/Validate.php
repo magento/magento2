@@ -153,7 +153,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         if (null === $this->storeManager) {
             $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Store\Model\StoreManagerInterface');
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
         }
         return $this->storeManager;
     }

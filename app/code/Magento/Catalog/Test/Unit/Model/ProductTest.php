@@ -176,61 +176,61 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Framework\Indexer\IndexerInterface');
+        $this->categoryIndexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
 
         $this->moduleManager = $this->getMock(
-            'Magento\Framework\Module\Manager',
+            \Magento\Framework\Module\Manager::class,
             ['isEnabled'],
             [],
             '',
             false
         );
         $this->stockItemFactoryMock = $this->getMock(
-            'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory',
+            \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productFlatProcessor = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
+            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
             [],
             [],
             '',
             false
         );
 
-        $this->_priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
-        $this->productTypeInstanceMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
+        $this->_priceInfoMock = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $this->productTypeInstanceMock = $this->getMock(\Magento\Catalog\Model\Product\Type::class, [], [], '', false);
         $this->productPriceProcessor = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Price\Processor',
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class,
             [],
             [],
             '',
             false
         );
 
-        $stateMock = $this->getMock('Magento\FrameworkApp\State', ['getAreaCode'], [], '', false);
+        $stateMock = $this->getMock(\Magento\Framework\App\State::class, ['getAreaCode'], [], '', false);
         $stateMock->expects($this->any())
             ->method('getAreaCode')
             ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
 
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
         $actionValidatorMock = $this->getMock(
-            '\Magento\Framework\Model\ActionValidator\RemoveAction',
+            \Magento\Framework\Model\ActionValidator\RemoveAction::class,
             [],
             [],
             '',
             false
         );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $cacheInterfaceMock = $this->getMock('Magento\Framework\App\CacheInterface');
+        $cacheInterfaceMock = $this->getMock(\Magento\Framework\App\CacheInterface::class);
 
         $contextMock = $this->getMock(
-            '\Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
         );
         $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
@@ -244,12 +244,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getActionValidator')
             ->will($this->returnValue($actionValidatorMock));
 
-        $this->optionInstanceMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
+        $this->optionInstanceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->setMethods(['setProduct', 'saveOptions', '__wakeup', '__sleep'])
             ->disableOriginalConstructor()->getMock();
 
         $optionFactory = $this->getMock(
-            'Magento\Catalog\Model\Product\OptionFactory',
+            \Magento\Catalog\Model\Product\OptionFactory::class,
             ['create'],
             [],
             '',
@@ -257,27 +257,27 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
         $optionFactory->expects($this->any())->method('create')->willReturn($this->optionInstanceMock);
 
-        $this->resource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
+        $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->category = $this->getMockBuilder('Magento\Catalog\Model\Category')
+        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->website = $this->getMockBuilder('\Magento\Store\Model\Website')
+        $this->website = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $storeManager->expects($this->any())
@@ -286,38 +286,44 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())
             ->method('getWebsite')
             ->will($this->returnValue($this->website));
-        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
-        $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $this->indexerRegistryMock = $this->getMock(
+            \Magento\Framework\Indexer\IndexerRegistry::class,
+            ['get'],
+            [],
+            '',
+            false
+        );
+        $this->categoryRepository = $this->getMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
 
         $this->_catalogProduct = $this->getMock(
-            'Magento\Catalog\Helper\Product',
+            \Magento\Catalog\Helper\Product::class,
             ['isDataForProductCategoryIndexerWasChanged'],
             [],
             '',
             false
         );
 
-        $this->imageCache = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\Cache')
+        $this->imageCache = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\Cache::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageCacheFactory = $this->getMockBuilder('Magento\Catalog\Model\Product\Image\CacheFactory')
+        $this->imageCacheFactory = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\CacheFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->mediaGalleryEntryFactoryMock =
-            $this->getMockBuilder('Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory')
+            $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\ProductAttributeRepositoryInterface');
-        $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
+        $this->metadataServiceMock = $this->getMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
+        $this->attributeValueFactory = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->mediaGalleryEntryConverterPoolMock =
             $this->getMock(
-                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool',
+                \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool::class,
                 ['getConverterByMediaType'],
                 [],
                 '',
@@ -326,7 +332,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->converterMock =
             $this->getMock(
-                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter',
+                \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::class,
                 [],
                 [],
                 '',
@@ -336,15 +342,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->mediaGalleryEntryConverterPoolMock->expects($this->any())->method('getConverterByMediaType')->willReturn(
             $this->converterMock
         );
-        $this->productLinkRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductLinkRepositoryInterface')
+        $this->productLinkRepositoryMock = $this->getMockBuilder(
+            \Magento\Catalog\Api\ProductLinkRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
+        $this->mediaConfig = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->model = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 'context' => $contextMock,
                 'catalogProductType' => $this->productTypeInstanceMock,
@@ -383,14 +390,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAttributes()
     {
-        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+        $productType = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
             ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
             $this->returnValue($productType)
         );
-        $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['__wakeup', 'isInGroup'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -430,11 +437,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCategoryCollection()
     {
-        $collection = $this->getMockBuilder('\Magento\Framework\Data\Collection')
+        $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
-        $this->assertInstanceOf('\Magento\Framework\Data\Collection', $this->model->getCategoryCollection());
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $this->model->getCategoryCollection());
     }
 
     /**
@@ -443,7 +450,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetCategoryCollectionCollectionNull($initCategoryCollection, $getIdResult, $productIdCached)
     {
         $product = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 '_getResource',
                 'setCategoryCollection',
@@ -454,14 +461,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $abstractDbMock = $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+        $abstractDbMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCategoryCollection',
             ])
             ->getMockForAbstractClass();
         $getCategoryCollectionMock = $this->getMock(
-            '\Magento\Framework\Data\Collection',
+            \Magento\Framework\Data\Collection::class,
             [],
             [],
             '',
@@ -513,7 +520,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCategoryCollection()
     {
-        $collection = $this->getMockBuilder('\Magento\Framework\Data\Collection')
+        $collection = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->once())->method('getCategoryCollection')->will($this->returnValue($collection));
@@ -525,7 +532,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->category->expects($this->any())->method('getId')->will($this->returnValue(10));
         $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->category));
         $this->categoryRepository->expects($this->any())->method('get')->will($this->returnValue($this->category));
-        $this->assertInstanceOf('\Magento\Catalog\Model\Category', $this->model->getCategory());
+        $this->assertInstanceOf(\Magento\Catalog\Model\Category::class, $this->model->getCategory());
     }
 
     public function testGetCategoryId()
@@ -617,7 +624,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testPriceReindexCallback()
     {
         $this->model = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 'catalogProductType' => $this->productTypeInstanceMock,
                 'categoryIndexer' => $this->categoryIndexerMock,
@@ -821,7 +828,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetIsSalableSimple()
     {
         $typeInstanceMock =
-            $this->getMock('Magento\Catalog\Model\Product\Type\Simple', ['isSalable'], [], '', false);
+            $this->getMock(\Magento\Catalog\Model\Product\Type\Simple::class, ['isSalable'], [], '', false);
         $typeInstanceMock
             ->expects($this->atLeastOnce())
             ->method('isSalable')
@@ -834,7 +841,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIsSalableHasDataIsSaleable()
     {
-        $typeInstanceMock = $this->getMock('Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
+        $typeInstanceMock = $this->getMock(\Magento\Catalog\Model\Product\Type\Simple::class, [], [], '', false);
 
         $this->model->setTypeInstance($typeInstanceMock);
         $this->model->setData('is_saleable', true);
@@ -850,7 +857,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function configureSaveTest()
     {
-        $productTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\Simple')
+        $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Simple::class)
             ->disableOriginalConstructor()->setMethods(['beforeSave', 'save'])->getMock();
         $productTypeMock->expects($this->once())->method('beforeSave')->will($this->returnSelf());
         $productTypeMock->expects($this->once())->method('save')->will($this->returnSelf());
@@ -874,7 +881,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ];
 
         $stockItemMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\AbstractSimpleObject',
+            \Magento\Framework\Api\AbstractSimpleObject::class,
             [],
             '',
             false,
@@ -889,7 +896,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($stockItemMock, $data['stock_item'], '\Magento\CatalogInventory\Api\Data\StockItemInterface')
+            ->with($stockItemMock, $data['stock_item'], \Magento\CatalogInventory\Api\Data\StockItemInterface::class)
             ->will($this->returnSelf());
         $this->stockItemFactoryMock->expects($this->once())
             ->method('create')
@@ -912,7 +919,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetProductLinks()
     {
-        $outputRelatedLink = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $outputRelatedLink = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $outputRelatedLink->setSku("Simple Product 1");
         $outputRelatedLink->setLinkType("related");
         $outputRelatedLink->setLinkedProductSku("Simple Product 2");
@@ -929,7 +936,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetProductLinks()
     {
-        $link = $this->objectManagerHelper->getObject('Magento\Catalog\Model\ProductLink\Link');
+        $link = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\ProductLink\Link::class);
         $link->setSku("Simple Product 1");
         $link->setLinkType("upsell");
         $link->setLinkedProductSku("Simple Product 2");
@@ -945,7 +952,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function setupMediaAttributes()
     {
-        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+        $productType = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
             ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -953,12 +960,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($productType)
         );
 
-        $frontendMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend')
+        $frontendMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class)
             ->disableOriginalConstructor()
             ->setMethods(['getInputType'])
             ->getMockForAbstractClass();
         $frontendMock->expects($this->any())->method('getInputType')->willReturn('media_image');
-        $attributeImage = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeImage = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -966,7 +973,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->method('getFrontend')
             ->willReturn($frontendMock);
         $attributeImage->expects($this->any())->method('getAttributeCode')->willReturn('image');
-        $attributeSmallImage = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeSmallImage = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods(['__wakeup', 'getFrontend', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -1034,9 +1041,21 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->setData('media_gallery', $mediaEntries);
 
         $entry1 =
-            $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface', [], [], '', false);
+            $this->getMock(
+                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class,
+                [],
+                [],
+                '',
+                false
+            );
         $entry2 =
-            $this->getMock('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface', [], [], '', false);
+            $this->getMock(
+                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class,
+                [],
+                [],
+                '',
+                false
+            );
 
         $this->converterMock->expects($this->exactly(2))->method('convertTo')->willReturnOnConsecutiveCalls(
             $entry1,
@@ -1069,7 +1088,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $entryMock = $this->getMockBuilder('\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface')
+        $entryMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class)
                           ->setMethods(
                               [
                                   'getId',
@@ -1111,11 +1130,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $priceCode = 'price';
         $colorAttributeCode = 'color';
-        $interfaceAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $interfaceAttribute = $this->getMock(\Magento\Framework\Api\MetadataObjectInterface::class);
         $interfaceAttribute->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($priceCode);
-        $colorAttribute = $this->getMock('\Magento\Framework\Api\MetadataObjectInterface');
+        $colorAttribute = $this->getMock(\Magento\Framework\Api\MetadataObjectInterface::class);
         $colorAttribute->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($colorAttributeCode);
@@ -1161,12 +1180,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testGetOptions()
     {
         $option1Id = 2;
-        $optionMock1 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+        $optionMock1 = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'setProduct'])
             ->getMock();
         $option2Id = 3;
-        $optionMock2 = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option')
+        $optionMock2 = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'setProduct'])
             ->getMock();
@@ -1215,7 +1234,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $qty = 1;
         $this->model->setQty($qty);
         $productTypePriceMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Type\Price',
+            \Magento\Catalog\Model\Product\Type\Price::class,
             ['getFinalPrice'],
             [],
             '',
@@ -1248,7 +1267,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTypeId()
     {
-        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\Virtual')
+        $productType = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\Virtual::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 

@@ -37,7 +37,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->_indexerMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer',
+            \Magento\Indexer\Model\Indexer::class,
             ['getId', 'invalidate'],
             [],
             '',
@@ -46,23 +46,26 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_indexerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
 
         $this->_stateMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State',
+            \Magento\Catalog\Model\Indexer\Product\Flat\State::class,
             ['isFlatEnabled'],
             [],
             '',
             false
         );
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get'],
             [],
             '',
             false
         );
-        $this->_model = $this->_objectManager->getObject('Magento\Catalog\Model\Indexer\Product\Flat\Processor', [
-            'indexerRegistry' => $this->indexerRegistryMock,
-            'state'  => $this->_stateMock
-        ]);
+        $this->_model = $this->_objectManager->getObject(
+            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
+            [
+                'indexerRegistry' => $this->indexerRegistryMock,
+                'state'  => $this->_stateMock
+            ]
+        );
     }
 
     /**
@@ -71,7 +74,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     public function testGetIndexer()
     {
         $this->prepareIndexer();
-        $this->assertInstanceOf('\Magento\Indexer\Model\Indexer', $this->_model->getIndexer());
+        $this->assertInstanceOf(\Magento\Indexer\Model\Indexer::class, $this->_model->getIndexer());
     }
 
     /**

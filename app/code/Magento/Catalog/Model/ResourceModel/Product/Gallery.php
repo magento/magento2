@@ -36,7 +36,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connectionName = null
     ) {
         $this->metadata = $metadataPool->getMetadata(
-            'Magento\Catalog\Api\Data\ProductInterface'
+            \Magento\Catalog\Api\Data\ProductInterface::class
         );
 
         parent::__construct($context, $connectionName);

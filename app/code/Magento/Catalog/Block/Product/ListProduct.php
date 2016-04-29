@@ -24,7 +24,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      *
      * @var string
      */
-    protected $_defaultToolbarBlock = 'Magento\Catalog\Block\Product\ProductList\Toolbar';
+    protected $_defaultToolbarBlock = \Magento\Catalog\Block\Product\ProductList\Toolbar::class;
 
     /**
      * Product Collection

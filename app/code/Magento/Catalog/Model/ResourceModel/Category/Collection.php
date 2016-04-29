@@ -63,7 +63,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Category', 'Magento\Catalog\Model\ResourceModel\Category');
+        $this->_init(\Magento\Catalog\Model\Category::class, \Magento\Catalog\Model\ResourceModel\Category::class);
     }
 
     /**

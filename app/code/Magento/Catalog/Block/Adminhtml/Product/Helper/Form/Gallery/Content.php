@@ -56,7 +56,7 @@ class Content extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild('uploader', 'Magento\Backend\Block\Media\Uploader');
+        $this->addChild('uploader', \Magento\Backend\Block\Media\Uploader::class);
 
         $this->getUploader()->getConfig()->setUrl(
             $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')

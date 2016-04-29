@@ -57,7 +57,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         parent::_prepareLayout();
 
-        $this->getLayout()->createBlock('Magento\Catalog\Block\Breadcrumbs');
+        $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
 
         $category = $this->getCurrentCategory();
         if ($category) {
@@ -118,7 +118,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         if (!$this->getData('cms_block_html')) {
             $html = $this->getLayout()->createBlock(
-                'Magento\Cms\Block\Block'
+                \Magento\Cms\Block\Block::class
             )->setBlockId(
                 $this->getCurrentCategory()->getLandingPage()
             )->toHtml();

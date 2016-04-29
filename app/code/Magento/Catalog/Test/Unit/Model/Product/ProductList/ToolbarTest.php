@@ -27,11 +27,11 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->toolbarModel = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Model\Product\ProductList\Toolbar',
+            \Magento\Catalog\Model\Product\ProductList\Toolbar::class,
             [
                 'request' => $this->requestMock,
             ]

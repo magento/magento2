@@ -164,7 +164,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Attribute');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Attribute::class);
     }
 
     /**
@@ -193,7 +193,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         }
         if ($this->getFrontendInput() == 'price') {
             if (!$this->getBackendModel()) {
-                $this->setBackendModel('Magento\Catalog\Model\Product\Attribute\Backend\Price');
+                $this->setBackendModel(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class);
             }
         }
         if ($this->getFrontendInput() == 'textarea') {
@@ -405,7 +405,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function _getDefaultSourceModel()
     {
-        return 'Magento\Eav\Model\Entity\Attribute\Source\Table';
+        return \Magento\Eav\Model\Entity\Attribute\Source\Table::class;
     }
 
     /**

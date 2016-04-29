@@ -265,7 +265,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     {
         if (null === $this->optionManagement) {
             $this->optionManagement = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Api\ProductAttributeOptionManagementInterface');
+                ->get(\Magento\Catalog\Api\ProductAttributeOptionManagementInterface::class);
         }
         return $this->optionManagement;
     }

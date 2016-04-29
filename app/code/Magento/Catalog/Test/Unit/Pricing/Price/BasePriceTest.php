@@ -59,12 +59,18 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $qty = 1;
-        $this->saleableItemMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
-        $this->regularPriceMock = $this->getMock('Magento\Catalog\Pricing\Price\RegularPrice', [], [], '', false);
-        $this->tearPriceMock = $this->getMock('Magento\Catalog\Pricing\Price\TierPrice', [], [], '', false);
-        $this->specialPriceMock = $this->getMock('Magento\Catalog\Pricing\Price\SpecialPrice', [], [], '', false);
-        $this->calculatorMock = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
+        $this->saleableItemMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->priceInfoMock = $this->getMock(\Magento\Framework\Pricing\PriceInfo\Base::class, [], [], '', false);
+        $this->regularPriceMock = $this->getMock(\Magento\Catalog\Pricing\Price\RegularPrice::class, [], [], '', false);
+        $this->tearPriceMock = $this->getMock(\Magento\Catalog\Pricing\Price\TierPrice::class, [], [], '', false);
+        $this->specialPriceMock = $this->getMock(\Magento\Catalog\Pricing\Price\SpecialPrice::class, [], [], '', false);
+        $this->calculatorMock = $this->getMock(
+            \Magento\Framework\Pricing\Adjustment\Calculator::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
@@ -76,7 +82,8 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->basePrice = $helper->getObject('Magento\Catalog\Pricing\Price\BasePrice',
+        $this->basePrice = $helper->getObject(
+            \Magento\Catalog\Pricing\Price\BasePrice::class,
             [
                 'saleableItem' => $this->saleableItemMock,
                 'quantity' => $qty,

@@ -183,7 +183,7 @@ class NewWidget extends \Magento\Catalog\Block\Product\NewProduct implements \Ma
         if ($this->showPager()) {
             if (!$this->_pager) {
                 $this->_pager = $this->getLayout()->createBlock(
-                    'Magento\Catalog\Block\Product\Widget\Html\Pager',
+                    \Magento\Catalog\Block\Product\Widget\Html\Pager::class,
                     'widget.new.product.list.pager'
                 );
 

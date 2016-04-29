@@ -301,7 +301,7 @@ class EavTest extends AbstractModifierTest
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('setAscendingDirection')
             ->willReturnSelf();
-        $dataObjectMock = $this->getMock('\Magento\Framework\Api\AbstractSimpleObject', [], [], '', false);
+        $dataObjectMock = $this->getMock(\Magento\Framework\Api\AbstractSimpleObject::class, [], [], '', false);
         $this->sortOrderBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($dataObjectMock);
