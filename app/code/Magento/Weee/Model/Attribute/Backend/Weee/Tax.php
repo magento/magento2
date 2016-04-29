@@ -53,7 +53,7 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
      */
     public static function getBackendModelName()
     {
-        return 'Magento\Weee\Model\Attribute\Backend\Weee\Tax';
+        return \Magento\Weee\Model\Attribute\Backend\Weee\Tax::class;
     }
 
     /**

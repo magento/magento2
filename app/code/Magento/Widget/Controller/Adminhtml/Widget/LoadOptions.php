@@ -18,7 +18,9 @@ class LoadOptions extends \Magento\Backend\App\Action
         try {
             $this->_view->loadLayout();
             if ($paramsJson = $this->getRequest()->getParam('widget')) {
-                $request = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonDecode($paramsJson);
+                $request = $this->_objectManager->get(
+                    \Magento\Framework\Json\Helper\Data::class
+                )->jsonDecode($paramsJson);
                 if (is_array($request)) {
                     $optionsBlock = $this->_view->getLayout()->getBlock('wysiwyg_widget.options');
                     if (isset($request['widget_type'])) {
@@ -33,7 +35,7 @@ class LoadOptions extends \Magento\Backend\App\Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
             );
         }
     }

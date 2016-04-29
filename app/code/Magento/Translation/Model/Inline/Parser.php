@@ -135,7 +135,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     {
         if (!$this->cacheManager instanceof \Magento\Translation\Model\Inline\CacheManager) {
             $this->cacheManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Translation\Model\Inline\CacheManager'
+                \Magento\Translation\Model\Inline\CacheManager::class
             );
         }
         return $this->cacheManager;

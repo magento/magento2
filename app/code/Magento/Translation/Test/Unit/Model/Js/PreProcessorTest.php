@@ -34,22 +34,22 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\Translation\Model\Js\Config', [], [], '', false);
-        $this->areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
-        $this->translateMock = $this->getMockForAbstractClass('Magento\Framework\TranslateInterface');
+        $this->configMock = $this->getMock(\Magento\Translation\Model\Js\Config::class, [], [], '', false);
+        $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
+        $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
         $this->model = new PreProcessor($this->configMock, $this->areaListMock, $this->translateMock);
     }
 
     public function testGetData()
     {
-        $asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
-        $chain = $this->getMock('Magento\Framework\View\Asset\PreProcessor\Chain', [], [], '', false);
-        $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
+        $asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $chain = $this->getMock(\Magento\Framework\View\Asset\PreProcessor\Chain::class, [], [], '', false);
+        $context = $this->getMock(\Magento\Framework\View\Asset\File\FallbackContext::class, [], [], '', false);
         $originalContent = 'content$.mage.__("hello1")content';
         $translatedContent = 'content"hello1"content';
         $patterns = ['~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~'];
         $areaCode = 'adminhtml';
-        $area = $this->getMock('Magento\Framework\App\Area', [], [], '', false);
+        $area = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
 
         $chain->expects($this->once())
             ->method('getAsset')

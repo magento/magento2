@@ -128,7 +128,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getDisplayOnSelectHtml()
     {
         $selectBlock = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setName(
             'widget_instance[<%- data.id %>][page_group]'
         )->setId(
@@ -242,7 +242,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getLayoutsChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout'
+             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout::class
         )->setName(
             'widget_instance[<%- data.id %>][pages][layout_handle]'
         )->setId(
@@ -268,7 +268,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getPageLayoutsPageChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction'
+             \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction::class
         )->setName(
             'widget_instance[<%- data.id %>][page_layouts][layout_handle]'
         )->setId(
@@ -294,7 +294,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getAddLayoutButtonHtml()
     {
         $button = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'label' => __('Add Layout Update'),
@@ -313,7 +313,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     public function getRemoveLayoutButtonHtml()
     {
         $button = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
                 'label' => $this->escapeJsQuote(__('Remove Layout Update')),

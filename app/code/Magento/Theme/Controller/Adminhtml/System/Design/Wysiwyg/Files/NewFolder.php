@@ -23,10 +23,10 @@ class NewFolder extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwy
             $result = ['error' => true, 'message' => $e->getMessage()];
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => __('Sorry, something went wrong. That\'s all we know.')];
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
         );
     }
 }

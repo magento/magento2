@@ -31,11 +31,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
-        $this->_catalogConfig = $this->getMockBuilder('Magento\Catalog\Model\Config')
+        $this->_scopeConfig = $this->getMockBuilder(
+            \Magento\Framework\App\Config\ScopeConfigInterface::class
+        )->getMock();
+        $this->_catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_attributeConfig = $this->getMockBuilder('Magento\Catalog\Model\Attribute\Config')
+        $this->_attributeConfig = $this->getMockBuilder(\Magento\Catalog\Model\Attribute\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 

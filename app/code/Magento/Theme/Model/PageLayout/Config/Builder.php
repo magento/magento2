@@ -40,7 +40,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
         $this->configFactory = $configFactory;
         $this->fileCollector = $fileCollector;
         $this->themeCollection = $themeCollection;
-        $this->themeCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
+        $this->themeCollection->setItemObjectClass(\Magento\Theme\Model\Theme\Data::class);
     }
 
     /**

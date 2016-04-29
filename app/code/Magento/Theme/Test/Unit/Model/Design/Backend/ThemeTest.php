@@ -41,20 +41,20 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
-        $this->cacheTypeListMock = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
+        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
+        $this->cacheTypeListMock = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder('Magento\Framework\Event\ManagerInterface')->getMock());
-        $this->configMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
+            ->willReturn($this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock());
+        $this->configMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\Theme\Model\Design\Backend\Theme',
+            \Magento\Theme\Model\Design\Backend\Theme::class,
             [
                 'design' => $this->designMock,
                 'context' => $this->contextMock,

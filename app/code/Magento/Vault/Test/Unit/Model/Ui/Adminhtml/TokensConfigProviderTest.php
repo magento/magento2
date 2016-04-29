@@ -120,7 +120,7 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria = $this->getSearchCriteria($customerId, $paymentCode);
 
-        $date = $this->getMockBuilder('DateTime')
+        $date = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dateTimeFactory->expects(static::once())

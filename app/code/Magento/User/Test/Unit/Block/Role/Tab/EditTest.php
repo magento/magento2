@@ -38,40 +38,41 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rootResourceMock = $this->getMockBuilder('Magento\Framework\Acl\RootResource')
+        $this->rootResourceMock = $this->getMockBuilder(\Magento\Framework\Acl\RootResource::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->rulesCollectionFactoryMock = $this
-            ->getMockBuilder('Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory')
+            ->getMockBuilder(\Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->aclRetrieverMock = $this->getMockBuilder('Magento\Authorization\Model\Acl\AclRetriever')
+        $this->aclRetrieverMock = $this->getMockBuilder(\Magento\Authorization\Model\Acl\AclRetriever::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->aclResourceProviderMock = $this->getMockBuilder('Magento\Framework\Acl\AclResource\ProviderInterface')
+        $this->aclResourceProviderMock = $this->getMockBuilder(
+            \Magento\Framework\Acl\AclResource\ProviderInterface::class
+        )->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->integrationDataMock = $this->getMockBuilder(\Magento\Integration\Helper\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->integrationDataMock = $this->getMockBuilder('Magento\Integration\Helper\Data')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->setMethods(['registry'])
             ->getMock();
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(
-            'Magento\User\Block\Role\Tab\Edit',
+            \Magento\User\Block\Role\Tab\Edit::class,
             [
                 'aclRetriever' => $this->aclRetrieverMock,
                 'rootResource' => $this->rootResourceMock,

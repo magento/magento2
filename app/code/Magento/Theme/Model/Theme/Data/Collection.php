@@ -17,5 +17,5 @@ class Collection extends \Magento\Theme\Model\Theme\Collection implements ListIn
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Theme\Model\Theme\Data';
+    protected $_itemObjectClass = \Magento\Theme\Model\Theme\Data::class;
 }

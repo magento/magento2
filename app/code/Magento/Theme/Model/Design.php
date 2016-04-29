@@ -85,7 +85,7 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\ResourceModel\Design');
+        $this->_init(\Magento\Theme\Model\ResourceModel\Design::class);
     }
 
     /**

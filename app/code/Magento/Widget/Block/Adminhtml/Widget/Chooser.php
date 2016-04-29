@@ -158,7 +158,7 @@ class Chooser extends \Magento\Backend\Block\Template
 
         $buttons = $config->getButtons();
         $chooseButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setType(
             'button'
         )->setId(

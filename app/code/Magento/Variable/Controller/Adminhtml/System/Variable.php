@@ -96,7 +96,7 @@ abstract class Variable extends Action
         $variableId = $this->getRequest()->getParam('variable_id', null);
         $storeId = (int)$this->getRequest()->getParam('store', 0);
         /* @var $variable \Magento\Variable\Model\Variable */
-        $variable = $this->_objectManager->create('Magento\Variable\Model\Variable');
+        $variable = $this->_objectManager->create(\Magento\Variable\Model\Variable::class);
         if ($variableId) {
             $variable->setStoreId($storeId)->load($variableId);
         }

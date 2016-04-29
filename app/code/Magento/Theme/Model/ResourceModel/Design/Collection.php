@@ -44,7 +44,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Design', 'Magento\Theme\Model\ResourceModel\Design');
+        $this->_init(\Magento\Theme\Model\Design::class, \Magento\Theme\Model\ResourceModel\Design::class);
     }
 
     /**

@@ -47,7 +47,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $classReflection = $this->getMock(
-            'Magento\Webapi\Model\Config\ClassReflector',
+            \Magento\Webapi\Model\Config\ClassReflector::class,
             ['reflectClassMethods', 'extractClassDescription'],
             [],
             '',
@@ -61,8 +61,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('classDescription'));
 
         $servicesConfig = [
-            'services' => [
-                'Magento\Customer\Api\AccountManagementInterface' => [
+            'services' => [\Magento\Customer\Api\AccountManagementInterface::class => [
                     'V1' => [
                         'methods' => [
                             'activateById' => [
@@ -75,8 +74,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                             ],
                         ],
                     ],
-                ],
-                'Magento\Customer\Api\CustomerRepositoryInterface' => [
+                ], \Magento\Customer\Api\CustomerRepositoryInterface::class => [
                     'V1' => [
                         'methods' => [
                             'getById' => [
@@ -96,7 +94,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                     'PUT' => [
                         'secure' => false,
                         'service' => [
-                            'class' => 'Magento\Customer\Api\AccountManagementInterface',
+                            'class' => \Magento\Customer\Api\AccountManagementInterface::class,
                             'method' => 'activateById',
                         ],
                         'resources' => [
@@ -114,7 +112,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                     'GET' => [
                         'secure' => false,
                         'service' => [
-                            'class' => 'Magento\Customer\Api\CustomerRepositoryInterface',
+                            'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
                             'method' => 'getById',
                         ],
                         'resources' => [
@@ -130,12 +128,12 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
         /**
          * @var $cacheMock \Magento\Webapi\Model\Cache\Type\Webapi
          */
-        $cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type\Webapi')
+        $cacheMock = $this->getMockBuilder(\Magento\Webapi\Model\Cache\Type\Webapi::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         /** @var $readerMock \Magento\Webapi\Model\Config\Reader */
-        $readerMock = $this->getMockBuilder('Magento\Webapi\Model\Config\Reader')
+        $readerMock = $this->getMockBuilder(\Magento\Webapi\Model\Config\Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $readerMock->expects($this->any())->method('read')->will($this->returnValue($servicesConfig));
@@ -144,7 +142,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
         $config = new \Magento\Webapi\Model\Config($cacheMock, $readerMock);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+        $typeProcessor = $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class);
 
         /** @var $config \Magento\Webapi\Model\ServiceMetadata */
         $this->serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata(
@@ -176,8 +174,8 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
     public function serviceNameDataProvider()
     {
         return [
-            ['Magento\Customer\Api\AccountManagementInterface', 'V1', false, 'customerAccountManagement'],
-            ['Magento\Customer\Api\AddressRepositoryInterface', 'V1', true, 'customerAddressRepositoryV1'],
+            [\Magento\Customer\Api\AccountManagementInterface::class, 'V1', false, 'customerAccountManagement'],
+            [\Magento\Customer\Api\AddressRepositoryInterface::class, 'V1', true, 'customerAddressRepositoryV1'],
         ];
     }
 
@@ -239,7 +237,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            'class' => 'Magento\Customer\Api\AccountManagementInterface',
+            'class' => \Magento\Customer\Api\AccountManagementInterface::class,
             'description' => 'classDescription',
         ];
         $result = $this->serviceMetadata->getServiceMetadata('customerAccountManagementV1');
@@ -277,7 +275,7 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            'class' => 'Magento\Customer\Api\AccountManagementInterface',
+            'class' => \Magento\Customer\Api\AccountManagementInterface::class,
             'description' => 'classDescription',
             'routes' => [
                 '/V1/customers/me/activate' => [
