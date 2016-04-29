@@ -16,7 +16,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItem = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem'],
             [],
             '',
@@ -24,7 +24,9 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer');
+        $this->model = $objectManager->getObject(
+            \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer::class
+        );
     }
 
     /**
@@ -54,7 +56,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock('Magento\Sales\Model\Order\Item', ['getProductOptions', '__wakeup'], [], '', false);
+                $this->getMock(
+                    \Magento\Sales\Model\Order\Item::class,
+                    ['getProductOptions',
+                    '__wakeup'],
+                    [],
+                    '',
+                    false
+                );
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -103,7 +112,14 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->getMock('Magento\Sales\Model\Order\Item', ['getProductOptions', '__wakeup'], [], '', false);
+                $this->getMock(
+                    \Magento\Sales\Model\Order\Item::class,
+                    ['getProductOptions',
+                    '__wakeup'],
+                    [],
+                    '',
+                    false
+                );
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')

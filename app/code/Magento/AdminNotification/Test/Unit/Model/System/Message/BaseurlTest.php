@@ -47,33 +47,33 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_configMock = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-        $this->_urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface');
+        $this->_configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
+        $this->_urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class);
 
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
         $configFactoryMock = $this->getMock(
-            'Magento\Framework\App\Config\ValueFactory',
+            \Magento\Framework\App\Config\ValueFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->_configDataMock = $this->getMock(
-            'Magento\Framework\App\Config\Value',
+            \Magento\Framework\App\Config\Value::class,
             ['getScope', 'getScopeId', 'getCollection', '__sleep', '__wakeup'],
             [],
             '',
             false
         );
         $this->_dataCollectionMock = $this->getMock(
-            'Magento\Config\Model\ResourceModel\Config\Data\Collection',
+            \Magento\Config\Model\ResourceModel\Config\Data\Collection::class,
             [],
             [],
             '',
             false
         );
 
-        $this->_iteratorMock = $this->getMock('Iterator');
+        $this->_iteratorMock = $this->getMock(\Iterator::class);
         $this->_dataCollectionMock->expects(
             $this->any()
         )->method(
@@ -97,7 +97,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
             'configValueFactory' => $configFactoryMock,
             'storeManager' => $this->_storeManagerMock,
         ];
-        $this->_model = $helper->getObject('Magento\AdminNotification\Model\System\Message\Baseurl', $arguments);
+        $this->_model = $helper->getObject(\Magento\AdminNotification\Model\System\Message\Baseurl::class, $arguments);
     }
 
     public function testGetSeverity()
@@ -163,7 +163,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
 
         $this->_configDataMock->expects($this->once())->method('getScopeId')->will($this->returnValue(1));
 
-        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(

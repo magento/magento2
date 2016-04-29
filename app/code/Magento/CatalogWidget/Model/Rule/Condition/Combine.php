@@ -33,7 +33,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     ) {
         $this->productFactory = $conditionFactory;
         parent::__construct($context, $data);
-        $this->setType('Magento\CatalogWidget\Model\Rule\Condition\Combine');
+        $this->setType(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class);
     }
 
     /**
@@ -54,7 +54,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $conditions,
             [
                 [
-                    'value' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine',
+                    'value' => \Magento\CatalogWidget\Model\Rule\Condition\Combine::class,
                     'label' => __('Conditions Combination'),
                 ],
                 ['label' => __('Product Attribute'), 'value' => $attributes]

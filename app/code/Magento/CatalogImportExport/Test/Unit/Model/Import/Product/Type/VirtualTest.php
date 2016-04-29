@@ -14,7 +14,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
     public function testPrepareAttributesWithDefaultValueForSave()
     {
         $virtualModelMock = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product\Type\Virtual',
+            \Magento\CatalogImportExport\Model\Import\Product\Type\Virtual::class,
             null,
             [],
             '',

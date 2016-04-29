@@ -17,7 +17,7 @@ class RadioTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->block = (new ObjectManager($this))
-            ->getObject('Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Radio');
+            ->getObject(\Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Radio::class);
     }
 
     public function testSetValidationContainer()

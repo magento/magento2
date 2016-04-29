@@ -18,8 +18,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Authorizenet\Model\Debug',
-            'Magento\Authorizenet\Model\ResourceModel\Debug'
+            \Magento\Authorizenet\Model\Debug::class,
+            \Magento\Authorizenet\Model\ResourceModel\Debug::class
         );
     }
 }

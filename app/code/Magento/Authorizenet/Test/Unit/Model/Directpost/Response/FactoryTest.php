@@ -28,16 +28,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->responseMock = $this->getMock('Magento\Authorizenet\Model\Directpost\Response', [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Authorizenet\Model\Directpost\Response::class, [], [], '', false);
 
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Authorizenet\Model\Directpost\Response', [])
+            ->with(\Magento\Authorizenet\Model\Directpost\Response::class, [])
             ->willReturn($this->responseMock);
 
         $this->responseFactory = $objectManager->getObject(
-            'Magento\Authorizenet\Model\Directpost\Response\Factory',
+            \Magento\Authorizenet\Model\Directpost\Response\Factory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }

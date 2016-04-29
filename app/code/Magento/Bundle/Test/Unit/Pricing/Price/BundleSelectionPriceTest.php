@@ -77,7 +77,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['__wakeup', 'getPriceInfo', 'getSelectionPriceType', 'getSelectionPriceValue'],
             [],
             '',
@@ -85,14 +85,14 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->bundleMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['__wakeup', 'getPriceType', 'getPriceInfo', 'setFinalPrice', 'getData'],
             [],
             '',
             false
         );
         $this->calculatorMock = $this->getMock(
-            'Magento\Framework\Pricing\Adjustment\CalculatorInterface',
+            \Magento\Framework\Pricing\Adjustment\CalculatorInterface::class,
             [],
             [],
             '',
@@ -101,35 +101,35 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->eventManagerMock = $this->getMock(
-            'Magento\Framework\Event\Manager',
+            \Magento\Framework\Event\Manager::class,
             ['dispatch'],
             [],
             '',
             false
         );
         $this->priceInfoMock = $this->getMock(
-            'Magento\Framework\Pricing\PriceInfo\Base',
+            \Magento\Framework\Pricing\PriceInfo\Base::class,
             ['getPrice'],
             [],
             '',
             false
         );
         $this->discountCalculatorMock = $this->getMock(
-            'Magento\Bundle\Pricing\Price\DiscountCalculator',
+            \Magento\Bundle\Pricing\Price\DiscountCalculator::class,
             [],
             [],
             '',
             false
         );
         $this->finalPriceMock = $this->getMock(
-            'Magento\Catalog\Pricing\Price\FinalPrice',
+            \Magento\Catalog\Pricing\Price\FinalPrice::class,
             [],
             [],
             '',
             false
         );
         $this->regularPriceMock = $this->getMock(
-            'Magento\Catalog\Pricing\Price\RegularPrice',
+            \Magento\Catalog\Pricing\Price\RegularPrice::class,
             [],
             [],
             '',
@@ -139,7 +139,7 @@ class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
-        $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceCurrencyMock = $this->getMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
 
         $this->quantity = 1;
 

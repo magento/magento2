@@ -20,7 +20,7 @@ class RoleLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_sessionMock = $this->getMock(
-            'Magento\Backend\Model\Auth\Session',
+            \Magento\Backend\Model\Auth\Session::class,
             ['getUser', 'getAclRole', 'hasUser'],
             [],
             '',

@@ -16,7 +16,7 @@ class ProductsViewed extends AjaxBlock
     public function execute()
     {
         $output = $this->layoutFactory->create()
-            ->createBlock('Magento\Backend\Block\Dashboard\Tab\Products\Viewed')
+            ->createBlock(\Magento\Backend\Block\Dashboard\Tab\Products\Viewed::class)
             ->toHtml();
         $resultRaw = $this->resultRawFactory->create();
         return $resultRaw->setContents($output);

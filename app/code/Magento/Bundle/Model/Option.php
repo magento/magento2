@@ -41,7 +41,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Bundle\Model\ResourceModel\Option');
+        $this->_init(\Magento\Bundle\Model\ResourceModel\Option::class);
         parent::_construct();
     }
 
@@ -140,6 +140,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */

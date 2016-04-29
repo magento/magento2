@@ -15,7 +15,7 @@ class Search extends \Magento\Backend\App\Action
     {
         return $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(
-                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search'
+                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search::class
             )->setIndex(
                 $this->getRequest()->getParam('index')
             )->setFirstShow(

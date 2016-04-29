@@ -19,7 +19,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorization\Model\Rules', 'Magento\Authorization\Model\ResourceModel\Rules');
+        $this->_init(
+            \Magento\Authorization\Model\Rules::class,
+            \Magento\Authorization\Model\ResourceModel\Rules::class
+        );
     }
 
     /**

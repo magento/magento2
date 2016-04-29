@@ -10,18 +10,18 @@ require __DIR__ . '/../../Customer/_files/customer_two_addresses.php';
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+    ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
     ->setValue('carriers/flatrate/active', 1, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+    ->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
     ->setValue('payment/paypal_express/active', 1, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
 /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-$customerRepository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+$customerRepository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
 $customer = $customerRepository->getById(1);
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
     ->setId(1)
     ->setAttributeSetId(4)
@@ -40,21 +40,21 @@ $product->setTypeId('simple')
 $product->load(1);
 
 $customerBillingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+    ->create(\Magento\Customer\Model\Address::class);
 $customerBillingAddress->load(1);
 $billingAddressDataObject = $customerBillingAddress->getDataModel();
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\Quote\Address');
+    ->create(\Magento\Quote\Model\Quote\Address::class);
 $billingAddress->importCustomerAddressData($billingAddressDataObject);
 $billingAddress->setAddressType('billing');
 
 /** @var \Magento\Customer\Model\Address $customerShippingAddress */
 $customerShippingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+    ->create(\Magento\Customer\Model\Address::class);
 $customerShippingAddress->load(2);
 $shippingAddressDataObject = $customerShippingAddress->getDataModel();
 $shippingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\Quote\Address');
+    ->create(\Magento\Quote\Model\Quote\Address::class);
 $shippingAddress->importCustomerAddressData($shippingAddressDataObject);
 $shippingAddress->setAddressType('shipping');
 
@@ -63,13 +63,14 @@ $shippingAddress->setCollectShippingRates(true);
 
 /** @var $quote \Magento\Quote\Model\Quote */
 $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Quote\Model\Quote');
+    ->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(false)
     ->setCustomerId($customer->getId())
     ->setCustomer($customer)
     ->setStoreId(
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
-            ->getStore()->getId()
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        )->getStore()->getId()
     )
     ->setReservedOrderId('test02')
     ->setBillingAddress($billingAddress)
@@ -82,5 +83,5 @@ $quote->collectTotals()->save();
 
 /** @var $service \Magento\Quote\Api\CartManagementInterface */
 $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('\Magento\Quote\Api\CartManagementInterface');
+    ->create(\Magento\Quote\Api\CartManagementInterface::class);
 $order = $service->submit($quote, ['increment_id' => '100000002']);

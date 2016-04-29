@@ -13,11 +13,12 @@ class Extended extends \Magento\Backend\Block\Widget\Grid\Column
      */
     public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
     {
-        $this->_rendererTypes['options'] = 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Extended';
-        $this->_filterTypes['options'] = 'Magento\Backend\Block\Widget\Grid\Column\Filter\Select\Extended';
-        $this->_rendererTypes['select'] = 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Select\Extended';
-        $this->_rendererTypes['checkbox'] = 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkboxes\Extended';
-        $this->_rendererTypes['radio'] = 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio\Extended';
+        $this->_rendererTypes['options'] = \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Extended::class;
+        $this->_filterTypes['options'] = \Magento\Backend\Block\Widget\Grid\Column\Filter\Select\Extended::class;
+        $this->_rendererTypes['select'] = \Magento\Backend\Block\Widget\Grid\Column\Renderer\Select\Extended::class;
+        $this->_rendererTypes['checkbox'] =
+            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Checkboxes\Extended::class;
+        $this->_rendererTypes['radio'] = \Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio\Extended::class;
 
         parent::__construct($context, $data);
     }

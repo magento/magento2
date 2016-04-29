@@ -65,8 +65,10 @@ class Role extends \Magento\Framework\Model\AbstractModel
     {
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_resource = $objectManager->get('Magento\Authorization\Model\ResourceModel\Role');
-        $this->_resourceCollection = $objectManager->get('Magento\Authorization\Model\ResourceModel\Role\Collection');
+        $this->_resource = $objectManager->get(\Magento\Authorization\Model\ResourceModel\Role::class);
+        $this->_resourceCollection = $objectManager->get(
+            \Magento\Authorization\Model\ResourceModel\Role\Collection::class
+        );
     }
 
     /**
@@ -76,7 +78,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorization\Model\ResourceModel\Role');
+        $this->_init(\Magento\Authorization\Model\ResourceModel\Role::class);
     }
 
     /**

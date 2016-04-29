@@ -24,11 +24,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_factoryMock = $this->getMock("Magento\Backend\Model\Menu\Item\Factory", [], [], '', false);
+        $this->_factoryMock = $this->getMock(\Magento\Backend\Model\Menu\Item\Factory::class, [], [], '', false);
         $this->_menuMock = $this->getMock(
-            'Magento\Backend\Model\Menu',
+            \Magento\Backend\Model\Menu::class,
             [],
-            [$this->getMock('Psr\Log\LoggerInterface')]
+            [$this->getMock(\Psr\Log\LoggerInterface::class)]
         );
 
         $this->_model = new \Magento\Backend\Model\Menu\Builder($this->_factoryMock, $this->_menuMock);
@@ -36,9 +36,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessCommand()
     {
-        $command = $this->getMock('Magento\Backend\Model\Menu\Builder\Command\Add', [], [], '', false);
+        $command = $this->getMock(\Magento\Backend\Model\Menu\Builder\Command\Add::class, [], [], '', false);
         $command->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $command2 = $this->getMock('Magento\Backend\Model\Menu\Builder\Command\Update', [], [], '', false);
+        $command2 = $this->getMock(\Magento\Backend\Model\Menu\Builder\Command\Update::class, [], [], '', false);
         $command2->expects($this->any())->method('getId')->will($this->returnValue(1));
         $command->expects($this->once())->method('chain')->with($this->equalTo($command2));
         $this->_model->processCommand($command);
@@ -47,11 +47,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetResultBuildsTreeStructure()
     {
-        $item1 = $this->getMock("Magento\Backend\Model\Menu\Item", [], [], '', false);
+        $item1 = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $item1->expects($this->once())->method('getChildren')->will($this->returnValue($this->_menuMock));
         $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
 
-        $item2 = $this->getMock("Magento\Backend\Model\Menu\Item", [], [], '', false);
+        $item2 = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $this->_factoryMock->expects($this->at(1))->method('create')->will($this->returnValue($item2));
 
         $this->_menuMock->expects(
@@ -59,7 +59,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         )->method(
             'add'
         )->with(
-            $this->isInstanceOf('Magento\Backend\Model\Menu\Item'),
+            $this->isInstanceOf(\Magento\Backend\Model\Menu\Item::class),
             $this->equalTo(null),
             $this->equalTo(2)
         );
@@ -69,7 +69,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         )->method(
             'add'
         )->with(
-            $this->isInstanceOf('Magento\Backend\Model\Menu\Item'),
+            $this->isInstanceOf(\Magento\Backend\Model\Menu\Item::class),
             $this->equalTo(null),
             $this->equalTo(4)
         );
@@ -125,7 +125,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResultSkipItemsWithInvalidParent()
     {
-        $item1 = $this->getMock("Magento\Backend\Model\Menu\Item", [], [], '', false);
+        $item1 = $this->getMock(\Magento\Backend\Model\Menu\Item::class, [], [], '', false);
         $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
 
         $this->_model->processCommand(

@@ -22,7 +22,7 @@ class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
         $responseData = [];
         try {
             $this->_objectManager->create(
-                'Magento\AdminNotification\Model\NotificationService'
+                \Magento\AdminNotification\Model\NotificationService::class
             )->markAsRead(
                 $notificationId
             );
@@ -31,7 +31,7 @@ class AjaxMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
             $responseData['success'] = false;
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->create('Magento\Framework\Json\Helper\Data')->jsonEncode($responseData)
+            $this->_objectManager->create(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($responseData)
         );
     }
 }

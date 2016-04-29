@@ -93,7 +93,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
                 'type' => 'currency',
                 'currency_code' => $baseCurrencyCode,
                 'index' => 'orders_avg_amount',
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
+                'renderer' => \Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency::class,
                 'header_css_class' => 'col-avg',
                 'column_css_class' => 'col-avg'
             ]
@@ -107,7 +107,7 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
                 'type' => 'currency',
                 'currency_code' => $baseCurrencyCode,
                 'index' => 'orders_sum_amount',
-                'renderer' => 'Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency',
+                'renderer' => \Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency::class,
                 'header_css_class' => 'col-total',
                 'column_css_class' => 'col-total'
             ]

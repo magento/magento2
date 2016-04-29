@@ -6,7 +6,9 @@
 use Magento\Framework\App\TemplateTypesInterface;
 
 /** @var \Magento\Newsletter\Model\Template $template */
-$template = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Newsletter\Model\Template');
+$template = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Newsletter\Model\Template::class
+);
 
 $templateData = [
     'template_code' => 'some_unique_code',

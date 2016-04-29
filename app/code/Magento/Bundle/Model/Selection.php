@@ -65,7 +65,7 @@ class Selection extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Bundle\Model\ResourceModel\Selection');
+        $this->_init(\Magento\Bundle\Model\ResourceModel\Selection::class);
         parent::_construct();
     }
 

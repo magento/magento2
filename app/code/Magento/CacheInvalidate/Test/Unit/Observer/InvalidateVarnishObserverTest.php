@@ -28,25 +28,25 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configMock = $this->getMock(
-            'Magento\PageCache\Model\Config',
+            \Magento\PageCache\Model\Config::class,
             ['getType', 'isEnabled'],
             [],
             '',
             false
         );
-        $this->purgeCache = $this->getMock('Magento\CacheInvalidate\Model\PurgeCache', [], [], '', false);
+        $this->purgeCache = $this->getMock(\Magento\CacheInvalidate\Model\PurgeCache::class, [], [], '', false);
         $this->model = new \Magento\CacheInvalidate\Observer\InvalidateVarnishObserver(
             $this->configMock,
             $this->purgeCache
         );
         $this->observerMock = $this->getMock(
-            'Magento\Framework\Event\Observer',
+            \Magento\Framework\Event\Observer::class,
             ['getEvent'],
             [],
             '',
             false
         );
-        $this->observerObject = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->observerObject = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
     }
 
     /**
@@ -65,7 +65,7 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(\Magento\PageCache\Model\Config::VARNISH)
         );
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getObject'], [], '', false);
         $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($this->observerObject));
         $this->observerMock->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
         $this->observerObject->expects($this->once())->method('getIdentities')->will($this->returnValue($tags));

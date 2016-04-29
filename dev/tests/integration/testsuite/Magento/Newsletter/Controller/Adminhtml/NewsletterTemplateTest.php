@@ -27,7 +27,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         ];
         $this->getRequest()->setPostValue($post);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Template'
+            \Magento\Newsletter\Model\Template::class
         );
     }
 
@@ -36,7 +36,9 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         /**
          * Unset messages
          */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session')->destroy();
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Backend\Model\Session::class
+        )->destroy();
         unset($this->_model);
     }
 

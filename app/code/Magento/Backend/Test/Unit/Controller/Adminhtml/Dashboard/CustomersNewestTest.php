@@ -16,8 +16,8 @@ class CustomersNewestTest extends AbstractTestCase
     public function testExecute()
     {
         $this->assertExecute(
-            'Magento\Backend\Controller\Adminhtml\Dashboard\CustomersNewest',
-            'Magento\Backend\Block\Dashboard\Tab\Customers\Newest'
+            \Magento\Backend\Controller\Adminhtml\Dashboard\CustomersNewest::class,
+            \Magento\Backend\Block\Dashboard\Tab\Customers\Newest::class
         );
     }
 }

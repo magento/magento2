@@ -11,6 +11,6 @@ class SocketFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $factory = new \Magento\CacheInvalidate\Model\SocketFactory();
-        $this->assertInstanceOf('\Zend\Http\Client\Adapter\Socket', $factory->create());
+        $this->assertInstanceOf(\Zend\Http\Client\Adapter\Socket::class, $factory->create());
     }
 }

@@ -35,7 +35,7 @@ class Search extends \Magento\Backend\Block\Widget
         $this->setChild(
             'grid',
             $this->getLayout()->createBlock(
-                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid',
+                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid::class,
                 'adminhtml.catalog.product.edit.tab.bundle.option.search.grid'
             )
         );

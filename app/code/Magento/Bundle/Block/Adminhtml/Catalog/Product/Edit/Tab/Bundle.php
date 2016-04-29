@@ -69,7 +69,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $this->setData('opened', true);
         $this->addChild(
             'add_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Create New Option'),
                 'class' => 'add',
@@ -81,7 +81,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $this->setChild(
             'options_box',
             $this->getLayout()->createBlock(
-                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option',
+                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option::class,
                 'adminhtml.catalog.product.edit.tab.bundle.option'
             )
         );

@@ -7,7 +7,7 @@
 require __DIR__ . '/queue.php';
 
 $problem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Newsletter\Model\Problem');
+    ->create(\Magento\Newsletter\Model\Problem::class);
 // $firstSubscriberId comes from subscribers.php
 $problem->setSubscriberId($firstSubscriberId)
     ->setQueueId($queue->getQueueId())

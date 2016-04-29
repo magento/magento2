@@ -15,7 +15,7 @@ class Tabs extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs
     /**
      * @var string
      */
-    protected $_attributeTabBlock = 'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes';
+    protected $_attributeTabBlock = \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes::class;
 
     /**
      * @return $this|void

@@ -12,11 +12,11 @@ class UrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $itemId = 3;
         $urlPath = 'mng/item/edit';
 
-        $itemMock = $this->getMock('Magento\Framework\DataObject', ['getItemId'], [], '', false);
+        $itemMock = $this->getMock(\Magento\Framework\DataObject::class, ['getItemId'], [], '', false);
         $itemMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
 
         $urlModelMock = $this->getMock(
-            'Magento\Backend\Model\Url',
+            \Magento\Backend\Model\Url::class,
             [],
             [],
             '',
