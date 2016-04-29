@@ -19,12 +19,12 @@ class FieldPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
-        $this->subject = $this->getMock('Magento\Config\Model\Config\Structure\Element\Field', [], [], '', false);
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $this->subject = $this->getMock(\Magento\Config\Model\Config\Structure\Element\Field::class, [], [], '', false);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\Paypal\Model\Config\Structure\Element\FieldPlugin',
+            \Magento\Paypal\Model\Config\Structure\Element\FieldPlugin::class,
             ['request' => $this->request]
         );
     }

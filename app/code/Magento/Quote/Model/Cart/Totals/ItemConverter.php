@@ -75,7 +75,7 @@ class ItemConverter
         $this->dataObjectHelper->populateWithArray(
             $itemsData,
             $items,
-            '\Magento\Quote\Api\Data\TotalsItemInterface'
+            \Magento\Quote\Api\Data\TotalsItemInterface::class
         );
         return $itemsData;
     }

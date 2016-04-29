@@ -20,7 +20,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            '\Magento\Quote\Model\Quote\Payment'
+            \Magento\Quote\Model\Quote\Payment::class
         );
     }
 

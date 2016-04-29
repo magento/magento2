@@ -10,6 +10,7 @@ namespace Magento\Persistent\Model;
  *
  * @method int getCustomerId()
  * @method Session setCustomerId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {
@@ -146,7 +147,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Persistent\Model\ResourceModel\Session');
+        $this->_init(\Magento\Persistent\Model\ResourceModel\Session::class);
     }
 
     /**

@@ -18,7 +18,7 @@ class RowTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->row = $objectManagerHelper->getObject('Magento\Paypal\Model\Report\Settlement\Row');
+        $this->row = $objectManagerHelper->getObject(\Magento\Paypal\Model\Report\Settlement\Row::class);
     }
 
     /**

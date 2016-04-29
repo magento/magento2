@@ -58,7 +58,7 @@ class Cert extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\ResourceModel\Cert');
+        $this->_init(\Magento\Paypal\Model\ResourceModel\Cert::class);
     }
 
     /**

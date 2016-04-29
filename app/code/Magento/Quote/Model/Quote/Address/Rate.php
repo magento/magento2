@@ -47,7 +47,7 @@ class Rate extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Address\Rate');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Address\Rate::class);
     }
 
     /**

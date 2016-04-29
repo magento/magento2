@@ -22,8 +22,8 @@ class CcGenericConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->ccConfigMock = $this->getMock('Magento\Payment\Model\CcConfig', [], [], '', false);
-        $this->paymentHelperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+        $this->ccConfigMock = $this->getMock(\Magento\Payment\Model\CcConfig::class, [], [], '', false);
+        $this->paymentHelperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
 
         $this->model = new CcGenericConfigProvider(
             $this->ccConfigMock,

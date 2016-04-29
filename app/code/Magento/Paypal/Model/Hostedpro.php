@@ -42,12 +42,12 @@ class Hostedpro extends Direct
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Hosted\Pro\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Hosted\Pro\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Hosted\Pro\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Hosted\Pro\Info::class;
 
     /**
      * Availability option

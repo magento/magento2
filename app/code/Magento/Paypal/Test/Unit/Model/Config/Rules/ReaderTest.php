@@ -40,23 +40,23 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->fileResolver = $this->getMockForAbstractClass(
-            '\Magento\Framework\Config\FileResolverInterface'
+            \Magento\Framework\Config\FileResolverInterface::class
         );
         $this->converter = $this->getMock(
-            '\Magento\Paypal\Model\Config\Rules\Converter',
+            \Magento\Paypal\Model\Config\Rules\Converter::class,
             [],
             [],
             '',
             false
         );
         $this->schemaLocator = $this->getMockForAbstractClass(
-            '\Magento\Framework\Config\SchemaLocatorInterface'
+            \Magento\Framework\Config\SchemaLocatorInterface::class
         );
         $this->validationState = $this->getMockForAbstractClass(
-            '\Magento\Framework\Config\ValidationStateInterface'
+            \Magento\Framework\Config\ValidationStateInterface::class
         );
         $this->helper = $this->getMock(
-            '\Magento\Paypal\Helper\Backend',
+            \Magento\Paypal\Helper\Backend::class,
             [],
             [],
             '',

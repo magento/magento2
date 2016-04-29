@@ -26,14 +26,14 @@ class Cashondelivery extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @var string
      */
-    protected $_formBlockType = 'Magento\OfflinePayments\Block\Form\Cashondelivery';
+    protected $_formBlockType = \Magento\OfflinePayments\Block\Form\Cashondelivery::class;
 
     /**
      * Info instructions block path
      *
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info\Instructions';
+    protected $_infoBlockType = \Magento\Payment\Block\Info\Instructions::class;
 
     /**
      * Availability option

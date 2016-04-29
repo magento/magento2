@@ -13,7 +13,7 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress\Review
      *
      * @var string
      */
-    protected $_configType = 'Magento\Paypal\Model\Config';
+    protected $_configType = \Magento\Paypal\Model\Config::class;
 
     /**
      * Config method type
@@ -27,5 +27,5 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress\Review
      *
      * @var string
      */
-    protected $_checkoutType = 'Magento\Paypal\Model\PayflowExpress\Checkout';
+    protected $_checkoutType = \Magento\Paypal\Model\PayflowExpress\Checkout::class;
 }

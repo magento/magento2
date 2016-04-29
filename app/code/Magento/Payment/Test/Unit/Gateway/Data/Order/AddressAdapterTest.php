@@ -23,7 +23,7 @@ class AddressAdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderAddressMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderAddressInterface')
+        $this->orderAddressMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderAddressInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new AddressAdapter($this->orderAddressMock);

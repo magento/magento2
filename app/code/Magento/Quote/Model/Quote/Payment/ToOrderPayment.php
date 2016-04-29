@@ -64,7 +64,7 @@ class ToOrderPayment
         $this->dataObjectHelper->populateWithArray(
             $orderPayment,
             array_merge($paymentData, $data),
-            '\Magento\Sales\Api\Data\OrderPaymentInterface'
+            \Magento\Sales\Api\Data\OrderPaymentInterface::class
         );
         $orderPayment->setAdditionalInformation(
             array_merge(

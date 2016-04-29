@@ -97,20 +97,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->paymentMethodFactory = $this->getMock('Magento\Payment\Model\Method\Factory', [], [], '', false);
-        $this->localeResolver = $this->getMock('Magento\Framework\Locale\ResolverInterface', [], [], '', false);
-        $this->dataStorage = $this->getMock('Magento\Framework\Config\DataInterface', [], [], '', false);
-        $this->date = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
+        $this->paymentMethodFactory = $this->getMock(\Magento\Payment\Model\Method\Factory::class, [], [], '', false);
+        $this->localeResolver = $this->getMock(\Magento\Framework\Locale\ResolverInterface::class, [], [], '', false);
+        $this->dataStorage = $this->getMock(\Magento\Framework\Config\DataInterface::class, [], [], '', false);
+        $this->date = $this->getMock(\Magento\Framework\Stdlib\DateTime\DateTime::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
-            'Magento\Payment\Model\Config',
+            \Magento\Payment\Model\Config::class,
             [
                 'scopeConfig' => $this->scopeConfig,
                 'paymentMethodFactory' => $this->paymentMethodFactory,
@@ -128,7 +128,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetActiveMethods($isActive)
     {
         $abstractMethod = $this->getMockBuilder(
-            'Magento\Payment\Model\Method\AbstractMethod'
+            \Magento\Payment\Model\Method\AbstractMethod::class
         )->disableOriginalConstructor()->setMethods(['setId', 'setStore', 'getConfigData'])->getMock();
         $this->scopeConfig->expects($this->once())->method('getValue')->with(
             'payment', ScopeInterface::SCOPE_STORE, null

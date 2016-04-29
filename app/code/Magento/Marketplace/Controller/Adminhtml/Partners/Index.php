@@ -37,7 +37,7 @@ class Index extends \Magento\Marketplace\Controller\Adminhtml\Partners
     {
         if ($this->getRequest()->isAjax()) {
             $output = $this->getLayoutFactory()->create()
-                ->createBlock('Magento\Marketplace\Block\Partners')
+                ->createBlock(\Magento\Marketplace\Block\Partners::class)
                 ->toHtml();
             $this->getResponse()->appendBody($output);
         }

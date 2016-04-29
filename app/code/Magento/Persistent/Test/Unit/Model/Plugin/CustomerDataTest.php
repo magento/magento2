@@ -35,10 +35,10 @@ class CustomerDataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helperMock = $this->getMock('Magento\Persistent\Helper\Data', [], [], '', false);
-        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->persistentSessionMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
-        $this->subjectMock = $this->getMock('\Magento\Customer\CustomerData\Customer', [], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\Persistent\Helper\Data::class, [], [], '', false);
+        $this->customerSessionMock = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
+        $this->persistentSessionMock = $this->getMock(\Magento\Persistent\Helper\Session::class, [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Customer\CustomerData\Customer::class, [], [], '', false);
         $this->plugin = new \Magento\Persistent\Model\Plugin\CustomerData(
             $this->helperMock,
             $this->customerSessionMock,
@@ -59,7 +59,6 @@ class CustomerDataTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([], $this->plugin->aroundGetSectionData($this->subjectMock, $proceed));
     }
-
 
     public function testAroundGetSectionData()
     {

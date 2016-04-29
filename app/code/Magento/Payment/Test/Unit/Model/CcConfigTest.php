@@ -29,11 +29,11 @@ class CcConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\Payment\Model\Config', [], [], '', false);
-        $this->repositoryMock = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->urlMock = $this->getMock('Magento\Framework\UrlInterface');
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
+        $this->configMock = $this->getMock(\Magento\Payment\Model\Config::class, [], [], '', false);
+        $this->repositoryMock = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
+        $this->urlMock = $this->getMock(\Magento\Framework\UrlInterface::class);
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         $this->model = new \Magento\Payment\Model\CcConfig(
             $this->configMock,
