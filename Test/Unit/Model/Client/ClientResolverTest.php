@@ -34,14 +34,14 @@ class ClientResolverTest extends \PHPUnit_Framework_TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->model= $this->helper->getObject(
-            '\Magento\AdvancedSearch\Model\Client\ClientResolver',
+            \Magento\AdvancedSearch\Model\Client\ClientResolver::class,
             [
                 'objectManager' => $this->objectManager,
                 'scopeConfig' => $this->scopeConfig,
@@ -59,11 +59,11 @@ class ClientResolverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('some_path'), $this->equalTo('some_scopeType'))
             ->will($this->returnValue('engineName'));
 
-        $factoryMock = $this->getMock('\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface');
+        $factoryMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientFactoryInterface::class);
 
-        $clientMock = $this->getMock('\Magento\AdvancedSearch\Model\Client\ClientInterface');
+        $clientMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
 
-        $clientOptionsMock = $this->getMock('\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface');
+        $clientOptionsMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface::class);
 
         $this->objectManager->expects($this->exactly(2))->method('create')
             ->withConsecutive(
@@ -84,7 +84,7 @@ class ClientResolverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($clientMock));
 
         $result = $this->model->create();
-        $this->assertInstanceOf('\Magento\AdvancedSearch\Model\Client\ClientInterface', $result);
+        $this->assertInstanceOf(\Magento\AdvancedSearch\Model\Client\ClientInterface::class, $result);
     }
 
     /**

@@ -38,7 +38,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->engineResolverMock = $this->getMockBuilder('Magento\Search\Model\EngineResolver')
+        $this->engineResolverMock = $this->getMockBuilder(\Magento\Search\Model\EngineResolver::class)
             ->setMethods(['getCurrentSearchEngine'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -50,7 +50,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\AdvancedSearch\Model\SuggestedQueriesInterface|
          *     \PHPUnit_Framework_MockObject_MockObject
          */
-        $suggestedQueriesMock = $this->getMock('Magento\AdvancedSearch\Model\SuggestedQueriesInterface');
+        $suggestedQueriesMock = $this->getMock(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class);
         $suggestedQueriesMock->expects($this->any())
             ->method('isResultsCountEnabled')
             ->willReturn(true);
@@ -58,7 +58,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([]);
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->any())
@@ -68,7 +68,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            '\Magento\AdvancedSearch\Model\SuggestedQueries',
+            \Magento\AdvancedSearch\Model\SuggestedQueries::class,
             [
                 'engineResolver' => $this->engineResolverMock,
                 'objectManager' => $this->objectManagerMock,
@@ -96,7 +96,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsResultsCountEnabledException()
     {
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerMock->expects($this->once())
@@ -106,7 +106,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
         /* @var $model \Magento\AdvancedSearch\Model\SuggestedQueries */
         $model = $objectManagerHelper->getObject(
-            '\Magento\AdvancedSearch\Model\SuggestedQueries',
+            \Magento\AdvancedSearch\Model\SuggestedQueries::class,
             [
                 'engineResolver' => $this->engineResolverMock,
                 'objectManager' => $objectManagerMock,
@@ -124,7 +124,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetItems()
     {
         /** @var $queryInterfaceMock \Magento\Search\Model\QueryInterface */
-        $queryInterfaceMock = $this->getMock('Magento\Search\Model\QueryInterface');
+        $queryInterfaceMock = $this->getMock(\Magento\Search\Model\QueryInterface::class);
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertEquals([], $result);
     }

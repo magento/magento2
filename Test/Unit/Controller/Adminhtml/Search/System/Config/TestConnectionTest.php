@@ -9,6 +9,11 @@ use Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnect
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
+/**
+ * Class TestConnectionTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TestConnectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -54,14 +59,14 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', ['getParams'], [], '', false);
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getParams'], [], '', false);
+        $responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
 
         $context = $this->getMock(
-            'Magento\Backend\App\Action\Context',
+            \Magento\Backend\App\Action\Context::class,
             ['getRequest', 'getResponse', 'getMessageManager', 'getSession'],
             $helper->getConstructArguments(
-                'Magento\Backend\App\Action\Context',
+                \Magento\Backend\App\Action\Context::class,
                 [
                     'request' => $this->requestMock
                 ]
@@ -70,23 +75,23 @@ class TestConnectionTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getRequest')->will($this->returnValue($this->requestMock));
         $context->expects($this->once())->method('getResponse')->will($this->returnValue($responseMock));
 
-        $this->clientResolverMock = $this->getMockBuilder('Magento\AdvancedSearch\Model\Client\ClientResolver')
+        $this->clientResolverMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->clientMock = $this->getMock('Magento\AdvancedSearch\Model\Client\ClientInterface');
+        $this->clientMock = $this->getMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
 
-        $this->resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultJsonFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
+        $this->resultJsonFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->tagFilterMock = $this->getMockBuilder('Magento\Framework\Filter\StripTags')
+        $this->tagFilterMock = $this->getMockBuilder(\Magento\Framework\Filter\StripTags::class)
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
