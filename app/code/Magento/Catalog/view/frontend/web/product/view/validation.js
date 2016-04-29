@@ -5,17 +5,17 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         define([
-            "jquery",
-            "jquery/ui",
-            "mage/validation/validation"
+            'jquery',
+            'jquery/ui',
+            'mage/validation/validation'
         ], factory);
     } else {
         factory(jQuery);
     }
 }(function ($) {
-    "use strict";
+    'use strict';
     
-    $.widget("mage.validation", $.mage.validation, {
+    $.widget('mage.validation', $.mage.validation, {
         options: {
             radioCheckboxClosest: 'ul, ol',
             errorPlacement: function (error, element) {
@@ -26,7 +26,7 @@
                     element = $(element).parent();
 
                     if (element.parent().find('[generated=true].mage-error').length) {
-                        return false;
+                        return;
                     }
                 }
 
@@ -34,7 +34,7 @@
                     messageBox = $(element.attr('data-errors-message-box'));
                     messageBox.html(error);
 
-                    return false;
+                    return;
                 }
 
                 dataValidate = element.attr('data-validate');
@@ -49,6 +49,7 @@
             },
             highlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').each(function() {
                         $(this).removeClass(errorClass);
@@ -64,6 +65,7 @@
             },
             unhighlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
                 } else if ($(element).is(':radio, :checkbox')) {
