@@ -573,6 +573,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns tracks
      *
