@@ -23,7 +23,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->scopeMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Config\ScopeInterface',
+            \Magento\Framework\Config\ScopeInterface::class,
             ['setCurrentScope'],
             '',
             false
@@ -36,14 +36,14 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $areaCode = 'some code';
         $this->scopeMock->expects($this->once())->method('setCurrentScope')->with($areaCode);
         $this->model->setAreaCode($areaCode);
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException');
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
         $this->model->setAreaCode('any code');
     }
 
     public function testGetAreaCodeException()
     {
         $this->scopeMock->expects($this->never())->method('setCurrentScope');
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException');
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class);
         $this->model->getAreaCode();
     }
 
@@ -129,7 +129,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testConstructor($mode)
     {
         $model = new \Magento\Framework\App\State(
-            $this->getMockForAbstractClass('Magento\Framework\Config\ScopeInterface', [], '', false),
+            $this->getMockForAbstractClass(\Magento\Framework\Config\ScopeInterface::class, [], '', false),
             $mode
         );
         $this->assertEquals($mode, $model->getMode());
@@ -154,7 +154,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     public function testConstructorException()
     {
         new \Magento\Framework\App\State(
-            $this->getMockForAbstractClass('Magento\Framework\Config\ScopeInterface', [], '', false),
+            $this->getMockForAbstractClass(\Magento\Framework\Config\ScopeInterface::class, [], '', false),
             "unknown mode"
         );
     }

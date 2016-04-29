@@ -25,9 +25,9 @@ class InitialTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_initialReaderMock =
-            $this->getMock('Magento\Framework\App\Config\Initial\Reader', [], [], '', false);
+            $this->getMock(\Magento\Framework\App\Config\Initial\Reader::class, [], [], '', false);
         $this->_configCacheMock =
-            $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false);
+            $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
         $serializedData = serialize(
             [
                 'data' => [

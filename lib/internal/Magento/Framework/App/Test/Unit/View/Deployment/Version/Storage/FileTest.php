@@ -22,8 +22,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->directory = $this->getMock('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->directory = $this->getMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystem
             ->expects($this->once())
             ->method('getDirectoryWrite')

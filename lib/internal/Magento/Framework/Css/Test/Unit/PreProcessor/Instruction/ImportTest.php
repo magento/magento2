@@ -40,9 +40,9 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     {
 
         $this->notationResolver = $this->getMock(
-            '\Magento\Framework\View\Asset\NotationResolver\Module', [], [], '', false
+            \Magento\Framework\View\Asset\NotationResolver\Module::class, [], [], '', false
         );
-        $this->asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
+        $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
 
         $this->relatedFileGeneratorMock = $this->getMockBuilder(RelatedGenerator::class)

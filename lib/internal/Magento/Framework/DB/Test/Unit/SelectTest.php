@@ -114,7 +114,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     protected function _getConnectionMockWithMockedQuote($callCount, $returnValue = null)
     {
         $connection = $this->getMock(
-            '\Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['supportStraightJoin', 'quote'],
             [],
             '',

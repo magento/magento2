@@ -47,7 +47,7 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\App\AreaList',
+        $instanceName = \Magento\Framework\App\AreaList::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;

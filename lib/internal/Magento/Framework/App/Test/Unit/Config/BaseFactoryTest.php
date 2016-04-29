@@ -9,8 +9,8 @@ class BaseFactoryTest extends \Magento\Framework\TestFramework\Unit\AbstractFact
 {
     protected function setUp()
     {
-        $this->instanceClassName = 'Magento\Framework\App\Config\Base';
-        $this->factoryClassName = 'Magento\Framework\App\Config\BaseFactory';
+        $this->instanceClassName = \Magento\Framework\App\Config\Base::class;
+        $this->factoryClassName = \Magento\Framework\App\Config\BaseFactory::class;
         parent::setUp();
     }
 }

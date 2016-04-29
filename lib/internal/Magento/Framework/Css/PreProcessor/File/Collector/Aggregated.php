@@ -74,7 +74,7 @@ class Aggregated implements CollectorInterface
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
-        $list = $this->fileListFactory->create('Magento\Framework\Css\PreProcessor\File\FileList\Collator');
+        $list = $this->fileListFactory->create(\Magento\Framework\Css\PreProcessor\File\FileList\Collator::class);
         $list->add($this->libraryFiles->getFiles($theme, $filePath));
         $list->add($this->baseFiles->getFiles($theme, $filePath));
 

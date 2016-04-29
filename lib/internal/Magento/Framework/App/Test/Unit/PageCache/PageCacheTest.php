@@ -11,7 +11,7 @@ class PageCacheTest extends \PHPUnit_Framework_TestCase
     {
         $identifier = 'page_cache';
 
-        $poolMock = $this->getMockBuilder('\Magento\Framework\App\Cache\Frontend\Pool')
+        $poolMock = $this->getMockBuilder(\Magento\Framework\App\Cache\Frontend\Pool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $poolMock->expects(
@@ -24,6 +24,6 @@ class PageCacheTest extends \PHPUnit_Framework_TestCase
             $this->returnArgument(0)
         );
         $model = new \Magento\Framework\App\PageCache\Cache($poolMock);
-        $this->assertInstanceOf('Magento\Framework\App\PageCache\Cache', $model);
+        $this->assertInstanceOf(\Magento\Framework\App\PageCache\Cache::class, $model);
     }
 }

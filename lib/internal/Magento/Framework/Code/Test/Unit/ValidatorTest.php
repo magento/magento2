@@ -22,9 +22,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidate()
     {
         $className = 'Same\Class\Name';
-        $validator1 = $this->getMock('Magento\Framework\Code\ValidatorInterface');
+        $validator1 = $this->getMock(\Magento\Framework\Code\ValidatorInterface::class);
         $validator1->expects($this->once())->method('validate')->with($className);
-        $validator2 = $this->getMock('Magento\Framework\Code\ValidatorInterface');
+        $validator2 = $this->getMock(\Magento\Framework\Code\ValidatorInterface::class);
         $validator2->expects($this->once())->method('validate')->with($className);
 
         $this->model->add($validator1);

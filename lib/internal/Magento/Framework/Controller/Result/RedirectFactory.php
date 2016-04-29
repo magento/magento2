@@ -29,7 +29,7 @@ class RedirectFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Controller\Result\Redirect'
+        $instanceName = \Magento\Framework\Controller\Result\Redirect::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

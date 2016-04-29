@@ -22,7 +22,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->areaListMock = $this->getMock('Magento\Framework\App\AreaList', ['getCodes'], [], '', false);
+        $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, ['getCodes'], [], '', false);
         $this->model = new Scope($this->areaListMock);
     }
 

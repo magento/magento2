@@ -62,7 +62,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @var string
      */
-    protected $_defaultStmtClass = 'Magento\Framework\DB\Statement\Pdo\Mysql';
+    protected $_defaultStmtClass = \Magento\Framework\DB\Statement\Pdo\Mysql::class;
 
     /**
      * Current Transaction Level

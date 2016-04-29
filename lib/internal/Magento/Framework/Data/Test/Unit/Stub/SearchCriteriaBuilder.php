@@ -14,6 +14,6 @@ class SearchCriteriaBuilder extends AbstractSearchCriteriaBuilder
      */
     public function init()
     {
-        $this->resultObjectInterface = 'Magento\Framework\Api\CriteriaInterface';
+        $this->resultObjectInterface = \Magento\Framework\Api\CriteriaInterface::class;
     }
 }

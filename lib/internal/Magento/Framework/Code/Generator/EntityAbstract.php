@@ -187,7 +187,7 @@ abstract class EntityAbstract
             'visibility' => 'protected',
             'docblock' => [
                 'shortDescription' => 'Object Manager instance',
-                'tags' => [['name' => 'var', 'description' => '\Magento\Framework\ObjectManagerInterface']],
+                'tags' => [['name' => 'var', 'description' => '\\' . \Magento\Framework\ObjectManagerInterface::class]],
             ],
         ];
 

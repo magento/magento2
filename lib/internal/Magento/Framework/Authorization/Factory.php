@@ -15,7 +15,7 @@ class Factory
     /**
      * Entity class name
      */
-    const CLASS_NAME = 'Magento\Framework\Authorization';
+    const CLASS_NAME = \Magento\Framework\Authorization::class;
 
     /**
      * Object Manager instance

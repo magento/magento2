@@ -172,10 +172,10 @@ class DataObjectHelper
             return $this;
         }
 
-        if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensibleDataInterface')) {
+        if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensibleDataInterface::class)) {
             $object = $this->objectFactory->create($returnType, []);
             $this->populateWithArray($object, $value, $returnType);
-        } else if (is_subclass_of($returnType, '\Magento\Framework\Api\ExtensionAttributesInterface')) {
+        } else if (is_subclass_of($returnType, \Magento\Framework\Api\ExtensionAttributesInterface::class)) {
             $object = $this->extensionFactory->create(get_class($dataObject), ['data' => $value]);
         } else {
             $object = $this->objectFactory->create($returnType, $value);

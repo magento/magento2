@@ -50,13 +50,13 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->reader = $this->getMock(\Magento\Framework\App\DeploymentConfig\Reader::class, [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->formatter = $this->getMockForAbstractClass(
-            'Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface'
+            \Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface::class
         );
-        $this->configFilePool = $this->getMock('Magento\Framework\Config\File\ConfigFilePool', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->configFilePool = $this->getMock(\Magento\Framework\Config\File\ConfigFilePool::class, [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $this->object = new Writer(
             $this->reader,
             $filesystem,
@@ -65,8 +65,8 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             $this->formatter
         );
         $this->reader->expects($this->any())->method('getFiles')->willReturn('test.php');
-        $this->dirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $this->dirRead = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->dirWrite = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $this->dirRead = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->dirRead->expects($this->any())
             ->method('getAbsolutePath');
         $filesystem->expects($this->any())

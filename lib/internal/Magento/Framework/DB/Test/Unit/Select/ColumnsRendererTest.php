@@ -36,10 +36,16 @@ class ColumnsRendererTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteMock = $this->getMock('\Magento\Framework\DB\Platform\Quote', ['quoteColumnAs'], [], '', false);
-        $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', ['getPart'], [], '', false);
+        $this->quoteMock = $this->getMock(
+            \Magento\Framework\DB\Platform\Quote::class,
+            ['quoteColumnAs'],
+            [],
+            '',
+            false
+        );
+        $this->selectMock = $this->getMock(\Magento\Framework\DB\Select::class, ['getPart'], [], '', false);
         $this->model = $objectManager->getObject(
-            '\Magento\Framework\DB\Select\ColumnsRenderer',
+            \Magento\Framework\DB\Select\ColumnsRenderer::class,
             ['quote' => $this->quoteMock]
         );
         $this->sqlWildcard = new \Zend_Db_Expr(Select::SQL_WILDCARD);

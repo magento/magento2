@@ -35,21 +35,21 @@ class InvokerDefaultTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_observerFactoryMock = $this->getMock(
-            'Magento\Framework\Event\ObserverFactory',
+            \Magento\Framework\Event\ObserverFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->_observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $this->_observerMock = $this->getMock(\Magento\Framework\Event\Observer::class, [], [], '', false);
         $this->_listenerMock = $this->getMock(
-            'Magento\Framework\Event\Test\Unit\Invoker\ObserverExample',
+            \Magento\Framework\Event\Test\Unit\Invoker\ObserverExample::class,
             ['execute'],
             [],
             '',
             false
         );
-        $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->_appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
 
         $this->_invokerDefault = new \Magento\Framework\Event\Invoker\InvokerDefault(
             $this->_observerFactoryMock,

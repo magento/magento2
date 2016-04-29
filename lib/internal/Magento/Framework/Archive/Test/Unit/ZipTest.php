@@ -19,7 +19,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->zip = $this->getMockBuilder('\Magento\Framework\Archive\Zip')
+        $this->zip = $this->getMockBuilder(\Magento\Framework\Archive\Zip::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -30,7 +30,7 @@ class ZipTest extends \PHPUnit_Framework_TestCase
     public function testConstructorNoExceptions()
     {
         try {
-            $reflectedClass = new \ReflectionClass('\Magento\Framework\Archive\Zip');
+            $reflectedClass = new \ReflectionClass(\Magento\Framework\Archive\Zip::class);
             $constructor = $reflectedClass->getConstructor();
             $constructor->invoke($this->zip, []);
         } catch (\Exception $e) {

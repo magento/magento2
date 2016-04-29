@@ -45,7 +45,7 @@ class ActionList
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
         ModuleReader $moduleReader,
-        $actionInterface = '\Magento\Framework\App\ActionInterface',
+        $actionInterface = \Magento\Framework\App\ActionInterface::class,
         $cacheKey = 'app_action_list',
         $reservedWords = []
     ) {

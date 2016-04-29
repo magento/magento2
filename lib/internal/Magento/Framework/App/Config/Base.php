@@ -22,7 +22,7 @@ class Base extends \Magento\Framework\Simplexml\Config
      */
     public function __construct($sourceData = null)
     {
-        $this->_elementClass = 'Magento\Framework\App\Config\Element';
+        $this->_elementClass = \Magento\Framework\App\Config\Element::class;
         parent::__construct($sourceData);
         self::$instances[] = $this;
     }

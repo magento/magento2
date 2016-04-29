@@ -26,7 +26,7 @@ class Size
      */
     public function getPostMaxSize()
     {
-        return $this->_iniGet('post_max_size');
+        return $this->_iniget('post_max_size');
     }
 
     /**
@@ -36,7 +36,7 @@ class Size
      */
     public function getUploadMaxSize()
     {
-        return $this->_iniGet('upload_max_filesize');
+        return $this->_iniget('upload_max_filesize');
     }
 
     /**

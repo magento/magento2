@@ -28,7 +28,7 @@ class Factory
     /**
      * Default strategy key
      */
-    const DEFAULT_STRATEGY = 'Magento\Framework\App\View\Asset\MaterializationStrategy\Copy';
+    const DEFAULT_STRATEGY = \Magento\Framework\App\View\Asset\MaterializationStrategy\Copy::class;
 
     /**
      * @param ObjectManagerInterface $objectManager

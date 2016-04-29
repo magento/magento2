@@ -39,11 +39,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_scopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
-        $this->_cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->_scopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
 
         $this->_readerMock =
-            $this->getMock('Magento\Framework\App\ResourceConnection\Config\Reader', [], [], '', false);
+            $this->getMock(\Magento\Framework\App\ResourceConnection\Config\Reader::class, [], [], '', false);
 
         $this->_resourcesConfig = [
             'mainResourceName' => ['name' => 'mainResourceName', 'extends' => 'anotherResourceName'],
@@ -65,7 +65,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(serialize($this->_resourcesConfig))
         );
 
-        $deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $deploymentConfig->expects($this->once())
             ->method('getConfigData')
             ->with('resource')
@@ -95,7 +95,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testExceptionConstructor()
     {
-        $deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $deploymentConfig->expects($this->once())
             ->method('getConfigData')
             ->with('resource')

@@ -33,7 +33,7 @@ class JsonFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\Controller\\Result\\Json'
+        $instanceName = \Magento\Framework\Controller\Result\Json::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

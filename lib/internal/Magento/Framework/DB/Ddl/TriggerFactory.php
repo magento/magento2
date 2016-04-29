@@ -15,7 +15,7 @@ class TriggerFactory
     /**
      * @var string
      */
-    const INSTANCE_NAME = 'Magento\Framework\DB\Ddl\Trigger';
+    const INSTANCE_NAME = \Magento\Framework\DB\Ddl\Trigger::class;
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager

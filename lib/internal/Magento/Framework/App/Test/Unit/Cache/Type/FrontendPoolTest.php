@@ -31,9 +31,9 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->_cachePool = $this->getMock('Magento\Framework\App\Cache\Frontend\Pool', [], [], '', false);
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->_cachePool = $this->getMock(\Magento\Framework\App\Cache\Frontend\Pool::class, [], [], '', false);
         $this->_model = new FrontendPool(
             $this->_objectManager,
             $this->deploymentConfig,
@@ -61,7 +61,7 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($fixtureConfigData)
         );
 
-        $cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');
+        $cacheFrontend = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->_cachePool->expects(
             $this->once()
         )->method(
@@ -72,13 +72,13 @@ class FrontendPoolTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($cacheFrontend)
         );
 
-        $accessProxy = $this->getMock('Magento\Framework\App\Cache\Type\AccessProxy', [], [], '', false);
+        $accessProxy = $this->getMock(\Magento\Framework\App\Cache\Type\AccessProxy::class, [], [], '', false);
         $this->_objectManager->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            'Magento\Framework\App\Cache\Type\AccessProxy',
+            \Magento\Framework\App\Cache\Type\AccessProxy::class,
             $this->identicalTo(['frontend' => $cacheFrontend, 'identifier' => $inputCacheType])
         )->will(
             $this->returnValue($accessProxy)
