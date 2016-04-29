@@ -20,14 +20,14 @@ class ServerAddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_request = $this->getMockBuilder(
-            'Magento\Framework\App\Request\Http'
+            \Magento\Framework\App\Request\Http::class
         )->disableOriginalConstructor()->setMethods(
             ['getServer']
         )->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_serverAddress = $objectManager->getObject(
-            'Magento\Framework\HTTP\PhpEnvironment\ServerAddress',
+            \Magento\Framework\HTTP\PhpEnvironment\ServerAddress::class,
             ['httpRequest' => $this->_request]
         );
     }

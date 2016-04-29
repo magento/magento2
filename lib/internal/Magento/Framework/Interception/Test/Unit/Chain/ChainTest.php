@@ -20,7 +20,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_pluginListMock = $this->getMock('Magento\Framework\Interception\PluginListInterface');
+        $this->_pluginListMock = $this->getMock(\Magento\Framework\Interception\PluginListInterface::class);
         $this->_model = new \Magento\Framework\Interception\Chain\Chain($this->_pluginListMock);
     }
 
@@ -33,7 +33,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $type = 'type';
         $method = 'method';
 
-        $subjectMock = $this->getMock('Magento\Framework\Interception\InterceptorInterface');
+        $subjectMock = $this->getMock(\Magento\Framework\Interception\InterceptorInterface::class);
         $pluginMock = $this->getMock('PluginClass', ['beforeMethod']);
 
         $pluginMock->expects($this->once())
@@ -71,7 +71,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $type = 'type';
         $method = 'method';
 
-        $subjectMock = $this->getMock('Magento\Framework\Interception\InterceptorInterface');
+        $subjectMock = $this->getMock(\Magento\Framework\Interception\InterceptorInterface::class);
         $pluginMock = $this->getMock('PluginClass', ['aroundMethod']);
 
         $pluginMock->expects($this->once())
@@ -102,7 +102,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $type = 'type';
         $method = 'method';
 
-        $subjectMock = $this->getMock('Magento\Framework\Interception\InterceptorInterface');
+        $subjectMock = $this->getMock(\Magento\Framework\Interception\InterceptorInterface::class);
         $pluginMock = $this->getMock('PluginClass', ['afterMethod']);
 
         $pluginMock->expects($this->once())

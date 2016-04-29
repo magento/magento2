@@ -14,7 +14,7 @@ class AmountFactory
     /**
      * Default amount class
      */
-    const DEFAULT_PRICE_AMOUNT_CLASS = 'Magento\Framework\Pricing\Amount\AmountInterface';
+    const DEFAULT_PRICE_AMOUNT_CLASS = \Magento\Framework\Pricing\Amount\AmountInterface::class;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface

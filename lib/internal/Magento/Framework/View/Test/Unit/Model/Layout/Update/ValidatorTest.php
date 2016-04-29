@@ -27,7 +27,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function _createValidator($layoutUpdate, $isSchemaValid = true)
     {
         $domConfigFactory = $this->getMockBuilder(
-            'Magento\Framework\Config\DomFactory'
+            \Magento\Framework\Config\DomFactory::class
         )->disableOriginalConstructor()->getMock();
 
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
@@ -49,9 +49,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Framework\Config\Dom\ValidationException($exceptionMessage)
             )
         );
-        $urnResolver = $this->_objectHelper->getObject('Magento\Framework\Config\Dom\UrnResolver');
+        $urnResolver = $this->_objectHelper->getObject(\Magento\Framework\Config\Dom\UrnResolver::class);
         $model = $this->_objectHelper->getObject(
-            'Magento\Framework\View\Model\Layout\Update\Validator',
+            \Magento\Framework\View\Model\Layout\Update\Validator::class,
             ['domConfigFactory' => $domConfigFactory, 'urnResolver' => $urnResolver]
         );
 

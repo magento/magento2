@@ -26,7 +26,7 @@ use Magento\Framework\Reflection\MethodsMap;
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
-    const EXTENSION_ATTRIBUTES_TYPE = '\Magento\Framework\Api\ExtensionAttributesInterface';
+    const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /** @var \Magento\Framework\Reflection\TypeProcessor */
     protected $typeProcessor;

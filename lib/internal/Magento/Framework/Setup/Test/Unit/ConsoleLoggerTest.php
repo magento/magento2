@@ -22,9 +22,9 @@ class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->console = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
+        $this->console = $this->getMock(\Symfony\Component\Console\Output\OutputInterface::class, [], [], '', false);
         $outputFormatter = $this->getMock(
-            'Symfony\Component\Console\Formatter\OutputFormatterInterface',
+            \Symfony\Component\Console\Formatter\OutputFormatterInterface::class,
             [],
             [],
             '',
@@ -48,7 +48,7 @@ class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testLogError()
     {
-        $exception = $this->getMock('\Exception', [], [], '', false);
+        $exception = $this->getMock(\Exception::class, [], [], '', false);
         $this->console
             ->expects($this->once())
             ->method('writeln')

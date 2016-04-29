@@ -31,8 +31,8 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $this->amountMock = $this->getMock('Magento\Framework\Pricing\Amount\Base', [], [], '', false);
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\App\ObjectManager::class, [], [], '', false);
+        $this->amountMock = $this->getMock(\Magento\Framework\Pricing\Amount\Base::class, [], [], '', false);
         $this->factory = new \Magento\Framework\Pricing\Amount\AmountFactory($this->objectManagerMock);
     }
 
@@ -44,7 +44,7 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\Pricing\Amount\AmountInterface'),
+                $this->equalTo(\Magento\Framework\Pricing\Amount\AmountInterface::class),
                 $this->equalTo(
                     [
                         'amount' => 'this-is-float-amount',
@@ -69,7 +69,7 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo('Magento\Framework\Pricing\Amount\AmountInterface'),
+                $this->equalTo(\Magento\Framework\Pricing\Amount\AmountInterface::class),
                 $this->equalTo(
                     [
                         'amount' => 'this-is-float-amount',

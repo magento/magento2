@@ -16,7 +16,9 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_output = $this->getMockForAbstractClass('Magento\Framework\Profiler\Driver\Standard\AbstractOutput');
+        $this->_output = $this->getMockForAbstractClass(
+            \Magento\Framework\Profiler\Driver\Standard\AbstractOutput::class
+        );
     }
 
     /**
@@ -55,7 +57,7 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
         $configuration = ['filterPattern' => '/filter pattern/', 'thresholds' => ['fetchKey' => 100]];
         /** @var $output \Magento\Framework\Profiler\Driver\Standard\AbstractOutput  */
         $output = $this->getMockForAbstractClass(
-            'Magento\Framework\Profiler\Driver\Standard\AbstractOutput',
+            \Magento\Framework\Profiler\Driver\Standard\AbstractOutput::class,
             [$configuration]
         );
         $this->assertEquals('/filter pattern/', $output->getFilterPattern());
@@ -113,7 +115,7 @@ class OutputAbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_output->setFilterPattern('/filter pattern/');
 
-        $mockStat = $this->getMock('Magento\Framework\Profiler\Driver\Standard\Stat');
+        $mockStat = $this->getMock(\Magento\Framework\Profiler\Driver\Standard\Stat::class);
         $expectedTimerIds = ['test'];
         $mockStat->expects(
             $this->once()

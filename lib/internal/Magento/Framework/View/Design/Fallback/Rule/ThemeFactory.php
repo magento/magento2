@@ -30,6 +30,6 @@ class ThemeFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\View\Design\Fallback\Rule\Theme', $data);
+        return $this->objectManager->create(\Magento\Framework\View\Design\Fallback\Rule\Theme::class, $data);
     }
 }

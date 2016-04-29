@@ -45,18 +45,18 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->scheduledStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\ScheduledStructure')
+        $this->scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataStructureMock = $this->getMockBuilder('Magento\Framework\View\Layout\Data\Structure')
+        $this->dataStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
+        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->helper = $helperObjectManager->getObject(
-            'Magento\Framework\View\Layout\ScheduledStructure\Helper',
+            \Magento\Framework\View\Layout\ScheduledStructure\Helper::class,
             [
                 'logger' => $this->loggerMock,
                 'state' => $this->stateMock

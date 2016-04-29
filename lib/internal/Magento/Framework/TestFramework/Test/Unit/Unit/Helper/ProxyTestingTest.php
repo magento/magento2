@@ -30,14 +30,14 @@ class ProxyTestingTest extends \PHPUnit_Framework_TestCase
         $expectedResult
     ) {
         // Create proxied object with $callProxiedMethod
-        $proxiedObject = $this->getMock('stdClass', [$callProxiedMethod]);
+        $proxiedObject = $this->getMock(\stdClass::class, [$callProxiedMethod]);
 
         // Create object, which reacts on called $method by calling $callProxiedMethod from proxied object
         $callProxy = function () use ($proxiedObject, $callProxiedMethod, $passProxiedParams) {
             return call_user_func_array([$proxiedObject, $callProxiedMethod], $passProxiedParams);
         };
 
-        $object = $this->getMock('stdClass', [$method]);
+        $object = $this->getMock(\stdClass::class, [$method]);
         $builder = $object->expects($this->once())->method($method);
         call_user_func_array([$builder, 'with'], $params);
         $builder->will($this->returnCallback($callProxy));

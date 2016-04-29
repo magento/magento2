@@ -39,9 +39,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock('Magento\Framework\Mview\Config\Reader', ['read'], [], '', false);
+        $this->reader = $this->getMock(\Magento\Framework\Mview\Config\Reader::class, ['read'], [], '', false);
         $this->cache = $this->getMockForAbstractClass(
-            'Magento\Framework\Config\CacheInterface',
+            \Magento\Framework\Config\CacheInterface::class,
             [],
             '',
             false,
@@ -50,7 +50,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['test', 'load', 'save']
         );
         $this->stateCollection = $this->getMockForAbstractClass(
-            'Magento\Framework\Mview\View\State\CollectionInterface',
+            \Magento\Framework\Mview\View\State\CollectionInterface::class,
             [],
             '',
             false,
@@ -91,7 +91,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->reader->expects($this->once())->method('read')->will($this->returnValue($this->views));
 
         $stateExistent = $this->getMock(
-            'Magento\Framework\Mview\Indexer\State',
+            \Magento\Framework\Mview\Indexer\State::class,
             ['getViewId', '__wakeup', 'delete'],
             [],
             '',
@@ -101,7 +101,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $stateExistent->expects($this->never())->method('delete');
 
         $stateNonexistent = $this->getMock(
-            'Magento\Framework\Mview\Indexer\State',
+            \Magento\Framework\Mview\Indexer\State::class,
             ['getViewId', '__wakeup', 'delete'],
             [],
             '',

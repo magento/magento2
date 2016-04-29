@@ -17,7 +17,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testTranslate($method, $strToTranslate, $translatedStr)
     {
-        $translatorMock = $this->getMockBuilder('stdClass')->setMethods(['translate'])->getMock();
+        $translatorMock = $this->getMockBuilder(\stdClass::class)->setMethods(['translate'])->getMock();
         $translatorMock->expects(
             $this->once()
         )->method(

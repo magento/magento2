@@ -19,7 +19,7 @@ class PropertiesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
+            \Magento\Framework\Model\AbstractModel::class,
             ['hasDataChanges', 'getData', 'getOrigData'],
             [],
             '',

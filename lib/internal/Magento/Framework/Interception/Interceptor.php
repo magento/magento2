@@ -54,8 +54,8 @@ trait Interceptor
     public function ___init()
     {
         $this->pluginLocator = ObjectManager::getInstance();
-        $this->pluginList = $this->pluginLocator->get('Magento\Framework\Interception\PluginListInterface');
-        $this->chain = $this->pluginLocator->get('Magento\Framework\Interception\ChainInterface');
+        $this->pluginList = $this->pluginLocator->get(\Magento\Framework\Interception\PluginListInterface::class);
+        $this->chain = $this->pluginLocator->get(\Magento\Framework\Interception\ChainInterface::class);
         $this->subjectType = get_parent_class($this);
         if (method_exists($this->subjectType, '___init')) {
             parent::___init();

@@ -34,6 +34,6 @@ class ModuleFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\View\Design\Fallback\Rule\Module', $data);
+        return $this->objectManager->create(\Magento\Framework\View\Design\Fallback\Rule\Module::class, $data);
     }
 }

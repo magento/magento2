@@ -24,10 +24,10 @@ class HeadTest extends \PHPUnit_Framework_TestCase
 
     public function testInterpret()
     {
-        $readerContextMock = $this->getMockBuilder('Magento\Framework\View\Layout\Reader\Context')
+        $readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $structureMock = $this->getMockBuilder('Magento\Framework\View\Page\Config\Structure')
+        $structureMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
         $readerContextMock->expects($this->once())

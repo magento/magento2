@@ -20,7 +20,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 
     public function testIsValid()
     {
-        $lists = $this->getMock('Magento\Framework\Setup\Lists', [], [], '', false);
+        $lists = $this->getMock(\Magento\Framework\Setup\Lists::class, [], [], '', false);
         $lists->expects($this->any())->method('getCurrencyList')->will($this->returnValue($this->expectedCurrencies));
         $currency = new \Magento\Framework\Validator\Currency($lists);
         $this->assertEquals(true, $currency->isValid('EUR'));

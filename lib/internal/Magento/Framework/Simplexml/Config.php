@@ -64,7 +64,7 @@ class Config
      *
      * @var string
      */
-    protected $_elementClass = 'Magento\Framework\Simplexml\Element';
+    protected $_elementClass = \Magento\Framework\Simplexml\Element::class;
 
     /**
      * Xpath describing nodes in configuration that need to be extended

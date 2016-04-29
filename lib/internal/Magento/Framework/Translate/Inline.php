@@ -207,7 +207,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     protected function getInlineScript()
     {
         /** @var $block \Magento\Framework\View\Element\Template */
-        $block = $this->layout->createBlock('Magento\Framework\View\Element\Template');
+        $block = $this->layout->createBlock(\Magento\Framework\View\Element\Template::class);
 
         $block->setAjaxUrl($this->getAjaxUrl());
         $block->setTemplate($this->templateFileName);

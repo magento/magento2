@@ -32,7 +32,7 @@ class ImageFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\Design\Theme\Image'
+        $instanceName = \Magento\Framework\View\Design\Theme\Image::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

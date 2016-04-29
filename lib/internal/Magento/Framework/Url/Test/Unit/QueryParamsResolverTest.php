@@ -16,7 +16,7 @@ class QueryParamsResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->object = $objectManager->getObject('Magento\Framework\Url\QueryParamsResolver');
+        $this->object = $objectManager->getObject(\Magento\Framework\Url\QueryParamsResolver::class);
     }
 
     public function testGetQuery()

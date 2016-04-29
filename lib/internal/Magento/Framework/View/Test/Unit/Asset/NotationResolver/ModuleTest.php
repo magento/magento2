@@ -27,8 +27,8 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
-        $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->asset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
+        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
         $this->object = new \Magento\Framework\View\Asset\NotationResolver\Module($this->assetRepo);
     }
 
@@ -53,7 +53,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     public function testConvertModuleNotationToPathModularSeparator(
         $assetRelPath, $relatedFieldId, $similarRelPath, $expectedResult
     ) {
-        $similarAsset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
+        $similarAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $similarAsset->expects($this->any())
             ->method('getPath')
             ->will($this->returnValue($similarRelPath));

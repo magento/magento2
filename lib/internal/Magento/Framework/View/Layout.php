@@ -195,7 +195,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         Logger $logger,
         $cacheable = true
     ) {
-        $this->_elementClass = 'Magento\Framework\View\Layout\Element';
+        $this->_elementClass = \Magento\Framework\View\Layout\Element::class;
         $this->_renderingOutput = new \Magento\Framework\DataObject();
 
         $this->_processorFactory = $processorFactory;
@@ -952,7 +952,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         if ($block) {
             return $block;
         }
-        return $this->createBlock('Magento\Framework\View\Element\Messages', 'messages');
+        return $this->createBlock(\Magento\Framework\View\Element\Messages::class, 'messages');
     }
 
     /**

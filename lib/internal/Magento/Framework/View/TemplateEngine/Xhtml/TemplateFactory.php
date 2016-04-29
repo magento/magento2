@@ -36,7 +36,7 @@ class TemplateFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\TemplateEngine\Xhtml\Template'
+        $instanceName = \Magento\Framework\View\TemplateEngine\Xhtml\Template::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

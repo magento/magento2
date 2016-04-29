@@ -20,7 +20,7 @@ class NoticeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Framework\Message\Notice');
+        $this->model = $objectManager->getObject(\Magento\Framework\Message\Notice::class);
     }
 
     public function testGetType()

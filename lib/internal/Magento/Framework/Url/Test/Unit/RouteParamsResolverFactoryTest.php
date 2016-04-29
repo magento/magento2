@@ -17,21 +17,21 @@ class RouteParamsResolverFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(
-            'Magento\Framework\Url\RouteParamsResolverFactory',
+            \Magento\Framework\Url\RouteParamsResolverFactory::class,
             ['objectManager' => $this->objectManager]
         );
     }
 
     public function testCreate()
     {
-        $producedInstance = $this->getMock('Magento\Framework\Url\RouteParamsResolverInterface');
+        $producedInstance = $this->getMock(\Magento\Framework\Url\RouteParamsResolverInterface::class);
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Url\RouteParamsResolverInterface')
+            ->with(\Magento\Framework\Url\RouteParamsResolverInterface::class)
             ->will($this->returnValue($producedInstance));
 
         $this->assertSame($producedInstance, $this->object->create([]));

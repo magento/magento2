@@ -35,6 +35,6 @@ class CollectionFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\Message\Collection', $data);
+        return $this->objectManager->create(\Magento\Framework\Message\Collection::class, $data);
     }
 }
