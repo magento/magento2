@@ -34,10 +34,10 @@ class Validate extends ImportResultController
             );
 
             /** @var $import \Magento\ImportExport\Model\Import */
-            $import = $this->_objectManager->create('Magento\ImportExport\Model\Import')->setData($data);
+            $import = $this->_objectManager->create(\Magento\ImportExport\Model\Import::class)->setData($data);
             $source = ImportAdapter::findAdapterFor(
                 $import->uploadSource(),
-                $this->_objectManager->create('Magento\Framework\Filesystem')
+                $this->_objectManager->create(\Magento\Framework\Filesystem::class)
                     ->getDirectoryWrite(DirectoryList::ROOT),
                 $data[$import::FIELD_FIELD_SEPARATOR]
             );

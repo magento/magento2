@@ -22,7 +22,9 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer
             try {
                 foreach ($indexerIds as $indexerId) {
                     /** @var \Magento\Framework\Indexer\IndexerInterface $model */
-                    $model = $this->_objectManager->get('Magento\Framework\Indexer\IndexerRegistry')->get($indexerId);
+                    $model = $this->_objectManager->get(
+                        \Magento\Framework\Indexer\IndexerRegistry::class
+                    )->get($indexerId);
                     $model->setScheduled(false);
                 }
                 $this->messageManager->addSuccess(

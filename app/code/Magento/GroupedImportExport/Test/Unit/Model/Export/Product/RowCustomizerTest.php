@@ -29,7 +29,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rowCustomizerMock = $this->objectManagerHelper->getObject(
-            '\Magento\GroupedImportExport\Model\Export\RowCustomizer'
+            \Magento\GroupedImportExport\Model\Export\RowCustomizer::class
         );
     }
 

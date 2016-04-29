@@ -40,7 +40,7 @@ class Purchased extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\ResourceModel\Link\Purchased');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Link\Purchased::class);
         parent::_construct();
     }
 

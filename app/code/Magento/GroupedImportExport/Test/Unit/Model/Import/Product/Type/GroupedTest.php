@@ -126,7 +126,7 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             false
         );
         $this->select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             ['from', 'where', 'joinLeft', 'getConnection'],
             [],
             '',

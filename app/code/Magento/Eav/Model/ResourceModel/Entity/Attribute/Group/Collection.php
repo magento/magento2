@@ -21,8 +21,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Eav\Model\Entity\Attribute\Group',
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group'
+            \Magento\Eav\Model\Entity\Attribute\Group::class,
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group::class
         );
     }
 

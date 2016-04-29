@@ -20,26 +20,26 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
     public function testExecuteAll()
     {
         $this->configureAdminArea();
-        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
-        $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $collection = $this->getMock(\Magento\Indexer\Model\Indexer\Collection::class, [], [], '', false);
+        $indexerOne = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_VALID);
-        $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerTwo = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
         $indexerTwo
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
-        $indexerThree = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerThree = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerThree->expects($this->once())->method('getTitle')->willReturn('Title_indexerThree');
         $indexerThree
             ->expects($this->once())
             ->method('getStatus')
             ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_WORKING);
-        $indexerFour = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerFour = $this->getMock(\Magento\Indexer\Model\Indexer::class, [], [], '', false);
         $indexerFour->expects($this->once())->method('getTitle')->willReturn('Title_indexerFour');
         $collection
             ->expects($this->once())

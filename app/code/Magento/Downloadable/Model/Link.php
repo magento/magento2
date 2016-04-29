@@ -87,7 +87,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\ResourceModel\Link');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Link::class);
         parent::_construct();
     }
 
@@ -272,6 +272,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param string $title
      * @return $this
@@ -395,7 +396,6 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements C
     ) {
         return $this->setData(self::KEY_SAMPLE_FILE_CONTENT, $sampleFileContent);
     }
-
 
     /**
      * Set URL

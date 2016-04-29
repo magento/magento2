@@ -19,7 +19,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\Country\Format', 'Magento\Directory\Model\ResourceModel\Country\Format');
+        $this->_init(
+            \Magento\Directory\Model\Country\Format::class,
+            \Magento\Directory\Model\ResourceModel\Country\Format::class
+        );
     }
 
     /**

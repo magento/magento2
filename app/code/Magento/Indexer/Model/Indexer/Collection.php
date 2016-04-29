@@ -12,7 +12,7 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Framework\Indexer\IndexerInterface';
+    protected $_itemObjectClass = \Magento\Framework\Indexer\IndexerInterface::class;
 
     /**
      * @var \Magento\Framework\Indexer\ConfigInterface

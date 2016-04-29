@@ -18,7 +18,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->type = $objectManager->getObject('Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type');
+        $this->type = $objectManager->getObject(\Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type::class);
     }
 
     /**

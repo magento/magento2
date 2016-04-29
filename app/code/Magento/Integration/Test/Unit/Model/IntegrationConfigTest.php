@@ -30,10 +30,10 @@ class IntegrationConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configCacheTypeMock = $this->getMockBuilder('Magento\Integration\Model\Cache\TypeIntegration')
+        $this->configCacheTypeMock = $this->getMockBuilder(\Magento\Integration\Model\Cache\TypeIntegration::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder('Magento\Integration\Model\Config\Integration\Reader')
+        $this->configReaderMock = $this->getMockBuilder(\Magento\Integration\Model\Config\Integration\Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->integrationConfigModel = new IntegrationConfig(

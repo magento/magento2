@@ -55,7 +55,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\Link', 'Magento\Downloadable\Model\ResourceModel\Link');
+        $this->_init(\Magento\Downloadable\Model\Link::class, \Magento\Downloadable\Model\ResourceModel\Link::class);
     }
 
     /**

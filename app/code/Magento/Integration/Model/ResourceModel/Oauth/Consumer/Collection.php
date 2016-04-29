@@ -18,8 +18,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Integration\Model\Oauth\Consumer',
-            'Magento\Integration\Model\ResourceModel\Oauth\Consumer'
+            \Magento\Integration\Model\Oauth\Consumer::class,
+            \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class
         );
     }
 }

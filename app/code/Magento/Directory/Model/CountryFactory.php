@@ -34,6 +34,6 @@ class CountryFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create('Magento\Directory\Model\Country', $arguments, false);
+        return $this->_objectManager->create(\Magento\Directory\Model\Country::class, $arguments, false);
     }
 }

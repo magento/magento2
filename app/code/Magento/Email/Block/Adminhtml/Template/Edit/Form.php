@@ -105,7 +105,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField('template_variables', 'hidden', ['name' => 'template_variables']);
 
         $insertVariableButton = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             '',
             [
                 'data' => [

@@ -14,7 +14,7 @@ class UpdatedTest extends \PHPUnit_Framework_TestCase
      */
     public function testRender($defaultValue, $assert)
     {
-        $context = $this->getMockBuilder('\Magento\Backend\Block\Context')
+        $context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $model = new \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Updated($context);

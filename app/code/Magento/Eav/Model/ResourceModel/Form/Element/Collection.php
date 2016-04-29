@@ -20,7 +20,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Form\Element', 'Magento\Eav\Model\ResourceModel\Form\Element');
+        $this->_init(\Magento\Eav\Model\Form\Element::class, \Magento\Eav\Model\ResourceModel\Form\Element::class);
     }
 
     /**
