@@ -11,5 +11,14 @@ namespace Magento\Customer\Test\Block\Adminhtml\Group\Edit;
  */
 class Form extends \Magento\Mtf\Block\Form
 {
-    //
+    /**
+     *
+     *
+     * @param string $field
+     * @return bool
+     */
+    public function isFieldDisabled($field)
+    {
+        return $this->_rootElement->find($this->mapping[$field]['selector'])->isDisabled();
+    }
 }
