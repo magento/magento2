@@ -155,8 +155,8 @@ class CustomerRepositoryTest extends WebapiAbstract
     public function testInvalidCustomerUpdate()
     {
         //Create customer 1 and retrieve customer token.
-        $customerData1 = $this->_createCustomer();
-        $this->generateCustomerToken(($customerData1[Customer::EMAIL]), 'test@123');
+        $firstCustomerData = $this->_createCustomer();
+        $this->generateCustomerToken($firstCustomerData[Customer::EMAIL], 'test@123');
 
         //Create customer 2 and update lastname.
         $customerData = $this->_createCustomer();
