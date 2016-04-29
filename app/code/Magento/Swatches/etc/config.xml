@@ -20,5 +20,10 @@
                 </input_types>
             </validator_data>
         </general>
+        <design>
+            <watermark>
+                <swatch_image_position>stretch</swatch_image_position>
+            </watermark>
+        </design>
     </default>
 </config>
