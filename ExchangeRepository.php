@@ -41,7 +41,7 @@ class ExchangeRepository
         $exchange = $this->objectManager->get($exchangeClassName);
 
         if (!$exchange instanceof ExchangeInterface) {
-            $exchangeInterface = '\Magento\Framework\MessageQueue\ExchangeInterface';
+            $exchangeInterface = \Magento\Framework\MessageQueue\ExchangeInterface::class;
             throw new \LogicException(
                 "Queue '{$exchangeClassName}' for connection name '{$connectionName}' " .
                 "does not implement interface '{$exchangeInterface}'"

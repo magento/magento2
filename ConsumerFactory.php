@@ -34,7 +34,6 @@ class ConsumerFactory
      */
     private $objectManager = null;
 
-
     /**
      * Initialize dependencies.
      *
@@ -160,7 +159,7 @@ class ConsumerFactory
         ];
 
         return $this->objectManager->create(
-            'Magento\Framework\MessageQueue\ConsumerConfiguration',
+            \Magento\Framework\MessageQueue\ConsumerConfiguration::class,
             ['data' => $configData]
         );
     }

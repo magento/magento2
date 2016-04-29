@@ -30,15 +30,15 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->configMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConfigInterface')
+        $this->configMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectEncoderMock = $this->getMockBuilder('Magento\Framework\Webapi\ServiceOutputProcessor')
+        $this->dataObjectEncoderMock = $this->getMockBuilder(\Magento\Framework\Webapi\ServiceOutputProcessor::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $this->encoder = $this->objectManager->getObject(
-            'Magento\Framework\MessageQueue\MessageEncoder',
+            \Magento\Framework\MessageQueue\MessageEncoder::class,
             [
                 'queueConfig' => $this->configMock,
                 'dataObjectEncoder' => $this->dataObjectEncoderMock
@@ -73,7 +73,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
         $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigData());
-        $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $object = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -93,7 +93,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
         $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigData());
-        $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $object = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -114,7 +114,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         return [
             QueueConfig::TOPIC_SCHEMA => [
                 QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
+                QueueConfig::TOPIC_SCHEMA_VALUE => \Magento\Customer\Api\Data\CustomerInterface::class
             ]
         ];
     }

@@ -26,9 +26,16 @@ class DeprecatedFormatTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->methodMapMock = $this->getMock('Magento\Framework\Reflection\MethodsMap', [], [], '', false, false);
+        $this->methodMapMock = $this->getMock(
+            \Magento\Framework\Reflection\MethodsMap::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
         $this->validatorMock = $this->getMock(
-            'Magento\Framework\MessageQueue\Config\Validator',
+            \Magento\Framework\MessageQueue\Config\Validator::class,
             [],
             [],
             '',

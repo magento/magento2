@@ -27,7 +27,7 @@ return [
             'name' => 'customer.created',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                'schema_value' => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
@@ -40,7 +40,7 @@ return [
             'name' => 'customer.created.one',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                'schema_value' => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
@@ -53,7 +53,7 @@ return [
             'name' => 'customer.created.one.two',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                'schema_value' => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
@@ -66,7 +66,7 @@ return [
             'name' => 'customer.created.two',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                'schema_value' => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             'publisher' => 'test-publisher-1',
             "response_schema" => [
@@ -79,7 +79,7 @@ return [
             'name' => 'customer.updated',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                'schema_value' => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             'publisher' => 'test-publisher-2',
             "response_schema" => [
@@ -92,7 +92,7 @@ return [
             'name' => 'customer.deleted',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Customer\Api\Data\CustomerInterface'
+                'schema_value' => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             'publisher' => 'test-publisher-2',
             "response_schema" => [
@@ -105,7 +105,7 @@ return [
             'name' => 'cart.created',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Quote\Api\Data\CartInterface'
+                'schema_value' => \Magento\Quote\Api\Data\CartInterface::class
             ],
             'publisher' => 'test-publisher-3',
             "response_schema" => [
@@ -118,7 +118,7 @@ return [
             'name' => 'cart.created.one',
             'schema' => [
                 'schema_type' => 'object',
-                'schema_value' => 'Magento\Quote\Api\Data\CartInterface'
+                'schema_value' => \Magento\Quote\Api\Data\CartInterface::class
             ],
             'publisher' => 'test-publisher-3',
             "response_schema" => [

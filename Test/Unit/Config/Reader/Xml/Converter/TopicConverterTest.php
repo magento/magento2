@@ -35,16 +35,23 @@ class TopicConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->methodMapMock = $this->getMock('Magento\Framework\Reflection\MethodsMap', [], [], '', false, false);
-        $this->validatorMock = $this->getMock(
-            'Magento\Framework\MessageQueue\Config\Validator',
+        $this->methodMapMock = $this->getMock(
+            \Magento\Framework\Reflection\MethodsMap::class,
             [],
             [],
             '',
             false,
             false
         );
-        $this->communicationConfigMock = $this->getMock('\Magento\Framework\Communication\ConfigInterface');
+        $this->validatorMock = $this->getMock(
+            \Magento\Framework\MessageQueue\Config\Validator::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
+        $this->communicationConfigMock = $this->getMock(\Magento\Framework\Communication\ConfigInterface::class);
         $wildcardPatternMap = include(__DIR__ . '/../../../../_files/wildcard_pattern_map.php');
         $topicsMap = include(__DIR__ . '/../../../../_files/topic_definitions_map.php');
         $this->validatorMock->expects($this->any())

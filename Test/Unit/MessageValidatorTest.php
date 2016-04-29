@@ -27,11 +27,11 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->configMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConfigInterface')
+        $this->configMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
-            'Magento\Framework\MessageQueue\MessageValidator',
+            \Magento\Framework\MessageQueue\MessageValidator::class,
             [
                 'queueConfig' => $this->configMock,
             ]
@@ -50,7 +50,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateValidObjectType()
     {
         $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigDataObjectType());
-        $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $object = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -61,7 +61,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateValidMethodType()
     {
         $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigDataMethodType());
-        $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $object = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -98,7 +98,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
         return [
             QueueConfig::TOPIC_SCHEMA => [
                 QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
+                QueueConfig::TOPIC_SCHEMA_VALUE => \Magento\Customer\Api\Data\CustomerInterface::class
             ]
         ];
     }
@@ -117,7 +117,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
                         'param_name' => 'customer',
                         'param_position' => 0,
                         'is_required' => true,
-                        'param_type' => 'Magento\Customer\Api\Data\CustomerInterface',
+                        'param_type' => \Magento\Customer\Api\Data\CustomerInterface::class,
                     ],
                     [
                         'param_name' => 'password',

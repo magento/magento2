@@ -44,7 +44,7 @@ class MergerFactory
         $merger = $this->objectManager->get($mergerClassName);
 
         if (!$merger instanceof MergerInterface) {
-            $mergerInterfaceName = '\Magento\Framework\MessageQueue\MergerInterface';
+            $mergerInterfaceName = \Magento\Framework\MessageQueue\MergerInterface::class;
             throw new \LogicException(
                 "Merger '{$mergerClassName}' for consumer name '{$consumerName}' " .
                 "does not implement interface '{$mergerInterfaceName}'"

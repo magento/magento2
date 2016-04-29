@@ -32,17 +32,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->xmlReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\Xml')
+        $this->xmlReaderMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Xml::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->envReaderMock = $this->getMockBuilder('Magento\Framework\MessageQueue\Config\Reader\Env')
+        $this->envReaderMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Env::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->remoteServiceReaderMock = $this
-            ->getMockBuilder('Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\MessageQueue')
-            ->disableOriginalConstructor()
+            ->getMockBuilder(
+                \Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\MessageQueue::class
+            )->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock = $this->getMockBuilder('Magento\Framework\Config\CacheInterface')
+        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -67,7 +68,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         return $objectManager->getObject(
-            'Magento\Framework\MessageQueue\Config\Data',
+            \Magento\Framework\MessageQueue\Config\Data::class,
             [
                 'xmlReader' => $this->xmlReaderMock,
                 'cache' => $this->cacheMock,

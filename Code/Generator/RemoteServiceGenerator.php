@@ -76,7 +76,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
         return [
             'name' => '__construct',
             'parameters' => [
-                ['name' => 'publisher', 'type' => '\Magento\Framework\MessageQueue\PublisherInterface'],
+                ['name' => 'publisher', 'type' => '\\' . \Magento\Framework\MessageQueue\PublisherInterface::class],
             ],
             'body' => "\$this->publisher = \$publisher;",
             'docblock' => [
@@ -103,7 +103,10 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                 'docblock' => [
                     'shortDescription' => 'Publisher',
                     'tags' => [
-                        ['name' => 'var', 'description' => '\Magento\Framework\MessageQueue\PublisherInterface']
+                        [
+                            'name' => 'var',
+                            'description' => '\\' . \Magento\Framework\MessageQueue\PublisherInterface::class
+                        ]
                     ],
                 ],
             ]

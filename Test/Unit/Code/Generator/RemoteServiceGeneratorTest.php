@@ -10,6 +10,9 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterf
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -34,28 +37,29 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->communicationConfigMock = $this->getMockBuilder('Magento\Framework\Communication\ConfigInterface')
+        $this->communicationConfigMock = $this->getMockBuilder(\Magento\Framework\Communication\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serviceMethodsMapMock = $this->getMockBuilder('Magento\Framework\Reflection\MethodsMap')
+        $this->serviceMethodsMapMock = $this->getMockBuilder(\Magento\Framework\Reflection\MethodsMap::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->communicationReaderMock = $this
-            ->getMockBuilder('Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication')
-            ->disableOriginalConstructor()
+            ->getMockBuilder(
+                \Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication::class
+            )->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->generator = $objectManager->getObject(
-            'Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator',
+            \Magento\Framework\MessageQueue\Code\Generator\RemoteServiceGenerator::class,
             [
                 'communicationConfig' => $this->communicationConfigMock,
                 'serviceMethodsMap' => $this->serviceMethodsMapMock,
                 'communicationRemoteServiceReader' => $this->communicationReaderMock,
-                'sourceClassName' => '\Magento\Customer\Api\CustomerRepositoryInterface',
-                'resultClassName' => '\Magento\Customer\Api\CustomerRepositoryInterfaceRemote',
+                'sourceClassName' => '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                'resultClassName' => '\\' . \Magento\Customer\Api\CustomerRepositoryInterfaceRemote::class,
                 'classGenerator' => null
             ]
         );
@@ -66,7 +70,7 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->serviceMethodsMapMock->expects($this->any())
             ->method('getMethodsMap')
-            ->with('\Magento\Customer\Api\CustomerRepositoryInterface')
+            ->with('\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class)
             ->willReturn(
                 [
                     'save' => [],
@@ -78,12 +82,12 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->serviceMethodsMapMock->expects($this->any())->method('getMethodParams')->willReturnMap(
             [
                 [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
+                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
                     'save',
                     [
                         [
                             'name' => 'customer',
-                            'type' => 'Magento\Customer\Api\Data\CustomerInterface',
+                            'type' => '\\' . \Magento\Customer\Api\Data\CustomerInterface::class,
                             'isDefaultValueAvailable' => false,
                             'defaultValue' => null,
                         ],
@@ -96,7 +100,7 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
+                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
                     'get',
                     [
                         [
@@ -114,19 +118,19 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
+                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
                     'getList',
                     [
                         [
                             'name' => 'searchCriteria',
-                            'type' => 'Magento\Framework\Api\SearchCriteriaInterface',
+                            'type' => '\\' . \Magento\Framework\Api\SearchCriteriaInterface::class,
                             'isDefaultValueAvailable' => false,
                             'defaultValue' => null,
                         ],
                     ]
                 ],
                 [
-                    '\Magento\Customer\Api\CustomerRepositoryInterface',
+                    '\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class,
                     'delete',
                     [
                         [
@@ -141,10 +145,10 @@ class RemoteServiceGeneratorTest extends \PHPUnit_Framework_TestCase
         );
         $this->communicationReaderMock->expects($this->any())->method('generateTopicName')->willReturnMap(
             [
-                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'save', 'topic.save'],
-                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'get', 'topic.get'],
-                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'getList', 'topic.getList'],
-                ['\Magento\Customer\Api\CustomerRepositoryInterface', 'delete', 'topic.delete'],
+                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'save', 'topic.save'],
+                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'get', 'topic.get'],
+                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'getList', 'topic.getList'],
+                ['\\' . \Magento\Customer\Api\CustomerRepositoryInterface::class, 'delete', 'topic.delete'],
             ]
         );
 

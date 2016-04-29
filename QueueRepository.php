@@ -51,7 +51,7 @@ class QueueRepository
             $queue = $this->objectManager->create($queueClassName, ['queueName' => $queueName]);
 
             if (!$queue instanceof QueueInterface) {
-                $queueInterface = '\Magento\Framework\MessageQueue\QueueInterface';
+                $queueInterface = \Magento\Framework\MessageQueue\QueueInterface::class;
                 throw new \LogicException(
                     "Queue '{$queueClassName}' for connection name '{$connectionName}' " .
                     "does not implement interface '{$queueInterface}'"

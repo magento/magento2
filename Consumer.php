@@ -52,7 +52,7 @@ class Consumer implements ConsumerInterface
     {
         if ($this->messageController === null) {
             $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\MessageQueue\MessageController');
+                ->get(\Magento\Framework\MessageQueue\MessageController::class);
         }
         return $this->messageController;
     }
