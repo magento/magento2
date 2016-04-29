@@ -63,12 +63,7 @@ class General extends AbstractModifier
     {
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
-        $numberFields = [
-            ProductAttributeInterface::CODE_PRICE,
-            ProductAttributeInterface::CODE_WEIGHT,
-            ProductAttributeInterface::CODE_SPECIAL_PRICE,
-            ProductAttributeInterface::CODE_COST,
-        ];
+        $numberFields = [ProductAttributeInterface::CODE_WEIGHT];
 
         foreach ($numberFields as $fieldCode) {
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/' . $fieldCode;
@@ -264,14 +259,12 @@ class General extends AbstractModifier
         if ($fromFieldPath && $toFieldPath) {
             $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
             $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
-            $scopeLabel = $this->arrayManager->get($fromFieldPath . self::META_CONFIG_PATH . '/scopeLabel', $meta);
 
             $meta = $this->arrayManager->merge(
                 $fromFieldPath . self::META_CONFIG_PATH,
                 $meta,
                 [
                     'label' => __('Set Product as New From'),
-                    'scopeLabel' => null,
                     'additionalClasses' => 'admin__field-date',
                 ]
             );
@@ -292,7 +285,6 @@ class General extends AbstractModifier
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
-                    'scopeLabel' => $scopeLabel,
                 ]
             );
             $meta = $this->arrayManager->set(
@@ -342,6 +334,7 @@ class General extends AbstractModifier
                     'handleShortDescriptionChanges' => '${$.provider}:data.product.short_description',
                     'handleSizeChanges' => '${$.provider}:data.product.size'
                 ],
+                'allowImport' => !$this->locator->getProduct()->getId(),
             ];
 
             if (!in_array($listener, $textListeners)) {
@@ -356,8 +349,7 @@ class General extends AbstractModifier
             $skuPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'autoImportIfEmpty' => true,
-                'allowImport' => $this->locator->getProduct()->getId() ? false : true,
+                'autoImportIfEmpty' => true
             ]
         );
 

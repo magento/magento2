@@ -49,6 +49,23 @@
                 padding-top: 0;
             }
         }
+
+        td {
+            border-top: 1px solid @control-table-cell__border-color;
+        }
+
+        .admin__control-table-pagination {
+            float: right;
+            padding-bottom: 0;
+        }
+
+        .action-previous {
+            margin-right: .5rem;
+        }
+
+        .action-next {
+            margin-left: .9rem;
+        }
     }
 
     tr {
@@ -207,5 +224,14 @@
             margin: 0;
             padding: 0;
         }
+    }
+}
+
+.admin__control-table-pagination {
+    &:extend(.abs-clearfix all);
+    padding-bottom: @indent__s;
+
+    .admin__data-grid-pager {
+        float: right;
     }
 }

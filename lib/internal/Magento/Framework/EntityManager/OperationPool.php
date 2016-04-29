@@ -24,7 +24,7 @@ class OperationPool
     private $objectManager;
 
     /**
-     * OrchestratorPool constructor.
+     * OperationPool constructor.
      * @param ObjectManager $objectManager
      * @param string[] $operations
      */

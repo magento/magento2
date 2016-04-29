@@ -522,9 +522,6 @@ class Product extends AbstractResource
             )->where(
                 $this->getLinkField() . ' = ?',
                 $oldId
-            )->where(
-                'store_id > ?',
-                0
             );
 
             $connection->query(
@@ -532,7 +529,7 @@ class Product extends AbstractResource
                     $select,
                     $tableName,
                     ['attribute_id', 'store_id', $this->getLinkField(), 'value'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
                 )
             );
         }
@@ -541,7 +538,6 @@ class Product extends AbstractResource
         $statusAttribute = $this->getAttribute('status');
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
-        $updateCond[] = 'store_id > 0';
         $updateCond[] = $connection->quoteInto($this->getLinkField() . ' = ?', $newId);
         $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
         $connection->update(

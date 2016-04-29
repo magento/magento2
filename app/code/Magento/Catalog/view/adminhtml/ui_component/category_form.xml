@@ -145,33 +145,24 @@
                 <item name="sortOrder" xsi:type="number">10</item>
             </item>
         </argument>
-        <container name="image_group">
+        <field name="image">
             <argument name="data" xsi:type="array">
-                <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="source" xsi:type="string">category</item>
                     <item name="label" xsi:type="string" translate="true">Category Image</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="formElement" xsi:type="string">fileUploader</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                    <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
                     <item name="required" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="uploaderConfig" xsi:type="array">
+                        <item name="url" xsi:type="url" path="catalog/category_image/upload"/>
+                    </item>
                 </item>
             </argument>
-            <field name="image">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataType" xsi:type="string">string</item>
-                        <item name="source" xsi:type="string">category</item>
-                        <item name="label" xsi:type="string"/>
-                        <item name="visible" xsi:type="boolean">true</item>
-                        <item name="formElement" xsi:type="string">fileUploader</item>
-                        <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
-                        <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
-                        <item name="uploaderConfig" xsi:type="array">
-                            <item name="url" xsi:type="url" path="catalog/category_image/upload"/>
-                        </item>
-                    </item>
-                </argument>
-            </field>
-        </container>
+        </field>
         <field name="description">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -561,11 +552,11 @@
             <field name="custom_design_from">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Schedule Update From</item>
                         <item name="additionalClasses" xsi:type="string">admin__field-date</item>
                         <item name="sortOrder" xsi:type="number">230</item>
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
-                        <item name="scopeLabel" xsi:type="string"/>
                         <item name="imports" xsi:type="array">
                             <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>

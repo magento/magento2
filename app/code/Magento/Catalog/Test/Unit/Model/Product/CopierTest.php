@@ -79,6 +79,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
             [
                 '__wakeup',
                 'setData',
+                'setOptions',
                 'setIsDuplicate',
                 'setOriginalId',
                 'setStatus',
@@ -97,6 +98,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         );
         $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
 
+        $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
         $duplicateMock->expects($this->once())->method('setOriginalId')->with(1);
         $duplicateMock->expects(
