@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Framework\Convert\DataSize;
 
 /**
  * Checks for PHP readiness. It is used by both Cron and Setup wizard.
@@ -30,6 +31,13 @@ class PhpReadinessCheck
     private $versionParser;
 
     /**
+     * Data size converter
+     *
+     * @var DataSize
+     */
+    protected $dataSize;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composerInformation
@@ -39,11 +47,13 @@ class PhpReadinessCheck
     public function __construct(
         ComposerInformation $composerInformation,
         PhpInformation $phpInformation,
-        VersionParser $versionParser
+        VersionParser $versionParser,
+        DataSize $dataSize
     ) {
         $this->composerInformation = $composerInformation;
         $this->phpInformation = $phpInformation;
         $this->versionParser = $versionParser;
+        $this->dataSize = $dataSize;
     }
 
     /**
@@ -172,26 +182,52 @@ class PhpReadinessCheck
     private function checkMemoryLimit()
     {
         $data = [];
+        $warning = false;
         $error = false;
-        $minimumRequiredMemoryLimit = '2G';
+        $message = '';
+        $minimumRequiredMemoryLimit = '756M';
+        $recommendedForUpgradeMemoryLimit = '2G';
 
         $currentMemoryLimit = ini_get('memory_limit');
 
-        if ($this->memoryToInteger($currentMemoryLimit) < $this->memoryToInteger($minimumRequiredMemoryLimit)) {
-            $error = true;
-        }
+        $currentMemoryInteger = intval($currentMemoryLimit);
 
-        $message = sprintf(
-            'Your current PHP memory limit is memory_limit=%s.
-             Magento 2 requires it to be set to %s or more.
-             Edit your config, restart web server, and try again.',
-            $currentMemoryLimit,
-            $minimumRequiredMemoryLimit
-        );
+        if (
+            $currentMemoryInteger > 0
+            && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
+            < $this->dataSize->convertSizeToBytes($minimumRequiredMemoryLimit)
+        ) {
+            $error = true;
+            $message = sprintf(
+                'Your current PHP memory limit is memory_limit=%s.
+                 Magento 2 requires it to be set to %s or more.
+                 As a user with root privileges, edit your php.ini file to increase memory_limit. 
+                 (The command php --ini tells you where it is located.) 
+                 After that, restart your web server and try again.',
+                $currentMemoryLimit,
+                $minimumRequiredMemoryLimit
+            );
+        } elseif (
+            $currentMemoryInteger > 0
+            && $this->dataSize->convertSizeToBytes($currentMemoryLimit)
+            < $this->dataSize->convertSizeToBytes($recommendedForUpgradeMemoryLimit)
+        ) {
+            $warning = true;
+            $message = sprintf(
+                'Your current PHP memory limit is memory_limit=%s.
+                 Magento 2 recommend it to be set to %s or more to use Setup Wizard.
+                 As a user with root privileges, edit your php.ini file to increase memory_limit. 
+                 (The command php --ini tells you where it is located.) 
+                 After that, restart your web server and try again.',
+                $currentMemoryLimit,
+                $recommendedForUpgradeMemoryLimit
+            );
+        }
 
         $data['memory_limit'] = [
             'message' => $message,
-            'error' => $error
+            'error' => $error,
+            'warning' => $warning,
         ];
 
         return $data;
