@@ -177,7 +177,7 @@ class Link extends \Magento\Framework\Model\AbstractExtensibleModel implements
     {
         if (!$this->_getExtensionAttributes()) {
             $this->setExtensionAttributes(
-                $this->extensionAttributesFactory->create('Magento\Catalog\Model\ProductLink\Link')
+                $this->extensionAttributesFactory->create(\Magento\Catalog\Model\ProductLink\Link::class)
             );
         }
         return $this->_getExtensionAttributes();

@@ -194,7 +194,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->optionFactory) {
             $this->optionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\OptionFactory');
+                ->get(\Magento\Catalog\Model\Product\OptionFactory::class);
         }
         return $this->optionFactory;
     }
@@ -206,7 +206,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->collectionFactory) {
             $this->collectionFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory');
+                ->get(\Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class);
         }
         return $this->collectionFactory;
     }
@@ -218,7 +218,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\MetadataPool');
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

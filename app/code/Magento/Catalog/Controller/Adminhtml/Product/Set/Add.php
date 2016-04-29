@@ -39,7 +39,9 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         $resultPage->setActiveMenu('Magento_Catalog::catalog_attributes_sets');
         $resultPage->getConfig()->getTitle()->prepend(__('New Attribute Set'));
         $resultPage->addContent(
-            $resultPage->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add')
+            $resultPage->getLayout()->createBlock(
+                \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Add::class
+            )
         );
         return $resultPage;
     }

@@ -57,7 +57,7 @@ class Formgroup extends \Magento\Backend\Block\Widget\Form\Generic
             'note',
             [
                 'text' => $this->getLayout()->createBlock(
-                    'Magento\Backend\Block\Widget\Button'
+                    \Magento\Backend\Block\Widget\Button::class
                 )->setData(
                     ['label' => __('Add Group'), 'onclick' => 'this.form.submit();', 'class' => 'add']
                 )->toHtml()

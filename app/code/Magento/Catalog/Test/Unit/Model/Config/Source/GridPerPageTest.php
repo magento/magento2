@@ -18,7 +18,7 @@ class GridPerPageTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            'Magento\Catalog\Model\Config\Source\GridPerPage',
+            \Magento\Catalog\Model\Config\Source\GridPerPage::class,
             ['perPageValues' => 'some,values']
         );
     }

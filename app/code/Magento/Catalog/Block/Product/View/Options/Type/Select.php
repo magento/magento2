@@ -36,7 +36,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             $require = $_option->getIsRequire() ? ' required' : '';
             $extraParams = '';
             $select = $this->getLayout()->createBlock(
-                'Magento\Framework\View\Element\Html\Select'
+                \Magento\Framework\View\Element\Html\Select::class
             )->setData(
                 [
                     'id' => 'select_' . $_option->getId(),

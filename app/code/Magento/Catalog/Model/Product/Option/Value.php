@@ -93,7 +93,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Option\Value');
+        $this->_init(\Magento\Catalog\Model\ResourceModel\Product\Option\Value::class);
     }
 
     /**

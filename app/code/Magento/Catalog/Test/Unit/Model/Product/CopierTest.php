@@ -36,23 +36,23 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->copyConstructorMock = $this->getMock('\Magento\Catalog\Model\Product\CopyConstructorInterface');
+        $this->copyConstructorMock = $this->getMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
         $this->productFactoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ProductFactory',
+            \Magento\Catalog\Model\ProductFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->optionRepositoryMock = $this->getMock(
-            'Magento\Catalog\Model\Product\Option\Repository',
+            \Magento\Catalog\Model\Product\Option\Repository::class,
             [],
             [],
             '',
             false
         );
         $this->optionRepositoryMock;
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
         $this->productMock->expects($this->any())->method('getData')->will($this->returnValue('product data'));
 
@@ -71,11 +71,11 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->atLeastOnce())->method('getWebsiteIds');
         $this->productMock->expects($this->atLeastOnce())->method('getCategoryIds');
 
-        $resourceMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
+        $resourceMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Product::class, [], [], '', false);
         $this->productMock->expects($this->once())->method('getResource')->will($this->returnValue($resourceMock));
 
         $duplicateMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 '__wakeup',
                 'setData',

@@ -18,23 +18,23 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
 
     protected function setUp()
     {
-        $this->priceProcessor = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Product\Price\Processor')
+        $this->priceProcessor = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class)
             ->disableOriginalConstructor()->getMock();
 
-        $productBuilder = $this->getMockBuilder('Magento\Catalog\Controller\Adminhtml\Product\Builder')->setMethods([
-                'build',
-            ])->disableOriginalConstructor()->getMock();
+        $productBuilder = $this->getMockBuilder(
+            \Magento\Catalog\Controller\Adminhtml\Product\Builder::class
+        )->setMethods(['build'])->disableOriginalConstructor()->getMock();
 
-        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')->disableOriginalConstructor()
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)->disableOriginalConstructor()
             ->setMethods(['getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
         $product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
         $productBuilder->expects($this->any())->method('build')->will($this->returnValue($product));
 
-        $this->resultRedirect = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -43,7 +43,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirect);
 
-        $abstractDbMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+        $abstractDbMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds', 'getResource'])
             ->getMock();
@@ -51,7 +51,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->method('getAllIds')
             ->willReturn([]);
 
-        $filterMock = $this->getMockBuilder('Magento\Ui\Component\MassAction\Filter')
+        $filterMock = $this->getMockBuilder(\Magento\Ui\Component\MassAction\Filter::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCollection'])
             ->getMock();
@@ -59,7 +59,9 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->method('getCollection')
             ->willReturn($abstractDbMock);
         
-        $collectionFactoryMock = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory')
+        $collectionFactoryMock = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

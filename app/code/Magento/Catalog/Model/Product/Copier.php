@@ -86,7 +86,7 @@ class Copier
     {
         if (null === $this->optionRepository) {
             $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\Product\Option\Repository');
+                ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
         }
         return $this->optionRepository;
     }

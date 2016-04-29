@@ -30,7 +30,7 @@ class CopyConstructorFactory
      */
     public function create($instance, array $arguments = [])
     {
-        if (!is_subclass_of($instance, '\Magento\Catalog\Model\Product\CopyConstructorInterface')) {
+        if (!is_subclass_of($instance, \Magento\Catalog\Model\Product\CopyConstructorInterface::class)) {
             throw new \InvalidArgumentException(
                 $instance . ' does not implement \Magento\Catalog\Model\Product\CopyConstructorInterface'
             );

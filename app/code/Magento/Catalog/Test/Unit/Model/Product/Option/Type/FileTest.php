@@ -26,13 +26,13 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->rootDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+        $this->rootDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isFile', 'isReadable', 'getAbsolutePath'])
             ->getMockForAbstractClass();
 
         $this->coreFileStorageDatabase = $this->getMock(
-            'Magento\MediaStorage\Helper\File\Storage\Database',
+            \Magento\MediaStorage\Helper\File\Storage\Database::class,
             ['copyFile'],
             [],
             '',
@@ -46,7 +46,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     protected function getFileObject()
     {
         return $this->objectManager->getObject(
-            'Magento\Catalog\Model\Product\Option\Type\File',
+            \Magento\Catalog\Model\Product\Option\Type\File::class,
             [
                 'saleableItem' => $this->rootDirectory,
                 'priceCurrency' => $this->coreFileStorageDatabase
@@ -57,7 +57,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testCopyQuoteToOrder()
     {
         $optionMock = $this->getMockBuilder(
-            'Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface'
+            \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface::class
         )->disableOriginalConstructor()->setMethods(['getValue'])->getMockForAbstractClass();
 
         $quotePath = '/quote/path/path/uploaded.file';
@@ -89,7 +89,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $fileObject->setData('configuration_item_option', $optionMock);
 
         $this->assertInstanceOf(
-            'Magento\Catalog\Model\Product\Option\Type\File',
+            \Magento\Catalog\Model\Product\Option\Type\File::class,
             $fileObject->copyQuoteToOrder()
         );
     }

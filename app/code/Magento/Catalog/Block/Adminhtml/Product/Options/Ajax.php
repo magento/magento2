@@ -62,7 +62,7 @@ class Ajax extends \Magento\Backend\Block\AbstractBlock
         $results = [];
         /** @var $optionsBlock \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */
         $optionsBlock = $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option'
+            \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option::class
         )->setIgnoreCaching(
             true
         );

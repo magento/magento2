@@ -10,14 +10,14 @@ class FullTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithAdapterErrorThrowsException()
     {
         $eavDecimalFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\DecimalFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $eavSourceFactory = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav\SourceFactory::class,
             ['create'],
             [],
             '',
@@ -36,7 +36,7 @@ class FullTest extends \PHPUnit_Framework_TestCase
             $eavSourceFactory
         );
 
-        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', $exceptionMessage);
+        $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $exceptionMessage);
 
         $model->execute();
     }

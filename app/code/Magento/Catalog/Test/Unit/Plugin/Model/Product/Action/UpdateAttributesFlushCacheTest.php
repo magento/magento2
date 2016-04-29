@@ -15,22 +15,21 @@ class UpdateAttributesFlushCacheTest extends \PHPUnit_Framework_TestCase
         $attrData = [];
         $storeId = 1;
 
-        $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', [], [], '', false);
+        $productActionMock = $this->getMock(\Magento\Catalog\Model\Product\Action::class, [], [], '', false);
 
-        $cacheContextMock = $this->getMock('Magento\Framework\Indexer\CacheContext', [], [], '', false);
+        $cacheContextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
         $cacheContextMock->expects($this->once())
             ->method('registerEntities')
             ->with(Product::CACHE_TAG, $productIds);
 
-
-        $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
         $eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with('clean_cache_by_tags', ['object' => $cacheContextMock]);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $model = $objectManager->getObject(
-            'Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache',
+            \Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache::class,
             [
                 'cacheContext' => $cacheContextMock,
                 'eventManager' => $eventManagerMock,

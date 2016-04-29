@@ -20,7 +20,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject('Magento\Catalog\Block\Category\View', []);
+        $this->block = $objectManager->getObject(\Magento\Catalog\Block\Category\View::class, []);
     }
 
     protected function tearDown()
@@ -31,7 +31,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testGetIdentities()
     {
         $categoryTag = ['catalog_category_1'];
-        $currentCatogoryMock = $this->getMock('Magento\Catalog\Model\Category', [], [], '', false);
+        $currentCatogoryMock = $this->getMock(\Magento\Catalog\Model\Category::class, [], [], '', false);
         $currentCatogoryMock->expects($this->once())->method('getIdentities')->will($this->returnValue($categoryTag));
         $this->block->setCurrentCategory($currentCatogoryMock);
         $this->assertEquals($categoryTag, $this->block->getIdentities());

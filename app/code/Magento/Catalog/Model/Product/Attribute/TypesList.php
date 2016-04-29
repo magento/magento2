@@ -51,7 +51,7 @@ class TypesList implements \Magento\Catalog\Api\ProductAttributeTypesListInterfa
             $this->dataObjectHelper->populateWithArray(
                 $type,
                 $option,
-                '\Magento\Catalog\Api\Data\ProductAttributeTypeInterface'
+                \Magento\Catalog\Api\Data\ProductAttributeTypeInterface::class
             );
             $types[] = $type;
         }

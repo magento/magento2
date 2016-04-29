@@ -30,14 +30,14 @@ class CatalogPriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->priceFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Product\CatalogPriceFactory',
+            \Magento\Catalog\Model\Product\CatalogPriceFactory::class,
             [],
             [],
             '',
             false
         );
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->catalogPriceInterfaceMock = $this->getMock('Magento\Catalog\Model\Product\CatalogPriceInterface');
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->catalogPriceInterfaceMock = $this->getMock(\Magento\Catalog\Model\Product\CatalogPriceInterface::class);
         $this->model = new \Magento\Catalog\Model\Product\CatalogPrice(
             $this->priceFactoryMock,
             ['custom_product_type' => 'CustomProduct/Model/CatalogPrice']

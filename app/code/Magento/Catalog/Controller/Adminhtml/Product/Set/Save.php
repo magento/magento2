@@ -65,11 +65,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
         $isNewSet = $this->getRequest()->getParam('gotoEdit', false) == '1';
 
         /* @var $model \Magento\Eav\Model\Entity\Attribute\Set */
-        $model = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+        $model = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
             ->setEntityTypeId($entityTypeId);
 
         /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-        $filterManager = $this->_objectManager->get('Magento\Framework\Filter\FilterManager');
+        $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
 
         try {
             if ($isNewSet) {
@@ -85,7 +85,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
                         __('This attribute set no longer exists.')
                     );
                 }
-                $data = $this->_objectManager->get('Magento\Framework\Json\Helper\Data')
+                $data = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)
                     ->jsonDecode($this->getRequest()->getPost('data'));
 
                 //filter html tags

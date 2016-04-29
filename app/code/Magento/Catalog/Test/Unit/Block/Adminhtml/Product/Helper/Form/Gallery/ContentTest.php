@@ -47,23 +47,23 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->fileSystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->readMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->fileSystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->readMock = $this->getMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $this->galleryMock = $this->getMock(
-            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery',
+            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery::class,
             [],
             [],
             '',
             false
         );
-        $this->mediaConfigMock = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
-        $this->jsonEncoderMock = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
+        $this->mediaConfigMock = $this->getMock(\Magento\Catalog\Model\Product\Media\Config::class, [], [], '', false);
+        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->content = $this->objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content',
+            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content::class,
             [
                 'mediaConfig' => $this->mediaConfigMock,
                 'jsonEncoder' => $this->jsonEncoderMock,

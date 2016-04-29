@@ -54,7 +54,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     protected function _getDefaultAttributeModel()
     {
-        return 'Magento\Catalog\Model\ResourceModel\Eav\Attribute';
+        return \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class;
     }
 
     /**

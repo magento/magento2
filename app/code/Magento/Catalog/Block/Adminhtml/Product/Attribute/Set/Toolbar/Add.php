@@ -28,7 +28,7 @@ class Add extends \Magento\Backend\Block\Template
         if ($this->getToolbar()) {
             $this->getToolbar()->addChild(
                 'save_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Save'),
                     'class' => 'save primary save-attribute-set',
@@ -39,7 +39,7 @@ class Add extends \Magento\Backend\Block\Template
             );
             $this->getToolbar()->addChild(
                 'back_button',
-                'Magento\Backend\Block\Widget\Button',
+                \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Back'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/') . '\')',
@@ -48,7 +48,7 @@ class Add extends \Magento\Backend\Block\Template
             );
         }
 
-        $this->addChild('setForm', 'Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset');
+        $this->addChild('setForm', \Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main\Formset::class);
         return parent::_prepareLayout();
     }
 

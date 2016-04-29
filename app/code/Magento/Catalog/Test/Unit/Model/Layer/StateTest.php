@@ -21,12 +21,12 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->item = $this->getMockBuilder('Magento\Catalog\Model\Layer\Filter\Item')
+        $this->item = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $helper = new ObjectManager($this);
-        $this->model = $helper->getObject('Magento\Catalog\Model\Layer\State');
+        $this->model = $helper->getObject(\Magento\Catalog\Model\Layer\State::class);
     }
 
     /**

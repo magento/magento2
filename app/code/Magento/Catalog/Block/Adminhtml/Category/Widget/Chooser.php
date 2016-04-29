@@ -73,7 +73,7 @@ class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Tree
         );
 
         $chooser = $this->getLayout()->createBlock(
-            'Magento\Widget\Block\Adminhtml\Widget\Chooser'
+            \Magento\Widget\Block\Adminhtml\Widget\Chooser::class
         )->setElement(
             $element
         )->setConfig(

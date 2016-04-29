@@ -47,7 +47,7 @@ class ConfigurationPool
             ) {
                 throw new \LogicException(
                     "{$className} doesn't implement " .
-                    "\\Magento\\Catalog\\Helper\\Product\\Configuration\\ConfigurationInterface"
+                    \Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface::class
                 );
             }
             $this->_instances[$className] = $helperInstance;

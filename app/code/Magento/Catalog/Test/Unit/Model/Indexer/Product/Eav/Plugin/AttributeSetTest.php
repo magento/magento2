@@ -9,14 +9,14 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
 {
     public function testAroundSave()
     {
-        $eavProcessorMock = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Product\Eav\Processor')
+        $eavProcessorMock = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $eavProcessorMock->expects($this->once())
             ->method('markIndexerAsInvalid');
 
         $filter = $this->getMockBuilder(
-            'Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet\IndexableAttributeFilter'
+            \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet\IndexableAttributeFilter::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -27,7 +27,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->will($this->returnValue([1, 2]));
 
-        $subjectMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Set')
+        $subjectMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Set::class)
             ->disableOriginalConstructor()
             ->getMock();
         $subjectMock->expects($this->any())

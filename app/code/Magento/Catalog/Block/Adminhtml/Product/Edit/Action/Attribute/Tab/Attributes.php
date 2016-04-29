@@ -113,10 +113,10 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
     protected function _getAdditionalElementTypes()
     {
         return [
-            'price' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price',
-            'weight' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
-            'image' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image',
-            'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean'
+            'price' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price::class,
+            'weight' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight::class,
+            'image' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image::class,
+            'boolean' => \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean::class
         ];
     }
 

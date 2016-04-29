@@ -180,7 +180,7 @@ class Config implements ConfigInterface
     {
         if (null === $this->attributeHelper) {
             $this->attributeHelper = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Eav\Model\Entity\Attribute');
+                ->get(\Magento\Eav\Model\Entity\Attribute::class);
         }
         return $this->attributeHelper;
     }

@@ -29,9 +29,9 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->cacheConfig = $this->getMock('\Magento\Framework\App\Cache\Type\Config', [], [], '', false);
+        $this->storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->cacheConfig = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
@@ -53,7 +53,7 @@ class CountryofmanufactureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($cachedDataSrl));
 
         $countryOfManufacture = $this->objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture',
+            \Magento\Catalog\Model\Product\Attribute\Source\Countryofmanufacture::class,
             [
                 'storeManager' => $this->storeManagerMock,
                 'configCacheType' => $this->cacheConfig,

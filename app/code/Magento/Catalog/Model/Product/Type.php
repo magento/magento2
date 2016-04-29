@@ -32,12 +32,12 @@ class Type implements OptionSourceInterface
     /**
      * Default product type model
      */
-    const DEFAULT_TYPE_MODEL = 'Magento\Catalog\Model\Product\Type\Simple';
+    const DEFAULT_TYPE_MODEL = \Magento\Catalog\Model\Product\Type\Simple::class;
 
     /**
      * Default price model
      */
-    const DEFAULT_PRICE_MODEL = 'Magento\Catalog\Model\Product\Type\Price';
+    const DEFAULT_PRICE_MODEL = \Magento\Catalog\Model\Product\Type\Price::class;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface

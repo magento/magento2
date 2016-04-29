@@ -37,7 +37,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false,
@@ -45,9 +45,9 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
-        $this->subject = $this->getMock('Magento\Store\Model\ResourceModel\Group', [], [], '', false);
+        $this->subject = $this->getMock(\Magento\Store\Model\ResourceModel\Group::class, [], [], '', false);
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get'],
             [],
             '',
@@ -65,7 +65,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockIndexerMethods();
         $groupMock = $this->getMock(
-            'Magento\Store\Model\Group',
+            \Magento\Store\Model\Group::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
             [],
             '',
@@ -85,7 +85,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveNotNew($valueMap)
     {
         $groupMock = $this->getMock(
-            'Magento\Store\Model\Group',
+            \Magento\Store\Model\Group::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
             [],
             '',
@@ -111,7 +111,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveWithoutChanges()
     {
         $groupMock = $this->getMock(
-            'Magento\Store\Model\Group',
+            \Magento\Store\Model\Group::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
             [],
             '',
