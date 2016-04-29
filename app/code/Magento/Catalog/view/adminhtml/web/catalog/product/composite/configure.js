@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    "jquery",
+    "Magento_Ui/js/lib/view/utils/async",
     "jquery/ui",
     "mage/translate",
     "prototype",
@@ -44,24 +44,16 @@ define([
         initialize: function() {
             var self = this;
 
-            this._initWindowElements();
-            this.dialog = jQuery('#product_composite_configure').modal({
-                title: jQuery.mage.__('Configure Product'),
-                type: 'slide',
-                buttons: [{
-                    text: jQuery.mage.__('OK'),
-                    'class': 'action-primary',
-                    click: function () {
-                        self.onConfirmBtn();
-                    }
-                }]
-            });
+            jQuery.async('#product_composite_configure',
+                self._initWindowElements);
         },
 
         /**
          * Initialize window elements
          */
         _initWindowElements: function() {
+            var self = this;
+
             this.blockWindow                = $('product_composite_configure');
             this.blockForm                  = $('product_composite_configure_form');
             this.blockFormFields            = $('product_composite_configure_form_fields');
@@ -73,6 +65,18 @@ define([
             this.blockMsg                   = $('product_composite_configure_messages');
             this.blockMsgError              = this.blockMsg.select('.message.error div')[0];
             this.iFrameJSVarname            = this.blockForm.select('input[name="as_js_varname"]')[0].value;
+
+            this.dialog = jQuery('#product_composite_configure').modal({
+                title: jQuery.mage.__('Configure Product'),
+                type: 'slide',
+                buttons: [{
+                    text: jQuery.mage.__('OK'),
+                    'class': 'action-primary',
+                    click: function () {
+                        self.onConfirmBtn();
+                    }
+                }]
+            });
         },
 
         /**
