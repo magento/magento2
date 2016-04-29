@@ -7,14 +7,14 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\MysqlMq\Model\MessageFactory $messageFactory */
-$messageFactory = $objectManager->create('Magento\MysqlMq\Model\MessageFactory');
+$messageFactory = $objectManager->create(\Magento\MysqlMq\Model\MessageFactory::class);
 $message1 = $messageFactory->create()
     ->load('topic.updated.use.just.in.tests', 'topic_name');
 
 $messageId1 = $message1->getId();
 
 /** @var \Magento\MysqlMq\Model\MessageStatusFactory $messageStatusFactory */
-$queueFactory = $objectManager->create('Magento\MysqlMq\Model\QueueFactory');
+$queueFactory = $objectManager->create(\Magento\MysqlMq\Model\QueueFactory::class);
 $queueId1 = $queueFactory->create()
     ->load('queue1', Magento\MysqlMq\Model\Queue::KEY_NAME)
     ->getId();
@@ -49,7 +49,7 @@ $plan = [
 
 
 /** @var \Magento\MysqlMq\Model\MessageStatusFactory $messageStatusFactory */
-$messageStatusFactory = $objectManager->create('Magento\MysqlMq\Model\MessageStatusFactory');
+$messageStatusFactory = $objectManager->create(\Magento\MysqlMq\Model\MessageStatusFactory::class);
 foreach ($plan as $instruction) {
     $messageStatus = $messageStatusFactory->create();
 

@@ -22,7 +22,7 @@ $queues = [
 ];
 foreach ($queues as $queueName) {
     /** @var \Magento\MysqlMq\Model\Queue $queue */
-    $queue = $objectManager->create('Magento\MysqlMq\Model\Queue');
+    $queue = $objectManager->create(\Magento\MysqlMq\Model\Queue::class);
     $queue->load($queueName, 'name');
     if (!$queue->getId()) {
         $queue->setName($queueName)->save();

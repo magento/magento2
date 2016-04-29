@@ -31,25 +31,25 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $configPath = __DIR__ . '/../etc/queue.xml';
-        $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())
             ->method('get')
             ->willReturn([$configPath => file_get_contents(($configPath))]);
 
         /** @var \Magento\Framework\MessageQueue\Config\Reader\Xml $xmlReader */
         $xmlReader = $this->objectManager->create(
-            '\Magento\Framework\MessageQueue\Config\Reader\Xml',
+            \Magento\Framework\MessageQueue\Config\Reader\Xml::class,
             ['fileResolver' => $fileResolverMock]
         );
 
         $newData = $xmlReader->read();
 
         /** @var \Magento\Framework\MessageQueue\Config\Data $configData */
-        $configData = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
+        $configData = $this->objectManager->get(\Magento\Framework\MessageQueue\Config\Data::class);
         $configData->reset();
         $configData->merge($newData);
 
-        $this->publisher = $this->objectManager->create('Magento\Framework\MessageQueue\PublisherInterface');
+        $this->publisher = $this->objectManager->create(\Magento\Framework\MessageQueue\PublisherInterface::class);
     }
 
     protected function tearDown()
@@ -61,16 +61,15 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $this->consumeMessages('demoConsumerQueueFive', PHP_INT_MAX);
         $this->consumeMessages('demoConsumerQueueOneWithException', PHP_INT_MAX);
 
-        $objectManagerConfiguration = [
-            'Magento\Framework\MessageQueue\Config\Reader\Xml' => [
+        $objectManagerConfiguration = [\Magento\Framework\MessageQueue\Config\Reader\Xml::class => [
                 'arguments' => [
-                    'fileResolver' => ['instance' => 'Magento\Framework\Config\FileResolverInterface'],
+                    'fileResolver' => ['instance' => \Magento\Framework\Config\FileResolverInterface::class],
                 ],
             ],
         ];
         $this->objectManager->configure($objectManagerConfiguration);
         /** @var \Magento\Framework\MessageQueue\Config\Data $queueConfig */
-        $queueConfig = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
+        $queueConfig = $this->objectManager->get(\Magento\Framework\MessageQueue\Config\Data::class);
         $queueConfig->reset();
     }
 
@@ -80,7 +79,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
     public function testPublishConsumeFlow()
     {
         /** @var \Magento\MysqlMq\Model\DataObjectFactory $objectFactory */
-        $objectFactory = $this->objectManager->create('Magento\MysqlMq\Model\DataObjectFactory');
+        $objectFactory = $this->objectManager->create(\Magento\MysqlMq\Model\DataObjectFactory::class);
         /** @var \Magento\MysqlMq\Model\DataObject $object */
         $object = $objectFactory->create();
         for ($i = 0; $i < 10; $i++) {
@@ -122,7 +121,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
     public function testPublishAndConsumeWithFailedJobs()
     {
         /** @var \Magento\MysqlMq\Model\DataObjectFactory $objectFactory */
-        $objectFactory = $this->objectManager->create('Magento\MysqlMq\Model\DataObjectFactory');
+        $objectFactory = $this->objectManager->create(\Magento\MysqlMq\Model\DataObjectFactory::class);
         /** @var \Magento\MysqlMq\Model\DataObject $object */
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
         $object = $objectFactory->create();
@@ -155,7 +154,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
     public function testPublishAndConsumeSchemaDefinedByMethod()
     {
         /** @var \Magento\MysqlMq\Model\DataObjectFactory $objectFactory */
-        $objectFactory = $this->objectManager->create('Magento\MysqlMq\Model\DataObjectFactory');
+        $objectFactory = $this->objectManager->create(\Magento\MysqlMq\Model\DataObjectFactory::class);
         /** @var \Magento\MysqlMq\Model\DataObject $object */
         $object = $objectFactory->create();
         $id = 33;
@@ -183,7 +182,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         $outputPattern = null
     ) {
         /** @var \Magento\Framework\MessageQueue\ConsumerFactory $consumerFactory */
-        $consumerFactory = $this->objectManager->create('Magento\Framework\MessageQueue\ConsumerFactory');
+        $consumerFactory = $this->objectManager->create(\Magento\Framework\MessageQueue\ConsumerFactory::class);
         $consumer = $consumerFactory->get($consumerName);
         ob_start();
         $consumer->process($messagesToProcess);

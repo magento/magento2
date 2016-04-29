@@ -29,16 +29,19 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\MessageQueue\Config\Data $queueConfig */
-        $queueConfig = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
+        $queueConfig = $this->objectManager->get(\Magento\Framework\MessageQueue\Config\Data::class);
         $queueConfig->reset();
 
-        $this->queue = $this->objectManager->create('Magento\MysqlMq\Model\Driver\Queue', ['queueName' => 'queue2']);
+        $this->queue = $this->objectManager->create(
+            \Magento\MysqlMq\Model\Driver\Queue::class,
+            ['queueName' => 'queue2']
+        );
     }
 
     protected function tearDown()
     {
         /** @var \Magento\Framework\MessageQueue\Config\Data $queueConfig */
-        $queueConfig = $this->objectManager->get('Magento\Framework\MessageQueue\Config\Data');
+        $queueConfig = $this->objectManager->get(\Magento\Framework\MessageQueue\Config\Data::class);
         $queueConfig->reset();
     }
 
@@ -48,7 +51,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     public function testPushAndDequeue()
     {
         /** @var \Magento\Framework\MessageQueue\EnvelopeFactory $envelopFactory */
-        $envelopFactory = $this->objectManager->get('Magento\Framework\MessageQueue\EnvelopeFactory');
+        $envelopFactory = $this->objectManager->get(\Magento\Framework\MessageQueue\EnvelopeFactory::class);
         $messageBody = '{"data": {"body": "Message body"}, "message_id": 1}';
         $topicName = 'some.topic';
         $envelop = $envelopFactory->create(['body' => $messageBody, 'properties' => ['topic_name' => $topicName]]);

@@ -25,7 +25,7 @@ class QueueManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->queueManagement = $this->objectManager->create('Magento\MysqlMq\Model\QueueManagement');
+        $this->queueManagement = $this->objectManager->create(\Magento\MysqlMq\Model\QueueManagement::class);
     }
 
     /**

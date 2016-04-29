@@ -7,7 +7,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\MysqlMq\Model\MessageFactory $messageFactory */
-$messageFactory = $objectManager->create('Magento\MysqlMq\Model\MessageFactory');
+$messageFactory = $objectManager->create(\Magento\MysqlMq\Model\MessageFactory::class);
 $message = $messageFactory->create();
 
 $message->setTopicName('topic.updated.use.just.in.tests')
