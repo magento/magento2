@@ -13,6 +13,11 @@ use Magento\Framework\View\Page\Config;
 class Renderer extends Config\Renderer
 {
     /**
+     * @var array
+     */
+    private $processingTypes = ['css', 'less'];
+
+    /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     private $assetRepo;
@@ -108,7 +113,7 @@ class Renderer extends Config\Renderer
      */
     protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {
-        if (!in_array($asset->getContentType(), ['css', 'less'])) {
+        if (!in_array($asset->getContentType(), $this->processingTypes)) {
             return parent::getAssetContentType($asset);
         }
         $asset->getSourceFile();

@@ -112,7 +112,6 @@ class FrontendCompilationTest extends \PHPUnit_Framework_TestCase
             ->method('build')
             ->willThrowException(new \Exception());
 
-
         $this->assetSourceMock->expects(self::never())
             ->method('getContent');
 
