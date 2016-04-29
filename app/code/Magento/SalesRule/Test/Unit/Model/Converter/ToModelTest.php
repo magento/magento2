@@ -102,7 +102,6 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
             ->method('getAggregatorType')
             ->willReturn('getAggregatorType');
 
-
         $dataCondition1 = $this->getMockBuilder('\Magento\SalesRule\Model\Data\Condition')
             ->disableOriginalConstructor()
             ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
