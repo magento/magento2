@@ -7,7 +7,7 @@
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
 
 /** @var $model \Magento\User\Model\User */
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\User\Model\User');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
 $userName = 'webapi_user';
 $model->load($userName, 'username');
 $model->delete();

@@ -27,9 +27,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
 
     public function testParse()
     {
-        $expected = [
-            'Magento\Module1',
-            'Magento\Module2',
+        $expected = [\Magento\Module1::class, \Magento\Module2::class,
         ];
 
         $actual = $this->parser->parse(

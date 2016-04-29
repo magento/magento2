@@ -36,9 +36,9 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Model\AdminTokenService');
-        $this->tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
-        $this->userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
+        $this->tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\AdminTokenService::class);
+        $this->tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
+        $this->userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
     }
 
     /**

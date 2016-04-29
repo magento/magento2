@@ -18,12 +18,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         // Clear out the clache
-        $cacheManager = $objectManager->create('Magento\Framework\App\Cache\Manager');
+        $cacheManager = $objectManager->create(\Magento\Framework\App\Cache\Manager::class);
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager->clean($cacheManager->getAvailableTypes());
 
         $fileResolver = $this->getMockForAbstractClass(
-            'Magento\Framework\Config\FileResolverInterface',
+            \Magento\Framework\Config\FileResolverInterface::class,
             [],
             '',
             false
@@ -31,15 +31,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $fileResolver->expects($this->any())->method('get')->willReturn([file_get_contents($xmlPath)]);
 
         $configReader = $objectManager->create(
-            'Magento\Framework\Search\SearchEngine\Config\Reader',
+            \Magento\Framework\Search\SearchEngine\Config\Reader::class,
             ['fileResolver' => $fileResolver]
         );
         $dataStorage = $objectManager->create(
-            'Magento\Search\Model\SearchEngine\Config\Data',
+            \Magento\Search\Model\SearchEngine\Config\Data::class,
             ['reader' => $configReader]
         );
         $this->config = $objectManager->create(
-            'Magento\Search\Model\SearchEngine\Config',
+            \Magento\Search\Model\SearchEngine\Config::class,
             ['dataStorage' => $dataStorage]
         );
     }

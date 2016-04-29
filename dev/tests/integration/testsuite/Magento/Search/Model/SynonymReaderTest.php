@@ -19,7 +19,7 @@ class SynonymReaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $objectManager->get('Magento\Search\Model\SynonymReader');
+        $this->model = $objectManager->get(\Magento\Search\Model\SynonymReader::class);
     }
 
     /**

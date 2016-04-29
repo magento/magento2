@@ -28,7 +28,7 @@ class SwitchActionTest extends \Magento\TestFramework\TestCase\AbstractControlle
 
         $this->dispatch('stores/store/switch');
         /** @var \Magento\Framework\App\Http\Context $httpContext */
-        $httpContext = $this->_objectManager->get('Magento\Framework\App\Http\Context');
+        $httpContext = $this->_objectManager->get(\Magento\Framework\App\Http\Context::class);
         $httpContext->unsValue(\Magento\Store\Model\Store::ENTITY);
         $this->assertEquals($modifiedDefaultCode, $httpContext->getValue(\Magento\Store\Model\Store::ENTITY));
 
@@ -44,12 +44,12 @@ class SwitchActionTest extends \Magento\TestFramework\TestCase\AbstractControlle
     protected function changeStoreCode($from, $to)
     {
         /** @var \Magento\Store\Model\Store $store */
-        $store = $this->_objectManager->create('Magento\Store\Model\Store');
+        $store = $this->_objectManager->create(\Magento\Store\Model\Store::class);
         $store->load($from, 'code');
         $store->setCode($to);
         $store->save();
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $storeManager->reinitStores();
     }
 }

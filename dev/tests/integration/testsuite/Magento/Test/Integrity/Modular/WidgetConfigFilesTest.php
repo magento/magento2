@@ -18,7 +18,7 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
      */
     protected function _getReaderClassName()
     {
-        return 'Magento\Widget\Model\Config\Reader';
+        return \Magento\Widget\Model\Config\Reader::class;
     }
 
     /**

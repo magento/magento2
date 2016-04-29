@@ -7,7 +7,7 @@
 require __DIR__ . '/order.php';
 
 /** @var \Magento\Sales\Model\Order $order */
-$order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+$order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
 $order->loadByIncrementId('100000001');
 
 $order->setData(

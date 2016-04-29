@@ -53,18 +53,18 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
     private function setupDirectory($composerDir)
     {
         $absoluteComposerDir = realpath(__DIR__ . '/_files/' . $composerDir . '/composer.json');
-        $this->composerJsonFinder = $this->getMockBuilder('Magento\Framework\Composer\ComposerJsonFinder')
+        $this->composerJsonFinder = $this->getMockBuilder(\Magento\Framework\Composer\ComposerJsonFinder::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $this->composerJsonFinder->expects($this->any())->method('findComposerJson')->willReturn($absoluteComposerDir);
 
-        $this->directoryList = $this->objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
-        $this->filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $this->directoryList = $this->objectManager->get(\Magento\Framework\App\Filesystem\DirectoryList::class);
+        $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $this->composerInformation = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
@@ -81,7 +81,7 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
         $this->setupDirectory('testSkeleton');
 
         /** @var UpdatePackagesCache $updatePackagesCache|\PHPUnit_Framework_MockObject_MockObject */
-        $updatePackagesCache = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false);
+        $updatePackagesCache = $this->getMock(\Magento\Setup\Model\UpdatePackagesCache::class, [], [], '', false);
 
         $packages = [
             'packages' => [

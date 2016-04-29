@@ -18,7 +18,7 @@ class PaymentConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCon
      */
     protected function _getReaderClassName()
     {
-        return 'Magento\Payment\Model\Config\Reader';
+        return \Magento\Payment\Model\Config\Reader::class;
     }
 
     /**

@@ -5,7 +5,7 @@
  */
 
 /** @var $store \Magento\Store\Model\Store */
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 if (!$store->load('test', 'code')->getId()) {
     $store->setData(
         [
