@@ -39,8 +39,8 @@ class Collection extends AbstractCollection implements OrderStatusHistorySearchR
     protected function _construct()
     {
         $this->_init(
-            'Magento\Sales\Model\Order\Status\History',
-            'Magento\Sales\Model\ResourceModel\Order\Status\History'
+            \Magento\Sales\Model\Order\Status\History::class,
+            \Magento\Sales\Model\ResourceModel\Order\Status\History::class
         );
     }
 

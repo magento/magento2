@@ -46,7 +46,7 @@ class Search extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             'class' => 'action-add action-secondary',
         ];
         return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             $addButtonData
         )->toHtml();

@@ -53,7 +53,7 @@ class ShowUpdateResult extends \Magento\Sales\Controller\Adminhtml\Order\Create
     {
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
-        $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+        $session = $this->_objectManager->get(\Magento\Backend\Model\Session::class);
         if ($session->hasUpdateResult() && is_scalar($session->getUpdateResult())) {
             $resultRaw->setContents($session->getUpdateResult());
         }

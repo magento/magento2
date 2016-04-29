@@ -20,7 +20,7 @@ class Delete extends RatingController
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 /** @var \Magento\Review\Model\Rating $model */
-                $model = $this->_objectManager->create('Magento\Review\Model\Rating');
+                $model = $this->_objectManager->create(\Magento\Review\Model\Rating::class);
                 $model->load($this->getRequest()->getParam('id'))->delete();
                 $this->messageManager->addSuccess(__('You deleted the rating.'));
             } catch (\Exception $e) {

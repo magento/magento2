@@ -23,7 +23,7 @@ class Entity extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Rating\Entity');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating\Entity::class);
     }
 
     /**

@@ -169,7 +169,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 
             foreach ($addresses as $address) {
                 $addressForm = $this->_customerFormFactory->create(
-                    'customer_address',
+                    \customer_address::class,
                     'adminhtml_customer_address',
                     $this->addressMapper->toFlatArray($address)
                 );

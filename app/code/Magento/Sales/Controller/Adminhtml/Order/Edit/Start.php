@@ -23,7 +23,7 @@ class Start extends \Magento\Sales\Controller\Adminhtml\Order\Create\Start
     {
         $this->_getSession()->clearStorage();
         $orderId = $this->getRequest()->getParam('order_id');
-        $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+        $order = $this->_objectManager->create(\Magento\Sales\Model\Order::class)->load($orderId);
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 

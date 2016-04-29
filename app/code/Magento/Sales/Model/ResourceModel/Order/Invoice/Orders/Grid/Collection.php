@@ -29,7 +29,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'sales_invoice_grid',
-        $resourceModel = '\Magento\Sales\Model\ResourceModel\Order\Invoice'
+        $resourceModel = \Magento\Sales\Model\ResourceModel\Order\Invoice::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

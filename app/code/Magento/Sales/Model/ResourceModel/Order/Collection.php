@@ -78,7 +78,7 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Order', 'Magento\Sales\Model\ResourceModel\Order');
+        $this->_init(\Magento\Sales\Model\Order::class, \Magento\Sales\Model\ResourceModel\Order::class);
         $this->addFilterToMap(
             'entity_id',
             'main_table.entity_id'

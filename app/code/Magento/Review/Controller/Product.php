@@ -146,7 +146,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        $allowGuest = $this->_objectManager->get('Magento\Review\Helper\Data')->getIsGuestAllowToWrite();
+        $allowGuest = $this->_objectManager->get(\Magento\Review\Helper\Data::class)->getIsGuestAllowToWrite();
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
@@ -161,7 +161,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action
                     $this->_redirect->getRefererUrl()
                 );
                 $this->getResponse()->setRedirect(
-                    $this->_objectManager->get('Magento\Customer\Model\Url')->getLoginUrl()
+                    $this->_objectManager->get(\Magento\Customer\Model\Url::class)->getLoginUrl()
                 );
             }
         }

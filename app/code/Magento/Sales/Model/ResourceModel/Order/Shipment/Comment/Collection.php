@@ -37,8 +37,8 @@ class Collection extends AbstractCollection implements ShipmentCommentSearchResu
     protected function _construct()
     {
         $this->_init(
-            'Magento\Sales\Model\Order\Shipment\Comment',
-            'Magento\Sales\Model\ResourceModel\Order\Shipment\Comment'
+            \Magento\Sales\Model\Order\Shipment\Comment::class,
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment::class
         );
     }
 

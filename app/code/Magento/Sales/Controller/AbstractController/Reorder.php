@@ -52,13 +52,13 @@ abstract class Reorder extends Action\Action
         $resultRedirect = $this->resultRedirectFactory->create();
 
         /* @var $cart \Magento\Checkout\Model\Cart */
-        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+        $cart = $this->_objectManager->get(\Magento\Checkout\Model\Cart::class);
         $items = $order->getItemsCollection();
         foreach ($items as $item) {
             try {
                 $cart->addOrderItem($item);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
+                if ($this->_objectManager->get(\Magento\Checkout\Model\Session::class)->getUseNotice(true)) {
                     $this->messageManager->addNotice($e->getMessage());
                 } else {
                     $this->messageManager->addError($e->getMessage());

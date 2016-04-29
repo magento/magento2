@@ -123,7 +123,7 @@ class Order extends \Magento\Framework\DataObject
         $invoiceItem->setOrderItem($item)->setProductId($item->getProductId());
 
         $this->_objectCopyService->copyFieldsetToTarget(
-            'sales_convert_order_item',
+            \sales_convert_order_item::class,
             'to_invoice_item',
             $item,
             $invoiceItem

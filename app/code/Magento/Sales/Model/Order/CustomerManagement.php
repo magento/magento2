@@ -77,7 +77,7 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
             throw new AlreadyExistsException(__("This order already has associated customer account"));
         }
         $customerData = $this->objectCopyService->copyFieldsetToTarget(
-            'order_address',
+            \order_address::class,
             'to_customer',
             $order->getBillingAddress(),
             []
@@ -85,7 +85,7 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
         $addresses = $order->getAddresses();
         foreach ($addresses as $address) {
             $addressData = $this->objectCopyService->copyFieldsetToTarget(
-                'order_address',
+                \order_address::class,
                 'to_customer_address',
                 $address,
                 []

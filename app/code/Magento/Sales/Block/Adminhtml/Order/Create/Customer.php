@@ -46,7 +46,7 @@ class Customer extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreat
                 'onclick' => 'order.setCustomerId(false)',
                 'class' => 'primary',
             ];
-            return $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
+            return $this->getLayout()->createBlock(\Magento\Backend\Block\Widget\Button::class)
                 ->setData($addButtonData)
                 ->toHtml();
         }

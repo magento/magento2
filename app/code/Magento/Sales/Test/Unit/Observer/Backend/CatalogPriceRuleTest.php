@@ -27,8 +27,8 @@ class CatalogPriceRuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eventObserverMock = $this->getMock('Magento\Framework\Event\Observer');
-        $this->_quoteMock = $this->getMock('Magento\Quote\Model\ResourceModel\Quote', [], [], '', false);
+        $this->eventObserverMock = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $this->_quoteMock = $this->getMock(\Magento\Quote\Model\ResourceModel\Quote::class, [], [], '', false);
         $this->_model = new CatalogPriceRule($this->_quoteMock);
     }
 

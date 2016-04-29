@@ -113,7 +113,7 @@ class NewOrder implements DataProviderInterface
             ->addAttributeToSort('created_at', 'desc');
         $this->eventManager->dispatch('rss_order_new_collection_select', ['collection' => $collection]);
 
-        $detailBlock = $this->layout->getBlockSingleton('Magento\Sales\Block\Adminhtml\Order\Details');
+        $detailBlock = $this->layout->getBlockSingleton(\Magento\Sales\Block\Adminhtml\Order\Details::class);
         foreach ($collection as $item) {
             $title = __('Order #%1 created at %2', $item->getIncrementId(), $this->localeDate->formatDate(
                 $item->getCreatedAt()

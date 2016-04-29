@@ -9,6 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Unit test for shipment repository class.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,7 +37,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
 
         $this->metadata = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Metadata',
+            \Magento\Sales\Model\ResourceModel\Metadata::class,
             ['getNewInstance', 'getMapper'],
             [],
             '',
@@ -44,7 +45,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->searchResultFactory = $this->getMock(
-            'Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory',
+            \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -52,7 +53,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->subject = $objectManager->getObject(
-            'Magento\Sales\Model\Order\ShipmentRepository',
+            \Magento\Sales\Model\Order\ShipmentRepository::class,
             [
                 'metadata' => $this->metadata,
                 'searchResultFactory' => $this->searchResultFactory
@@ -68,14 +69,12 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGet($id, $entityId)
     {
         if (!$id) {
-            $this->setExpectedException(
-                'Magento\Framework\Exception\InputException'
-            );
+            $this->setExpectedException(\Magento\Framework\Exception\InputException::class);
 
             $this->subject->get($id);
         } else {
             $shipment = $this->getMock(
-                'Magento\Sales\Model\Order\Shipment',
+                \Magento\Sales\Model\Order\Shipment::class,
                 ['load', 'getEntityId'],
                 [],
                 '',
@@ -94,9 +93,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($shipment);
 
             if (!$entityId) {
-                $this->setExpectedException(
-                    'Magento\Framework\Exception\NoSuchEntityException'
-                );
+                $this->setExpectedException(\Magento\Framework\Exception\NoSuchEntityException::class);
 
                 $this->subject->get($id);
             } else {
@@ -135,7 +132,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $filter = $this->getMock(
-            'Magento\Framework\Api\Filter',
+            \Magento\Framework\Api\Filter::class,
             ['getConditionType', 'getField', 'getValue'],
             [],
             '',
@@ -152,7 +149,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn('test_value');
 
         $filterGroup = $this->getMock(
-            'Magento\Framework\Api\Search\FilterGroup',
+            \Magento\Framework\Api\Search\FilterGroup::class,
             ['getFilters'],
             [],
             '',
@@ -163,7 +160,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$filter]);
 
         $searchCriteria = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
+            \Magento\Framework\Api\SearchCriteria::class,
             ['getFilterGroups'],
             [],
             '',
@@ -174,7 +171,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$filterGroup]);
 
         $collection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Shipment\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class,
             ['addFieldToFilter'],
             [],
             '',
@@ -194,7 +191,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDelete()
     {
         $shipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['getEntityId'],
             [],
             '',
@@ -205,7 +202,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -231,7 +228,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteWithException()
     {
         $shipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['getEntityId'],
             [],
             '',
@@ -241,7 +238,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -263,7 +260,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSave()
     {
         $shipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['getEntityId'],
             [],
             '',
@@ -274,7 +271,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -300,7 +297,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveWithException()
     {
         $shipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             ['getEntityId'],
             [],
             '',
@@ -310,7 +307,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
+            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
             [],
             '',
             false,
@@ -332,7 +329,7 @@ class ShipmentRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $shipment = $this->getMock(
-            'Magento\Sales\Model\Order\Shipment',
+            \Magento\Sales\Model\Order\Shipment::class,
             [],
             [],
             '',

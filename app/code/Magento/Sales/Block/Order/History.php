@@ -95,7 +95,7 @@ class History extends \Magento\Framework\View\Element\Template
         parent::_prepareLayout();
         if ($this->getOrders()) {
             $pager = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
+                \Magento\Theme\Block\Html\Pager::class,
                 'sales.order.history.pager'
             )->setCollection(
                 $this->getOrders()

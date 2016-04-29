@@ -19,11 +19,11 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_pdfConfigMock = $this->getMockBuilder('Magento\Sales\Model\Order\Pdf\Config')
+        $this->_pdfConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $directoryMock = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             [],
             [],
             '',
@@ -37,13 +37,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                 }
             )
         );
-        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false, false);
+        $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false, false);
         $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryMock));
         $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
-            'Magento\Sales\Model\Order\Pdf\Invoice',
+            \Magento\Sales\Model\Order\Pdf\Invoice::class,
             [
                 'filesystem' => $filesystemMock,
                 'pdfConfig' => $this->_pdfConfigMock,

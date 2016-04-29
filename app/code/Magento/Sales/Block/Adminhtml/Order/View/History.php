@@ -60,7 +60,7 @@ class History extends \Magento\Backend\Block\Template
     {
         $onclick = "submitAndReloadArea($('order_history_block').parentNode, '" . $this->getSubmitUrl() . "')";
         $button = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
+            \Magento\Backend\Block\Widget\Button::class
         )->setData(
             ['label' => __('Submit Comment'), 'class' => 'action-save action-secondary', 'onclick' => $onclick]
         );

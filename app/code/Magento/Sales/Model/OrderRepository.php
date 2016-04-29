@@ -193,7 +193,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     {
         if (!$this->orderExtension instanceof OrderExtension) {
             $this->orderExtension = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                '\Magento\Sales\Api\Data\OrderExtension'
+                \Magento\Sales\Api\Data\OrderExtension::class
             );
         }
         return $this->orderExtension;
@@ -209,7 +209,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     {
         if (!$this->shippingAssignmentBuilder instanceof ShippingAssignmentBuilder) {
             $this->shippingAssignmentBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                '\Magento\Sales\Model\Order\ShippingAssignmentBuilder'
+                \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class
             );
         }
         return $this->shippingAssignmentBuilder;

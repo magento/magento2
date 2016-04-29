@@ -34,8 +34,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Collection\AbstractC
     protected function _construct()
     {
         $this->_init(
-            'Magento\Sales\Model\Order\Shipment\Item',
-            'Magento\Sales\Model\ResourceModel\Order\Shipment\Item'
+            \Magento\Sales\Model\Order\Shipment\Item::class,
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Item::class
         );
     }
 

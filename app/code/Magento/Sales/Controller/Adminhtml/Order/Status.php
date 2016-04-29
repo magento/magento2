@@ -45,7 +45,7 @@ abstract class Status extends \Magento\Backend\App\Action
     {
         $statusCode = $this->getRequest()->getParam('status');
         if ($statusCode) {
-            $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->load($statusCode);
+            $status = $this->_objectManager->create(\Magento\Sales\Model\Order\Status::class)->load($statusCode);
         } else {
             $status = false;
         }

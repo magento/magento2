@@ -25,10 +25,10 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     protected function setUp()
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit('\Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity');
+        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->creditmemoMock = $this->getMock(
-            '\Magento\Sales\Model\Order\Creditmemo',
+            \Magento\Sales\Model\Order\Creditmemo::class,
             ['getStore', '__wakeup', 'getOrder'],
             [],
             '',

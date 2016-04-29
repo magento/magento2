@@ -44,28 +44,28 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->storesConfigMock = $this->getMock(
-            '\Magento\Store\Model\StoresConfig',
+            \Magento\Store\Model\StoresConfig::class,
             [],
             [],
             '',
             false
         );
         $this->collectionFactoryMock = $this->getMock(
-            '\Magento\Sales\Model\ResourceModel\Order\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->orderCollectionMock = $this->getMock(
-            '\Magento\Sales\Model\ResourceModel\Order\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Collection::class,
             [],
             [],
             '',
             false
         );
 
-        $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface');
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class);
 
         $this->model = new CleanExpiredOrders(
             $this->storesConfigMock,
@@ -90,7 +90,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         $this->orderCollectionMock->expects($this->exactly(4))->method('addFieldToFilter');
         $this->orderCollectionMock->expects($this->exactly(4))->method('walk');
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $selectMock->expects($this->exactly(2))->method('where')->willReturnSelf();
         $this->orderCollectionMock->expects($this->exactly(2))->method('getSelect')->willReturn($selectMock);
 
@@ -114,7 +114,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->orderCollectionMock);
         $this->orderCollectionMock->expects($this->exactly(2))->method('addFieldToFilter');
 
-        $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->orderCollectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
 

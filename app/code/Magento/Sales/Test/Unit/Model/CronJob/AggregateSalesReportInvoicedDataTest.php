@@ -34,15 +34,17 @@ class AggregateSalesReportInvoicedDataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->invoicedFactoryMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\InvoicedFactory')
+        $this->invoicedFactoryMock = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory::class
+        )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
+        $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,7 +58,7 @@ class AggregateSalesReportInvoicedDataTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $date = $this->setupAggregate();
-        $invoicedMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Report\Invoiced')
+        $invoicedMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\Invoiced::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoicedMock->expects($this->once())

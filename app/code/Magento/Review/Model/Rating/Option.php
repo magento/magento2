@@ -29,7 +29,7 @@ class Option extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\ResourceModel\Rating\Option');
+        $this->_init(\Magento\Review\Model\ResourceModel\Rating\Option::class);
     }
 
     /**

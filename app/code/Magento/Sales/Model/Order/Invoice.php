@@ -172,7 +172,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Invoice');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Invoice::class);
     }
 
     /**
@@ -792,6 +792,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns increment id
      *

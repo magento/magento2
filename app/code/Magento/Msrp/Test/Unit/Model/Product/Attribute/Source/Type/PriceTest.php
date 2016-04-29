@@ -17,13 +17,13 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject('Magento\Msrp\Model\Product\Attribute\Source\Type\Price');
+        $this->_model = $objectManager->getObject(\Magento\Msrp\Model\Product\Attribute\Source\Type\Price::class);
     }
 
     public function testGetFlatColumns()
     {
         $abstractAttributeMock = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
             ['getAttributeCode', '__wakeup'],
             [],
             '',

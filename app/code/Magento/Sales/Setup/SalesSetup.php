@@ -214,30 +214,30 @@ class SalesSetup extends \Magento\Eav\Setup\EavSetup
     {
         $entities = [
             'order' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order',
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order::class,
                 'table' => 'sales_order',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'invoice' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Invoice',
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Invoice::class,
                 'table' => 'sales_invoice',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'creditmemo' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Creditmemo',
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Creditmemo::class,
                 'table' => 'sales_creditmemo',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],
             'shipment' => [
-                'entity_model' => 'Magento\Sales\Model\ResourceModel\Order\Shipment',
+                'entity_model' => \Magento\Sales\Model\ResourceModel\Order\Shipment::class,
                 'table' => 'sales_shipment',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
+                'increment_model' => \Magento\Eav\Model\Entity\Increment\NumericValue::class,
                 'increment_per_store' => true,
                 'attributes' => [],
             ],

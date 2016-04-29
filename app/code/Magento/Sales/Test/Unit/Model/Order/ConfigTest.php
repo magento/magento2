@@ -24,9 +24,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $orderStatusFactory = $this->getMock('Magento\Sales\Model\Order\StatusFactory', [], [], '', false, false);
+        $orderStatusFactory = $this->getMock(\Magento\Sales\Model\Order\StatusFactory::class, [], [], '', false, false);
         $this->orderStatusCollectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
+            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
             ['create'],
             [],
             '',
@@ -35,7 +35,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->salesConfig = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
             ->getObject(
-                'Magento\Sales\Model\Order\Config',
+                \Magento\Sales\Model\Order\Config::class,
                 [
                     'orderStatusFactory' => $orderStatusFactory,
                     'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedResult = ['complete', 'pending_payment'];
 
         $collectionMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Status\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Status\Collection::class,
             ['create', 'joinStates'],
             [],
             '',
