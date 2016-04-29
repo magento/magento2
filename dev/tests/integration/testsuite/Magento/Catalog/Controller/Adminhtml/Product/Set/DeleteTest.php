@@ -36,7 +36,7 @@ class DeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     protected function getAttributeSetByName($attributeSetName)
     {
         $attributeSet = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Eav\Model\Entity\Attribute\Set'
+            \Magento\Eav\Model\Entity\Attribute\Set::class
         )->load($attributeSetName, 'attribute_set_name');
         return $attributeSet->getId() === null ? null : $attributeSet;
     }

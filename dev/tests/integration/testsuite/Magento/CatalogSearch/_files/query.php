@@ -6,7 +6,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $query \Magento\Search\Model\Query */
-$query = $objectManager->create('Magento\Search\Model\Query');
+$query = $objectManager->create(\Magento\Search\Model\Query::class);
 $query->setStoreId(1);
 $query->setQueryText(
     'query_text'

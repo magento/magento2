@@ -20,11 +20,11 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Attribute\Backend\Price'
+            \Magento\Catalog\Model\Product\Attribute\Backend\Price::class
         );
         $this->_model->setAttribute(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Eav\Model\Config'
+                \Magento\Eav\Model\Config::class
             )->getAttribute(
                 'catalog_product',
                 'price'
@@ -65,7 +65,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     public function testAfterSave()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         $product->setOrigData();
@@ -78,7 +78,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                 $product->getId(),
                 $this->_model->getAttribute()->getId(),
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    \Magento\Store\Model\StoreManagerInterface::class
                 )->getStore()->getId()
             )
         );

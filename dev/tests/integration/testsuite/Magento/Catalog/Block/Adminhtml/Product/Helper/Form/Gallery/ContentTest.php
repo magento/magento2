@@ -14,11 +14,14 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
-        $block = $layout->createBlock('Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content', 'block');
+        $block = $layout->createBlock(
+            \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content::class,
+            'block'
+        );
 
-        $this->assertInstanceOf('Magento\Backend\Block\Media\Uploader', $block->getUploader());
+        $this->assertInstanceOf(\Magento\Backend\Block\Media\Uploader::class, $block->getUploader());
     }
 }

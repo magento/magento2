@@ -17,7 +17,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     public function testGenerateUniqueSkuExistingProduct()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         $product->setId(null);
@@ -47,7 +47,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Product\Copier'
+            \Magento\Catalog\Model\Product\Copier::class
         );
         $copier->copy($product);
         $this->assertEquals('0123456789012345678901234567890123456789012345678901234567890123', $product->getSku());
@@ -88,7 +88,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->setTypeId(
             \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE

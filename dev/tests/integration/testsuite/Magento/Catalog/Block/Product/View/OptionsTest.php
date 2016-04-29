@@ -34,7 +34,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $this->productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
         try {
             $this->product = $this->productRepository->get('simple');
@@ -42,13 +42,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
             $this->product = $this->productRepository->get('simple_dropdown_option');
         }
 
-        $this->objectManager->get('Magento\Framework\Registry')->unregister('current_product');
-        $this->objectManager->get('Magento\Framework\Registry')->register('current_product', $this->product);
+        $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('current_product');
+        $this->objectManager->get(\Magento\Framework\Registry::class)->register('current_product', $this->product);
 
         $this->block = $this->objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Catalog\Block\Product\View\Options'
+            \Magento\Catalog\Block\Product\View\Options::class
         );
     }
 
@@ -60,7 +60,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->product, $this->block->getProduct());
 
         $product = $this->objectManager->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $this->block->setProduct($product);
         $this->assertSame($product, $this->block->getProduct());
@@ -82,7 +82,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $options = $this->block->getOptions();
         $this->assertNotEmpty($options);
         foreach ($options as $option) {
-            $this->assertInstanceOf('Magento\Catalog\Model\Product\Option', $option);
+            $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option::class, $option);
         }
     }
 

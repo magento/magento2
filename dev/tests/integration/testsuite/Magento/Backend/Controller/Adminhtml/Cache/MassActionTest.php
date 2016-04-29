@@ -23,14 +23,14 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     public static function setUpBeforeClass()
     {
         /** @var \Magento\Framework\App\DeploymentConfig $config */
-        $config = Bootstrap::getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
+        $config = Bootstrap::getObjectManager()->get(\Magento\Framework\App\DeploymentConfig::class);
         self::$typesConfig = $config->get(State::CACHE_KEY);
     }
 
     protected function tearDown()
     {
         /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
-        $cacheState = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\StateInterface');
+        $cacheState = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
         foreach (self::$typesConfig as $type => $value) {
             $cacheState->setEnabled($type, $value);
         }
@@ -105,7 +105,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     private function setAll($isEnabled)
     {
         /** @var $cacheState \Magento\Framework\App\Cache\StateInterface */
-        $cacheState = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\StateInterface');
+        $cacheState = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
         foreach (array_keys(self::$typesConfig) as $type) {
             $cacheState->setEnabled($type, $isEnabled);
         }
@@ -123,7 +123,7 @@ class MassActionTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/admin/cache/massRefresh');
 
         /** @var $cacheTypeList \Magento\Framework\App\Cache\TypeListInterface */
-        $cacheTypeList = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache\TypeListInterface');
+        $cacheTypeList = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\TypeListInterface::class);
         $invalidatedTypes = array_keys($cacheTypeList->getInvalidated());
         $failed = array_intersect($typesToRefresh, $invalidatedTypes);
         $this->assertEmpty($failed, 'Could not refresh following cache types: ' . implode(', ', $failed));

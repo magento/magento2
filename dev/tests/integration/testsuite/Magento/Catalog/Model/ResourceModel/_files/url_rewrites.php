@@ -5,7 +5,7 @@
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 /** @var $category \Magento\Catalog\Model\Category */
-$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(3)
     ->setName('Category 1')
@@ -22,7 +22,9 @@ $urlKeys = ['url-key', 'url-key-1', 'url-key-2', 'url-key-5', 'url-key-1000', 'u
 
 foreach ($urlKeys as $i => $urlKey) {
     $id = $i + 1;
-    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+    $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        \Magento\Catalog\Model\Product::class
+    );
     $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         ->setStoreId(1)
         ->setAttributeSetId(4)

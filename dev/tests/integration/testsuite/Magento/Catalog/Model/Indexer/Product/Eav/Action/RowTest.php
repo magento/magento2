@@ -18,25 +18,25 @@ class RowTest extends \PHPUnit_Framework_TestCase
     public function testUpdateProduct()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
-        $attr = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
+        $attr = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class)
             ->getAttribute('catalog_product', 'weight');
         $attr->setIsFilterable(1)->save();
 
         $this->assertTrue($attr->isIndexable());
 
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         $product->setWeight(11);
         $product->save();
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\CategoryFactory'
+            \Magento\Catalog\Model\CategoryFactory::class
         );
         /** @var \Magento\Catalog\Block\Product\ListProduct $listProduct */
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Block\Product\ListProduct'
+            \Magento\Catalog\Block\Product\ListProduct::class
         );
 
         $category = $categoryFactory->create()->load(2);

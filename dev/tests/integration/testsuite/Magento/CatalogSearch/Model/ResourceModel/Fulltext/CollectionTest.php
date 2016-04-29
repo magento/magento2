@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $objManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var  \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $fulltextCollection */
         $fulltextCollection = $objManager->create(
-            '\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection',
+            \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class,
             ['searchRequestName' => $request]
         );
         foreach ($filters as $field => $value) {

@@ -24,7 +24,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(
-            'Magento\BundleImportExport\Model\Export\RowCustomizer'
+            \Magento\BundleImportExport\Model\Export\RowCustomizer::class
         );
     }
 
@@ -34,7 +34,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     public function testPrepareData()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
-        $collection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
+        $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $select = $collection->getConnection()->select()
             ->from(['p' => $collection->getTable('catalog_product_entity')], ['sku', 'entity_id'])
             ->where('sku IN(?)', ['simple', 'custom-design-simple-product', 'bundle-product']);

@@ -6,10 +6,12 @@
 
 /* Create attribute */
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Setup\CategorySetup::class
+);
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $attribute->setData(
     [
@@ -32,7 +34,7 @@ $attribute->setData(
         'used_for_sort_by' => 0,
         'frontend_label' => ['Multiselect Attribute'],
         'backend_type' => 'varchar',
-        'backend_model' => 'Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend',
+        'backend_model' => \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend::class,
         'option' => [
             'value' => [
                 'option_1' => ['Option 1'],

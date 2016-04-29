@@ -127,7 +127,7 @@ class Transaction
     {
         /** @var $resource \Magento\Framework\App\ResourceConnection */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\ResourceConnection');
+            ->get(\Magento\Framework\App\ResourceConnection::class);
         return $resource->getConnection($connectionName);
     }
 

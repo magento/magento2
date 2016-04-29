@@ -20,9 +20,9 @@ class GraphTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
-        $this->_block = $layout->createBlock('Magento\Backend\Block\Dashboard\Graph');
-        $this->_block->setDataHelper($objectManager->get('Magento\Backend\Helper\Dashboard\Order'));
+        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
+        $this->_block = $layout->createBlock(\Magento\Backend\Block\Dashboard\Graph::class);
+        $this->_block->setDataHelper($objectManager->get(\Magento\Backend\Helper\Dashboard\Order::class));
     }
 
     public function testGetChartUrl()

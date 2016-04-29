@@ -793,7 +793,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->create('Magento\Catalog\Model\Product');
+        $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
         $id = $product->getIdBySku('Configurable 03');
         $product->load($id);
         $this->assertEquals('1', $product->getHasOptions());
@@ -1144,12 +1144,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -1168,11 +1168,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('simple4');
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load($productId);
         $productLinks = [
@@ -1202,10 +1202,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple3' => 'url-key3'
         ];
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import_with_valid_url_keys.csv',
                 'directory' => $directory
@@ -1222,7 +1222,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
@@ -1240,10 +1240,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple3' => false
         ];
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import_with_use_config_settings.csv',
                 'directory' => $directory
@@ -1262,7 +1262,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($products as $sku => $manageStockUseConfig) {
             /** @var \Magento\CatalogInventory\Model\StockRegistry $stockRegistry */
             $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\CatalogInventory\Model\StockRegistry'
+                \Magento\CatalogInventory\Model\StockRegistry::class
             );
             $stockItem = $stockRegistry->getStockItemBySku($sku);
             $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());

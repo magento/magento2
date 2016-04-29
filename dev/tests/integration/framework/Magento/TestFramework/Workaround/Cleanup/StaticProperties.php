@@ -34,13 +34,13 @@ class StaticProperties
      */
     protected static $_classesToSkip = [
         'Mage',
-        'Magento\Framework\App\ObjectManager',
-        'Magento\TestFramework\Helper\Bootstrap',
-        'Magento\TestFramework\Event\Magento',
-        'Magento\TestFramework\Event\PhpUnit',
-        'Magento\TestFramework\Annotation\AppIsolation',
-        'Magento\TestFramework\Workaround\Cleanup\StaticProperties',
-        'Magento\Framework\Phrase',
+        \Magento\Framework\App\ObjectManager::class,
+        \Magento\TestFramework\Helper\Bootstrap::class,
+        \Magento\TestFramework\Event\Magento::class,
+        \Magento\TestFramework\Event\PhpUnit::class,
+        \Magento\TestFramework\Annotation\AppIsolation::class,
+        \Magento\TestFramework\Workaround\Cleanup\StaticProperties::class,
+        \Magento\Framework\Phrase::class,
     ];
 
     /**
@@ -106,7 +106,6 @@ class StaticProperties
         }
         return false; // File is not in an "include" directory
     }
-
 
     /**
      * Restore static variables (after running controller test case)

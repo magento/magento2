@@ -7,13 +7,13 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 
 try {
     $product = $productRepository->get('simple-1', false, null, true);

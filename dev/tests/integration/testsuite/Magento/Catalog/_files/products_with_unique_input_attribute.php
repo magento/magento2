@@ -8,7 +8,7 @@ require __DIR__ . '/unique_input_attribute.php';
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setName('Simple Product with unique input attribute')

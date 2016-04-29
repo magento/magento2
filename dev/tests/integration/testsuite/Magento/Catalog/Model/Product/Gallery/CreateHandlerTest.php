@@ -21,7 +21,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->createHandler = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Gallery\CreateHandler'
+            \Magento\Catalog\Model\Product\Gallery\CreateHandler::class
         );
     }
 
@@ -34,7 +34,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
         $fileLabel = 'Magento image';
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load(1);
         $product->setData(
@@ -42,7 +42,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             ['images' => ['image' => ['file' => $fileName, 'label' => $fileLabel]]]
         );
         $product->setData('image', $fileName);
-        $this->createHandler->execute('Magento\Catalog\Api\Data\ProductInterface', $product);
+        $this->createHandler->execute(\Magento\Catalog\Api\Data\ProductInterface::class, $product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/images/image/new_file'));
         $this->assertEquals($fileLabel, $product->getData('image_label'));
 
@@ -51,7 +51,7 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
             'media_gallery',
             ['images' => ['image' => ['value_id' => '100', 'file' => $fileName, 'label' => $fileLabel]]]
         );
-        $this->createHandler->execute('Magento\Catalog\Api\Data\ProductInterface', $product);
+        $this->createHandler->execute(\Magento\Catalog\Api\Data\ProductInterface::class, $product);
         $this->assertStringStartsWith('/m/a/magento_image', $product->getData('media_gallery/duplicate/100'));
         $this->assertEquals($fileLabel, $product->getData('image_label'));
     }

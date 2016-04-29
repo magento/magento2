@@ -18,7 +18,7 @@ class CustomergroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup'
+            \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup::class
         );
     }
 

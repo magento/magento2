@@ -18,7 +18,7 @@ class RulesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Authorization\Model\Rules'
+            \Magento\Authorization\Model\Rules::class
         );
     }
 

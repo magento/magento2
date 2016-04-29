@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
+$category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
 $category->isObjectNew(true);
 $category->setId(
     '444'
@@ -24,7 +24,9 @@ $category->setId(
     true
 )->save();
 
-$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Catalog\Model\Product::class
+);
 
 $productModel->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE

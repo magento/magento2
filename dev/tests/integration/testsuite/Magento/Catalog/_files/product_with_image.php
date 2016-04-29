@@ -8,7 +8,7 @@ require __DIR__ . '/product_image.php';
 require __DIR__ . '/product_simple.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $product = $productRepository->get('simple');
 
 /** @var $product \Magento\Catalog\Model\Product */

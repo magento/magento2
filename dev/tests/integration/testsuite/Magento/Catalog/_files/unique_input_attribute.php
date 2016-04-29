@@ -7,19 +7,21 @@
  */
 
 /** @var \Magento\Eav\Model\Entity\Type $entityType */
-$entityType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Eav\Model\Entity\Type');
+$entityType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Eav\Model\Entity\Type::class
+);
 $entityType->loadByCode('catalog_product');
 $defaultSetId = $entityType->getDefaultAttributeSetId();
 /** @var \Magento\Eav\Model\Entity\Attribute\Set $defaultSet */
 $defaultSet = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Entity\Attribute\Set'
+    \Magento\Eav\Model\Entity\Attribute\Set::class
 );
 $defaultSet->load($defaultSetId);
 $defaultGroupId = $defaultSet->getDefaultGroupId();
 
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Model\ResourceModel\Eav\Attribute'
+    \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
 );
 $attribute->setAttributeCode(
     'unique_input_attribute'

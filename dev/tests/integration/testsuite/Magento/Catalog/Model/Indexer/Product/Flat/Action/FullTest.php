@@ -23,10 +23,10 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp()
     {
         $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State'
+            \Magento\Catalog\Model\Indexer\Product\Flat\State::class
         );
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor'
+            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class
         );
     }
 
@@ -42,10 +42,10 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_processor->reindexAll();
 
         $categoryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\CategoryFactory'
+            \Magento\Catalog\Model\CategoryFactory::class
         );
         $listProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Block\Product\ListProduct'
+            \Magento\Catalog\Block\Product\ListProduct::class
         );
 
         $category = $categoryFactory->create()->load(2);

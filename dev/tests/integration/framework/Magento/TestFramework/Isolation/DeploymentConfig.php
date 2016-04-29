@@ -39,7 +39,7 @@ class DeploymentConfig
     public function startTestSuite()
     {
         if (null === $this->reader) {
-            $this->reader = Bootstrap::getObjectManager()->get('Magento\Framework\App\DeploymentConfig\Reader');
+            $this->reader = Bootstrap::getObjectManager()->get(\Magento\Framework\App\DeploymentConfig\Reader::class);
             $this->config = $this->reader->load();
         }
     }

@@ -15,18 +15,18 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $layout \Magento\Framework\View\Layout */
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
         // Create block with blocking _prepateLayout(), which is used by block to instantly add 'form' child
         /** @var $block \Magento\Backend\Block\Widget\Form\Container */
         $block = $this->getMock(
-            'Magento\Backend\Block\Widget\Form\Container',
+            \Magento\Backend\Block\Widget\Form\Container::class,
             ['_prepareLayout'],
-            [$objectManager->create('Magento\Backend\Block\Widget\Context')]
+            [$objectManager->create(\Magento\Backend\Block\Widget\Context::class)]
         );
 
         $layout->addBlock($block, 'block');
-        $form = $layout->addBlock('Magento\Framework\View\Element\Text', 'form', 'block');
+        $form = $layout->addBlock(\Magento\Framework\View\Element\Text::class, 'form', 'block');
 
         $expectedHtml = '<b>html</b>';
         $this->assertNotEquals($expectedHtml, $block->getFormHtml());
