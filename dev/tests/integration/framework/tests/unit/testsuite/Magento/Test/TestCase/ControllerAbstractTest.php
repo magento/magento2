@@ -19,11 +19,11 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $testObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
-        $request = $testObjectManager->getObject('Magento\TestFramework\Request');
-        $response = $testObjectManager->getObject('Magento\TestFramework\Response');
+        $this->messageManager = $this->getMock(\Magento\Framework\Message\Manager::class, [], [], '', false);
+        $request = $testObjectManager->getObject(\Magento\TestFramework\Request::class);
+        $response = $testObjectManager->getObject(\Magento\TestFramework\Response::class);
         $this->_objectManager = $this->getMock(
-            'Magento\TestFramework\ObjectManager',
+            \Magento\TestFramework\ObjectManager::class,
             ['get', 'create'],
             [],
             '',
@@ -34,9 +34,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             ->will(
                 $this->returnValueMap(
                     [
-                        ['Magento\Framework\App\RequestInterface', $request],
-                        ['Magento\Framework\App\ResponseInterface', $response],
-                        ['Magento\Framework\Message\Manager', $this->messageManager],
+                        [\Magento\Framework\App\RequestInterface::class, $request],
+                        [\Magento\Framework\App\ResponseInterface::class, $response],
+                        [\Magento\Framework\Message\Manager::class, $this->messageManager],
                     ]
                 )
             );
@@ -52,7 +52,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         if (!$this->_bootstrap) {
             $this->_bootstrap = $this->getMock(
-                'Magento\TestFramework\Bootstrap',
+                \Magento\TestFramework\Bootstrap::class,
                 ['getAllOptions'],
                 [],
                 '',
@@ -65,13 +65,13 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function testGetRequest()
     {
         $request = $this->getRequest();
-        $this->assertInstanceOf('Magento\TestFramework\Request', $request);
+        $this->assertInstanceOf(\Magento\TestFramework\Request::class, $request);
     }
 
     public function testGetResponse()
     {
         $response = $this->getResponse();
-        $this->assertInstanceOf('Magento\TestFramework\Response', $response);
+        $this->assertInstanceOf(\Magento\TestFramework\Response::class, $response);
     }
 
     /**
@@ -112,7 +112,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
          * which requires fully initialized application environment intentionally not available
          * for unit tests
          */
-        $setRedirectMethod = new \ReflectionMethod('Magento\Framework\App\Response\Http', 'setRedirect');
+        $setRedirectMethod = new \ReflectionMethod(\Magento\Framework\App\Response\Http::class, 'setRedirect');
         $setRedirectMethod->invoke($this->getResponse(), 'http://magentocommerce.com');
         $this->assertRedirect();
         $this->assertRedirect($this->equalTo('http://magentocommerce.com'));
@@ -127,7 +127,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $this->addSessionMessages();
         /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit_Framework_Constraint $constraint */
-        $constraint = $this->getMock('PHPUnit_Framework_Constraint', ['toString', 'matches']);
+        $constraint = $this->getMock(\PHPUnit_Framework_Constraint::class, ['toString', 'matches']);
         $constraint->expects(
             $this->once()
         )->method('matches')

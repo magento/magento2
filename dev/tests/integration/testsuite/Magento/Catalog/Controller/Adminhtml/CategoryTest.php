@@ -23,7 +23,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function testSaveAction($inputData, $defaultAttributes, $attributesSaved = [], $isSuccess = true)
     {
         /** @var $store \Magento\Store\Model\Store */
-        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Store');
+        $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
         $store->load('fixturestore', 'code');
         $storeId = $store->getId();
 
@@ -41,7 +41,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
         $category->setStoreId($storeId);
         $category->load(2);
@@ -86,7 +86,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             );
         } else {
             $result = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\Json\Helper\Data'
+                \Magento\Framework\Json\Helper\Data::class
             )->jsonDecode(
                 $body
             );
@@ -364,7 +364,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         foreach ($urlKeys as $categoryId => $urlKey) {
             /** @var $category \Magento\Catalog\Model\Category */
             $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Category'
+                \Magento\Catalog\Model\Category::class
             );
             if ($categoryId > 0) {
                 $category->load($categoryId)

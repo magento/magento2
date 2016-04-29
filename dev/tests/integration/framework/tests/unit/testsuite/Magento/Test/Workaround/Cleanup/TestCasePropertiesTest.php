@@ -39,7 +39,7 @@ class TestCasePropertiesTest extends \PHPUnit_Framework_TestCase
         /** @var $testClass \Magento\Test\Workaround\Cleanup\TestCasePropertiesTest\DummyTestCase */
         $testClass = $testSuite->testAt(0);
 
-        $propertyObjectMock = $this->getMock('stdClass', ['__destruct']);
+        $propertyObjectMock = $this->getMock(\stdClass::class, ['__destruct']);
         $propertyObjectMock->expects($this->atLeastOnce())->method('__destruct');
         $testClass->setPropertyObject($propertyObjectMock);
 

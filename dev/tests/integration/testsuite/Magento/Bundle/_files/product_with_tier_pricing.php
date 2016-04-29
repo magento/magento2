@@ -12,7 +12,7 @@
 require __DIR__ . '/../../../Magento/Catalog/_files/products.php';
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('bundle')
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])

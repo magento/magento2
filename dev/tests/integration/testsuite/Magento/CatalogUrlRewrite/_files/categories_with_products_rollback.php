@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
 $productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('\Magento\Catalog\Model\ResourceModel\Product\Collection');
+    ->create(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
 
 $productCollection->load()->delete();
 

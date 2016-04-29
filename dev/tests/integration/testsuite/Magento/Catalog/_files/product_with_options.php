@@ -7,7 +7,7 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $product->setTypeId(
     'simple'
@@ -194,7 +194,7 @@ $options = [
 $customOptions = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
 
 foreach ($options as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $customOption */

@@ -6,7 +6,7 @@
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product
     ->setTypeId('simple')
     ->setId(1)
@@ -24,7 +24,7 @@ $product
     ->save();
 
 $customDesignProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product', ['data' => $product->getData()]);
+    ->create(\Magento\Catalog\Model\Product::class, ['data' => $product->getData()]);
 
 $customDesignProduct->setUrlKey('custom-design-simple-product')
     ->setId(2)

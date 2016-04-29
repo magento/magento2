@@ -59,8 +59,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_objectManager->removeSharedInstance('Magento\Framework\App\ResponseInterface');
-        $this->_objectManager->removeSharedInstance('Magento\Framework\App\RequestInterface');
+        $this->_objectManager->removeSharedInstance(\Magento\Framework\App\ResponseInterface::class);
+        $this->_objectManager->removeSharedInstance(\Magento\Framework\App\RequestInterface::class);
     }
 
     protected function tearDown()
@@ -103,7 +103,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getRequest()
     {
         if (!$this->_request) {
-            $this->_request = $this->_objectManager->get('Magento\Framework\App\RequestInterface');
+            $this->_request = $this->_objectManager->get(\Magento\Framework\App\RequestInterface::class);
         }
         return $this->_request;
     }
@@ -116,7 +116,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function getResponse()
     {
         if (!$this->_response) {
-            $this->_response = $this->_objectManager->get('Magento\Framework\App\ResponseInterface');
+            $this->_response = $this->_objectManager->get(\Magento\Framework\App\ResponseInterface::class);
         }
         return $this->_response;
     }
@@ -193,7 +193,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
     public function assertSessionMessages(
         \PHPUnit_Framework_Constraint $constraint,
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         $this->_assertSessionErrors = false;
         /** @var $messageManager \Magento\Framework\Message\ManagerInterface */

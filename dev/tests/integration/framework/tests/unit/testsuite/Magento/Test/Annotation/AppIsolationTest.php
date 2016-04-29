@@ -24,7 +24,7 @@ class AppIsolationTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_application = $this->getMock(
-            'Magento\TestFramework\Application',
+            \Magento\TestFramework\Application::class,
             ['reinitialize'],
             [],
             '',
@@ -73,7 +73,7 @@ class AppIsolationTest extends \PHPUnit_Framework_TestCase
     public function testEndTestIsolationController()
     {
         /** @var $controllerTest \Magento\TestFramework\TestCase\AbstractController */
-        $controllerTest = $this->getMockForAbstractClass('Magento\TestFramework\TestCase\AbstractController');
+        $controllerTest = $this->getMockForAbstractClass(\Magento\TestFramework\TestCase\AbstractController::class);
         $this->_application->expects($this->once())->method('reinitialize');
         $this->_object->endTest($controllerTest);
     }

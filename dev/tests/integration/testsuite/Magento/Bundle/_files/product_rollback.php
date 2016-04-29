@@ -12,12 +12,12 @@
 require __DIR__ . '/../../../Magento/Catalog/_files/products_rollback.php';
 
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Catalog\Api\ProductRepositoryInterface');
+    ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 try {
     $product = $productRepository->get('bundle-product', false, null, true);
     $productRepository->delete($product);

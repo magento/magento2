@@ -33,11 +33,11 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
-        $registration = $objectManager->get('Magento\Theme\Model\Theme\Registration');
+        $registration = $objectManager->get(\Magento\Theme\Model\Theme\Registration::class);
         $registration->register();
-        $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('BackendTest/test_default');
+        $objectManager->get(\Magento\Framework\View\DesignInterface::class)->setDesignTheme('BackendTest/test_default');
         $this->_layout = $objectManager->create(
-            'Magento\Framework\View\LayoutInterface',
+            \Magento\Framework\View\LayoutInterface::class,
             ['area' => 'adminhtml']
         );
         $this->_layout->getUpdate()->load('layout_test_grid_handle');
@@ -58,9 +58,9 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $blockEmpty \Magento\Backend\Block\Widget\Grid\Massaction */
         $blockEmpty = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Massaction'
+            \Magento\Backend\Block\Widget\Grid\Massaction::class
         );
         $this->assertEmpty($blockEmpty->getItems());
         $this->assertEquals(0, $blockEmpty->getCount());
@@ -164,7 +164,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertNotNull($gridMassactionColumn, 'Massaction column does not exist in the grid column set');
         $this->assertInstanceOf(
-            'Magento\Backend\Block\Widget\Grid\Column',
+            \Magento\Backend\Block\Widget\Grid\Column::class,
             $gridMassactionColumn,
             'Massaction column is not an instance of \Magento\Backend\Block\Widget\Column'
         );

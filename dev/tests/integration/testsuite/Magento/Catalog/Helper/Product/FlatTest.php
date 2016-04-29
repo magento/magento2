@@ -20,10 +20,10 @@ class FlatTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Helper\Product\Flat\Indexer'
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class
         );
         $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Indexer\Product\Flat\State'
+            \Magento\Catalog\Model\Indexer\Product\Flat\State::class
         );
     }
 
@@ -48,7 +48,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
     public function testIsAddFilterableAttributes()
     {
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             ['addFilterableAttrs' => 1]
         );
         $this->assertEquals(1, $helper->isAddFilterableAttributes());
@@ -62,7 +62,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
     public function testIsAddChildData()
     {
         $helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Helper\Product\Flat\Indexer',
+            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
             ['addChildData' => 1]
         );
         $this->assertEquals(1, $helper->isAddChildData());

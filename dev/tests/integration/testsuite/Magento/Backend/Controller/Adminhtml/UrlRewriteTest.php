@@ -17,7 +17,7 @@ class UrlRewriteTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
      */
     public function testSaveActionCmsPage()
     {
-        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\Page');
+        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Model\Page::class);
         $page->load('page_design_blank', 'identifier');
 
         $this->getRequest()->setPostValue(

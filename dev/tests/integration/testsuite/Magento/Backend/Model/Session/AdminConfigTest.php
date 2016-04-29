@@ -30,7 +30,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $model = $this->objectManager->create('Magento\Backend\Model\Session\AdminConfig');
+        $model = $this->objectManager->create(\Magento\Backend\Model\Session\AdminConfig::class);
         $this->assertEquals('/index.php/backend', $model->getCookiePath());
     }
 
@@ -42,7 +42,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     {
         $sessionName = 'adminHtmlSession';
         $adminConfig = $this->objectManager->create(
-            'Magento\Backend\Model\Session\AdminConfig',
+            \Magento\Backend\Model\Session\AdminConfig::class,
             ['sessionName' => $sessionName]
         );
         $this->assertSame($sessionName, $adminConfig->getName());
