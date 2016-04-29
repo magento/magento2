@@ -170,7 +170,7 @@ define([
          * @returns {Object} Chainable.
          */
         createHeaderTemplate: function (prop) {
-            var visible = _.isUndefined(prop.visible) ? this.visible() : prop.visible,
+            var visible = prop.visible !== false,
                 disabled = _.isUndefined(prop.disabled) ? this.disabled() : prop.disabled;
 
             return {

@@ -813,6 +813,7 @@ class CustomOptions extends AbstractModifier
                         'componentType' => ActionDelete::NAME,
                         'fit' => true,
                         'sortOrder' => $sortOrder,
+                        'visible' => false
                     ],
                 ],
             ],
