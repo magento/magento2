@@ -17,5 +17,5 @@ class Initial extends \Magento\Reports\Model\ResourceModel\Report\Collection
      * Report sub-collection class name
      * @var string
      */
-    protected $_reportCollection = 'Magento\Reports\Model\ResourceModel\Accounts\Collection';
+    protected $_reportCollection = \Magento\Reports\Model\ResourceModel\Accounts\Collection::class;
 }

@@ -26,7 +26,7 @@ class ExportDownloadsExcel extends \Magento\Reports\Controller\Adminhtml\Report\
     {
         $fileName = 'products_downloads.xml';
         $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Product\Downloads\Grid'
+            \Magento\Reports\Block\Adminhtml\Product\Downloads\Grid::class
         )->setSaveParametersInSession(
             true
         )->getExcel(

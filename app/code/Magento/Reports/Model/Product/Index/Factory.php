@@ -15,8 +15,8 @@ class Factory
      * @var array
      */
     protected $_typeClasses = [
-        self::TYPE_COMPARED => 'Magento\Reports\Model\Product\Index\Compared',
-        self::TYPE_VIEWED => 'Magento\Reports\Model\Product\Index\Viewed',
+        self::TYPE_COMPARED => \Magento\Reports\Model\Product\Index\Compared::class,
+        self::TYPE_VIEWED => \Magento\Reports\Model\Product\Index\Viewed::class,
     ];
 
     /**

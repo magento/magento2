@@ -28,7 +28,7 @@ class Preview extends \Magento\Newsletter\Controller\Adminhtml\Queue
 
         // set default value for selected store
         /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManager');
+        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManager::class);
         $defaultStore = $storeManager->getDefaultStoreView();
         if (!$defaultStore) {
             $allStores = $storeManager->getStores();

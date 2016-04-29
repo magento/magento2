@@ -50,7 +50,7 @@ class Wishlist extends \Magento\Backend\Block\Template
     {
         $this->setChild(
             'grid',
-            $this->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Wishlist\Grid', 'report.grid')
+            $this->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Wishlist\Grid::class, 'report.grid')
         );
 
         $collection = $this->_wishlistFactory->create();

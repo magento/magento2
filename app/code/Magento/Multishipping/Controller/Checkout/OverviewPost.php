@@ -12,6 +12,8 @@ use Magento\Framework\Exception\PaymentException;
 
 /**
  * Class OverviewPost
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OverviewPost extends \Magento\Multishipping\Controller\Checkout
 {
@@ -106,7 +108,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_redirect('*/*/billing');
         } catch (\Magento\Checkout\Exception $e) {
             $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
+                \Magento\Checkout\Helper\Data::class
             )->sendPaymentFailedEmail(
                 $this->_getCheckout()->getQuote(),
                 $e->getMessage(),
@@ -117,7 +119,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->_redirect('*/cart');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->_objectManager->get(
-                'Magento\Checkout\Helper\Data'
+                \Magento\Checkout\Helper\Data::class
             )->sendPaymentFailedEmail(
                 $this->_getCheckout()->getQuote(),
                 $e->getMessage(),
@@ -129,7 +131,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
             $this->logger->critical($e);
             try {
                 $this->_objectManager->get(
-                    'Magento\Checkout\Helper\Data'
+                    \Magento\Checkout\Helper\Data::class
                 )->sendPaymentFailedEmail(
                     $this->_getCheckout()->getQuote(),
                     $e->getMessage(),

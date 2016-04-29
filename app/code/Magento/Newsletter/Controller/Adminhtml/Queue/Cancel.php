@@ -16,7 +16,7 @@ class Cancel extends \Magento\Newsletter\Controller\Adminhtml\Queue
     public function execute()
     {
         $queue = $this->_objectManager->get(
-            'Magento\Newsletter\Model\Queue'
+            \Magento\Newsletter\Model\Queue::class
         )->load(
             $this->getRequest()->getParam('id')
         );

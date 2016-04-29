@@ -20,7 +20,7 @@ class ExportProductExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sh
     {
         $fileName = 'shopcart_product.xml';
         $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
+            \Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid::class
         )->getExcelFile(
             $fileName
         );

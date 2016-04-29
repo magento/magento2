@@ -158,7 +158,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Queue');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Queue::class);
     }
 
     /**

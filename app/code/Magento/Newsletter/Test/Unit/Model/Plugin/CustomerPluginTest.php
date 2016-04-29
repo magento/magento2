@@ -29,11 +29,11 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subscriberFactory = $this->getMockBuilder('\Magento\Newsletter\Model\SubscriberFactory')
+        $this->subscriberFactory = $this->getMockBuilder(\Magento\Newsletter\Model\SubscriberFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->subscriber = $this->getMockBuilder('\Magento\Newsletter\Model\Subscriber')
+        $this->subscriber = $this->getMockBuilder(\Magento\Newsletter\Model\Subscriber::class)
             ->setMethods(['loadByEmail', 'getId', 'delete', 'updateSubscription'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -42,7 +42,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->plugin = $this->objectManager->getObject(
-            'Magento\Newsletter\Model\Plugin\CustomerPlugin',
+            \Magento\Newsletter\Model\Plugin\CustomerPlugin::class,
             [
                 'subscriberFactory' => $this->subscriberFactory
             ]
@@ -52,8 +52,8 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
     public function testAfterSave()
     {
         $customerId = 1;
-        $subject = $this->getMock('\Magento\Customer\Api\CustomerRepositoryInterface');
-        $customer = $this->getMock('Magento\Customer\Api\Data\CustomerInterface');
+        $subject = $this->getMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $customer = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customer->expects($this->once())->method('getId')->willReturn($customerId);
         $this->subscriber->expects($this->once())->method('updateSubscription')->with($customerId)->willReturnSelf();
 
@@ -65,8 +65,8 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
         $deleteCustomer = function () {
             return true;
         };
-        $subject = $this->getMock('\Magento\Customer\Api\CustomerRepositoryInterface');
-        $customer = $this->getMock('Magento\Customer\Api\Data\CustomerInterface');
+        $subject = $this->getMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $customer = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customer->expects($this->once())->method('getEmail')->willReturn('test@test.com');
         $this->subscriber->expects($this->once())->method('loadByEmail')->with('test@test.com')->willReturnSelf();
         $this->subscriber->expects($this->once())->method('getId')->willReturn(1);
@@ -81,8 +81,8 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
         $deleteCustomerById = function () {
             return true;
         };
-        $subject = $this->getMock('\Magento\Customer\Api\CustomerRepositoryInterface');
-        $customer = $this->getMock('Magento\Customer\Api\Data\CustomerInterface');
+        $subject = $this->getMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $customer = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
         $subject->expects($this->once())->method('getById')->willReturn($customer);
         $customer->expects($this->once())->method('getEmail')->willReturn('test@test.com');
         $this->subscriber->expects($this->once())->method('loadByEmail')->with('test@test.com')->willReturnSelf();
