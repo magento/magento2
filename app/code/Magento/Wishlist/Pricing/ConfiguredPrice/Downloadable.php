@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 
-class DownloadablePrice extends FinalPrice implements ConfiguredPriceInterface
+class Downloadable extends FinalPrice implements ConfiguredPriceInterface
 {
     /**
      * Price type configured

@@ -10,9 +10,9 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Wishlist\Pricing\ConfiguredPrice\DownloadablePrice;
+use Magento\Wishlist\Pricing\ConfiguredPrice\Downloadable;
 
-class DownloadablePriceTest extends \PHPUnit_Framework_TestCase
+class DownloadableTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -30,7 +30,7 @@ class DownloadablePriceTest extends \PHPUnit_Framework_TestCase
     private $priceCurrency;
 
     /**
-     * @var DownloadablePrice
+     * @var Downloadable
      */
     private $model;
 
@@ -62,7 +62,7 @@ class DownloadablePriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
             ->getMockForAbstractClass();
 
-        $this->model = new DownloadablePrice(
+        $this->model = new Downloadable(
             $this->saleableItem,
             null,
             $this->calculator,
