@@ -411,10 +411,8 @@ class Currency extends \Magento\Framework\Model\AbstractModel
      */
     private function trimUnicodeDirectionMark($string)
     {
-        if (preg_match('/^\x{200E}/u', $string)) {
-            $string = preg_replace('/^\x{200E}/u', '', $string);
-        } elseif (preg_match('/^\x{200F}/u', $string)) {
-            $string = preg_replace('/^\x{200F}/u', '', $string);
+        if (preg_match('/^(\x{200E}|\x{200F})/u', $string, $match)) {
+            $string = preg_replace('/^'.$match[1].'/u', '', $string);
         }
         return $string;
     }
