@@ -71,7 +71,9 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         );
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion')->willReturn(['success' => true]);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(['success' => true]);
-        $this->phpReadinessCheck->expects($this->once())->method('checkPhpCronSettings')->willReturn(['success' => true]);
+        $this->phpReadinessCheck->expects($this->once())
+            ->method('checkPhpCronSettings')
+            ->willReturn(['success' => true]);
         $this->expected = [
             ReadinessCheck::KEY_PHP_VERSION_VERIFIED => ['success' => true],
             ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED => ['success' => true],
