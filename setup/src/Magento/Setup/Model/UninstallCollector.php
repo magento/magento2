@@ -63,7 +63,7 @@ class UninstallCollector
             $uninstallClassName = str_replace('_', '\\', $row['module']) . '\Setup\Uninstall';
             if (class_exists($uninstallClassName)) {
                 $uninstallClass = $this->objectManager->create($uninstallClassName);
-                if (is_subclass_of($uninstallClass, 'Magento\Framework\Setup\UninstallInterface')) {
+                if (is_subclass_of($uninstallClass, \Magento\Framework\Setup\UninstallInterface::class)) {
                     $uninstallList[$row['module']] = $uninstallClass;
                 }
             }

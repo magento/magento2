@@ -69,9 +69,9 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
-        $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
-        $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
-        $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->enabledModuleList = $objectManager->get(\Magento\Framework\Module\ModuleList::class);
+        $this->fullModuleList = $objectManager->get(\Magento\Framework\Module\FullModuleList::class);
+        $this->packageInfo = $objectManager->get(\Magento\Framework\Module\PackageInfoFactory::class)->create();
         $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
         $this->timezone = $tzProvider->get();

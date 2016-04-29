@@ -12,6 +12,7 @@ use Magento\Setup\Model\DateTime\DateTimeProvider;
 
 /**
  * Class UpdatePackagesCache manages information about available for update packages though the cache file.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdatePackagesCache
 {
@@ -76,7 +77,7 @@ class UpdatePackagesCache
         DateTimeProvider $dateTimeProvider
     ) {
         $applicationFactory = $objectManagerProvider->get()
-            ->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
+            ->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
         $this->dateTime = $dateTimeProvider->get();

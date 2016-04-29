@@ -18,7 +18,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
         return $objectManagerHelper->getObject(
-            'Magento\Setup\Module\Dependency\Report\Framework\Data\Module',
+            \Magento\Setup\Module\Dependency\Report\Framework\Data\Module::class,
             ['name' => $name, 'dependencies' => $dependencies]
         );
     }

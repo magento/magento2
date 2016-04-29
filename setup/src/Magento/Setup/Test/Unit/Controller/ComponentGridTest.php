@@ -18,6 +18,9 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Setup\Model\MarketplaceManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -100,7 +103,6 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
                 'time' => self::FORMATTED_TIME,
             ],
         ];
-
         $this->lastSyncData = [
             "lastSyncDate" => "1447271496",
             "packages" => [
@@ -129,42 +131,60 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         ];
         $allComponentData = array_merge($allComponentData, $this->componentData);
         $this->composerInformationMock = $this->getMock(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [],
             [],
             '',
             false
         );
         /** @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject $objectManagerProvider */
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $objectManagerProvider->expects($this->once())
-            ->method('get')
-            ->willReturn($objectManager);
+        $objectManagerProvider = $this->getMock(\Magento\Setup\Model\ObjectManagerProvider::class, [], [], '', false);
+        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+        $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $this->packageInfoFactoryMock = $this
-            ->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
-        $this->enabledModuleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+            ->getMock(\Magento\Framework\Module\PackageInfoFactory::class, [], [], '', false);
+        $this->enabledModuleListMock = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
         $this->enabledModuleListMock->expects($this->any())->method('has')->willReturn(true);
-        $this->fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $this->fullModuleListMock = $this->getMock(\Magento\Framework\Module\FullModuleList::class, [], [], '', false);
         $this->fullModuleListMock->expects($this->any())->method('getNames')->willReturn($allComponentData);
-        $this->timezoneMock = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false);
-        $objectManager->expects($this->any())
-            ->method('get')
+        $this->timezoneMock = $this->getMock(
+            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $objectManager->expects($this->any())->method('get')
             ->willReturnMap([
-                ['Magento\Framework\Module\PackageInfoFactory', $this->packageInfoFactoryMock],
-                ['Magento\Framework\Module\FullModuleList', $this->fullModuleListMock],
-                ['Magento\Framework\Module\ModuleList', $this->enabledModuleListMock],
-                ['Magento\Framework\Stdlib\DateTime\TimezoneInterface', $this->timezoneMock]
+                [\Magento\Framework\Module\PackageInfoFactory::class, $this->packageInfoFactoryMock],
+                [\Magento\Framework\Module\FullModuleList::class, $this->fullModuleListMock],
+                [\Magento\Framework\Module\ModuleList::class, $this->enabledModuleListMock],
+                [\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class, $this->timezoneMock]
             ]);
-
         /** @var TimezoneProvider|\PHPUnit_Framework_MockObject_MockObject $timezoneProviderMock */
-        $timezoneProviderMock = $this->getMock('\Magento\Setup\Model\DateTime\TimezoneProvider', [], [], '', false);
-        $timezoneProviderMock->expects($this->any())
-            ->method('get')
-            ->willReturn($this->timezoneMock);
-        $this->packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
-        $this->updatePackagesCacheMock = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false);
-        $this->marketplaceManagerMock = $this->getMock('Magento\Setup\Model\MarketplaceManager', [], [], '', false);
+        $timezoneProviderMock = $this->getMock(
+            \Magento\Setup\Model\DateTime\TimezoneProvider::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $timezoneProviderMock->expects($this->any())->method('get')->willReturn($this->timezoneMock);
+        $this->packageInfo = $this->getMock(\Magento\Framework\Module\PackageInfo::class, [], [], '', false);
+        $this->updatePackagesCacheMock = $this->getMock(
+            \Magento\Setup\Model\UpdatePackagesCache::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->marketplaceManagerMock = $this->getMock(
+            \Magento\Setup\Model\MarketplaceManager::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->packageInfoFactoryMock->expects($this->once())->method('create')->willReturn($this->packageInfo);
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
@@ -178,7 +198,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -210,7 +230,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->lastSyncData);
         $this->setupTimezoneMock();
         $jsonModel = $this->controller->componentsAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
@@ -241,7 +261,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->lastSyncData);
         $this->setupTimezoneMock();
         $jsonModel = $this->controller->syncAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);

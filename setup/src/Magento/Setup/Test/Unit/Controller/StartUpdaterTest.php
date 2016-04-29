@@ -9,6 +9,10 @@ namespace Magento\Setup\Test\Unit\Controller;
 use Magento\Setup\Model\Navigation;
 use Magento\Setup\Controller\StartUpdater;
 
+/**
+ * Class StartUpdaterTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StartUpdaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -53,10 +57,10 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        $this->updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
-        $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->navigation = $this->getMock('Magento\Setup\Model\Navigation', [], [], '', false);
+        $this->updater = $this->getMock(\Magento\Setup\Model\Updater::class, [], [], '', false);
+        $this->fullModuleList = $this->getMock(\Magento\Framework\Module\FullModuleList::class, [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->navigation = $this->getMock(\Magento\Setup\Model\Navigation::class, [], [], '', false);
         $this->controller = new StartUpdater(
             $this->filesystem,
             $this->navigation,
@@ -71,10 +75,10 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'C', 'type' => 'enable'],
                 ['title' => 'D', 'type' => 'disable'],
             ]);
-        $this->request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $this->response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
-        $this->mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $this->request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
+        $this->response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
+        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
+        $this->mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)
@@ -93,7 +97,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -152,7 +156,12 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"update",'
             . '"headerTitle": "Update package 1" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
-        $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
+        $write = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
+            [],
+            '',
+            false
+        );
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
@@ -167,7 +176,12 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $content = '{"packages":[{"name":"vendor\/package","version":"1.0"}],"type":"upgrade",'
             . '"headerTitle": "System Upgrade" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
-        $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
+        $write = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
+            [],
+            '',
+            false
+        );
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
@@ -183,7 +197,12 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
             . '"headerTitle": "Enable Package 1" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->fullModuleList->expects($this->once())->method('has')->willReturn(true);
-        $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
+        $write = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
+            [],
+            '',
+            false
+        );
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')
@@ -199,7 +218,12 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
             . '"headerTitle": "Disable Package 1" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
         $this->fullModuleList->expects($this->once())->method('has')->willReturn(true);
-        $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
+        $write = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
+            [],
+            '',
+            false
+        );
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())
             ->method('writeFile')

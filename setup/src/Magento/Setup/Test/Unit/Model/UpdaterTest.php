@@ -13,7 +13,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateUpdaterTaskUpdate()
     {
-        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
+        $queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
         $queue->expects($this->once())
             ->method('addJobs')
             ->with(
@@ -33,7 +33,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUpdaterTaskUninstall()
     {
-        $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
+        $queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
         $queue->expects($this->once())
             ->method('addJobs')
             ->with(

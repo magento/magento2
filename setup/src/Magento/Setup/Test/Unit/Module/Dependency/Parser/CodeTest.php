@@ -17,7 +17,7 @@ class CodeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->parser = $objectManagerHelper->getObject('Magento\Setup\Module\Dependency\Parser\Code');
+        $this->parser = $objectManagerHelper->getObject(\Magento\Setup\Module\Dependency\Parser\Code::class);
     }
 
     /**

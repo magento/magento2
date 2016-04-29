@@ -47,7 +47,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $moduleList = $this->objectManagerProvider->get()->create('Magento\Framework\Module\ModuleList');
+        $moduleList = $this->objectManagerProvider->get()->create(\Magento\Framework\Module\ModuleList::class);
         $output->writeln('<info>List of enabled modules:</info>');
         $enabledModules = $moduleList->getNames();
         if (count($enabledModules) === 0) {
@@ -57,7 +57,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         }
         $output->writeln('');
 
-        $fullModuleList = $this->objectManagerProvider->get()->create('Magento\Framework\Module\FullModuleList');
+        $fullModuleList = $this->objectManagerProvider->get()->create(\Magento\Framework\Module\FullModuleList::class);
         $output->writeln("<info>List of disabled modules:</info>");
         $disabledModules = array_diff($fullModuleList->getNames(), $enabledModules);
         if (count($disabledModules) === 0) {

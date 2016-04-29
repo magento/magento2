@@ -47,8 +47,8 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->dbValidator = $this->getMock(\Magento\Setup\Validator\DbValidator::class, [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $this->deploymentConfig->expects($this->once())
             ->method('get')
             ->willReturn(
@@ -59,10 +59,10 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
                     ConfigOptionsListConstants::KEY_PASSWORD => 'password'
                 ]
             );
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->write = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $this->filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $this->write = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
-        $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
+        $this->phpReadinessCheck = $this->getMock(\Magento\Setup\Model\PhpReadinessCheck::class, [], [], '', false);
         $this->readinessCheck = new ReadinessCheck(
             $this->dbValidator,
             $this->deploymentConfig,

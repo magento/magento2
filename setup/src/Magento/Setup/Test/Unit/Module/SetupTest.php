@@ -24,8 +24,8 @@ class SetupTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $resourceModel = $this->getMock('\Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->connection = $this->getMockForAbstractClass('\Magento\Framework\DB\Adapter\AdapterInterface');
+        $resourceModel = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
+        $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $resourceModel->expects($this->any())
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)

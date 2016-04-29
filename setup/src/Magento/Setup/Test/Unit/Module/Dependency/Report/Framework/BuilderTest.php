@@ -17,7 +17,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->builder = $objectManagerHelper->getObject('Magento\Setup\Module\Dependency\Report\Framework\Builder');
+        $this->builder = $objectManagerHelper->getObject(
+            \Magento\Setup\Module\Dependency\Report\Framework\Builder::class
+        );
     }
 
     /**

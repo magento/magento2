@@ -17,7 +17,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
      */
     public function testPhraseCreation($constructArguments, $getter, $result)
     {
-        $reflectionClass = new \ReflectionClass('Magento\Setup\Module\I18n\Dictionary\Phrase');
+        $reflectionClass = new \ReflectionClass(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
         $phrase = $reflectionClass->newInstanceArgs($constructArguments);
         $this->assertEquals($result, $phrase->{$getter}());
     }
@@ -58,7 +58,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('DomainException', $message);
 
-        $reflectionClass = new \ReflectionClass('Magento\Setup\Module\I18n\Dictionary\Phrase');
+        $reflectionClass = new \ReflectionClass(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
         $reflectionClass->newInstanceArgs($constructArguments);
     }
 

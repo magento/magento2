@@ -22,7 +22,13 @@ class ContextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->componentRegistrar = $this->getMock(
+            \Magento\Framework\Component\ComponentRegistrar::class,
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     /**

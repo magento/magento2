@@ -21,7 +21,7 @@ class StdoTest extends \PHPUnit_Framework_TestCase
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Setup\Module\I18n\Dictionary\Writer\Csv $writer */
-        $writer = $objectManagerHelper->getObject('Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo');
+        $writer = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo::class);
 
         $this->assertAttributeEquals($this->_handler, '_fileHandler', $writer);
     }

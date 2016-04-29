@@ -25,7 +25,7 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->marketplaceManager =
-            $this->getMock('Magento\Setup\Model\MarketplaceManager', ['getPackagesForInstall'], [], '', false);
+            $this->getMock(\Magento\Setup\Model\MarketplaceManager::class, ['getPackagesForInstall'], [], '', false);
         $this->controller = new InstallExtensionGrid($this->marketplaceManager);
     }
 
@@ -35,7 +35,7 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
     }
 
     /**
@@ -50,7 +50,7 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
             ->method('getPackagesForInstall')
             ->will($this->returnValue($extensions));
         $jsonModel = $this->controller->extensionsAction();
-        $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('extensions', $variables);
