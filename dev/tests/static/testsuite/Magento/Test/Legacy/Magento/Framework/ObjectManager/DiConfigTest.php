@@ -50,4 +50,30 @@ class DiConfigTest extends \PHPUnit_Framework_TestCase
             'The <value> node is obsolete. Instead, provide the actual value as a text literal.'
         );
     }
+
+    public function testCommandListClassIsNotDirectlyConfigured()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker(
+            [$this, 'assertCommandListClassIsNotDirectlyConfigured'],
+            \Magento\Framework\App\Utility\Files::init()->getDiConfigs(true)
+        );
+    }
+
+    /**
+     * Scan the specified di.xml file and assert that it has no directly configured CommandList class
+     *
+     * @param string $file
+     */
+    public function assertCommandListClassIsNotDirectlyConfigured($file)
+    {
+        $xml = simplexml_load_file($file);
+        foreach ($xml->xpath('//type') as $type) {
+            $this->assertNotContains(
+                'Magento\Framework\Console\CommandList',
+                $type->attributes(),
+                'Use \Magento\Framework\Console\CommandListInterface instead of \Magento\Framework\Console\CommandList'
+            );
+        }
+    }
 }
