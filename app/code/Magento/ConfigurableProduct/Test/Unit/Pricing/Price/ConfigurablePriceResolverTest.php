@@ -27,7 +27,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $className = 'Magento\ConfigurableProduct\Model\Product\Type\Configurable';
-        $this->configurable = $this->getMock($className, ['getUsedProducts'], [], '', false);
+        $this->configurable = $this->getMock($className, ['getUsedProductCollection'], [], '', false);
 
         $className = 'Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface';
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
@@ -56,11 +56,12 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getName']
+            ['getSku']
         );
-        $product->expects($this->once())->method('getName')->willReturn('Kiwi');
+        $product->expects($this->once())->method('getSku')->willReturn('Kiwi');
+        $productCollection = $this->getProductCollection([]);
 
-        $this->configurable->expects($this->once())->method('getUsedProducts')->willReturn([]);
+        $this->configurable->expects($this->once())->method('getUsedProductCollection')->willReturn($productCollection);
 
         $this->resolver->resolvePrice($product);
     }
@@ -81,14 +82,38 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getName']
+            ['getSku']
         );
-        $product->expects($this->never())->method('getName');
+        $product->expects($this->never())->method('getSku');
 
-        $this->configurable->expects($this->once())->method('getUsedProducts')->willReturn([$product]);
+        $productCollection = $this->getProductCollection([$product]);
+        $this->configurable->expects($this->once())->method('getUsedProductCollection')->willReturn($productCollection);
         $this->priceResolver->expects($this->atLeastOnce())->method('resolvePrice')->willReturn($price);
 
         $this->assertEquals($expectedValue, $this->resolver->resolvePrice($product));
+    }
+
+    /**
+     * @param array $products
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getProductCollection($products)
+    {
+        $productCollection = $this->getMockBuilder(
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection'
+        )->setMethods(
+            [
+                'setFlag',
+                'addAttributeToSelect',
+                'getIterator',
+            ]
+        )->disableOriginalConstructor()
+            ->getMock();
+        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('setFlag')->willReturnSelf();
+        $productCollection->expects($this->once())->method('getIterator')->willReturn(new \ArrayIterator($products));
+
+        return $productCollection;
     }
 
     /**
