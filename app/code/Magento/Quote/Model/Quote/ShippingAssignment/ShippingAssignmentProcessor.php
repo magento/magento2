@@ -68,7 +68,8 @@ class ShippingAssignmentProcessor
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         foreach ($shippingAssignment->getItems() as $item) {
-            if (!$quote->getItemById($item->getItemId())) {
+            /** @var \Magento\Quote\Model\Quote\Item $item */
+            if (!$quote->getItemById($item->getItemId()) && !$item->isDeleted()) {
                 $this->cartItemPersister->save($quote, $item);
             }
         }
