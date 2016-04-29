@@ -210,7 +210,8 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
                     'setFromDate',
                     'getToDate',
                     'setToDate',
-                ])
+                ]
+            )
             ->getMock();
         $dataModel
             ->expects($this->atLeastOnce())
