@@ -11,7 +11,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 );
 
 /** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('virtual')
     ->setId(1)
     ->setAttributeSetId(4)
@@ -31,7 +31,7 @@ $product->load(1);
 
 $addressData = include __DIR__ . '/address_data.php';
 
-$billingAddress = $objectManager->create('Magento\Quote\Model\Quote\Address', ['data' => $addressData]);
+$billingAddress = $objectManager->create(\Magento\Quote\Model\Quote\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 
 $shippingAddress = clone $billingAddress;
@@ -39,11 +39,11 @@ $shippingAddress->setId(null)->setAddressType('shipping');
 $shippingAddress->setShippingMethod('flatrate_flatrate');
 
 /** @var $quote \Magento\Quote\Model\Quote */
-$quote = $objectManager->create('Magento\Quote\Model\Quote');
+$quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
-    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId()
+    $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId()
 )->setReservedOrderId(
     '100000001'
 )->setBillingAddress(
@@ -64,7 +64,7 @@ $quote->collectTotals();
 $quote->save();
 
 $quote->setCustomerEmail('admin@example.com');
-$quoteManagement = $objectManager->create('\Magento\Quote\Api\CartManagementInterface');
+$quoteManagement = $objectManager->create(\Magento\Quote\Api\CartManagementInterface::class);
 
 $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 
@@ -72,7 +72,7 @@ $order = $quoteManagement->submit($quote, ['increment_id' => '100000001']);
 $item = $order->getAllItems()[0];
 
 /** @var \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory */
-$invoiceFactory = $objectManager->get('Magento\Sales\Api\InvoiceManagementInterface');
+$invoiceFactory = $objectManager->get(\Magento\Sales\Api\InvoiceManagementInterface::class);
 
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
 $invoice = $invoiceFactory->prepareInvoice($order, [$item->getId() => 10]);
@@ -80,7 +80,7 @@ $invoice->register();
 $invoice->save();
 
 /** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
-$creditmemoFactory = $objectManager->get('Magento\Sales\Model\Order\CreditmemoFactory');
+$creditmemoFactory = $objectManager->get(\Magento\Sales\Model\Order\CreditmemoFactory::class);
 $creditmemo = $creditmemoFactory->createByInvoice($invoice, ['qtys' => [$item->getId() => 5]]);
 
 foreach ($creditmemo->getAllItems() as $creditmemoItem) {
@@ -88,5 +88,5 @@ foreach ($creditmemo->getAllItems() as $creditmemoItem) {
     $creditmemoItem->setBackToStock(true);
 }
 
-$creditmemoManagement = $objectManager->create('Magento\Sales\Api\CreditmemoManagementInterface');
+$creditmemoManagement = $objectManager->create(\Magento\Sales\Api\CreditmemoManagementInterface::class);
 $creditmemoManagement->refund($creditmemo);

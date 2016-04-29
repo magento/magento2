@@ -5,7 +5,7 @@
  */
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
-$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
 $rule->setName(
     'AUTO_RULE'
 )->setIsActive(
@@ -30,6 +30,6 @@ $rule->setName(
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var Magento\Framework\Registry $registry */
-$registry = $objectManager->get('Magento\Framework\Registry');
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
 $registry->unregister('_fixture/Magento_SalesRule_Api_RuleRepository');
 $registry->register('_fixture/Magento_SalesRule_Api_RuleRepository', $rule);

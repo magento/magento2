@@ -25,7 +25,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->addressRepository = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AddressRepositoryInterface',
+            \Magento\Customer\Api\AddressRepositoryInterface::class,
             [],
             '',
             false,
@@ -34,14 +34,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ['getList']
         );
         /** @var \Magento\Framework\View\LayoutInterface $layout */
-        $layout = $this->_objectManager->get('Magento\Framework\View\LayoutInterface');
-        $sessionQuoteMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
+        $layout = $this->_objectManager->get(\Magento\Framework\View\LayoutInterface::class);
+        $sessionQuoteMock = $this->getMockBuilder(\Magento\Backend\Model\Session\Quote::class)
             ->disableOriginalConstructor()->setMethods(['getCustomerId', 'getStore', 'getStoreId', 'getQuote'])
             ->getMock();
         $sessionQuoteMock->expects($this->any())->method('getCustomerId')->will($this->returnValue(1));
 
         $this->_addressBlock = $layout->createBlock(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Form\Address',
+            \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address::class,
             'address_block' . rand(),
             ['addressService' => $this->addressRepository, 'sessionQuote' => $sessionQuoteMock]
         );
@@ -52,7 +52,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $addressData = $this->_getAddresses();
         $searchResult = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AddressSearchResultsInterface',
+            \Magento\Customer\Api\Data\AddressSearchResultsInterface::class,
             [],
             '',
             false,
@@ -73,7 +73,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $addressData = $this->_getAddresses();
         $searchResult = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AddressSearchResultsInterface',
+            \Magento\Customer\Api\Data\AddressSearchResultsInterface::class,
             [],
             '',
             false,
@@ -191,7 +191,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function _getAddresses()
     {
         /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory $addressFactory */
-        $addressFactory = $this->_objectManager->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
+        $addressFactory = $this->_objectManager->create(\Magento\Customer\Api\Data\AddressInterfaceFactory::class);
         $addressData[] = $addressFactory->create()
             ->setId(1)
             ->setStreet(['Street1'])

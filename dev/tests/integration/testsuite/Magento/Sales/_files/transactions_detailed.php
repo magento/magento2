@@ -6,11 +6,11 @@
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var Magento\Sales\Model\Order\Payment $payment */
-$payment = $objectManager->create('Magento\Sales\Model\Order\Payment');
+$payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 
 /** @var \Magento\Sales\Model\Order $order */
-$order = $objectManager->create('Magento\Sales\Model\Order');
+$order = $objectManager->create(\Magento\Sales\Model\Order::class);
 $order->setIncrementId('100000006')->setSubtotal(100)->setBaseSubtotal(100)->setCustomerIsGuest(true)
     ->setPayment($payment);
 

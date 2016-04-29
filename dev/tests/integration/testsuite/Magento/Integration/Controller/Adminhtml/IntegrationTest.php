@@ -25,7 +25,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
         parent::setUp();
         /** @var $integration \Magento\Integration\Model\Integration */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $integration = $objectManager->create('Magento\Integration\Model\Integration');
+        $integration = $objectManager->create(\Magento\Integration\Model\Integration::class);
         $this->_integration = $integration->load('Fixture Integration', 'name');
     }
 

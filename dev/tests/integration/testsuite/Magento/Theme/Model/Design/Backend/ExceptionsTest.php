@@ -15,7 +15,7 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Theme\Model\Design\Backend\Exceptions'
+            \Magento\Theme\Model\Design\Backend\Exceptions::class
         );
         $this->_model->setScope('default');
         $this->_model->setScopeId(0);

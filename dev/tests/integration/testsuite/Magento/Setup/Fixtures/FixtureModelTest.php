@@ -41,8 +41,10 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
 
     public function testTest()
     {
-        $reindexCommand = Bootstrap::getObjectManager()->get('Magento\Indexer\Console\Command\IndexerReindexCommand');
-        $parser = Bootstrap::getObjectManager()->get('Magento\Framework\Xml\Parser');
+        $reindexCommand = Bootstrap::getObjectManager()->get(
+            \Magento\Indexer\Console\Command\IndexerReindexCommand::class
+        );
+        $parser = Bootstrap::getObjectManager()->get(\Magento\Framework\Xml\Parser::class);
         $itfApplication = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication();
         $model = new FixtureModel($reindexCommand, $parser, $itfApplication->getInitParams());
         $model->loadConfig(__DIR__ . '/_files/small.xml');
@@ -62,7 +64,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
             self::$_generatorWorkingDir . '/tax_rates.csv'
         );
         /** @var $appCache \Magento\Framework\App\Cache */
-        $appCache = Bootstrap::getObjectManager()->get('Magento\Framework\App\Cache');
+        $appCache = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache::class);
         $appCache->clean(
             [
                 \Magento\Eav\Model\Cache\Type::CACHE_TAG,
