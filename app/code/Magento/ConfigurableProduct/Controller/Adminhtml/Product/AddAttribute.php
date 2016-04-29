@@ -37,7 +37,7 @@ class AddAttribute extends Action
         $this->_view->loadLayout('popup');
         $this->productBuilder->build($this->getRequest());
         $attributeBlock = $this->_view->getLayout()->createBlock(
-            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created'
+            \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created::class
         );
         $this->_addContent($attributeBlock);
         $this->_view->renderLayout();

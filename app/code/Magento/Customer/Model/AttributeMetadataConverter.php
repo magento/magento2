@@ -33,6 +33,7 @@ class AttributeMetadataConverter
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
+
     /**
      * Initialize the Converter
      *
@@ -74,7 +75,7 @@ class AttributeMetadataConverter
                         $this->dataObjectHelper->populateWithArray(
                             $optionObject,
                             $optionArrayValues,
-                            '\Magento\Customer\Api\Data\OptionInterface'
+                            \Magento\Customer\Api\Data\OptionInterface::class
                         );
                         $optionArray[] = $optionObject;
                     }
@@ -91,7 +92,6 @@ class AttributeMetadataConverter
                 ->setValue($value);
             $validationRules[] = $validationRule;
         }
-
 
         return $this->attributeMetadataFactory->create()->setAttributeCode($attribute->getAttributeCode())
             ->setFrontendInput($attribute->getFrontendInput())

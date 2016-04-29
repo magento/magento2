@@ -8,6 +8,9 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LinkManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,25 +45,25 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->productRepository = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->productFactory = $this->getMock(
-            '\Magento\Catalog\Api\Data\ProductInterfaceFactory',
+            \Magento\Catalog\Api\Data\ProductInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->dataObjectHelperMock = $this->getMockBuilder('\Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->configurableType =
-            $this->getMockBuilder('Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable')
+            $this->getMockBuilder(\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class)
                 ->disableOriginalConstructor()->getMock();
 
         $this->object = $this->objectManagerHelper->getObject(
-            '\Magento\ConfigurableProduct\Model\LinkManagement',
+            \Magento\ConfigurableProduct\Model\LinkManagement::class,
             [
                 'productRepository' => $this->productRepository,
                 'productFactory' => $this->productFactory,
@@ -74,20 +77,20 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     {
         $productId = 'test';
 
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productTypeInstance = $this->getMockBuilder('Magento\ConfigurableProduct\Model\Product\Type\Configurable')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productTypeInstance = $this->getMockBuilder(
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
+        )->disableOriginalConstructor()->getMock();
 
         $product->expects($this->any())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
         $product->expects($this->any())->method('getStoreId')->willReturn(1);
         $product->expects($this->any())->method('getTypeInstance')->willReturn($productTypeInstance);
         $productTypeInstance->expects($this->once())->method('setStoreFilter')->with(1, $product);
 
-        $childProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $childProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -98,18 +101,18 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->method('get')->with($productId)
             ->willReturn($product);
 
-        $attribute = $this->getMock('\Magento\Eav\Api\Data\AttributeInterface');
+        $attribute = $this->getMock(\Magento\Eav\Api\Data\AttributeInterface::class);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn('code');
         $childProduct->expects($this->once())->method('getDataUsingMethod')->with('code')->willReturn(false);
         $childProduct->expects($this->once())->method('getData')->with('code')->willReturn(10);
         $childProduct->expects($this->once())->method('getStoreId')->willReturn(1);
         $childProduct->expects($this->once())->method('getAttributes')->willReturn([$attribute]);
 
-        $productMock = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
+        $productMock = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($productMock, ['store_id' => 1, 'code' => 10], '\Magento\Catalog\Api\Data\ProductInterface')
+            ->with($productMock, ['store_id' => 1, 'code' => 10], \Magento\Catalog\Api\Data\ProductInterface::class)
             ->willReturnSelf();
 
         $this->productFactory->expects($this->once())
@@ -124,7 +127,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     public function testGetWithNonConfigurableProduct()
     {
         $productId= 'test';
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->any())->method('getTypeId')->willReturn('simple');
@@ -140,13 +143,13 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'configurable-sku';
         $childSku = 'simple-sku';
 
-        $configurable = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $configurable = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $configurable->expects($this->any())->method('getId')->will($this->returnValue(666));
 
-        $simple = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $simple = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -174,13 +177,13 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'configurable-sku';
         $childSku = 'simple-sku';
 
-        $configurable = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $configurable = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $configurable->expects($this->any())->method('getId')->will($this->returnValue(666));
 
-        $simple = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $simple = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -202,12 +205,12 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getTypeInstance', 'save', 'getTypeId', 'addData', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productType = $this->getMockBuilder('Magento\ConfigurableProduct\Model\Product\Type\Configurable')
+        $productType = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
             ->setMethods(['getUsedProducts'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -221,7 +224,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->with($productSku)
             ->will($this->returnValue($product));
 
-        $option = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $option = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getSku', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -244,7 +247,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
-        $product = $this->getMock('\Magento\Catalog\Api\Data\ProductInterface');
+        $product = $this->getMock(\Magento\Catalog\Api\Data\ProductInterface::class);
 
         $product->expects($this->any())
             ->method('getTypeId')
@@ -261,14 +264,14 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getTypeInstance', 'save', 'getTypeId', 'addData', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->any())
             ->method('getTypeId')
             ->will($this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE));
-        $productType = $this->getMockBuilder('Magento\ConfigurableProduct\Model\Product\Type\Configurable')
+        $productType = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
             ->setMethods(['getUsedProducts'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -276,7 +279,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($product));
 
-        $option = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $option = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getSku', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();

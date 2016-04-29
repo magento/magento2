@@ -174,7 +174,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $html = parent::getFormHtml();
         $html .= $this->getLayout()->createBlock(
-            'Magento\Catalog\Block\Adminhtml\Product\Composite\Configure'
+            \Magento\Catalog\Block\Adminhtml\Product\Composite\Configure::class
         )->toHtml();
         return $html;
     }

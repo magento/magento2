@@ -43,11 +43,17 @@ class DeployStaticContentCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $this->deployer = $this->getMock('Magento\Deploy\Model\Deployer', [], [], '', false);
-        $this->filesUtil = $this->getMock('Magento\Framework\App\Utility\Files', [], [], '', false);
-        $this->validator = $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
+        $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerFactory = $this->getMock(
+            \Magento\Framework\App\ObjectManagerFactory::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->deployer = $this->getMock(\Magento\Deploy\Model\Deployer::class, [], [], '', false);
+        $this->filesUtil = $this->getMock(\Magento\Framework\App\Utility\Files::class, [], [], '', false);
+        $this->validator = $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
         $this->command = new DeployStaticContentCommand(
             $this->objectManagerFactory,
             $this->validator,

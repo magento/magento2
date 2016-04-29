@@ -126,7 +126,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function getSession()
     {
         if ($this->session === null) {
-            $this->session = ObjectManager::getInstance()->get('Magento\Framework\Session\SessionManagerInterface');
+            $this->session = ObjectManager::getInstance()->get(
+                \Magento\Framework\Session\SessionManagerInterface::class
+            );
         }
         return $this->session;
     }

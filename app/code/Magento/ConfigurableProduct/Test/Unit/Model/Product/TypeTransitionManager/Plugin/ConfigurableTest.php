@@ -34,17 +34,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->model = new \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable($this->requestMock);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->model = new \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable(
+            $this->requestMock
+        );
         $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['setTypeId', '__wakeup'],
             [],
             '',
             false
         );
         $this->subjectMock = $this->getMock(
-            'Magento\Catalog\Model\Product\TypeTransitionManager',
+            \Magento\Catalog\Model\Product\TypeTransitionManager::class,
             [],
             [],
             '',

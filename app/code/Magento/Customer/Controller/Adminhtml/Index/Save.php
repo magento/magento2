@@ -211,7 +211,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $this->dataObjectHelper->populateWithArray(
                     $customer,
                     $customerData,
-                    '\Magento\Customer\Api\Data\CustomerInterface'
+                    \Magento\Customer\Api\Data\CustomerInterface::class
                 );
                 $addresses = [];
                 foreach ($addressesData as $addressData) {
@@ -225,7 +225,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $this->dataObjectHelper->populateWithArray(
                         $addressDataObject,
                         $addressData,
-                        '\Magento\Customer\Api\Data\AddressInterface'
+                        \Magento\Customer\Api\Data\AddressInterface::class
                     );
                     $addresses[] = $addressDataObject;
                 }

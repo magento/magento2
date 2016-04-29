@@ -31,7 +31,7 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
         }
 
         $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
-        $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
+        $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setCompositeProductResult($updateResult);
         return $this->resultRedirectFactory->create()->setPath('catalog/product/showUpdateResult');
     }
 }

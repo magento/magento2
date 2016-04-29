@@ -14,6 +14,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Visitor', 'Magento\Customer\Model\ResourceModel\Visitor');
+        $this->_init(\Magento\Customer\Model\Visitor::class, \Magento\Customer\Model\ResourceModel\Visitor::class);
     }
 }

@@ -49,18 +49,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
+        $this->_scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->_readerMock = $this->getMock(
-            'Magento\Customer\Model\Address\Config\Reader',
+            \Magento\Customer\Model\Address\Config\Reader::class,
             [],
             [],
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -69,7 +69,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_storeMock)
         );
 
-        $this->_addressHelperMock = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
+        $this->_addressHelperMock = $this->getMock(\Magento\Customer\Helper\Address::class, [], [], '', false);
 
         $this->_cacheMock->expects(
             $this->once()
@@ -123,7 +123,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->_scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue('someValue'));
 
-        $rendererMock = $this->getMock('Magento\Framework\DataObject');
+        $rendererMock = $this->getMock(\Magento\Framework\DataObject::class);
 
         $this->_addressHelperMock->expects(
             $this->any()

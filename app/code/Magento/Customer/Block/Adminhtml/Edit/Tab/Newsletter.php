@@ -233,7 +233,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         $this->setChild(
             'grid',
             $this->getLayout()->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid',
+                \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid::class,
                 'newsletter.grid'
             )
         );

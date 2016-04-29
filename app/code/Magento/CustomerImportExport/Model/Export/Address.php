@@ -36,7 +36,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**#@-*/
 

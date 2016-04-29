@@ -21,7 +21,9 @@ class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata')
+        $this->metadataMock = $this->getMockBuilder(
+            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -45,7 +47,7 @@ class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
     ) {
         $entityId = 1;
 
-        $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getId',
@@ -102,7 +104,7 @@ class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
 
     public function testIsModifiedBypass()
     {
-        $dataObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getId',

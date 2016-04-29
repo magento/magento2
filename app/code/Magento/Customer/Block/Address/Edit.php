@@ -133,7 +133,7 @@ class Edit extends \Magento\Directory\Block\Data
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,
                 $postedData,
-                '\Magento\Customer\Api\Data\AddressInterface'
+                \Magento\Customer\Api\Data\AddressInterface::class
             );
         }
 
@@ -148,7 +148,7 @@ class Edit extends \Magento\Directory\Block\Data
     public function getNameBlockHtml()
     {
         $nameBlock = $this->getLayout()
-            ->createBlock('Magento\Customer\Block\Widget\Name')
+            ->createBlock(\Magento\Customer\Block\Widget\Name::class)
             ->setObject($this->getAddress());
 
         return $nameBlock->toHtml();

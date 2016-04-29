@@ -16,7 +16,7 @@ class PostcodeTest extends \PHPUnit_Framework_TestCase
     {
         $countryUs = 'US';
         $countryUa = 'UK';
-        $helperMock = $this->getMockBuilder('Magento\Directory\Helper\Data')
+        $helperMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 

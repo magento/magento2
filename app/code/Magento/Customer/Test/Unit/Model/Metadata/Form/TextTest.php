@@ -105,7 +105,7 @@ class TextTest extends AbstractFormTestCase
      */
     public function testValidateValueLength($value, $expected)
     {
-        $minTextLengthRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+        $minTextLengthRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();
@@ -116,7 +116,7 @@ class TextTest extends AbstractFormTestCase
             ->method('getValue')
             ->will($this->returnValue(4));
 
-        $maxTextLengthRule = $this->getMockBuilder('Magento\Customer\Api\Data\ValidationRuleInterface')
+        $maxTextLengthRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getValue'])
             ->getMockForAbstractClass();

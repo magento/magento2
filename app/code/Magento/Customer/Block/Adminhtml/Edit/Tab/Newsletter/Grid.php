@@ -136,9 +136,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Status'),
                 'align' => 'center',
-                'filter' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Filter\Status',
+                'filter' => \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Filter\Status::class,
                 'index' => 'queue_status',
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer\Status'
+                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer\Status::class
             ]
         );
 
@@ -149,7 +149,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'align' => 'center',
                 'filter' => false,
                 'sortable' => false,
-                'renderer' => 'Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer\Action'
+                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\Newsletter\Grid\Renderer\Action::class
             ]
         );
 

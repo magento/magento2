@@ -32,13 +32,13 @@ class CustomerSessionUserContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
 
         $this->customerSessionUserContext = $this->objectManager->getObject(
-            'Magento\Customer\Model\Authorization\CustomerSessionUserContext',
+            \Magento\Customer\Model\Authorization\CustomerSessionUserContext::class,
             ['customerSession' => $this->customerSession]
         );
     }

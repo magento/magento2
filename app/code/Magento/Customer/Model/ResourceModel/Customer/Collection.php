@@ -16,7 +16,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
     /**
      * Name of collection model
      */
-    const CUSTOMER_MODEL_NAME = 'Magento\Customer\Model\Customer';
+    const CUSTOMER_MODEL_NAME = \Magento\Customer\Model\Customer::class;
 
     /**
      * @var \Magento\Framework\DataObject\Copy\Config
@@ -84,7 +84,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      */
     protected function _construct()
     {
-        $this->_init($this->_modelName, 'Magento\Customer\Model\ResourceModel\Customer');
+        $this->_init($this->_modelName, \Magento\Customer\Model\ResourceModel\Customer::class);
     }
 
     /**

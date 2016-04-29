@@ -25,7 +25,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     public function testValidatePositive()
     {
         $password = 'password';
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword', 'getPasswordConfirm'])
             ->getMock();
@@ -52,7 +52,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSaveNegative($password)
     {
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword'])
             ->getMock();
@@ -67,7 +67,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     {
         $password = 'more-then-6';
         $passwordHash = 'password-hash';
-        $object = $this->getMockBuilder('Magento\Framework\DataObject')
+        $object = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
             ->getMock();

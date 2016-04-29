@@ -17,7 +17,7 @@ class Newsletter extends \Magento\Customer\Controller\Adminhtml\Index
         $customerId = $this->initCurrentCustomer();
         /** @var  \Magento\Newsletter\Model\Subscriber $subscriber */
         $subscriber = $this->_objectManager
-            ->create('Magento\Newsletter\Model\Subscriber')
+            ->create(\Magento\Newsletter\Model\Subscriber::class)
             ->loadByCustomerId($customerId);
 
         $this->_coreRegistry->register('subscriber', $subscriber);

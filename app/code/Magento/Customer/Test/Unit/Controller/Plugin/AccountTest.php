@@ -50,7 +50,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->session = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setNoReferer',
@@ -59,7 +59,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->subject = $this->getMockBuilder('Magento\Framework\App\ActionInterface')
+        $this->subject = $this->getMockBuilder(\Magento\Framework\App\ActionInterface::class)
             ->setMethods([
                 'getActionFlag',
             ])
@@ -69,14 +69,14 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             return self::EXPECTED_VALUE;
         };
 
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getActionName',
             ])
             ->getMock();
 
-        $this->actionFlag = $this->getMockBuilder('Magento\Framework\App\ActionFlag')
+        $this->actionFlag = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

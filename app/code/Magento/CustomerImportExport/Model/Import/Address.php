@@ -16,7 +16,7 @@ class Address extends AbstractCustomer
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**#@-*/
 
@@ -543,7 +543,6 @@ class Address extends AbstractCustomer
                 }
             }
         }
-
 
         foreach (self::getDefaultAddressAttributeMapping() as $columnName => $attributeCode) {
             if (!empty($rowData[$columnName])) {
