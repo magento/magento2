@@ -12,6 +12,23 @@ namespace Magento\Framework\File;
 class Size
 {
     /**
+     * Data size converter
+     *
+     * @var \Magento\Framework\Convert\DataSize
+     */
+    protected $dataSize;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Convert\DataSize $dataSize
+     */
+    public function __construct(\Magento\Framework\Convert\DataSize $dataSize)
+    {
+        $this->dataSize = $dataSize;
+    }
+
+    /**
      * Maximum file size for MAX_FILE_SIZE attribute of a form
      *
      * @link http://www.php.net/manual/en/features.file-upload.post-method.php
@@ -72,8 +89,8 @@ class Size
     public function getMaxFileSize()
     {
         if (self::$_maxFileSize < 0) {
-            $postMaxSize = $this->convertSizeToInteger($this->getPostMaxSize());
-            $uploadMaxSize = $this->convertSizeToInteger($this->getUploadMaxSize());
+            $postMaxSize = $this->dataSize->convertSizeToBytes($this->getPostMaxSize());
+            $uploadMaxSize = $this->dataSize->convertSizeToBytes($this->getUploadMaxSize());
             $min = max($postMaxSize, $uploadMaxSize);
 
             if ($postMaxSize > 0) {
@@ -93,33 +110,14 @@ class Size
     /**
      * Converts a ini setting to a integer value
      *
+     * @deprecated Please use \Magento\Framework\Convert\DataSize
+     *
      * @param string $size
      * @return integer
      */
     public function convertSizeToInteger($size)
     {
-        if (!is_numeric($size)) {
-            $type = strtoupper(substr($size, -1));
-            $size = (int)$size;
-
-            switch ($type) {
-                case 'K':
-                    $size *= 1024;
-                    break;
-
-                case 'M':
-                    $size *= 1024 * 1024;
-                    break;
-
-                case 'G':
-                    $size *= 1024 * 1024 * 1024;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        return (int)$size;
+        return $this->dataSize->convertSizeToBytes($size);
     }
 
     /**
