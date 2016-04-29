@@ -15,8 +15,6 @@ use Magento\Framework\Session\SaveHandlerInterface;
 
 /**
  * Magento session configuration
- *
- * @method Config setSaveHandler()
  */
 class Config implements ConfigInterface
 {
@@ -128,21 +126,6 @@ class Config implements ConfigInterface
         $this->_stringHelper = $stringHelper;
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
-
-        /**
-         * Session handler
-         *
-         * Save handler may be set to custom value in deployment config, which will override everything else.
-         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
-         */
-        $defaultSaveHandler = $this->getStorageOption('session.save_handler')
-            ?: SaveHandlerInterface::DEFAULT_HANDLER;
-        $saveMethod = $deploymentConfig->get(
-            self::PARAM_SESSION_SAVE_METHOD,
-            $defaultSaveHandler
-        );
-        $saveMethod = $saveMethod === 'db' ? 'user' : $saveMethod;
-        $this->setSaveHandler($saveMethod);
 
         /**
          * Session path
