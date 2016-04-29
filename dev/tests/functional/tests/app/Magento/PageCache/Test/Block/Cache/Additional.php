@@ -40,11 +40,7 @@ class Additional extends Block
      */
     public function isFlushCacheButtonVisible($flushButtonName)
     {
-        try {
-            return $this->_rootElement->find(sprintf($this->flushButton, $flushButtonName), Locator::SELECTOR_XPATH)
+        return $this->_rootElement->find(sprintf($this->flushButton, $flushButtonName), Locator::SELECTOR_XPATH)
                 ->isVisible();
-        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
-            return false;
-        }
     }
 }
