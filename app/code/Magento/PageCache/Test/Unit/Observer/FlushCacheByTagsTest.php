@@ -29,20 +29,20 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_configMock = $this->getMock(
-            'Magento\PageCache\Model\Config',
+            \Magento\PageCache\Model\Config::class,
             ['getType', 'isEnabled'],
             [],
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', ['clean'], [], '', false);
-        $this->fullPageCacheMock = $this->getMock('\Magento\PageCache\Model\Cache\Type', ['clean'], [], '', false);
+        $this->_cacheMock = $this->getMock(\Magento\Framework\App\PageCache\Cache::class, ['clean'], [], '', false);
+        $this->fullPageCacheMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, ['clean'], [], '', false);
 
         $this->_model = new \Magento\PageCache\Observer\FlushCacheByTags(
             $this->_configMock,
             $this->_cacheMock
         );
-        $reflection = new \ReflectionClass('\Magento\PageCache\Observer\FlushCacheByTags');
+        $reflection = new \ReflectionClass(\Magento\PageCache\Observer\FlushCacheByTags::class);
         $reflectionProperty = $reflection->getProperty('fullPageCache');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->_model, $this->fullPageCacheMock);
@@ -57,14 +57,14 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     public function testExecute($cacheState)
     {
         $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
-        $observerObject = $this->getMock('Magento\Framework\Event\Observer');
-        $observedObject = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $observerObject = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $observedObject = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         if ($cacheState) {
             $tags = ['cache_1', 'cache_group'];
             $expectedTags = ['cache_1', 'cache_group'];
 
-            $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
+            $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getObject'], [], '', false);
             $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
             $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
             $this->_configMock->expects($this->once())
@@ -91,12 +91,12 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     public function testExecuteWithEmptyTags()
     {
         $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
-        $observerObject = $this->getMock('Magento\Framework\Event\Observer');
-        $observedObject = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $observerObject = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $observedObject = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
 
         $tags = [];
 
-        $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getObject'], [], '', false);
         $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
         $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
         $this->_configMock->expects(

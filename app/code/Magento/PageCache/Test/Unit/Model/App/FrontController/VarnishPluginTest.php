@@ -55,18 +55,18 @@ class VarnishPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->configMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
-        $this->versionMock = $this->getMock('Magento\Framework\App\PageCache\Version', [], [], '', false);
-        $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->configMock = $this->getMock(\Magento\PageCache\Model\Config::class, [], [], '', false);
+        $this->versionMock = $this->getMock(\Magento\Framework\App\PageCache\Version::class, [], [], '', false);
+        $this->stateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
         $this->frontControllerMock = $this->getMock(
-            'Magento\Framework\App\FrontControllerInterface',
+            \Magento\Framework\App\FrontControllerInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class, [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
         $response = $this->responseMock;
         $this->closure = function () use ($response) {
             return $response;
@@ -136,14 +136,14 @@ class VarnishPluginTest extends \PHPUnit_Framework_TestCase
                 $this->once(),
                 $this->once(),
                 $this->once(),
-                $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false),
+                $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false),
             ],
             'production' => [
                 \Magento\Framework\App\State::MODE_PRODUCTION,
                 $this->never(),
                 $this->never(),
                 $this->never(),
-                $this->getMock('Magento\Framework\Controller\ResultInterface', [], [], '', false),
+                $this->getMock(\Magento\Framework\Controller\ResultInterface::class, [], [], '', false),
             ],
         ];
     }

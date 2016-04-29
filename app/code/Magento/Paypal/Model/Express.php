@@ -31,12 +31,12 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'Magento\Paypal\Block\Express\Form';
+    protected $_formBlockType = \Magento\Paypal\Block\Express\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Paypal\Block\Payment\Info';
+    protected $_infoBlockType = \Magento\Paypal\Block\Payment\Info::class;
 
     /**
      * Availability option

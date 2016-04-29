@@ -52,15 +52,15 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $result = $this->getMock('Magento\Framework\Controller\ResultInterface', [], [], '', false);
+        $result = $this->getMock(\Magento\Framework\Controller\ResultInterface::class, [], [], '', false);
         $this->closure = function() use ($result) {
             return $result;
         };
 
-        $this->header = $this->getMock('Zend\Http\Header\HeaderInterface', [], [], '', false);
-        $this->subject = $this->getMock('Magento\Framework\Controller\ResultInterface', [], [], '', false);
+        $this->header = $this->getMock(\Zend\Http\Header\HeaderInterface::class, [], [], '', false);
+        $this->subject = $this->getMock(\Magento\Framework\Controller\ResultInterface::class, [], [], '', false);
         $this->response = $this->getMock(
-            'Magento\Framework\App\Response\Http',
+            \Magento\Framework\App\Response\Http::class,
             ['getHeader', 'clearHeader', 'setHeader'],
             [],
             '',
@@ -73,17 +73,17 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
 
-        $config = $this->getMock('Magento\PageCache\Model\Config', ['isEnabled', 'getType'], [], '', false);
+        $config = $this->getMock(\Magento\PageCache\Model\Config::class, ['isEnabled', 'getType'], [], '', false);
         $config->expects($this->any())->method('isEnabled')->willReturn(true);
         $config->expects($this->any())->method('getType')->willReturn(\Magento\PageCache\Model\Config::BUILT_IN);
 
-        $this->kernel = $this->getMock('Magento\Framework\App\PageCache\Kernel', [], [], '', false);
+        $this->kernel = $this->getMock(\Magento\Framework\App\PageCache\Kernel::class, [], [], '', false);
 
-        $this->state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->state = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
         $this->plugin = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\PageCache\Model\Controller\Result\BuiltinPlugin',
+            \Magento\PageCache\Model\Controller\Result\BuiltinPlugin::class,
             [
                 'registry' => $this->registry,
                 'config' => $config,

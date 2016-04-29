@@ -39,21 +39,21 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->itemMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['__wakeup', 'getProductId', 'getOptions'],
             [],
             '',
             false
         );
         $this->comparedMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['__wakeup', 'getProductId', 'getOptions'],
             [],
             '',
             false
         );
         $this->optionMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item\Option',
+            \Magento\Quote\Model\Quote\Item\Option::class,
             ['__wakeup', 'getCode', 'getValue'],
             [],
             '',

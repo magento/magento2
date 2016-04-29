@@ -19,6 +19,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Quote', 'Magento\Quote\Model\ResourceModel\Quote');
+        $this->_init(\Magento\Quote\Model\Quote::class, \Magento\Quote\Model\ResourceModel\Quote::class);
     }
 }

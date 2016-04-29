@@ -58,7 +58,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Quote\Address\Rate', 'Magento\Quote\Model\ResourceModel\Quote\Address\Rate');
+        $this->_init(
+            \Magento\Quote\Model\Quote\Address\Rate::class,
+            \Magento\Quote\Model\ResourceModel\Quote\Address\Rate::class
+        );
     }
 
     /**

@@ -28,7 +28,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
 
@@ -49,7 +49,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetMethodInstance()
     {
         /** @var $methodInterfaceMock MethodInterface */
-        $methodInterfaceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $this->assertSame($this->config, $this->config->setMethodInstance($methodInterfaceMock));
     }
@@ -64,7 +64,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
     public function setMethodDataProvider()
     {
         /** @var $methodInterfaceMock MethodInterface */
-        $methodInterfaceMock = $this->getMockBuilder('Magento\Payment\Model\MethodInterface')
+        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInterfaceMock->expects($this->once())
             ->method('getCode')

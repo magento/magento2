@@ -44,7 +44,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->shippingMethodManagementMock =
-            $this->getMock('Magento\Quote\Model\ShippingMethodManagement', [], [], '', false);
+            $this->getMock(\Magento\Quote\Model\ShippingMethodManagement::class, [], [], '', false);
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 867;
@@ -56,7 +56,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = $objectManager->getObject(
-            'Magento\Quote\Model\GuestCart\GuestShippingMethodManagement',
+            \Magento\Quote\Model\GuestCart\GuestShippingMethodManagement::class,
             [
                 'shippingMethodManagement' => $this->shippingMethodManagementMock,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,

@@ -15,6 +15,6 @@ class System extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\NewRelicReporting\Model\ResourceModel\System');
+        $this->_init(\Magento\NewRelicReporting\Model\ResourceModel\System::class);
     }
 }

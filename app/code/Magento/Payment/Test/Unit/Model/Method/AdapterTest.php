@@ -12,6 +12,9 @@ use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
 use Magento\Payment\Model\Method\Adapter;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -62,19 +65,19 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->eventManager = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface'
+            \Magento\Framework\Event\ManagerInterface::class
         );
         $this->valueHandlerPool = $this->getMock(
-            'Magento\Payment\Gateway\Config\ValueHandlerPoolInterface'
+            \Magento\Payment\Gateway\Config\ValueHandlerPoolInterface::class
         );
         $this->validatorPool = $this->getMock(
-            'Magento\Payment\Gateway\Validator\ValidatorPoolInterface'
+            \Magento\Payment\Gateway\Validator\ValidatorPoolInterface::class
         );
         $this->commandPool = $this->getMock(
-            'Magento\Payment\Gateway\Command\CommandPoolInterface'
+            \Magento\Payment\Gateway\Command\CommandPoolInterface::class
         );
         $this->paymentDataObjectFactory = $this->getMockBuilder(
-            'Magento\Payment\Gateway\Data\PaymentDataObjectFactory'
+            \Magento\Payment\Gateway\Data\PaymentDataObjectFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -98,7 +101,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     public function testIsAvailableNotActive()
     {
         $activeValueHandler = $this->getMock(
-            'Magento\Payment\Gateway\Config\ValueHandlerInterface'
+            \Magento\Payment\Gateway\Config\ValueHandlerInterface::class
         );
 
         $this->valueHandlerPool->expects(static::once())
@@ -119,14 +122,14 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     public function testIsAvailableEmptyQuote()
     {
         $activeValueHandler = $this->getMock(
-            'Magento\Payment\Gateway\Config\ValueHandlerInterface'
+            \Magento\Payment\Gateway\Config\ValueHandlerInterface::class
         );
         $availabilityValidator = $this->getMock(
-            'Magento\Payment\Gateway\Validator\ValidatorInterface'
+            \Magento\Payment\Gateway\Validator\ValidatorInterface::class
         );
-        $paymentDO = $this->getMock('Magento\Payment\Gateway\Data\PaymentDataObjectInterface');
-        $validationResult = $this->getMock('Magento\Payment\Gateway\Validator\ResultInterface');
-        $paymentInfo = $this->getMock('Magento\Payment\Model\InfoInterface');
+        $paymentDO = $this->getMock(\Magento\Payment\Gateway\Data\PaymentDataObjectInterface::class);
+        $validationResult = $this->getMock(\Magento\Payment\Gateway\Validator\ResultInterface::class);
+        $paymentInfo = $this->getMock(\Magento\Payment\Model\InfoInterface::class);
 
         $this->valueHandlerPool->expects(static::once())
             ->method('get')

@@ -13,7 +13,7 @@ class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractE
      *
      * @var string
      */
-    protected $_configType = 'Magento\Paypal\Model\Config';
+    protected $_configType = \Magento\Paypal\Model\Config::class;
 
     /**
      * Config method type
@@ -27,5 +27,5 @@ class UpdateShippingMethods extends \Magento\Paypal\Controller\Express\AbstractE
      *
      * @var string
      */
-    protected $_checkoutType = 'Magento\Paypal\Model\PayflowExpress\Checkout';
+    protected $_checkoutType = \Magento\Paypal\Model\PayflowExpress\Checkout::class;
 }

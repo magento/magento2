@@ -108,7 +108,7 @@ class Observer
     protected function _applyAccountLinksPersistentData()
     {
         if (!$this->_layout->getBlock('header.additional')) {
-            $this->_layout->addBlock('Magento\Persistent\Block\Header\Additional', 'header.additional');
+            $this->_layout->addBlock(\Magento\Persistent\Block\Header\Additional::class, 'header.additional');
         }
     }
 

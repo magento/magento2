@@ -7,6 +7,9 @@
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -60,18 +63,18 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->productRepositoryMock = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->productRepositoryMock = $this->getMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->itemDataFactoryMock =
-            $this->getMock('Magento\Quote\Api\Data\CartItemInterfaceFactory', ['create'], [], '', false);
-        $this->dataMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
-        $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+            $this->getMock(\Magento\Quote\Api\Data\CartItemInterfaceFactory::class, ['create'], [], '', false);
+        $this->dataMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $methods = ['getId', 'getSku', 'getQty', 'setData', '__wakeUp', 'getProduct', 'addProduct'];
         $this->quoteItemMock =
-            $this->getMock('Magento\Quote\Model\Quote\Item', $methods, [], '', false);
+            $this->getMock(\Magento\Quote\Model\Quote\Item::class, $methods, [], '', false);
         $this->customOptionProcessor = $this->getMock(
-            'Magento\Catalog\Model\CustomOptions\CustomOptionProcessor',
+            \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::class,
             [],
             [],
             '',
@@ -132,7 +135,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('MAGETWO-48531');
         $cartId = 13;
-        $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $buyRequest->expects($this->once())
             ->method('setData')
             ->with('qty', '12');
@@ -170,7 +173,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('MAGETWO-48531');
         $cartId = 13;
-        $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->dataMock->expects($this->exactly(2))->method('getQty')->will($this->returnValue(12));
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
         $this->quoteRepositoryMock->expects($this->once())
@@ -220,7 +223,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('MAGETWO-48531');
         $cartId = 13;
-        $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $buyRequest->expects($this->once())
             ->method('setData')
             ->with('qty', '12');
@@ -263,7 +266,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('MAGETWO-48531');
         $cartId = 13;
-        $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->dataMock->expects($this->exactly(2))->method('getQty')->will($this->returnValue(12));
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
         $this->quoteRepositoryMock->expects($this->once())
@@ -330,7 +333,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->markTestSkipped('MAGETWO-48531');
         $cartId = 11;
         $itemId = 5;
-        $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->dataMock->expects($this->exactly(2))->method('getQty')->will($this->returnValue(12));
         $this->dataMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
@@ -379,7 +382,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->markTestSkipped('MAGETWO-48531');
         $cartId = 11;
         $itemId = 5;
-        $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $this->dataMock->expects($this->exactly(2))->method('getQty')->will($this->returnValue(12));
         $this->dataMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
@@ -429,15 +432,15 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->markTestSkipped('MAGETWO-48531');
         $cartId = 11;
         $itemId = 5;
-        $buyRequest = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
-        $cartItemProcessorMock = $this->getMock('\Magento\Quote\Model\Quote\Item\CartItemProcessorInterface');
+        $buyRequest = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
+        $cartItemProcessorMock = $this->getMock(\Magento\Quote\Model\Quote\Item\CartItemProcessorInterface::class);
         $this->repository = new \Magento\Quote\Model\Quote\Item\Repository(
             $this->quoteRepositoryMock,
             $this->productRepositoryMock,
             $this->itemDataFactoryMock,
             ['simple' => $cartItemProcessorMock, 'custom_options' => $this->customOptionProcessor]
         );
-        $requestMock = $this->getMock('\Magento\Framework\DataObject', ['setQty', 'getData'], [], '', false);
+        $requestMock = $this->getMock(\Magento\Framework\DataObject::class, ['setQty', 'getData'], [], '', false);
         $cartItemProcessorMock->expects($this->once())->method('convertToBuyRequest')->willReturn($requestMock);
         $cartItemProcessorMock
             ->expects($this->once())
@@ -535,11 +538,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $this->markTestSkipped('MAGETWO-48531');
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with(33)
             ->will($this->returnValue($quoteMock));
-        $itemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $itemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getAllItems')->will($this->returnValue([$itemMock]));
 
         $this->assertEquals([$itemMock], $this->repository->getList(33));

@@ -433,13 +433,13 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $quote->reserveOrderId();
         if ($quote->isVirtual()) {
             $this->dataObjectHelper->mergeDataObjects(
-                '\Magento\Sales\Api\Data\OrderInterface',
+                \Magento\Sales\Api\Data\OrderInterface::class,
                 $order,
                 $this->quoteAddressToOrder->convert($quote->getBillingAddress(), $orderData)
             );
         } else {
             $this->dataObjectHelper->mergeDataObjects(
-                '\Magento\Sales\Api\Data\OrderInterface',
+                \Magento\Sales\Api\Data\OrderInterface::class,
                 $order,
                 $this->quoteAddressToOrder->convert($quote->getShippingAddress(), $orderData)
             );

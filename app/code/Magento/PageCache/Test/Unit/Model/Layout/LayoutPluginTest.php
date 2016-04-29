@@ -30,7 +30,7 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->layoutMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             [],
             '',
             false,
@@ -38,8 +38,8 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
             true,
             ['isCacheable', 'getAllBlocks']
         );
-        $this->responseMock = $this->getMock('\Magento\Framework\App\Response\Http', [], [], '', false);
-        $this->configMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
+        $this->responseMock = $this->getMock(\Magento\Framework\App\Response\Http::class, [], [], '', false);
+        $this->configMock = $this->getMock(\Magento\PageCache\Model\Config::class, [], [], '', false);
 
         $this->model = new \Magento\PageCache\Model\Layout\LayoutPlugin(
             $this->responseMock,
@@ -92,7 +92,13 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
     {
         $html = 'html';
         $this->configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
-        $blockStub = $this->getMock('Magento\PageCache\Test\Unit\Block\Controller\StubBlock', null, [], '', false);
+        $blockStub = $this->getMock(
+            \Magento\PageCache\Test\Unit\Block\Controller\StubBlock::class,
+            null,
+            [],
+            '',
+            false
+        );
         $blockStub->setTtl($ttl);
         $this->layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue($layoutIsCacheable));
         $this->layoutMock->expects($this->any())->method('getAllBlocks')->will($this->returnValue([$blockStub]));

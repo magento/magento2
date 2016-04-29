@@ -32,7 +32,7 @@ class RateCollectorInterfaceFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Quote\Model\Quote\Address\RateCollectorInterface'
+        $instanceName = \Magento\Quote\Model\Quote\Address\RateCollectorInterface::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

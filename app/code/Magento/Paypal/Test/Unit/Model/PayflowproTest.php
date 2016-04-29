@@ -57,28 +57,28 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $configFactoryMock = $this->getMock(
-            'Magento\Payment\Model\Method\ConfigInterfaceFactory',
+            \Magento\Payment\Model\Method\ConfigInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->configMock = $this->getMock(
-            'Magento\Paypal\Model\PayflowConfig',
+            \Magento\Paypal\Model\PayflowConfig::class,
             [],
             [],
             '',
             false
         );
         $client = $this->getMock(
-            'Magento\Framework\HTTP\ZendClient',
+            \Magento\Framework\HTTP\ZendClient::class,
             [],
             [],
             '',
             false
         );
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             '',
             false,
@@ -87,13 +87,13 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ['getStore']
         );
         $this->gatewayMock = $this->getMock(
-            'Magento\Paypal\Model\Payflow\Service\Gateway',
+            \Magento\Paypal\Model\Payflow\Service\Gateway::class,
             [],
             [],
             '',
             false
         );
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
 
@@ -111,12 +111,12 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $client->expects($this->any())->method('request')->will($this->returnSelf());
         $client->expects($this->any())->method('getBody')->will($this->returnValue('RESULT name=value&name2=value2'));
 
-        $clientFactory = $this->getMock('Magento\Framework\HTTP\ZendClientFactory', ['create'], [], '', false);
+        $clientFactory = $this->getMock(\Magento\Framework\HTTP\ZendClientFactory::class, ['create'], [], '', false);
         $clientFactory->expects($this->any())->method('create')->will($this->returnValue($client));
 
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->payflowpro = $this->helper->getObject(
-            'Magento\Paypal\Model\Payflowpro',
+            \Magento\Paypal\Model\Payflowpro::class,
             [
                 'configFactory' => $configFactoryMock,
                 'httpClientFactory' => $clientFactory,
@@ -147,8 +147,8 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     public function canVoidDataProvider()
     {
         return [
-            [0, 'Magento\Sales\Model\Order\Payment', true],
-            [null, 'Magento\Sales\Model\Order\Payment', true]
+            [0, \Magento\Sales\Model\Order\Payment::class, true],
+            [null, \Magento\Sales\Model\Order\Payment::class, true]
         ];
     }
 
@@ -175,7 +175,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
             ->will($this->returnValue('BNCODE'));
-        $payment = $this->getMock('Magento\Payment\Model\Info', ['setTransactionId', '__wakeup'], [], '', false);
+        $payment = $this->getMock(\Magento\Payment\Model\Info::class, ['setTransactionId', '__wakeup'], [], '', false);
         $payment->expects($this->once())->method('setTransactionId')->will($this->returnSelf());
         $this->payflowpro->fetchTransactionInfo($payment, 'AD49G8N825');
     }
@@ -186,7 +186,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTransStatus($response, $paymentExpected)
     {
-        $payment = $this->helper->getObject('Magento\Payment\Model\Info');
+        $payment = $this->helper->getObject(\Magento\Payment\Model\Info::class);
         $this->payflowpro->setTransStatus($payment, $response);
         $this->assertEquals($paymentExpected->getData(), $payment->getData());
     }
@@ -350,7 +350,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     protected function initStoreMock()
     {
         $storeId = 27;
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -392,8 +392,8 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
             ->with(
-                $this->isInstanceOf('Magento\Framework\DataObject'),
-                $this->isInstanceOf('Magento\Paypal\Model\PayflowConfig')
+                $this->isInstanceOf(\Magento\Framework\DataObject::class),
+                $this->isInstanceOf(\Magento\Paypal\Model\PayflowConfig::class)
             )
             ->willReturn($response);
         return $response;
@@ -405,7 +405,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     protected function getPaymentMock()
     {
-        $paymentMock = $this->getMockBuilder('Magento\Payment\Model\Info')
+        $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getAdditionalInformation', 'getParentTransactionId', 'getOrder',
@@ -445,7 +445,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             'id' => 4,
             'increment_id' => '0000004'
         ];
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBaseCurrencyCode', 'getIncrementId', 'getId', 'getBillingAddress', 'getShippingAddress'])
             ->getMock();
