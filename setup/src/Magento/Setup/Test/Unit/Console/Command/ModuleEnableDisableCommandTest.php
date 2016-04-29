@@ -9,6 +9,9 @@ use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -319,10 +322,13 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     private function getCommandTester($isEnable)
     {
         $class = $isEnable ? ModuleEnableCommand::class : ModuleDisableCommand::class;
-        $command = new $class($this->generatedFiles, $this->objectManagerProviderMock);
+        $command = new $class($this->objectManagerProviderMock);
         $deploymentConfigProperty = new \ReflectionProperty($class, 'deploymentConfig');
         $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->deploymentConfigMock);
+        $deploymentConfigProperty = new \ReflectionProperty($class, 'generatedFiles');
+        $deploymentConfigProperty->setAccessible(true);
+        $deploymentConfigProperty->setValue($command, $this->generatedFiles);
         return new CommandTester($command);
     }
 }

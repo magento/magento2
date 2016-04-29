@@ -24,24 +24,12 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     /**
      * @var GeneratedFiles
      */
-    private $generatedFiles;
+    protected $generatedFiles;
 
     /**
      * @var DeploymentConfig
      */
     protected $deploymentConfig;
-
-    /**
-     * Constructor
-     *
-     * @param GeneratedFiles $generatedFiles
-     * @param ObjectManagerProvider $objectManagerProvider
-     */
-    public function __construct(GeneratedFiles $generatedFiles, ObjectManagerProvider $objectManagerProvider)
-    {
-        $this->generatedFiles = $generatedFiles;
-        parent::__construct($objectManagerProvider);
-    }
 
     /**
      * {@inheritdoc}
@@ -110,6 +98,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             }
             $this->setIsEnabled($isEnable, $modulesToChange, $output);
             $this->cleanup($input, $output);
+            $this->getGeneratedFiles()->requestRegeneration();
             if ($force) {
                 $output->writeln(
                     '<error>Alert: You used the --force option.'
@@ -147,7 +136,6 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');
             $output->writeln('');
         }
-        $this->generatedFiles->requestRegeneration();
     }
 
     /**
@@ -195,5 +183,19 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             return $this->objectManager->get(DeploymentConfig::class);
         }
         return $this->deploymentConfig;
+    }
+
+    /**
+     * Get deployment config
+     *
+     * @return GeneratedFiles
+     * @deprecated
+     */
+    private function getGeneratedFiles()
+    {
+        if (!($this->generatedFiles instanceof GeneratedFiles)) {
+            return $this->objectManager->get(GeneratedFiles::class);
+        }
+        return $this->generatedFiles;
     }
 }
