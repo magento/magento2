@@ -6,6 +6,9 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ValidateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -68,7 +71,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $this->customer = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             '',
             false,
@@ -77,7 +80,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         );
         $this->customer->expects($this->once())->method('getWebsiteId')->willReturn(2);
         $this->customerDataFactory = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -85,14 +88,14 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerDataFactory->expects($this->once())->method('create')->willReturn($this->customer);
         $this->form = $this->getMock(
-            'Magento\Customer\Model\Metadata\Form',
+            \Magento\Customer\Model\Metadata\Form::class,
             [],
             [],
             '',
             false
         );
         $this->request = $this->getMockForAbstractClass(
-            'Magento\Framework\App\RequestInterface',
+            \Magento\Framework\App\RequestInterface::class,
             [],
             '',
             false,
@@ -101,34 +104,40 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ['getPost']
         );
         $this->response = $this->getMockForAbstractClass(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [],
             '',
             false
         );
-        $this->formFactory = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', ['create'], [], '', false);
+        $this->formFactory = $this->getMock(
+            \Magento\Customer\Model\Metadata\FormFactory::class,
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->formFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->form);
         $this->extensibleDataObjectConverter = $this->getMock(
-            'Magento\Framework\Api\ExtensibleDataObjectConverter',
+            \Magento\Framework\Api\ExtensibleDataObjectConverter::class,
             [],
             [],
             '',
             false
         );
-        $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '', false);
+        $this->dataObjectHelper = $this->getMock(\Magento\Framework\Api\DataObjectHelper::class, [], [], '', false);
         $this->dataObjectHelper->expects($this->once())->method('populateWithArray');
         $this->customerAccountManagement = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\AccountManagementInterface',
+            \Magento\Customer\Api\AccountManagementInterface::class,
             [],
             '',
             false,
             true,
             true
         );
-        $this->resultJson = $this->getMock('Magento\Framework\Controller\Result\Json', [], [], '', false);
+        $this->resultJson = $this->getMock(\Magento\Framework\Controller\Result\Json::class, [], [], '', false);
         $this->resultJson->expects($this->once())->method('setData');
         $this->resultJsonFactory = $this->getMock(
-            'Magento\Framework\Controller\Result\JsonFactory',
+            \Magento\Framework\Controller\Result\JsonFactory::class,
             ['create'],
             [],
             '',
@@ -138,7 +147,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->controller = $objectHelper->getObject(
-            'Magento\Customer\Controller\Adminhtml\Index\Validate',
+            \Magento\Customer\Controller\Adminhtml\Index\Validate::class,
             [
                 'request' => $this->request,
                 'response' => $this->response,
@@ -164,7 +173,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())->method('setInvisibleIgnored');
         $this->form->expects($this->atLeastOnce())->method('extractData')->willReturn([]);
 
-        $error = $this->getMock('Magento\Framework\Message\Error', [], [], '', false);
+        $error = $this->getMock(\Magento\Framework\Message\Error::class, [], [], '', false);
         $this->form->expects($this->once())
             ->method('validateData')
             ->willReturn([$error]);
@@ -174,7 +183,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $validationResult = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\ValidationResultsInterface',
+            \Magento\Customer\Api\Data\ValidationResultsInterface::class,
             [],
             '',
             false,
@@ -203,7 +212,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('extractData')
             ->willReturn([]);
 
-        $error = $this->getMock('Magento\Framework\Message\Error', [], [], '', false);
+        $error = $this->getMock(\Magento\Framework\Message\Error::class, [], [], '', false);
         $this->form->expects($this->never())
             ->method('validateData')
             ->willReturn([$error]);
@@ -213,7 +222,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $validationResult = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\ValidationResultsInterface',
+            \Magento\Customer\Api\Data\ValidationResultsInterface::class,
             [],
             '',
             false,
@@ -250,19 +259,19 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $validationResult = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\ValidationResultsInterface',
+            \Magento\Customer\Api\Data\ValidationResultsInterface::class,
             [],
             '',
             false,
             true,
             true
         );
-        $error = $this->getMock('Magento\Framework\Message\Error', [], [], '', false);
+        $error = $this->getMock(\Magento\Framework\Message\Error::class, [], [], '', false);
         $error->expects($this->once())
             ->method('getText')
             ->willReturn('Error text');
 
-        $exception = $this->getMock('Magento\Framework\Validator\Exception', [], [], '', false);
+        $exception = $this->getMock(\Magento\Framework\Validator\Exception::class, [], [], '', false);
         $exception->expects($this->once())
             ->method('getMessages')
             ->willReturn([$error]);

@@ -19,7 +19,7 @@ class ImageTest extends FileTest
     protected function getClass($value, $isAjax)
     {
         $imageForm = $this->getMock(
-            'Magento\Customer\Model\Metadata\Form\Image',
+            \Magento\Customer\Model\Metadata\Form\Image::class,
             ['_isUploadedFile'],
             [
                 $this->localeMock,

@@ -163,7 +163,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         $this->dataObjectHelper->populateWithArray(
             $customer,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
     }
 
@@ -182,7 +182,7 @@ class InlineEdit extends \Magento\Backend\App\Action
                 $this->dataObjectHelper->populateWithArray(
                     $address,
                     $this->processAddressData($data),
-                    '\Magento\Customer\Api\Data\AddressInterface'
+                    \Magento\Customer\Api\Data\AddressInterface::class
                 );
                 break;
             }

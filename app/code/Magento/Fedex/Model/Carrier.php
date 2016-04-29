@@ -638,6 +638,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $r = $this->_rawRequest;
         $xml = $this->_xmlElFactory->create(
+            
             ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><FDXRateAvailableServicesRequest/>']
         );
 
@@ -724,7 +725,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $priceArr = [];
 
         if (strlen(trim($response)) > 0) {
-            $xml = $this->parseXml($response, 'Magento\Shipping\Model\Simplexml\Element');
+            $xml = $this->parseXml($response, \Magento\Shipping\Model\Simplexml\Element::class);
             if (is_object($xml)) {
                 if (is_object($xml->Error) && is_object($xml->Error->Message)) {
                     $errorTitle = (string)$xml->Error->Message;

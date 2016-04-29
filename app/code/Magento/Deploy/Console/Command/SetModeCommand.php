@@ -81,7 +81,7 @@ class SetModeCommand extends Command
         try {
             /** @var \Magento\Deploy\Model\Mode $modeController */
             $modeController = $this->objectManager->create(
-                'Magento\Deploy\Model\Mode',
+                \Magento\Deploy\Model\Mode::class,
                 [
                     'input' => $input,
                     'output' => $output,

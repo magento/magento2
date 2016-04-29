@@ -124,7 +124,7 @@ class CustomerMetadata implements CustomerMetadataInterface
         if (!$this->customerDataObjectMethods) {
             $dataObjectMethods = array_flip(get_class_methods($dataObjectClassName));
             $baseClassDataObjectMethods = array_flip(
-                get_class_methods('Magento\Framework\Api\AbstractExtensibleObject')
+                get_class_methods(\Magento\Framework\Api\AbstractExtensibleObject::class)
             );
             $this->customerDataObjectMethods = array_diff_key($dataObjectMethods, $baseClassDataObjectMethods);
         }

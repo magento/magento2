@@ -47,12 +47,12 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->backendConfigMock = $this->getMockBuilder('Magento\Backend\App\ConfigInterface')
+        $this->backendConfigMock = $this->getMockBuilder(\Magento\Backend\App\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
         $this->customerRegistryMock = $this->getMock(
-            'Magento\Customer\Model\CustomerRegistry',
+            \Magento\Customer\Model\CustomerRegistry::class,
             ['retrieveSecureData', 'retrieve'],
             [],
             '',
@@ -65,7 +65,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerSecure = $this->getMock(
-            'Magento\Customer\Model\Data\CustomerSecure',
+            \Magento\Customer\Model\Data\CustomerSecure::class,
             [
                 'getId',
                 'getPasswordHash',
@@ -257,7 +257,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $hash = '1b2af329dd0';
 
         $customerMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface',
+            \Magento\Customer\Api\Data\CustomerInterface::class,
             [],
             [],
             '',
@@ -308,7 +308,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
                 ->method('save')
                 ->willReturn($customerMock);
 
-            $this->setExpectedException('\Magento\Framework\Exception\InvalidEmailOrPasswordException');
+            $this->setExpectedException(\Magento\Framework\Exception\InvalidEmailOrPasswordException::class);
             $this->authentication->authenticate($customerId, $password);
         }
     }

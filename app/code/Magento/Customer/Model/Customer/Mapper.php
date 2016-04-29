@@ -38,7 +38,7 @@ class Mapper
      */
     public function toFlatArray(CustomerInterface $customer)
     {
-        $flatArray = $this->extensibleDataObjectConverter->toNestedArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
+        $flatArray = $this->extensibleDataObjectConverter->toNestedArray($customer, [], \Magento\Customer\Api\Data\CustomerInterface::class);
         unset($flatArray["addresses"]);
         return ConvertArray::toFlatArray($flatArray);
     }

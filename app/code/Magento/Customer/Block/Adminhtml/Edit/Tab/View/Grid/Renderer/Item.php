@@ -71,7 +71,7 @@ class Item extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         } elseif (isset($productHelpers['default'])) {
             $helperName = $productHelpers['default'];
         } else {
-            $helperName = 'Magento\Catalog\Helper\Product\Configuration';
+            $helperName = \Magento\Catalog\Helper\Product\Configuration::class;
         }
 
         return $this->_productConfigPool->get($helperName);

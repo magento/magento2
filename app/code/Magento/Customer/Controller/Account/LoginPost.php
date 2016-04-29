@@ -76,7 +76,7 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     {
         if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
+                \Magento\Framework\App\Config\ScopeConfigInterface::class
             );
         } else {
             return $this->scopeConfig;

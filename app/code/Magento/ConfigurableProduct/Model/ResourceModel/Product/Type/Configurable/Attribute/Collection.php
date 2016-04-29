@@ -97,8 +97,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute',
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute'
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class,
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
         );
         $this->_labelTable = $this->getTable('catalog_product_super_attribute_label');
     }

@@ -49,7 +49,7 @@ class NewAction extends \Magento\Customer\Controller\Adminhtml\Group
             );
         }
 
-        $resultPage->getLayout()->addBlock('Magento\Customer\Block\Adminhtml\Group\Edit', 'group', 'content')
+        $resultPage->getLayout()->addBlock(\Magento\Customer\Block\Adminhtml\Group\Edit::class, 'group', 'content')
             ->setEditMode((bool)$groupId);
 
         return $resultPage;

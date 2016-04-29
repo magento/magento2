@@ -18,14 +18,14 @@ class RendererFactoryTest extends \PHPUnit_Framework_TestCase
     {
         // Set up mocks
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $configMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $configMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $rendererMock = $this->getMockBuilder('Magento\Framework\View\Page\Config\RendererInterface')
+        $rendererMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config\RendererInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $createArgs = [1,2,3];
@@ -48,7 +48,7 @@ class RendererFactoryTest extends \PHPUnit_Framework_TestCase
             'rendererTypes' => $rendererTypes
         ];
 
-        $model = $objectManager->getObject('Magento\Developer\Model\View\Page\Config\RendererFactory', $sutArgs);
+        $model = $objectManager->getObject(\Magento\Developer\Model\View\Page\Config\RendererFactory::class, $sutArgs);
 
         // Test
         $this->assertSame($rendererMock, $model->create($createArgs));

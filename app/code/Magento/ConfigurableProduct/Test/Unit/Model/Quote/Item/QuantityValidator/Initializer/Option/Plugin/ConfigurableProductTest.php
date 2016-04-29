@@ -17,7 +17,7 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
     public function testAroundGetStockItem(array $data)
     {
         $subjectMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option',
+            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class,
             [],
             [],
             '',
@@ -25,21 +25,21 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         );
 
         $quoteItemMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item', ['getProductType', '__wakeup'], [], '', false
+            \Magento\Quote\Model\Quote\Item::class, ['getProductType', '__wakeup'], [], '', false
         );
         $quoteItemMock->expects($this->once())
             ->method('getProductType')
             ->will($this->returnValue($data['product_type']));
 
         $stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item', ['setProductName', '__wakeup'], [], '', false
+            \Magento\CatalogInventory\Model\Stock\Item::class, ['setProductName', '__wakeup'], [], '', false
         );
         $matcherMethod = $data['matcher_method'];
         $stockItemMock->expects($this->$matcherMethod())
             ->method('setProductName');
 
         $optionMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item\Option', ['getProduct', '__wakeup'], [], '', false
+            \Magento\Quote\Model\Quote\Item\Option::class, ['getProduct', '__wakeup'], [], '', false
         );
 
         $proceed = function () use ($stockItemMock) {

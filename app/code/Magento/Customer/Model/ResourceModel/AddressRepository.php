@@ -154,7 +154,10 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
 
         /** @var Collection $collection */
         $collection = $this->addressCollectionFactory->create();
-        $this->extensionAttributesJoinProcessor->process($collection, 'Magento\Customer\Api\Data\AddressInterface');
+        $this->extensionAttributesJoinProcessor->process(
+            $collection,
+            \Magento\Customer\Api\Data\AddressInterface::class
+        );
         // Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);

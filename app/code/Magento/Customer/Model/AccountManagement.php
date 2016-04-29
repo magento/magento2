@@ -837,7 +837,7 @@ class AccountManagement implements AccountManagementInterface
     public function validate(CustomerInterface $customer)
     {
         $customerData = $this->extensibleDataObjectConverter
-            ->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
+            ->toFlatArray($customer, [], \Magento\Customer\Api\Data\CustomerInterface::class);
         $customerErrors = $this->validator->validateData($customerData, [], 'customer');
 
         $validationResults = $this->validationResultsDataFactory->create();
@@ -1262,7 +1262,7 @@ class AccountManagement implements AccountManagementInterface
         // object passed for events
         $mergedCustomerData = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerData = $this->dataProcessor
-            ->buildOutputDataArray($customer, '\Magento\Customer\Api\Data\CustomerInterface');
+            ->buildOutputDataArray($customer, \Magento\Customer\Api\Data\CustomerInterface::class);
         $mergedCustomerData->addData($customerData);
         $mergedCustomerData->setData('name', $this->customerViewHelper->getCustomerName($customer));
         return $mergedCustomerData;

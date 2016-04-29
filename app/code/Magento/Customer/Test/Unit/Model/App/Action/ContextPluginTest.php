@@ -49,14 +49,14 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->customerSessionMock = $this->getMock(
-            'Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             [],
             [],
             '',
             false
         );
         $this->httpContextMock = $this->getMock(
-            'Magento\Framework\App\Http\Context',
+            \Magento\Framework\App\Http\Context::class,
             [],
             [],
             '',
@@ -65,8 +65,8 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return 'ExpectedValue';
         };
-        $this->subjectMock = $this->getMock('Magento\Framework\App\Action\Action', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->subjectMock = $this->getMock(\Magento\Framework\App\Action\Action::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->plugin = new \Magento\Customer\Model\App\Action\ContextPlugin(
             $this->customerSessionMock,
             $this->httpContextMock

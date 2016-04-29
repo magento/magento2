@@ -122,7 +122,9 @@ class Info extends \Magento\Framework\View\Element\Template
      */
     public function isNewsletterEnabled()
     {
-        return $this->getLayout()->getBlockSingleton('Magento\Customer\Block\Form\Register')->isNewsletterEnabled();
+        return $this->getLayout()
+            ->getBlockSingleton(\Magento\Customer\Block\Form\Register::class)
+            ->isNewsletterEnabled();
     }
 
     /**

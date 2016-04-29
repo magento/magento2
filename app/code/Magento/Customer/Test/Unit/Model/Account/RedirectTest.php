@@ -16,6 +16,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RedirectTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -80,9 +83,9 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
 
-        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getLastCustomerId',
@@ -101,39 +104,39 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->scopeConfig = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->url = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');
-        $this->urlDecoder = $this->getMockForAbstractClass('Magento\Framework\Url\DecoderInterface');
+        $this->url = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
+        $this->urlDecoder = $this->getMockForAbstractClass(\Magento\Framework\Url\DecoderInterface::class);
 
-        $this->customerUrl = $this->getMockBuilder('Magento\Customer\Model\Url')
+        $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultForward = $this->getMockBuilder('Magento\Framework\Controller\Result\Forward')
+        $this->resultForward = $this->getMockBuilder(\Magento\Framework\Controller\Result\Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Customer\Model\Account\Redirect',
+            \Magento\Customer\Model\Account\Redirect::class,
             [
                 'request'               => $this->request,
                 'customerSession'       => $this->customerSession,

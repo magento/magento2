@@ -55,7 +55,7 @@ class Carts extends \Magento\Backend\Block\Template
         foreach ($sharedWebsiteIds as $websiteId) {
             $blockName = 'customer_cart_' . $websiteId;
             $block = $this->getLayout()->createBlock(
-                'Magento\Customer\Block\Adminhtml\Edit\Tab\Cart',
+                \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart::class,
                 $blockName,
                 ['data' => ['website_id' => $websiteId]]
             );
@@ -88,7 +88,7 @@ class Carts extends \Magento\Backend\Block\Template
         $this->dataObjectHelper->populateWithArray(
             $customerDataObject,
             $this->_backendSession->getCustomerData()['account'],
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         return $customerDataObject;
     }

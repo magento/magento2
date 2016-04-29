@@ -19,7 +19,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\Abs
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Address', 'Magento\Customer\Model\ResourceModel\Address');
+        $this->_init(\Magento\Customer\Model\Address::class, \Magento\Customer\Model\ResourceModel\Address::class);
     }
 
     /**

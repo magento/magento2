@@ -32,9 +32,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->subjectMock = $this->getMock(
-            'Magento\Catalog\Model\Product\CartConfiguration',
+            \Magento\Catalog\Model\Product\CartConfiguration::class,
             [],
             [],
             '',

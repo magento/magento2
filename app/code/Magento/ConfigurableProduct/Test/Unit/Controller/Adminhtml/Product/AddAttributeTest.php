@@ -45,22 +45,22 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder('\Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->request = $this->getMock(\Magento\Framework\App\RequestInterface::class);
         $this->response = $this->getMock(
-            '\Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             [
                 'sendResponse',
                 'setBody'
             ]
         );
-        $this->productBuilder = $this->getMockBuilder('\Magento\Catalog\Controller\Adminhtml\Product\Builder')
+        $this->productBuilder = $this->getMockBuilder(\Magento\Catalog\Controller\Adminhtml\Product\Builder::class)
             ->disableOriginalConstructor()
             ->setMethods(['build'])
             ->getMock();
-        $this->view = $this->getMock('\Magento\Framework\App\ViewInterface');
+        $this->view = $this->getMock(\Magento\Framework\App\ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -73,7 +73,7 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->view));
 
         $this->controller = $this->objectManagerHelper->getObject(
-            '\Magento\ConfigurableProduct\Controller\Adminhtml\Product\AddAttribute',
+            \Magento\ConfigurableProduct\Controller\Adminhtml\Product\AddAttribute::class,
             [
                 'context' => $this->context,
                 'productBuilder' => $this->productBuilder
@@ -83,13 +83,13 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'getId'])
             ->getMock();
-        $layout = $this->getMock('\Magento\Framework\View\LayoutInterface');
+        $layout = $this->getMock(\Magento\Framework\View\LayoutInterface::class);
         $block = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created'
+            \Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\NewAttribute\Product\Created::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['setIndex', 'toHtml'])
