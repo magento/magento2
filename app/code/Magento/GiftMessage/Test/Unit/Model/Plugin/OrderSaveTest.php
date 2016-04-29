@@ -156,6 +156,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->never())->method('getItems');
         $this->plugin->afterSave($this->orderRepositoryMock, $this->orderMock);
     }
+
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      * @expectedMessage Could not add gift message to order:Test message
@@ -188,7 +189,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         $this->giftMessageOrderItemRepositoryMock
             ->expects($this->once())->method('save')
             ->with($orderId, $orderItemId, $this->giftMessageMock)
-        ->willThrowException(new \Exception('TestMessage'));
+            ->willThrowException(new \Exception('TestMessage'));
         $this->plugin->afterSave($this->orderRepositoryMock, $this->orderMock);
     }
 }
