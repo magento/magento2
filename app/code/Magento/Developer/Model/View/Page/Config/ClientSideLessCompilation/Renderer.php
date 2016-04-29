@@ -15,7 +15,7 @@ class Renderer extends Config\Renderer
     /**
      * @var array
      */
-    private $processingTypes = ['css', 'less'];
+    private static $processingTypes = ['css', 'less'];
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
@@ -113,7 +113,7 @@ class Renderer extends Config\Renderer
      */
     protected function getAssetContentType(\Magento\Framework\View\Asset\AssetInterface $asset)
     {
-        if (!in_array($asset->getContentType(), $this->processingTypes)) {
+        if (!in_array($asset->getContentType(), self::$processingTypes)) {
             return parent::getAssetContentType($asset);
         }
         $asset->getSourceFile();
