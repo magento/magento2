@@ -13,12 +13,8 @@ use Magento\Framework\Model\Entity\ScopeFactory;
 /**
  * Class StoreScope
  */
-class StoreScopeProvider implements ScopeProviderInterface
+class DefaultStoreScopeProvider implements ScopeProviderInterface
 {
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
      * @var ScopeFactory
@@ -28,14 +24,11 @@ class StoreScopeProvider implements ScopeProviderInterface
     /**
      * StoreScopeProvider constructor.
      *
-     * @param StoreManagerInterface $storeManager
      * @param ScopeFactory $scopeFactory
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         ScopeFactory $scopeFactory
     ) {
-        $this->storeManager = $storeManager;
         $this->scopeFactory = $scopeFactory;
     }
 
@@ -46,17 +39,6 @@ class StoreScopeProvider implements ScopeProviderInterface
      */
     public function getContext($entityType, $entityData = [])
     {
-        if (isset($entityData[Store::STORE_ID])) {
-            $value = $entityData[Store::STORE_ID];
-        } else {
-            $value = (int)$this->storeManager->getStore(true)->getId();
-        }
-
-        $identifier = Store::STORE_ID;
-        $fallback = null;
-        if ($value != Store::DEFAULT_STORE_ID) {
-            $fallback = $this->scopeFactory->create($identifier, Store::DEFAULT_STORE_ID);
-        }
-        return $this->scopeFactory->create($identifier, $value, $fallback);
+        return $this->scopeFactory->create(Store::STORE_ID, Store::DEFAULT_STORE_ID, null);
     }
 }
