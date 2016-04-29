@@ -32,7 +32,7 @@ class Menu extends \ArrayObject
             $this->_path = $pathInMenuStructure . '/';
         }
         $this->_logger = $logger;
-        $this->setIteratorClass('Magento\Backend\Model\Menu\Iterator');
+        $this->setIteratorClass(\Magento\Backend\Model\Menu\Iterator::class);
     }
 
     /**

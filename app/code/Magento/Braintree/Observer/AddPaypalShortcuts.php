@@ -17,7 +17,7 @@ class AddPaypalShortcuts implements ObserverInterface
     /**
      * Block class
      */
-    const PAYPAL_SHORTCUT_BLOCK = 'Magento\Braintree\Block\Paypal\Button';
+    const PAYPAL_SHORTCUT_BLOCK = \Magento\Braintree\Block\Paypal\Button::class;
 
     /**
      * Add Braintree PayPal shortcut buttons

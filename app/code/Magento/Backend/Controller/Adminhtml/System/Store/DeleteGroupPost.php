@@ -20,7 +20,7 @@ class DeleteGroupPost extends \Magento\Backend\Controller\Adminhtml\System\Store
         /** @var \Magento\Backend\Model\View\Result\Redirect $redirectResult */
         $redirectResult = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        if (!($model = $this->_objectManager->create('Magento\Store\Model\Group')->load($itemId))) {
+        if (!($model = $this->_objectManager->create(\Magento\Store\Model\Group::class)->load($itemId))) {
             $this->messageManager->addError(__('Something went wrong. Please try again.'));
             return $redirectResult->setPath('adminhtml/*/');
         }

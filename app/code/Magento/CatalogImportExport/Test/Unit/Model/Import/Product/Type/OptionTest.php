@@ -321,7 +321,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected function _getModelDependencies($addExpectations = false, $deleteBehavior = false, $doubleOptions = false)
     {
-        $connection = $this->getMock('stdClass', ['delete', 'quoteInto', 'insertMultiple', 'insertOnDuplicate']);
+        $connection = $this->getMock(\stdClass::class, ['delete', 'quoteInto', 'insertMultiple', 'insertOnDuplicate']);
         if ($addExpectations) {
             if ($deleteBehavior) {
                 $connection->expects(
@@ -356,7 +356,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             }
         }
 
-        $resourceHelper = $this->getMock('stdClass', ['getNextAutoincrement']);
+        $resourceHelper = $this->getMock(\stdClass::class, ['getNextAutoincrement']);
         if ($addExpectations) {
             $resourceHelper->expects($this->any())->method('getNextAutoincrement')->will($this->returnValue(2));
         }
@@ -386,7 +386,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $csvData = $this->_loadCsvFile();
 
-        $dataSourceModel = $this->getMock('stdClass', ['getNextBunch']);
+        $dataSourceModel = $this->getMock(\stdClass::class, ['getNextBunch']);
         if ($addExpectations) {
             $dataSourceModel->expects(
                 $this->at(0)
@@ -427,7 +427,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productEntity, $this->metadataPoolMock);
 
-        $productModelMock = $this->getMock('stdClass', ['getProductEntitiesInfo']);
+        $productModelMock = $this->getMock(\stdClass::class, ['getProductEntitiesInfo']);
         $productModelMock->expects(
             $this->any()
         )->method(
@@ -474,7 +474,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
         $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue($optionsData));
 
-        $collectionIterator = $this->getMock('stdClass', ['iterate']);
+        $collectionIterator = $this->getMock(\stdClass::class, ['iterate']);
         $collectionIterator->expects(
             $this->any()
         )->method(
@@ -918,7 +918,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
     public function testParseRequiredData()
     {
-        $modelData = $this->getMock('stdClass', ['getNextBunch']);
+        $modelData = $this->getMock(\stdClass::class, ['getNextBunch']);
         $modelData->expects(
             $this->at(0)
         )->method(
@@ -930,7 +930,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         );
         $modelData->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
 
-        $productModel = $this->getMock('stdClass', ['getProductEntitiesInfo']);
+        $productModel = $this->getMock(\stdClass::class, ['getProductEntitiesInfo']);
         $productModel->expects($this->any())->method('getProductEntitiesInfo')->will($this->returnValue([]));
 
         /** @var \Magento\CatalogImportExport\Model\Import\Product $productEntityMock */
@@ -953,9 +953,9 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'data' => [
                     'data_source_model' => $modelData,
                     'product_model' => $productModel,
-                    'option_collection' => $this->objectManagerHelper->getObject('stdClass'),
+                    'option_collection' => $this->objectManagerHelper->getObject(\stdClass::class),
                     'product_entity' => $productEntityMock,
-                    'collection_by_pages_iterator' => $this->objectManagerHelper->getObject('stdClass'),
+                    'collection_by_pages_iterator' => $this->objectManagerHelper->getObject(\stdClass::class),
                     'page_size' => 5000,
                     'stores' => [],
                     'metadata_pool' => $this->metadataPoolMock

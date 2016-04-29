@@ -434,7 +434,7 @@ class Grid extends \Magento\Backend\Block\Widget
         $this->setChild(
             'reset_filter_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Reset Filter'),
@@ -446,7 +446,7 @@ class Grid extends \Magento\Backend\Block\Widget
         $this->setChild(
             'search_button',
             $this->getLayout()->createBlock(
-                'Magento\Backend\Block\Widget\Button'
+                \Magento\Backend\Block\Widget\Button::class
             )->setData(
                 [
                     'label' => __('Search'),

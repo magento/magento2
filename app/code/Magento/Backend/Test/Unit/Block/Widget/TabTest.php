@@ -28,7 +28,7 @@ class TabTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Backend\Block\Widget\Tab $object */
         $object = $this->helper->getObject(
-            '\Magento\Backend\Block\Widget\Tab',
+            \Magento\Backend\Block\Widget\Tab::class,
             ['data' => [$field => $value]]
         );
         $this->assertEquals($expected, $object->{$method}());

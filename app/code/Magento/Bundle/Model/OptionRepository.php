@@ -122,7 +122,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         $this->dataObjectHelper->populateWithArray(
             $optionDataObject,
             $option->getData(),
-            '\Magento\Bundle\Api\Data\OptionInterface'
+            \Magento\Bundle\Api\Data\OptionInterface::class
         );
         $optionDataObject->setOptionId($option->getId())
             ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())

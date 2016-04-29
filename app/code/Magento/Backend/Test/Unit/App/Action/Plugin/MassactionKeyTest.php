@@ -34,12 +34,12 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->subjectMock = $this->getMock('Magento\Backend\App\AbstractAction', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Backend\App\AbstractAction::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
 
         $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
-            'Magento\Backend\App\Action\Plugin\MassactionKey',
+            \Magento\Backend\App\Action\Plugin\MassactionKey::class,
             [
                 'subject' => $this->subjectMock,
                 'closure' => $this->closureMock,

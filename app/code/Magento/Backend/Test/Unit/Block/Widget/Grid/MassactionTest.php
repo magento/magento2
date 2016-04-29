@@ -44,7 +44,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_gridMock = $this->getMock(
-            'Magento\Backend\Block\Widget\Grid',
+            \Magento\Backend\Block\Widget\Grid::class,
             ['getId', 'getCollection'],
             [],
             '',
@@ -53,7 +53,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->_gridMock->expects($this->any())->method('getId')->will($this->returnValue('test_grid'));
 
         $this->_layoutMock = $this->getMock(
-            'Magento\Framework\View\Layout',
+            \Magento\Framework\View\Layout::class,
             ['getParentName', 'getBlock', 'helper'],
             [],
             '',
@@ -80,9 +80,9 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_gridMock)
         );
 
-        $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->_requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
 
-        $this->_urlModelMock = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
+        $this->_urlModelMock = $this->getMock(\Magento\Backend\Model\Url::class, [], [], '', false);
 
         $arguments = [
             'layout' => $this->_layoutMock,
@@ -92,7 +92,10 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         ];
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_block = $objectManagerHelper->getObject('Magento\Backend\Block\Widget\Grid\Massaction', $arguments);
+        $this->_block = $objectManagerHelper->getObject(
+            \Magento\Backend\Block\Widget\Grid\Massaction::class,
+            $arguments
+        );
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 
@@ -146,7 +149,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->_block->getCount());
 
         $actualItem = $this->_block->getItem($itemId);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $actualItem);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $actualItem);
         $this->assertEquals($expectedItem->getData(), $actualItem->getData());
 
         $this->_block->removeItem($itemId);
@@ -237,7 +240,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     {
         $this->_block->setUseSelectAll(true);
 
-        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 

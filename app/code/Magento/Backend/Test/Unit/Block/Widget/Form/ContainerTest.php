@@ -14,7 +14,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         // _prepateLayout() is blocked, because it is used by block to instantly add 'form' child
         $block = $this->getMock(
-            'Magento\Backend\Block\Widget\Form\Container',
+            \Magento\Backend\Block\Widget\Form\Container::class,
             ['getChildBlock'],
             [],
             '',

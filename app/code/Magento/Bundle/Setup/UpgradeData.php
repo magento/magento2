@@ -156,7 +156,7 @@ class UpgradeData implements UpgradeDataInterface
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             'shipment_type',
             'source_model',
-            'Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type'
+            \Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type::class
         );
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'shipment_type', 'default_value', 0);
         $eavSetup->updateAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'shipment_type', 'is_visible', 1);

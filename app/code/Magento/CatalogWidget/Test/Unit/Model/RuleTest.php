@@ -22,14 +22,14 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->combineFactory = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\CombineFactory')
+        $this->combineFactory = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\CombineFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->rule = $objectManagerHelper->getObject(
-            'Magento\CatalogWidget\Model\Rule',
+            \Magento\CatalogWidget\Model\Rule::class,
             [
                 'conditionsFactory' => $this->combineFactory
             ]
@@ -38,7 +38,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConditionsInstance()
     {
-        $condition = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\Combine')
+        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();

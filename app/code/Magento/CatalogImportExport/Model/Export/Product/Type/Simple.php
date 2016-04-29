@@ -18,8 +18,8 @@ class Simple extends \Magento\CatalogImportExport\Model\Export\Product\Type\Abst
      * @var array
      */
     protected $_attributeOverrides = [
-        'has_options' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
-        'required_options' => ['source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'],
+        'has_options' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
+        'required_options' => ['source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class],
         'created_at' => ['backend_type' => 'datetime'],
         'updated_at' => ['backend_type' => 'datetime'],
     ];

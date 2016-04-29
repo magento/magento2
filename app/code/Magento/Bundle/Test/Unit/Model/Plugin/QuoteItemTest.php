@@ -28,21 +28,21 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', [], [], '', false);
-        $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $this->orderItemMock = $this->getMock(\Magento\Sales\Model\Order\Item::class, [], [], '', false);
+        $this->quoteItemMock = $this->getMock(\Magento\Quote\Model\Quote\Item::class, [], [], '', false);
         $orderItem = $this->orderItemMock;
         $this->closureMock = function () use ($orderItem) {
             return $orderItem;
         };
-        $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class, [], [], '', false);
         $this->model = new \Magento\Bundle\Model\Plugin\QuoteItem();
     }
 
     public function testAroundItemToOrderItemPositive()
     {
-        $productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $bundleAttribute = $this->getMock(
-            'Magento\Catalog\Model\Product\Configuration\Item\Option',
+            \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
             [],
             [],
             '',
@@ -66,7 +66,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundItemToOrderItemNegative()
     {
-        $productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $productMock->expects(
             $this->once()
         )->method(

@@ -16,9 +16,11 @@ class BackendModelTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave($value, $errorMessage = null)
     {
         /** @var BackendModel $model */
-        $model = (new ObjectManager($this))->getObject('Magento\Backend\Model\Config\SessionLifetime\BackendModel');
+        $model = (new ObjectManager($this))->getObject(
+            \Magento\Backend\Model\Config\SessionLifetime\BackendModel::class
+        );
         if ($errorMessage !== null) {
-            $this->setExpectedException('\Magento\Framework\Exception\LocalizedException', $errorMessage);
+            $this->setExpectedException(\Magento\Framework\Exception\LocalizedException::class, $errorMessage);
         }
         $model->setValue($value);
         $model->beforeSave();

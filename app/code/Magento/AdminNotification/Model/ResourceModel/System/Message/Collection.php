@@ -51,8 +51,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\AdminNotification\Model\System\Message',
-            'Magento\AdminNotification\Model\ResourceModel\System\Message'
+            \Magento\AdminNotification\Model\System\Message::class,
+            \Magento\AdminNotification\Model\ResourceModel\System\Message::class
         );
     }
 

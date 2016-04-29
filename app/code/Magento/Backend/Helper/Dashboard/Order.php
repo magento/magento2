@@ -44,7 +44,7 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
     private function getStoreManager()
     {
         if ($this->_storeManager === null) {
-            $this->_storeManager = ObjectManager::getInstance()->get('Magento\Store\Model\StoreManagerInterface');
+            $this->_storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
         }
         return $this->_storeManager;
     }

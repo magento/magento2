@@ -35,7 +35,7 @@ class SetAttributeTabBlockObserver implements ObserverInterface
         $product = $observer->getEvent()->getProduct();
         if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             $this->helperCatalog->setAttributeTabBlock(
-                'Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes'
+                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes::class
             );
         }
         return $this;

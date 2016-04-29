@@ -18,7 +18,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->responseModel = $objectManager->getObject('Magento\Authorizenet\Model\Directpost\Response');
+        $this->responseModel = $objectManager->getObject(\Magento\Authorizenet\Model\Directpost\Response::class);
     }
 
     /**

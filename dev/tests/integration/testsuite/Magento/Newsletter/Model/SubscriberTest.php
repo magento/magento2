@@ -16,7 +16,7 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Newsletter\Model\Subscriber'
+            \Magento\Newsletter\Model\Subscriber::class
         );
     }
 

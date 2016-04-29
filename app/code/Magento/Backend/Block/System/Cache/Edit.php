@@ -34,7 +34,7 @@ class Edit extends \Magento\Backend\Block\Widget
     {
         $this->addChild(
             'save_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save Cache Settings'),
                 'class' => 'save',
@@ -69,7 +69,7 @@ class Edit extends \Magento\Backend\Block\Widget
     {
         $this->setChild(
             'form',
-            $this->getLayout()->createBlock('Magento\Backend\Block\System\Cache\Form')->initForm()
+            $this->getLayout()->createBlock(\Magento\Backend\Block\System\Cache\Form::class)->initForm()
         );
         return $this;
     }
