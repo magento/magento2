@@ -110,3 +110,5 @@ DoubleColon
 \Magento\Framework\ObjectManager\Code\Generator\Sample
 \Magento\Config\Block\Tooltip
 \Magento\Framework\Model\Name
+\Magento\Test\Di\WrappedClass
+\Magento\Test\Di\WrappedClass\Logger
