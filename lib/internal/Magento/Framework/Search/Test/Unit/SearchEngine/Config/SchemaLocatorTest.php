@@ -16,7 +16,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $urnResolver = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolver = $this->getMock(\Magento\Framework\Config\Dom\UrnResolver::class, [], [], '', false);
         $urnResolver->expects($this->any())
             ->method('getRealPath')
             ->with(SchemaLocator::SEARCH_ENGINE_XSD_PATH)

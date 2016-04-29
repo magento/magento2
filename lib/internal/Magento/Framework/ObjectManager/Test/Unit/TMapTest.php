@@ -25,10 +25,10 @@ class TMapTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->om = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->om = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->omConfig = $this->getMockBuilder('Magento\Framework\ObjectManager\ConfigInterface')
+        $this->omConfig = $this->getMockBuilder(\Magento\Framework\ObjectManager\ConfigInterface::class)
             ->getMockForAbstractClass();
     }
 

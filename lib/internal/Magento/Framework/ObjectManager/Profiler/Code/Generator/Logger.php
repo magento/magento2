@@ -36,7 +36,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
                 'docblock' => [
                     'shortDescription' => 'Object Manager factory log',
                     'tags' => [
-                        ['name' => 'var', 'description' => '\Magento\Framework\ObjectManager\Factory\Log'],
+                        ['name' => 'var', 'description' => '\\' . \Magento\Framework\ObjectManager\Factory\Log::class],
                     ],
                 ],
             ],
@@ -46,7 +46,7 @@ class Logger extends \Magento\Framework\Code\Generator\EntityAbstract
                 'docblock' => [
                     'shortDescription' => 'Object Manager instance',
                     'tags' => [
-                        ['name' => 'var', 'description' => '\Magento\Framework\ObjectManagerInterface'],
+                        ['name' => 'var', 'description' => '\\' . \Magento\Framework\ObjectManagerInterface::class],
                     ],
                 ],
             ],

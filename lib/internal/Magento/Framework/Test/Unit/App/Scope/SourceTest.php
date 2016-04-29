@@ -23,7 +23,7 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeResolverPoolMock = $this->getMockBuilder('Magento\Framework\App\ScopeResolverPool')
+        $this->scopeResolverPoolMock = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -41,11 +41,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $result = [$scopeData, $scopeData];
 
         /** @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject $scopeResolverMock */
-        $scopeResolverMock = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
+        $scopeResolverMock = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
             ->getMockForAbstractClass();
 
         /** @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject $scopeMock */
-        $scopeMock = $this->getMockBuilder('Magento\Framework\App\ScopeInterface')
+        $scopeMock = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
             ->getMockForAbstractClass();
 
         $this->scopeResolverPoolMock->expects($this->once())

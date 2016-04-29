@@ -34,7 +34,7 @@ class DomFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\ObjectManager\Config\Reader\Dom'
+        $instanceName = \Magento\Framework\ObjectManager\Config\Reader\Dom::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
