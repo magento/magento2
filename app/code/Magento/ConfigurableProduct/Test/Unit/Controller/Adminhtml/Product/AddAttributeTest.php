@@ -95,12 +95,9 @@ class AddAttributeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setIndex', 'toHtml'])
             ->getMock();
 
-        $this->view->expects($this->once())->method('loadLayout')->with('popup')->willReturnSelf();
         $this->productBuilder->expects($this->once())->method('build')->with($this->request)->willReturn($product);
-        $this->view->expects($this->any())->method('getLayout')->willReturn($layout);
+        $this->view->expects($this->once())->method('getLayout')->willReturn($layout);
         $layout->expects($this->once())->method('createBlock')->willReturn($block);
-        $layout->expects($this->once())->method('setChild')->willReturnSelf();
-        $this->view->expects($this->any())->method('renderLayout')->willReturnSelf();
 
         $this->controller->execute();
     }
