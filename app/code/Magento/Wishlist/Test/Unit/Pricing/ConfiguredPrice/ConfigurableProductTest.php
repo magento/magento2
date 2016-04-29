@@ -9,9 +9,9 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProductPrice;
+use Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct;
 
-class ConfigurableProductPriceTest extends \PHPUnit_Framework_TestCase
+class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -29,7 +29,7 @@ class ConfigurableProductPriceTest extends \PHPUnit_Framework_TestCase
     private $priceCurrency;
 
     /**
-     * @var ConfigurableProductPrice
+     * @var ConfigurableProduct
      */
     private $model;
 
@@ -59,7 +59,7 @@ class ConfigurableProductPriceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
             ->getMockForAbstractClass();
 
-        $this->model = new ConfigurableProductPrice(
+        $this->model = new ConfigurableProduct(
             $this->saleableItem,
             null,
             $this->calculator,
@@ -82,7 +82,7 @@ class ConfigurableProductPriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with(ConfigurableProductPrice::PRICE_CODE)
+            ->with(ConfigurableProduct::PRICE_CODE)
             ->willReturn($priceMock);
 
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
