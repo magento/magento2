@@ -16,18 +16,18 @@ class SelectTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $eventManager = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
-        $escaper = $this->getMockBuilder('Magento\Framework\Escaper')
+        $escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $escaper->expects($this->any())
             ->method('escapeHtml')
             ->will($this->returnArgument(0));
 
-        $context = $this->getMockBuilder('Magento\Framework\View\Element\Context')
+        $context = $this->getMockBuilder(\Magento\Framework\View\Element\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->once())
@@ -41,9 +41,10 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($scopeConfig));
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->select = $objectManagerHelper->getObject('Magento\Framework\View\Element\Html\Select', [
-            'context' => $context
-        ]);
+        $this->select = $objectManagerHelper->getObject(
+            \Magento\Framework\View\Element\Html\Select::class,
+            ['context' => $context]
+        );
     }
 
     public function testAddOptionAndSetOptionsAndGetOptions()

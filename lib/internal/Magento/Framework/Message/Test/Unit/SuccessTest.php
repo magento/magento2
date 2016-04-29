@@ -20,7 +20,7 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Framework\Message\Success');
+        $this->model = $objectManager->getObject(\Magento\Framework\Message\Success::class);
     }
 
     public function testGetType()

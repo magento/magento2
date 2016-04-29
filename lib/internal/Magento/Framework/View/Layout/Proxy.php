@@ -48,7 +48,7 @@ class Proxy extends \Magento\Framework\View\Layout implements \Magento\Framework
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\View\\Layout',
+        $instanceName = \Magento\Framework\View\Layout::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;

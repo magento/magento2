@@ -125,7 +125,8 @@ class TranslatedLists implements ListsInterface
         $options = [];
         $days = (new DataBundle())
             ->get($this->localeResolver->getLocale())['calendar']['gregorian']['dayNames']['format']['wide'] ?: [];
-        $englishDays = (new DataBundle())->get('en_US')['calendar']['gregorian']['dayNames']['format']['abbreviated'];
+        $englishDays = (new DataBundle())->get(
+            \en_US::class)['calendar']['gregorian']['dayNames']['format']['abbreviated'];
         foreach ($days as $code => $name) {
             $code = $preserveCodes ? $englishDays[$code] : $code;
             $options[] = ['label' => $name, 'value' => $ucFirstCode ? ucfirst($code) : $code];

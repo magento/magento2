@@ -41,7 +41,7 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
     {
         $this->fileName = DirectoryList::TMP . DIRECTORY_SEPARATOR . self::LOCK_NAME . LockerProcess::LOCK_EXTENSION;
 
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -107,7 +107,6 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
             ->with($this->fileName)
             ->willReturn(time() - 25);
 
-
         $tmpDirectoryMock->expects(self::once())
             ->method('writeFile')
             ->with($this->fileName, self::matchesRegularExpression('#\d+#'));
@@ -147,7 +146,7 @@ class LockerProcessTest extends \PHPUnit_Framework_TestCase
      */
     private function getTmpDirectoryMock()
     {
-        $tmpDirectoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $tmpDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
 
         return $tmpDirectoryMock;

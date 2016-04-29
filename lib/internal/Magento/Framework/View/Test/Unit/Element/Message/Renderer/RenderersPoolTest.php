@@ -13,13 +13,13 @@ class RenderersPoolTest extends \PHPUnit_Framework_TestCase
     {
         $renderers = [
             'renderer_1' => $this->getMock(
-                'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+                \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             ),
             'renderer_2' => $this->getMock(
-                'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+                \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             ),
             'renderer_3' => $this->getMock(
-                'Magento\Framework\View\Element\Message\Renderer\RendererInterface'
+                \Magento\Framework\View\Element\Message\Renderer\RendererInterface::class
             )
         ];
 

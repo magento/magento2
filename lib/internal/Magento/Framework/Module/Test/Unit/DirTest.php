@@ -22,7 +22,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->moduleRegistryMock = $this->getMock(
-            'Magento\Framework\Component\ComponentRegistrarInterface',
+            \Magento\Framework\Component\ComponentRegistrarInterface::class,
             [],
             [],
             '',

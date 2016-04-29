@@ -26,12 +26,12 @@ class RendererPool extends AbstractBlock
     /**
      * Default price renderer
      */
-    const PRICE_RENDERER_DEFAULT = 'Magento\Framework\Pricing\Render\PriceBox';
+    const PRICE_RENDERER_DEFAULT = \Magento\Framework\Pricing\Render\PriceBox::class;
 
     /**
      * Default amount renderer
      */
-    const AMOUNT_RENDERER_DEFAULT = 'Magento\Framework\Pricing\Render\Amount';
+    const AMOUNT_RENDERER_DEFAULT = \Magento\Framework\Pricing\Render\Amount::class;
 
     /**
      * Create amount renderer

@@ -13,7 +13,7 @@ class SaveHandlerFactory
     /**
      * Php native session handler
      */
-    const PHP_NATIVE_HANDLER = 'Magento\Framework\Session\SaveHandler\Native';
+    const PHP_NATIVE_HANDLER = \Magento\Framework\Session\SaveHandler\Native::class;
 
     /**
      * Object manager

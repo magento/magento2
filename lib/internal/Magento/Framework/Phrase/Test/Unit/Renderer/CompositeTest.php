@@ -29,8 +29,8 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rendererOne = $this->getMock('Magento\Framework\Phrase\RendererInterface');
-        $this->rendererTwo = $this->getMock('Magento\Framework\Phrase\RendererInterface');
+        $this->rendererOne = $this->getMock(\Magento\Framework\Phrase\RendererInterface::class);
+        $this->rendererTwo = $this->getMock(\Magento\Framework\Phrase\RendererInterface::class);
         $this->object = new \Magento\Framework\Phrase\Renderer\Composite([$this->rendererOne, $this->rendererTwo]);
     }
 

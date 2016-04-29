@@ -70,7 +70,7 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helperObjectManager->getObject(
-            'Magento\Framework\View\Layout\ScheduledStructure',
+            \Magento\Framework\View\Layout\ScheduledStructure::class,
             ['data' => $this->scheduledData]
         );
     }

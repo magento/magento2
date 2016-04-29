@@ -218,7 +218,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testFindSetterMethodName()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $setterName = $this->_typeProcessor->findSetterMethodName($class, 'AttrName');
         $this->assertEquals("setAttrName", $setterName);
 
@@ -232,7 +232,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindSetterMethodNameInvalidAttribute()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $this->_typeProcessor->findSetterMethodName($class, 'InvalidAttribute');
     }
 
@@ -242,7 +242,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testFindSetterMethodNameWrongCamelCasedAttribute()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $this->_typeProcessor->findSetterMethodName($class, 'ActivE');
     }
 
@@ -252,7 +252,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParamType()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $methodReflection = $class->getMethod('setName');
         $paramsReflection = $methodReflection->getParameters();
         $this->_typeProcessor->getParamType($paramsReflection[0]);
@@ -260,7 +260,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParameterDescription()
     {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
+        $class = new ClassReflection(\Magento\Framework\Reflection\Test\Unit\DataObject::class);
         $methodReflection = $class->getMethod('setName');
         $paramsReflection = $methodReflection->getParameters();
         $this->assertEquals('Name of the attribute', $this->_typeProcessor->getParamDescription($paramsReflection[0]));

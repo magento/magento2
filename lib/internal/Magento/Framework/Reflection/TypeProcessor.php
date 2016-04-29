@@ -170,7 +170,7 @@ class TypeProcessor
             $this->_types[$typeName]['documentation'] = $docBlock ? $this->getDescription($docBlock) : '';
             /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
             foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodReflection) {
-                if ($methodReflection->class === "Magento\Framework\Model\AbstractModel") {
+                if ($methodReflection->class === \Magento\Framework\Model\AbstractModel::class) {
                     continue;
                 }
                 $this->_processMethod($methodReflection, $typeName);

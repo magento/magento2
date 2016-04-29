@@ -39,17 +39,17 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_config = $this->getMock('Magento\Framework\View\Asset\ConfigInterface', [], [], '', false);
-        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->_objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_config = $this->getMock(\Magento\Framework\View\Asset\ConfigInterface::class, [], [], '', false);
+        $this->_filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->_directory = $this->getMock(
-            '\Magento\Framework\Filesystem\Directory\Write',
+            \Magento\Framework\Filesystem\Directory\Write::class,
             [],
             [],
             '',
             false
         );
-        $this->_state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $this->_state = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
         $this->_filesystem->expects(
             $this->any()
         )->method(
@@ -84,7 +84,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMergedAssets(array $assets, $contentType, $appMode, $mergeStrategy)
     {
-        $mergedAsset = $this->getMock('Magento\Framework\View\Asset\AssetInterface');
+        $mergedAsset = $this->getMock(\Magento\Framework\View\Asset\AssetInterface::class);
         $this->_config->expects($this->once())->method('isMergeCssFiles')->will($this->returnValue(true));
         $this->_config->expects($this->once())->method('isMergeJsFiles')->will($this->returnValue(true));
 
@@ -95,7 +95,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            'Magento\Framework\View\Asset\Merged',
+            \Magento\Framework\View\Asset\Merged::class,
             ['assets' => $assets, 'mergeStrategy' => $mergeStrategyMock]
         )->will(
             $this->returnValue($mergedAsset)
@@ -129,37 +129,37 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
                 $jsAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_PRODUCTION,
-                'Magento\Framework\View\Asset\MergeStrategy\FileExists',
+                \Magento\Framework\View\Asset\MergeStrategy\FileExists::class,
             ],
             'css production mode' => [
                 $cssAssets,
                 'css',
                 \Magento\Framework\App\State::MODE_PRODUCTION,
-                'Magento\Framework\View\Asset\MergeStrategy\FileExists',
+                \Magento\Framework\View\Asset\MergeStrategy\FileExists::class,
             ],
             'js default mode' => [
                 $jsAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+                \Magento\Framework\View\Asset\MergeStrategy\Checksum::class,
             ],
             'css default mode' => [
                 $cssAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+                \Magento\Framework\View\Asset\MergeStrategy\Checksum::class,
             ],
             'js developer mode' => [
                 $jsAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEVELOPER,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+                \Magento\Framework\View\Asset\MergeStrategy\Checksum::class,
             ],
             'css developer mode' => [
                 $cssAssets,
                 'css',
                 \Magento\Framework\App\State::MODE_DEVELOPER,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+                \Magento\Framework\View\Asset\MergeStrategy\Checksum::class,
             ]
         ];
     }

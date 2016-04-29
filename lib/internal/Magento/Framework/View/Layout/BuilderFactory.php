@@ -26,8 +26,8 @@ class BuilderFactory
      * @var array
      */
     protected $typeMap = [
-        self::TYPE_LAYOUT => 'Magento\Framework\View\Layout\Builder',
-        self::TYPE_PAGE   => 'Magento\Framework\View\Page\Builder',
+        self::TYPE_LAYOUT => \Magento\Framework\View\Layout\Builder::class,
+        self::TYPE_PAGE   => \Magento\Framework\View\Page\Builder::class,
     ];
 
     /**

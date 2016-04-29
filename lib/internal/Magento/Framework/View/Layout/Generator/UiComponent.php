@@ -31,7 +31,7 @@ class UiComponent implements GeneratorInterface
     /**
      * Block container for components
      */
-    const CONTAINER = 'Magento\Framework\View\Element\UiComponent\ContainerInterface';
+    const CONTAINER = \Magento\Framework\View\Element\UiComponent\ContainerInterface::class;
 
     /**
      * @var UiComponentFactory
@@ -115,14 +115,18 @@ class UiComponent implements GeneratorInterface
             $structure->addToParentGroup($elementName, $attributes['group']);
         }
 
-        $context = $this->contextFactory->create([
-            'namespace' => $elementName,
-            'pageLayout' => $layout
-        ]);
+        $context = $this->contextFactory->create(
+            [
+                'namespace' => $elementName,
+                'pageLayout' => $layout
+            ]
+        );
 
-        $component = $this->uiComponentFactory->create($elementName, null, [
-            'context' => $context
-        ]);
+        $component = $this->uiComponentFactory->create(
+            $elementName,
+            null,
+            ['context' => $context]
+        );
         $this->prepareComponent($component);
 
         /** @var ContainerInterface $blockContainer */

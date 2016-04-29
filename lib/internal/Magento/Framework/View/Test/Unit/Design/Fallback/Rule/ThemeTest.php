@@ -29,12 +29,13 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rule = $this->getMockForAbstractClass('\Magento\Framework\View\Design\Fallback\Rule\RuleInterface');
+        $this->rule = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
         $this->componentRegistrar = $this->getMockForAbstractClass(
-            '\Magento\Framework\Component\ComponentRegistrarInterface'
+            \Magento\Framework\Component\ComponentRegistrarInterface::class
         );
         $this->model = new Theme($this->rule, $this->componentRegistrar);
     }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Parameter "theme" should be specified and should implement the theme interface
@@ -46,10 +47,10 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPatternDirs()
     {
-        $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $parentTheme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $parentTheme->expects($this->any())->method('getFullPath')->will($this->returnValue('package/parent_theme'));
 
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
         $theme->expects($this->any())->method('getFullPath')->will($this->returnValue('package/current_theme'));
         $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
 

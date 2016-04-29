@@ -32,9 +32,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->source = $this->getMock('Magento\Framework\View\Asset\Source', [], [], '', false);
-        $this->context = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\ContextInterface');
-        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+        $this->source = $this->getMock(\Magento\Framework\View\Asset\Source::class, [], [], '', false);
+        $this->context = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\ContextInterface::class);
+        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
