@@ -20,7 +20,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
 
         $documentFields = [];
         for ($count = 0; $count < 5; $count++) {
-            $field = $this->getMockBuilder('Magento\Framework\Search\DocumentField')
+            $field = $this->getMockBuilder(\Magento\Framework\Search\DocumentField::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -30,7 +30,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->document = $helper->getObject(
-            'Magento\Framework\Search\Document',
+            \Magento\Framework\Search\Document::class,
             [
                 'documentId' => 42,
                 'documentFields' => $documentFields,

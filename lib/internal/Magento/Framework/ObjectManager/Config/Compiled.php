@@ -76,7 +76,7 @@ class Compiled implements \Magento\Framework\ObjectManager\ConfigInterface
             }
             return $this->arguments[$type];
         } else {
-            return [['_i_' => 'Magento\Framework\ObjectManagerInterface']];
+            return [['_i_' => \Magento\Framework\ObjectManagerInterface::class]];
         }
     }
 

@@ -166,7 +166,7 @@ class Builder
     {
         /** @var Mapper $mapper */
         $mapper = $this->objectManager->create(
-            'Magento\Framework\Search\Request\Mapper',
+            \Magento\Framework\Search\Request\Mapper::class,
             [
                 'objectManager' => $this->objectManager,
                 'rootQueryName' => $data['query'],
@@ -176,7 +176,7 @@ class Builder
             ]
         );
         return $this->objectManager->create(
-            'Magento\Framework\Search\Request',
+            \Magento\Framework\Search\Request::class,
             [
                 'name' => $data['query'],
                 'indexName' => $data['index'],
@@ -198,7 +198,7 @@ class Builder
         $dimensions = [];
         foreach ($dimensionsData as $dimensionData) {
             $dimensions[$dimensionData['name']] = $this->objectManager->create(
-                'Magento\Framework\Search\Request\Dimension',
+                \Magento\Framework\Search\Request\Dimension::class,
                 $dimensionData
             );
         }

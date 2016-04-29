@@ -34,7 +34,7 @@ class EntityStorageFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Search\Dynamic\EntityStorage'
+        $instanceName = \Magento\Framework\Search\Dynamic\EntityStorage::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

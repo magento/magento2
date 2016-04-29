@@ -81,7 +81,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+                            'description' =>
+                                '\\' . \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
                         ],
                     ],
                 ]
@@ -153,7 +154,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
                 [
                     'name' => 'extensionAttributesJoinProcessor',
-                    'type' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+                    'type' => '\\' . \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
                 ],
             ],
             'body' => "\$this->"
@@ -178,7 +179,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'param',
-                        'description' => '\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface'
+                        'description' => '\\' . \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
                             . " \$extensionAttributesJoinProcessor"
                     ],
                 ],

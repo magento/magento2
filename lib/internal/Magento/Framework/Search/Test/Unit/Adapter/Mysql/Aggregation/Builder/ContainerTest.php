@@ -25,7 +25,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $bucketValue = 'dataProvider';
         /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container $provider */
         $provider = $this->objectManager->getObject(
-            'Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container',
+            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container::class,
             ['buckets' => [$bucketName => $bucketValue]]
         );
         $this->assertEquals($bucketValue, $provider->get($bucketName));

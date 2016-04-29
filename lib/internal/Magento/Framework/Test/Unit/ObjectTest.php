@@ -162,7 +162,7 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->getMock('Magento\Framework\DataObject', ['setTestData', 'getTestData']);
+        $mock = $this->getMock(\Magento\Framework\DataObject::class, ['setTestData', 'getTestData']);
         $mock->expects($this->once())->method('setTestData')->with($this->equalTo('data'));
         $mock->expects($this->once())->method('getTestData');
 
@@ -346,8 +346,8 @@ string',
         $this->assertTrue($this->_object->offsetExists('key1'));
         $this->assertFalse($this->_object->offsetExists('key2'));
 
-        $this->assertEquals('value1', $this->_object->offsetGet('key1'));
-        $this->assertNull($this->_object->offsetGet('key2'));
+        $this->assertEquals('value1', $this->_object->offsetget(\key1::class));
+        $this->assertNull($this->_object->offsetget(\key2::class));
         $this->_object->offsetUnset('key1');
         $this->assertFalse($this->_object->offsetExists('key1'));
     }

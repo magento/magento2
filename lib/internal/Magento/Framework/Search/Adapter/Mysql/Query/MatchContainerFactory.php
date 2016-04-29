@@ -32,7 +32,7 @@ class MatchContainerFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer'
+        $instanceName = \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
