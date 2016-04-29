@@ -21,14 +21,14 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productAttributeCollectionFactory =
-            $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory')
+            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
 
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\\CatalogSearch\\Model\\Search\\RequestGenerator',
+            \Magento\CatalogSearch\Model\Search\RequestGenerator::class,
             ['productAttributeCollectionFactory' => $this->productAttributeCollectionFactory]
         );
     }
@@ -97,7 +97,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerate($countResult, $attributeOptions)
     {
-        $collection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection')
+        $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->any())
@@ -148,7 +148,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     private function createAttributeMock($attributeOptions)
     {
-        $attribute = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Attribute')
+        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [

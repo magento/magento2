@@ -51,7 +51,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogRule\Model\Rule', 'Magento\CatalogRule\Model\ResourceModel\Rule');
+        $this->_init(\Magento\CatalogRule\Model\Rule::class, \Magento\CatalogRule\Model\ResourceModel\Rule::class);
     }
 
     /**

@@ -25,13 +25,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->options = $helper->getObject(
-            'Magento\CatalogSearch\Model\Adapter\Options',
+            \Magento\CatalogSearch\Model\Adapter\Options::class,
             [
                 'scopeConfig' => $this->scopeConfig
             ]

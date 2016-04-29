@@ -19,7 +19,7 @@ class Index extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currency
         $this->_setActiveMenu('Magento_CurrencySymbol::system_currency_rates');
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Currency Rates'));
         $this->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\CurrencySymbol\Block\Adminhtml\System\Currency')
+            $this->_view->getLayout()->createBlock(\Magento\CurrencySymbol\Block\Adminhtml\System\Currency::class)
         );
         $this->_view->renderLayout();
     }

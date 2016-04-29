@@ -33,16 +33,16 @@ class PageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $objectManager->getObject(
-            'Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             [
                 'eventDispatcher' => $this->eventManagerMock
             ]
         );
-        $this->resourcePageMock = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
+        $this->resourcePageMock = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -51,14 +51,14 @@ class PageTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->thisMock = $this->getMockBuilder('Magento\Cms\Model\Page')
+        $this->thisMock = $this->getMockBuilder(\Magento\Cms\Model\Page::class)
             ->setConstructorArgs(
                 [
                     $this->context,
-                    $this->getMockBuilder('Magento\Framework\Registry')
+                    $this->getMockBuilder(\Magento\Framework\Registry::class)
                         ->disableOriginalConstructor()
                         ->getMock(),
-                    $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
+                    $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\AbstractResource::class)
                         ->disableOriginalConstructor()
                         ->setMethods(
                             [
@@ -67,7 +67,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                             ]
                         )
                         ->getMockForAbstractClass(),
-                    $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
+                    $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
                         ->disableOriginalConstructor()
                         ->getMockForAbstractClass(),
                 ]

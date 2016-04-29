@@ -28,7 +28,7 @@ class DbTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_defaultReader = $this->getMockBuilder(
-            'Magento\Store\Model\Config\Reader\DefaultReader'
+            \Magento\Store\Model\Config\Reader\DefaultReader::class
         )->disableOriginalConstructor()->getMock();
         $this->_converter = new \Magento\Cron\Model\Config\Converter\Db();
         $this->_reader = new \Magento\Cron\Model\Config\Reader\Db($this->_defaultReader, $this->_converter);

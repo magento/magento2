@@ -21,9 +21,9 @@ class AddStockStatusToCollectionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockHelper = $this->getMock('Magento\CatalogInventory\Helper\Stock', [], [], '', false);
+        $this->stockHelper = $this->getMock(\Magento\CatalogInventory\Helper\Stock::class, [], [], '', false);
         $this->plugin = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\CatalogInventory\Model\AddStockStatusToCollection',
+            \Magento\CatalogInventory\Model\AddStockStatusToCollection::class,
             [
                 'stockHelper' => $this->stockHelper,
             ]
@@ -32,7 +32,7 @@ class AddStockStatusToCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddStockStatusToCollection()
     {
-        $productCollection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 

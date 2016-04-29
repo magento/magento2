@@ -26,15 +26,17 @@ class PathTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validatorMock = $this->getMockBuilder('Magento\Framework\Session\Config\Validator\CookiePathValidator')
+        $this->validatorMock = $this->getMockBuilder(
+            \Magento\Framework\Session\Config\Validator\CookiePathValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Module\ModuleResource')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Cookie\Model\Config\Backend\Path',
+        $this->model = $objectManager->getObject(
+            \Magento\Cookie\Model\Config\Backend\Path::class,
             [
                 'configValidator' => $this->validatorMock,
                 'resource' => $this->resourceMock

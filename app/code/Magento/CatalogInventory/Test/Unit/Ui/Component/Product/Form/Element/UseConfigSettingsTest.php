@@ -30,7 +30,7 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $processorMock = $this->getMock(
-            'Magento\Framework\View\Element\UiComponent\Processor',
+            \Magento\Framework\View\Element\UiComponent\Processor::class,
             [],
             [],
             '',
@@ -39,7 +39,7 @@ class UseConfigSettingsTest extends \PHPUnit_Framework_TestCase
         );
         $processorMock->expects($this->once())
             ->method('register');
-        $this->contextMock = $this->getMock('Magento\Framework\View\Element\UiComponent\ContextInterface');
+        $this->contextMock = $this->getMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getProcessor')
             ->willReturn($processorMock);

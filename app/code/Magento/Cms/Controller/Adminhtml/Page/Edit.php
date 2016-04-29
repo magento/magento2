@@ -70,7 +70,7 @@ class Edit extends \Magento\Backend\App\Action
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('page_id');
-        $model = $this->_objectManager->create('Magento\Cms\Model\Page');
+        $model = $this->_objectManager->create(\Magento\Cms\Model\Page::class);
 
         // 2. Initial checking
         if ($id) {

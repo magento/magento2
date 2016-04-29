@@ -178,11 +178,11 @@ class PageRepository implements PageRepositoryInterface
             $this->dataObjectHelper->populateWithArray(
                 $pageData,
                 $pageModel->getData(),
-                'Magento\Cms\Api\Data\PageInterface'
+                \Magento\Cms\Api\Data\PageInterface::class
             );
             $pages[] = $this->dataObjectProcessor->buildOutputDataArray(
                 $pageData,
-                'Magento\Cms\Api\Data\PageInterface'
+                \Magento\Cms\Api\Data\PageInterface::class
             );
         }
         $searchResults->setItems($pages);

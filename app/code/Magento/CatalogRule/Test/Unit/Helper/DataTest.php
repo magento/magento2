@@ -19,7 +19,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helper = (new ObjectManager($this))->getObject('Magento\CatalogRule\Helper\Data');
+        $this->helper = (new ObjectManager($this))->getObject(\Magento\CatalogRule\Helper\Data::class);
     }
 
     /**

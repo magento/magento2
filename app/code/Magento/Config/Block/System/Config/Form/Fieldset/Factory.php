@@ -34,6 +34,6 @@ class Factory
      */
     public function create(array $data = [])
     {
-        return $this->_objectManager->create('Magento\Config\Block\System\Config\Form\Fieldset', $data);
+        return $this->_objectManager->create(\Magento\Config\Block\System\Config\Form\Fieldset::class, $data);
     }
 }

@@ -39,16 +39,16 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
+        $this->configMock = $this->getMockBuilder(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->minSaleQtyHelperMock = $this->getMockBuilder('Magento\CatalogInventory\Helper\Minsaleqty')
+        $this->minSaleQtyHelperMock = $this->getMockBuilder(\Magento\CatalogInventory\Helper\Minsaleqty::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Configuration(

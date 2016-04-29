@@ -22,7 +22,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     protected function _construct()
     {
-        $this->_init('Magento\CheckoutAgreements\Model\ResourceModel\Agreement');
+        $this->_init(\Magento\CheckoutAgreements\Model\ResourceModel\Agreement::class);
     }
 
     /**
@@ -65,6 +65,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @inheritdoc
      */

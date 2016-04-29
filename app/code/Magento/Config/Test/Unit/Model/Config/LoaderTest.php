@@ -25,7 +25,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_configValueFactory = $this->getMock(
-            'Magento\Framework\App\Config\ValueFactory',
+            \Magento\Framework\App\Config\ValueFactory::class,
             ['create', 'getCollection'],
             [],
             '',
@@ -34,7 +34,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Config\Model\Config\Loader($this->_configValueFactory);
 
         $this->_configCollection = $this->getMock(
-            'Magento\Config\Model\ResourceModel\Config\Data\Collection',
+            \Magento\Config\Model\ResourceModel\Config\Data\Collection::class,
             [],
             [],
             '',
@@ -52,7 +52,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
 
-        $configDataMock = $this->getMock('Magento\Framework\App\Config\Value', [], [], '', false);
+        $configDataMock = $this->getMock(\Magento\Framework\App\Config\Value::class, [], [], '', false);
         $this->_configValueFactory->expects(
             $this->once()
         )->method(

@@ -75,7 +75,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->context = $this->getMock(
-            '\Magento\Framework\Model\Context',
+            \Magento\Framework\Model\Context::class,
             ['getEventDispatcher'],
             [],
             '',
@@ -83,22 +83,25 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->registry = $this->getMock(
-            '\Magento\Framework\Registry',
+            \Magento\Framework\Registry::class,
             [],
             [],
             '',
             false
         );
 
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+        $this->customerSession = $this->getMock(\Magento\Customer\Model\Session::class, [], [], '', false);
 
-        $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
-        $this->storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface', ['getStore']);
+        $this->storeManager = $this->getMockForAbstractClass(
+            \Magento\Store\Model\StoreManagerInterface::class,
+            ['getStore']
+        );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->stockConfiguration = $this->getMock(
-            '\Magento\CatalogInventory\Api\StockConfigurationInterface',
+            \Magento\CatalogInventory\Api\StockConfigurationInterface::class,
             [],
             [],
             '',
@@ -106,11 +109,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
-            '\Magento\CatalogInventory\Api\StockItemRepositoryInterface'
+            \Magento\CatalogInventory\Api\StockItemRepositoryInterface::class
         );
 
         $this->resource = $this->getMock(
-            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item',
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class,
             [],
             [],
             '',
@@ -118,7 +121,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceCollection = $this->getMock(
-            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection',
+            \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection::class,
             [],
             [],
             '',
@@ -128,7 +131,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->item = $this->objectManagerHelper->getObject(
-            'Magento\CatalogInventory\Model\Stock\Item',
+            \Magento\CatalogInventory\Model\Stock\Item::class,
             [
                 'context' => $this->context,
                 'registry' => $this->registry,
@@ -171,7 +174,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetProduct()
     {
         $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             [
                 'getId',
                 'getName',

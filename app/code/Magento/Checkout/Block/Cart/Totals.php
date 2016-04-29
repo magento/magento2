@@ -18,7 +18,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @var string
      */
-    protected $_defaultRenderer = 'Magento\Checkout\Block\Total\DefaultTotal';
+    protected $_defaultRenderer = \Magento\Checkout\Block\Total\DefaultTotal::class;
 
     /**
      * @var array

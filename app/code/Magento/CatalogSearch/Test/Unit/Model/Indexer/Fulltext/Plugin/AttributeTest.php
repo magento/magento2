@@ -31,9 +31,9 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Attribute', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Attribute::class, [], [], '', false);
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Indexer\IndexerInterface',
+            \Magento\Framework\Indexer\IndexerInterface::class,
             [],
             '',
             false,
@@ -42,7 +42,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ['getId', 'getState', '__wakeup']
         );
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Framework\Indexer\IndexerRegistry',
+            \Magento\Framework\Indexer\IndexerRegistry::class,
             ['get'],
             [],
             '',
@@ -64,7 +64,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testAroundSave($isObjectNew, $isSearchableChanged, $invalidateCounter)
     {
         $attributeMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
             [],
             '',
@@ -113,7 +113,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testAroundDelete($isObjectNew, $isSearchable, $invalidateCounter)
     {
         $attributeMock = $this->getMock(
-            '\Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['getIsSearchable', 'isObjectNew', '__wakeup'],
             [],
             '',
