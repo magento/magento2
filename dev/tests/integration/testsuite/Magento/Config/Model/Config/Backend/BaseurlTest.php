@@ -20,7 +20,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $model \Magento\Config\Model\Config\Backend\Baseurl */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Config\Model\Config\Backend\Baseurl'
+            \Magento\Config\Model\Config\Backend\Baseurl::class
         );
         $model->setPath($path)->setValue($value)->save();
         $this->assertNotEmpty((int)$model->getId());
@@ -81,7 +81,7 @@ class BaseurlTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $model \Magento\Config\Model\Config\Backend\Baseurl */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Config\Model\Config\Backend\Baseurl'
+            \Magento\Config\Model\Config\Backend\Baseurl::class
         );
         $model->setPath($path)->setValue($value)->save();
     }

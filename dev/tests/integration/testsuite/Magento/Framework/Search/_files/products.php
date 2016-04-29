@@ -6,10 +6,10 @@
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
 $customOptionFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+    ->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(1)
@@ -79,7 +79,7 @@ $product->setCanSaveCustomOptions(true)
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(2)
@@ -149,7 +149,7 @@ $product->setCanSaveCustomOptions(true)
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(3)
@@ -219,7 +219,7 @@ $product->setCanSaveCustomOptions(true)
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(4)
@@ -272,7 +272,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId(5)

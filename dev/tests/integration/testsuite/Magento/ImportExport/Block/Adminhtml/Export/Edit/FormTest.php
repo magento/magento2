@@ -36,9 +36,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\ImportExport\Block\Adminhtml\Export\Edit\Form'
+            \Magento\ImportExport\Block\Adminhtml\Export\Edit\Form::class
         );
     }
 

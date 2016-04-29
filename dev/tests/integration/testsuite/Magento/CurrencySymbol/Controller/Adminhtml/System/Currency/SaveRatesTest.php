@@ -17,7 +17,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     protected function setUp()
     {
         $this->currencyRate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Directory\Model\Currency'
+            \Magento\Directory\Model\Currency::class
         );
         parent::setUp();
     }

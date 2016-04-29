@@ -5,7 +5,7 @@
  */
 
 /** @var $page \Magento\Cms\Model\Page */
-$page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Page');
+$page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
 $page->setTitle('Cms Page 100')
     ->setIdentifier('page100')
     ->setStores([0])
@@ -14,7 +14,7 @@ $page->setTitle('Cms Page 100')
     ->setPageLayout('1column')
     ->save();
 
-$page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Page');
+$page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Cms\Model\Page::class);
 $page->setTitle('Cms Page Design Blank')
     ->setIdentifier('page_design_blank')
     ->setStores([0])

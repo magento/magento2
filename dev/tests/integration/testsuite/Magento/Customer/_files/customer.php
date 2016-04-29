@@ -6,8 +6,8 @@
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $repository \Magento\Customer\Api\CustomerRepositoryInterface */
-$repository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
-$customer = $objectManager->create('Magento\Customer\Model\Customer');
+$repository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+$customer = $objectManager->create(\Magento\Customer\Model\Customer::class);
 
 /** @var Magento\Customer\Model\Customer $customer */
 $customer->setWebsiteId(1)

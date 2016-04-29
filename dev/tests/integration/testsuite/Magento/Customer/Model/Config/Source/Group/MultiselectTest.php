@@ -15,7 +15,9 @@ class MultiselectTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         /** @var Multiselect $multiselect */
-        $multiselect = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Source\Group\Multiselect');
+        $multiselect = Bootstrap::getObjectManager()->get(
+            \Magento\Customer\Model\Config\Source\Group\Multiselect::class
+        );
         $this->assertEquals(
             [
                 ['value' => 1, 'label' => 'General'],

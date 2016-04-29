@@ -55,7 +55,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $importModel = $this->getMock(
-            'Magento\ImportExport\Model\Import',
+            \Magento\ImportExport\Model\Import::class,
             ['getEntityBehaviors', 'getUniqueEntityBehaviors'],
             [],
             '',
@@ -78,7 +78,7 @@ class BeforeTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $objectManager->create(
-            'Magento\ImportExport\Block\Adminhtml\Import\Edit\Before',
+            \Magento\ImportExport\Block\Adminhtml\Import\Edit\Before::class,
             [
                 'importModel' => $importModel,
             ]

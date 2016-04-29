@@ -7,7 +7,7 @@
  */
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+    ->create(\Magento\Customer\Model\Address::class);
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     [

@@ -24,7 +24,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(
-            'Magento\ConfigurableImportExport\Model\Export\RowCustomizer'
+            \Magento\ConfigurableImportExport\Model\Export\RowCustomizer::class
         );
     }
 
@@ -33,7 +33,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
-        $collection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
+        $collection = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $select = (string)$collection->getSelect();
         $this->model->prepareData($collection, [1, 2, 3, 4]);
         $this->assertEquals($select, (string)$collection->getSelect());

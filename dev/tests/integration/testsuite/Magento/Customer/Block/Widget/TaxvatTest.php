@@ -19,7 +19,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Block\Widget\Taxvat'
+            \Magento\Customer\Block\Widget\Taxvat::class
         );
 
         $this->assertContains('title="Tax/VAT number"', $block->toHtml());
@@ -34,14 +34,14 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Model\Attribute $model */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Attribute'
+            \Magento\Customer\Model\Attribute::class
         );
         $model->loadByCode('customer', 'taxvat')->setIsRequired(true);
         $model->save();
 
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Block\Widget\Taxvat'
+            \Magento\Customer\Block\Widget\Taxvat::class
         );
 
         $this->assertContains('title="Tax/VAT number"', $block->toHtml());
@@ -51,7 +51,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
         $eavConfig->clear();
     }
 }

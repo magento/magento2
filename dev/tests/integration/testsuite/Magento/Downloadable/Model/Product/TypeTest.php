@@ -22,7 +22,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Downloadable\Model\Product\Type'
+            \Magento\Downloadable\Model\Product\Type::class
         );
     }
 
@@ -33,7 +33,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function testDeleteTypeSpecificData()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load(1);
         $product->setOrigData();
@@ -56,7 +56,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product->setDownloadableData($downloadableData);
         $this->_model->deleteTypeSpecificData($product);
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load(1);
 
@@ -77,7 +77,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load(1);
         $product->setOrigData();
@@ -107,8 +107,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         }
 
         $product->setDownloadableData($downloadableData);
-        $sampleFactory = $objectManager->create('Magento\Downloadable\Api\Data\SampleInterfaceFactory');
-        $linkFactory = $objectManager->create('Magento\Downloadable\Api\Data\LinkInterfaceFactory');
+        $sampleFactory = $objectManager->create(\Magento\Downloadable\Api\Data\SampleInterfaceFactory::class);
+        $linkFactory = $objectManager->create(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class);
         $extension = $product->getExtensionAttributes();
         $expectedLink = [
             'is_shareable' => '2',
@@ -182,7 +182,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $product->save();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load(1);
 

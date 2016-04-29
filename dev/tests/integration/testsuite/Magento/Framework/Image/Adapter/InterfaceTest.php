@@ -116,7 +116,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-            $adapter = $objectManager->get('Magento\Framework\Image\AdapterFactory')->create($adapterType);
+            $adapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create($adapterType);
             return $adapter;
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
@@ -551,7 +551,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Filesystem\Directory\ReadFactory readFactory */
         $readFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem\Directory\ReadFactory'
+            \Magento\Framework\Filesystem\Directory\ReadFactory::class
         );
         $reader = $readFactory->create(BP);
         $path = $reader->getAbsolutePath('lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
@@ -607,7 +607,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     public function testValidateUploadFile()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $imageAdapter = $objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
+        $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
         $this->assertTrue($imageAdapter->validateUploadFile($this->_getFixture('magento_thumbnail.jpg')));
     }
 
@@ -617,7 +617,7 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     public function testValidateUploadFileException()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $imageAdapter = $objectManager->get('Magento\Framework\Image\AdapterFactory')->create();
+        $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
         $imageAdapter->validateUploadFile(__FILE__);
     }
 }

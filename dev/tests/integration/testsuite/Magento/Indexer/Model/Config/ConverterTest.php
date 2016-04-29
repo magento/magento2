@@ -15,7 +15,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Indexer\Config\Converter');
+            ->create(\Magento\Framework\Indexer\Config\Converter::class);
     }
 
     public function testConverter()

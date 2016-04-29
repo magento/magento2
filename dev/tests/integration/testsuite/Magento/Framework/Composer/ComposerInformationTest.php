@@ -48,12 +48,12 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->directoryList = $this->objectManager->create(
-            'Magento\Framework\App\Filesystem\DirectoryList',
+            \Magento\Framework\App\Filesystem\DirectoryList::class,
             ['root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
         );
 
         $this->filesystem = $this->objectManager->create(
-            'Magento\Framework\Filesystem',
+            \Magento\Framework\Filesystem::class,
             ['directoryList' => $this->directoryList]
         );
 
@@ -71,7 +71,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
@@ -95,7 +95,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
@@ -119,7 +119,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupDirectory($composerDir);
         $composerInfo = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
@@ -142,7 +142,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
@@ -179,7 +179,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupDirectory('notARealDirectory');
         $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
@@ -195,7 +195,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
@@ -221,7 +221,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $composerInfo = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
+            \Magento\Framework\Composer\ComposerInformation::class,
             [
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,

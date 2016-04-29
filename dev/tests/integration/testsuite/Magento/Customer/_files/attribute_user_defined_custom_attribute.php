@@ -5,7 +5,7 @@
  */
 
 /** @var Magento\Customer\Model\Attribute $model */
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 
 $model->setName(
     'custom_attribute1'
@@ -27,7 +27,7 @@ $model->setName(
 
 $model->save();
 
-$model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 
 $model2->setName(
     'custom_attribute2'
@@ -49,7 +49,7 @@ $model2->setName(
 
 $model2->save();
 
-$model3 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model3 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 
 $model3->setName(
     'customer_image'

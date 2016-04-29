@@ -23,12 +23,12 @@ class CollectionFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create('Magento\Framework\Message\CollectionFactory');
+        $this->model = $this->objectManager->create(\Magento\Framework\Message\CollectionFactory::class);
     }
 
     public function testCreate()
     {
         $message = $this->model->create();
-        $this->assertInstanceOf('\Magento\Framework\Message\Collection', $message);
+        $this->assertInstanceOf(\Magento\Framework\Message\Collection::class, $message);
     }
 }

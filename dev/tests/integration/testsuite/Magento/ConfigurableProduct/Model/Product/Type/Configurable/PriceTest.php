@@ -130,7 +130,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         if (!$this->customOptionFactory) {
             $this->customOptionFactory = $this->objectManager->create(
-                'Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory'
+                \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class
             );
         }
 
@@ -157,7 +157,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
         /** @var $model \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price */
         $model = $this->objectManager->create(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price'
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price::class
         );
 
         // final price is the lowest price of configurable variations

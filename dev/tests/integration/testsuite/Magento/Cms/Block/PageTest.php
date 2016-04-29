@@ -13,12 +13,12 @@ class PageTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPage()
     {
-        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\Page');
+        $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Cms\Model\Page::class);
         $page->load('page100', 'identifier');
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         );
-        $pageBlock = $layout->createBlock('Magento\Cms\Block\Page');
+        $pageBlock = $layout->createBlock(\Magento\Cms\Block\Page::class);
         $pageBlock->setData('page', $page);
         $pageBlock->toHtml();
         $this->assertEquals($page, $pageBlock->getPage());

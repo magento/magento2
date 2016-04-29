@@ -305,7 +305,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
         return Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem\File\Read',
+            \Magento\Framework\Filesystem\File\Read::class,
             ['path' => $fullPath, 'driver' => new \Magento\Framework\Filesystem\Driver\File()]
         );
     }

@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
 $quote->setStoreId(1)
     ->setIsActive(true)
     ->setIsMultiShipping(false)

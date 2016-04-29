@@ -33,10 +33,10 @@ class BlockTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout\Reader\Block'
+            \Magento\Framework\View\Layout\Reader\Block::class
         );
         $this->readerContext = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout\Reader\Context'
+            \Magento\Framework\View\Layout\Reader\Context::class
         );
     }
 

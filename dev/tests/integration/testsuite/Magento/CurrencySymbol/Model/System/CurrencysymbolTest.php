@@ -23,15 +23,15 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->currencySymbolModel = Bootstrap::getObjectManager()->create(
-            'Magento\CurrencySymbol\Model\System\Currencysymbol'
+            \Magento\CurrencySymbol\Model\System\Currencysymbol::class
         );
     }
 
     protected function tearDown()
     {
         $this->currencySymbolModel = null;
-        Bootstrap::getObjectManager()->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-        Bootstrap::getObjectManager()->create('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+        Bootstrap::getObjectManager()->get(\Magento\Framework\App\Config\ReinitableConfigInterface::class)->reinit();
+        Bootstrap::getObjectManager()->create(\Magento\Store\Model\StoreManagerInterface::class)->reinitStores();
     }
 
     public function testGetCurrencySymbolsData()

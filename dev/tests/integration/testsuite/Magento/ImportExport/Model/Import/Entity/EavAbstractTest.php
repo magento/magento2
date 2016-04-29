@@ -25,7 +25,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\Entity\AbstractEav',
+            \Magento\ImportExport\Model\Import\Entity\AbstractEav::class,
             [],
             '',
             false
@@ -41,7 +41,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
 
         /** @var $attributeCollection \Magento\Customer\Model\ResourceModel\Attribute\Collection */
         $attributeCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
+            \Magento\Customer\Model\ResourceModel\Attribute\Collection::class
         );
         $attributeCollection->addFieldToFilter(
             'attribute_code',

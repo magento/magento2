@@ -15,7 +15,7 @@ class CookiePathValidatorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $objectManager->create('Magento\Framework\Session\Config\Validator\CookiePathValidator');
+        $this->model = $objectManager->create(\Magento\Framework\Session\Config\Validator\CookiePathValidator::class);
     }
 
     public function testNoLeadingSlash()
