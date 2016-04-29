@@ -58,7 +58,7 @@ abstract class Quote extends \Magento\Backend\App\Action
     {
         $this->_coreRegistry->register(
             \Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE,
-            $this->_objectManager->create('Magento\SalesRule\Model\Rule')
+            $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class)
         );
         $id = (int)$this->getRequest()->getParam('id');
 

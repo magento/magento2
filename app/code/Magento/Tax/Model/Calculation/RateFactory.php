@@ -34,6 +34,6 @@ class RateFactory
      */
     public function create(array $arguments = [])
     {
-        return $this->_objectManager->create('Magento\Tax\Model\Calculation\Rate', $arguments);
+        return $this->_objectManager->create(\Magento\Tax\Model\Calculation\Rate::class, $arguments);
     }
 }

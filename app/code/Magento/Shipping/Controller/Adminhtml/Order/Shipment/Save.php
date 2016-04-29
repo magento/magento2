@@ -61,7 +61,7 @@ class Save extends \Magento\Backend\App\Action
     {
         $shipment->getOrder()->setIsInProcess(true);
         $transaction = $this->_objectManager->create(
-            'Magento\Framework\DB\Transaction'
+            \Magento\Framework\DB\Transaction::class
         );
         $transaction->addObject(
             $shipment
@@ -95,7 +95,7 @@ class Save extends \Magento\Backend\App\Action
         $data = $this->getRequest()->getParam('shipment');
 
         if (!empty($data['comment_text'])) {
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($data['comment_text']);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setCommentText($data['comment_text']);
         }
 
         try {
@@ -143,7 +143,7 @@ class Save extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess(
                 $isNeedCreateLabel ? $shipmentCreatedMessage . ' ' . $labelCreatedMessage : $shipmentCreatedMessage
             );
-            $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);
@@ -153,7 +153,7 @@ class Save extends \Magento\Backend\App\Action
                 $this->_redirect('*/*/new', ['order_id' => $this->getRequest()->getParam('order_id')]);
             }
         } catch (\Exception $e) {
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             if ($isNeedCreateLabel) {
                 $responseAjax->setError(true);
                 $responseAjax->setMessage(__('An error occurred while creating shipping label.'));

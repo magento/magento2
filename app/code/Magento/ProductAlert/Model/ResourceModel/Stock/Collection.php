@@ -19,7 +19,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\ProductAlert\Model\Stock', 'Magento\ProductAlert\Model\ResourceModel\Stock');
+        $this->_init(\Magento\ProductAlert\Model\Stock::class, \Magento\ProductAlert\Model\ResourceModel\Stock::class);
     }
 
     /**

@@ -18,7 +18,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Swatches\Model\Swatch', 'Magento\Swatches\Model\ResourceModel\Swatch');
+        $this->_init(\Magento\Swatches\Model\Swatch::class, \Magento\Swatches\Model\ResourceModel\Swatch::class);
     }
 
     /**

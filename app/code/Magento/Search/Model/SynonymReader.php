@@ -67,7 +67,7 @@ class SynonymReader extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\ResourceModel\SynonymReader');
+        $this->_init(\Magento\Search\Model\ResourceModel\SynonymReader::class);
     }
 
     /**

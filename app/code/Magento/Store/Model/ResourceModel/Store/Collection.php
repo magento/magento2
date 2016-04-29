@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->setFlag('load_default_store', false);
-        $this->_init('Magento\Store\Model\Store', 'Magento\Store\Model\ResourceModel\Store');
+        $this->_init(\Magento\Store\Model\Store::class, \Magento\Store\Model\ResourceModel\Store::class);
     }
 
     /**

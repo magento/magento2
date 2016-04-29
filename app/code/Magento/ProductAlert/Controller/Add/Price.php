@@ -78,12 +78,12 @@ class Price extends AddController
             /* @var $product \Magento\Catalog\Model\Product */
             $product = $this->productRepository->getById($productId);
             /** @var \Magento\ProductAlert\Model\Price $model */
-            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Price')
+            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Price::class)
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setPrice($product->getFinalPrice())
                 ->setWebsiteId(
-                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                         ->getStore()
                         ->getWebsiteId()
                 );

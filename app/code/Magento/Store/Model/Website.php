@@ -217,7 +217,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\ResourceModel\Website');
+        $this->_init(\Magento\Store\Model\ResourceModel\Website::class);
     }
 
     /**

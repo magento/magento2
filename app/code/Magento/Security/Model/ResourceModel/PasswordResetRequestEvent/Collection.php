@@ -50,8 +50,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Security\Model\PasswordResetRequestEvent',
-            'Magento\Security\Model\ResourceModel\PasswordResetRequestEvent'
+            \Magento\Security\Model\PasswordResetRequestEvent::class,
+            \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class
         );
     }
 

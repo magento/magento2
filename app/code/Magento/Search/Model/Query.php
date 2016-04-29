@@ -130,7 +130,7 @@ class Query extends AbstractModel implements QueryInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\ResourceModel\Query');
+        $this->_init(\Magento\Search\Model\ResourceModel\Query::class);
     }
 
     /**

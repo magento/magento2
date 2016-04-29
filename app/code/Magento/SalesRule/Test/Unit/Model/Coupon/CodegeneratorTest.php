@@ -18,7 +18,7 @@ class CodegeneratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->codegenerator = $objectManager->getObject('Magento\SalesRule\Model\Coupon\Codegenerator');
+        $this->codegenerator = $objectManager->getObject(\Magento\SalesRule\Model\Coupon\Codegenerator::class);
     }
 
     /**

@@ -26,14 +26,14 @@ class SaveAndContinueButtonTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->urlBuilderMock = $this->getMock('\Magento\Framework\UrlInterface', [], [], '', false);
-        $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $contextMock = $this->getMock('\Magento\Backend\Block\Widget\Context', [], [], '', false);
+        $this->urlBuilderMock = $this->getMock(\Magento\Framework\UrlInterface::class, [], [], '', false);
+        $this->registryMock = $this->getMock(\Magento\Framework\Registry::class, [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Backend\Block\Widget\Context::class, [], [], '', false);
 
         $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $this->model = (new ObjectManager($this))->getObject(
-            'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\SaveAndContinueButton',
+            \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\SaveAndContinueButton::class,
             [
                 'context' => $contextMock,
                 'registry' => $this->registryMock

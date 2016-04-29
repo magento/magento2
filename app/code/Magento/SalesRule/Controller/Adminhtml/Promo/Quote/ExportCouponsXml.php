@@ -22,7 +22,7 @@ class ExportCouponsXml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
         if ($rule->getId()) {
             $fileName = 'coupon_codes.xml';
             $content = $this->_view->getLayout()->createBlock(
-                'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid'
+                \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid::class
             )->getExcelFile(
                 $fileName
             );

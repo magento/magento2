@@ -89,44 +89,44 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->sessionMock = $this->getMock(
-            'Magento\Framework\Session\Generic',
+            \Magento\Framework\Session\Generic::class,
             ['getCurrencyCode'],
             [],
             '',
             false
         );
         $this->httpContextMock = $this->getMock(
-            'Magento\Framework\App\Http\Context',
+            \Magento\Framework\App\Http\Context::class,
             [],
             [],
             '',
             false
         );
         $this->httpRequestMock = $this->getMock(
-            'Magento\Framework\App\Request\Http',
+            \Magento\Framework\App\Request\Http::class,
             ['getParam'],
             [],
             '',
             false
         );
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->storeCookieManager = $this->getMock('Magento\Store\Api\StoreCookieManagerInterface');
+        $this->storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeCookieManager = $this->getMock(\Magento\Store\Api\StoreCookieManagerInterface::class);
         $this->storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             [],
             [],
             '',
             false
         );
         $this->currentStoreMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             [],
             [],
             '',
             false
         );
         $this->websiteMock = $this->getMock(
-            'Magento\Store\Model\Website',
+            \Magento\Store\Model\Website::class,
             ['getDefaultStore', '__wakeup'],
             [],
             '',
@@ -136,16 +136,15 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             return 'ExpectedValue';
         };
         $this->subjectMock = $this->getMock(
-            'Magento\Framework\App\Action\Action',
+            \Magento\Framework\App\Action\Action::class,
             [],
             [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
 
-        $this->plugin = (new ObjectManager($this))->getObject(
-            'Magento\Store\App\Action\Plugin\Context',
+        $this->plugin = (new ObjectManager($this))->getObject(\Magento\Store\App\Action\Plugin\Context::class,
             [
                 'session' => $this->sessionMock,
                 'httpContext' => $this->httpContextMock,

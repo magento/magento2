@@ -30,7 +30,7 @@ class ResetMethodTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->model = $this->objectManager->getObject('\Magento\Security\Model\Config\Source\ResetMethod');
+        $this->model = $this->objectManager->getObject(\Magento\Security\Model\Config\Source\ResetMethod::class);
     }
 
     public function testToOptionArray()

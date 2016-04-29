@@ -21,23 +21,29 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute(array $sampleDataPackages, $appRunResult, $expectedMsg)
     {
-        $directoryRead = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
+        $directoryRead = $this->getMock(
+            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
         $directoryRead->expects($this->any())->method('getAbsolutePath')->willReturn('/path/to/composer.json');
 
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystem->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::ROOT)
             ->willReturn($directoryRead);
 
-        $sampleDataDependency = $this->getMock('Magento\SampleData\Model\Dependency', [], [], '', false);
+        $sampleDataDependency = $this->getMock(\Magento\SampleData\Model\Dependency::class, [], [], '', false);
         $sampleDataDependency
             ->expects($this->any())
             ->method('getSampleDataPackages')
             ->willReturn($sampleDataPackages);
 
-        $commandInput = $this->getMock('Symfony\Component\Console\Input\ArrayInput', [], [], '', false);
+        $commandInput = $this->getMock(\Symfony\Component\Console\Input\ArrayInput::class, [], [], '', false);
 
         $arrayInputFactory = $this
-            ->getMock('Symfony\Component\Console\Input\ArrayInputFactory', ['create'], [], '', false);
+            ->getMock(\Symfony\Component\Console\Input\ArrayInputFactory::class, ['create'], [], '', false);
 
         array_walk($sampleDataPackages, function (&$v, $k) {
             $v = "$k:$v";
@@ -56,14 +62,14 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
             ->with(['parameters' => $requireArgs])
             ->willReturn($commandInput);
 
-        $application = $this->getMock('Composer\Console\Application', [], [], '', false);
+        $application = $this->getMock(\Composer\Console\Application::class, [], [], '', false);
         $application->expects($this->any())->method('run')
             ->with($commandInput, $this->anything())
             ->willReturn($appRunResult);
         if (($appRunResult !== 0) && !empty($sampleDataPackages)) {
             $application->expects($this->once())->method('resetComposer')->willReturnSelf();
         }
-        $applicationFactory = $this->getMock('Composer\Console\ApplicationFactory', ['create'], [], '', false);
+        $applicationFactory = $this->getMock(\Composer\Console\ApplicationFactory::class, ['create'], [], '', false);
         $applicationFactory->expects($this->any())->method('create')->willReturn($application);
 
         $commandTester = new CommandTester(

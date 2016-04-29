@@ -64,7 +64,7 @@ class MetaTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->connectionMock = $this->getMockForAbstractClass(
-            'Magento\Framework\DB\Adapter\AdapterInterface',
+            \Magento\Framework\DB\Adapter\AdapterInterface::class,
             [],
             '',
             false,
@@ -73,28 +73,28 @@ class MetaTest extends \PHPUnit_Framework_TestCase
             ['query']
         );
         $this->dbContext = $this->getMock(
-            'Magento\Framework\Model\ResourceModel\Db\Context',
+            \Magento\Framework\Model\ResourceModel\Db\Context::class,
             [],
             [],
             '',
             false
         );
         $this->metaFactory = $this->getMock(
-            'Magento\SalesSequence\Model\MetaFactory',
+            \Magento\SalesSequence\Model\MetaFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->resourceProfile = $this->getMock(
-            'Magento\SalesSequence\Model\ResourceModel\Profile',
+            \Magento\SalesSequence\Model\ResourceModel\Profile::class,
             ['loadActiveProfile', 'save'],
             [],
             '',
             false
         );
         $this->resourceMock = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['getConnection', 'getTableName'],
             [],
             '',
@@ -102,21 +102,21 @@ class MetaTest extends \PHPUnit_Framework_TestCase
         );
         $this->dbContext->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->select = $this->getMock(
-            'Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [],
             [],
             '',
             false
         );
         $this->meta = $this->getMock(
-            'Magento\SalesSequence\Model\Meta',
+            \Magento\SalesSequence\Model\Meta::class,
             [],
             [],
             '',
             false
         );
         $this->profile = $this->getMock(
-            'Magento\SalesSequence\Model\Profile',
+            \Magento\SalesSequence\Model\Profile::class,
             [],
             [],
             '',

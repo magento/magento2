@@ -193,7 +193,7 @@ class TaxCalculation implements TaxCalculationInterface
         $this->dataObjectHelper->populateWithArray(
             $taxDetailsDataObject,
             $taxDetailsData,
-            '\Magento\Tax\Api\Data\TaxDetailsInterface'
+            \Magento\Tax\Api\Data\TaxDetailsInterface::class
         );
         $taxDetailsDataObject->setItems($processedItems);
         return $taxDetailsDataObject;

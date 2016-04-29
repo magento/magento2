@@ -20,7 +20,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function _construct()
     {
-        $this->_init('Magento\Tax\Model\ClassModel', 'Magento\Tax\Model\ResourceModel\TaxClass');
+        $this->_init(\Magento\Tax\Model\ClassModel::class, \Magento\Tax\Model\ResourceModel\TaxClass::class);
     }
 
     /**

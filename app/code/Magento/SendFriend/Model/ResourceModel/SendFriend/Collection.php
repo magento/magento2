@@ -19,6 +19,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\SendFriend\Model\SendFriend', 'Magento\SendFriend\Model\ResourceModel\SendFriend');
+        $this->_init(
+            \Magento\SendFriend\Model\SendFriend::class,
+            \Magento\SendFriend\Model\ResourceModel\SendFriend::class
+        );
     }
 }

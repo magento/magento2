@@ -38,7 +38,7 @@ class Edit extends TermController
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create('Magento\Search\Model\Query');
+        $model = $this->_objectManager->create(\Magento\Search\Model\Query::class);
 
         if ($id) {
             $model->load($id);
@@ -52,7 +52,7 @@ class Edit extends TermController
         }
 
         // set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getPageData(true);
+        $data = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getPageData(true);
         if (!empty($data)) {
             $model->addData($data);
         }

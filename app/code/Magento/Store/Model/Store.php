@@ -413,8 +413,10 @@ class Store extends AbstractExtensibleModel implements
     {
         parent::__wakeup();
         $this->_coreFileStorageDatabase = ObjectManager::getInstance()
-            ->get('Magento\MediaStorage\Helper\File\Storage\Database');
-        $this->_config = ObjectManager::getInstance()->get('Magento\Framework\App\Config\ReinitableConfigInterface');
+            ->get(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $this->_config = ObjectManager::getInstance()->get(
+            \Magento\Framework\App\Config\ReinitableConfigInterface::class
+        );
     }
 
     /**
@@ -424,7 +426,7 @@ class Store extends AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\ResourceModel\Store');
+        $this->_init(\Magento\Store\Model\ResourceModel\Store::class);
     }
 
     /**
