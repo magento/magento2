@@ -31,15 +31,15 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManager::class, [], [], '', false);
         $this->_model = new \Magento\Store\App\Request\PathInfoProcessor($this->_storeManagerMock);
     }
 
     public function testProcessIfStoreExistsAndIsNotDirectAcccessToFrontName()
     {
-        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -63,7 +63,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessIfStoreExistsAndDirectAcccessToFrontName()
     {
-        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -88,7 +88,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessIfStoreIsEmpty()
     {
         $path = '/0/node_one/';
-        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
@@ -112,7 +112,7 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessIfStoreCodeIsNotExist()
     {
-        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $store = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_storeManagerMock->expects($this->once())->method('getStore')->with('storeCode')
             ->willThrowException(new NoSuchEntityException());
         $store->expects($this->never())->method('isUseStoreInUrl');

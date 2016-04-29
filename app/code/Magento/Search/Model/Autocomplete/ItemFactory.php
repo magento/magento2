@@ -30,6 +30,6 @@ class ItemFactory
      */
     public function create(array $data)
     {
-        return $this->objectManager->create('\Magento\Search\Model\Autocomplete\Item', ['data' => $data]);
+        return $this->objectManager->create(\Magento\Search\Model\Autocomplete\Item::class, ['data' => $data]);
     }
 }

@@ -157,7 +157,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\SendFriend\Model\ResourceModel\SendFriend');
+        $this->_init(\Magento\SendFriend\Model\ResourceModel\SendFriend::class);
     }
 
     /**

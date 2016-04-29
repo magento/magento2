@@ -131,7 +131,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
     {
         /** @var \Magento\SalesRule\Model\ResourceModel\Rule\Collection $collection */
         $collection = $this->ruleCollectionFactory->create();
-        $ruleInterfaceName = 'Magento\SalesRule\Api\Data\RuleInterface';
+        $ruleInterfaceName = \Magento\SalesRule\Api\Data\RuleInterface::class;
         $this->extensionAttributesJoinProcessor->process($collection, $ruleInterfaceName);
 
         //Add filters from root filter group to the collection

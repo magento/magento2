@@ -39,6 +39,6 @@ class PasswordResetRequestEvent extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Security\Model\ResourceModel\PasswordResetRequestEvent');
+        $this->_init(\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent::class);
     }
 }

@@ -52,9 +52,9 @@ class RowBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initRowBaseCalculator()
     {
-        $taxClassService = $this->getMock('Magento\Tax\Api\TaxClassManagementInterface');
+        $taxClassService = $this->getMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
         $this->rowBaseCalculator = $this->getMock(
-            'Magento\Tax\Model\Calculation\RowBaseCalculator',
+            \Magento\Tax\Model\Calculation\RowBaseCalculator::class,
             ['deltaRound'],
             [
                 'taxClassService' => $taxClassService,

@@ -104,7 +104,7 @@ class RequestPreprocessor
     {
         if ($this->baseUrlChecker === null) {
             $this->baseUrlChecker = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Store\Model\BaseUrlChecker'
+                \Magento\Store\Model\BaseUrlChecker::class
             );
         }
 

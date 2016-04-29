@@ -19,7 +19,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\Calculation\Rule', 'Magento\Tax\Model\ResourceModel\Calculation\Rule');
+        $this->_init(
+            \Magento\Tax\Model\Calculation\Rule::class,
+            \Magento\Tax\Model\ResourceModel\Calculation\Rule::class
+        );
     }
 
     /**

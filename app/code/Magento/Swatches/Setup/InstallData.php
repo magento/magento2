@@ -56,7 +56,7 @@ class InstallData implements InstallDataInterface
                 'type' => 'varchar',
                 'label' => 'Swatch',
                 'input' => 'media_image',
-                'frontend' => 'Magento\Catalog\Model\Product\Attribute\Frontend\Image',
+                'frontend' => \Magento\Catalog\Model\Product\Attribute\Frontend\Image::class,
                 'required' => false,
                 'sort_order' => 3,
                 'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,

@@ -110,7 +110,7 @@ class Rate extends \Magento\Framework\Model\AbstractExtensibleModel implements T
      */
     protected function _construct()
     {
-        $this->_init('Magento\Tax\Model\ResourceModel\Calculation\Rate');
+        $this->_init(\Magento\Tax\Model\ResourceModel\Calculation\Rate::class);
     }
 
     /**

@@ -66,7 +66,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\Query', 'Magento\Search\Model\ResourceModel\Query');
+        $this->_init(\Magento\Search\Model\Query::class, \Magento\Search\Model\ResourceModel\Query::class);
     }
 
     /**

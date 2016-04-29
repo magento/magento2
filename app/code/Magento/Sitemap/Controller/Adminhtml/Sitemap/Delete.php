@@ -20,7 +20,7 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
         $directory = $this->_objectManager->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::ROOT
         );
@@ -30,7 +30,7 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
         if ($id) {
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('Magento\Sitemap\Model\Sitemap');
+                $model = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
                 $model->setId($id);
                 // init and load sitemap model
 

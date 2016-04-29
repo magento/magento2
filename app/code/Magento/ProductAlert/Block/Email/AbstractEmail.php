@@ -172,7 +172,7 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     protected function getPriceRender()
     {
         return $this->_layout->createBlock(
-            'Magento\Framework\Pricing\Render',
+            \Magento\Framework\Pricing\Render::class,
             '',
             ['data' => ['price_render_handle' => 'catalog_product_prices']]
         );

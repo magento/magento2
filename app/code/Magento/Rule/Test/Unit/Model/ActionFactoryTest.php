@@ -27,11 +27,11 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->actionFactory = $this->objectManagerHelper->getObject(
-            'Magento\Rule\Model\ActionFactory',
+            \Magento\Rule\Model\ActionFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]

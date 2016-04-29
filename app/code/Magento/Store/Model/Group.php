@@ -142,7 +142,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\ResourceModel\Group');
+        $this->_init(\Magento\Store\Model\ResourceModel\Group::class);
     }
 
     /**

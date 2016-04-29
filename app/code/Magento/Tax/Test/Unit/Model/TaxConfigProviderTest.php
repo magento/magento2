@@ -41,17 +41,17 @@ class TaxConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->taxHelperMock = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
-        $this->taxConfigMock = $this->getMock('Magento\Tax\Model\Config', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+        $this->taxHelperMock = $this->getMock(\Magento\Tax\Helper\Data::class, [], [], '', false);
+        $this->taxConfigMock = $this->getMock(\Magento\Tax\Model\Config::class, [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
         $this->scopeConfigMock = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             [],
             [],
             '',
             false
         );
-        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $this->quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->model = new \Magento\Tax\Model\TaxConfigProvider(
             $this->taxHelperMock,

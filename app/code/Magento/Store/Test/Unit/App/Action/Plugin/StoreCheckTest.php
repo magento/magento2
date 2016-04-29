@@ -42,8 +42,8 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->_storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->_storeManagerMock = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
@@ -51,11 +51,11 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_storeMock)
         );
-        $this->subjectMock = $this->getMock('Magento\Framework\App\Action\Action', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Framework\App\Action\Action::class, [], [], '', false);
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->requestMock = $this->getMock(\Magento\Framework\App\RequestInterface::class);
 
         $this->_plugin = new \Magento\Store\App\Action\Plugin\StoreCheck($this->_storeManagerMock);
     }

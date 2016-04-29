@@ -53,11 +53,11 @@ class Price extends UnsubscribeController
                 throw new NoSuchEntityException();
             }
             /** @var \Magento\ProductAlert\Model\Price $model */
-            $model = $this->_objectManager->create('Magento\ProductAlert\Model\Price')
+            $model = $this->_objectManager->create(\Magento\ProductAlert\Model\Price::class)
                 ->setCustomerId($this->customerSession->getCustomerId())
                 ->setProductId($product->getId())
                 ->setWebsiteId(
-                    $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+                    $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)
                         ->getStore()
                         ->getWebsiteId()
                 )

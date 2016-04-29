@@ -87,7 +87,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Security\Model\ResourceModel\AdminSessionInfo');
+        $this->_init(\Magento\Security\Model\ResourceModel\AdminSessionInfo::class);
     }
 
     /**

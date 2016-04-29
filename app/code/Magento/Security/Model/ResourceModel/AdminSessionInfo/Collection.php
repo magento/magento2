@@ -50,8 +50,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Security\Model\AdminSessionInfo',
-            'Magento\Security\Model\ResourceModel\AdminSessionInfo'
+            \Magento\Security\Model\AdminSessionInfo::class,
+            \Magento\Security\Model\ResourceModel\AdminSessionInfo::class
         );
     }
 

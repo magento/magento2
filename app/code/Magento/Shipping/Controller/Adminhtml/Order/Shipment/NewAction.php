@@ -47,7 +47,7 @@ class NewAction extends \Magento\Backend\App\Action
         $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
         $shipment = $this->shipmentLoader->load();
         if ($shipment) {
-            $comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
+            $comment = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true);
             if ($comment) {
                 $shipment->setCommentText($comment);
             }
