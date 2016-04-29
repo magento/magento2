@@ -17,7 +17,7 @@ class Lock extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('\Magento\MessageQueue\Model\ResourceModel\Lock');
+        $this->_init(\Magento\MessageQueue\Model\ResourceModel\Lock::class);
     }
 
     /**

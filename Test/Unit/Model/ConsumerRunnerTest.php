@@ -35,11 +35,11 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->consumerFactoryMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerFactory')
+        $this->consumerFactoryMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->consumerRunner = $this->objectManager->getObject(
-            'Magento\MessageQueue\Model\ConsumerRunner',
+            \Magento\MessageQueue\Model\ConsumerRunner::class,
             ['consumerFactory' => $this->consumerFactoryMock]
         );
         parent::setUp();
@@ -53,7 +53,7 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
     public function testMagicMethod()
     {
         /** @var ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
-        $consumerMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConsumerInterface')->getMock();
+        $consumerMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)->getMock();
         $consumerMock->expects($this->once())->method('process');
         $consumerName = 'someConsumerName';
         $this->consumerFactoryMock

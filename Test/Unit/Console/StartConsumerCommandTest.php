@@ -37,7 +37,7 @@ class StartConsumerCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfigure()
     {
-        $this->command = $this->objectManager->getObject('Magento\MessageQueue\Console\StartConsumerCommand');
+        $this->command = $this->objectManager->getObject(\Magento\MessageQueue\Console\StartConsumerCommand::class);
 
         $this->assertEquals(StartConsumerCommand::COMMAND_QUEUE_CONSUMERS_START, $this->command->getName());
         $this->assertEquals('Start MessageQueue consumer', $this->command->getDescription());
