@@ -173,10 +173,10 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturn(['data_1'=>1]);
 
-         $this->dataObjectProcessor
-             ->expects($this->any())
-             ->method('buildOutputDataArray')
-             ->willReturn(['data_2'=>2]);
+        $this->dataObjectProcessor
+            ->expects($this->any())
+            ->method('buildOutputDataArray')
+            ->willReturn(['data_2'=>2]);
 
         $this->ruleFactory
             ->expects($this->any())
