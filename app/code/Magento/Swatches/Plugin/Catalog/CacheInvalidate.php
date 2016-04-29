@@ -45,5 +45,4 @@ class CacheInvalidate
         }
         return $result;
     }
-
 }

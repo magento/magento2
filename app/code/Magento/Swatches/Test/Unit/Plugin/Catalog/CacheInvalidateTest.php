@@ -21,6 +21,7 @@ class CacheInvalidateTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute | \PHPUnit_Framework_MockObject_MockObject
      */
     private $attribute;
+
     /**
      * @var \Magento\Swatches\Plugin\Catalog\CacheInvalidate
      */
