@@ -308,7 +308,8 @@
                 font-weight: @font-weight__regular;
             }
 
-            .label:extend(.abs-visually-hidden all) {
+            .label {
+                &:extend(.abs-visually-hidden all);
             }
         }
     }
@@ -626,6 +627,34 @@
         .lib-css(background, @footer__background-color);
         margin-top: auto;
         padding-bottom: @indent__m;
+
+        .switcher {
+            .options {
+                ul.dropdown {
+                    bottom: -@indent__s;
+                    left: 100%;
+                    margin: 0 0 0 @indent__base;
+                    top: auto;
+
+                    &:before,
+                    &:after {
+                        left: auto;
+                        right: 100%;
+                        top: auto;
+                        bottom: @indent__base - 7px;
+                    }
+
+                    &:before {
+                        .lib-css(border-color, transparent @dropdown-list__background transparent transparent);
+                    }
+
+                    &:after {
+                        .lib-css(border-color, transparent @dropdown-list-pointer__border transparent transparent);
+                        margin: 0 0 -1px -1px;
+                    }
+                }
+            }
+        }
     }
 
     .footer {
