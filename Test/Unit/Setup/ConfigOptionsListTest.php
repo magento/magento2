@@ -51,18 +51,18 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->objectManager = new ObjectManager($this);
-        $this->connectionValidatorMock = $this->getMockBuilder('Magento\Amqp\Setup\ConnectionValidator')
+        $this->connectionValidatorMock = $this->getMockBuilder(\Magento\Amqp\Setup\ConnectionValidator::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->deploymentConfigMock = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
+        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            'Magento\Amqp\Setup\ConfigOptionsList',
+            \Magento\Amqp\Setup\ConfigOptionsList::class,
             [
                 'connectionValidator' => $this->connectionValidatorMock,
             ]
@@ -138,7 +138,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($result);
         /** @var \Magento\Framework\Config\Data\ConfigData $configData */
         $configData = $result[0];
-        $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $configData);
+        $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $configData);
         $actualData = $configData->getData();
         $this->assertEquals($expectedConfigData, $actualData);
     }

@@ -30,12 +30,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->deploymentConfigMock = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
+        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConfigData'])
             ->getMock();
         $this->amqpConfig = $this->objectManager->getObject(
-            'Magento\Amqp\Model\Config',
+            \Magento\Amqp\Model\Config::class,
             [
                 'config' => $this->deploymentConfigMock,
             ]
