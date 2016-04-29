@@ -42,7 +42,7 @@ return [
             "name" => "demo.object.created",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
+                "schema_value" => '\\' . \Magento\MysqlMq\Model\DataObject::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -55,7 +55,7 @@ return [
             "name" => "demo.object.updated",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
+                "schema_value" => '\\' . \Magento\MysqlMq\Model\DataObject::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -68,7 +68,7 @@ return [
             "name" => "demo.object.custom.created",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
+                "schema_value" => '\\' . \Magento\MysqlMq\Model\DataObject::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -86,7 +86,7 @@ return [
                         "param_name" => "dataObject",
                         "param_position" => 0,
                         "is_required" => true,
-                        "param_type" => "Magento\\MysqlMq\\Model\\DataObject"
+                        "param_type" => '\\' . \Magento\MysqlMq\Model\DataObject::class
                     ],
                     [
                         "param_name" => "requiredParam",
@@ -113,7 +113,7 @@ return [
             "name" => "customer.created",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
+                "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -126,7 +126,7 @@ return [
             "name" => "customer.created.one",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
+                "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -139,7 +139,7 @@ return [
             "name" => "customer.created.one.two",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
+                "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -152,7 +152,7 @@ return [
             "name" => "customer.created.two",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
+                "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -165,7 +165,7 @@ return [
             "name" => "customer.updated",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
+                "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -178,7 +178,7 @@ return [
             "name" => "customer.deleted",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInterface"
+                "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -191,7 +191,7 @@ return [
             "name" => "cart.created",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Quote\\Api\\Data\\CartInterface"
+                "schema_value" => \Magento\Quote\Api\Data\CartInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -204,7 +204,7 @@ return [
             "name" => "cart.created.one",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Quote\\Api\\Data\\CartInterface"
+                "schema_value" => \Magento\Quote\Api\Data\CartInterface::class
             ],
             "response_schema" => [
                 "schema_type" => null,
@@ -230,11 +230,11 @@ return [
             "name" => "publisher5.topic",
             "schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\MysqlMq\\Model\\DataObject"
+                "schema_value" => '\\' . \Magento\MysqlMq\Model\DataObject::class
             ],
             "response_schema" => [
                 "schema_type" => "object",
-                "schema_value" => "Magento\\Customer\\Api\\Data\\CustomerInter"
+                "schema_value" => \Magento\Customer\Api\Data\CustomerInterface::class
             ],
             "publisher" => "test-publisher-5",
             'is_synchronous' => true,
@@ -249,7 +249,7 @@ return [
             "handlers" => [
                 "demo.object.created" => [
                    "defaultHandler" => [
-                        "type" => "\\Magento\\MysqlMq\\Model\\Processor",
+                        "type" => '\\' . \Magento\MysqlMq\Model\Processor::class,
                         "method" => "processMessage"
                     ]
                 ]
@@ -265,7 +265,7 @@ return [
             "handlers" => [
                 "demo.object.created" => [
                    "defaultHandler" => [
-                        "type" => "\\Magento\\MysqlMq\\Model\\Processor",
+                        "type" => '\\' . \Magento\MysqlMq\Model\Processor::class,
                         "method" => "processMessageWithException"
                     ]
                 ]
@@ -281,13 +281,13 @@ return [
             "handlers" => [
                 "demo.object.created" => [
                    "defaultHandler" => [
-                        "type" => "\\Magento\\MysqlMq\\Model\\Processor",
+                        "type" => '\\' . \Magento\MysqlMq\Model\Processor::class,
                         "method" => "processMessage"
                     ]
                 ],
                 "demo.object.updated" => [
                    "defaultHandler" => [
-                        "type" => "\\Magento\\MysqlMq\\Model\\Processor",
+                        "type" => '\\' . \Magento\MysqlMq\Model\Processor::class,
                         "method" => "processMessage"
                     ]
                 ]
@@ -336,7 +336,7 @@ return [
             "handlers" => [
                 "test.schema.defined.by.method" => [
                    "defaultHandler" => [
-                        "type" => "Magento\\MysqlMq\\Model\\DataObjectRepository",
+                        "type" => \Magento\MysqlMq\Model\DataObjectRepository::class,
                         "method" => "delayedOperation"
                     ]
                 ]
@@ -352,7 +352,7 @@ return [
             "handlers" => [
                 "topic.broker.test" => [
                     "0" => [
-                        "type" => "Magento\\MysqlMq\\Model\\Processor",
+                        "type" => \Magento\MysqlMq\Model\Processor::class,
                         "method" => "processMessage"
                     ]
                 ]

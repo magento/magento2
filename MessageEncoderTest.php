@@ -8,6 +8,9 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MessageEncoderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\MessageQueue\MessageEncoder */
@@ -20,7 +23,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->encoder = $this->objectManager->create(
-            'Magento\Framework\MessageQueue\MessageEncoder',
+            \Magento\Framework\MessageQueue\MessageEncoder::class,
             ['queueConfig' => $this->getConfig()]
         );
         parent::setUp();
@@ -33,11 +36,11 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncode()
     {
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $fixtureCustomerId = 1;
         $customer = $customerRepository->getById($fixtureCustomerId);
         /** @var \Magento\Customer\Api\Data\CustomerExtensionInterface $customerExtension */
-        $customerExtension = $this->objectManager->create('Magento\Customer\Api\Data\CustomerExtension');
+        $customerExtension = $this->objectManager->create(\Magento\Customer\Api\Data\CustomerExtension::class);
         $customerExtension->setTestGroupCode('Some Group Code');
         $customer->setExtensionAttributes($customerExtension);
         $encodedCustomerData = json_decode($this->encoder->encode('customer.created', $customer), true);
@@ -53,11 +56,11 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncodeArrayOfEntities()
     {
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $this->objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        $customerRepository = $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
         $fixtureCustomerId = 1;
         $customer = $customerRepository->getById($fixtureCustomerId);
         /** @var \Magento\Customer\Api\Data\CustomerExtensionInterface $customerExtension */
-        $customerExtension = $this->objectManager->create('Magento\Customer\Api\Data\CustomerExtension');
+        $customerExtension = $this->objectManager->create(\Magento\Customer\Api\Data\CustomerExtension::class);
         $customerExtension->setTestGroupCode('Some Group Code');
         $customer->setExtensionAttributes($customerExtension);
         $encodedCustomerData = json_decode($this->encoder->encode('customer.list.retrieved', [$customer]), true);
@@ -71,26 +74,26 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $encodedMessage = $this->getCustomerDataAsJson('2015-07-22 12:43:36');
         /** @var \Magento\Customer\Api\Data\CustomerInterface $decodedCustomerObject */
         $decodedCustomerObject = $this->encoder->decode('customer.created', $encodedMessage);
-        $this->assertInstanceOf('Magento\Customer\Api\Data\CustomerInterface', $decodedCustomerObject);
+        $this->assertInstanceOf(\Magento\Customer\Api\Data\CustomerInterface::class, $decodedCustomerObject);
         $this->assertEquals('customer@example.com', $decodedCustomerObject->getEmail());
         $this->assertEquals(1, $decodedCustomerObject->getGroupId());
 
         $this->assertInstanceOf(
-            'Magento\Customer\Api\Data\CustomerExtensionInterface',
+            \Magento\Customer\Api\Data\CustomerExtensionInterface::class,
             $decodedCustomerObject->getExtensionAttributes()
         );
         $this->assertEquals('Some Group Code', $decodedCustomerObject->getExtensionAttributes()->getTestGroupCode());
         $addresses = $decodedCustomerObject->getAddresses();
         $this->assertCount(1, $addresses, "Address was not decoded.");
         $this->assertInstanceOf(
-            'Magento\Customer\Api\Data\AddressInterface',
+            \Magento\Customer\Api\Data\AddressInterface::class,
             $addresses[0]
         );
         $this->assertEquals('3468676', $addresses[0]->getTelephone());
         $this->assertEquals(true, $addresses[0]->isDefaultBilling());
 
         $this->assertInstanceOf(
-            'Magento\Customer\Api\Data\RegionInterface',
+            \Magento\Customer\Api\Data\RegionInterface::class,
             $addresses[0]->getRegion()
         );
         $this->assertEquals('AL', $addresses[0]->getRegion()->getRegionCode());
@@ -129,25 +132,25 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     protected function getConfig()
     {
         $configPath = __DIR__ . '/etc/queue.xml';
-        $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
+        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolverMock->expects($this->any())
             ->method('get')
             ->willReturn([$configPath => file_get_contents(($configPath))]);
 
         /** @var \Magento\Framework\MessageQueue\Config\Reader\Xml $xmlReader */
         $xmlReader = $this->objectManager->create(
-            '\Magento\Framework\MessageQueue\Config\Reader\Xml',
+            \Magento\Framework\MessageQueue\Config\Reader\Xml::class,
             ['fileResolver' => $fileResolverMock]
         );
 
         $newData = $xmlReader->read();
 
         /** @var \Magento\Framework\MessageQueue\Config\Data $configData */
-        $configData = $this->objectManager->create('Magento\Framework\MessageQueue\Config\Data');
+        $configData = $this->objectManager->create(\Magento\Framework\MessageQueue\Config\Data::class);
         $configData->reset();
         $configData->merge($newData);
         $config = $this->objectManager->create(
-            'Magento\Framework\MessageQueue\ConfigInterface',
+            \Magento\Framework\MessageQueue\ConfigInterface::class,
             ['queueConfigData' => $configData]
         );
 

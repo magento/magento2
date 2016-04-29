@@ -9,6 +9,7 @@ namespace Magento\Framework\MessageQueue;
  * Test of communication configuration reading and parsing.
  *
  * @magentoCache config disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,25 +85,25 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         } else {
             $content[] = file_get_contents($configFilePath);
         }
-        $fileResolver = $this->getMockForAbstractClass('Magento\Framework\Config\FileResolverInterface');
+        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolver->expects($this->any())
             ->method('get')
             ->willReturn($content);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $deprecatedConverter = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat'
+            \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat::class
         );
 
         $topicConverter = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\TopicConfig',
+            \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\TopicConfig::class,
             [
                 'communicationConfig' => $this->getCommunicationConfigInstance()
             ]
         );
 
         $converter = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter',
+            \Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter::class,
             [
                 'converters' => [
                     ['converter' => $deprecatedConverter, 'sortOrder' => 10],
@@ -111,38 +112,38 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $xmlReader = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\Xml',
+            \Magento\Framework\MessageQueue\Config\Reader\Xml::class,
             [
                 'fileResolver' => $fileResolver,
                 'converter' => $converter,
             ]
         );
-        $deploymentConfigReader = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig\Reader')
+        $deploymentConfigReader = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig\Reader::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $envConfigData = include $envConfigFilePath ?: __DIR__ . '/_files/valid_queue_input.php';
         $deploymentConfigReader->expects($this->any())->method('load')->willReturn($envConfigData);
         $deploymentConfig = $objectManager->create(
-            'Magento\Framework\App\DeploymentConfig',
+            \Magento\Framework\App\DeploymentConfig::class,
             ['reader' => $deploymentConfigReader]
         );
         $envReader = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\Env',
+            \Magento\Framework\MessageQueue\Config\Reader\Env::class,
             [
                 'deploymentConfig' => $deploymentConfig
             ]
         );
-        $methodsMap = $objectManager->create('Magento\Framework\Reflection\MethodsMap');
+        $methodsMap = $objectManager->create(\Magento\Framework\Reflection\MethodsMap::class);
         $envValidator = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Reader\Env\Validator',
+            \Magento\Framework\MessageQueue\Config\Reader\Env\Validator::class,
             [
                 'methodsMap' => $methodsMap
             ]
         );
 
         $compositeReader = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\CompositeReader',
+            \Magento\Framework\MessageQueue\Config\CompositeReader::class,
             [
                 'readers' => [
                     ['reader' => $xmlReader, 'sortOrder' => 10],
@@ -153,14 +154,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\MessageQueue\Config $configData */
         $configData = $objectManager->create(
-            'Magento\Framework\MessageQueue\Config\Data',
+            \Magento\Framework\MessageQueue\Config\Data::class,
             [
                 'reader' => $compositeReader,
                 'envValidator' => $envValidator
             ]
         );
         return $objectManager->create(
-            'Magento\Framework\MessageQueue\ConfigInterface',
+            \Magento\Framework\MessageQueue\ConfigInterface::class,
             ['queueConfigData' => $configData]
         );
     }
@@ -173,25 +174,27 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private function getCommunicationConfigInstance()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $fileResolver = $this->getMockForAbstractClass('Magento\Framework\Config\FileResolverInterface');
+        $fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
         $fileResolver->expects($this->any())
             ->method('get')
             ->willReturn([file_get_contents(__DIR__ . '/_files/communication.xml')]);
 
         $xmlReader = $objectManager->create(
-            'Magento\Framework\Communication\Config\Reader\XmlReader',
+            \Magento\Framework\Communication\Config\Reader\XmlReader::class,
             [
                 'fileResolver' => $fileResolver,
             ]
         );
 
         $compositeReader = $objectManager->create(
-            'Magento\Framework\Communication\Config\CompositeReader',
+            \Magento\Framework\Communication\Config\CompositeReader::class,
             [
                 'readers' => [
                     ['reader' => $xmlReader, 'sortOrder' => 10],
                     [
-                        'reader' => $objectManager->create('Magento\Framework\Communication\Config\Reader\EnvReader'),
+                        'reader' => $objectManager->create(
+                            \Magento\Framework\Communication\Config\Reader\EnvReader::class
+                        ),
                         'sortOrder' => 20
                     ]
                 ],
@@ -200,14 +203,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Communication\Config $configData */
         $configData = $objectManager->create(
-            'Magento\Framework\Communication\Config\Data',
+            \Magento\Framework\Communication\Config\Data::class,
             [
                 'reader' => $compositeReader
             ]
         );
 
         $config = $objectManager->create(
-            'Magento\Framework\Communication\ConfigInterface',
+            \Magento\Framework\Communication\ConfigInterface::class,
             [
                 'configData' => $configData
             ]
