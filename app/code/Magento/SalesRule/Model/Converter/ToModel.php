@@ -206,7 +206,7 @@ class ToModel
 
     /**
      * Convert date to ISO8601
-     * 
+     *
      * @param string|null $date
      * @return string|null
      */
