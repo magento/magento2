@@ -20,7 +20,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_importConfig = $this->getMock(
-            'Magento\Directory\Model\Currency\Import\Config',
+            \Magento\Directory\Model\Currency\Import\Config::class,
             [],
             [],
             '',

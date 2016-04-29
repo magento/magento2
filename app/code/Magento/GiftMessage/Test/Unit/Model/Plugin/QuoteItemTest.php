@@ -40,14 +40,14 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItemMock = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             ['setGiftMessageId', 'setGiftMessageAvailable', '__wakeup'],
             [],
             '',
             false
         );
         $this->quoteItemMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Item',
+            \Magento\Quote\Model\Quote\Item::class,
             ['getGiftMessageId', 'getStoreId', '__wakeup'],
             [],
             '',
@@ -57,9 +57,9 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () use ($orderItems) {
             return $orderItems;
         };
-        $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Quote\Model\Quote\Item\ToOrderItem::class, [], [], '', false);
         $this->helperMock = $this->getMock(
-            'Magento\GiftMessage\Helper\Message',
+            \Magento\GiftMessage\Helper\Message::class,
             ['setGiftMessageId', 'isMessagesAllowed'],
             [],
             '',

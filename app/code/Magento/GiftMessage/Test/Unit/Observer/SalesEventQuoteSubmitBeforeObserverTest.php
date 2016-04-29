@@ -23,10 +23,10 @@ class SalesEventQuoteSubmitBeforeObserverTest extends \PHPUnit_Framework_TestCas
     public function testSalesEventQuoteSubmitBefore()
     {
         $giftMessageId = 42;
-        $observerMock = $this->getMock('\Magento\Framework\Event\Observer');
-        $eventMock = $this->getMock('\Magento\Framework\Event', ['getOrder', 'getQuote']);
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getGiftMessageId'], [], '', false);
-        $orderMock = $this->getMock('\Magento\Sales\Model\Order', ['setGiftMessageId'], [], '', false);
+        $observerMock = $this->getMock(\Magento\Framework\Event\Observer::class);
+        $eventMock = $this->getMock(\Magento\Framework\Event::class, ['getOrder', 'getQuote']);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, ['getGiftMessageId'], [], '', false);
+        $orderMock = $this->getMock(\Magento\Sales\Model\Order::class, ['setGiftMessageId'], [], '', false);
         $observerMock->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getGiftMessageId')->willReturn($giftMessageId);

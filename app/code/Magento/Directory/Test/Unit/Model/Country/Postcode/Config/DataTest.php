@@ -20,10 +20,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->readerMock = $this->getMockBuilder(
-            'Magento\Directory\Model\Country\Postcode\Config\Reader'
+            \Magento\Directory\Model\Country\Postcode\Config\Reader::class
         )->disableOriginalConstructor()->getMock();
         $this->cacheMock = $this->getMockBuilder(
-            'Magento\Framework\App\Cache\Type\Config'
+            \Magento\Framework\App\Cache\Type\Config::class
         )->disableOriginalConstructor()->getMock();
     }
 

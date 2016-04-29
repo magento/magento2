@@ -97,7 +97,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     {
         if ($this->httpClientFactory === null) {
             $this->httpClientFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\HTTP\ZendClientFactory');
+                ->get(\Magento\Framework\HTTP\ZendClientFactory::class);
         }
         return $this->httpClientFactory;
     }

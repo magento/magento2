@@ -65,7 +65,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Form\Fieldset', 'Magento\Eav\Model\ResourceModel\Form\Fieldset');
+        $this->_init(\Magento\Eav\Model\Form\Fieldset::class, \Magento\Eav\Model\ResourceModel\Form\Fieldset::class);
     }
 
     /**

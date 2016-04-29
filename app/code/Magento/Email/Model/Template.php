@@ -165,7 +165,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     protected function _construct()
     {
-        $this->_init('Magento\Email\Model\ResourceModel\Template');
+        $this->_init(\Magento\Email\Model\ResourceModel\Template::class);
     }
 
     /**

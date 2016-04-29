@@ -65,7 +65,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Form\Element');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Form\Element::class);
     }
 
     /**

@@ -60,7 +60,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     protected function _construct()
     {
-        $this->_init('Magento\GiftMessage\Model\ResourceModel\Message');
+        $this->_init(\Magento\GiftMessage\Model\ResourceModel\Message::class);
     }
 
     /**
@@ -85,6 +85,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */

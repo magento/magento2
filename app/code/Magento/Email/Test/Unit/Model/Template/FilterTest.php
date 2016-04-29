@@ -84,54 +84,54 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
+        $this->string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->logger = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->escaper = $this->getMockBuilder('\Magento\Framework\Escaper')
+        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->enableProxyingToOriginalMethods()
             ->getMock();
 
-        $this->assetRepo = $this->getMockBuilder('\Magento\Framework\View\Asset\Repository')
+        $this->assetRepo = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
+        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->coreVariableFactory = $this->getMockBuilder('\Magento\Variable\Model\VariableFactory')
+        $this->coreVariableFactory = $this->getMockBuilder(\Magento\Variable\Model\VariableFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layout = $this->getMockBuilder('\Magento\Framework\View\LayoutInterface')
+        $this->layout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutFactory = $this->getMockBuilder('\Magento\Framework\View\LayoutFactory')
+        $this->layoutFactory = $this->getMockBuilder(\Magento\Framework\View\LayoutFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->appState = $this->getMockBuilder('\Magento\Framework\App\State')
+        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->backendUrlBuilder = $this->getMockBuilder('\Magento\Backend\Model\UrlInterface')
+        $this->backendUrlBuilder = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->emogrifier = $this->objectManager->getObject('\Pelago\Emogrifier');
+        $this->emogrifier = $this->objectManager->getObject(\Pelago\Emogrifier::class);
 
-        $this->configVariables = $this->getMockBuilder('Magento\Email\Model\Source\Variables')
+        $this->configVariables = $this->getMockBuilder(\Magento\Email\Model\Source\Variables::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -142,7 +142,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected function getModel($mockedMethods = null)
     {
-        return $this->getMockBuilder('\Magento\Email\Model\Template\Filter')
+        return $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setConstructorArgs([
                 $this->string,
                 $this->logger,
@@ -348,7 +348,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
 
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class, [], [], '', false);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getId')->willReturn(1);
 
@@ -369,7 +369,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = '';
 
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
+        $storeMock = $this->getMock(\Magento\Store\Api\Data\StoreInterface::class, [], [], '', false);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getId')->willReturn(1);
 

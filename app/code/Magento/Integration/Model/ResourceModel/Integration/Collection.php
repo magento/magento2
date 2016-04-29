@@ -17,7 +17,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Integration\Model\Integration', 'Magento\Integration\Model\ResourceModel\Integration');
+        $this->_init(
+            \Magento\Integration\Model\Integration::class,
+            \Magento\Integration\Model\ResourceModel\Integration::class
+        );
     }
 
     /**

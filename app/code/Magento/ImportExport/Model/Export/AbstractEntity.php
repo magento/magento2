@@ -20,7 +20,7 @@ abstract class AbstractEntity
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = 'Magento\Framework\Data\Collection';
+    const ATTRIBUTE_COLLECTION_NAME = \Magento\Framework\Data\Collection::class;
 
     /**#@-*/
 

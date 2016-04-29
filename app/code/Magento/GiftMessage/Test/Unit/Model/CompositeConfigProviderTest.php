@@ -19,7 +19,7 @@ class CompositeConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->configProviderMock = $this->getMock('\Magento\Checkout\Model\ConfigProviderInterface');
+        $this->configProviderMock = $this->getMock(\Magento\Checkout\Model\ConfigProviderInterface::class);
         $this->model = new \Magento\GiftMessage\Model\CompositeConfigProvider([$this->configProviderMock]);
     }
 

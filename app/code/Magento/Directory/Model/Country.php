@@ -69,7 +69,7 @@ class Country extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Directory\Model\ResourceModel\Country');
+        $this->_init(\Magento\Directory\Model\ResourceModel\Country::class);
     }
 
     /**

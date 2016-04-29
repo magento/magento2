@@ -335,7 +335,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($blockParameters['class'])) {
             $block = $this->_layout->createBlock($blockParameters['class'], null, ['data' => $blockParameters]);
         } elseif (isset($blockParameters['id'])) {
-            $block = $this->_layout->createBlock('Magento\Cms\Block\Block');
+            $block = $this->_layout->createBlock(\Magento\Cms\Block\Block::class);
             if ($block) {
                 $block->setBlockId($blockParameters['id']);
             }

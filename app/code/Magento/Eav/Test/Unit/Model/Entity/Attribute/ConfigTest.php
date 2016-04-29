@@ -43,16 +43,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute', [], [], '', false);
-        $this->_entityType = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
+        $this->_attribute = $this->getMock(\Magento\Eav\Model\Entity\Attribute::class, [], [], '', false);
+        $this->_entityType = $this->getMock(\Magento\Eav\Model\Entity\Type::class, [], [], '', false);
         $this->_readerMock = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\Config\Reader',
+            \Magento\Eav\Model\Entity\Attribute\Config\Reader::class,
             [],
             [],
             '',
             false
         );
-        $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false);
+        $this->_cacheMock = $this->getMock(\Magento\Framework\App\Cache\Type\Config::class, [], [], '', false);
         $this->_cacheId = 'eav_attributes';
         $this->_cacheMock->expects(
             $this->once()

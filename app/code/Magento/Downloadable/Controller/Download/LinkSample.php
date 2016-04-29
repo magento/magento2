@@ -21,7 +21,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
     {
         $linkId = $this->getRequest()->getParam('link_id', 0);
         /** @var \Magento\Downloadable\Model\Link $link */
-        $link = $this->_objectManager->create('Magento\Downloadable\Model\Link')->load($linkId);
+        $link = $this->_objectManager->create(\Magento\Downloadable\Model\Link::class)->load($linkId);
         if ($link->getId()) {
             $resource = '';
             $resourceType = '';
@@ -30,7 +30,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
                 $resourceType = DownloadHelper::LINK_TYPE_URL;
             } elseif ($link->getSampleType() == DownloadHelper::LINK_TYPE_FILE) {
                 $resource = $this->_objectManager->get(
-                    'Magento\Downloadable\Helper\File'
+                    \Magento\Downloadable\Helper\File::class
                 )->getFilePath(
                     $this->_getLink()->getBaseSamplePath(),
                     $link->getSampleFile()

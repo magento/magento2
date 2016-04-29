@@ -67,7 +67,7 @@ class Sample extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Downloadable\Model\ResourceModel\Sample');
+        $this->_init(\Magento\Downloadable\Model\ResourceModel\Sample::class);
         parent::_construct();
     }
 

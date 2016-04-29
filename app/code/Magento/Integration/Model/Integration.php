@@ -95,7 +95,7 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Integration\Model\ResourceModel\Integration');
+        $this->_init(\Magento\Integration\Model\ResourceModel\Integration::class);
     }
 
     /**

@@ -118,7 +118,7 @@ class Data extends \Magento\Framework\View\Element\Template
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setName(
             $name
         )->setId(
@@ -166,7 +166,7 @@ class Data extends \Magento\Framework\View\Element\Template
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
         $html = $this->getLayout()->createBlock(
-            'Magento\Framework\View\Element\Html\Select'
+            \Magento\Framework\View\Element\Html\Select::class
         )->setName(
             'region'
         )->setTitle(
