@@ -288,6 +288,15 @@ define([
         },
 
         /**
+         * Get number of columns
+         *
+         * @returns {Number} columns
+         */
+        getColumnsCount: function () {
+            return this.labels().length + (this.dndConfig.enabled ? 1 : 0);
+        },
+
+        /**
          * Processing pages before addChild
          *
          * @param {Object} ctx - element context
