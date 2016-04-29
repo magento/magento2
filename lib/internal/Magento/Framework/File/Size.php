@@ -16,17 +16,7 @@ class Size
      *
      * @var \Magento\Framework\Convert\DataSize
      */
-    protected $dataSize;
-
-    /**
-     * Constructor
-     *
-     * @param \Magento\Framework\Convert\DataSize $dataSize
-     */
-    public function __construct(\Magento\Framework\Convert\DataSize $dataSize)
-    {
-        $this->dataSize = $dataSize;
-    }
+    private $dataSize;
 
     /**
      * Maximum file size for MAX_FILE_SIZE attribute of a form
@@ -89,8 +79,8 @@ class Size
     public function getMaxFileSize()
     {
         if (self::$_maxFileSize < 0) {
-            $postMaxSize = $this->dataSize->convertSizeToBytes($this->getPostMaxSize());
-            $uploadMaxSize = $this->dataSize->convertSizeToBytes($this->getUploadMaxSize());
+            $postMaxSize = $this->getNewDependency()->convertSizeToBytes($this->getPostMaxSize());
+            $uploadMaxSize = $this->getNewDependency()->convertSizeToBytes($this->getUploadMaxSize());
             $min = max($postMaxSize, $uploadMaxSize);
 
             if ($postMaxSize > 0) {
@@ -117,7 +107,7 @@ class Size
      */
     public function convertSizeToInteger($size)
     {
-        return $this->dataSize->convertSizeToBytes($size);
+        return $this->getNewDependency()->convertSizeToBytes($size);
     }
 
     /**
@@ -130,5 +120,22 @@ class Size
     protected function _iniGet($param)
     {
         return trim(ini_get($param));
+    }
+
+    /**
+     * The getter function to get the new dependency for real application code
+     *
+     * @return \Magento\Framework\Convert\DataSize
+     *
+     * @deprecated
+     */
+    private function getNewDependency()
+    {
+        if ($this->dataSize === null) {
+            $this->dataSize =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Convert\DataSize::class);
+        }
+
+        return $this->dataSize;
     }
 }
