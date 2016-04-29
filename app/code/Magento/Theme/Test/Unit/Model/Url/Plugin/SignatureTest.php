@@ -34,9 +34,9 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Framework\View\Url\ConfigInterface');
+        $this->config = $this->getMock(\Magento\Framework\View\Url\ConfigInterface::class);
         $this->deploymentVersion = $this->getMock(
-            'Magento\Framework\App\View\Deployment\Version', [], [], '', false
+            \Magento\Framework\App\View\Deployment\Version::class, [], [], '', false
         );
         $this->closureMock = function () {
             return 'http://127.0.0.1/magento/pub/static/';
@@ -58,7 +58,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($fixtureConfigFlag));
         $this->deploymentVersion->expects($this->never())->method($this->anything());
 
-        $url = $this->getMockForAbstractClass('\Magento\Framework\Url\ScopeInterface');
+        $url = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
         $actualResult = $this->object->aroundGetBaseUrl($url, $this->closureMock, $inputUrlType);
         $this->assertEquals('http://127.0.0.1/magento/pub/static/', $actualResult);
     }
@@ -80,7 +80,7 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
         $this->deploymentVersion->expects($this->once())->method('getValue')->will($this->returnValue('123'));
 
-        $url = $this->getMockForAbstractClass('\Magento\Framework\Url\ScopeInterface');
+        $url = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
         $actualResult = $this->object->aroundGetBaseUrl(
             $url, $this->closureMock, \Magento\Framework\UrlInterface::URL_TYPE_STATIC
         );

@@ -131,7 +131,7 @@ final class TokensConfigProvider
             ->setConditionType('gt')
             ->setValue(
                 $this->dateTimeFactory->create(
-                    'now',
+                    \now::class,
                     new \DateTimeZone('UTC')
                 )->format('Y-m-d 00:00:00')
             )

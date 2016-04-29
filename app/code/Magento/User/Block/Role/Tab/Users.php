@@ -59,7 +59,7 @@ class Users extends \Magento\Backend\Block\Widget\Tabs
     {
         $this->setChild(
             'userGrid',
-            $this->getLayout()->createBlock('Magento\User\Block\Role\Grid\User', 'roleUsersGrid')
+            $this->getLayout()->createBlock(\Magento\User\Block\Role\Grid\User::class, 'roleUsersGrid')
         );
         return parent::_prepareLayout();
     }

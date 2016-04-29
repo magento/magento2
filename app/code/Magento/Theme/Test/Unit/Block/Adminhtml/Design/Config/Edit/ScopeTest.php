@@ -36,7 +36,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
     {
         $this->initContext();
 
-        $this->scopeResolverPool = $this->getMockBuilder('Magento\Framework\App\ScopeResolverPool')
+        $this->scopeResolverPool = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -59,13 +59,13 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $scopeObject = $this->getMockBuilder('Magento\Framework\App\ScopeInterface')
+        $scopeObject = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
             ->getMockForAbstractClass();
         $scopeObject->expects($this->once())
             ->method('getScopeTypeName')
             ->willReturn($scopeTypeName);
 
-        $scopeResolver = $this->getMockBuilder('Magento\Framework\App\ScopeResolverInterface')
+        $scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
             ->getMockForAbstractClass();
         $scopeResolver->expects($this->once())
             ->method('getScope')
@@ -98,11 +98,11 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
 
     protected function initContext()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

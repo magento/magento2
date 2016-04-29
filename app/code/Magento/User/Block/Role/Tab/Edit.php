@@ -107,7 +107,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
     {
 
         if (!($this->coreRegistry instanceof \Magento\Framework\Registry)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\Registry');
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\Registry::class);
         } else {
             return $this->coreRegistry;
         }

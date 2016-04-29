@@ -12,7 +12,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         /** @var $fileBlock \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File */
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $collectionFactory = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
+            \Magento\Framework\Data\Form\Element\CollectionFactory::class,
             [],
             [],
             '',
@@ -20,7 +20,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
 
         $fileBlock = $helper->getObject(
-            'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File',
+            \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class,
             ['factoryCollection' => $collectionFactory]
         );
 

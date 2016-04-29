@@ -61,7 +61,7 @@ class Variable extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Variable\Model\ResourceModel\Variable');
+        $this->_init(\Magento\Variable\Model\ResourceModel\Variable::class);
     }
 
     /**

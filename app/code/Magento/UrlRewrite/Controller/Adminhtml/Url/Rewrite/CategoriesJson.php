@@ -18,7 +18,7 @@ class CategoriesJson extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrit
         $categoryId = $this->getRequest()->getParam('id', null);
         $this->getResponse()->setBody(
             $this->_objectManager->get(
-                'Magento\UrlRewrite\Block\Catalog\Category\Tree'
+                \Magento\UrlRewrite\Block\Catalog\Category\Tree::class
             )->getTreeArray(
                 $categoryId,
                 true,

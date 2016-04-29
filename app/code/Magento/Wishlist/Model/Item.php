@@ -166,7 +166,7 @@ class Item extends AbstractModel implements ItemInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\ResourceModel\Item');
+        $this->_init(\Magento\Wishlist\Model\ResourceModel\Item::class);
     }
 
     /**

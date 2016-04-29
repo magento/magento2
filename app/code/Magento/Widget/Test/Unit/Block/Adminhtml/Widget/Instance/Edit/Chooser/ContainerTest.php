@@ -20,7 +20,7 @@ class ContainerTest extends AbstractContainerTest
         parent::setUp();
 
         $this->containerBlock = $this->objectManagerHelper->getObject(
-            'Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container',
+            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container::class,
             [
                 'context' => $this->contextMock,
                 'themesFactory' => $this->themeCollectionFactoryMock,

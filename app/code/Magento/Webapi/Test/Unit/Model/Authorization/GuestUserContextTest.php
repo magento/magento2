@@ -28,7 +28,7 @@ class GuestUserContextTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->guestUserContext = $this->objectManager->getObject(
-            'Magento\Webapi\Model\Authorization\GuestUserContext'
+            \Magento\Webapi\Model\Authorization\GuestUserContext::class
         );
     }
 

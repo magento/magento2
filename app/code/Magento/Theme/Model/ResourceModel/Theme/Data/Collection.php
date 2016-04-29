@@ -17,6 +17,6 @@ class Collection extends \Magento\Theme\Model\ResourceModel\Theme\Collection imp
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\Theme\Data', 'Magento\Theme\Model\ResourceModel\Theme');
+        $this->_init(\Magento\Theme\Model\Theme\Data::class, \Magento\Theme\Model\ResourceModel\Theme::class);
     }
 }

@@ -9,6 +9,9 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
     /**
@@ -58,15 +61,13 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         }
 
         /** @var $currentUser \Magento\User\Model\User */
-        $currentUser = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
-        if ($userId == $currentUser->getId() && $this->_objectManager->get(
-            'Magento\Framework\Validator\Locale'
-        )->isValid(
-            $data['interface_locale']
-        )
+        $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
+        if ($userId == $currentUser->getId()
+            && $this->_objectManager->get(\Magento\Framework\Validator\Locale::class)
+                ->isValid($data['interface_locale'])
         ) {
             $this->_objectManager->get(
-                'Magento\Backend\Model\Locale\Manager'
+                \Magento\Backend\Model\Locale\Manager::class
             )->switchBackendInterfaceLocale(
                 $data['interface_locale']
             );
