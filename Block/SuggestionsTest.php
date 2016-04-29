@@ -26,7 +26,7 @@ class SuggestionsTest extends \PHPUnit_Framework_TestCase
             new QueryResult("<script>alert('Test');</script>", 1)
         ]);
 
-        $this->block = Bootstrap::getObjectManager()->create('Magento\AdvancedSearch\Block\Suggestions', [
+        $this->block = Bootstrap::getObjectManager()->create(\Magento\AdvancedSearch\Block\Suggestions::class, [
             'searchDataProvider' => $suggestedQueries,
             'title' => 'title',
         ]);
