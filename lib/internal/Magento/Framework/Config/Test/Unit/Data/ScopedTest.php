@@ -29,9 +29,9 @@ class ScopedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_readerMock = $this->getMock('Magento\Framework\Config\ReaderInterface');
-        $this->_configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
-        $this->_cacheMock = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->_readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
+        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\ScopeInterface::class);
+        $this->_cacheMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
 
         $this->_model = new \Magento\Framework\Config\Data\Scoped(
             $this->_readerMock,

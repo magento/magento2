@@ -49,7 +49,7 @@ class TypeDuplicationTest extends \PHPUnit_Framework_TestCase
             $this->_fixturePath .
             PHP_EOL .
             'Multiple type injection [\TypeDuplication\ArgumentBaseClass]';
-        $this->setExpectedException('Magento\Framework\Exception\ValidatorException', $message);
+        $this->setExpectedException(\Magento\Framework\Exception\ValidatorException::class, $message);
         $this->_validator->validate('\TypeDuplication\InvalidClassWithDuplicatedTypes');
     }
 }

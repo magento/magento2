@@ -19,7 +19,7 @@ class DefaultTest extends \PHPUnit_Framework_TestCase
 
     public function testPopulateAclDoesntChangeAclObject()
     {
-        $aclMock = $this->getMock('Magento\Framework\Acl');
+        $aclMock = $this->getMock(\Magento\Framework\Acl::class);
         $aclMock->expects($this->never())->method('addRole');
         $aclMock->expects($this->never())->method('addResource');
         $aclMock->expects($this->never())->method('allow');

@@ -22,7 +22,7 @@ class AggregateInvokerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_testCase = $this->getMock(
-            'PHPUnit_Framework_Test',
+            \PHPUnit_Framework_Test::class,
             ['run', 'count', 'fail', 'markTestIncomplete', 'markTestSkipped']
         );
         $this->_invoker = new AggregateInvoker($this->_testCase, []);

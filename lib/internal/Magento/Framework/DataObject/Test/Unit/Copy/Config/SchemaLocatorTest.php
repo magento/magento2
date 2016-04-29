@@ -18,7 +18,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $urnResolverMock = $this->getMock(
-            'Magento\Framework\Config\Dom\UrnResolver',
+            \Magento\Framework\Config\Dom\UrnResolver::class,
             [],
             [],
             '',

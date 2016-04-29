@@ -27,13 +27,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->response = $this->getMock(
-            '\Magento\Framework\HTTP\PhpEnvironment\Response',
+            \Magento\Framework\HTTP\PhpEnvironment\Response::class,
             ['setHeader', 'sendHeaders'],
             [],
             '',
             false
         );
-        $this->mime = $this->getMock('Magento\Framework\File\Mime');
+        $this->mime = $this->getMock(\Magento\Framework\File\Mime::class);
         $this->object = new Http($this->response, $this->mime);
     }
 

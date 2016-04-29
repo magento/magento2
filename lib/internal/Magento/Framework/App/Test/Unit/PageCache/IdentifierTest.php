@@ -24,7 +24,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
      */
     protected function getRequestMock($uri, $vary = null)
     {
-        $requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
+        $requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $requestMock->expects($this->once())
             ->method('getUriString')
             ->willReturn($uri);
@@ -42,7 +42,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
      */
     protected function getContextMock($getVeryStringCalledTimes, $vary)
     {
-        $contextMock = $this->getMock('\Magento\Framework\App\Http\Context', [], [], '', false);
+        $contextMock = $this->getMock(\Magento\Framework\App\Http\Context::class, [], [], '', false);
         $contextMock->expects($this->exactly($getVeryStringCalledTimes))
             ->method('getVaryString')
             ->willReturn($vary);
@@ -62,7 +62,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
         $context = $this->getContextMock($varyStringCookie ? 0 : 1, $varyStringContext);
 
         $model = $this->objectManager->getObject(
-            '\Magento\Framework\App\PageCache\Identifier',
+            \Magento\Framework\App\PageCache\Identifier::class,
             [
                 'request' => $request,
                 'context' => $context,

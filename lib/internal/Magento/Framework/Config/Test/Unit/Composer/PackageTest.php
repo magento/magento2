@@ -58,6 +58,6 @@ class PackageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             ['magento/theme-adminhtml-backend' => 7, 'magento/theme-frontend-luma' => 8],
             (array)$this->object->get('nested', '/^magento\/theme/')
-            );
+        );
     }
 }

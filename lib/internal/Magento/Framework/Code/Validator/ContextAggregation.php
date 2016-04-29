@@ -43,7 +43,7 @@ class ContextAggregation implements ValidatorInterface
 
         foreach ($actualDependencies as $type) {
             /** Check if argument is context object */
-            if (is_subclass_of($type, '\Magento\Framework\ObjectManager\ContextInterface')) {
+            if (is_subclass_of($type, \Magento\Framework\ObjectManager\ContextInterface::class)) {
                 $contextDependencies = array_merge(
                     $contextDependencies,
                     $this->_argumentsReader->getConstructorArguments(new \ReflectionClass($type), false, true)

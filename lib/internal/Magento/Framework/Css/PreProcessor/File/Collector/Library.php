@@ -77,7 +77,7 @@ class Library implements CollectorInterface
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
-        $list = $this->fileListFactory->create('Magento\Framework\Css\PreProcessor\File\FileList\Collator');
+        $list = $this->fileListFactory->create(\Magento\Framework\Css\PreProcessor\File\FileList\Collator::class);
         $files = $this->libraryDirectory->search($filePath);
         $list->add($this->createFiles($this->libraryDirectory, $theme, $files));
 

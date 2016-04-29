@@ -46,7 +46,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
     /**
      * Expected cache type
      */
-    const CACHE_TYPE = 'Magento\Framework\Cache\FrontendInterface';
+    const CACHE_TYPE = \Magento\Framework\Cache\FrontendInterface::class;
 
     protected function setUp()
     {
@@ -57,7 +57,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $this->_config = $this->getMock(
-            'Magento\Framework\Cache\ConfigInterface',
+            \Magento\Framework\Cache\ConfigInterface::class,
             ['getTypes', 'getType'],
             [],
             '',
@@ -66,7 +66,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
         $this->_config->expects($this->any())->method('getTypes')->will($this->returnValue($this->_typesArray));
 
         $cacheState = $this->getMock(
-            'Magento\Framework\App\Cache\StateInterface',
+            \Magento\Framework\App\Cache\StateInterface::class,
             ['isEnabled', 'setEnabled', 'persist'],
             [],
             '',
@@ -74,12 +74,12 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
         );
         $cacheState->expects($this->any())->method('isEnabled')->will($this->returnValue(self::IS_CACHE_ENABLED));
         $cacheBlockMock = $this->getMock(self::CACHE_TYPE, [], [], '', false);
-        $factory = $this->getMock('Magento\Framework\App\Cache\InstanceFactory', ['get'], [], '', false);
+        $factory = $this->getMock(\Magento\Framework\App\Cache\InstanceFactory::class, ['get'], [], '', false);
         $factory->expects($this->any())->method('get')->with(self::CACHE_TYPE)->will(
             $this->returnValue($cacheBlockMock)
         );
         $this->_cache = $this->getMock(
-            'Magento\Framework\App\CacheInterface',
+            \Magento\Framework\App\CacheInterface::class,
             ['load', 'getFrontend', 'save', 'remove', 'clean'],
             [],
             '',
@@ -88,7 +88,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_typeList = $objectHelper->getObject(
-            'Magento\Framework\App\Cache\TypeList',
+            \Magento\Framework\App\Cache\TypeList::class,
             [
                 'config' => $this->_config,
                 'cacheState' => $cacheState,

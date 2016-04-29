@@ -14,7 +14,7 @@ class AttributeValueFactory
     /**
      * Entity class name
      */
-    const CLASS_NAME = 'Magento\Framework\Api\AttributeValue';
+    const CLASS_NAME = \Magento\Framework\Api\AttributeValue::class;
 
     /**
      * Object Manager instance

@@ -185,7 +185,7 @@ class Area implements \Magento\Framework\App\AreaInterface
      */
     protected function _getDesign()
     {
-        return $this->_objectManager->get('Magento\Framework\View\DesignInterface');
+        return $this->_objectManager->get(\Magento\Framework\View\DesignInterface::class);
     }
 
     /**
@@ -240,7 +240,7 @@ class Area implements \Magento\Framework\App\AreaInterface
         $this->_translator->loadData(null, false);
 
         \Magento\Framework\Phrase::setRenderer(
-            $this->_objectManager->get('Magento\Framework\Phrase\RendererInterface')
+            $this->_objectManager->get(\Magento\Framework\Phrase\RendererInterface::class)
         );
 
         return $this;

@@ -69,7 +69,7 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->reader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $this->reader = $this->getMock(\Magento\Framework\App\DeploymentConfig\Reader::class, [], [], '', false);
         $this->_deploymentConfig = new \Magento\Framework\App\DeploymentConfig($this->reader, []);
         $this->_deploymentConfigMerged = new \Magento\Framework\App\DeploymentConfig(
             $this->reader,

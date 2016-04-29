@@ -48,7 +48,7 @@ class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\\Magento\\Framework\\DataObject\\Copy\\Config\\Data',
+        $instanceName = \Magento\Framework\DataObject\Copy\Config\Data::class,
         $shared = true
     ) {
         $this->_objectManager = $objectManager;

@@ -416,7 +416,7 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
         /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
         installed MAGETWO-31756 */
         // Check if a proxy sent a header indicating an initial secure request
-        $config = $this->objectManager->get('Magento\Framework\App\Config');
+        $config = $this->objectManager->get(\Magento\Framework\App\Config::class);
         $offLoaderHeader = trim(
             (string)$config->getValue(
                 self::XML_PATH_OFFLOADER_HEADER,

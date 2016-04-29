@@ -31,8 +31,8 @@ class InvalidateLoggerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->loggerMock = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
         $this->invalidateLogger = new \Magento\Framework\Cache\InvalidateLogger(
             $this->requestMock,
             $this->loggerMock

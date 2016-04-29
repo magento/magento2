@@ -24,21 +24,21 @@ class RawTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
+            \Magento\Framework\App\ResponseInterface::class,
             ['setBody', 'sendResponse'],
             [],
             '',
             false
         );
         $this->raw = $this->objectManagerHelper->getObject(
-            'Magento\Framework\Controller\Result\Raw'
+            \Magento\Framework\Controller\Result\Raw::class
         );
     }
 
     public function testSetContents()
     {
         $content = '<content>test</content>';
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Raw', $this->raw->setContents($content));
+        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Raw::class, $this->raw->setContents($content));
     }
 
     public function testRender()

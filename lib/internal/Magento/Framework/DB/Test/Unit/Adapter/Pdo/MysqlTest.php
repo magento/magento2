@@ -46,10 +46,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
-        $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
-        $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
-        $selectFactory = $this->getMockBuilder('Magento\Framework\DB\SelectFactory')
+        $string = $this->getMock(\Magento\Framework\Stdlib\StringUtils::class);
+        $dateTime = $this->getMock(\Magento\Framework\Stdlib\DateTime::class);
+        $logger = $this->getMockForAbstractClass(\Magento\Framework\DB\LoggerInterface::class);
+        $selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -59,7 +59,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 //        SelectFactory $selectFactory,
 //        array $config = []
         $this->_mockAdapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['beginTransaction', 'getTransactionLevel'],
             [
                 'string' => $string,
@@ -81,7 +81,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
              ->will($this->returnValue(1));
 
         $this->_adapter = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [
                 'getCreateTable',
                 '_connect',
@@ -107,7 +107,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         );
 
         $profiler = $this->getMock(
-            'Zend_Db_Profiler'
+            \Zend_Db_Profiler::class
         );
 
         $resourceProperty = new \ReflectionProperty(
@@ -446,7 +446,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         $sqlQuery = "INSERT INTO `some_table` (`index`,`row`,`select`,`insert`) VALUES (?, ?, ?, ?) "
             . "ON DUPLICATE KEY UPDATE `select` = VALUES(`select`), `insert` = VALUES(`insert`)";
 
-        $stmtMock = $this->getMock('Zend_Db_Statement_Pdo', [], [], '', false);
+        $stmtMock = $this->getMock(\Zend_Db_Statement_Pdo::class, [], [], '', false);
         $bind = ['indexValue', 'rowValue', 'selectValue', 'insertValue'];
         $this->_adapter->expects($this->once())
             ->method('query')
@@ -467,7 +467,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testAddColumn($options, $expectedQuery)
     {
         $connectionMock = $this->getMock(
-            '\Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
         );
 

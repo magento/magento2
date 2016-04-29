@@ -19,7 +19,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storage = $this->getMock('Magento\Framework\Cache\Config\Data', ['get'], [], '', false);
+        $this->_storage = $this->getMock(\Magento\Framework\Cache\Config\Data::class, ['get'], [], '', false);
         $this->_model = new \Magento\Framework\Cache\Config($this->_storage);
     }
 

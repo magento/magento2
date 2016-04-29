@@ -104,7 +104,7 @@ class Mapper extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => 'object',
-                    'type' => '\\Magento\Framework\Model\AbstractModel',
+                    'type' => '\\' . \Magento\Framework\Model\AbstractModel::class,
                 ],
             ],
             'body' => $body,

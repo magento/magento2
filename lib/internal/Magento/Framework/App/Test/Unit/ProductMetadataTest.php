@@ -16,14 +16,14 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $composerJsonFinder = $this->getMockBuilder('Magento\Framework\Composer\ComposerJsonFinder')
+        $composerJsonFinder = $this->getMockBuilder(\Magento\Framework\Composer\ComposerJsonFinder::class)
             ->disableOriginalConstructor()->setMethods(['findComposerJson'])->getMock();
         $composerJsonFinder->expects($this->any())->method('findComposerJson')
             ->willReturn(realpath(__DIR__ . '/_files/test.composer.json'));
 
         $objectManager = new ObjectManager($this);
         $this->productMetadata = $objectManager->getObject(
-            'Magento\Framework\App\ProductMetadata',
+            \Magento\Framework\App\ProductMetadata::class,
             ['composerJsonFinder' => $composerJsonFinder]
         );
     }

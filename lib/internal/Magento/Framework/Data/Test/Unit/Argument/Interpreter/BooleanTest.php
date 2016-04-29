@@ -21,7 +21,7 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_booleanUtils = $this->getMock('\Magento\Framework\Stdlib\BooleanUtils');
+        $this->_booleanUtils = $this->getMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $this->_model = new Boolean($this->_booleanUtils);
     }
 

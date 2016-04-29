@@ -22,7 +22,7 @@ class ArrayTypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_itemInterpreter = $this->getMockForAbstractClass(
-            'Magento\Framework\Data\Argument\InterpreterInterface'
+            \Magento\Framework\Data\Argument\InterpreterInterface::class
         );
         $this->_model = new ArrayType($this->_itemInterpreter);
     }

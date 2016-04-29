@@ -11,7 +11,7 @@ namespace Magento\Framework\Api;
  */
 class ExtensionAttributesFactory
 {
-    const EXTENSIBLE_INTERFACE_NAME = 'Magento\Framework\Api\ExtensibleDataInterface';
+    const EXTENSIBLE_INTERFACE_NAME = \Magento\Framework\Api\ExtensibleDataInterface::class;
 
     /**
      * Object Manager instance
