@@ -20,7 +20,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $invalidPath = 'invalid path';
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Cookie\Model\Config\Backend\Lifetime $model */
-        $model = $objectManager->create('Magento\Cookie\Model\Config\Backend\Path');
+        $model = $objectManager->create(\Magento\Cookie\Model\Config\Backend\Path::class);
         $model->setValue($invalidPath);
         $model->save();
     }

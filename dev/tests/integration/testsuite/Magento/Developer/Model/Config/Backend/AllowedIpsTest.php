@@ -19,7 +19,7 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Developer\Model\Config\Backend\AllowedIps
          */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Developer\Model\Config\Backend\AllowedIps'
+            \Magento\Developer\Model\Config\Backend\AllowedIps::class
         );
         $model->setValue($value);
         $model->setPath('path');

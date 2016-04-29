@@ -8,7 +8,7 @@ require 'customer_two_addresses.php';
 
 /** @var \Magento\Customer\Model\Customer $customer */
 $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Customer\Model\Customer'
+    \Magento\Customer\Model\Customer::class
 )->load(
     1
 );

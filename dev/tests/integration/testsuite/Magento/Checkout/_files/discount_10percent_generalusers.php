@@ -9,14 +9,14 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
-$salesRule = $objectManager->create('Magento\SalesRule\Model\Rule');
+$salesRule = $objectManager->create(\Magento\SalesRule\Model\Rule::class);
 
 $data = [
     'name' => 'Test Coupon for General',
     'is_active' => true,
     'website_ids' => [
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->getWebsiteId()
     ],
     'customer_group_ids' => [1],
@@ -28,6 +28,8 @@ $data = [
 ];
 
 $salesRule->loadPost($data)->setUseAutoGeneration(false)->save();
-$objectManager->get('Magento\Framework\Registry')->unregister('Magento/Checkout/_file/discount_10percent_generalusers');
-$objectManager->get('Magento\Framework\Registry')
+$objectManager->get(
+    \Magento\Framework\Registry::class
+)->unregister('Magento/Checkout/_file/discount_10percent_generalusers');
+$objectManager->get(\Magento\Framework\Registry::class)
     ->register('Magento/Checkout/_file/discount_10percent_generalusers', $salesRule->getRuleId());

@@ -23,7 +23,7 @@ class EntityTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_importConfigMock = $this->getMock('Magento\ImportExport\Model\Import\ConfigInterface');
+        $this->_importConfigMock = $this->getMock(\Magento\ImportExport\Model\Import\ConfigInterface::class);
         $this->_model = new \Magento\ImportExport\Model\Source\Import\Entity($this->_importConfigMock);
     }
 

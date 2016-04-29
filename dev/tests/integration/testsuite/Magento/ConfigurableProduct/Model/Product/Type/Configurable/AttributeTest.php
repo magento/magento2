@@ -15,7 +15,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute'
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
         );
     }
 

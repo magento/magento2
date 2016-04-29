@@ -46,10 +46,10 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
     protected function _getConfigurableAttribute()
     {
         return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Entity\Attribute'
+            \Magento\Catalog\Model\Entity\Attribute::class
         )->loadByCode(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Eav\Model\Config'
+                \Magento\Eav\Model\Config::class
             )->getEntityType(
                 'catalog_product'
             )->getId(),

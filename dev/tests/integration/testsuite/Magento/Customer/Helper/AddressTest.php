@@ -13,7 +13,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Customer\Helper\Address'
+            \Magento\Customer\Helper\Address::class
         );
     }
 

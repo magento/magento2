@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,11 +37,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $requestConfig = __DIR__ . '/../../_files/requests.xml';
-
-    /**
-     * @var string
-     */
     protected $searchEngine = EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
 
     protected function setUp()
@@ -48,18 +44,18 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
-        $converter = $this->objectManager->create('Magento\Framework\Search\Request\Config\Converter');
+        $converter = $this->objectManager->create(\Magento\Framework\Search\Request\Config\Converter::class);
 
         $document = new \DOMDocument();
-        $document->load($this->requestConfig);
+        $document->load($this->getRequestConfig());
         $requestConfig = $converter->convert($document);
 
         /** @var \Magento\Framework\Search\Request\Config $config */
-        $config = $this->objectManager->create('Magento\Framework\Search\Request\Config');
+        $config = $this->objectManager->create(\Magento\Framework\Search\Request\Config::class);
         $config->merge($requestConfig);
 
         $this->requestBuilder = $this->objectManager->create(
-            'Magento\Framework\Search\Request\Builder',
+            \Magento\Framework\Search\Request\Builder::class,
             ['config' => $config]
         );
 
@@ -67,11 +63,19 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return string
+     */
+    protected function getRequestConfig()
+    {
+        return __DIR__ . '/../../_files/requests.xml';
+    }
+
+    /**
      * Make sure that correct engine is set
      */
     protected function assertPreConditions()
     {
-        $currentEngine = $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+        $currentEngine = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->getValue(EngineInterface::CONFIG_ENGINE_PATH, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         $this->assertEquals($this->searchEngine, $currentEngine);
     }
@@ -81,7 +85,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected function createAdapter()
     {
-        return $this->objectManager->create('Magento\Framework\Search\Adapter\Mysql\Adapter');
+        return $this->objectManager->create(\Magento\Framework\Search\Adapter\Mysql\Adapter::class);
     }
 
     /**
@@ -364,17 +368,17 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     public function testCustomFilterableAttribute()
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-        $attribute = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+        $attribute = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $selectOptions */
         $selectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $multiselectOptions */
         $multiselectOptions = $this->objectManager
-            ->create('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection')
+            ->create(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class)
             ->setAttributeFilter($attribute->getId());
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());

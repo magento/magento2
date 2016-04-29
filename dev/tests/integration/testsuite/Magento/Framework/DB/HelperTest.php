@@ -20,11 +20,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\DB\Helper',
+            \Magento\Framework\DB\Helper::class,
             ['modulePrefix' => 'core']
         );
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Store\Model\ResourceModel\Store\Collection'
+            \Magento\Store\Model\ResourceModel\Store\Collection::class
         );
         $this->_select = $collection->getSelect();
     }

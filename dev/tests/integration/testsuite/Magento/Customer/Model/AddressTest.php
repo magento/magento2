@@ -21,10 +21,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->addressModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Address'
+            \Magento\Customer\Model\Address::class
         );
         $this->addressFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\Data\AddressInterfaceFactory'
+            \Magento\Customer\Api\Data\AddressInterfaceFactory::class
         );
     }
 

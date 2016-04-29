@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoCache all disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TranslateTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\View\FileSystem $viewFileSystem */
         $viewFileSystem = $this->getMock(
-            'Magento\Framework\View\FileSystem',
+            \Magento\Framework\View\FileSystem::class,
             ['getLocaleFileName', 'getDesignTheme'],
             [],
             '',
@@ -30,16 +31,16 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
             );
 
         /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
-        $theme = $this->getMock('Magento\Framework\View\Design\ThemeInterface', []);
+        $theme = $this->getMock(\Magento\Framework\View\Design\ThemeInterface::class, []);
         $theme->expects($this->any())->method('getId')->will($this->returnValue(10));
 
         $viewFileSystem->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->addSharedInstance($viewFileSystem, 'Magento\Framework\View\FileSystem');
+        $objectManager->addSharedInstance($viewFileSystem, \Magento\Framework\View\FileSystem::class);
 
         /** @var $moduleReader \Magento\Framework\Module\Dir\Reader */
-        $moduleReader = $objectManager->get('Magento\Framework\Module\Dir\Reader');
+        $moduleReader = $objectManager->get(\Magento\Framework\Module\Dir\Reader::class);
         $moduleReader->setModuleDir(
             'Magento_Store',
             'i18n',
@@ -53,28 +54,28 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Theme\Model\View\Design $designModel */
         $designModel = $this->getMock(
-            'Magento\Theme\Model\View\Design',
+            \Magento\Theme\Model\View\Design::class,
             ['getDesignTheme'],
             [
-                $objectManager->get('Magento\Store\Model\StoreManagerInterface'),
-                $objectManager->get('Magento\Framework\View\Design\Theme\FlyweightFactory'),
-                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\Theme\Model\ThemeFactory'),
-                $objectManager->get('Magento\Framework\ObjectManagerInterface'),
-                $objectManager->get('Magento\Framework\App\State'),
+                $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class),
+                $objectManager->get(\Magento\Framework\View\Design\Theme\FlyweightFactory::class),
+                $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
+                $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
+                $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
+                $objectManager->get(\Magento\Framework\App\State::class),
                 ['frontend' => 'Test/default']
             ]
         );
 
         $designModel->expects($this->any())->method('getDesignTheme')->will($this->returnValue($theme));
 
-        $objectManager->addSharedInstance($designModel, 'Magento\Theme\Model\View\Design\Proxy');
+        $objectManager->addSharedInstance($designModel, \Magento\Theme\Model\View\Design\Proxy::class);
 
-        $model = $objectManager->create('Magento\Framework\Translate');
-        $objectManager->addSharedInstance($model, 'Magento\Framework\Translate');
-        $objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Composite');
-        $objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Translate');
-        \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
+        $model = $objectManager->create(\Magento\Framework\Translate::class);
+        $objectManager->addSharedInstance($model, \Magento\Framework\Translate::class);
+        $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Composite::class);
+        $objectManager->removeSharedInstance(\Magento\Framework\Phrase\Renderer\Translate::class);
+        \Magento\Framework\Phrase::setRenderer($objectManager->get(\Magento\Framework\Phrase\RendererInterface::class));
         $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND);
     }
 

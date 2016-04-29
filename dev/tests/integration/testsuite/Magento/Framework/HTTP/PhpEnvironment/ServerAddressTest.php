@@ -15,7 +15,7 @@ class ServerAddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_helper = $objectManager->get('Magento\Framework\HTTP\PhpEnvironment\ServerAddress');
+        $this->_helper = $objectManager->get(\Magento\Framework\HTTP\PhpEnvironment\ServerAddress::class);
     }
 
     public function testGetServerAddress()

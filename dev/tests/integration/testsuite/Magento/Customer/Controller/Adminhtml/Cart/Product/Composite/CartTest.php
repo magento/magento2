@@ -19,7 +19,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         parent::setUp();
         $this->quoteItemCollectionFactory = $this->_objectManager->get(
-            'Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory'
+            \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory::class
         );
     }
 

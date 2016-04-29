@@ -24,7 +24,7 @@ class TranslateCachingTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->renderer = Phrase::getRenderer();
-        Phrase::setRenderer($this->objectManager->get('\Magento\Framework\Phrase\RendererInterface'));
+        Phrase::setRenderer($this->objectManager->get(\Magento\Framework\Phrase\RendererInterface::class));
     }
 
     protected function tearDown()
@@ -32,7 +32,7 @@ class TranslateCachingTest extends \PHPUnit_Framework_TestCase
         Phrase::setRenderer($this->renderer);
 
         /** @var \Magento\Framework\App\Cache\Type\Translate $cache */
-        $cache = $this->objectManager->get('Magento\Framework\App\Cache\Type\Translate');
+        $cache = $this->objectManager->get(\Magento\Framework\App\Cache\Type\Translate::class);
         $cache->clean();
     }
 
@@ -42,13 +42,13 @@ class TranslateCachingTest extends \PHPUnit_Framework_TestCase
     public function testLoadDataCaching()
     {
         /** @var \Magento\Framework\Translate $model */
-        $model = $this->objectManager->get('Magento\Framework\Translate');
+        $model = $this->objectManager->get(\Magento\Framework\Translate::class);
 
         $model->loadData(\Magento\Framework\App\Area::AREA_FRONTEND); // this is supposed to cache the fixture
         $this->assertEquals('Fixture Db Translation', new Phrase('Fixture String'));
 
         /** @var \Magento\Translation\Model\ResourceModel\StringUtils $translateString */
-        $translateString = $this->objectManager->create('Magento\Translation\Model\ResourceModel\StringUtils');
+        $translateString = $this->objectManager->create(\Magento\Translation\Model\ResourceModel\StringUtils::class);
         $translateString->saveTranslate('Fixture String', 'New Db Translation');
 
         $this->assertEquals(
