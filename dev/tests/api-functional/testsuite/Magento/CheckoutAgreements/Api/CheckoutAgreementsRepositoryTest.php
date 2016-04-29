@@ -40,7 +40,7 @@ class CheckoutAgreementsRepositoryTest extends WebapiAbstract
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $agreement \Magento\CheckoutAgreements\Model\Agreement */
-        $agreement = $objectManager->create('Magento\CheckoutAgreements\Model\Agreement');
+        $agreement = $objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
         $agreement->load($name, 'name');
         if (!$agreement->getId()) {
             throw new \InvalidArgumentException('There is no checkout agreement with provided ID.');

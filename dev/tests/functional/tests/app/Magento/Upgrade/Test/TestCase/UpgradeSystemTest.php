@@ -62,13 +62,13 @@ class UpgradeSystemTest extends Injectable
         $upgrade = []
     ) {
         // Create fixture
-        $upgradeFixture = $fixtureFactory->create('Magento\Upgrade\Test\Fixture\Upgrade', ['data' => $upgrade]);
+        $upgradeFixture = $fixtureFactory->create(\Magento\Upgrade\Test\Fixture\Upgrade::class, ['data' => $upgrade]);
         $createBackupConfig = array_intersect_key(
             $upgrade,
             ['optionsCode' => '', 'optionsMedia' => '', 'optionsDb' => '']
         );
         $createBackupFixture = $fixtureFactory->create(
-            'Magento\Upgrade\Test\Fixture\Upgrade',
+            \Magento\Upgrade\Test\Fixture\Upgrade::class,
             ['data' => $createBackupConfig]
         );
         $version = $upgrade['upgradeVersion'];

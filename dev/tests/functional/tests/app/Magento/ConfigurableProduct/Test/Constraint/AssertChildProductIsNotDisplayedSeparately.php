@@ -40,7 +40,7 @@ class AssertChildProductIsNotDisplayedSeparately extends AbstractConstraint
         $cmsIndex->open();
         foreach ($configurableAttributesData['matrix'] as $variation) {
             $product = $this->objectManager->create(
-                'Magento\Catalog\Test\Fixture\CatalogProductSimple',
+                \Magento\Catalog\Test\Fixture\CatalogProductSimple::class,
                 [
                     'data' => [
                         'name' => $variation['name']

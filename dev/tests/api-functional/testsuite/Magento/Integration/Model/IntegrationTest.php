@@ -13,12 +13,11 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /** @var  \Magento\Integration\Model\Integration */
     protected $integration;
 
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $integrationService \Magento\Integration\Api\IntegrationServiceInterface */
-        $integrationService = $objectManager->get('Magento\Integration\Api\IntegrationServiceInterface');
+        $integrationService = $objectManager->get(\Magento\Integration\Api\IntegrationServiceInterface::class);
 
         $params = [
             'all_resources' => true,

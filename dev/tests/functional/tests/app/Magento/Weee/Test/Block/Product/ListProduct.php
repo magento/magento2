@@ -25,7 +25,7 @@ class ListProduct extends \Magento\Catalog\Test\Block\Product\ListProduct
     {
         $locator = sprintf($this->productItem, $product->getName());
         return $this->blockFactory->create(
-            'Magento\Weee\Test\Block\Product\ProductList\ProductItem',
+            \Magento\Weee\Test\Block\Product\ProductList\ProductItem::class,
             ['element' => $this->_rootElement->find($locator, Locator::SELECTOR_XPATH)]
         );
     }

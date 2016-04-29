@@ -82,7 +82,7 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
         // Preconditions
         $this->configData = $configData;
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData]
         )->run();
         $taxRule->persist();
@@ -99,11 +99,11 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
         // Steps
         $order->persist();
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
         )->run();
         $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             $order->getEntityId()
         )->run();
         $this->checkoutCart->open();
@@ -128,6 +128,6 @@ class ApplyTaxBasedOnVatIdTest extends AbstractApplyVatIdTest
     public function tearDown()
     {
         parent::tearDown();
-        $this->objectManager->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep')->run();
+        $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class)->run();
     }
 }

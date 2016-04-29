@@ -142,7 +142,8 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
     private function isProductInCategory($categoryId, $productId, $productPosition)
     {
         /** @var \Magento\Catalog\Api\CategoryRepositoryInterface $categoryLoader */
-        $categoryLoader = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\CategoryRepositoryInterface');
+        $categoryLoader = Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
         $category = $categoryLoader->get($categoryId);
         $productsPosition = $category->getProductsPosition();
 
@@ -162,7 +163,7 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
-        $config = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+        $config = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         if ($config->getValue('catalog/custom_categories_sort') == 1) {
             $this->markTestSkipped('Will be fixed after MAGETWO-41737');

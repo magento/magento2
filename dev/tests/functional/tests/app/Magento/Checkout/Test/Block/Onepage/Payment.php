@@ -120,7 +120,7 @@ class Payment extends Block
         $element = $this->_rootElement->find($this->activePaymentMethodSelector);
 
         return $this->blockFactory->create(
-            '\Magento\Checkout\Test\Block\Onepage\Payment\Method',
+            \Magento\Checkout\Test\Block\Onepage\Payment\Method::class,
             ['element' => $element]
         );
     }

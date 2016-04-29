@@ -35,10 +35,10 @@ class RuleRepositoryTest extends WebapiAbstract
             'uses_per_customer' => 2,
             'is_active' => 1,
             'condition' => [
-                'condition_type' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
+                'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
                 'conditions' => [
                     [
-                        'condition_type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                        'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                         'operator' => '>',
                         'attribute_name' => 'base_subtotal',
                         'value' => 800
@@ -49,10 +49,10 @@ class RuleRepositoryTest extends WebapiAbstract
                 'value' => null,
             ],
             'action_condition' => [
-                'condition_type' =>  'Magento\SalesRule\Model\Rule\Condition\Product\Combine',
+                'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
                 "conditions" => [
                     [
-                        'condition_type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+                        'condition_type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                         'operator' => '==',
                         'attribute_name' => 'attribute_set_id',
                         'value' => '4',

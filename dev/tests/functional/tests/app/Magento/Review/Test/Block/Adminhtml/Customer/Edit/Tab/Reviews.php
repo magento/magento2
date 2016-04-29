@@ -28,7 +28,7 @@ class Reviews extends Tab
     public function getReviewsGrid()
     {
         return $this->blockFactory->create(
-            'Magento\Review\Test\Block\Adminhtml\Grid',
+            \Magento\Review\Test\Block\Adminhtml\Grid::class,
             ['element' => $this->_rootElement->find($this->reviews)]
         );
     }

@@ -97,7 +97,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private function validateComposerJsonFile($path)
     {
         /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
-        $appFactory = self::$objectManager->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
+        $appFactory = self::$objectManager->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
         $app = $appFactory->create();
         $app->runComposerCommand(['command' => 'validate'], $path);
     }

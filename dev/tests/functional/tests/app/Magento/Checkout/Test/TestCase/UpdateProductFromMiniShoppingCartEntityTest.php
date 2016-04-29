@@ -117,7 +117,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected function createProduct($product, array $data = [])
     {
         $createProductsStep = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $product, 'data' => $data]
         );
         return $createProductsStep->run()['products'][0];
@@ -132,7 +132,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     protected function addToCart(FixtureInterface $product)
     {
         $addToCartStep = $this->objectManager->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => [$product]]
         );
         $addToCartStep->run();

@@ -50,12 +50,12 @@ class CreditmemoListTest extends WebapiAbstract
     {
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
 
         /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
         $filterBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
 
         $searchCriteriaBuilder->addFilters(

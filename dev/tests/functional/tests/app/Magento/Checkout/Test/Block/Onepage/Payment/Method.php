@@ -91,7 +91,7 @@ class Method extends Block
         $element = $this->_rootElement->find($this->billingAddressSelector);
 
         return $this->blockFactory->create(
-            '\Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing',
+            \Magento\Checkout\Test\Block\Onepage\Payment\Method\Billing::class,
             ['element' => $element]
         );
     }

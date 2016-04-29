@@ -25,7 +25,7 @@ class StockStatusTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->get('Magento\Catalog\Model\Product')->load(1);
+        $product = $objectManager->get(\Magento\Catalog\Model\Product::class)->load(1);
         $expectedData = $product->getQuantityAndStockStatus();
         $serviceInfo = [
             'rest' => [

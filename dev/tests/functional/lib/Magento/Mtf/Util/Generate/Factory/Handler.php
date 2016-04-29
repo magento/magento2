@@ -81,7 +81,7 @@ class Handler extends AbstractFactory
             $this->factoryContent .= "\n";
         }
 
-        $this->factoryContent .= "        \$handler = \$this->objectManager->get('{$realClass}');\n";
+        $this->factoryContent .= "        \$handler = \$this->objectManager->get({$realClass}::class);\n";
         $this->factoryContent .= "        return \$handler->persist(\$fixture);";
         $this->factoryContent .= "\n    }\n";
 

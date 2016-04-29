@@ -191,7 +191,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     protected function login(Customer $customer)
     {
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
     }

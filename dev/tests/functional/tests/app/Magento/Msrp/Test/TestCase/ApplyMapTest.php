@@ -34,11 +34,11 @@ class ApplyMapTest extends Injectable
     {
         // Preconditions
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'msrp']
         )->run();
         $product = $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductStep',
+            \Magento\Catalog\Test\TestStep\CreateProductStep::class,
             ['product' => $product]
         )->run();
 
@@ -53,7 +53,7 @@ class ApplyMapTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'msrp', 'rollback' => true]
         )->run();
     }

@@ -82,7 +82,7 @@ class CoreRoutingTest extends \Magento\Webapi\Routing\BaseService
         $this->_markTestAsRestOnly();
         /** @var $curlClient CurlClient */
         $curlClient = Bootstrap::getObjectManager()->get(
-            'Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient'
+            \Magento\TestFramework\TestCase\Webapi\Adapter\Rest\CurlClient::class
         );
         $response = $curlClient->get('/V1/testmodule1/resource1/1', [], ['Accept:']);
         $this->assertEquals('testProduct1', $response['name'], "Empty Accept header failed to return response.");

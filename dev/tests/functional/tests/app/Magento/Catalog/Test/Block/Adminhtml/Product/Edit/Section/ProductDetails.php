@@ -66,7 +66,7 @@ class ProductDetails extends Section
                 && !$fields['category_ids']['source']->getCategories()[0]->hasData('id')
             ) {
                 $this->blockFactory->create(
-                    'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds',
+                    \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\NewCategoryIds::class,
                     ['element' => $this->browser->find($this->newCategoryRootElement)]
                 )->addNewCategory($fields['category_ids']['source']->getCategories()[0]);
             } else {

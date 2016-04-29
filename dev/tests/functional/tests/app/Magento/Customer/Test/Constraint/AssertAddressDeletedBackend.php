@@ -39,7 +39,7 @@ class AssertAddressDeletedBackend extends AbstractConstraint
         $orderCreateIndex->getStoreBlock()->selectStoreView();
         $actualAddresses = $orderCreateIndex->getCreateBlock()->getBillingAddressBlock()->getExistingAddresses();
         $addressRenderer = $this->objectManager->create(
-            'Magento\Customer\Test\Block\Address\Renderer',
+            \Magento\Customer\Test\Block\Address\Renderer::class,
             ['address' => $deletedAddress]
         );
         $addressToSearch = $addressRenderer->render();

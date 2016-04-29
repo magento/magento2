@@ -149,7 +149,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
         $storeManager = \Magento\TestFramework\ObjectManager::getInstance()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         );
 
         foreach ($storeManager->getStores(true) as $store) {

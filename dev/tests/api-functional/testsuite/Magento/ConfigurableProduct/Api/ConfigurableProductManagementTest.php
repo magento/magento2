@@ -32,7 +32,7 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
         ];
         /** @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository */
         $attributeRepository = Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Api\ProductAttributeRepositoryInterface'
+            \Magento\Catalog\Api\ProductAttributeRepositoryInterface::class
         );
         $attribute = $attributeRepository->get('test_configurable');
         $attributeOptionValue = $attribute->getOptions()[1]->getValue();

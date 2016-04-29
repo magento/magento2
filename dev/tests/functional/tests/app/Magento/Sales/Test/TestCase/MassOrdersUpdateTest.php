@@ -116,7 +116,7 @@ class MassOrdersUpdateTest extends Injectable
         foreach ($steps as $step) {
             $action = str_replace(' ', '', ucwords($step));
             $methodAction = (($action != 'OnHold') ? 'Create' : '') . $action . 'Step';
-            $path = 'Magento\Sales\Test\TestStep';
+            $path = \Magento\Sales\Test\TestStep::class;
             $processStep = $this->objectManager->create($path . '\\' . $methodAction, ['order' => $order]);
             $processStep->run();
         }

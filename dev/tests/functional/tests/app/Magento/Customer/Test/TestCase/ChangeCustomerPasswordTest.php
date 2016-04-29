@@ -99,7 +99,7 @@ class ChangeCustomerPasswordTest extends Injectable
 
         // Steps
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $initialCustomer]
         )->run();
 

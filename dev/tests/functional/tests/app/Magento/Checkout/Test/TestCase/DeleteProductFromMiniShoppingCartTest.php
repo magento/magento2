@@ -95,7 +95,7 @@ class DeleteProductFromMiniShoppingCartTest extends Injectable
     protected function prepareProducts($productList)
     {
         $productsStep = ObjectManager::getInstance()->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
+            \Magento\Catalog\Test\TestStep\CreateProductsStep::class,
             ['products' => $productList]
         );
 
@@ -112,7 +112,7 @@ class DeleteProductFromMiniShoppingCartTest extends Injectable
     protected function addToCart(array $products)
     {
         $addToCartStep = ObjectManager::getInstance()->create(
-            'Magento\Checkout\Test\TestStep\AddProductsToTheCartStep',
+            \Magento\Checkout\Test\TestStep\AddProductsToTheCartStep::class,
             ['products' => $products]
         );
         $addToCartStep->run();

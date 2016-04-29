@@ -78,7 +78,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
                 continue;
             }
             $date = ObjectManager::getInstance()->create(
-                '\Magento\Backend\Test\Fixture\Source\Date',
+                \Magento\Backend\Test\Fixture\Source\Date::class,
                 ['params' => [], 'data' => ['pattern' => $reportFilter]]
             );
             $customersReport[$name] = $date->getData();

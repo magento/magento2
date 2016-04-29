@@ -29,7 +29,7 @@ class CreditMemos extends Tab
     public function getGridBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos\Grid',
+            \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos\Grid::class,
             ['element' => $this->_rootElement->find($this->grid)]
         );
     }

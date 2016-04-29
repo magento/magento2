@@ -49,19 +49,19 @@ class TaxClassRepositoryTest extends WebapiAbstract
     public function setUp()
     {
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
         $this->filterBuilder = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
         $this->taxClassFactory = Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Api\Data\TaxClassInterfaceFactory'
+            \Magento\Tax\Api\Data\TaxClassInterfaceFactory::class
         );
         $this->taxClassRegistry = Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Model\ClassModelRegistry'
+            \Magento\Tax\Model\ClassModelRegistry::class
         );
         $this->taxClassRepository = Bootstrap::getObjectManager()->create(
-            'Magento\Tax\Model\TaxClass\Repository',
+            \Magento\Tax\Model\TaxClass\Repository::class,
             ['classModelRegistry' => $this->taxClassRegistry]
         );
     }

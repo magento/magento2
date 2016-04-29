@@ -48,11 +48,11 @@ class PageRepositoryTest extends WebapiAbstract
      */
     public function setUp()
     {
-        $this->pageFactory = Bootstrap::getObjectManager()->create('Magento\Cms\Api\Data\PageInterfaceFactory');
-        $this->pageRepository = Bootstrap::getObjectManager()->create('Magento\Cms\Api\PageRepositoryInterface');
-        $this->dataObjectHelper = Bootstrap::getObjectManager()->create('Magento\Framework\Api\DataObjectHelper');
+        $this->pageFactory = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\Data\PageInterfaceFactory::class);
+        $this->pageRepository = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\PageRepositoryInterface::class);
+        $this->dataObjectHelper = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\DataObjectHelper::class);
         $this->dataObjectProcessor = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Reflection\DataObjectProcessor');
+            ->create(\Magento\Framework\Reflection\DataObjectProcessor::class);
     }
 
     /**
@@ -152,11 +152,11 @@ class PageRepositoryTest extends WebapiAbstract
         $this->dataObjectHelper->populateWithArray(
             $this->currentPage,
             [PageInterface::TITLE => $newPageTitle],
-            'Magento\Cms\Api\Data\PageInterface'
+            \Magento\Cms\Api\Data\PageInterface::class
         );
         $pageData = $this->dataObjectProcessor->buildOutputDataArray(
             $this->currentPage,
-            'Magento\Cms\Api\Data\PageInterface'
+            \Magento\Cms\Api\Data\PageInterface::class
         );
 
         $serviceInfo = [
@@ -221,10 +221,10 @@ class PageRepositoryTest extends WebapiAbstract
             ->setIdentifier($pageIdentifier);
         $this->currentPage = $this->pageRepository->save($pageDataObject);
 
-        $filterBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\FilterBuilder');
+        $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Api\SearchCriteriaBuilder');
+            ->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $filter = $filterBuilder
             ->setField(PageInterface::IDENTIFIER)
             ->setValue($pageIdentifier)

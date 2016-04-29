@@ -23,7 +23,7 @@ class View extends \Magento\Sales\Test\Block\Order\View
     {
         $selector = ($id === null) ? $this->content : sprintf($this->itemBlock, $id) . $this->content;
         return $this->blockFactory->create(
-            'Magento\SalesRule\Test\Block\Order\Items',
+            \Magento\SalesRule\Test\Block\Order\Items::class,
             ['element' => $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)]
         );
     }

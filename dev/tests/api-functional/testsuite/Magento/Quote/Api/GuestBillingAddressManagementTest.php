@@ -28,7 +28,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
     protected function getQuoteMaskedId($quoteId)
     {
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = $this->objectManager->create('Magento\Quote\Model\QuoteIdMaskFactory')->create();
+        $quoteIdMask = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)->create();
         $quoteIdMask->load($quoteId, 'quote_id');
         return $quoteIdMask->getMaskedId();
     }
@@ -38,7 +38,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
      */
     public function testGetAddress()
     {
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         /** @var \Magento\Quote\Model\Quote\Address $address */
@@ -92,7 +92,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
     public function testSetAddress()
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
 
         $cartId = $this->getQuoteMaskedId($quote->getId());
@@ -132,7 +132,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
         $addressId = $this->_webApiCall($serviceInfo, $requestData);
 
         //reset $quote to reload data
-        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');
         $address = $quote->getBillingAddress();
         $address->getRegionCode();

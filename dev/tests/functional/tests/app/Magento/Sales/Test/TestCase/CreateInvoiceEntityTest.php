@@ -41,7 +41,7 @@ class CreateInvoiceEntityTest extends Injectable
     public function __prepare()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'checkmo, flatrate']
         )->run();
     }
@@ -60,7 +60,7 @@ class CreateInvoiceEntityTest extends Injectable
 
         // Steps
         $result = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateInvoiceStep',
+            \Magento\Sales\Test\TestStep\CreateInvoiceStep::class,
             ['order' => $order, 'data' => $data]
         )->run();
 
@@ -74,6 +74,6 @@ class CreateInvoiceEntityTest extends Injectable
      */
     public function tearDown()
     {
-        $this->objectManager->create('Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+        $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
     }
 }

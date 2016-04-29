@@ -80,7 +80,7 @@ class CreateCurrencyRateTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'config_currency_symbols_usd']
         )->run();
     }

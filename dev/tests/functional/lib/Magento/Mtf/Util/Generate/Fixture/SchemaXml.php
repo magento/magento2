@@ -52,7 +52,7 @@ class SchemaXml
     public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
-        $this->fieldsProvider = $this->objectManager->create('Magento\Mtf\Util\Generate\Fixture\FieldsProvider');
+        $this->fieldsProvider = $this->objectManager->create(\Magento\Mtf\Util\Generate\Fixture\FieldsProvider::class);
         $this->dom = new \DOMDocument('1.0');
         $this->dom->load(dirname(__FILE__) . '/template.xml');
         $this->dom->preserveWhiteSpace = false;

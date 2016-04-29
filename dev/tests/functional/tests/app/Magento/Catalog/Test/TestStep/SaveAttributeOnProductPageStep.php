@@ -71,7 +71,7 @@ class SaveAttributeOnProductPageStep implements TestStepInterface
     public function cleanup()
     {
         $this->objectManager->create(
-            'Magento\Catalog\Test\TestStep\DeleteAttributeStep',
+            \Magento\Catalog\Test\TestStep\DeleteAttributeStep::class,
             ['attribute' => $this->attribute]
         )->run();
     }
