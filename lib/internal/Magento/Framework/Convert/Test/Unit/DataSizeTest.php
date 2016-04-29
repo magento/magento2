@@ -8,6 +8,9 @@ namespace Magento\Framework\Convert\Test\Unit;
 
 use Magento\Framework\Convert\DataSize;
 
+/**
+ * Class DataSizeTest
+ */
 class DataSizeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,6 +18,11 @@ class DataSizeTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataSize;
 
+    /**
+     * Setup
+     *
+     * @return void
+     */
     protected function setUp()
     {
         $this->dataSize = new DataSize();
@@ -25,6 +33,7 @@ class DataSizeTest extends \PHPUnit_Framework_TestCase
      * @backupStaticAttributes
      * @param string $value
      * @param int $expected
+     * @return void
      */
     public function testConvertSizeToInteger($value, $expected)
     {

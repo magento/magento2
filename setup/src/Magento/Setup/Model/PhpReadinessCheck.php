@@ -43,6 +43,7 @@ class PhpReadinessCheck
      * @param ComposerInformation $composerInformation
      * @param PhpInformation $phpInformation
      * @param VersionParser $versionParser
+     * @param DataSize $dataSize
      */
     public function __construct(
         ComposerInformation $composerInformation,
@@ -330,24 +331,5 @@ class PhpReadinessCheck
             $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
         }
         return $normalizedPhpVersion;
-    }
-
-    /**
-     * Converts memory to integer
-     *
-     * @param $string
-     * @return mixed
-     */
-    private function memoryToInteger($string) {
-
-        $suffix = '';
-
-        sscanf ($string, '%u%c', $number, $suffix);
-
-        if (!empty($suffix)) {
-            $number = $number * bcpow (1024, strpos (' KMG', strtoupper($suffix)));
-        }
-
-        return $number;
     }
 }
