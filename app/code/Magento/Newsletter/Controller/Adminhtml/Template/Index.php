@@ -23,7 +23,7 @@ class Index extends \Magento\Newsletter\Controller\Adminhtml\Template
         $this->_setActiveMenu('Magento_Newsletter::newsletter_template');
         $this->_addBreadcrumb(__('Newsletter Templates'), __('Newsletter Templates'));
         $this->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Newsletter\Block\Adminhtml\Template', 'template')
+            $this->_view->getLayout()->createBlock(\Magento\Newsletter\Block\Adminhtml\Template::class, 'template')
         );
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Newsletter Templates'));
         $this->_view->renderLayout();

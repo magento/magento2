@@ -79,7 +79,7 @@ class Event extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\ResourceModel\Event');
+        $this->_init(\Magento\Reports\Model\ResourceModel\Event::class);
     }
 
     /**

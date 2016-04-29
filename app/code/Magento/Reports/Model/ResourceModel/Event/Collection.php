@@ -27,7 +27,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Reports\Model\Event', 'Magento\Reports\Model\ResourceModel\Event');
+        $this->_init(\Magento\Reports\Model\Event::class, \Magento\Reports\Model\ResourceModel\Event::class);
     }
 
     /**

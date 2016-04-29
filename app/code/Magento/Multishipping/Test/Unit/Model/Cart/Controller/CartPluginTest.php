@@ -24,8 +24,8 @@ class CartPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cartRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
+        $this->cartRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->checkoutSessionMock = $this->getMock(\Magento\Checkout\Model\Session::class, [], [], '', false);
         $this->model = new \Magento\Multishipping\Model\Cart\Controller\CartPlugin(
             $this->cartRepositoryMock,
             $this->checkoutSessionMock
@@ -36,7 +36,7 @@ class CartPluginTest extends \PHPUnit_Framework_TestCase
     {
         $addressId = 100;
         $quoteMock = $this->getMock(
-            '\Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             [
                 'isMultipleShippingAddresses',
                 'getAllShippingAddresses',
@@ -51,7 +51,7 @@ class CartPluginTest extends \PHPUnit_Framework_TestCase
         );
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
-        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
 
         $quoteMock->expects($this->once())->method('isMultipleShippingAddresses')->willReturn(true);
@@ -64,8 +64,8 @@ class CartPluginTest extends \PHPUnit_Framework_TestCase
         $this->cartRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
         $this->model->beforeDispatch(
-            $this->getMock('\Magento\Checkout\Controller\Cart', [], [], '', false),
-            $this->getMock('\Magento\Framework\App\RequestInterface')
+            $this->getMock(\Magento\Checkout\Controller\Cart::class, [], [], '', false),
+            $this->getMock(\Magento\Framework\App\RequestInterface::class)
         );
     }
 }

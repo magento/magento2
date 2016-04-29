@@ -22,7 +22,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
         if (!$request->isPost()) {
             $this->getResponse()->setRedirect($this->getUrl('*/template'));
         }
-        $template = $this->_objectManager->create('Magento\Newsletter\Model\Template');
+        $template = $this->_objectManager->create(\Magento\Newsletter\Model\Template::class);
 
         $id = (int)$request->getParam('id');
         if ($id) {
@@ -45,7 +45,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
             )->setTemplateStyles(
                 $request->getParam('styles')
             )->setModifiedAt(
-                $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')->gmtDate()
+                $this->_objectManager->get(\Magento\Framework\Stdlib\DateTime\DateTime::class)->gmtDate()
             );
 
             if (!$template->getId()) {

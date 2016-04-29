@@ -21,7 +21,7 @@ class Abandoned extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
             __('Abandoned Carts'),
             __('Abandoned Carts')
         )->_addContent(
-            $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Shopcart\Abandoned')
+            $this->_view->getLayout()->createBlock(\Magento\Reports\Block\Adminhtml\Shopcart\Abandoned::class)
         );
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Abandoned Carts'));
         $this->_view->renderLayout();

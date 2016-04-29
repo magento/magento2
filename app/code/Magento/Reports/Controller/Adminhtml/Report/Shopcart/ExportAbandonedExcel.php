@@ -20,7 +20,7 @@ class ExportAbandonedExcel extends \Magento\Reports\Controller\Adminhtml\Report\
     {
         $fileName = 'shopcart_abandoned.xml';
         $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid'
+            \Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid::class
         )->getExcelFile(
             $fileName
         );

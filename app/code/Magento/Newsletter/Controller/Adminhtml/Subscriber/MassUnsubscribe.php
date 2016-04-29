@@ -22,7 +22,7 @@ class MassUnsubscribe extends \Magento\Newsletter\Controller\Adminhtml\Subscribe
             try {
                 foreach ($subscribersIds as $subscriberId) {
                     $subscriber = $this->_objectManager->create(
-                        'Magento\Newsletter\Model\Subscriber'
+                        \Magento\Newsletter\Model\Subscriber::class
                     )->load(
                         $subscriberId
                     );

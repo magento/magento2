@@ -63,7 +63,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_map['fields']['queue_id'] = 'main_table.queue_id';
-        $this->_init('Magento\Newsletter\Model\Queue', 'Magento\Newsletter\Model\ResourceModel\Queue');
+        $this->_init(\Magento\Newsletter\Model\Queue::class, \Magento\Newsletter\Model\ResourceModel\Queue::class);
     }
 
     /**

@@ -20,7 +20,7 @@ class ExportAbandonedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sh
     {
         $fileName = 'shopcart_abandoned.csv';
         $content = $this->_view->getLayout()->createBlock(
-            'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid'
+            \Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid::class
         )->getCsvFile();
 
         return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
