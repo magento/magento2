@@ -19,7 +19,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @var string
      */
-    protected $requestConfig = __DIR__ . '/../_files/requests.xml';
+    protected $requestConfig;
 
     /**
      * @var string
@@ -31,11 +31,12 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     protected function createAdapter()
     {
-        return $this->objectManager->create('Magento\Elasticsearch\SearchAdapter\Adapter');
+        return $this->objectManager->create(\Magento\Elasticsearch\SearchAdapter\Adapter::class);
     }
 
     protected function setUp()
     {
+        $this->requestConfig = __DIR__ . '/../_files/requests.xml';
         //remember to add @ for magentoDataFixture when MAGETWO-44489 is done
         $this->markTestSkipped("Skipping until ES is configured on builds - MAGETWO-44489");
     }
