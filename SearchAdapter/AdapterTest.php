@@ -19,11 +19,6 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @var string
      */
-    protected $requestConfig;
-
-    /**
-     * @var string
-     */
     protected $searchEngine = Config::ENGINE_NAME;
 
     protected function setUp()
