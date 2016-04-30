@@ -19,12 +19,15 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * @var string
      */
+    protected $requestConfig = '/../_files/requests.xml';
+
+    /**
+     * @var string
+     */
     protected $searchEngine = Config::ENGINE_NAME;
 
     protected function setUp()
     {
-        parent::setUp();
-        $this->requestConfig = __DIR__ . '/../_files/requests.xml';
         // @todo add @ for magentoDataFixture when MAGETWO-44489 is done
         $this->markTestSkipped("Skipping until ES is configured on builds - MAGETWO-44489");
     }
