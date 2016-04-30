@@ -36,7 +36,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $requestConfig;
+    protected $requestConfig = '/../../_files/requests.xml';
 
     /**
      * @var string
@@ -45,15 +45,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->requestConfig = __DIR__ . '/../../_files/requests.xml';
-
         $this->objectManager = Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
         $converter = $this->objectManager->create('Magento\Framework\Search\Request\Config\Converter');
 
         $document = new \DOMDocument();
-        $document->load($this->requestConfig);
+        $document->load(__DIR__ . $this->requestConfig);
         $requestConfig = $converter->convert($document);
 
         /** @var \Magento\Framework\Search\Request\Config $config */
