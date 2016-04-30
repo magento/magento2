@@ -1367,4 +1367,20 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         }
         return false;
     }
+
+    /**
+     * @return string
+     */
+    public function getPasswordConfirm()
+    {
+        return (string) $this->getData('password_confirm');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return (string) $this->getData('password');
+    }
 }
