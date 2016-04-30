@@ -222,7 +222,7 @@ class Deployer
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $themesArg)
+    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $themesArg = [])
     {
 
         $this->omFactory = $omFactory;
