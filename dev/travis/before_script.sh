@@ -4,20 +4,9 @@
 # See COPYING.txt for license details.
 
 set -e
-PATH="$HOME/.cache/bin:$PATH"
-
 trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit code $?' ERR
 
-# mock mail
-sudo service postfix stop
-echo # print a newline
-smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
-echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/sendmail.ini
-
-# disable xDebug
-echo > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
-
-# prepare for integration tests
+# prepare for test suite
 case $TEST_SUITE in
     integration)
         cd dev/tests/integration
@@ -81,14 +70,3 @@ case $TEST_SUITE in
         cd ../../..
         ;;
 esac
-
-# change memory_limit for travis
-echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-phpenv rehash;
-
-# install deps
-export COMPOSER_BIN_DIR=~/bin
-if [[ -n "$GITHUB_TOKEN" ]]; then
-    composer config github-oauth.github.com "$GITHUB_TOKEN"
-fi
-composer install --no-interaction --prefer-dist

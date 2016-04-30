@@ -14,6 +14,7 @@ php:
   - 7.0
 env:
   global:
+    - COMPOSER_BIN_DIR=~/bin
     - INTEGRATION_SETS=2
   matrix:
     - TEST_SUITE=unit
@@ -22,9 +23,7 @@ env:
     - TEST_SUITE=static TEST_FILTER='--filter "Magento\\Test\\Php\\LiveCodeTest"'
 cache:
   apt: true
-  directories:
-    - $HOME/.composer/cache
-    - $HOME/.cache/bin
+  directories: $HOME/.composer/cache
 matrix:
   exclude:
     - php: 5.6
@@ -32,5 +31,6 @@ matrix:
     - php: 7.0
       env: TEST_SUITE=static
 before_install: ./dev/travis/before_install.sh
+install: composer install --no-interaction --prefer-dist
 before_script: ./dev/travis/before_script.sh
 script: cd dev/tests/$TEST_SUITE && phpunit $TEST_FILTER
