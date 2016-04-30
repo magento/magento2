@@ -16,6 +16,6 @@ case $TEST_SUITE in
         ;;
     static)
         cd dev/tests/static
-        phpunit --filter "$STATIC_FILTER"
+        phpunit --filter 'Magento\\Test\\Php\\LiveCodeTest::(testCodeStyle|testAnnotationStandard)'
         ;;
 esac
