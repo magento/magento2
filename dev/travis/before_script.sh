@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-# Copyright © 2015 Magento. All rights reserved.
+# Copyright © 2016 Magento. All rights reserved.
 # See COPYING.txt for license details.
 
 set -e
 PATH="$HOME/.cache/bin:$PATH"
+
+trap '>&2 echo Error: Command \`$BASH_COMMAND\` on line $LINENO failed with exit code $?' ERR
 
 # mock mail
 sudo service postfix stop
@@ -61,6 +63,20 @@ case $TEST_SUITE in
             CREATE DATABASE magento_integration_tests;
         '
         mv etc/install-config-mysql.travis.php.dist etc/install-config-mysql.php
+
+        cd ../../..
+        ;;
+    static)
+        cd dev/tests/static
+
+        echo "==> preparing changed files list"
+        changed_files_ce="$TRAVIS_BUILD_DIR/dev/tests/static/testsuite/Magento/Test/_files/changed_files_ce.txt"
+        php get_github_changes.php \
+            --output-file="$changed_files_ce" \
+            --base-path="$TRAVIS_BUILD_DIR" \
+            --repo='https://github.com/magento/magento2.git' \
+            --branch='develop'
+        cat "$changed_files_ce" | sed 's/^/  + including /'
 
         cd ../../..
         ;;
