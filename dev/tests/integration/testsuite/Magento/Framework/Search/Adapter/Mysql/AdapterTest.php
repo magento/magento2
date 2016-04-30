@@ -36,11 +36,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $requestConfig = '/../../_files/requests.xml';
-
-    /**
-     * @var string
-     */
     protected $searchEngine = EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE;
 
     protected function setUp()
@@ -51,7 +46,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $converter = $this->objectManager->create('Magento\Framework\Search\Request\Config\Converter');
 
         $document = new \DOMDocument();
-        $document->load(__DIR__ . $this->requestConfig);
+        $document->load($this->getRequestConfigPath());
         $requestConfig = $converter->convert($document);
 
         /** @var \Magento\Framework\Search\Request\Config $config */
@@ -64,6 +59,16 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adapter = $this->createAdapter();
+    }
+
+    /**
+     * Get request config path
+     * 
+     * @return string
+     */
+    protected function getRequestConfigPath()
+    {
+        return __DIR__ . '/../../_files/requests.xml';
     }
 
     /**
