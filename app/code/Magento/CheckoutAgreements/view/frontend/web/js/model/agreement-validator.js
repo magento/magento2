@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -11,7 +11,9 @@ define(
     ],
     function ($) {
         'use strict';
-        var agreementsConfig = window.checkoutConfig.checkoutAgreements;
+        var checkoutConfig = window.checkoutConfig,
+            agreementsConfig = checkoutConfig ? checkoutConfig.checkoutAgreements : {};
+
         return {
             /**
              * Validate checkout agreements

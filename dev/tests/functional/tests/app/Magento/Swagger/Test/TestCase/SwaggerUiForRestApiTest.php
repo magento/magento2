@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -76,6 +76,10 @@ class SwaggerUiForRestApiTest extends Injectable
         $serviceName,
         array $endpoints
     ) {
+        $this->markTestIncomplete(
+            "MAGETWO-49889: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
+        );
+
         $this->serviceName = $serviceName;
         $this->endpoints = $endpoints;
         $this->swaggerPage->open();

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,13 +13,12 @@ define([
     return Abstract.extend({
         defaults: {
             template: 'ui/form/element/checkbox-set',
-            isMultiselect: true
+            multiple: false,
+            multipleScopeValue: null
         },
 
         /**
-         * Initializes configuration.
-         *
-         * @returns {CheckboxSet} Chainable.
+         * @inheritdoc
          */
         initConfig: function () {
             this._super();
@@ -30,9 +29,51 @@ define([
         },
 
         /**
-         * Defines initial value.
-         *
-         * @returns {CheckboxSet} Chainable.
+         * @inheritdoc
+         */
+        initLinks: function () {
+            var scope = this.source.get(this.dataScope);
+
+            this.multipleScopeValue = this.multiple && _.isArray(scope) ? utils.copy(scope) : undefined;
+
+            return this._super();
+        },
+
+        /**
+         * @inheritdoc
+         */
+        reset: function () {
+            this.value(utils.copy(this.initialValue));
+            this.error(false);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        clear: function () {
+            var value = this.multiple ? [] : '';
+
+            this.value(value);
+            this.error(false);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        normalizeData: function (value) {
+            if (!this.multiple) {
+                return this._super();
+            }
+
+            return _.isArray(value) ? utils.copy(value) : [];
+        },
+
+        /**
+         * @inheritdoc
          */
         setInitialValue: function () {
             this._super();
@@ -43,41 +84,21 @@ define([
         },
 
         /**
-         * Restores initial value.
-         *
-         * @returns {CheckboxSet} Chainable.
+         * @inheritdoc
          */
-        reset: function () {
-            this.value(utils.copy(this.initialValue));
+        getInitialValue: function () {
+            var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
+                value;
 
-            return this;
-        },
-
-        /**
-         * Empties current value.
-         *
-         * @returns {CheckboxSet} Chainable.
-         */
-        clear: function () {
-            var value = this.isMultiselect ? [] : '';
-
-            this.value(value);
-
-            return this;
-        },
-
-        /**
-         * Performs data type conversions.
-         *
-         * @param {*} value
-         * @returns {Array|String}
-         */
-        normalizeData: function (value) {
-            if (!this.isMultiselect) {
+            if (!this.multiple) {
                 return this._super();
             }
 
-            return utils.isEmpty(value) ? [] : value;
+            values.some(function (v) {
+                return _.isArray(v) && (value = utils.copy(v));
+            });
+
+            return value;
         },
 
         /**
@@ -88,7 +109,7 @@ define([
         getPreview: function () {
             var option;
 
-            if (!this.isMultiselect) {
+            if (!this.multiple) {
                 option = this.getOption(this.value());
 
                 return option ? option.label : '';
@@ -112,16 +133,13 @@ define([
         },
 
         /**
-         * Defines if current value has
-         * changed from its' initial state.
-         *
-         * @returns {Boolean}
+         * @inheritdoc
          */
         hasChanged: function () {
             var value = this.value(),
                 initial = this.initialValue;
 
-            return this.isMultiselect ?
+            return this.multiple ?
                 !utils.equalArrays(value, initial) :
                 this._super();
         }

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -39,6 +39,8 @@
     .dropdown-menu {
         left: 0;
         margin-top: .5em;
+        max-height: 250px;
+        overflow-y: auto;
         padding-top: .25em;
 
         li {
@@ -260,7 +262,7 @@
             }
 
             span {
-                .lib-visually-hidden();
+                &:extend(.abs-visually-hidden all);
             }
         }
 

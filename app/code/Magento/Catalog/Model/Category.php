@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -661,9 +661,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $url = false;
         $image = $this->getImage();
         if ($image) {
-            $url = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-            ) . 'catalog/category/' . $image;
+            if (is_string($image)) {
+                $url = $this->_storeManager->getStore()->getBaseUrl(
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . 'catalog/category/' . $image;
+            } else {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while getting the image url.')
+                );
+            }
         }
         return $url;
     }
@@ -1115,7 +1121,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $identities = [
             self::CACHE_TAG . '_' . $this->getId(),
         ];
-        if ($this->hasDataChanges() || $this->isDeleted()) {
+        if (!$this->getId() || $this->hasDataChanges()
+            || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)
+        ) {
+            $identities[] = self::CACHE_TAG;
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
         }
         return $identities;

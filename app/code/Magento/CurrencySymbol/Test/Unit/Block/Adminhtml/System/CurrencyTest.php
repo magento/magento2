@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System;
@@ -71,6 +71,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             );
 
         $childBlockMock->expects($this->at(1))
+            ->method('addChild')
+            ->with(
+                'options_button',
+                'Magento\Backend\Block\Widget\Button',
+                ['label' => __('Options'), 'onclick' => 'setLocation(\'\')']
+            );
+
+        $childBlockMock->expects($this->at(2))
             ->method('addChild')
             ->with(
                 'reset_button',

@@ -2,7 +2,7 @@
 /**
  * Test authentication mechanisms in REST.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Authentication;
@@ -90,6 +90,8 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     public function testGetRequestTokenExpiredConsumer()
     {
         $this::consumerFixture('2012-01-01 00:00:00');
+        $this::$_consumer->setUpdatedAt('2012-01-01 00:00:00');
+        $this::$_consumer->save();
         /** @var $oAuthClient \Magento\TestFramework\Authentication\Rest\OauthClient */
         $oAuthClient = $this->_getOauthClient(self::$_consumerKey, self::$_consumerSecret);
         $oAuthClient->requestRequestToken();

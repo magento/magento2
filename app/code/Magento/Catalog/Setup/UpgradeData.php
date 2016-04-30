@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
@@ -257,6 +257,12 @@ class UpgradeData implements UpgradeDataInterface
                 'frontend_label',
                 'Small'
             );
+            $categorySetup->updateAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                'image',
+                'frontend_input_renderer',
+                null
+            );
 
             //Design tab
             $categorySetup->updateAttribute(
@@ -331,25 +337,21 @@ class UpgradeData implements UpgradeDataInterface
                     'is_filterable_in_grid' => false
                 ]
             );
-
-            /** @var EavSetup $eavSetup */
-            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
-            $field = 'weight';
-            $applyTo = explode(
-                ',',
-                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $field, 'apply_to')
-            );
-            if ($key = array_search('virtual', $applyTo)) {
-                unset($applyTo[$key]);
-                $eavSetup->updateAttribute(
-                    \Magento\Catalog\Model\Product::ENTITY,
-                    $field,
-                    'apply_to',
-                    implode(',', $applyTo)
-                );
-            }
         }
+        
+        if (version_compare($context->getVersion(), '2.0.7') < 0) {
+            /** @var EavSetup $eavSetupF */
+            $eavSetup= $this->eavSetupFactory->create(['setup' => $setup]);
 
+            $eavSetup->updateAttribute(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                'meta_description',
+                [
+                    'note' => 'Maximum 255 chars. Meta Description should optimally be between 150-160 characters'
+                ]
+            );
+        }
+        
         $setup->endSetup();
     }
 }

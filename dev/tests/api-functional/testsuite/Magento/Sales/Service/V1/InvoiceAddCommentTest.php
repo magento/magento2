@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -40,8 +40,8 @@ class InvoiceAddCommentTest extends WebapiAbstract
             InvoiceCommentInterface::ENTITY_ID => null,
             InvoiceCommentInterface::CREATED_AT => null,
             InvoiceCommentInterface::PARENT_ID => $invoice->getId(),
-            InvoiceCommentInterface::IS_VISIBLE_ON_FRONT => true,
-            InvoiceCommentInterface::IS_CUSTOMER_NOTIFIED => true,
+            InvoiceCommentInterface::IS_VISIBLE_ON_FRONT => 1,
+            InvoiceCommentInterface::IS_CUSTOMER_NOTIFIED => 1,
         ];
 
         $requestData = ['entity' => $commentData];

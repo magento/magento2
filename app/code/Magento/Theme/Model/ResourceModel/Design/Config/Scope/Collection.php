@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\ResourceModel\Design\Config\Scope;
@@ -101,7 +101,9 @@ class Collection extends \Magento\Framework\Data\Collection
             if (isset($itemData['use_in_grid']) && (boolean)$itemData['use_in_grid']) {
                 $result[$itemName] = $this->valueProcessor->process(
                     $this->appConfig->getValue($itemData['path'], $scope, $scopeId),
-                    $itemData['path']
+                    $scope,
+                    $scopeId,
+                    $itemData
                 );
             }
         }

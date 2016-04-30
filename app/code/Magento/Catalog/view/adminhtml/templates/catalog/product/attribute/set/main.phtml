@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,14 @@
 
 ?>
 <div class="attribute-set">
+
+    <div class="admin__data-grid-loading-mask"
+         data-role="spinner">
+        <div class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </div>
+    </div>
     <div class="edit-attribute-set attribute-set-col">
         <?php echo $block->getSetFormHtml() ?>
         <script>
@@ -423,6 +431,7 @@
                 jQuery(function() {
                     initVars();
                     TreePanels.init();
+                    jQuery("[data-role='spinner']").hide();
                 });
                 //]]>
 

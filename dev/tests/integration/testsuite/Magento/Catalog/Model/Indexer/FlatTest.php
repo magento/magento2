@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer;
@@ -117,7 +117,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Populate EAV category data
+     * Populate EAV category data`
      *
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      */
@@ -127,13 +127,14 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
         );
-        $category->load(2);
+        $category->getResource()->load($category, 2);
 
         /** @var \Magento\Catalog\Model\Category $categoryOne */
         $categoryOne = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Category'
         );
-        $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true)->save();
+        $categoryOne->setName('Category One')->setPath($category->getPath())->setIsActive(true);
+        $category->getResource()->save($categoryOne);
         self::loadAttributeValues($categoryOne);
 
         self::$categoryOne = $categoryOne->getId();
@@ -143,7 +144,8 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Category'
         );
 
-        $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true)->save();
+        $categoryTwo->setName('Category Two')->setPath($categoryOne->getPath())->setIsActive(true);
+        $category->getResource()->save($categoryTwo);
 
         self::loadAttributeValues($categoryTwo);
 

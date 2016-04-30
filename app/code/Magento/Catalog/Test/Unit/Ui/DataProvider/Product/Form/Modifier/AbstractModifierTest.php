@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -8,12 +8,9 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 
 /**
  * Class AbstractDataProviderTest
@@ -51,11 +48,6 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
      */
     protected $arrayManagerMock;
 
-    /**
-     * @var Grouper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $grouperMock;
-
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -72,12 +64,9 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
                 'getExistsStoreValueFlag'
             ])->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['load', 'getId'])
+            ->setMethods(['load', 'getId', 'getConfig'])
             ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->grouperMock = $this->getMockBuilder(Grouper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -86,18 +75,12 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('get')
-            ->willReturnArgument(3);
+            ->willReturnArgument(2);
         $this->arrayManagerMock->expects($this->any())
             ->method('set')
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('merge')
-            ->willReturnArgument(1);
-        $this->grouperMock->expects($this->any())
-            ->method('groupMetaElements')
-            ->willReturnArgument(0);
-        $this->grouperMock->expects($this->any())
-            ->method('remove')
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('remove')

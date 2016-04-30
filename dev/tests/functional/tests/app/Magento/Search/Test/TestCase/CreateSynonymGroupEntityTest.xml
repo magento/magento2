@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Search\Test\TestCase\CreateSynonymGroupEntityTest" summary="Create Synonym Group" ticketId="MAGETWO-47681">
+        <variation name="CreateSynonymGroupEntityTestVariation1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="synonymGroup/data/synonyms" xsi:type="string">synonym_%isolation%</data>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage" />
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupInGrid" />
+        </variation>
+    </testCase>
+    <testCase name="Magento\Search\Test\TestCase\CreateSynonymGroupEntityTest" summary="Create Synonym Group with few synonyms and Default Store View" ticketId="MAGETWO-47681">
+        <variation name="CreateSynonymGroupEntityTestVariation2">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="synonymGroup/data/synonyms" xsi:type="string">shoes_%isolation%,foot wear_%isolation%,mens shoes_%isolation%,women shoes_%isolation%</data>
+            <data name="synonymGroup/data/scope_id/dataset" xsi:type="string">default_store_view</data>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage" />
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupInGrid" />
+        </variation>
+    </testCase>
+    <testCase name="Magento\Search\Test\TestCase\CreateSynonymGroupEntityTest" summary="Create Synonym Group with custom Website and Store View" ticketId="MAGETWO-47681">
+        <variation name="CreateSynonymGroupEntityTestVariation3">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="synonymGroup/data/synonyms" xsi:type="string">synonym_%isolation%</data>
+            <data name="synonymGroup/data/scope_id/dataset" xsi:type="string">custom_store</data>
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupSuccessSaveMessage" />
+            <constraint name="Magento\Search\Test\Constraint\AssertSynonymGroupInGrid" />
+        </variation>
+    </testCase>
+</config>

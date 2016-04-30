@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Export;
@@ -106,11 +106,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $groupRepository;
-
-    /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadataPool;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter| \PHPUnit_Framework_MockObject_MockObject
@@ -290,13 +285,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->metadataPool = $this->getMock(
-            '\Magento\Framework\Model\Entity\MetadataPool',
-            [],
-            [],
-            '',
-            false
-        );
         $this->writer = $this->getMock(
             'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
             [
@@ -355,7 +343,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $this->typeFactory,
             $this->linkTypeProvider,
             $this->rowCustomizer,
-            $this->metadataPool,
             $this->storeResolver,
             $this->groupRepository
         );

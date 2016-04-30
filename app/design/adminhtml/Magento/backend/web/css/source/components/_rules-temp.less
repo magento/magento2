@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -30,10 +30,17 @@
         padding-left: 0 !important;
         border-left: none !important;
     }
+
+    .legend {
+        font-weight: @font-weight__semibold;
+    }
 }
 
 .rule-tree .fieldset {
+    border: 0;
+    margin: 0;
     min-width: 0; // Fixed Chrome fieldset issue
+    padding: 0;
 }
 
 @-moz-document url-prefix() { // Fixed Firefox fieldset issue

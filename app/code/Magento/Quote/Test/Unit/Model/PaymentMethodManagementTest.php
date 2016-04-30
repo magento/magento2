@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model;
@@ -16,6 +16,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
+    
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -111,7 +112,7 @@ class PaymentMethodManagementTest extends \PHPUnit_Framework_TestCase
         $cartId = 100;
         $paymentId = 200;
         $methodDataWithAdditionalData = ['method' => 'data', 'additional_data' => ['additional' => 'value']];
-        $methodData = ['method' => 'data', 'additional' => 'value'];
+        $methodData = $methodDataWithAdditionalData;
         $paymentMethod = 'checkmo';
 
         $quoteMock = $this->getMock(

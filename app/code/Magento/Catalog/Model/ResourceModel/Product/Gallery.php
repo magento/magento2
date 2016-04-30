@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
@@ -21,18 +21,18 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $metadata;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->metadata = $metadataPool->getMetadata(

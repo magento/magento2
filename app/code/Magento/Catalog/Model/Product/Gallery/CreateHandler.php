@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Create handler for catalog product gallery.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreateHandler
+class CreateHandler implements ExtensionInterface
 {
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $metadata;
 
@@ -57,7 +58,7 @@ class CreateHandler
     protected $fileStorageDb;
 
     /**
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -66,7 +67,7 @@ class CreateHandler
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      */
     public function __construct(
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -85,13 +86,15 @@ class CreateHandler
 
     /**
      * @param string $entityType
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param object $product
+     * @param array $arguments
+     * @return object
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute($entityType, $product)
+    public function execute($entityType, $product, $arguments = [])
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
 

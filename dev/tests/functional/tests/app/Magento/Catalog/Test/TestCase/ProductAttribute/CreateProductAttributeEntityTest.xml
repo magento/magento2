@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -32,6 +32,7 @@
             <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
+            <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
@@ -130,6 +131,7 @@
             <data name="assertProduct/data/name" xsi:type="string">Product name</data>
             <data name="assertProduct/data/sku" xsi:type="string">product-sku</data>
             <data name="assertProduct/data/price" xsi:type="string">35</data>
+            <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />

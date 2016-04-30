@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -104,7 +104,6 @@ class Categories extends AbstractModifier
                         'config' => [
                             'isTemplate' => false,
                             'componentType' => 'modal',
-                            'dataScope' => 'data.new_category',
                             'options' => [
                                 'title' => __('New Category'),
                             ],
@@ -155,8 +154,8 @@ class Categories extends AbstractModifier
     protected function customizeCategoriesField(array $meta)
     {
         $fieldCode = 'category_ids';
-        $elementPath = $this->getElementArrayPath($meta, $fieldCode);
-        $containerPath = $this->getElementArrayPath($meta, static::CONTAINER_PREFIX . $fieldCode);
+        $elementPath = $this->arrayManager->findPath($fieldCode, $meta, null, 'children');
+        $containerPath = $this->arrayManager->findPath(static::CONTAINER_PREFIX . $fieldCode, $meta, null, 'children');
 
         if (!$elementPath) {
             return $meta;
@@ -193,7 +192,6 @@ class Categories extends AbstractModifier
                                     'levelsVisibility' => '1',
                                     'elementTmpl' => 'ui/grid/filters/elements/ui-select',
                                     'options' => $this->getCategoriesTree(),
-                                    'scopeLabel' => null,
                                     'listens' => [
                                         'index=create_category:responseData' => 'setParsed',
                                         'newOption' => 'toggleOptionSelected'

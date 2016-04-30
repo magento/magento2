@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -93,6 +93,7 @@
                 <item name="alias" xsi:type="string">paypal.express-in-context.mini-cart</item>
                 <item name="button_id" xsi:type="string">paypal-express-in-context-mini-cart</item>
             </argument>
+            <argument name="payment" xsi:type="object">Magento\Paypal\Model\Express</argument>
         </arguments>
     </type>
 
@@ -101,6 +102,13 @@
         <arguments>
             <argument name="tokenUiComponentProviders" xsi:type="array">
                 <item name="payflowpro" xsi:type="object">Magento\Paypal\Model\Payflow\Ui\TokenUiComponentProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\CustomerData\SectionPool">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="paypal-billing-agreement" xsi:type="string">Magento\Paypal\CustomerData\BillingAgreement</item>
             </argument>
         </arguments>
     </type>

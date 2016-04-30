@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
@@ -23,6 +23,9 @@ use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 /**
  * Class HelperTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class HelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -97,6 +100,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected $customOptionMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $linkResolverMock;
+
+    /**
      * @var ProductLinks
      */
     protected $productLinksMock;
@@ -142,7 +150,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 '__sleep',
                 '__wakeup',
                 'getSku',
-                'getProductLinks'
+                'getProductLinks',
+                'getWebsiteIds'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -157,10 +166,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customOptionFactoryMock->expects($this->any())
-            ->method('create')
-            ->with(['data' => ['is_delete' => false]])
-            ->willReturn($this->customOptionMock);
         $this->productLinksMock->expects($this->any())
             ->method('initializeLinks')
             ->willReturn($this->productMock);
@@ -175,6 +180,14 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'productLinkFactory' => $this->productLinkFactoryMock,
             'productRepository' => $this->productRepositoryMock,
         ]);
+
+        $this->linkResolverMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link\Resolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $helperReflection = new \ReflectionClass(get_class($this->helper));
+        $resolverProperty = $helperReflection->getProperty('linkResolver');
+        $resolverProperty->setAccessible(true);
+        $resolverProperty->setValue($this->helper, $this->linkResolverMock);
     }
 
     /**
@@ -198,9 +211,13 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->customOptionMock->expects($this->once())
             ->method('setOptionId');
 
+        $optionsData = [
+            'option1' => ['is_delete' => true, 'name' => 'name1', 'price' => 'price1'],
+            'option2' => ['is_delete' => false, 'name' => 'name1', 'price' => 'price1'],
+        ];
         $productData = [
             'stock_data' => ['stock_data'],
-            'options' => ['option1' => ['is_delete' => true], 'option2' => ['is_delete' => false]]
+            'options' => $optionsData,
         ];
         $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
             ->disableOriginalConstructor()
@@ -248,10 +265,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->with('use_default')
             ->willReturn($useDefaults);
-        $this->requestMock->expects($this->at(3))
-            ->method('getPost')
-            ->with('options_use_default')
-            ->willReturn(true);
+        $this->linkResolverMock->expects($this->once())->method('getLinks')->willReturn([]);
         $this->stockFilterMock->expects($this->once())
             ->method('filter')
             ->with(['stock_data'])
@@ -278,6 +292,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $productData['category_ids'] = [];
         $productData['website_ids'] = [];
+        unset($productData['options']);
 
         $this->productMock->expects($this->once())
             ->method('addData')
@@ -291,6 +306,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->any())
             ->method('getOptionsReadOnly')
             ->willReturn(false);
+
+        $this->customOptionFactoryMock->expects($this->any())
+            ->method('create')
+            ->with(['data' => $optionsData['option2']])
+            ->willReturn($this->customOptionMock);
         $this->productMock->expects($this->once())
             ->method('setOptions')
             ->with([$this->customOptionMock]);

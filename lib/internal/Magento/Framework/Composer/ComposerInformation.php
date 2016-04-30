@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,6 +43,11 @@ class ComposerInformation
      * Magento2 component type
      */
     const COMPONENT_PACKAGE_TYPE = 'magento2-component';
+
+    /**
+     * Default composer repository key
+     */
+    const COMPOSER_DEFAULT_REPO_KEY = 'packagist';
 
     /**#@+
      * Composer command
@@ -285,5 +290,23 @@ class ComposerInformation
     {
         $package = $this->composer->getRepositoryManager()->findPackage($name, $version);
         return $package->getRequires();
+    }
+
+    /**
+     * Returns all repository URLs, except local and packagists.
+     *
+     * @return string[]
+     */
+    public function getRootRepositories()
+    {
+        $repositoryUrls = [];
+
+        foreach ($this->composer->getConfig()->getRepositories() as $key => $repository) {
+            if ($key !== self::COMPOSER_DEFAULT_REPO_KEY) {
+                $repositoryUrls[] = $repository['url'];
+            }
+        }
+
+        return $repositoryUrls;
     }
 }

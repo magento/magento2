@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
@@ -38,18 +38,39 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testRender()
+    public function testRenderTextWithoutTranslation()
     {
         $text = 'text';
-        $translatedText = 'translated text';
+        $this->_translator->expects($this->once())
+            ->method('getData')
+            ->willReturn([]);
+        $this->assertEquals($text, $this->_renderer->render([$text], []));
+    }
+
+    public function testRenderTextWithSingleQuotes()
+    {
+        $translatedTextInDictionary = "That's translated text";
+        $translatedTextInput = 'That\\\'s translated text';
         $translate = 'translate';
 
-        $this->_translator->expects($this->exactly(2))
+        $this->_translator->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue([$translatedText => $translate]));
+            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
 
-        $this->assertEquals($translate, $this->_renderer->render([$translatedText], []));
-        $this->assertEquals($text, $this->_renderer->render([$text], []));
+        $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
+    }
+
+    public function testRenderTextWithDoubleQuotes()
+    {
+        $translatedTextInDictionary = "That\"s translated text";
+        $translatedTextInput = 'That\"s translated text';
+        $translate = 'translate';
+
+        $this->_translator->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
+
+        $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }
 
     public function testRenderException()

@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Downloadable\Api\Data\ProductAttributeInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\DownloadablePanel;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\AttributeConstantsInterface;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite;
-use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 
 /**
@@ -74,18 +72,18 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
     public function testModifyData($typeId, $isDownloadable)
     {
         $productId = 1;
-        $this->locatorMock->expects($this->once())
+        $this->locatorMock->expects(static::once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects($this->once())
+        $this->productMock->expects(static::once())
             ->method('getId')
             ->willReturn($productId);
-        $this->productMock->expects($this->once())
+        $this->productMock->expects(static::once())
             ->method('getTypeId')
             ->willReturn($typeId);
         $resultData = [
             $productId => [
-                AttributeConstantsInterface::CODE_IS_DOWNLOADABLE => $isDownloadable
+                ProductAttributeInterface::CODE_IS_DOWNLOADABLE => $isDownloadable
             ]
         ];
 
@@ -108,12 +106,12 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifyMeta()
     {
-        $this->locatorMock->expects($this->exactly(2))
+        $this->locatorMock->expects(static::once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        $this->productMock->expects($this->any())
+        $this->productMock->expects(static::any())
             ->method('getTypeId');
-        $this->arrayManagerMock->expects($this->exactly(3))
+        $this->arrayManagerMock->expects(static::exactly(3))
             ->method('set')
             ->willReturn([]);
 

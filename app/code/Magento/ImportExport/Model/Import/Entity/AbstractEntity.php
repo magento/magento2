@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Model\Import\Entity;
@@ -238,6 +238,13 @@ abstract class AbstractEntity
      * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
+
+    /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -828,5 +835,19 @@ abstract class AbstractEntity
     public function getValidColumnNames()
     {
         return $this->validColumnNames;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
@@ -82,7 +82,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->_copyright;
+        return __($this->_copyright);
     }
 
     /**

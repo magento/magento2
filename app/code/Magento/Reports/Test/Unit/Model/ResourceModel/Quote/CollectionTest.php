@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Quote;
@@ -110,15 +110,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $customerName = "CONCAT_WS('firstname', 'lastname')";
         $customerTableName = 'customer_entity';
         $customerId = ['customer_id' => ['test_id']];
-        $customersData = [['item_1']];
-        $itemData = ['test'];
+        $customersData = [['entity_id' => 'test_id', 'name' => 'item_1']];
 
         $this->selectMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
         $this->selectMock->expects($this->once())
             ->method('from')
-            ->with(['customer' => $customerTableName], ['email'])
+            ->with(['customer' => $customerTableName], ['entity_id', 'email'])
             ->willReturnSelf();
         $this->selectMock->expects($this->once())
             ->method('columns')
@@ -158,9 +157,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $itemMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
             ->disableOriginalConstructor()
             ->getMock();
-        $itemMock->expects($this->once())
-            ->method('getData')
-            ->willReturn($itemData);
 
         $this->entityFactoryMock->expects($this->any())
             ->method('create')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer;
@@ -58,7 +58,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject  */
     private $urlBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->arrayUtils = $this->getMock('\Magento\Framework\Stdlib\ArrayUtils', [], [], '', false);
         $this->jsonEncoder = $this->getMock('\Magento\Framework\Json\EncoderInterface', [], [], '', false);
@@ -323,7 +323,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaCallback()
     {
-        $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('http://magento.com/');
-        $this->assertContains(Configurable::MEDIA_CALLBACK_ACTION, $this->configurable->getMediaCallback());
+        $url = 'http://localhost/' . Configurable::MEDIA_CALLBACK_ACTION;
+
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->with(Configurable::MEDIA_CALLBACK_ACTION)
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->configurable->getMediaCallback());
     }
 }

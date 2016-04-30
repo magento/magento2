@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Import\AdvancedPricing;
@@ -25,7 +25,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorTest;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->validatorTest = $this->getMockForAbstractClass(
             'Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface',

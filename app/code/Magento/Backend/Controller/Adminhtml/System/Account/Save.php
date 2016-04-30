@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
@@ -10,24 +10,28 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Security\Model\SecurityCookie;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
     /**
-     * @var \Magento\Security\Helper\SecurityCookie
+     * @var SecurityCookie
      */
-    protected $securityCookieHelper;
+    private $securityCookie;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     * Get security cookie
+     *
+     * @return SecurityCookie
+     * @deprecated
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-    ) {
-        parent::__construct($context);
-        $this->securityCookieHelper = $securityCookieHelper;
+    private function getSecurityCookie()
+    {
+        if (!($this->securityCookie instanceof SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
+        } else {
+            return $this->securityCookie;
+        }
     }
 
     /**
@@ -79,7 +83,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             }
         } catch (UserLockedException $e) {
             $this->_auth->logout();
-            $this->securityCookieHelper->setLogoutReasonCookie(
+            $this->getSecurityCookie()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
         } catch (ValidatorException $e) {

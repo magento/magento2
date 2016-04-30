@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\Model\ResourceModel;
+
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\CallbackPool;
 
 /**
  * Abstract resource model
@@ -25,19 +25,11 @@ abstract class AbstractResource
     }
 
     /**
-     * Array of callbacks subscribed to commit transaction commit
-     *
-     * @var array
-     */
-    protected static $_commitCallbacks = [];
-
-    /**
      * Resource initialization
      *
      * @return void
      */
     abstract protected function _construct();
-
 
     /**
      * Get connection
@@ -61,14 +53,13 @@ abstract class AbstractResource
     /**
      * Subscribe some callback to transaction commit
      *
-     * @param array $callback
+     * @param callable|array $callback
      * @return $this
      * @api
      */
     public function addCommitCallback($callback)
     {
-        $connectionKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$connectionKey][] = $callback;
+        CallbackPool::attach(spl_object_hash($this->getConnection()), $callback);
         return $this;
     }
 
@@ -85,18 +76,14 @@ abstract class AbstractResource
          * Process after commit callbacks
          */
         if ($this->getConnection()->getTransactionLevel() === 0) {
-            $connectionKey = spl_object_hash($this->getConnection());
-            if (isset(self::$_commitCallbacks[$connectionKey])) {
-                $callbacks = self::$_commitCallbacks[$connectionKey];
-                self::$_commitCallbacks[$connectionKey] = [];
-                try {
-                    foreach ($callbacks as $callback) {
-                        call_user_func($callback);
-                    }
-                } catch (\Exception $e) {
-                    echo $e;
-                    throw $e;
+            $callbacks = CallbackPool::get(spl_object_hash($this->getConnection()));
+            try {
+                foreach ($callbacks as $callback) {
+                    call_user_func($callback);
                 }
+            } catch (\Exception $e) {
+                echo $e;
+                throw $e;
             }
         }
         return $this;
@@ -111,34 +98,26 @@ abstract class AbstractResource
     public function rollBack()
     {
         $this->getConnection()->rollBack();
-        $connectionKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$connectionKey] = [];
+        CallbackPool::clear(spl_object_hash($this->getConnection()));
         return $this;
     }
 
     /**
      * Serialize specified field in an object
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @param string $field
      * @param mixed $defaultValue
      * @param bool $unsetEmpty
      * @return $this
      */
-    protected function _serializeField(\Magento\Framework\DataObject $object, $field, $defaultValue = null, $unsetEmpty = false)
+    protected function _serializeField(DataObject $object, $field, $defaultValue = null, $unsetEmpty = false)
     {
         $value = $object->getData($field);
-        if (empty($value)) {
-            if ($unsetEmpty) {
-                $object->unsetData($field);
-            } else {
-                if (is_object($defaultValue) || is_array($defaultValue)) {
-                    $defaultValue = serialize($defaultValue);
-                }
-                $object->setData($field, $defaultValue);
-            }
-        } elseif (is_array($value) || is_object($value)) {
-            $object->setData($field, serialize($value));
+        if (empty($value) && $unsetEmpty) {
+            $object->unsetData($field);
+        } else {
+            $object->setData($field, serialize($value ?: $defaultValue));
         }
 
         return $this;
@@ -152,24 +131,30 @@ abstract class AbstractResource
      * @param mixed $defaultValue
      * @return void
      */
-    protected function _unserializeField(\Magento\Framework\DataObject $object, $field, $defaultValue = null)
+    protected function _unserializeField(DataObject $object, $field, $defaultValue = null)
     {
         $value = $object->getData($field);
+
+        if ($value) {
+            $unserializedValue = @unserialize($value);
+            $value = $unserializedValue !== false || $value === 'b:0;' ? $unserializedValue : $value;
+        }
+
         if (empty($value)) {
             $object->setData($field, $defaultValue);
-        } elseif (!is_array($value) && !is_object($value)) {
-            $object->setData($field, unserialize($value));
+        } else {
+            $object->setData($field, $value);
         }
     }
 
     /**
      * Prepare data for passed table
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @param string $table
      * @return array
      */
-    protected function _prepareDataForTable(\Magento\Framework\DataObject $object, $table)
+    protected function _prepareDataForTable(DataObject $object, $table)
     {
         $data = [];
         $fields = $this->getConnection()->describeTable($table);

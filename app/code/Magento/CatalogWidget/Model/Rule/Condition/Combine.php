@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,7 +71,9 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     public function collectValidatedAttributes($productCollection)
     {
+        $alias = array_keys($productCollection->getSelect()->getPart('from'))[0];
         foreach ($this->getConditions() as $condition) {
+            $condition->setData('attribute', $alias . '.' . $condition->getData('attribute'));
             $condition->addToCollection($productCollection);
         }
         return $this;

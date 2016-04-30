@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Test\Unit;
@@ -17,7 +17,7 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
             [$filesystem, $backupFactory]
         );
 
-        $file = 'var/backup/2.gz';
+        $file = 'var/backup/2.sql';
         $manager->expects($this->once())->method('getBackupFilename')->will($this->returnValue($file));
 
         $model = new \Magento\Framework\Backup\Snapshot($filesystem, $backupFactory);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -64,18 +64,16 @@ class ScheduleDesignUpdate extends AbstractModifier
             return $meta;
         }
 
-        $fromFieldPath = $this->getElementArrayPath($meta, self::CODE_CUSTOM_DESIGN_FROM);
-        $toFieldPath = $this->getElementArrayPath($meta, self::CODE_CUSTOM_DESIGN_TO);
+        $fromFieldPath = $this->arrayManager->findPath(self::CODE_CUSTOM_DESIGN_FROM, $meta, null, 'children');
+        $toFieldPath = $this->arrayManager->findPath(self::CODE_CUSTOM_DESIGN_TO, $meta, null, 'children');
         $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
         $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
-        $scopeLabel = $this->arrayManager->get($fromFieldPath . self::META_CONFIG_PATH . '/scopeLabel', $meta);
 
         $meta = $this->arrayManager->merge(
             $fromFieldPath . self::META_CONFIG_PATH,
             $meta,
             [
                 'label' => __('Schedule Update From'),
-                'scopeLabel' => null,
                 'additionalClasses' => 'admin__field-date',
             ]
         );
@@ -96,7 +94,6 @@ class ScheduleDesignUpdate extends AbstractModifier
                 'additionalClasses' => 'admin__control-grouped-date',
                 'breakLine' => false,
                 'component' => 'Magento_Ui/js/form/components/group',
-                'scopeLabel' => $scopeLabel,
             ]
         );
         $meta = $this->arrayManager->set(

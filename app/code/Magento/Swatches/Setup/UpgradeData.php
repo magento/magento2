@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Setup;
@@ -43,7 +43,7 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-            $eavSetup = $this->eavSetupFactory->create();
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
             $groupId = (int)$eavSetup->getAttributeGroupByCode(
                 Product::ENTITY,
                 'Default',

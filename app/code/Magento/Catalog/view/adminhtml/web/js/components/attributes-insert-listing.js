@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ define([
         defaults: {
             addAttributeUrl: '',
             attributeSetId: '',
-            attributesIds: '',
+            attributeIds: '',
             groupCode: '',
             groupName: '',
             groupSortOrder: 0,
@@ -52,7 +52,7 @@ define([
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    attributesIds: this.selections().getSelections(),
+                    attributeIds: this.selections().getSelections(),
                     templateId: this.attributeSetId,
                     groupCode: this.groupCode,
                     groupName: this.groupName,
@@ -68,6 +68,7 @@ define([
                     };
                     this.form().reload();
                     this.modal().state(false);
+                    this.reload();
                 }.bind(this)
             });
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ $registry->register('isSecureArea', true);
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Catalog\Api\ProductRepositoryInterface');
 try {
-    $product = $productRepository->get('simple_dropdown_option');
+    $product = $productRepository->get('simple_dropdown_option', false, null, true);
     $product->delete();
 } catch (NoSuchEntityException $e) {
 

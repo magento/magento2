@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -306,6 +306,11 @@ class Store extends AbstractExtensibleModel implements
      * @var \Magento\Store\Model\Information
      */
     protected $information;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -1078,7 +1083,20 @@ class Store extends AbstractExtensibleModel implements
             return false;
         }
 
-        return $this->getGroup()->getDefaultStoreId() != $this->getId();
+        return $this->getGroup()->getStoresCount() > 1;
+    }
+
+    /**
+     * Check if store is default
+     *
+     * @return boolean
+     */
+    public function isDefault()
+    {
+        if (!$this->getId() && $this->getWebsite() && $this->getWebsite()->getStoresCount() == 0) {
+            return true;
+        }
+        return $this->getGroup()->getDefaultStoreId() == $this->getId();
     }
 
     /**
@@ -1168,6 +1186,18 @@ class Store extends AbstractExtensibleModel implements
     {
         parent::afterDelete();
         $this->_configCacheType->clean();
+
+        if ($this->getId() === $this->getGroup()->getDefaultStoreId()) {
+            $ids = $this->getGroup()->getStoreIds();
+            if (!empty($ids) && count($ids) > 1) {
+                unset($ids[$this->getId()]);
+                $defaultId = current($ids);
+            } else {
+                $defaultId = null;
+            }
+            $this->getGroup()->setDefaultStoreId($defaultId);
+            $this->getGroup()->save();
+        }
         return $this;
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -37,11 +37,11 @@ class FulltextFilter implements FilterApplierInterface
      * Add table alias to columns
      *
      * @param array $columns
-     * @param DbCollection $collection
+     * @param AbstractDb $collection
      * @param string $indexTable
      * @return array
      */
-    protected function addTableAliasToColumns(array $columns, DbCollection $collection, $indexTable)
+    protected function addTableAliasToColumns(array $columns, AbstractDb $collection, $indexTable)
     {
         $alias = '';
         foreach ($collection->getSelect()->getPart('from') as $tableAlias => $data) {
@@ -75,13 +75,14 @@ class FulltextFilter implements FilterApplierInterface
             throw new \InvalidArgumentException('Database collection required.');
         }
 
-        /** @var AbstractDb $collection */
-        $columns = $this->getFulltextIndexColumns($collection, $collection->getResource()->getMainTable());
+        /** @var SearchResult $collection */
+        $mainTable = $collection->getMainTable();
+        $columns = $this->getFulltextIndexColumns($collection, $mainTable);
         if (!$columns) {
             return;
         }
 
-        $columns = $this->addTableAliasToColumns($columns, $collection, $collection->getMainTable());
+        $columns = $this->addTableAliasToColumns($columns, $collection, $mainTable);
         $collection->getSelect()
             ->where(
                 'MATCH(' . implode(',', $columns) . ') AGAINST(?)',

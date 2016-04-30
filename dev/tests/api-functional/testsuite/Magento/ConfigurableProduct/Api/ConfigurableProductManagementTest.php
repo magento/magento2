@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Api;
@@ -35,7 +35,7 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
             'Magento\Catalog\Api\ProductAttributeRepositoryInterface'
         );
         $attribute = $attributeRepository->get('test_configurable');
-        $attributeOptionValue = $attribute->getOptions()[0]->getValue();
+        $attributeOptionValue = $attribute->getOptions()[1]->getValue();
         $data = [
             'product' => [
                 'sku' => 'test',
@@ -57,9 +57,9 @@ class ConfigurableProductManagementTest extends \Magento\TestFramework\TestCase\
 
         $expectedItems = [
             [
-                'sku' => 'test-',
+                'sku' => 'test-' . $attributeOptionValue,
                 'price' => 10,
-                'name' => '-',
+                'name' => '-' . $attributeOptionValue,
                 'status' => 1,
                 'visibility' => \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE,
                 'product_links' => [],

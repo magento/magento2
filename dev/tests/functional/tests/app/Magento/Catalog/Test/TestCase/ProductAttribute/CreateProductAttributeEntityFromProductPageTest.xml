@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -55,6 +55,7 @@
             <data name="attribute/data/is_required" xsi:type="string">Yes</data>
             <data name="attribute/data/attribute_code" xsi:type="string">attr_text_%isolation%</data>
             <data name="attribute/data/default_value_text" xsi:type="string">default_value_text%isolation%</data>
+            <data name="sectionName" xsi:type="string">attributes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
         </variation>
         <variation name="CreateProductAttributeEntityFromProductPageTestVariation4">

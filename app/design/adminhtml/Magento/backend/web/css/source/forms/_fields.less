@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -81,12 +81,25 @@
     .fieldset-wrapper {
         &.admin__fieldset-section {
             > .fieldset-wrapper-title {
-                margin: @indent__s 0;
                 padding-left: @indent__s;
 
                 strong {
                     font-size: @collapsible-title__font-size;
                     font-weight: @font-weight__semibold;
+                }
+            }
+
+            .admin__fieldset-wrapper-content {
+                > .admin__fieldset {
+                    padding-top: @indent__s;
+                }
+            }
+
+            &:last-child {
+                .admin__fieldset-wrapper-content {
+                    > .admin__fieldset {
+                        padding-bottom: 0;
+                    }
                 }
             }
         }
@@ -119,6 +132,15 @@
 
             > .admin__field-control {
                 &:extend(.abs-field-no-label all);
+            }
+        }
+
+        //  Field with empty table and no thead
+        + .admin__field {
+            &._empty {
+                &._no-header {
+                    margin-top: -@indent__l;
+                }
             }
         }
     }
@@ -203,7 +225,7 @@
 
     .required > &, //  ToDo UI: change classes "required" to "_required".
     ._required > & {
-        span {
+        > span {
             &:after {
                 color: @field-label__required__color;
                 content: '*';
@@ -213,20 +235,15 @@
                 line-height: 1;
                 margin-left: 10px;
                 position: absolute;
-                top: 1.2rem;
+                margin-top: .2rem;
                 z-index: 1;
-            }
-
-            &[data-config-scope] {
-                &:after {
-                    top: .2rem;
-                }
             }
         }
     }
 
     ._disabled > & {
         color: @field-label__disabled__color;
+        cursor: default;
     }
 }
 
@@ -257,6 +274,13 @@
     .admin__fieldset > & {
         margin-bottom: 3rem;
         position: relative;
+    }
+
+    //  Hide group legend and show first field label instead
+    legend {
+        &.admin__field-label {
+            opacity: 0;
+        }
     }
 
     //  ToDo UI: Scope Labels must be moved from right side of each control to the place under the label of the control.
@@ -312,6 +336,7 @@
 
     //  If there is a tooltip
     &._with-tooltip {
+        > .admin__control-addon,
         > .admin__field-option,
         > .admin__control-select,
         > .admin__control-text,
@@ -330,6 +355,7 @@
 
     //  If there is a fallback reset button
     &._with-reset {
+        > .admin__control-addon,
         > .admin__control-text,
         > .admin__control-textarea {
             width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - 4px)'; // Minus space size
@@ -343,6 +369,7 @@
 
         //  If both
         &._with-tooltip {
+            > .admin__control-addon,
             > .admin__control-text,
             > .admin__control-textarea {
                 width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - @{field-tooltip__width} - 8px)'; // Minus 2 space sizes
@@ -364,7 +391,7 @@
             padding: 1.7rem 0;
             width: calc(100% - @indent__l);
         }
-        
+
         .admin__field-option {
             padding-top: 0;
         }
@@ -472,16 +499,38 @@
 
 [class*='admin__control-grouped'],
 .admin__control-fields {
-    & > .admin__field:first-child {
-        position: static;
+    & > .admin__field {
+        &:first-child {
+            position: static;
+
+            & > .admin__field-label {
+                #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+                background: @color-white;
+                cursor: pointer;
+                left: 0;
+                position: absolute;
+                top: 0;
+
+                span {
+                    &:before {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        &._disabled {
+            & > .admin__field-label {
+                cursor: default;
+            }
+        }
 
         & > .admin__field-label {
-            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
-            cursor: pointer;
-            left: 0;
-            opacity: 0;
-            position: absolute;
-            top: 0;
+            span {
+                &:before {
+                    display: none;
+                }
+            }
         }
     }
 }
@@ -494,7 +543,7 @@
 
     .admin__field:nth-child(n+2):not(.admin__field-option):not(.admin__field-group-show-label) {
         > .admin__field-label {
-            .extend__visually-hidden();
+            &:extend(.abs-visually-hidden all);
         }
     }
 
@@ -538,7 +587,7 @@
 
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label {
-                    .lib-visually-hidden();
+                    &:extend(.abs-visually-hidden all);
                 }
             }
         }
@@ -588,7 +637,7 @@
             }
         }
     }
-    
+
     .ui-datepicker-trigger {
         top: 0;
         left: 100%;
@@ -608,13 +657,14 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
+                text-align: left;
             }
         }
 
         &:nth-child(n+2) {
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label[class] {
-                    .lib-visually-hidden-reset();
+                    &:extend(.abs-visually-hidden-reset all);
                 }
             }
         }
@@ -660,41 +710,12 @@
 
 .admin_field-complex {
     &:extend(.abs-clearfix all);
-    margin-bottom: 3rem;
+    margin: @indent__s 0 @indent__l;
     padding-left: @indent__s;
 
-    .admin_field-complex-title {
-        clear: both;
-        color: @collapsible-title__color;
-        font-size: @collapsible-title__font-size;
-        font-weight: @font-weight__semibold;
-        letter-spacing: .025em;
-        margin-bottom: @indent__s;
+    .admin__field:not(._hidden) + & {
+        margin-top: 3rem;
     }
-
-    .admin_field-complex-elements {
-        float: right;
-        max-width: 40%;
-
-        button {
-            margin-left: @indent__m;
-        }
-    }
-
-    .admin_field-complex-content {
-        max-width: 60%;
-        overflow: hidden;
-    }
-}
-
-//
-//  Complex Field
-//  _____________________________________________
-
-.admin_field-complex {
-    &:extend(.abs-clearfix all);
-    margin-bottom: 3rem;
-    padding-left: @indent__s;
 
     .admin_field-complex-title {
         clear: both;
@@ -718,6 +739,15 @@
         max-width: 60%;
         overflow: hidden;
     }
+
+    //  Field with empty table and no thead
+    + .admin__field {
+        &._empty {
+            &._no-header {
+                margin-top: -@indent__l;
+            }
+        }
+    }
 }
 
 //
@@ -732,10 +762,10 @@
 
     &:extend(.abs-fieldset-legend);
     & + br {
+        clear: left;
         display: block;
         height: 0;
         overflow: hidden;
-        clear: left;
     }
 }
 

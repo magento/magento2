@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\AttributeConstantsInterface;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General;
 
@@ -23,13 +22,22 @@ class GeneralTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(General::class, [
             'locator' => $this->locatorMock,
-            'grouper' => $this->grouperMock,
             'arrayManager' => $this->arrayManagerMock,
         ]);
     }
 
     public function testModifyMeta()
     {
-        $this->assertNotEmpty($this->getModel()->modifyMeta([]));
+        $this->assertNotEmpty($this->getModel()->modifyMeta([
+            'first_panel_code' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'label' => 'Test label',
+                        ]
+                    ],
+                ]
+            ]
+        ]));
     }
 }

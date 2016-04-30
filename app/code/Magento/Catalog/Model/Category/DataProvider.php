@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category;
@@ -201,9 +201,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $category = $this->getCurrentCategory();
-        if (!$category->getId()) {
-            return [];
-        } else {
+        if ($category) {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
@@ -253,7 +251,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $meta[$code]['validation'] = $rules;
             }
 
-            $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
+            $meta[$code]['scopeLabel'] = $this->getScopeLabel($attribute);
             $meta[$code]['componentType'] = Field::NAME;
         }
 
@@ -277,12 +275,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseConfigSettings($categoryData)
     {
         foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
-            if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
-                ($categoryData[$elementsWithUseConfigSetting] == '')
-            ) {
-                $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
-            } else {
-                $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
+            if (!isset($categoryData['use_config'][$elementsWithUseConfigSetting])) {
+                if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
+                    ($categoryData[$elementsWithUseConfigSetting] == '')
+                ) {
+                    $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
+                } else {
+                    $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
+                }
             }
         }
         return $categoryData;
@@ -384,9 +384,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;
         if ($this->request->getParam('store') && $this->request->getParam('id')) {
+            $result['use_default.url_key']['checked'] = true;
             $result['use_default.url_key']['default'] = true;
             $result['use_default.url_key']['visible'] = true;
         } else {
+            $result['use_default.url_key']['checked'] = false;
             $result['use_default.url_key']['default'] = false;
             $result['use_default.url_key']['visible'] = false;
         }

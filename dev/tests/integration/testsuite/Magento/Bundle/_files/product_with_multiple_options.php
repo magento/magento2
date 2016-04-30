@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,6 +38,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setPriceView(1)
     ->setPriceType(1)
     ->setPrice(10.0)
+    ->setShipmentType(0)
     ->setBundleOptionsData(
         [
             // Required "Drop-down" option

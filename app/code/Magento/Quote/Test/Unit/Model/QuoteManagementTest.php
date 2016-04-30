@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -124,7 +124,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteFactoryMock;
+    private $quoteIdMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -238,7 +238,6 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', ['create'], [], '', false);
-
         $this->model = $objectManager->getObject(
             '\Magento\Quote\Model\QuoteManagement',
             [
@@ -264,6 +263,12 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
                 'quoteFactory' => $this->quoteFactoryMock
             ]
         );
+
+        // Set the new dependency
+        $this->quoteIdMock = $this->getMock('Magento\Quote\Model\QuoteIdMask', [], [], '', false);
+        $quoteIdFactoryMock = $this->getMock(\Magento\Quote\Model\QuoteIdMaskFactory::class, ['create'], [], '', false);
+        $this->setPropertyValue($this->model, 'quoteIdMaskFactory', $quoteIdFactoryMock);
+
     }
 
     public function testCreateEmptyCartAnonymous()
@@ -508,6 +513,13 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $customerId = 455;
         $storeId = 5;
 
+        $this->getPropertyValue($this->model, 'quoteIdMaskFactory')
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($this->quoteIdMock);
+        $this->quoteIdMock->expects($this->once())->method('load')->with($cartId, 'quote_id')->willReturnSelf();
+        $this->quoteIdMock->expects($this->once())->method('getId')->willReturn(10);
+        $this->quoteIdMock->expects($this->once())->method('delete');
         $quoteMock = $this->getMock(
             '\Magento\Quote\Model\Quote',
             ['getCustomerId', 'setCustomer', 'setCustomerIsGuest'],
@@ -739,7 +751,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderId')->with($orderId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastRealOrderId')->with($orderIncrementId);
         $this->checkoutSessionMock->expects($this->once())->method('setLastOrderStatus')->with($orderStatus);
- 
+
         $this->assertEquals($orderId, $service->placeOrder($cartId));
     }
 
@@ -935,7 +947,7 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
         $order = $this->getMock(
             'Magento\Sales\Model\Order',
             ['setShippingAddress', 'getAddressesCollection', 'getAddresses', 'getBillingAddress', 'addAddresses',
-            'setBillingAddress', 'setAddresses', 'setPayment', 'setItems', 'setQuoteId'],
+                'setBillingAddress', 'setAddresses', 'setPayment', 'setItems', 'setQuoteId'],
             [],
             '',
             false
@@ -978,5 +990,38 @@ class QuoteManagementTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->willReturn($cartMock);
         $this->assertEquals($cartMock, $this->model->getCartForCustomer($customerId));
+    }
+
+    /**
+     * Get any object property value.
+     *
+     * @param $object
+     * @param $property
+     * @return mixed
+     */
+    protected function getPropertyValue($object, $property)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+
+        return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * Set object property value.
+     *
+     * @param $object
+     * @param $property
+     * @param $value
+     */
+    protected function setPropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+
+        return $object;
     }
 }

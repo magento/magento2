@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
@@ -22,7 +22,7 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockHelperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMock(
             'Magento\CatalogInventory\Model\Configuration',
@@ -56,7 +56,6 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly($callCount))
             ->method('addInStockFilterToCollection')
             ->with($collectionMock);
-
 
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
     }

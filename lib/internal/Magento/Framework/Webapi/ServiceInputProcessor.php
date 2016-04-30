@@ -2,7 +2,7 @@
 /**
  * Service Input Processor
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -147,10 +147,19 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                         throw $e;
                     }
                 }
-                if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $className);
-                } else {
-                    $setterValue = $this->convertValue($value, $returnType);
+                try {
+                    if ($camelCaseProperty === 'CustomAttributes') {
+                        $setterValue = $this->convertCustomAttributeValue($value, $className);
+                    } else {
+                        $setterValue = $this->convertValue($value, $returnType);
+                    }
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        new Phrase(
+                            'Error occurred during "%field_name" processing. %details',
+                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
                 $object->{$setterName}($setterValue);
             }
