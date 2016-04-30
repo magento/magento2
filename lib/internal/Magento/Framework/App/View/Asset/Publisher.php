@@ -52,12 +52,16 @@ class Publisher
     public function isFileEquals(Asset\LocalInterface $asset)
     {
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        if ($dir->isExist($asset->getPath()) === false) {
+        $source = $asset->getSourceFile();
+        $destination = $dir->getAbsolutePath($asset->getPath());
+
+        if ($dir->isExist($source) === false) {
             return false;
         }
 
-        $source = $asset->getSourceFile();
-        $destination = $dir->getAbsolutePath($asset->getPath());
+        if ($dir->isExist($destination) === false) {
+            return false;
+        }
 
         $sourceSum = md5_file($source);
         $destinationSum = md5_file($destination);
