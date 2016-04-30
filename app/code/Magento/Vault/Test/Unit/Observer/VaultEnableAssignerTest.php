@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\Unit\Observer;
@@ -10,6 +10,7 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\VaultEnableAssigner;
 
@@ -39,7 +40,9 @@ class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
     {
         $dataObject = new DataObject(
             [
-                VaultConfigProvider::IS_ACTIVE_CODE => $activeCode
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    VaultConfigProvider::IS_ACTIVE_CODE => $activeCode
+                ]
             ]
         );
         $paymentModel = $this->getMock(InfoInterface::class);

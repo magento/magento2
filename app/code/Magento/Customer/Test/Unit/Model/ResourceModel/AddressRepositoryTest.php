@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
@@ -62,7 +62,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $repository;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->addressFactory = $this->getMock('Magento\Customer\Model\AddressFactory', ['create'], [], '', false);
         $this->addressRegistry = $this->getMock('Magento\Customer\Model\AddressRegistry', [], [], '', false);

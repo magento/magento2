@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @api
@@ -561,6 +562,7 @@ abstract class AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array
+     * @throws LocalizedException
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
@@ -571,19 +573,28 @@ abstract class AbstractType
             $options = $product->getOptions();
         }
         if ($options !== null) {
+            $results = [];
             foreach ($options as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
-                $group = $option->groupFactory($option->getType())
-                    ->setOption($option)
-                    ->setProduct($product)
-                    ->setRequest($buyRequest)
-                    ->setProcessMode($processMode)
-                    ->validateUserValue($buyRequest->getOptions());
+                try {
+                    $group = $option->groupFactory($option->getType())
+                        ->setOption($option)
+                        ->setProduct($product)
+                        ->setRequest($buyRequest)
+                        ->setProcessMode($processMode)
+                        ->validateUserValue($buyRequest->getOptions());
+                } catch (LocalizedException $e) {
+                    $results[] = $e->getMessage();
+                    continue;
+                }
 
                 $preparedValue = $group->prepareForCart();
                 if ($preparedValue !== null) {
                     $transport->options[$option->getId()] = $preparedValue;
                 }
+            }
+            if (count($results) > 0) {
+                throw new LocalizedException(__(implode("\n", $results)));
             }
         }
 

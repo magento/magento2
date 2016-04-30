@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
@@ -55,7 +55,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->preprocessor = $this->getMockBuilder('Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms')
+        $this->preprocessor = $this->getMockBuilder('Magento\Search\Adapter\Query\Preprocessor\Synonyms')
             ->setMethods(['process'])
             ->disableOriginalConstructor()
             ->getMock();

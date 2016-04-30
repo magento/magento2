@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,6 @@ namespace Magento\Setup\Model;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
-use Magento\Setup\Model\UpdatePackagesCache;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -80,12 +79,6 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
         $packageName = 'magento/module-store';
 
         $this->setupDirectory('testSkeleton');
-
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManagerProvider
-            ->expects($this->any())
-            ->method('get')
-            ->willReturn($this->objectManager);
 
         /** @var UpdatePackagesCache $updatePackagesCache|\PHPUnit_Framework_MockObject_MockObject */
         $updatePackagesCache = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false);

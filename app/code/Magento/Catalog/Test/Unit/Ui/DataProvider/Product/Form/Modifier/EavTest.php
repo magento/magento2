@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -19,11 +19,21 @@ use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 
 /**
  * Class EavTest
  *
  * @method Eav getModel
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EavTest extends AbstractModifierTest
@@ -31,62 +41,102 @@ class EavTest extends AbstractModifierTest
     /**
      * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eavConfigMock;
+    private $eavConfigMock;
 
     /**
      * @var EavValidationRules|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eavValidationRulesMock;
+    private $eavValidationRulesMock;
 
     /**
      * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
      * @var GroupCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupCollectionFactoryMock;
+    private $groupCollectionFactoryMock;
 
     /**
      * @var GroupCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupCollectionMock;
+    private $groupCollectionMock;
 
     /**
      * @var Group|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $groupMock;
+    private $groupMock;
 
     /**
      * @var EavAttribute|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeMock;
+    private $attributeMock;
 
     /**
      * @var EntityType|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $entityTypeMock;
+    private $entityTypeMock;
 
     /**
      * @var AttributeCollection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attributeCollectionMock;
+    private $attributeCollectionMock;
 
     /**
      * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
+    private $storeManagerMock;
 
     /**
      * @var FormElementMapper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $formElementMapperMock;
+    private $formElementMapperMock;
 
     /**
      * @var MetaPropertiesMapper|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metaPropertiesMapperMock;
+    private $metaPropertiesMapperMock;
+
+    /**
+     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaBuilderMock;
+
+    /**
+     * @var ProductAttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeGroupRepositoryMock;
+
+    /**
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaMock;
+
+    /**
+     * @var SortOrderBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sortOrderBuilderMock;
+
+    /**
+     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeRepositoryMock;
+
+    /**
+     * @var AttributeGroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeGroupMock;
+
+    /**
+     * @var SearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchResultsMock;
+
+    /**
+     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavAttributeMock;
 
     protected function setUp()
     {
@@ -126,6 +176,29 @@ class EavTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->metaPropertiesMapperMock = $this->getMockBuilder(MetaPropertiesMapper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributeGroupRepositoryMock = $this->getMockBuilder(ProductAttributeGroupRepositoryInterface::class)
+            ->getMockForAbstractClass();
+        $this->attributeGroupMock = $this->getMockBuilder(AttributeGroupInterface::class)
+            ->setMethods(['getAttributeGroupCode', 'getApplyTo'])
+            ->getMockForAbstractClass();
+        $this->attributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
+            ->getMockForAbstractClass();
+        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getItems'])
+            ->getMock();
+        $this->sortOrderBuilderMock = $this->getMockBuilder(SortOrderBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchResultsMock = $this->getMockBuilder(SearchResultsInterface::class)
+            ->getMockForAbstractClass();
+        $this->eavAttributeMock = $this->getMockBuilder(Attribute::class)
+            ->setMethods(['getAttributeGroupCode', 'getApplyTo', 'getFrontendInput', 'getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -179,11 +252,90 @@ class EavTest extends AbstractModifierTest
             'storeManager' => $this->storeManagerMock,
             'formElementMapper' => $this->formElementMapperMock,
             'metaPropertiesMapper' => $this->metaPropertiesMapperMock,
+            'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
+            'attributeGroupRepository' => $this->attributeGroupRepositoryMock,
+            'sortOrderBuilder' => $this->sortOrderBuilderMock,
+            'attributeRepository' => $this->attributeRepositoryMock
         ]);
     }
 
     public function testModifyData()
     {
+        $sourceData = [
+            '1' => [
+                'product' => [
+                    ProductAttributeInterface::CODE_PRICE => '19.99'
+                ]
+            ]
+        ];
 
+        $this->locatorMock->expects($this->any())
+            ->method('getProduct')
+            ->willReturn($this->productMock);
+
+        $this->productMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+        $this->productMock->expects($this->once())
+            ->method('getAttributeSetId')
+            ->willReturn(4);
+        $this->productMock->expects($this->once())
+            ->method('getData')
+            ->with(ProductAttributeInterface::CODE_PRICE)->willReturn('19.9900');
+
+        $this->searchCriteriaBuilderMock->expects($this->any())
+            ->method('addFilter')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->searchCriteriaMock);
+        $this->attributeGroupRepositoryMock->expects($this->any())
+            ->method('getList')
+            ->willReturn($this->searchCriteriaMock);
+        $this->searchCriteriaMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$this->attributeGroupMock]);
+        $this->sortOrderBuilderMock->expects($this->once())
+            ->method('setField')
+            ->willReturnSelf();
+        $this->sortOrderBuilderMock->expects($this->once())
+            ->method('setAscendingDirection')
+            ->willReturnSelf();
+        $dataObjectMock = $this->getMock('\Magento\Framework\Api\AbstractSimpleObject', [], [], '', false);
+        $this->sortOrderBuilderMock->expects($this->once())
+            ->method('create')
+            ->willReturn($dataObjectMock);
+
+        $this->searchCriteriaBuilderMock->expects($this->any())
+            ->method('addFilter')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->once())
+            ->method('addSortOrder')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->searchCriteriaMock);
+
+        $this->attributeRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($this->searchCriteriaMock)
+            ->willReturn($this->searchResultsMock);
+        $this->eavAttributeMock->expects($this->any())
+            ->method('getAttributeGroupCode')
+            ->willReturn('product-details');
+        $this->eavAttributeMock->expects($this->once())
+            ->method('getApplyTo')
+            ->willReturn([]);
+        $this->eavAttributeMock->expects($this->once())
+            ->method('getFrontendInput')
+            ->willReturn('price');
+        $this->eavAttributeMock->expects($this->any())
+            ->method('getAttributeCode')
+            ->willReturn(ProductAttributeInterface::CODE_PRICE);
+        $this->searchResultsMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$this->eavAttributeMock]);
+
+        $this->assertEquals($sourceData, $this->getModel()->modifyData([]));
     }
 }

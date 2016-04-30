@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -15,6 +15,12 @@ define([
 ], function (_, loader, resolver, adapter, Collection, utils, $, app) {
     'use strict';
 
+    /**
+     * Format params
+     *
+     * @param {Object} params
+     * @returns {Array}
+     */
     function prepareParams(params) {
         var result = '?';
 
@@ -56,6 +62,14 @@ define([
         return result;
     }
 
+    /**
+     * Makes ajax request
+     *
+     * @param {Object} params
+     * @param {Object} data
+     * @param {String} url
+     * @returns {*}
+     */
     function makeRequest(params, data, url) {
         var save = $.Deferred();
 
@@ -72,6 +86,12 @@ define([
             url: url + prepareParams(params),
             data: data,
             dataType: 'json',
+
+            /**
+             * Success callback.
+             * @param {Object} resp
+             * @returns {Boolean}
+             */
             success: function (resp) {
                 if (resp.ajaxExpired) {
                     window.location.href = resp.ajaxRedirect;
@@ -88,12 +108,21 @@ define([
                     $('body').notification('add', {
                         error: resp.error,
                         message: message,
+
+                        /**
+                         * Inserts message on page
+                         * @param {String} msg
+                         */
                         insertMethod: function (msg) {
                             $('.page-main-actions').after(msg);
                         }
                     });
                 });
             },
+
+            /**
+             * Complete callback.
+             */
             complete: function () {
                 $('body').trigger('processStop');
             }
@@ -124,7 +153,8 @@ define([
         defaults: {
             additionalFields: [],
             additionalInvalid: false,
-            selectorPrefix: false,
+            selectorPrefix: '.page-content',
+            messagesClass: 'messages',
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
@@ -134,6 +164,10 @@ define([
             listens: {
                 selectorPrefix: 'destroyAdapter initAdapter',
                 '${ $.name }.${ $.reloadItem }': 'params.set reload'
+            },
+            exports: {
+                selectorPrefix: '${ $.provider }:client.selectorPrefix',
+                messagesClass: '${ $.provider }:client.messagesClass'
             }
         },
 
@@ -286,6 +320,9 @@ define([
             this.source.trigger('data.overload');
         },
 
+        /**
+         * Updates data from server.
+         */
         reload: function () {
             makeRequest(this.params, this.data, this.reloadUrl).then(function (data) {
                 app(data, true);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Advanced;
@@ -64,6 +64,13 @@ class CollectionTest extends BaseCollectionTest
             false
         );
         $this->search = $this->getMock('Magento\Search\Api\SearchInterface', [], [], '', false);
+
+        $this->prepareObjectManager([
+            [
+                'Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation',
+                $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation')
+            ],
+        ]);
 
         $this->advancedCollection = $helper->getObject(
             'Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection',
@@ -141,5 +148,21 @@ class CollectionTest extends BaseCollectionTest
             ->disableOriginalConstructor()
             ->getMock();
         return $criteriaBuilder;
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
@@ -26,7 +26,6 @@ class StockData extends AbstractModifier
     {
         $this->locator = $locator;
     }
-
 
     /**
      * {@inheritdoc}
@@ -60,7 +59,6 @@ class StockData extends AbstractModifier
                             'is_qty_decimal' => $config,
                             'is_decimal_divided' => $config,
                             'container_backorders' => $config,
-                            'container_deferred_stock_update' => $config,
                             'container_notify_stock_qty' => $config,
                         ],
                     ],

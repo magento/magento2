@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,26 +45,14 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      * CategoryLinkManagement constructor.
      *
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param ResourceModel\Product $productResource
-     * @param \Magento\Catalog\Api\CategoryLinkRepositoryInterface $categoryLinkRepository
      * @param \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
-     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        ResourceModel\Product $productResource,
-        \Magento\Catalog\Api\CategoryLinkRepositoryInterface $categoryLinkRepository,
-        \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory,
-        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+        \Magento\Catalog\Api\Data\CategoryProductLinkInterfaceFactory $productLinkFactory
     ) {
         $this->categoryRepository = $categoryRepository;
-        $this->productRepository = $productRepository;
-        $this->productResource = $productResource;
-        $this->categoryLinkRepository = $categoryLinkRepository;
         $this->productLinkFactory = $productLinkFactory;
-        $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
@@ -102,10 +90,10 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
      */
     public function assignProductToCategories($productSku, array $categoryIds)
     {
-        $product = $this->productRepository->get($productSku);
-        $assignedCategories = $this->productResource->getCategoryIds($product);
+        $product = $this->getProductRepository()->get($productSku);
+        $assignedCategories = $this->getProductResource()->getCategoryIds($product);
         foreach (array_diff($assignedCategories, $categoryIds) as $categoryId) {
-            $this->categoryLinkRepository->deleteByIds($categoryId, $productSku);
+            $this->getCategoryLinkRepository()->deleteByIds($categoryId, $productSku);
         }
 
         foreach (array_diff($categoryIds, $assignedCategories) as $categoryId) {
@@ -114,12 +102,68 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
             $categoryProductLink->setSku($productSku);
             $categoryProductLink->setCategoryId($categoryId);
             $categoryProductLink->setPosition(0);
-            $this->categoryLinkRepository->save($categoryProductLink);
+            $this->getCategoryLinkRepository()->save($categoryProductLink);
         }
-        $productCategoryIndexer = $this->indexerRegistry->get(Indexer\Product\Category::INDEXER_ID);
+        $productCategoryIndexer = $this->getIndexerRegistry()->get(Indexer\Product\Category::INDEXER_ID);
         if (!$productCategoryIndexer->isScheduled()) {
             $productCategoryIndexer->reindexRow($product->getId());
         }
         return true;
+    }
+
+    /**
+     * Retrieve product repository instance
+     *
+     * @return \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private function getProductRepository()
+    {
+        if (null === $this->productRepository) {
+            $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\ProductRepositoryInterface');
+        }
+        return $this->productRepository;
+    }
+
+    /**
+     * Retrieve product resource instance
+     *
+     * @return ResourceModel\Product
+     */
+    private function getProductResource()
+    {
+        if (null === $this->productResource) {
+            $this->productResource = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Product');
+        }
+        return $this->productResource;
+    }
+
+    /**
+     * Retrieve category link repository instance
+     *
+     * @return \Magento\Catalog\Api\CategoryLinkRepositoryInterface
+     */
+    private function getCategoryLinkRepository()
+    {
+        if (null === $this->categoryLinkRepository) {
+            $this->categoryLinkRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\CategoryLinkRepositoryInterface');
+        }
+        return $this->categoryLinkRepository;
+    }
+
+    /**
+     * Retrieve indexer registry instance
+     *
+     * @return \Magento\Framework\Indexer\IndexerRegistry
+     */
+    private function getIndexerRegistry()
+    {
+        if (null === $this->indexerRegistry) {
+            $this->indexerRegistry = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Indexer\IndexerRegistry');
+        }
+        return $this->indexerRegistry;
     }
 }

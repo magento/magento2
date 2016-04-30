@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -167,9 +167,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $mediaConfig;
 
     /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appStateMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Framework\Indexer\IndexerInterface');
 
@@ -337,6 +342,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
             [
@@ -365,6 +371,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $modelReflection = new \ReflectionClass(get_class($this->model));
+        $appStateReflection = $modelReflection->getProperty('appState');
+        $appStateReflection->setAccessible(true);
+        $appStateReflection->setValue($this->model, $this->appStateMock);
     }
 
     public function testGetAttributes()
@@ -802,21 +816,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->configureSaveTest();
         $this->model->beforeSave();
         $this->model->afterSave();
-    }
-
-    public function testGetIsSalableConfigurable()
-    {
-        $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', ['getIsSalable'], [], '', false);
-
-        $typeInstanceMock
-            ->expects($this->atLeastOnce())
-            ->method('getIsSalable')
-            ->willReturn(true);
-
-        $this->model->setTypeInstance($typeInstanceMock);
-
-        self::assertTrue($this->model->getIsSalable());
     }
 
     public function testGetIsSalableSimple()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,7 +42,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrency;
 
-
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -69,7 +68,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
@@ -142,8 +141,8 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
-        $metadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $this->metadataPool = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
+        $metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
@@ -202,9 +201,12 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             $this->eavConfig,
             $this->dateFormat,
             $this->dateTime,
-            $this->productFactory,
-            $this->metadataPool
+            $this->productFactory
         );
+
+        $this->setProperties($this->indexBuilder, [
+            'metadataPool' => $this->metadataPool
+        ]);
     }
 
     /**
@@ -253,5 +255,21 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->once())->method('insertFromSelect')->with('catalogrule_group_website');
 
         $this->indexBuilder->reindexByIds([1]);
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

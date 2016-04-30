@@ -6,25 +6,20 @@
 namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
  */
-class SaveHandler
+class SaveHandler implements ExtensionInterface
 {
     /**
      * @var OptionRepositoryInterface
      */
     private $optionRepository;
-
-    /**
-     * @var ProductAttributeRepositoryInterface
-     */
-    private $productAttributeRepository;
 
     /**
      * @var ResourceModelConfigurable
@@ -36,26 +31,23 @@ class SaveHandler
      *
      * @param ResourceModelConfigurable $resourceModel
      * @param OptionRepositoryInterface $optionRepository
-     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         ResourceModelConfigurable $resourceModel,
-        OptionRepositoryInterface $optionRepository,
-        ProductAttributeRepositoryInterface $productAttributeRepository
+        OptionRepositoryInterface $optionRepository
     ) {
         $this->resourceModel = $resourceModel;
         $this->optionRepository = $optionRepository;
-        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
      * @param string $entityType
      * @param ProductInterface $entity
+     * @param array $arguments
      * @return ProductInterface
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, ProductInterface $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         if ($entity->getTypeId() !== Configurable::TYPE_CODE) {
             return $entity;
@@ -66,17 +58,17 @@ class SaveHandler
             return $entity;
         }
 
-        $ids = [];
+        if ($extensionAttributes->getConfigurableProductOptions() !== null) {
+            $this->deleteConfigurableProductAttributes($entity);
+        }
+
         $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
         if (!empty($configurableOptions)) {
-            $ids = $this->saveConfigurableProductAttributes($entity, $configurableOptions);
+            $this->saveConfigurableProductAttributes($entity, $configurableOptions);
         }
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
         $this->resourceModel->saveProducts($entity, $configurableLinks);
-        if (empty($configurableLinks) || !empty($ids)) {
-            $this->deleteConfigurableProductAttributes($entity, $ids);
-        }
 
         return $entity;
     }
@@ -93,12 +85,7 @@ class SaveHandler
         $ids = [];
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
         foreach ($attributes as $attribute) {
-            $eavAttribute = $this->productAttributeRepository->get($attribute->getAttributeId());
-
-            $data = $attribute->getData();
-            $attribute->loadByProductAndAttribute($product, $eavAttribute);
-            $attribute->setData(array_replace_recursive($attribute->getData(), $data));
-
+            $attribute->setId(null);
             $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
         }
 
@@ -109,16 +96,13 @@ class SaveHandler
      * Remove product attributes
      *
      * @param ProductInterface $product
-     * @param array $attributesIds
      * @return void
      */
-    private function deleteConfigurableProductAttributes(ProductInterface $product, array $attributesIds)
+    private function deleteConfigurableProductAttributes(ProductInterface $product)
     {
         $list = $this->optionRepository->getList($product->getSku());
         foreach ($list as $item) {
-            if (!in_array($item->getId(), $attributesIds)) {
-                $this->optionRepository->deleteById($product->getSku(), $item->getId());
-            }
+            $this->optionRepository->deleteById($product->getSku(), $item->getId());
         }
     }
 }

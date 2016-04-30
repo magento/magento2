@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
@@ -9,8 +9,10 @@ use Magento\Ui\Component\Form\Element\MultiSelect;
 
 /**
  * Class MultiSelectTest
+ *
+ * @method MultiSelect getModel
  */
-class MultiSelectTest extends AbstractOptionsFieldTest
+class MultiSelectTest extends AbstractElementTest
 {
     /**
      * {@inheritdoc}

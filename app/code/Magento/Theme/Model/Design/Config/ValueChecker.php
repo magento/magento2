@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Config;
@@ -47,21 +47,25 @@ class ValueChecker
      * @param string $value
      * @param string $scope
      * @param int $scopeId
-     * @param string $path
+     * @param array $fieldConfig
      * @return bool
      */
-    public function isDifferentFromDefault($value, $scope, $scopeId, $path)
+    public function isDifferentFromDefault($value, $scope, $scopeId, array $fieldConfig)
     {
         list($scope, $scopeId) = $this->fallbackResolver->getFallbackScope($scope, $scopeId);
         if ($scope) {
             return !$this->isEqual(
                 $this->valueProcessor->process(
                     $value,
-                    $path
+                    $scope,
+                    $scopeId,
+                    $fieldConfig
                 ),
                 $this->valueProcessor->process(
-                    $this->appConfig->getValue($path, $scope, $scopeId),
-                    $path
+                    $this->appConfig->getValue($fieldConfig['path'], $scope, $scopeId),
+                    $scope,
+                    $scopeId,
+                    $fieldConfig
                 )
             );
         }
@@ -95,6 +99,9 @@ class ValueChecker
     protected function isEqualArrays(array $value, array $defaultValue)
     {
         $result = true;
+        if (count($value) !== count($defaultValue)) {
+            return false;
+        }
         foreach ($value as $key => $elem) {
             if (is_array($elem)) {
                 if (isset($defaultValue[$key])) {

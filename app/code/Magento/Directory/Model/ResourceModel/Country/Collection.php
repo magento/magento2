@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -143,7 +143,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Loads Item By Id
      *
      * @param string $countryId
-     * @return \Magento\Directory\Model\ResourceModel\Country
+     * @return \Magento\Directory\Model\ResourceModel\Country|null
      */
     public function getItemById($countryId)
     {
@@ -152,7 +152,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 return $country;
             }
         }
-        return $this->_countryFactory->create();
+        return null;
     }
 
     /**

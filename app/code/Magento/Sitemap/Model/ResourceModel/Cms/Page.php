@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Sitemap cms page collection model
@@ -149,8 +149,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if ($isId) {
-            $this->entityManager->load(PageInterface::class, $object, $value);
-            $this->_afterLoad($object);
+            $this->entityManager->load($object, $value, PageInterface::class);
         }
         return $this;
     }
@@ -199,20 +198,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->transactionManager->start($this->getConnection());
-        try {
-            $object->beforeDelete();
-            $this->_beforeDelete($object);
-            $this->entityManager->delete(PageInterface::class, $object);
-            $this->_afterDelete($object);
-            $object->isDeleted(true);
-            $object->afterDelete();
-            $this->transactionManager->commit();
-            $object->afterDeleteCommit();
-        } catch (\Exception $e) {
-            $this->transactionManager->rollBack();
-            throw $e;
-        }
+        $this->entityManager->delete($object, PageInterface::class);
         return $this;
     }
 }

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -30,7 +30,22 @@
 @file-uploader-dragover__background: @color-gray83;
 @file-uploader-dragover-focus__color: @color-blue2;
 
+//  Grid uploader
+
+@data-grid-file-uploader-image__size: 5rem;
+@data-grid-file-uploader-image__z-index: 1;
+
+@data-grid-file-uploader-menu-button__width: 2rem;
+
+@data-grid-file-uploader-upload-icon__color: @color-darkie-gray;
+@data-grid-file-uploader-upload-icon__hover__color: @color-very-dark-gray;
+@data-grid-file-uploader-upload-icon__line-height: 48px;
+
+@data-grid-file-uploader-wrapper__size: @data-grid-file-uploader-image__size + 2rem;
+
 //
+//  Single file uploader
+//  ---------------------------------------------
 
 .file-uploader-area {
     margin-bottom: @indent__xs;
@@ -159,4 +174,117 @@
             box-shadow: 0 0 0 1px @file-uploader-preview-focus__color;
         }
     }
+}
+
+//
+//  Grid image uploader
+//  ---------------------------------------------
+
+.data-grid-file-uploader {
+    min-width: @data-grid-file-uploader-wrapper__size;
+
+    &._loading {
+        .file-uploader-spinner {
+            display: block;
+        }
+
+        .file-uploader-button {
+            &:before {
+                display: none;
+            }
+        }
+    }
+
+    .file-uploader-image {
+        background: transparent;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        max-height: 100%;
+        max-width: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: @data-grid-file-uploader-image__z-index;
+
+        + .file-uploader-area {
+            .file-uploader-button {
+                &:before {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .file-uploader-area {
+        z-index: @data-grid-file-uploader-image__z-index + 1;
+    }
+
+    .file-uploader-spinner {
+        height: 100%;
+        margin: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+
+    .file-uploader-button {
+        display: block;
+        height: @data-grid-file-uploader-upload-icon__line-height;
+        text-align: center;
+
+        .lib-icon-font (
+            @icon-plus__content,
+            @_icon-font: @icons-admin__font-name,
+            @_icon-font-size: 1.3rem,
+            @_icon-font-line-height: @data-grid-file-uploader-upload-icon__line-height,
+            @_icon-font-color: @data-grid-file-uploader-upload-icon__color,
+            @_icon-font-color-hover: @data-grid-file-uploader-upload-icon__hover__color,
+            @_icon-font-text-hide: true,
+            @_icon-font-display: block
+        );
+    }
+
+    .action-select-wrap {
+        float: left;
+
+        .action-select {
+            border: 1px solid @file-uploader-preview__border-color;
+            display: block;
+            height: @data-grid-file-uploader-image__size;
+            margin-left: -1px;
+            padding: 0;
+            width: @data-grid-file-uploader-menu-button__width;
+
+            &:after {
+                border-color: @data-grid-file-uploader-upload-icon__color transparent transparent transparent;
+                left: 50%;
+                margin: 0 0 0 -5px;
+            }
+
+            &:hover {
+                &:after {
+                    border-color: @data-grid-file-uploader-upload-icon__hover__color transparent transparent transparent;
+                }
+            }
+
+            > span {
+                display: none;
+            }
+        }
+
+        .action-menu {
+            left: 4rem;
+            right: auto;
+            z-index: @data-grid-file-uploader-image__z-index + 1;
+        }
+    }
+}
+
+.data-grid-file-uploader-inner {
+    border: 1px solid @file-uploader-preview__border-color;
+    float: left;
+    height: @data-grid-file-uploader-image__size;
+    position: relative;
+    width: @data-grid-file-uploader-image__size;
 }

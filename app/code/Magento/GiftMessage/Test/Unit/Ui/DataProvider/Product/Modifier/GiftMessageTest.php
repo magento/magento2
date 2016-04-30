@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Ui\DataProvider\Product\Modifier;
@@ -35,7 +35,6 @@ class GiftMessageTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(GiftMessage::class, [
             'locator' => $this->locatorMock,
-            'grouper' => $this->grouperMock,
             'scopeConfig' => $this->scopeConfigMock,
         ]);
     }

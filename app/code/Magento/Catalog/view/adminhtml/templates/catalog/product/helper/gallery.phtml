@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
+$formName = $block->getFormName();
 ?>
 <div id="<?php echo $block->getHtmlId() ?>"
      class="gallery"
@@ -17,26 +18,20 @@ $elementName = $block->getElement()->getName() . '[images]';
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
     >
-    <?php if (!$block->getElement()->getReadonly()) {
-    ?>
+    <?php if (!$block->getElement()->getReadonly()) {?>
         <div class="image image-placeholder">
-            <?php echo $block->getUploaderHtml();
-    ?>
+            <?php echo $block->getUploaderHtml(); ?>
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                 <p class="image-placeholder-text">
                     <?php /* @escapeNotVerified */ echo __('Browse to find or drag image here'); ?>
                 </p>
             </div>
         </div>
-    <?php
-
-} ?>
+    <?php } ?>
     <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
         <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
-               data-form-part="product_form"
+               data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
                value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
@@ -50,34 +45,35 @@ $elementName = $block->getElement()->getName() . '[images]';
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][position]"
                    value="<%- data.position %>"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    class="position"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][file]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.file %>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][value_id]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.value_id %>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][label]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.label %>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.disabled %>"/>
             <input type="hidden"
+                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
+                   value="image"/>
+            <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][removed]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value=""
                    class="is-removed"/>
 
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-
                 <img class="product-image"
                      data-role="image-element"
                      src="<%- data.url %>"
@@ -124,9 +120,10 @@ $elementName = $block->getElement()->getName() . '[images]';
     </script>
 
     <script data-role="img-dialog-container-tmpl" type="text/x-magento-template">
-      <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog">
+      <div class="image-panel" data-role="dialog">
       </div>
     </script>
+
     <script data-role="img-dialog-tmpl" type="text/x-magento-template">
             <div class="image-panel-preview">
                 <img src="<%- data.url %>" alt="<%- data.label %>" />
@@ -141,7 +138,7 @@ $elementName = $block->getElement()->getName() . '[images]';
                         </label>
 
                         <div class="admin__field-control">
-                            <textarea id="image-description"
+                            <textarea data-role="image-description"
                                       rows="3"
                                       class="admin__control-textarea"
                                       name="<?php /* @escapeNotVerified */
@@ -163,7 +160,7 @@ $elementName = $block->getElement()->getName() . '[images]';
                                         <label>
                                             <input class="image-type"
                                                    data-role="type-selector"
-                                                   data-form-part="product_form"
+                                                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                                    type="checkbox"
                                                    value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
                                                        $attribute->getAttributeCode()
@@ -201,7 +198,7 @@ $elementName = $block->getElement()->getName() . '[images]';
                                 <input type="checkbox"
                                        id="hide-from-product-page"
                                        data-role="visibility-trigger"
-                                       data-form-part="product_form"
+                                       data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                        value="1"
                                        class="admin__control-checkbox"
                                        name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
@@ -216,6 +213,7 @@ $elementName = $block->getElement()->getName() . '[images]';
                 </fieldset>
             </div>
     </script>
+    <?php echo $block->getChildHtml('new-video'); ?>
 </div>
 <script>
     jQuery('body').trigger('contentUpdated');

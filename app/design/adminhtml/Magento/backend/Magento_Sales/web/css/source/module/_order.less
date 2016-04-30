@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -243,6 +243,20 @@
             font-size: 1.3rem;
             &:before {
                 content: attr(data-label) ": ";
+            }
+        }
+    }
+}
+
+.options-list {
+    &.nested {
+        .admin__field-option {
+            .admin__field-label {
+                > span {
+                    &:after {
+                        content: none;
+                    }
+                }
             }
         }
     }

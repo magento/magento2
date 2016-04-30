@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Model\Design\Config;
@@ -77,7 +77,9 @@ class Storage
         foreach ($fieldsData as &$fieldData) {
             $value = $this->valueProcessor->process(
                 $this->scopeConfig->getValue($fieldData->getPath(), $scope, $scopeId),
-                $fieldData->getPath()
+                $scope,
+                $scopeId,
+                $fieldData->getFieldConfig()
             );
             if ($value !== null) {
                 $fieldData->setValue($value);
@@ -113,7 +115,7 @@ class Storage
                     $fieldData->getValue(),
                     $designConfig->getScope(),
                     $designConfig->getScopeId(),
-                    $fieldData->getFieldConfig()['path']
+                    $fieldData->getFieldConfig()
                 )
             ) {
                 $saveTransaction->addObject($backendModel);

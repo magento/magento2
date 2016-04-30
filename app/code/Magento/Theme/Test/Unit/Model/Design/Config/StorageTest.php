@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
@@ -145,7 +145,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->backendModelMock);
         $this->valueCheckerMock->expects($this->once())
             ->method('isDifferentFromDefault')
-            ->with('value', $scope, $scopeId, 'design/head/default_title')
+            ->with('value', $scope, $scopeId, ['path' => 'design/head/default_title'])
             ->willReturn(true);
         $this->transactionMock->expects($this->once())
             ->method('addObject')
@@ -175,13 +175,16 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->designConfigData->expects($this->atLeastOnce())
             ->method('getPath')
             ->willReturn('path');
+        $this->designConfigData->expects($this->atLeastOnce())
+            ->method('getFieldConfig')
+            ->willReturn(['path' => 'path']);
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('path', $scope, $scopeId)
             ->willReturn('value');
         $this->valueProcessor->expects($this->once())
             ->method('process')
-            ->with('value', 'path')
+            ->with('value', 'website', 1, ['path' => 'path'])
             ->willReturnArgument(0);
         $this->designConfigData->expects($this->once())
             ->method('setValue')

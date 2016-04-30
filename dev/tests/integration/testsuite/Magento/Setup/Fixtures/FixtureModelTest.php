@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,10 +49,6 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         $model->initObjectManager();
 
         foreach ($model->loadFixtures()->getFixtures() as $fixture) {
-            //TODO: OrderFixture execution must be unskiped after implementation MAGETWO-47449
-            if ($fixture->getPriority() == '135') {
-                continue;
-            }
             $fixture->execute();
         }
     }

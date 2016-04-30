@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -9,14 +9,7 @@
 //  Variables
 //  _____________________________________________
 
-@collapsible__border-color: @color-gray80;
-
-@collapsible-title__color: @color-very-dark-gray-black;
-@collapsible-title__font-size: 1.7rem;
-@collapsible-title__padding-top: 1.9rem;
-@collapsible-title__padding-bottom: @collapsible-title__padding-top;
-@collapsible-title__hover__color: darken(@collapsible-title__color, 15%);
-@collapsible-title__disabled__color: lighten(@collapsible-title__color, 30%);
+@collapsible__border-color: @control-collapsible__border-color;
 
 @collapsible-title-icon__size: 1.8rem;
 @collapsible-title-support-text__font-size: 1.4rem;
@@ -450,6 +443,18 @@
                     text-decoration: underline;
                 }
             }
+        }
+
+        select, // Fix for Chrome (Tooltip dropped to the bottom after select of text input)
+        input[type='text'],
+        input[type='password'] {
+            float: left;
+        }
+
+        .note { // Fix for Chrome (Tooltip dropped to the bottom after select of text input)
+            clear: both;
+            margin: 0;
+            padding: @indent__xs 0;
         }
 
         .system-tooltip-box {

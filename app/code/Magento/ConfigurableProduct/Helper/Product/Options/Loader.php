@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Helper\Product\Options;
@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Class Loader
@@ -21,13 +22,22 @@ class Loader
     private $optionValueFactory;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
      * ReadHandler constructor
      *
      * @param OptionValueInterfaceFactory $optionValueFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      */
-    public function __construct(OptionValueInterfaceFactory $optionValueFactory)
-    {
+    public function __construct(
+        OptionValueInterfaceFactory $optionValueFactory,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
+    ) {
         $this->optionValueFactory = $optionValueFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     /**
@@ -39,8 +49,8 @@ class Loader
         $options = [];
         /** @var Configurable $typeInstance */
         $typeInstance = $product->getTypeInstance();
-        $attributeCollection = $typeInstance->getConfigurableAttributes($product);
-
+        $attributeCollection = $typeInstance->getConfigurableAttributeCollection($product);
+        $this->extensionAttributesJoinProcessor->process($attributeCollection);
         foreach ($attributeCollection as $attribute) {
             $values = [];
             $attributeOptions = $attribute->getOptions();

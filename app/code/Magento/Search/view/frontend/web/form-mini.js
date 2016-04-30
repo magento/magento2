@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -7,9 +7,10 @@ define([
     'jquery',
     'underscore',
     'mage/template',
+    "matchMedia",
     'jquery/ui',
     'mage/translate'
-], function ($, _, mageTemplate) {
+], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
 
     /**
@@ -38,7 +39,8 @@ define([
                     '</span>' +
                 '</li>',
             submitBtn: 'button[type="submit"]',
-            searchLabel: '[data-role=minisearch-label]'
+            searchLabel: '[data-role=minisearch-label]',
+            isExpandable: null
         },
 
         _create: function () {
@@ -50,6 +52,7 @@ define([
             this.searchForm = $(this.options.formSelector);
             this.submitBtn = this.searchForm.find(this.options.submitBtn)[0];
             this.searchLabel = $(this.options.searchLabel);
+            this.isExpandable = this.options.isExpandable;
 
             _.bindAll(this, '_onKeyDown', '_onPropertyChange', '_onSubmit');
 
@@ -57,11 +60,25 @@ define([
 
             this.element.attr('autocomplete', this.options.autocomplete);
 
+            mediaCheck({
+                media: '(max-width: 768px)',
+                entry: function () {
+                    this.isExpandable = true;
+                }.bind(this),
+                exit: function () {
+                    this.isExpandable = false;
+                    this.element.removeAttr('aria-expanded');
+                }.bind(this)
+            });
+
             this.element.on('blur', $.proxy(function () {
 
                 setTimeout($.proxy(function () {
                     if (this.autoComplete.is(':hidden')) {
                         this.searchLabel.removeClass('active');
+                        if (this.isExpandable === true) {
+                            this.element.attr('aria-expanded', 'false');
+                        }
                     }
                     this.autoComplete.hide();
                     this._updateAriaHasPopup(false);
@@ -72,6 +89,9 @@ define([
 
             this.element.on('focus', $.proxy(function () {
                 this.searchLabel.addClass('active');
+                if (this.isExpandable === true) {
+                    this.element.attr('aria-expanded', 'true');
+                }
             }, this));
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
@@ -249,7 +269,7 @@ define([
 
                     this.responseList.indexList
                         .on('click', function (e) {
-                            this.responseList.selected = $(e.target);
+                            this.responseList.selected = $(e.currentTarget);
                             this.searchForm.trigger('submit');
                         }.bind(this))
                         .on('mouseenter mouseleave', function (e) {

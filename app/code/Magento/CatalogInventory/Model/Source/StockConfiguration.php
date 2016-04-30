@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Source;
@@ -31,6 +31,7 @@ class StockConfiguration implements ValueSourceInterface
      */
     public function getValue($name)
     {
-        return $this->stockConfiguration->getDefaultConfigValue($name);
+        $value= $this->stockConfiguration->getDefaultConfigValue($name);
+        return is_numeric($value) ? (float)$value : $value;
     }
 }

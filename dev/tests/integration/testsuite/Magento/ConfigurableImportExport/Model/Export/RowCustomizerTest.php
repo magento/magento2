@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableImportExport\Model\Export;
@@ -33,7 +33,6 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
-        $this->markTestSkipped('Skipped till implementation MAGETWO-47395');
         $collection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
         $select = (string)$collection->getSelect();
         $this->model->prepareData($collection, [1, 2, 3, 4]);

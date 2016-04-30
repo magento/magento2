@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
@@ -80,6 +80,22 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
             );
         }
         return true;
+    }
+
+    /**
+     * Return a particular synonym group interface instance based on passed in synonym group id
+     *
+     * @param int $synonymGroupId
+     * @return \Magento\Search\Api\Data\SynonymGroupInterface
+     */
+    public function get($synonymGroupId)
+    {
+        /** @var SynonymGroup $synonymGroup */
+        $synonymGroup = $this->synonymGroupFactory->create();
+        if ($synonymGroupId !== null) {
+            $synonymGroup->load($synonymGroupId);
+        }
+        return $synonymGroup;
     }
 
     /**

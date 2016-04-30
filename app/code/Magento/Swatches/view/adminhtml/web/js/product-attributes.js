@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -104,14 +104,6 @@ define([
                         this._enable(this.isFilterable);
                         this._enable(this.isFilterableInSearch);
                         this.backendType.val('int');
-                    }
-
-                    if (this.frontendInput.is(':visible') &&
-                        (this.frontendInput.val() === 'swatch_text' || this.frontendInput.val() === 'swatch_visual')
-                    ) {
-                        this.usedInProductListing.val(1);
-                        this.isVisibleOnFront.val(1);
-                        this.updateProductPreviewImage.val(1);
                     }
 
                     if (this.frontendInput.val() === 'multiselect' ||

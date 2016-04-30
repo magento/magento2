@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -36,11 +36,11 @@
             <data name="category/data/meta_keywords" xsi:type="string">custom meta keywords %isolation%</data>
             <data name="category/data/meta_description" xsi:type="string">Custom meta description %isolation%</data>
             <data name="category/data/layout" xsi:type="string">2 columns with right bar</data>
-            <data name="category/data/layout_update_xml" xsi:type="string">LAYOUT UPDATE XML</data>
-            <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
-            <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
-            <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
+            <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;catalog.leftnav&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
+            <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
+            <data name="category/data/schedule_update_from" xsi:type="string">Jan 10, 2014</data>
+            <data name="category/data/schedule_update_to" xsi:type="string">Dec 31, 2024</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
         </variation>
@@ -79,11 +79,11 @@
             <data name="category/data/meta_description" xsi:type="string">Custom meta description %isolation%</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <data name="category/data/layout" xsi:type="string">2 columns with right bar</data>
-            <data name="category/data/layout_update_xml" xsi:type="string">LAYOUT UPDATE XML</data>
-            <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
-            <data name="category/data/schedule_update_from" xsi:type="string">01/10/2014</data>
-            <data name="category/data/schedule_update_to" xsi:type="string">12/31/2024</data>
+            <data name="category/data/layout_update_xml" xsi:type="string">&#60;referenceContainer name=&quot;content.aside&quot; remove=&quot;true&quot;/&#62;</data>
             <data name="category/data/new_theme" xsi:type="string">Magento Luma</data>
+            <data name="category/data/apply_design_to_products" xsi:type="string">Yes</data>
+            <data name="category/data/schedule_update_from" xsi:type="string">Jan 1, 2014</data>
+            <data name="category/data/schedule_update_to" xsi:type="string">Dec 31, 2024</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategoryPage" />

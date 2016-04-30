@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -85,6 +85,14 @@
         margin: 0 0 @indent__xl;
         padding: @indent__s 0 0;
     }
+
+    .order-review-form {
+        .action {
+            &.primary {
+                &:extend(.abs-button-l all);
+            }
+        }
+    }
 }
 
 //
@@ -163,5 +171,43 @@
         &:extend(.abs-add-clearfix-desktop all);
         &:extend(.abs-discount-block-desktop all);
         border-top: @border-width__base solid @border-color__base;
+
+        .block {
+            .lib-css(margin-bottom, @indent__base - @indent__xs);
+
+            &.giftcard {
+                &.active {
+                    .lib-css(padding-bottom, @indent__xl);
+                }
+            }
+
+            .title {
+                &:after {
+                    display: inline;
+                    margin-left: @indent__s;
+                    position: static;
+                }
+            }
+
+            .content {
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    .order-review-form {
+        &:extend(.abs-add-clearfix-desktop all);
+
+        .actions-toolbar {
+            > .primary {
+                float: right;
+            }
+        }
+
+        .action {
+            &.primary {
+                margin-right: 0;
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -15,9 +15,11 @@ define([
      *
      * @param {Object} data
      * @param {String} url
+     * @param {String} selectorPrefix
+     * @param {String} messagesClass
      * @returns {*}
      */
-    function beforeSave(data, url) {
+    function beforeSave(data, url, selectorPrefix, messagesClass) {
         var save = $.Deferred();
 
         data = utils.serialize(data);
@@ -47,7 +49,7 @@ define([
                 }
 
                 $('body').notification('clear');
-                $.each(resp.messages, function (key, message) {
+                $.each(resp.messages || [resp.message] || [], function (key, message) {
                     $('body').notification('add', {
                         error: resp.error,
                         message: message,
@@ -58,7 +60,9 @@ define([
                          * @param {String} msg
                          */
                         insertMethod: function (msg) {
-                            $('.page-main-actions').after(msg);
+                            var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
+
+                            $('.page-main-actions', selectorPrefix).after($wrapper);
                         }
                     });
                 });
@@ -84,7 +88,7 @@ define([
             var url = this.urls.beforeSave,
                 save = this._save.bind(this, data, options);
 
-            beforeSave(data, url).then(save);
+            beforeSave(data, url, this.selectorPrefix, this.messagesClass).then(save);
 
             return this;
         },

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel\Store;
@@ -79,6 +79,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function addGroupFilter($groupId)
     {
         return $this->addFieldToFilter('main_table.group_id', ['in' => $groupId]);
+    }
+
+    /**
+     * Add filter by status to collection
+     *
+     * @param int $status
+     * @return $this
+     */
+    public function addStatusFilter($status)
+    {
+        return $this->addFieldToFilter('main_table.is_active', ['eq' => $status]);
     }
 
     /**

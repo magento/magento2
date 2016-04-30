@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -44,7 +44,7 @@
         <strategy>xpath</strategy>
         <fields>
             <conditions_serialized>
-                <selector>#sales_rule_formrule_conditions_fieldset_</selector>
+                <selector>.fieldset[id^="sales_rule_formrule_conditions_fieldset_"]</selector>
                 <input>conditions</input>
             </conditions_serialized>
         </fields>

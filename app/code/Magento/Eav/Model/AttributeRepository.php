@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -103,18 +103,21 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
             'main_table.entity_type_id = entity_type.entity_type_id',
             []
         );
-        $attributeCollection->join(
+        $attributeCollection->joinLeft(
             ['eav_entity_attribute' => $attributeCollection->getTable('eav_entity_attribute')],
             'main_table.attribute_id = eav_entity_attribute.attribute_id',
             []
         );
         $entityType = $this->eavConfig->getEntityType($entityTypeCode);
+
         $additionalTable = $entityType->getAdditionalAttributeTable();
-        $attributeCollection->join(
-            ['additional_table' => $attributeCollection->getTable($additionalTable)],
-            'main_table.attribute_id = additional_table.attribute_id',
-            []
-        );
+        if ($additionalTable) {
+            $attributeCollection->join(
+                ['additional_table' => $attributeCollection->getTable($additionalTable)],
+                'main_table.attribute_id = additional_table.attribute_id',
+                []
+            );
+        }
         //Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $attributeCollection);

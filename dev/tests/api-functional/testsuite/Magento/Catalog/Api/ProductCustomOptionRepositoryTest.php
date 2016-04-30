@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Model\ProductRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
@@ -39,7 +40,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     public function testRemove()
     {
         $sku = 'simple';
-        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Model\ProductRepository'
         );
@@ -142,7 +143,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoAppIsolation enabled
      * @dataProvider optionDataProvider
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @param array $optionData
      */
     public function testSave($optionData)
     {
@@ -166,7 +167,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         unset($result['product_sku']);
         unset($result['option_id']);
         if (!empty($result['values'])) {
-            foreach ($result['values'] as $key => $value) {
+            foreach (array_keys($result['values']) as $key) {
                 unset($result['values'][$key]['option_type_id']);
             }
         }
@@ -240,7 +241,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     public function testUpdate()
     {
         $productSku = 'simple';
-        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Model\ProductRepository'
         );
@@ -306,7 +307,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             'sort_order' => 100,
         ];
 
-        /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
+        /** @var ProductRepository $productRepository */
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Model\ProductRepository'
         );
@@ -379,5 +380,49 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
             'radio' => ['radio'],
             'multiple' => ['multiple']
         ];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
+     * @magentoAppIsolation enabled
+     * @dataProvider optionNegativeUpdateDataProvider
+     * @param array $optionData
+     * @param string $message
+     */
+    public function testUpdateNegative($optionData, $message)
+    {
+        $productSku = 'simple';
+        /** @var ProductRepository $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepository::class);
+        $options = $productRepository->get($productSku, true)->getOptions();
+        $option = array_shift($options);
+        $optionId = $option->getOptionId();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/options/' . $optionId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => 'V1',
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $this->setExpectedException('SoapFault');
+        } else {
+            $this->setExpectedException('Exception', $message, 400);
+        }
+        $this->_webApiCall($serviceInfo, ['option' => $optionData]);
+    }
+
+    /**
+     * @return array
+     */
+    public function optionNegativeUpdateDataProvider()
+    {
+        return include '_files/product_options_update_negative.php';
     }
 }

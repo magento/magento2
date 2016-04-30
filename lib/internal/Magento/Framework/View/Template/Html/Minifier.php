@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -73,6 +73,7 @@ class Minifier implements MinifierInterface
         Filesystem $filesystem,
         Filesystem\Directory\ReadFactory $readFactory
     ) {
+        $this->filesystem = $filesystem;
         $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TEMPLATE_MINIFICATION_DIR);
         $this->readFactory = $readFactory;
     }
@@ -132,7 +133,11 @@ class Minifier implements MinifierInterface
                             preg_replace(
                                 '#(?<!:)//[^\n\r]*(\s\?\>)#',
                                 '$1',
-                                $this->readFactory->create($dir)->readFile($fileName)
+                                preg_replace(
+                                    '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
+                                    '',
+                                    $this->readFactory->create($dir)->readFile($fileName)
+                                )
                             )
                         )
                     )
@@ -154,6 +159,6 @@ class Minifier implements MinifierInterface
      */
     private function getRelativeGeneratedPath($sourcePath)
     {
-        return ltrim($sourcePath, '/');
+        return $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getRelativePath($sourcePath);
     }
 }

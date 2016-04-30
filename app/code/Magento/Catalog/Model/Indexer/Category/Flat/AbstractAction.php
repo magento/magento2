@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
 namespace Magento\Catalog\Model\Indexer\Category\Flat;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class AbstractAction
 {
@@ -55,7 +55,7 @@ class AbstractAction
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $categoryMetadata;
 
@@ -74,17 +74,13 @@ class AbstractAction
     public function __construct(
         ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        MetadataPool $metadataPool,
-        $skipStaticColumns = []
+        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->resourceHelper = $resourceHelper;
-        $this->skipStaticColumns = $skipStaticColumns;
         $this->columns = array_merge($this->getStaticColumns(), $this->getEavColumns());
-        $this->categoryMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
     }
 
     /**
@@ -199,7 +195,7 @@ class AbstractAction
         );
 
         foreach ($describe as $column) {
-            if (in_array($column['COLUMN_NAME'], $this->skipStaticColumns)) {
+            if (in_array($column['COLUMN_NAME'], $this->getSkipStaticColumns())) {
                 continue;
             }
             $isUnsigned = '';
@@ -380,11 +376,11 @@ class AbstractAction
         $attributesType = ['varchar', 'int', 'decimal', 'text', 'datetime'];
         foreach ($attributesType as $type) {
             foreach ($this->getAttributeTypeValues($type, $entityIds, $storeId) as $row) {
-                if (isset($row[$this->categoryMetadata->getLinkField()]) && isset($row['attribute_id'])) {
+                if (isset($row[$this->getCategoryMetadata()->getLinkField()]) && isset($row['attribute_id'])) {
                     $attributeId = $row['attribute_id'];
                     if (isset($attributes[$attributeId])) {
                         $attributeCode = $attributes[$attributeId]['attribute_code'];
-                        $values[$row[$this->categoryMetadata->getLinkField()]][$attributeCode] = $row['value'];
+                        $values[$row[$this->getCategoryMetadata()->getLinkField()]][$attributeCode] = $row['value'];
                     }
                 }
             }
@@ -402,7 +398,7 @@ class AbstractAction
      */
     protected function getAttributeTypeValues($type, $entityIds, $storeId)
     {
-        $linkField = $this->categoryMetadata->getLinkField();
+        $linkField = $this->getCategoryMetadata()->getLinkField();
         $select = $this->connection->select()->from(
             [
                 'def' => $this->connection->getTableName($this->getTableName('catalog_category_entity_' . $type)),
@@ -468,5 +464,31 @@ class AbstractAction
     protected function getTableName($name)
     {
         return $this->resource->getTableName($name);
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\EntityMetadata
+     */
+    private function getCategoryMetadata()
+    {
+        if (null === $this->categoryMetadata) {
+            $metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+            $this->categoryMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        }
+        return $this->categoryMetadata;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSkipStaticColumns()
+    {
+        if (null === $this->skipStaticColumns) {
+            $provider = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider');
+            $this->skipStaticColumns = $provider->get();
+        }
+        return $this->skipStaticColumns;
     }
 }

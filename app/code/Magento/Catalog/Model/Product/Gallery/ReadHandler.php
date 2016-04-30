@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+
 /**
  * Read handler for catalog product gallery.
  */
-class ReadHandler
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
@@ -39,11 +41,12 @@ class ReadHandler
 
     /**
      * @param string $entityType
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param object $entity
+     * @param array $arguments
+     * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $product)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $value = [];
         $value['images'] = [];
@@ -51,7 +54,7 @@ class ReadHandler
         $localAttributes = ['label', 'position', 'disabled'];
 
         $mediaEntries = $this->resourceModel->loadProductGalleryByAttributeId(
-            $product,
+            $entity,
             $this->getAttribute()->getAttributeId()
         );
 
@@ -62,15 +65,15 @@ class ReadHandler
                 }
             }
 
-            $value['images'][] = $mediaEntry;
+            $value['images'][$mediaEntry['value_id']] = $mediaEntry;
         }
 
-        $product->setData(
+        $entity->setData(
             $this->getAttribute()->getAttributeCode(),
             $value
         );
 
-        return $product;
+        return $entity;
     }
 
     /**

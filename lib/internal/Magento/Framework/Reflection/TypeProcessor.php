@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection;
@@ -14,6 +14,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class TypeProcessor
 {
@@ -599,6 +600,9 @@ class TypeProcessor
         if ($type == 'bool' || $type == 'boolean') {
             $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
             return true;
+        }
+        if (($type == 'int' || $type == 'float') && !is_numeric($value)) {
+            return false;
         }
         return settype($value, $type);
     }
