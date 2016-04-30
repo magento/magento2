@@ -26,13 +26,10 @@ case $TEST_SUITE in
         echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of $test_set_size"
         cp phpunit.xml.dist phpunit.xml
 
-        # remove memory usage and update integration tests if not set 1
+        # remove memory usage tests if from any set other than the first
         if [[ $INTEGRATION_INDEX > 1 ]]; then
             echo "  - removing testsuite/Magento/MemoryUsageTest.php"
             perl -pi -0e 's#^\s+<!-- Memory(.*?)</testsuite>\n##ims' phpunit.xml
-            
-            echo "  - removing ../../../update/dev/tests/integration/testsuite"
-            perl -pi -e 's#\s+<directory.*>../../../update/dev/tests.*</directory>\n##g' phpunit.xml
         fi
 
         # divide test sets up by indexed testsuites
