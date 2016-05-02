@@ -11,10 +11,9 @@ namespace Magento\Setup\Model\Cron;
 class JobStaticRegenerate extends AbstractJob
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var \Magento\Setup\Model\ObjectManagerProvider
      */
-    protected $objectManager;
-
+    protected $objectManagerProvider;
     /**
      * @var \Magento\Framework\App\Cache
      */
@@ -46,9 +45,8 @@ class JobStaticRegenerate extends AbstractJob
         $name,
         $params = []
     ) {
-        $this->objectManager = $objectManagerProvider->get();
-        $this->cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $this->objectManager->get('Magento\Framework\App\Cache');
+        $this->cleanupFiles = $objectManagerProvider->get()->get('Magento\Framework\App\State\CleanupFiles');
+        $this->cache = $objectManagerProvider->get()->get('Magento\Framework\App\Cache');
         $this->output = $output;
         $this->status = $status;
 
@@ -71,14 +69,14 @@ class JobStaticRegenerate extends AbstractJob
             } else {
                 $this->getStatusObject()->add(
                     'Cleaning generated files...',
-                    \Magento\Setup\Model\Cron\SetupLogger::INFO
+                    \Magento\Framework\Logger\Monolog::INFO
                 );
                 $this->getCleanFilesObject()->clearCodeGeneratedFiles();
-                $this->getStatusObject()->add('Clearing cache...', \Magento\Setup\Model\Cron\SetupLogger::INFO);
+                $this->getStatusObject()->add('Clearing cache...', \Magento\Framework\Logger\Monolog::INFO);
                 $this->getCacheObject()->clean();
                 $this->getStatusObject()->add(
                     'Cleaning static view files',
-                    \Magento\Setup\Model\Cron\SetupLogger::INFO
+                    \Magento\Framework\Logger\Monolog::INFO
                 );
                 $this->getCleanFilesObject()->clearMaterializedViewFiles();
             }
@@ -135,7 +133,7 @@ class JobStaticRegenerate extends AbstractJob
      */
     public function getFilesystem()
     {
-        return $this->objectManager->create('Magento\Deploy\Model\Filesystem');
+        return $this->objectManagerProvider->get()->create('Magento\Deploy\Model\Filesystem');
     }
 
     /**
@@ -145,7 +143,7 @@ class JobStaticRegenerate extends AbstractJob
      */
     public function getModeObject()
     {
-        return $this->objectManager->create(
+        return $this->objectManagerProvider->get()->create(
             'Magento\Deploy\Model\Mode',
             [
                 'input' => new \Symfony\Component\Console\Input\ArrayInput([]),

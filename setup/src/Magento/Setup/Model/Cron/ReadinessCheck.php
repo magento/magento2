@@ -116,14 +116,13 @@ class ReadinessCheck
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_SETTINGS_VERIFIED] = $phpSettingsCheckResult;
 
         // check DB connection
-        $dbCheckErrorMessage = '';
-        $result = $this->performDBCheck($dbCheckErrorMessage);
-        if ($result === true) {
+        $errorMessage = $this->performDBCheck();
+        if (empty($errorMessage)) {
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_DB_WRITE_PERMISSION_VERIFIED] = true;
         } else {
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_DB_WRITE_PERMISSION_VERIFIED] = false;
-            $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $dbCheckErrorMessage;
-            $errorLogMessages [] = $dbCheckErrorMessage;
+            $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMessage;
+            $errorLogMessages [] = $errorMessage;
         }
 
         // updates timestamp
@@ -138,9 +137,9 @@ class ReadinessCheck
 
         $resultJson = json_encode($resultJsonRawData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $write->writeFile(self::SETUP_CRON_JOB_STATUS_FILE, $resultJson);
-        if (!empty($message)) {
-            $loggerMessage = implode(PHP_EOL, $message);
-            $this->status->add($loggerMessage, SetupLogger::ERROR, false);
+        if (!empty($errorLogMessages)) {
+            $loggerMessage = implode(PHP_EOL, $errorLogMessages);
+            $this->status->add($loggerMessage, \Magento\Framework\Logger\Monolog::ERROR, false);
         }
         return (empty($errorLogMessages));
     }
@@ -214,12 +213,10 @@ class ReadinessCheck
     /**
      * A private function to check database access and return appropriate error message in case of error
      *
-     * @param string $errorLogMessage
-     * @return bool
+     * @return string
      */
-    private function performDBCheck(&$errorLogMessage)
+    private function performDBCheck()
     {
-        $success = true;
         $errorLogMessage = '';
         $dbInfo = $this->deploymentConfig->get(
             \Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT
@@ -232,9 +229,8 @@ class ReadinessCheck
                 $dbInfo[\Magento\Framework\Config\ConfigOptionsListConstants::KEY_PASSWORD]
             );
         } catch (\Exception $e) {
-            $success = false;
             $errorLogMessage = $e->getMessage();
         }
-        return $success;
+        return $errorLogMessage;
     }
 }
