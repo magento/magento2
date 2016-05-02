@@ -14,6 +14,7 @@ class JobStaticRegenerate extends AbstractJob
      * @var \Magento\Setup\Model\ObjectManagerProvider
      */
     protected $objectManagerProvider;
+
     /**
      * @var \Magento\Framework\App\Cache
      */
