@@ -20,7 +20,6 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\SampleData;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Install controller
@@ -61,20 +60,17 @@ class Install extends AbstractActionController
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
-     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
         ProgressFactory $progressFactory,
-        \Magento\Framework\Setup\SampleData\State $sampleDataState,
-        DeploymentConfig $deploymentConfig
+        \Magento\Framework\Setup\SampleData\State $sampleDataState
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
         $this->sampleDataState = $sampleDataState;
-        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -164,7 +160,7 @@ class Install extends AbstractActionController
      */
     private function checkForPriorInstall()
     {
-        if ($this->deploymentConfig->isAvailable()) {
+        if ($this->getDeploymentConfig()->isAvailable()) {
             throw new \Magento\Setup\Exception('Magento application is already installed.');
         }
     }
@@ -265,5 +261,21 @@ class Install extends AbstractActionController
         $result[AdminAccount::KEY_FIRST_NAME] = $result[AdminAccount::KEY_USER];
         $result[AdminAccount::KEY_LAST_NAME] = $result[AdminAccount::KEY_USER];
         return $result;
+    }
+
+    /**
+     * Get Deployment Config
+     *
+     * @return \Magento\Framework\App\DeploymentConfig
+     *
+     * @deprecated
+     */
+    private function getDeploymentConfig()
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }
