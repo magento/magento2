@@ -14,7 +14,7 @@ use Magento\Framework\Phrase;
 /**
  * Class ScopeResolver
  */
-class ScopeResolver implements ScopeResolverInterface
+class ScopeResolver
 {
     /**
      * @var ObjectManagerInterface
