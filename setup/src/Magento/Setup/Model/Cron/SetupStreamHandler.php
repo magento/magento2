@@ -9,9 +9,18 @@ namespace Magento\Setup\Model\Cron;
 use Monolog\Handler\StreamHandler;
 
 /**
- * Wrapper class for Monolog\Handler\StreamHandler
+ * Setup specific stream handler
  */
-class SetupStreamHandler extends StreamHandler
+class SetupStreamHandler extends \Magento\Framework\Logger\Handler\Base
 {
+    /**
+     * @var string
+     */
+    protected $fileName = '/var/log/update.log';
 
+
+    /**
+     * @var int
+     */
+    protected $loggerType = \Magento\Framework\Logger\Monolog::ERROR;
 }

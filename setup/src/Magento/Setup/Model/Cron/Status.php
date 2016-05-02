@@ -9,7 +9,6 @@ namespace Magento\Setup\Model\Cron;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Class which provides access to the current status of the Magento setup application.
@@ -57,7 +56,7 @@ class Status
     protected $varReaderWriter;
 
     /**
-     * @var SetupLogger
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -65,7 +64,7 @@ class Status
      * Constructor
      *
      * @param Filesystem $filesystem
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param SetupLoggerCreator $setupLoggerCreator
      * @param string $statusFilePath
      * @param string $logFilePath
      * @param string $updateInProgressFlagFilePath
@@ -73,7 +72,7 @@ class Status
      */
     public function __construct(
         Filesystem $filesystem,
-        ObjectManagerProvider $objectManagerProvider,
+        SetupLoggerCreator $setupLoggerCreator,
         $statusFilePath = null,
         $logFilePath = null,
         $updateInProgressFlagFilePath = null,
@@ -88,13 +87,7 @@ class Status
         $this->updateErrorFlagFilePath = $updateErrorFlagFilePath
             ? $updateErrorFlagFilePath
             : '.update_error.flag';
-        $this->logger = $objectManagerProvider
-            ->get()
-            ->create('\Magento\Setup\Model\Cron\SetupLogger', ['name' => 'setup-cron']);
-        $streamHanlder = $objectManagerProvider
-            ->get()
-            ->create('\Magento\Setup\Model\Cron\SetupStreamHandler', [$this->getLogFilePath()]);
-        $this->logger->pushHandler($streamHanlder);
+        $this->logger = $setupLoggerCreator->create('setup-cron');
     }
 
     /**
@@ -129,15 +122,42 @@ class Status
      * @return $this
      * @throws \RuntimeException
      */
-    public function add($text, $severity = SetupLogger::INFO, $writeToStatusFile = true)
+    public function add($text, $severity = \Magento\Framework\Logger\Monolog::INFO, $writeToStatusFile = true)
     {
+        $this->log($severity, $text);
         $currentUtcTime = '[' . date('Y-m-d H:i:s T', time()) . '] ';
         $text = $currentUtcTime . $text;
-        $this->logger->addRecord($severity, $text);
         if ($writeToStatusFile) {
             $this->writeMessageToFile($text, $this->statusFilePath);
         }
         return $this;
+    }
+
+    /**
+     * A private function to invoke appropriate function from PSR LoggerInterface based on severity
+     *
+     * @param $severity
+     * @param $message
+     *
+     * @return void
+     */
+    private function log($severity, $message)
+    {
+        if ($severity == \Magento\Framework\Logger\Monolog::ALERT) {
+            $this->logger->alert($message);
+        } elseif ($severity == \Magento\Framework\Logger\Monolog::CRITICAL) {
+            $this->logger->critical($message);
+        } elseif ($severity == \Magento\Framework\Logger\Monolog::ERROR) {
+            $this->logger->error($message);
+        } elseif ($severity == \Magento\Framework\Logger\Monolog::EMERGENCY) {
+            $this->logger->emergency($message);
+        } elseif ($severity == \Magento\Framework\Logger\Monolog::INFO) {
+            $this->logger->info($message);
+        } elseif ($severity == \Magento\Framework\Logger\Monolog::NOTICE) {
+            $this->logger->notice($message);
+        } elseif ($severity == \Magento\Framework\Logger\Monolog::WARNING) {
+            $this->logger->warning($message);
+        }
     }
 
     /**

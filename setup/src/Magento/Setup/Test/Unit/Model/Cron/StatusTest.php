@@ -31,9 +31,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     private $objectManagerProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SetupLogger
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface
      */
     private $logger;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\SetupLoggerCreator
+     */
+    private $setupLoggerCreator;
 
     public function setUp()
     {
@@ -47,14 +52,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->varReaderWriter));
-        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $this->logger = $this->getMock('Magento\Setup\Model\Cron\SetupLogger', [], [], '', false);
-        $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
-        $objectManager->expects($this->at(0))->method('create')->willReturn($this->logger);
-        $setupStreamHandler = $this->getMock('Magento\Setup\Model\Cron\SetupStreamHandler', [], [], '', false);
-        $objectManager->expects($this->at(1))->method('create')->willReturn($setupStreamHandler);
-        $this->status = new Status($this->filesystem, $this->objectManagerProvider);
+        $this->logger = $this->getMockForAbstractClass('\Psr\Log\LoggerInterface', [], '', false);
+        $this->setupLoggerCreator = $this->getMock('\Magento\Setup\Model\Cron\SetupLoggerCreator', [], [], '',false);
+        $this->setupLoggerCreator
+            ->expects($this->once())
+            ->method('create')
+            ->with('setup-cron')
+            ->willReturn($this->logger);
+        $this->status = new Status($this->filesystem, $this->setupLoggerCreator);
     }
 
     public function testGetStatusFilePath()
@@ -79,8 +84,8 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->varReaderWriter->expects($this->once())->method('isExist')->willReturn(false);
         $this->varReaderWriter->expects($this->once())->method('writeFile');
-        $this->logger->expects($this->once())->method('addRecord');
-        $this->status->add('test1');
+        $this->logger->expects($this->once())->method('error');
+        $this->status->add('test1', \Magento\Framework\Logger\Monolog::ERROR);
     }
 
     public function testToggleUpdateInProgressTrue()

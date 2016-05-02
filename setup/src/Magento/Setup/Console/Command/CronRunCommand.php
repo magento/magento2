@@ -83,16 +83,16 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $notification = 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+        $output = 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
         if (!$this->checkRun()) {
-            print $notification;
+            print $output;
             return self::SETUP_CRON_READINESS_CHECK_FAILURE;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
-            $this->status->add($e->getMessage(), \Magento\Setup\Model\Cron\SetupLogger::ERROR);
-            print $notification;
+            $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
+            print $output;
             return self::SETUP_CRON_START_UPDATE_ERROR;
         }
 
@@ -102,31 +102,31 @@ class CronRunCommand extends AbstractSetupCommand
                 $job = $this->queue->popQueuedJob();
                 $this->status->add(
                     sprintf('Job "%s" has started' . PHP_EOL, $job),
-                    \Magento\Setup\Model\Cron\SetupLogger::INFO
+                    \Magento\Framework\Logger\Monolog::INFO
                 );
                 try {
                     $job->execute();
                     $this->status->add(
                         sprintf('Job "%s" has been successfully completed', $job),
-                        \Magento\Setup\Model\Cron\SetupLogger::INFO
+                        \Magento\Framework\Logger\Monolog::INFO
                     );
                 } catch (\Exception $e) {
                     $this->status->toggleUpdateError(true);
                     $this->status->add(
                         sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage()),
-                        \Magento\Setup\Model\Cron\SetupLogger::ERROR
+                        \Magento\Framework\Logger\Monolog::ERROR
                     );
                     $returnCode = self::SETUP_CRON_UPDATE_JOB_ERROR;
                 }
             }
         } catch (\Exception $e) {
-            $this->status->add($e->getMessage(), \Magento\Setup\Model\Cron\SetupLogger::ERROR);
+            $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
             $this->status->toggleUpdateError(true);
             $returnCode = self::SETUP_CRON_UPDATE_JOB_ERROR;
         } finally {
             $this->status->toggleUpdateInProgress(false);
             if ($returnCode != self::SETUP_CRON_NORMAL_EXIT) {
-                print $notification;
+                print $output;
             }
             return $returnCode;
         }
