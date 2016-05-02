@@ -45,6 +45,11 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
      */
     private $expected;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     */
+    private $status;
+
     public function setUp()
     {
         $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
@@ -63,19 +68,30 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
         $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
+        $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $this->readinessCheck = new ReadinessCheck(
             $this->dbValidator,
             $this->deploymentConfig,
             $this->filesystem,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->status
         );
-        $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion')->willReturn(['success' => true]);
-        $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(['success' => true]);
-        $this->phpReadinessCheck->expects($this->once())->method('checkPhpSettings')->willReturn(['success' => true]);
+        $this->phpReadinessCheck
+            ->expects($this->once())
+            ->method('checkPhpVersion')
+            ->willReturn(['responseType' => 'success']);
+        $this->phpReadinessCheck
+            ->expects($this->once())
+            ->method('checkPhpExtensions')
+            ->willReturn(['responseType' => 'success']);
+        $this->phpReadinessCheck
+            ->expects($this->once())
+            ->method('checkPhpSettings')
+            ->willReturn(['responseType' => 'success']);
         $this->expected = [
-            ReadinessCheck::KEY_PHP_VERSION_VERIFIED => ['success' => true],
-            ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED => ['success' => true],
-            ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED => ['success' => true],
+            ReadinessCheck::KEY_PHP_VERSION_VERIFIED => ['responseType' => 'success'],
+            ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED => ['responseType' => 'success'],
+            ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED => ['responseType' => 'success']
         ];
     }
 

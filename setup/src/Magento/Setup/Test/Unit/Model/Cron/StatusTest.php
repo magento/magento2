@@ -11,7 +11,7 @@ use Magento\Setup\Model\Cron\Status;
 class StatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Status
+     * @var \PHPUnit_Framework_MockObject_MockObject|Status
      */
     private $status;
 
@@ -25,6 +25,16 @@ class StatusTest extends \PHPUnit_Framework_TestCase
      */
     private $varReaderWriter;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     */
+    private $objectManagerProvider;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|SetupLogger
+     */
+    private $logger;
+
     public function setUp()
     {
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
@@ -37,7 +47,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->varReaderWriter));
-        $this->status = new Status($this->filesystem);
+        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $this->logger = $this->getMock('Magento\Setup\Model\Cron\SetupLogger', [], [], '', false);
+        $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
+        $objectManager->expects($this->at(0))->method('create')->willReturn($this->logger);
+        $setupStreamHandler = $this->getMock('Magento\Setup\Model\Cron\SetupStreamHandler', [], [], '', false);
+        $objectManager->expects($this->at(1))->method('create')->willReturn($setupStreamHandler);
+        $this->status = new Status($this->filesystem, $this->objectManagerProvider);
     }
 
     public function testGetStatusFilePath()
@@ -53,18 +70,16 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->varReaderWriter->expects($this->any())
             ->method('getAbsolutePath')
-            ->with('update_status.log')
-            ->willReturn('DIR/var/update_status.log');
-        $this->assertEquals('DIR/var/update_status.log', $this->status->getLogFilePath());
+            ->with('log/update.log')
+            ->willReturn('DIR/var/log/update.log');
+        $this->assertEquals('DIR/var/log/update.log', $this->status->getLogFilePath());
     }
 
     public function testAdd()
     {
-        $this->varReaderWriter->expects($this->at(0))->method('isExist')->willReturn(false);
-        $this->varReaderWriter->expects($this->at(1))->method('writeFile');
-        $this->varReaderWriter->expects($this->at(2))->method('isExist')->willReturn(true);
-        $this->varReaderWriter->expects($this->at(3))->method('readFile')->willReturn('test0');
-        $this->varReaderWriter->expects($this->at(4))->method('writeFile');
+        $this->varReaderWriter->expects($this->once())->method('isExist')->willReturn(false);
+        $this->varReaderWriter->expects($this->once())->method('writeFile');
+        $this->logger->expects($this->once())->method('addRecord');
         $this->status->add('test1');
     }
 

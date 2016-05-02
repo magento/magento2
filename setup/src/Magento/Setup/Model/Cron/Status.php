@@ -9,6 +9,7 @@ namespace Magento\Setup\Model\Cron;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
  * Class which provides access to the current status of the Magento setup application.
@@ -56,9 +57,15 @@ class Status
     protected $varReaderWriter;
 
     /**
+     * @var SetupLogger
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
+     * @param ObjectManagerProvider $objectManagerProvider
      * @param string $statusFilePath
      * @param string $logFilePath
      * @param string $updateInProgressFlagFilePath
@@ -66,6 +73,7 @@ class Status
      */
     public function __construct(
         Filesystem $filesystem,
+        ObjectManagerProvider $objectManagerProvider,
         $statusFilePath = null,
         $logFilePath = null,
         $updateInProgressFlagFilePath = null,
@@ -73,13 +81,20 @@ class Status
     ) {
         $this->varReaderWriter = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->statusFilePath = $statusFilePath ? $statusFilePath : '.update_status.txt';
-        $this->logFilePath = $logFilePath ? $logFilePath : 'update_status.log';
+        $this->logFilePath = $logFilePath ? $logFilePath : DirectoryList::LOG . '/update.log';
         $this->updateInProgressFlagFilePath = $updateInProgressFlagFilePath
             ? $updateInProgressFlagFilePath
             : '.update_in_progress.flag';
         $this->updateErrorFlagFilePath = $updateErrorFlagFilePath
             ? $updateErrorFlagFilePath
             : '.update_error.flag';
+        $this->logger = $objectManagerProvider
+            ->get()
+            ->create('\Magento\Setup\Model\Cron\SetupLogger', ['name' => 'setup-cron']);
+        $streamHanlder = $objectManagerProvider
+            ->get()
+            ->create('\Magento\Setup\Model\Cron\SetupStreamHandler', [$this->getLogFilePath()]);
+        $this->logger->pushHandler($streamHanlder);
     }
 
     /**
@@ -108,14 +123,17 @@ class Status
      * Add information to a temporary file which is used for status display on a web page and to a permanent status log.
      *
      * @param string $text
+     * @param int $severity
+     * @param bool $writeToStatusFile
+     *
      * @return $this
      * @throws \RuntimeException
      */
-    public function add($text)
+    public function add($text, $severity = SetupLogger::INFO, $writeToStatusFile = true)
     {
         $currentUtcTime = '[' . date('Y-m-d H:i:s T', time()) . '] ';
         $text = $currentUtcTime . $text;
-        $this->writeMessageToFile($text, $this->logFilePath);
+        $this->logger->addRecord($severity, $text);
         $this->writeMessageToFile($text, $this->statusFilePath);
         return $this;
     }

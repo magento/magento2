@@ -18,6 +18,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronRunCommand extends AbstractSetupCommand
 {
     /**
+     *  Cron execution return codes
+     */
+    const SETUP_CRON_NORMAL_EXIT = 0;
+    const SETUP_CRON_READINESS_CHECK_FAILURE = 1;
+    const SETUP_CRON_START_UPDATE_ERROR = 2;
+    const SETUP_CRON_UPDATE_JOB_ERROR = 3;
+
+    /**
      * @var DeploymentConfig
      */
     protected $deploymentConfig;
@@ -75,36 +83,50 @@ class CronRunCommand extends AbstractSetupCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->checkRun()) {
-            return;
+            print 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+            return self::SETUP_CRON_READINESS_CHECK_FAILURE;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
-            $this->status->add($e->getMessage());
-            return;
+            $this->status->add($e->getMessage(), \Magento\Setup\Model\Cron\SetupLogger::ERROR);
+            print 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+            return self::SETUP_CRON_START_UPDATE_ERROR;
         }
 
+        $returnCode = self::SETUP_CRON_NORMAL_EXIT;
         try {
             while (!empty($this->queue->peek()) && strpos($this->queue->peek()[Queue::KEY_JOB_NAME], 'setup:') === 0) {
                 $job = $this->queue->popQueuedJob();
                 $this->status->add(
-                    sprintf('Job "%s" has started' . PHP_EOL, $job)
+                    sprintf('Job "%s" has started' . PHP_EOL, $job),
+                    \Magento\Setup\Model\Cron\SetupLogger::INFO
                 );
                 try {
                     $job->execute();
-                    $this->status->add(sprintf('Job "%s" has been successfully completed', $job));
+                    $this->status->add(
+                        sprintf('Job "%s" has been successfully completed', $job),
+                        \Magento\Setup\Model\Cron\SetupLogger::INFO
+                    );
                 } catch (\Exception $e) {
                     $this->status->toggleUpdateError(true);
                     $this->status->add(
-                        sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage())
+                        sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage()),
+                        \Magento\Setup\Model\Cron\SetupLogger::ERROR
                     );
+                    $returnCode = self::SETUP_CRON_UPDATE_JOB_ERROR;
                 }
             }
         } catch (\Exception $e) {
-            $this->status->add($e->getMessage());
+            $this->status->add($e->getMessage(), \Magento\Setup\Model\Cron\SetupLogger::ERROR);
             $this->status->toggleUpdateError(true);
+            $returnCode = self::SETUP_CRON_UPDATE_JOB_ERROR;
         } finally {
             $this->status->toggleUpdateInProgress(false);
+            if ($returnCode != self::SETUP_CRON_NORMAL_EXIT) {
+                print 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+            }
+            return $returnCode;
         }
     }
 

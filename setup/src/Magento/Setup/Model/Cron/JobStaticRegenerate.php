@@ -75,11 +75,17 @@ class JobStaticRegenerate extends AbstractJob
                 $filesystem = $this->getFilesystem();
                 $filesystem->regenerateStatic($this->getOutputObject());
             } else {
-                $this->getStatusObject()->add('Cleaning generated files...');
+                $this->getStatusObject()->add(
+                    'Cleaning generated files...',
+                    \Magento\Setup\Model\Cron\SetupLogger::INFO
+                );
                 $this->getCleanFilesObject()->clearCodeGeneratedFiles();
-                $this->getStatusObject()->add('Clearing cache...');
+                $this->getStatusObject()->add('Clearing cache...', \Magento\Setup\Model\Cron\SetupLogger::INFO);
                 $this->getCacheObject()->clean();
-                $this->getStatusObject()->add('Cleaning static view files');
+                $this->getStatusObject()->add(
+                    'Cleaning static view files',
+                    \Magento\Setup\Model\Cron\SetupLogger::INFO
+                );
                 $this->getCleanFilesObject()->clearMaterializedViewFiles();
             }
         } catch (\Exception $e) {
