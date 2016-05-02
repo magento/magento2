@@ -18,7 +18,6 @@ class SetupStreamHandler extends \Magento\Framework\Logger\Handler\Base
      */
     protected $fileName = '/var/log/update.log';
 
-
     /**
      * @var int
      */

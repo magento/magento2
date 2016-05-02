@@ -26,11 +26,6 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     private $varReaderWriter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface
      */
     private $logger;
@@ -53,13 +48,13 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->varReaderWriter));
         $this->logger = $this->getMockForAbstractClass('\Psr\Log\LoggerInterface', [], '', false);
-        $this->setupLoggerCreator = $this->getMock('\Magento\Setup\Model\Cron\SetupLoggerCreator', [], [], '',false);
-        $this->setupLoggerCreator
+        $this->setupLoggerFactory = $this->getMock('\Magento\Setup\Model\Cron\SetupLoggerFactory', [], [], '', false);
+        $this->setupLoggerFactory
             ->expects($this->once())
             ->method('create')
             ->with('setup-cron')
             ->willReturn($this->logger);
-        $this->status = new Status($this->filesystem, $this->setupLoggerCreator);
+        $this->status = new Status($this->filesystem, $this->setupLoggerFactory);
     }
 
     public function testGetStatusFilePath()
@@ -84,7 +79,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->varReaderWriter->expects($this->once())->method('isExist')->willReturn(false);
         $this->varReaderWriter->expects($this->once())->method('writeFile');
-        $this->logger->expects($this->once())->method('error');
+        $this->logger->expects($this->once())->method('log')->with(\Magento\Framework\Logger\Monolog::ERROR, 'test1');
         $this->status->add('test1', \Magento\Framework\Logger\Monolog::ERROR);
     }
 

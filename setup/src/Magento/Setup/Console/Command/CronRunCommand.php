@@ -83,16 +83,16 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output = 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+        $notification = 'setup-cron: Please check var/log/update.log for errors.';
         if (!$this->checkRun()) {
-            print $output;
+            $output->writeln($notification);
             return self::SETUP_CRON_READINESS_CHECK_FAILURE;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
             $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
-            print $output;
+            $output->writeln($notification);
             return self::SETUP_CRON_START_UPDATE_ERROR;
         }
 
@@ -126,7 +126,7 @@ class CronRunCommand extends AbstractSetupCommand
         } finally {
             $this->status->toggleUpdateInProgress(false);
             if ($returnCode != self::SETUP_CRON_NORMAL_EXIT) {
-                print $output;
+                $output->writeln($notification);
             }
             return $returnCode;
         }

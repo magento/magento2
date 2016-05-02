@@ -11,7 +11,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 /**
  * Class to get PSR-3 compliant logger instance
  */
-class SetupLoggerCreator
+class SetupLoggerFactory
 {
     /**
      * @var ObjectManagerProvider

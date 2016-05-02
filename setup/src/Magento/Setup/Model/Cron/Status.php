@@ -64,7 +64,7 @@ class Status
      * Constructor
      *
      * @param Filesystem $filesystem
-     * @param SetupLoggerCreator $setupLoggerCreator
+     * @param SetupLoggerFactory $setupLoggerFactory
      * @param string $statusFilePath
      * @param string $logFilePath
      * @param string $updateInProgressFlagFilePath
@@ -72,7 +72,7 @@ class Status
      */
     public function __construct(
         Filesystem $filesystem,
-        SetupLoggerCreator $setupLoggerCreator,
+        SetupLoggerFactory $setupLoggerFactory,
         $statusFilePath = null,
         $logFilePath = null,
         $updateInProgressFlagFilePath = null,
@@ -87,7 +87,7 @@ class Status
         $this->updateErrorFlagFilePath = $updateErrorFlagFilePath
             ? $updateErrorFlagFilePath
             : '.update_error.flag';
-        $this->logger = $setupLoggerCreator->create('setup-cron');
+        $this->logger = $setupLoggerFactory->create('setup-cron');
     }
 
     /**
@@ -124,40 +124,13 @@ class Status
      */
     public function add($text, $severity = \Magento\Framework\Logger\Monolog::INFO, $writeToStatusFile = true)
     {
-        $this->log($severity, $text);
+        $this->logger->log($severity, $text);
         $currentUtcTime = '[' . date('Y-m-d H:i:s T', time()) . '] ';
         $text = $currentUtcTime . $text;
         if ($writeToStatusFile) {
             $this->writeMessageToFile($text, $this->statusFilePath);
         }
         return $this;
-    }
-
-    /**
-     * A private function to invoke appropriate function from PSR LoggerInterface based on severity
-     *
-     * @param $severity
-     * @param $message
-     *
-     * @return void
-     */
-    private function log($severity, $message)
-    {
-        if ($severity == \Magento\Framework\Logger\Monolog::ALERT) {
-            $this->logger->alert($message);
-        } elseif ($severity == \Magento\Framework\Logger\Monolog::CRITICAL) {
-            $this->logger->critical($message);
-        } elseif ($severity == \Magento\Framework\Logger\Monolog::ERROR) {
-            $this->logger->error($message);
-        } elseif ($severity == \Magento\Framework\Logger\Monolog::EMERGENCY) {
-            $this->logger->emergency($message);
-        } elseif ($severity == \Magento\Framework\Logger\Monolog::INFO) {
-            $this->logger->info($message);
-        } elseif ($severity == \Magento\Framework\Logger\Monolog::NOTICE) {
-            $this->logger->notice($message);
-        } elseif ($severity == \Magento\Framework\Logger\Monolog::WARNING) {
-            $this->logger->warning($message);
-        }
     }
 
     /**
