@@ -15,7 +15,7 @@ class NoSuchEntityException extends LocalizedException
      * @deprecated
      */
     const MESSAGE_SINGLE_FIELD = 'No such entity with %fieldName = %fieldValue';
-    
+
     /**
      * @deprecated
      */
