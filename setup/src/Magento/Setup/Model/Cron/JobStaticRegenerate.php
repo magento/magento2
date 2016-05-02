@@ -5,12 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\App\Cache;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\App\DeploymentConfig\Writer;
-
 /**
  * Static regenerate job
  */
@@ -71,7 +65,7 @@ class JobStaticRegenerate extends AbstractJob
     {
         try {
             $mode = $this->getModeObject();
-            if ($mode->getMode() == State::MODE_PRODUCTION) {
+            if ($mode->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
                 $filesystem = $this->getFilesystem();
                 $filesystem->regenerateStatic($this->getOutputObject());
             } else {
@@ -154,7 +148,7 @@ class JobStaticRegenerate extends AbstractJob
         return $this->objectManager->create(
             'Magento\Deploy\Model\Mode',
             [
-                'input' => new ArrayInput([]),
+                'input' => new \Symfony\Component\Console\Input\ArrayInput([]),
                 'output' => $this->output,
             ]
         );
