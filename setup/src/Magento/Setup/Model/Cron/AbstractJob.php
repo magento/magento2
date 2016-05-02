@@ -108,12 +108,12 @@ abstract class AbstractJob
      */
     protected function performCleanup()
     {
-        $this->status->add('Cleaning generated files...');
+        $this->status->add('Cleaning generated files...', \Magento\Setup\Model\Cron\SetupLogger::INFO);
         $this->cleanupFiles->clearCodeGeneratedFiles();
-        $this->status->add('Complete!');
-        $this->status->add('Clearing cache...');
+        $this->status->add('Complete!', \Magento\Setup\Model\Cron\SetupLogger::INFO);
+        $this->status->add('Clearing cache...', \Magento\Setup\Model\Cron\SetupLogger::INFO);
         $this->cache->clean();
-        $this->status->add('Complete!');
+        $this->status->add('Complete!', \Magento\Setup\Model\Cron\SetupLogger::INFO);
     }
 
     /**

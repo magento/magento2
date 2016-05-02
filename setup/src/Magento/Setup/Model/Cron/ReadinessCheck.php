@@ -11,6 +11,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Setup\Model\PhpReadinessCheck;
 use Magento\Setup\Validator\DbValidator;
+use Magento\Setup\Controller\ResponseTypeInterface;
 
 /**
  * This class is used by setup:cron:run command to check if this command can be run properly. It also checks if PHP
@@ -58,23 +59,31 @@ class ReadinessCheck
     private $phpReadinessCheck;
 
     /**
+     * @var Status
+     */
+    private $status;
+
+    /**
      * Constructor
      *
      * @param DbValidator $dbValidator
      * @param DeploymentConfig $deploymentConfig
      * @param Filesystem $filesystem
      * @param PhpReadinessCheck $phpReadinessCheck
+     * @param Status $status
      */
     public function __construct(
         DbValidator $dbValidator,
         DeploymentConfig $deploymentConfig,
         Filesystem $filesystem,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        Status $status
     ) {
         $this->dbValidator = $dbValidator;
         $this->deploymentConfig = $deploymentConfig;
         $this->filesystem = $filesystem;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->status = $status;
     }
 
     /**
@@ -85,13 +94,46 @@ class ReadinessCheck
     public function runReadinessCheck()
     {
         $resultJsonRawData = [self::KEY_READINESS_CHECKS => []];
-        // checks PHP
+        $message = [];
+        // checks PHP related settings
         $phpVersionCheckResult = $this->phpReadinessCheck->checkPhpVersion();
+        if (isset($phpVersionCheckResult['responseType']) &&
+            $phpVersionCheckResult['responseType'] == ResponseTypeInterface::RESPONSE_TYPE_ERROR) {
+            if (isset($phpVersionCheckResult['data']['message'])) {
+                $message[] = $phpVersionCheckResult['data']['message'];
+            } else {
+                $message[] = 'Minimum required version is' .
+                    $phpVersionCheckResult['data']['required'] .
+                    '. While your installed version is ' .
+                    $phpVersionCheckResult['data']['current'] .
+                    '.';
+            }
+        }
         $phpExtensionsCheckResult = $this->phpReadinessCheck->checkPhpExtensions();
+        if (isset($phpVersionCheckResult['responseType']) &&
+            $phpExtensionsCheckResult['responseType'] == ResponseTypeInterface::RESPONSE_TYPE_ERROR) {
+            if (isset($phpExtensionsCheckResult['data']['message'])) {
+                $message[] = $phpExtensionsCheckResult['data']['message'];
+            } else {
+                $message[] = 'Following required PHP extensions are missing:' .
+                    PHP_EOL .
+                    implode(PHP_EOL, $phpExtensionsCheckResult['data']['missing']);
+            }
+        }
         $phpSettingsCheckResult = $this->phpReadinessCheck->checkPhpSettings();
+        if (isset($phpVersionCheckResult['responseType']) &&
+            $phpSettingsCheckResult['responseType'] == ResponseTypeInterface::RESPONSE_TYPE_ERROR) {
+            foreach ($phpSettingsCheckResult['data'] as $setting => $valueArray) {
+                if ($valueArray['error'] == true) {
+                    $message[] = $valueArray['message'];
+                }
+            }
+        }
+
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_VERSION_VERIFIED] = $phpVersionCheckResult;
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_EXTENSIONS_VERIFIED] = $phpExtensionsCheckResult;
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_SETTINGS_VERIFIED] = $phpSettingsCheckResult;
+
         // checks Database privileges
         $success = true;
         $errorMsg = '';
@@ -113,6 +155,7 @@ class ReadinessCheck
         } else {
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_DB_WRITE_PERMISSION_VERIFIED] = false;
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMsg;
+            $message [] = $errorMsg;
         }
         // updates timestamp
         if ($write->isExist(self::SETUP_CRON_JOB_STATUS_FILE)) {
@@ -125,6 +168,10 @@ class ReadinessCheck
 
         $resultJson = json_encode($resultJsonRawData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $write->writeFile(self::SETUP_CRON_JOB_STATUS_FILE, $resultJson);
+        if (!empty($message)) {
+            $loggerMessage = implode(PHP_EOL, $message);
+            $this->status->add($loggerMessage, SetupLogger::ERROR, false);
+        }
         return $success;
     }
 }
