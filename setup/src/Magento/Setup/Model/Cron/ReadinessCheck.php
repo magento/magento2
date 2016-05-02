@@ -147,7 +147,7 @@ class ReadinessCheck
     /**
      * Private function to help build log message for php version check action
      *
-     * @param $phpVersionCheckResult
+     * @param array $phpVersionCheckResult
      * @return string
      */
     private function getPhpVersionCheckErrorLogMessage($phpVersionCheckResult)
@@ -171,7 +171,7 @@ class ReadinessCheck
     /**
      * Private function to help build log message for php extensions check action
      *
-     * @param $phpExtensionsCheckResult
+     * @param array $phpExtensionsCheckResult
      * @return string
      */
     private function getPhpExtensionsCheckErrorLogMessage($phpExtensionsCheckResult)
@@ -193,7 +193,7 @@ class ReadinessCheck
     /**
      * Private function to help build log message for php settings check action
      *
-     * @param $phpSettingsCheckResult
+     * @param array $phpSettingsCheckResult
      * @return string
      */
     private function getPhpSettingsCheckErrorLogMessage($phpSettingsCheckResult)
