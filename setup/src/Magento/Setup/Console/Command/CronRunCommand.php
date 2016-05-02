@@ -21,9 +21,10 @@ class CronRunCommand extends AbstractSetupCommand
      *  Cron execution return codes
      */
     const SETUP_CRON_NORMAL_EXIT = 0;
-    const SETUP_CRON_READINESS_CHECK_FAILURE = 1;
-    const SETUP_CRON_START_UPDATE_ERROR = 2;
-    const SETUP_CRON_UPDATE_JOB_ERROR = 3;
+    // 1 & 2 are reserved codes
+    const SETUP_CRON_READINESS_CHECK_FAILURE = 3;
+    const SETUP_CRON_START_UPDATE_ERROR = 4;
+    const SETUP_CRON_UPDATE_JOB_ERROR = 5;
 
     /**
      * @var DeploymentConfig
@@ -82,15 +83,16 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $notification = 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
         if (!$this->checkRun()) {
-            print 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+            print $notification;
             return self::SETUP_CRON_READINESS_CHECK_FAILURE;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
             $this->status->add($e->getMessage(), \Magento\Setup\Model\Cron\SetupLogger::ERROR);
-            print 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+            print $notification;
             return self::SETUP_CRON_START_UPDATE_ERROR;
         }
 
@@ -124,7 +126,7 @@ class CronRunCommand extends AbstractSetupCommand
         } finally {
             $this->status->toggleUpdateInProgress(false);
             if ($returnCode != self::SETUP_CRON_NORMAL_EXIT) {
-                print 'setup-cron: Please check var/log/update.log for errors.' . PHP_EOL;
+                print $notification;
             }
             return $returnCode;
         }

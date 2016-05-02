@@ -134,7 +134,9 @@ class Status
         $currentUtcTime = '[' . date('Y-m-d H:i:s T', time()) . '] ';
         $text = $currentUtcTime . $text;
         $this->logger->addRecord($severity, $text);
-        $this->writeMessageToFile($text, $this->statusFilePath);
+        if ($writeToStatusFile) {
+            $this->writeMessageToFile($text, $this->statusFilePath);
+        }
         return $this;
     }
 

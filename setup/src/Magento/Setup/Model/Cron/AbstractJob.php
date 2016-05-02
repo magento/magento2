@@ -54,7 +54,6 @@ abstract class AbstractJob
      */
     protected $objectManager;
 
-
     /**
      * Constructor
      *
