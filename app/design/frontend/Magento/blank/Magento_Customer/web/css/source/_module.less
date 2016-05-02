@@ -271,6 +271,20 @@
             z-index: -1;
         }
 
+        .password-strength-meter-no-pwd & {
+            &:before {
+                background-color: @password-strength-color__default;
+                width: 100%;
+            }
+        }
+
+        .password-strength-meter-0 & {
+            &:before {
+                background-color: @password-strength-color__weak;
+                width: 25%;
+            }
+        }
+
         .password-strength-meter-1 & {
             &:before {
                 background-color: @password-strength-color__weak;

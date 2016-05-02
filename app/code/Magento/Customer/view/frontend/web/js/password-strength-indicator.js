@@ -48,10 +48,11 @@ define([
          */
         _calculateStrength: function () {
             var password = this._getPassword(),
+                isEmpty = password.length === 0,
                 score = zxcvbn(password).score,
-                className = this._getClassName(score);
+                className = this._getClassName(score, isEmpty);
 
-            this._displayStrength(className, score);
+            this._displayStrength(className, score, isEmpty);
             //update error messages
             $.validator.validateSingleElement(this.element.find('input[type="password"]'));
         },
@@ -60,35 +61,37 @@ define([
          * Display strength
          * @param {String} className
          * @param {Number} score
+         * @param {Boolean} isEmpty
          * @private
          */
-        _displayStrength: function (className, score) {
+        _displayStrength: function (className, score, isEmpty) {
             var strengthContainer = this.element.find('#' + this.options.passwordStrengthMeterId),
                 strengthLabel = '';
 
             strengthContainer.removeClass();
             strengthContainer.addClass(className);
 
-            switch (score) {
-                case 1:
-                    strengthLabel = $t('Weak');
-                    break;
+            if (isEmpty) {
+                strengthLabel = $t('No Password');
+            } else {
+                switch (score) {
+                    case 0:
+                    case 1:
+                        strengthLabel = $t('Weak');
+                        break;
 
-                case 2:
-                    strengthLabel = $t('Medium');
-                    break;
+                    case 2:
+                        strengthLabel = $t('Medium');
+                        break;
 
-                case 3:
-                    strengthLabel = $t('Strong');
-                    break;
+                    case 3:
+                        strengthLabel = $t('Strong');
+                        break;
 
-                case 4:
-                    strengthLabel = $t('Very Strong');
-                    break;
-
-                case 0:
-                default:
-                    strengthLabel = $t('No password');
+                    case 4:
+                        strengthLabel = $t('Very Strong');
+                        break;
+                }
             }
 
             this.element.find('#' + this.options.passwordStrengthMeterLabelId).text(strengthLabel);
@@ -106,11 +109,13 @@ define([
         /**
          * Get class name for score
          * @param {int} score
+         * @param {Boolean} isEmpty
          * @returns {String}
          * @private
          */
-        _getClassName: function (score) {
-            return this.options.defaultClassName + score;
+        _getClassName: function (score, isEmpty) {
+            var suffix = isEmpty ? 'no-pwd' : score;
+            return this.options.defaultClassName + suffix;
         }
     });
 
