@@ -92,10 +92,12 @@ class Authentication implements AuthenticationInterface
         }
 
         $lockThreshInterval = new \DateInterval('PT' . $lockThreshold . 'S');
-        // set first failure date when this is first failure or last first failure expired
-        if (1 === $failuresNum || !$firstFailureDate || $now->diff($firstFailureDate) > $lockThreshInterval) {
+        $lockExpires = new \DateTime($customerSecure->getLockExpires());
+        // set first failure date when this is the first failure or the lock is expired
+        if (1 === $failuresNum || !$firstFailureDate || $now > $lockExpires) {
             $customerSecure->setFirstFailure($this->dateTime->formatDate($now));
             $failuresNum = 1;
+            $customerSecure->setLockExpires(null);
             // otherwise lock customer
         } elseif ($failuresNum >= $maxFailures) {
             $customerSecure->setLockExpires($this->dateTime->formatDate($now->add($lockThreshInterval)));
