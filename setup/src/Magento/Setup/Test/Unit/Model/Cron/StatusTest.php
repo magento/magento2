@@ -31,9 +31,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\SetupLoggerCreator
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\SetupLoggerFactory
      */
-    private $setupLoggerCreator;
+    private $setupLoggerFactory;
 
     public function setUp()
     {
