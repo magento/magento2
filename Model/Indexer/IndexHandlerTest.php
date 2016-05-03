@@ -14,8 +14,12 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 
 /**
+ * Important: Please make sure that each integration test file works with unique elastic search index. In order to
+ * achieve this, use @magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
+ * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest'
+ *
  * @magentoDbIsolation enabled
- * magentoDataFixture Magento/Elasticsearch/_files/indexer.php
+ * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -79,9 +83,6 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        //remember to add @ on line 18 when MAGETWO-44489 is done
-        $this->markTestSkipped('MAGETWO-44489 - Skipping until Elastic search support becomes available on Bamboo.');
-
         $this->connectionManager = Bootstrap::getObjectManager()->create(
             'Magento\Elasticsearch\SearchAdapter\ConnectionManager'
         );
@@ -111,6 +112,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test reindex process
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      */
     public function testReindexAll()
     {
@@ -127,6 +129,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      */
     public function testReindexRowAfterEdit()
     {
@@ -149,6 +152,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      */
     public function testReindexRowAfterMassAction()
     {
@@ -188,6 +192,7 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoAppArea adminhtml
      */
     public function testReindexRowAfterDelete()
