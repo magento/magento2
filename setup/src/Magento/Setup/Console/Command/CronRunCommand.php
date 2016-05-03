@@ -21,10 +21,7 @@ class CronRunCommand extends AbstractSetupCommand
      *  Cron execution return codes
      */
     const SETUP_CRON_NORMAL_EXIT = 0;
-    // 1 & 2 are reserved codes
-    const SETUP_CRON_READINESS_CHECK_FAILURE = 3;
-    const SETUP_CRON_START_UPDATE_ERROR = 4;
-    const SETUP_CRON_UPDATE_JOB_ERROR = 5;
+    const SETUP_CRON_EXIT_WITH_ERROR = 1;
 
     /**
      * @var DeploymentConfig
@@ -86,14 +83,14 @@ class CronRunCommand extends AbstractSetupCommand
         $notification = 'setup-cron: Please check var/log/update.log for errors.';
         if (!$this->checkRun()) {
             $output->writeln($notification);
-            return self::SETUP_CRON_READINESS_CHECK_FAILURE;
+            return self::SETUP_CRON_EXIT_WITH_ERROR;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
             $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
             $output->writeln($notification);
-            return self::SETUP_CRON_START_UPDATE_ERROR;
+            return self::SETUP_CRON_EXIT_WITH_ERROR;
         }
 
         $returnCode = self::SETUP_CRON_NORMAL_EXIT;
@@ -116,13 +113,13 @@ class CronRunCommand extends AbstractSetupCommand
                         sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage()),
                         \Magento\Framework\Logger\Monolog::ERROR
                     );
-                    $returnCode = self::SETUP_CRON_UPDATE_JOB_ERROR;
+                    $returnCode = self::SETUP_CRON_EXIT_WITH_ERROR;
                 }
             }
         } catch (\Exception $e) {
             $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
             $this->status->toggleUpdateError(true);
-            $returnCode = self::SETUP_CRON_UPDATE_JOB_ERROR;
+            $returnCode = self::SETUP_CRON_EXIT_WITH_ERROR;
         } finally {
             $this->status->toggleUpdateInProgress(false);
             if ($returnCode != self::SETUP_CRON_NORMAL_EXIT) {
