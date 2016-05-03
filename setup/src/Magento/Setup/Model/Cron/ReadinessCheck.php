@@ -135,11 +135,13 @@ class ReadinessCheck
         }
         $resultJsonRawData[self::KEY_CURRENT_TIMESTAMP] = time();
 
+        // write to transient log file to display on GUI
         $resultJson = json_encode($resultJsonRawData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $write->writeFile(self::SETUP_CRON_JOB_STATUS_FILE, $resultJson);
-        if (!empty($errorLogMessages)) {
-            $loggerMessage = implode(PHP_EOL, $errorLogMessages);
-            $this->status->add($loggerMessage, \Magento\Framework\Logger\Monolog::ERROR, false);
+
+        // write to permanent log file, var/log/update.log
+        foreach ($errorLogMessages as $errorLog) {
+            $this->status->add($errorLog, \Magento\Framework\Logger\Monolog::ERROR, false);
         }
         return (empty($errorLogMessages));
     }
@@ -184,7 +186,8 @@ class ReadinessCheck
             } else {
                 $message = 'Following required PHP extensions are missing:' .
                     PHP_EOL .
-                    implode(PHP_EOL, $phpExtensionsCheckResult['data']['missing']);
+                    "\t" .
+                    implode(PHP_EOL . "\t", $phpExtensionsCheckResult['data']['missing']);
             }
         }
         return $message;
@@ -198,16 +201,16 @@ class ReadinessCheck
      */
     private function getPhpSettingsCheckErrorLogMessage($phpSettingsCheckResult)
     {
-        $message = '';
+        $messages = [];
         if (isset($phpSettingsCheckResult['responseType']) &&
             $phpSettingsCheckResult['responseType'] == ResponseTypeInterface::RESPONSE_TYPE_ERROR) {
             foreach ($phpSettingsCheckResult['data'] as $valueArray) {
                 if ($valueArray['error'] == true) {
-                    $message = $valueArray['message'];
+                    $messages [] = preg_replace('/\s+/S', " ", $valueArray['message']);
                 }
             }
         }
-        return $message;
+        return implode(PHP_EOL . "\t", $messages);
     }
 
     /**
