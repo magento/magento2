@@ -279,7 +279,6 @@ class Filesystem extends AbstractBackup
             }
 
             mkdir($backupsDir);
-            chmod($backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
 
         if (!is_writable($backupsDir)) {

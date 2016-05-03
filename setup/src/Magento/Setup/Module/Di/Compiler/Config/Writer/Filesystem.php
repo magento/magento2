@@ -51,7 +51,7 @@ class Filesystem implements WriterInterface
     private function initialize()
     {
         if (!file_exists($this->directoryList->getPath(DirectoryList::DI))) {
-            mkdir($this->directoryList->getPath(DirectoryList::DI), DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            mkdir($this->directoryList->getPath(DirectoryList::DI));
         }
     }
 }
