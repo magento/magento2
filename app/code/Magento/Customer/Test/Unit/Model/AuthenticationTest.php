@@ -12,6 +12,7 @@ use Magento\Customer\Model\Authentication;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecure;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AuthenticationTest extends \PHPUnit_Framework_TestCase
@@ -46,6 +47,11 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      */
     private $authentication;
 
+    /**
+     * @var DateTime
+     */
+    private $dateTimeMock;
+
     protected function setUp()
     {
         $this->backendConfigMock = $this->getMockBuilder(ConfigInterface::class)
@@ -65,6 +71,12 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->encryptorMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeMock->expects($this->any())
+            ->method('formatDate')
+            ->willReturn('formattedDate');
         $this->customerSecureMock = $this->getMock(
             CustomerSecure::class,
             [
@@ -82,6 +94,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->authentication = $objectManagerHelper->getObject(
@@ -91,6 +104,7 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
                 'backendConfig' => $this->backendConfigMock,
                 'customerRepository' => $this->customerRepositoryMock,
                 'encryptor' => $this->encryptorMock,
+                'dateTime' => $this->dateTimeMock,
             ]
         );
     }
@@ -112,8 +126,28 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
         $this->authentication->processAuthenticationFailure($customerId);
     }
 
-    public function testProcessAuthenticationFailureFirstAttempt()
-    {
+    /**
+     * @param int $failureNum
+     * @param string $firstFailure
+     * @param string $lockExpires
+     * @param int $setFailureNumCallCtr
+     * @param int $setFailureNumValue
+     * @param int $setFirstFailureCallCtr
+     * @param int $setFirstFailureValue
+     * @param int $setLockExpiresCallCtr
+     * @param int $setLockExpiresValue
+     * @dataProvider processAuthenticationFailureDataProvider
+     */
+    public function testProcessAuthenticationFailureFirstAttempt(
+        $failureNum,
+        $firstFailure,
+        $lockExpires,
+        $setFailureNumCallCtr,
+        $setFailureNumValue,
+        $setFirstFailureCallCtr,
+        $setLockExpiresCallCtr,
+        $setLockExpiresValue
+    ) {
         $customerId = 1;
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
@@ -138,96 +172,32 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($customerMock);
 
-        $this->customerSecureMock->expects($this->once())->method('getFailuresNum')->willReturn(0);
-        $this->customerSecureMock->expects($this->once())->method('getFirstFailure')->willReturn(0);
-        $this->customerSecureMock->expects($this->once())->method('setFirstFailure');
-        $this->customerSecureMock->expects($this->once())->method('setFailuresNum');
-
-        $this->authentication->processAuthenticationFailure($customerId);
-    }
-
-    public function testProcessAuthenticationFailureLockExpired()
-    {
-        $customerId = 1;
-        $this->backendConfigMock->expects($this->exactly(2))
-            ->method('getValue')
-            ->withConsecutive(
-                [\Magento\Customer\Model\Authentication::LOCKOUT_THRESHOLD_PATH],
-                [\Magento\Customer\Model\Authentication::MAX_FAILURES_PATH]
-            )
-            ->willReturnOnConsecutiveCalls(10, 5);
-
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieveSecureData')
-            ->with($customerId)
-            ->willReturn($this->customerSecureMock);
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($customerMock);
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($customerMock);
-
-        $date = new \DateTime();
-        $date->modify('-100 second');
-        $lockExpiresDate = $date->format('Y-m-d H:i:s');
-        $date->modify('-400 second');
-        $firstFailureDate = $date->format('Y-m-d H:i:s');
-        $this->customerSecureMock->expects($this->once())->method('getFailuresNum')->willReturn(5);
+        $this->customerSecureMock->expects($this->once())->method('getFailuresNum')->willReturn($failureNum);
         $this->customerSecureMock->expects($this->once())
             ->method('getFirstFailure')
-            ->willReturn($firstFailureDate);
+            ->willReturn($firstFailure ? (new \DateTime())->modify($firstFailure)->format('Y-m-d H:i:s') : null);
         $this->customerSecureMock->expects($this->once())
             ->method('getLockExpires')
-            ->willReturn($lockExpiresDate);
-        $this->customerSecureMock->expects($this->once())->method('setFirstFailure');
-        $this->customerSecureMock->expects($this->once())->method('setLockExpires')->with(null);
-        $this->customerSecureMock->expects($this->once())->method('setFailuresNum')->with(1);
+            ->willReturn($lockExpires ? (new \DateTime())->modify($lockExpires)->format('Y-m-d H:i:s') : null);
+        $this->customerSecureMock->expects($this->exactly($setFirstFailureCallCtr))->method('setFirstFailure');
+        $this->customerSecureMock->expects($this->exactly($setFailureNumCallCtr))
+            ->method('setFailuresNum')
+            ->with($setFailureNumValue);
+        $this->customerSecureMock->expects($this->exactly($setLockExpiresCallCtr))
+            ->method('setLockExpires')
+            ->with($setLockExpiresValue);
 
         $this->authentication->processAuthenticationFailure($customerId);
     }
 
-    public function testProcessAuthenticationFailureMaxNumberOfAttempts()
+    public function processAuthenticationFailureDataProvider()
     {
-        $customerId = 1;
-        $date = new \DateTime();
-        $date->modify('-500 second');
-        $formattedDate = $date->format('Y-m-d H:i:s');
-        $this->backendConfigMock->expects($this->exactly(2))
-            ->method('getValue')
-            ->withConsecutive(
-                [\Magento\Customer\Model\Authentication::LOCKOUT_THRESHOLD_PATH],
-                [\Magento\Customer\Model\Authentication::MAX_FAILURES_PATH]
-            )
-            ->willReturnOnConsecutiveCalls(10, 5);
-
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieveSecureData')
-            ->with($customerId)
-            ->willReturn($this->customerSecureMock);
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($customerMock);
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($customerMock);
-
-        $this->customerSecureMock->expects($this->once())->method('getFailuresNum')->willReturn(4);
-        $this->customerSecureMock->expects($this->once())
-            ->method('getFirstFailure')
-            ->willReturn($formattedDate);
-        $this->customerSecureMock->expects($this->once())->method('setLockExpires');
-        $this->customerSecureMock->expects($this->once())->method('setFailuresNum')->with(5);
-
-        $this->authentication->processAuthenticationFailure($customerId);
+        return [
+            'first attempt' => [0, null, null, 1, 1, 1, 1, null],
+            'not locked' => [3, '-400 second', null, 1, 4, 0, 0, null],
+            'lock expired' => [5, '-400 second', '-100 second', 1, 1, 1, 1, null],
+            'max attempt' => [4, '-400 second', null, 1, 5, 0, 1, 'formattedDate'],
+        ];
     }
 
     public function testUnlock()

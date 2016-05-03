@@ -82,7 +82,7 @@ class Authentication implements AuthenticationInterface
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
 
         if (!($lockThreshold && $maxFailures)) {
-            return false;
+            return;
         }
         $failuresNum = (int)$customerSecure->getFailuresNum() + 1;
 
@@ -92,9 +92,10 @@ class Authentication implements AuthenticationInterface
         }
 
         $lockThreshInterval = new \DateInterval('PT' . $lockThreshold . 'S');
-        $lockExpires = new \DateTime($customerSecure->getLockExpires());
+        $lockExpires = $customerSecure->getLockExpires();
+        $lockExpired = ($lockExpires !== null) && ($now > new \DateTime($lockExpires));
         // set first failure date when this is the first failure or the lock is expired
-        if (1 === $failuresNum || !$firstFailureDate || $now > $lockExpires) {
+        if (1 === $failuresNum || !$firstFailureDate || $lockExpired) {
             $customerSecure->setFirstFailure($this->dateTime->formatDate($now));
             $failuresNum = 1;
             $customerSecure->setLockExpires(null);
