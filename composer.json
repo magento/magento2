@@ -195,7 +195,7 @@
         "components/jqueryui": "1.10.4",
         "twbs/bootstrap": "3.1.0",
         "tinymce/tinymce": "3.4.7",
-        "magento-hackathon/magento-composer-installer":"*"
+        "magento-hackathon/magento-composer-installer": "*"
     },
     "extra": {
         "component_paths": {
