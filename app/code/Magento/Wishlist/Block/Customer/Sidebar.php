@@ -43,20 +43,36 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
             $arguments['zone'] = $renderZone;
         }
 
+        $price = '';
+
+        $priceRender = $this->getPriceRender();
+        if ($priceRender) {
+            $price = $priceRender->render($priceType, $product, $arguments);
+        }
+
+        return $price;
+    }
+
+    /**
+     * Get price render block
+     *
+     * @return Render
+     */
+    private function getPriceRender()
+    {
         /** @var Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->getLayout()->createBlock(
                 'Magento\Framework\Pricing\Render',
                 'product.price.render.default',
-                ['data' => ['price_render_handle' => 'catalog_product_prices']]
+                [
+                    'data' => [
+                        'price_render_handle' => 'catalog_product_prices',
+                    ],
+                ]
             );
         }
-
-        $price = '';
-        if ($priceRender) {
-            $price = $priceRender->render($priceType, $product, $arguments);
-        }
-        return $price;
+        return $priceRender;
     }
 }
