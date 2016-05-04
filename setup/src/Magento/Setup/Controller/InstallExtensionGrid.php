@@ -58,5 +58,4 @@ class InstallExtensionGrid extends AbstractActionController
             ]
         );
     }
-
 }

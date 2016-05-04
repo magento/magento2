@@ -28,7 +28,8 @@ class Marketplace extends AbstractActionController
      * @param PackagesAuth $packagesAuth
      * @param PackagesData $packagesData
      */
-    public function __construct(PackagesAuth $packagesAuth, PackagesData $packagesData) {
+    public function __construct(PackagesAuth $packagesAuth, PackagesData $packagesData)
+    {
         $this->packagesAuth = $packagesAuth;
         $this->packagesData = $packagesData;
     }
