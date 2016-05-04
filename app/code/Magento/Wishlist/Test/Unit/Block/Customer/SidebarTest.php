@@ -80,7 +80,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testGetProductPriceHtml_CreateBlock()
+    public function testGetProductPriceHtmlCreateBlock()
     {
         $priceType = 'wishlist_configured_price';
         $expected = 'block content';
