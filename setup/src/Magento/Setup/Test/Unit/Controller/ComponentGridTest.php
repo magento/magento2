@@ -16,7 +16,6 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
 
-
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
