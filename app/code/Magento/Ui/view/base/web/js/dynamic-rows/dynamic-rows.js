@@ -557,8 +557,11 @@ define([
                 }
 
                 elems.forEach(function (record) {
-                    _.where(record.elems(), {formElement: 'select'}).forEach(function (elem) {
-                        elem.value(undefined)
+                    _.where(record.elems(),
+                        {
+                            formElement: 'select'
+                        }).forEach(function (elem) {
+                        elem.value(undefined);
                     });
                 });
 
