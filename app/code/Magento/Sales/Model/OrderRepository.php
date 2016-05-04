@@ -185,8 +185,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
-     * Get the new OrderExtension dependency for application code
-     * @return OrderExtension
+     * Get the new OrderExtensionFactory for application code
+     * 
+     * @return OrderExtensionFactory
      * @deprecated
      */
     private function getOrderExtensionFactory()
