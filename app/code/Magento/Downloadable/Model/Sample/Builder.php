@@ -99,6 +99,9 @@ class Builder
             SampleInterface::class
         );
         if ($sample->getSampleType() === \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
+            if (!isset($this->data['file'])) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Sample file not provided'));
+            }
             $fileName = $this->downloadableFile->moveFileFromTmp(
                 $this->getComponent()->getBaseTmpPath(),
                 $this->getComponent()->getBasePath(),
