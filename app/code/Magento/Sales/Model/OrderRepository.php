@@ -10,13 +10,12 @@ use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
-use Magento\Sales\Api\Data\OrderExtension;
+use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Repository class for @see OrderInterface
@@ -33,6 +32,16 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @var SearchResultFactory
      */
     protected $searchResultFactory = null;
+
+    /**
+     * @var OrderExtensionFactory
+     */
+    private $orderExtensionFactory;
+
+    /**
+     * @var ShippingAssignmentBuilder
+     */
+    private $shippingAssignmentBuilder;
 
     /**
      * OrderInterface[]
@@ -164,7 +173,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderExtensionDependency();
+            $extensionAttributes = $this->getOrderExtensionDependencyFactory()->create();
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
@@ -180,12 +189,14 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @return OrderExtension
      * @deprecated
      */
-    private function getOrderExtensionDependency()
+    private function getOrderExtensionDependencyFactory()
     {
-
-        return ObjectManager::getInstance()->create(
-            '\Magento\Sales\Api\Data\OrderExtension'
-        );
+        if (!$this->orderExtensionFactory instanceof OrderExtensionFactory) {
+            $this->orderExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                '\Magento\Sales\Api\Data\OrderExtensionFactory'
+            );
+        }
+        return $this->orderExtensionFactory;
     }
 
     /**
@@ -196,9 +207,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     private function getShippingAssignmentBuilderDependency()
     {
-        return ObjectManager::getInstance()->create(
-            '\Magento\Sales\Model\Order\ShippingAssignmentBuilder'
-        );
+        if (!$this->shippingAssignmentBuilder instanceof ShippingAssignmentBuilder) {
+            $this->shippingAssignmentBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                '\Magento\Sales\Model\Order\ShippingAssignmentBuilder'
+            );
+        }
+        return $this->shippingAssignmentBuilder;
     }
 
     /**
