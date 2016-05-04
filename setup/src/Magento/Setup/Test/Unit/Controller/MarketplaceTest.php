@@ -16,9 +16,9 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
     private $composerInformation;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\MarketplaceManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PackagesData
      */
-    private $marketplaceManager;
+    private $packagesData;
 
     /**
      * Controller
@@ -31,8 +31,8 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInformation =
             $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
-        $this->marketplaceManager = $this->getMock('Magento\Setup\Model\MarketplaceManager', [], [], '', false);
-        $this->controller = new Marketplace($this->composerInformation, $this->marketplaceManager);
+        $this->packagesData = $this->getMock('Magento\Setup\Model\PackagesData', [], [], '', false);
+        $this->controller = new Marketplace($this->composerInformation, $this->packagesData);
     }
 
     /**
@@ -40,11 +40,11 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAuthJsonAction()
     {
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('checkCredentialsAction')
             ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('saveAuthJson')
             ->willReturn(true);
@@ -60,7 +60,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAuthJsonActionWithError()
     {
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('checkCredentialsAction')
             ->will($this->throwException(new \Exception));
@@ -80,11 +80,11 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckAuthAction()
     {
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('getAuthJsonData')
             ->will($this->returnValue(['username' => 'test', 'password' => 'test']));
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('checkCredentialsAction')
             ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
@@ -100,7 +100,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckAuthActionWithError()
     {
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('getAuthJsonData')
             ->will($this->throwException(new \Exception));
@@ -117,7 +117,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveCredetinalsAction()
     {
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('removeCredentials')
             ->will($this->returnValue(true));
@@ -134,7 +134,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoveCredentialsWithError()
     {
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('removeCredentials')
             ->will($this->throwException(new \Exception));
