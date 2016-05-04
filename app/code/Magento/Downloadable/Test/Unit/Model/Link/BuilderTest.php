@@ -94,10 +94,17 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $basePath = 'l/e/f/gm';
         $baseSamplePath = 's/l/e/f/gm';
         $linkFileName = 'cat1.png';
-        $this->objectCopyServiceMock->expects($this->once())->method('getDataFromFieldset')->with(
-            'downloadable_data',
-            'to_link',
-            $data
+        $this->objectCopyServiceMock->expects($this->exactly(2))->method('getDataFromFieldset')->withConsecutive(
+            [
+                'downloadable_data',
+                'to_link',
+                $data
+            ],
+            [
+                'downloadable_link_sample_data',
+                'to_link_sample',
+                $data['sample']
+            ]
         )->willReturn($downloadableData);
         $this->service->setData($data);
         $this->dataObjectHelperMock->method('populateWithArray')
@@ -165,10 +172,17 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $downloadableData = ['sort_order' => 1];
-        $this->objectCopyServiceMock->expects($this->once())->method('getDataFromFieldset')->with(
-            'downloadable_data',
-            'to_link',
-            $data
+        $this->objectCopyServiceMock->expects($this->exactly(2))->method('getDataFromFieldset')->withConsecutive(
+            [
+                'downloadable_data',
+                'to_link',
+                $data
+            ],
+            [
+                'downloadable_link_sample_data',
+                'to_link_sample',
+                $data['sample']
+            ]
         )->willReturn($downloadableData);
         $this->service->setData($data);
         $this->dataObjectHelperMock->method('populateWithArray')
