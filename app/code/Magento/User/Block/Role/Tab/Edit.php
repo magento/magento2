@@ -198,9 +198,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form implements \Magento\Backen
      */
     public function getTree()
     {
-        $resources = $this->_aclResourceProvider->getAclResources();
-        $rootArray = $this->_integrationData->mapResources(
-            isset($resources[1]['children']) ? $resources[1]['children'] : []
+        $resources = $this->aclResourceProvider->getAclResources();
+        $configResource = array_filter($resources, function($node) {
+            return $node['id'] == 'Magento_Backend::admin';
+        });
+        $configResource = reset($configResource);
+        $rootArray = $this->integrationData->mapResources(
+            isset($configResource['children']) ? $configResource['children'] : []
         );
         return $rootArray;
     }
