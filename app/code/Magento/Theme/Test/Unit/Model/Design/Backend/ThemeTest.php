@@ -111,10 +111,24 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
     }
 
-    public function testGetValue()
+    /**
+     * @param string|null $value
+     * @param string $expectedResult
+     * @return void
+     * @dataProvider getValueDataProvider
+     */
+    public function testGetValue($value, $expectedResult)
     {
-        $this->model->setValue(null);
-        $this->assertEquals('', $this->model->getValue());
+        $this->model->setValue($value);
+        $this->assertEquals($expectedResult, $this->model->getValue());
+    }
+
+    public function getValueDataProvider()
+    {
+        return [
+            [null, ''],
+            ['value', 'value']
+        ];
     }
 
     public function afterSaveDataProvider()
