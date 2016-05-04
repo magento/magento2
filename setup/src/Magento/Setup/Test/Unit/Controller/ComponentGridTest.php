@@ -13,7 +13,9 @@ use Magento\Setup\Controller\ComponentGrid;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
+
 
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
@@ -55,6 +57,11 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
      * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
      */
     private $packagesData;
+
+    /**
+     * @var PackagesAuth|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $packagesAuth;
     
     /**
      * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
@@ -128,11 +135,13 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         
         $this->packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
         $this->packagesData = $this->getMock('Magento\Setup\Model\PackagesData', [], [], '', false);
+        $this->packagesAuth = $this->getMock('Magento\Setup\Model\PackagesAuth', [], [], '', false);
 
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
             $this->objectManagerProvider,
-            $this->packagesData
+            $this->packagesData,
+            $this->packagesAuth
         );
     }
 
@@ -178,6 +187,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->composerInformationMock->expects($this->once())
             ->method('isPackageInComposerJson')
             ->willReturn(true);
+        $this->packagesAuth->expects($this->once())->method('getAuthJsonData')->willReturn([
+            'username' => 'someusername', 'password' => 'somepassword'
+        ]);
         $this->packagesData->expects($this->once())
             ->method('syncPackagesData')
             ->willReturn($this->lastSyncData);
@@ -207,14 +219,13 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     {
         $this->packagesData->expects($this->once())
             ->method('syncPackagesData')
-            ->willReturn(array_replace($this->lastSyncData, $this->convertedLastSyncDate));
+            ->willReturn($this->lastSyncData);
         $jsonModel = $this->controller->syncAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
-        $expectedLastSyncData = array_replace($this->lastSyncData, $this->convertedLastSyncDate);
-        $this->assertEquals($expectedLastSyncData, $variables['lastSyncData']);
+        $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);
     }
 
 }
