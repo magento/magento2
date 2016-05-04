@@ -142,6 +142,7 @@ class Consumer implements ConsumerInterface
                     $queue->reject($message); //push message back to the queue
                 }
             } catch (MessageLockException $exception) {
+                $this->resource->getConnection()->rollBack();
                 $queue->acknowledge($message);
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
