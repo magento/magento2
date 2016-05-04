@@ -133,7 +133,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage \Magento\Framework\Exception\InputException::DEFAULT_MESSAGE
+     * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testNonExistentPropertiesWithoutDefaultArgumentValue()
     {
