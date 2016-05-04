@@ -75,7 +75,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $extensionAttributes = $this->getMock(
             '\Magento\Sales\Api\Data\OrderExtension',
-            [],
+            ['getShippingAssignments'],
             [],
             '',
             false

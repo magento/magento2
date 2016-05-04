@@ -173,7 +173,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderExtensionDependencyFactory()->create();
+            $extensionAttributes = $this->getOrderExtensionFactory()->create();
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
@@ -185,11 +185,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
-     * Get the new OrderExtension dependency for application code
-     * @return OrderExtension
+     * Get the new OrderExtensionFactory for application code
+     * 
+     * @return OrderExtensionFactory
      * @deprecated
      */
-    private function getOrderExtensionDependencyFactory()
+    private function getOrderExtensionFactory()
     {
         if (!$this->orderExtensionFactory instanceof OrderExtensionFactory) {
             $this->orderExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
