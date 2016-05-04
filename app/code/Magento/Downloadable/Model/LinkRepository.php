@@ -178,11 +178,13 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             if ($product->getTypeId() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
                 throw new InputException(__('Provided product must be type \'downloadable\'.'));
             }
-            if (!$this->contentValidator->isValid($link)) {
+            $validateLinkContent = !($link->getLinkType() === 'file' && $link->getLinkFile());
+            $validateSampleContent = !($link->getSampleType() === 'file' && $link->getSampleFile());
+            if (!$this->contentValidator->isValid($link, $validateLinkContent, $validateSampleContent)) {
                 throw new InputException(__('Provided link information is invalid.'));
             }
 
-            if (!in_array($link->getLinkType(), ['url', 'file'])) {
+            if (!($link->getLinkType() === 'url' || $link->getLinkType() === 'file')) {
                 throw new InputException(__('Invalid link type.'));
             }
             $title = $link->getTitle();
@@ -235,13 +237,21 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             );
         }
 
-        if ($link->getSampleType() == 'file' && $link->getSampleFile() === null) {
+        if ($link->getSampleType() == 'file') {
             $linkData['sample']['type'] = 'file';
-            $linkData['sample']['file'] = $this->jsonEncoder->encode(
-                [
+            if ($link->getSampleFile() === null) {
+                $fileData = [
                     $this->fileContentUploader->upload($link->getSampleFileContent(), 'link_sample_file'),
-                ]
-            );
+                ];
+            } else {
+                $fileData = [
+                    [
+                        'file' => $link->getSampleFile(),
+                        'status' => 'old',
+                    ]
+                ];
+            }
+            $linkData['sample']['file'] = $this->jsonEncoder->encode($fileData);
         } elseif ($link->getSampleType() == 'url') {
             $linkData['sample']['type'] = 'url';
             $linkData['sample']['url'] = $link->getSampleUrl();
@@ -281,8 +291,8 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
         if ($existingLink->getProductId() != $linkFieldValue) {
             throw new InputException(__('Provided downloadable link is not related to given product.'));
         }
-        $validateLinkContent = $link->getLinkFileContent() === null ? false : true;
-        $validateSampleContent = $link->getSampleFileContent() === null ? false : true;
+        $validateLinkContent = !($link->getLinkFileContent() === null);
+        $validateSampleContent = !($link->getSampleFileContent() === null);
         if (!$this->contentValidator->isValid($link, $validateLinkContent, $validateSampleContent)) {
             throw new InputException(__('Provided link information is invalid.'));
         }
@@ -296,10 +306,10 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
             }
         }
 
-        if ($link->getLinkType() == 'file' && $link->getLinkFileContent() === null) {
+        if ($link->getLinkType() == 'file' && $link->getLinkFileContent() === null && !$link->getLinkFile()) {
             $link->setLinkFile($existingLink->getLinkFile());
         }
-        if ($link->getSampleType() == 'file' && $link->getSampleFileContent() === null) {
+        if ($link->getSampleType() == 'file' && $link->getSampleFileContent() === null && !$link->getSampleFile()) {
             $link->setSampleFile($existingLink->getSampleFile());
         }
 
@@ -328,6 +338,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get MetadataPool instance
      *
+     * @deprecated MAGETWO-52273
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -342,6 +353,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
     /**
      * Get LinkTypeHandler  instance
      *
+     * @deprecated MAGETWO-52273
      * @return LinkHandler
      */
     private function getLinkTypeHandler()
