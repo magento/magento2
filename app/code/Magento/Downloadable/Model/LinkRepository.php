@@ -184,7 +184,7 @@ class LinkRepository implements \Magento\Downloadable\Api\LinkRepositoryInterfac
                 throw new InputException(__('Provided link information is invalid.'));
             }
 
-            if (!($link->getLinkType() === 'url' || $link->getLinkType() === 'file')) {
+            if (!in_array($link->getLinkType(), ['url', 'file'], true)) {
                 throw new InputException(__('Invalid link type.'));
             }
             $title = $link->getTitle();

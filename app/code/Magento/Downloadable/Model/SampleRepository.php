@@ -190,7 +190,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
                 throw new InputException(__('Provided sample information is invalid.'));
             }
 
-            if (!($sample->getSampleType() === 'url' || $sample->getSampleType() === 'file')) {
+            if (!in_array($sample->getSampleType(), ['url', 'file'], true)) {
                 throw new InputException(__('Invalid sample type.'));
             }
 
