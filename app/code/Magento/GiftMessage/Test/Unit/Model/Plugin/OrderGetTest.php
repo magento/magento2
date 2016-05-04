@@ -5,6 +5,7 @@
  */
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
