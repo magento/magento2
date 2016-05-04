@@ -52,7 +52,7 @@ class Ftp
      * @param int $mode
      * @return bool
      */
-    public function mkdirRecursive($path, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE)
+    public function mkdirRecursive($path, $mode = 0777)
     {
         $this->checkConnected();
         $dir = explode("/", $path);
@@ -219,7 +219,7 @@ class Ftp
      * @return bool
      * @throws \Exception
      */
-    public function upload($remote, $local, $dirMode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $ftpMode = FTP_BINARY)
+    public function upload($remote, $local, $dirMode = 0777, $ftpMode = FTP_BINARY)
     {
         $this->checkConnected();
 

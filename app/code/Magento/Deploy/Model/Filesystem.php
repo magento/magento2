@@ -18,11 +18,15 @@ class Filesystem
 {
     /**
      * File access permissions
+     *
+     * @deprecated
      */
     const PERMISSIONS_FILE = 0640;
 
     /**
      * Directory access permissions
+     *
+     * @deprecated
      */
     const PERMISSIONS_DIR = 0750;
 
@@ -107,19 +111,11 @@ class Filesystem
                 DirectoryList::TMP_MATERIALIZATION_DIR
             ]
         );
-        $this->changePermissions(
-            [
-                DirectoryList::STATIC_VIEW
-            ],
-            self::PERMISSIONS_DIR,
-            self::PERMISSIONS_DIR
-        );
 
         // Trigger static assets compilation and deployment
         $this->deployStaticContent($output);
         // Trigger code generation
         $this->compile($output);
-        $this->lockStaticResources();
     }
 
     /**
@@ -215,6 +211,8 @@ class Filesystem
      * @param int $dirPermissions
      * @param int $filePermissions
      * @return void
+     *
+     * @deprecated
      */
     protected function changePermissions($directoryCodeList, $dirPermissions, $filePermissions)
     {
@@ -233,6 +231,8 @@ class Filesystem
      * Chenge permissions on static resources
      *
      * @return void
+     *
+     * @deprecated
      */
     public function lockStaticResources()
     {
