@@ -327,7 +327,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get MetadataPool instance
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -342,7 +342,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get SampleTypeHandler Instance
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated
      * @return SampleHandler
      */
     private function getSampleTypeHandler()
