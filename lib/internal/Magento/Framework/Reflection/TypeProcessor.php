@@ -491,7 +491,7 @@ class TypeProcessor
                 if ($value !== null && !settype($value[$key], $arrayItemType)) {
                     throw new SerializationException(
                         new Phrase(
-                            SerializationException::TYPE_MISMATCH,
+                            'Invalid type for value: "%value". Expected Type: "%type".',
                             ['value' => $value, 'type' => $type]
                         )
                     );
@@ -503,7 +503,7 @@ class TypeProcessor
             if ($value !== null && $type !== self::ANY_TYPE && !$this->setType($value, $type)) {
                 throw new SerializationException(
                     new Phrase(
-                        SerializationException::TYPE_MISMATCH,
+                        'Invalid type for value: "%value". Expected Type: "%type".',
                         ['value' => (string)$value, 'type' => $type]
                     )
                 );
@@ -511,7 +511,7 @@ class TypeProcessor
         } else {
             throw new SerializationException(
                 new Phrase(
-                    SerializationException::TYPE_MISMATCH,
+                    'Invalid type for value: "%value". Expected Type: "%type".',
                     ['value' => gettype($value), 'type' => $type]
                 )
             );
