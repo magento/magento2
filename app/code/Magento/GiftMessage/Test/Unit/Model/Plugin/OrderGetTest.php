@@ -5,7 +5,9 @@
  */
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
-
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderGetTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -72,16 +74,28 @@ class OrderGetTest extends \PHPUnit_Framework_TestCase
             \Magento\GiftMessage\Api\OrderItemRepositoryInterface::class
         );
         $this->orderExtensionFactoryMock = $this->getMock(
-            \Magento\Sales\Api\Data\OrderExtensionFactory::class, ['create'], [], '', false
+            \Magento\Sales\Api\Data\OrderExtensionFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->orderItemExtensionFactoryMock = $this->getMock(
-            \Magento\Sales\Api\Data\OrderItemExtensionFactory::class, ['create'], [], '', false
+            \Magento\Sales\Api\Data\OrderItemExtensionFactory::class,
+            ['create'],
+            [],
+            '',
+            false
         );
         $this->orderMock = $this->getMock(
             \Magento\Sales\Api\Data\OrderInterface::class
         );
         $this->orderExtensionMock = $this->getMock(
-           \Magento\Sales\Api\Data\OrderExtension::class, ['getGiftMessage', 'setGiftMessage'], [], '', false
+            \Magento\Sales\Api\Data\OrderExtension::class,
+            ['getGiftMessage', 'setGiftMessage'],
+            [],
+            '',
+            false
         );
         $this->giftMessageMock = $this->getMock(
             \Magento\GiftMessage\Api\Data\MessageInterface::class
@@ -90,7 +104,11 @@ class OrderGetTest extends \PHPUnit_Framework_TestCase
             \Magento\Sales\Api\Data\OrderItemInterface::class
         );
         $this->orderItemExtensionMock = $this->getMock(
-            \Magento\Sales\Api\Data\OrderItemExtension::class, ['setGiftMessage', 'getGiftMessage'], [], '', false
+            \Magento\Sales\Api\Data\OrderItemExtension::class,
+            ['setGiftMessage', 'getGiftMessage'],
+            [],
+            '',
+            false
         );
         $this->orderRepositoryMock = $this->getMock(
             \Magento\Sales\Api\OrderRepositoryInterface::class
