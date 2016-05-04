@@ -62,17 +62,9 @@ class PackagesAuth
     /**
      * @return string
      */
-    public function getPackagesJsonUrl()
+    private function getPackagesJsonUrl()
     {
         return $this->urlPrefix .  $this->getCredentialBaseUrl() .  '/packages.json';
-    }
-
-    /**
-     * @return string
-     */
-    public function getCheckCredentialUrl()
-    {
-        return $this->urlPrefix .  $this->getCredentialBaseUrl() .  '/check_credentials';
     }
 
     /**
@@ -131,14 +123,15 @@ class PackagesAuth
      * @return bool|mixed
      * @throws \Exception
      */
-    public function getAuthJson()
+    private function getAuthJson()
     {
         $directory = $this->filesystem->getDirectoryRead(DirectoryList::COMPOSER_HOME);
         if ($directory->isExist(self::PATH_TO_AUTH_FILE) && $directory->isReadable(self::PATH_TO_AUTH_FILE)) {
             try {
                 $data = $directory->readFile(self::PATH_TO_AUTH_FILE);
                 return json_decode($data, true);
-            } catch (\Magento\Framework\Exception\FileSystemException $e) {
+            } catch (\Exception $e) {
+                throw new \Exception ('Error in reading Auth file');
             }
         }
         return false;
@@ -155,18 +148,15 @@ class PackagesAuth
         $serviceUrl = $this->getCredentialBaseUrl();
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::COMPOSER_HOME);
         if ($directory->isExist(self::PATH_TO_AUTH_FILE) && $directory->isReadable(self::PATH_TO_AUTH_FILE)) {
-            try {
-                $authJsonData = $this->getAuthJson();
-                if (isset($authJsonData['http-basic']) && isset($authJsonData['http-basic'][$serviceUrl])) {
-                    unset($authJsonData['http-basic'][$serviceUrl]);
-                    if ($authJsonData === ['http-basic' => []]) {
-                        return $directory->delete(self::PATH_TO_AUTH_FILE);
-                    } else {
-                        $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
-                        return $data !== false && $directory->writeFile(self::PATH_TO_AUTH_FILE, $data);
-                    }
+            $authJsonData = $this->getAuthJson();
+            if (isset($authJsonData['http-basic']) && isset($authJsonData['http-basic'][$serviceUrl])) {
+                unset($authJsonData['http-basic'][$serviceUrl]);
+                if ($authJsonData === ['http-basic' => []]) {
+                    return $directory->delete(self::PATH_TO_AUTH_FILE);
+                } else {
+                    $data = json_encode($authJsonData, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);
+                    return $data !== false && $directory->writeFile(self::PATH_TO_AUTH_FILE, $data);
                 }
-            } catch (\Exception $e) {
             }
         }
         return false;
