@@ -549,6 +549,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'scope_label' => '[GLOBAL]',
             'can_use_default_value' => false,
             'can_use_website_value' => false,
+            'can_restore_to_default' => false,
         ];
 
         $formFieldMock->expects($this->once())->method('setRenderer')->with($fieldRendererMock);
