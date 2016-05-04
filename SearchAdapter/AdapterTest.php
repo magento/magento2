@@ -11,8 +11,7 @@ use Magento\Elasticsearch\Model\Config;
  * Class AdapterTest
  *
  * @magentoDbIsolation disabled
- * @magentoDataFixture Magento/Framework/Search/_files/products.php
- * 
+ *
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
  * achieve this, use @magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
  * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest'
@@ -46,6 +45,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testMatchQuery()
     {
@@ -56,6 +56,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testAggregationsQuery()
     {
@@ -66,6 +67,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testMatchQueryFilters()
     {
@@ -78,6 +80,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testRangeFilterWithAllFields()
     {
@@ -90,6 +93,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testRangeFilterWithoutFromField()
     {
@@ -102,6 +106,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testRangeFilterWithoutToField()
     {
@@ -114,6 +119,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testTermFilter()
     {
@@ -126,6 +132,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testTermFilterArray()
     {
@@ -138,6 +145,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testWildcardFilter()
     {
@@ -150,6 +158,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      *
      */
     public function testSearchLimit()
@@ -163,6 +172,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testBoolFilter()
     {
@@ -175,6 +185,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testBoolFilterWithNestedNegativeBoolFilter()
     {
@@ -187,6 +198,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testBoolFilterWithNestedRangeInNegativeBoolFilter()
     {
@@ -200,6 +212,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testSimpleAdvancedSearch(
         $nameQuery,
@@ -219,6 +232,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
      */
     public function testCustomFilterableAttribute()
     {
