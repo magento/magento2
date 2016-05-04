@@ -110,7 +110,7 @@ class Downloadable
     /**
      * Get LinkBuilder instance
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated
      * @return \Magento\Downloadable\Model\Link\Builder
      */
     private function getLinkBuilder()
@@ -125,7 +125,7 @@ class Downloadable
     /**
      * Get SampleBuilder instance
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated
      * @return \Magento\Downloadable\Model\Sample\Builder
      */
     private function getSampleBuilder()
@@ -142,7 +142,7 @@ class Downloadable
     /**
      * Get LinkFactory instance
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated
      * @return LinkFactory
      */
     private function getLinkFactory()
@@ -157,7 +157,7 @@ class Downloadable
     /**
      * Get Sample Factory
      *
-     * @deprecated MAGETWO-52273
+     * @deprecated
      * @return SampleFactory
      */
     private function getSampleFactory()
