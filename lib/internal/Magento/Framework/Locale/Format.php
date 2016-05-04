@@ -10,6 +10,11 @@ use Magento\Framework\Locale\Bundle\DataBundle;
 class Format implements \Magento\Framework\Locale\FormatInterface
 {
     /**
+     * @var string
+     */
+    private static $defaultNumberSet = 'latn';
+
+    /**
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
@@ -104,12 +109,18 @@ class Format implements \Magento\Framework\Locale\FormatInterface
             $currency = $this->_scopeResolver->getScope()->getCurrentCurrency();
         }
         $localeData = (new DataBundle())->get($localeCode);
-        $format = $localeData['NumberElements']['latn']['patterns']['currencyFormat']
-            ?: explode(';', $localeData['NumberPatterns'][1])[0];
-        $decimalSymbol = $localeData['NumberElements']['latn']['symbols']['decimal']
-            ?: $localeData['NumberElements'][0];
-        $groupSymbol = $localeData['NumberElements']['latn']['symbols']['group']
-            ?: $localeData['NumberElements'][1];
+        $defaultSet = $localeData['NumberElements']['default'] ?: self::$defaultNumberSet;
+        $format = $localeData['NumberElements'][$defaultSet]['patterns']['currencyFormat']
+            ?: ($localeData['NumberElements'][self::$defaultNumberSet]['patterns']['currencyFormat']
+                ?: explode(';', $localeData['NumberPatterns'][1])[0]);
+
+        $decimalSymbol = $localeData['NumberElements'][$defaultSet]['symbols']['decimal']
+            ?: ($localeData['NumberElements'][self::$defaultNumberSet]['symbols']['decimal']
+                ?: $localeData['NumberElements'][0]);
+
+        $groupSymbol = $localeData['NumberElements'][$defaultSet]['symbols']['group']
+            ?: ($localeData['NumberElements'][self::$defaultNumberSet]['symbols']['group']
+                ?: $localeData['NumberElements'][1]);
 
         $pos = strpos($format, ';');
         if ($pos !== false) {
