@@ -341,9 +341,9 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 "The {$component} is specified in 'extra->component_paths', but missing in 'replace' section"
             );
         }
-        $allowMissingComponents =  file(__DIR__ . '/_files/blacklist/missing_components.txt');
+        $allowedMissingComponents =  file(__DIR__ . '/_files/blacklist/missing_components.txt');
         foreach (array_keys(self::$rootJson['replace']) as $replace) {
-            if (in_array($replace, $allowMissingComponents)) {
+            if (in_array($replace, $allowedMissingComponents)) {
                 continue;
             }
             if (!MagentoComponent::matchMagentoComponent($replace)) {
