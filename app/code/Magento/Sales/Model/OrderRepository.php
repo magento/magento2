@@ -10,7 +10,7 @@ use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
-use Magento\Sales\Api\Data\OrderExtension;
+use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -34,9 +34,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     protected $searchResultFactory = null;
 
     /**
-     * @var OrderExtension
+     * @var OrderExtensionFactory
      */
-    private $orderExtension;
+    private $orderExtensionFactory;
 
     /**
      * @var ShippingAssignmentBuilder
@@ -173,7 +173,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderExtensionDependency()->create();
+            $extensionAttributes = $this->getOrderExtensionDependencyFactory()->create();
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
@@ -189,14 +189,14 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @return OrderExtension
      * @deprecated
      */
-    private function getOrderExtensionDependency()
+    private function getOrderExtensionDependencyFactory()
     {
-        if (!$this->orderExtension instanceof OrderExtension) {
-            $this->orderExtension = \Magento\Framework\App\ObjectManager::getInstance()->get(
+        if (!$this->orderExtensionFactory instanceof OrderExtensionFactory) {
+            $this->orderExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 '\Magento\Sales\Api\Data\OrderExtensionFactory'
             );
         }
-        return $this->orderExtension;
+        return $this->orderExtensionFactory;
     }
 
     /**
