@@ -16,7 +16,6 @@ use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Repository class for @see OrderInterface
@@ -33,6 +32,16 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @var SearchResultFactory
      */
     protected $searchResultFactory = null;
+
+    /**
+     * @var OrderExtension
+     */
+    private $orderExtension;
+
+    /**
+     * @var ShippingAssignmentBuilder
+     */
+    private $shippingAssignmentBuilder;
 
     /**
      * OrderInterface[]
@@ -164,7 +173,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderExtensionDependency();
+            $extensionAttributes = $this->getOrderExtensionDependency()->create();
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
@@ -182,10 +191,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     private function getOrderExtensionDependency()
     {
-
-        return ObjectManager::getInstance()->create(
-            '\Magento\Sales\Api\Data\OrderExtension'
-        );
+        if (!$this->orderExtension instanceof OrderExtension) {
+            $this->orderExtension = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                '\Magento\Sales\Api\Data\OrderExtensionFactory'
+            );
+        }
+        return $this->orderExtension;
     }
 
     /**
@@ -196,9 +207,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     private function getShippingAssignmentBuilderDependency()
     {
-        return ObjectManager::getInstance()->create(
-            '\Magento\Sales\Model\Order\ShippingAssignmentBuilder'
-        );
+        if (!$this->shippingAssignmentBuilder instanceof ShippingAssignmentBuilder) {
+            $this->shippingAssignmentBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                '\Magento\Sales\Model\Order\ShippingAssignmentBuilder'
+            );
+        }
+        return $this->shippingAssignmentBuilder;
     }
 
     /**
