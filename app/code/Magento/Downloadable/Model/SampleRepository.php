@@ -185,11 +185,12 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             if ($product->getTypeId() !== Type::TYPE_DOWNLOADABLE) {
                 throw new InputException(__('Provided product must be type \'downloadable\'.'));
             }
-            if (!$this->contentValidator->isValid($sample)) {
+            $validateSampleContent = !($sample->getSampleType() === 'file' && $sample->getSampleFile());
+            if (!$this->contentValidator->isValid($sample, $validateSampleContent)) {
                 throw new InputException(__('Provided sample information is invalid.'));
             }
 
-            if (!in_array($sample->getSampleType(), ['url', 'file'])) {
+            if (!($sample->getSampleType() === 'url' || $sample->getSampleType() === 'file')) {
                 throw new InputException(__('Invalid sample type.'));
             }
 
@@ -221,7 +222,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
             'title' => $sample->getTitle(),
         ];
 
-        if ($sample->getSampleType() == 'file' && $sample->getSampleFile() === null) {
+        if ($sample->getSampleType() === 'file' && $sample->getSampleFile() === null) {
             $sampleData['file'] = $this->jsonEncoder->encode(
                 [
                     $this->fileContentUploader->upload($sample->getSampleFileContent(), 'sample'),
@@ -326,6 +327,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get MetadataPool instance
      *
+     * @deprecated MAGETWO-52273
      * @return MetadataPool
      */
     private function getMetadataPool()
@@ -340,6 +342,7 @@ class SampleRepository implements \Magento\Downloadable\Api\SampleRepositoryInte
     /**
      * Get SampleTypeHandler Instance
      *
+     * @deprecated MAGETWO-52273
      * @return SampleHandler
      */
     private function getSampleTypeHandler()
