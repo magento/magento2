@@ -107,10 +107,10 @@ class Handler
             throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
 
-        $isAllowed = false;
+        $isAllowed = true;
         foreach ($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES] as $resource) {
-            if ($this->_authorization->isAllowed($resource)) {
-                $isAllowed = true;
+            if (!$this->_authorization->isAllowed($resource)) {
+                $isAllowed = false;
                 break;
             }
         }
