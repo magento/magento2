@@ -54,7 +54,7 @@ class Base extends StreamHandler
     {
         $logDir = $this->filesystem->getParentDirectory($this->url);
         if (!$this->filesystem->isDirectory($logDir)) {
-            $this->filesystem->createDirectory($logDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            $this->filesystem->createDirectory($logDir);
         }
 
         parent::write($record);

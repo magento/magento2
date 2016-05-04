@@ -14,8 +14,6 @@ use Magento\Framework\Session\Config;
 
 /**
  * Magento Backend session configuration
- *
- * @method Config setSaveHandler()
  */
 class AdminConfig extends Config
 {
