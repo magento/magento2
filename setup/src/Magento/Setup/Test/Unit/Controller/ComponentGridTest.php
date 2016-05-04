@@ -227,5 +227,4 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
         $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);
     }
-
 }
