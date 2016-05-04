@@ -226,9 +226,8 @@ define([
 
         /**
          * Destroys collection along with its' elements.
-         * @param {Boolean} skipUpdate - skip collection update when element to be destroyed.
          */
-        destroy: function (skipUpdate) {
+        destroy: function () {
             this._super();
 
             this.elems.each('destroy');
