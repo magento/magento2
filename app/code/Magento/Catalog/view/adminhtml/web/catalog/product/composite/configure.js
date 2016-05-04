@@ -44,16 +44,26 @@ define([
         initialize: function() {
             var self = this;
 
-            jQuery.async('#product_composite_configure',
-                self._initWindowElements);
+            this._initWindowElements();
+            jQuery.async('#product_composite_configure',function (el) {
+                self.dialog = jQuery(el).modal({
+                    title: jQuery.mage.__('Configure Product'),
+                    type: 'slide',
+                    buttons: [{
+                        text: jQuery.mage.__('OK'),
+                        'class': 'action-primary',
+                        click: function () {
+                            self.onConfirmBtn();
+                        }
+                    }]
+                });
+            });
         },
 
         /**
          * Initialize window elements
          */
         _initWindowElements: function() {
-            var self = this;
-
             this.blockWindow                = $('product_composite_configure');
             this.blockForm                  = $('product_composite_configure_form');
             this.blockFormFields            = $('product_composite_configure_form_fields');
@@ -65,18 +75,6 @@ define([
             this.blockMsg                   = $('product_composite_configure_messages');
             this.blockMsgError              = this.blockMsg.select('.message.error div')[0];
             this.iFrameJSVarname            = this.blockForm.select('input[name="as_js_varname"]')[0].value;
-
-            this.dialog = jQuery('#product_composite_configure').modal({
-                title: jQuery.mage.__('Configure Product'),
-                type: 'slide',
-                buttons: [{
-                    text: jQuery.mage.__('OK'),
-                    'class': 'action-primary',
-                    click: function () {
-                        self.onConfirmBtn();
-                    }
-                }]
-            });
         },
 
         /**
