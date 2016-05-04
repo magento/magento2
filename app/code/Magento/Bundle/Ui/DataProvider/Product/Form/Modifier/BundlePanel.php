@@ -323,7 +323,6 @@ class BundlePanel extends AbstractModifier
                                                 'additionalClasses' => 'admin__field-wide',
                                                 'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
                                                 'template' => 'ui/dynamic-rows/templates/default',
-                                                'renderDefaultRecord' => true,
                                                 'columnsHeader' => false,
                                                 'columnsHeaderAfterRender' => true,
                                                 'provider' => 'product_form.product_form_data_source',
