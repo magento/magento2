@@ -28,11 +28,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $orderItemExtensionFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     private $orderMock;
 
     /**
@@ -72,7 +67,11 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Sales\Api\Data\OrderInterface::class
         );
         $this->orderExtensionMock = $this->getMock(
-            \Magento\Sales\Api\Data\OrderExtension::class, ['getGiftMessage', 'setGiftMessage'], [], '', false
+            \Magento\Sales\Api\Data\OrderExtension::class,
+            ['getGiftMessage', 'setGiftMessage'],
+            [],
+            '',
+            false
         );
         $this->giftMessageMock = $this->getMock(
             \Magento\GiftMessage\Api\Data\MessageInterface::class
@@ -81,7 +80,11 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Sales\Api\Data\OrderItemInterface::class
         );
         $this->orderItemExtensionMock = $this->getMock(
-            \Magento\Sales\Api\Data\OrderItemExtension::class, ['setGiftMessage', 'getGiftMessage'], [], '', false
+            \Magento\Sales\Api\Data\OrderItemExtension::class,
+            ['setGiftMessage', 'getGiftMessage'],
+            [],
+            '',
+            false
         );
         $this->orderRepositoryMock = $this->getMock(
             \Magento\Sales\Api\OrderRepositoryInterface::class
@@ -137,7 +140,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
     {
         // save Gift Message on order level
         $orderId = 1;
-        $orderItemId = 2;
         $this->orderMock->expects($this->once())->method('getEntityId')->willReturn($orderId);
         $this->orderMock
             ->expects($this->once())

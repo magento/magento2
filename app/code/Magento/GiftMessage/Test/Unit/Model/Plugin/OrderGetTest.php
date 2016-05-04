@@ -6,12 +6,10 @@
 
 namespace Magento\GiftMessage\Test\Unit\Model\Plugin;
 
-use Magento\GiftMessage\Model\Plugin\OrderGet;
-
 class OrderGetTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var OrderGet
+     * @var \Magento\GiftMessage\Model\Plugin\OrderGet
      */
     private $plugin;
 
@@ -97,7 +95,7 @@ class OrderGetTest extends \PHPUnit_Framework_TestCase
         $this->orderRepositoryMock = $this->getMock(
             \Magento\Sales\Api\OrderRepositoryInterface::class
         );
-        $this->plugin = new OrderGet(
+        $this->plugin = new \Magento\GiftMessage\Model\Plugin\OrderGet(
             $this->giftMessageOrderRepositoryMock,
             $this->giftMessageOrderItemRepositoryMock,
             $this->orderExtensionFactoryMock,
