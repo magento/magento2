@@ -229,4 +229,3 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($schema, $this->_responseMock->getBody());
     }
 }
-
