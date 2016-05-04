@@ -123,15 +123,20 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 /** @var \Magento\Framework\App\State $adminAppState */
                 $adminAppState = $objectManager->get('Magento\Framework\App\State');
                 $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
-                $objectManager->create(
-                    'Magento\Backend\Model\Auth\Session',
+                /** @var \Magento\Backend\Model\Session\AdminConfig $sessionConfig */
+                $sessionConfig = $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class);
+                $cookiePath = $this->getSetupCookiePath($objectManager);
+                $sessionConfig->setCookiePath($cookiePath);
+                /** @var \Magento\Backend\Model\Auth\Session $adminSession */
+                $adminSession = $objectManager->create(
+                    \Magento\Backend\Model\Auth\Session::class,
                     [
-                        'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                        'sessionConfig' => $sessionConfig,
                         'appState' => $adminAppState
                     ]
                 );
-
-                if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+                if (!$objectManager->get(\Magento\Backend\Model\Auth::class)->isLoggedIn()) {
+                    $adminSession->destroy();
                     $response = $event->getResponse();
                     $baseUrl = Http::getDistroBaseUrlPath($_SERVER);
                     $response->getHeaders()->addHeaderLine('Location', $baseUrl . 'index.php/session/unlogin');
@@ -142,6 +147,25 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             }
         }
         return false;
+    }
+
+    /**
+     * Get cookie path
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @return string
+     */
+    private function getSetupCookiePath(\Magento\Framework\ObjectManagerInterface $objectManager)
+    {
+        /** @var \Magento\Backend\App\BackendAppList $backendAppList */
+        $backendAppList = $objectManager->get(\Magento\Backend\App\BackendAppList::class);
+        $backendApp = $backendAppList->getBackendApp('setup');
+        /** @var \Magento\Backend\Model\UrlFactory $backendUrlFactory */
+        $backendUrlFactory = $objectManager->get(\Magento\Backend\Model\UrlFactory::class);
+        $baseUrl = parse_url($backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = \Magento\Framework\App\Request\Http::getUrlNoScript($baseUrl);
+        $cookiePath = $baseUrl . $backendApp->getCookiePath();
+        return $cookiePath;
     }
 
     /**
