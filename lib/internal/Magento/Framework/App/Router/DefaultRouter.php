@@ -37,7 +37,7 @@ class DefaultRouter implements RouterInterface
      * Modify request and set to no-route action
      *
      * @param RequestInterface $request
-     * @return boolean
+     * @return ActionInterface
      */
     public function match(RequestInterface $request)
     {
