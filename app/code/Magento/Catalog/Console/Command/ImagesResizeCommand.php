@@ -5,7 +5,6 @@
  */
 namespace Magento\Catalog\Console\Command;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\Cache as ImageCache;
 use Magento\Catalog\Model\Product\Image\CacheFactory as ImageCacheFactory;
@@ -30,7 +29,7 @@ class ImagesResizeCommand extends Command
     protected $productCollectionFactory;
 
     /**
-     * @var ProductRepositoryInterface
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -42,13 +41,13 @@ class ImagesResizeCommand extends Command
     /**
      * @param AppState $appState
      * @param ProductCollectionFactory $productCollectionFactory
-     * @param ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param ImageCacheFactory $imageCacheFactory
      */
     public function __construct(
         AppState $appState,
         ProductCollectionFactory $productCollectionFactory,
-        ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         ImageCacheFactory $imageCacheFactory
     ) {
         $this->appState = $appState;
