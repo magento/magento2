@@ -86,13 +86,6 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    /**
-     * @deprecated
-     */
-    public function testStartActionException()
-    {
-    }
-
     public function testStartActionPriorInstallException()
     {
         $this->webLogger->expects($this->once())->method('clear');
