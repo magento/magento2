@@ -134,7 +134,6 @@ class Deployer
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
-
                     /** @var \Magento\Theme\Model\View\Design $design */
                     $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
                     $design->setDesignTheme($themePath, $area);
@@ -159,7 +158,6 @@ class Deployer
                         ]
                     );
                     $fileManager->createRequireJsConfigAsset();
-
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
                         if (($fileArea == $area || $fileArea == 'base') &&
@@ -183,11 +181,7 @@ class Deployer
                     }
                     if ($this->jsTranslationConfig->dictionaryEnabled()) {
                         $this->deployFile(
-                            $this->jsTranslationConfig->getDictionaryFileName(),
-                            $area,
-                            $themePath,
-                            $locale,
-                            null
+                            $this->jsTranslationConfig->getDictionaryFileName(), $area, $themePath, $locale, null
                         );
                     }
                     $fileManager->clearBundleJsPool();
@@ -217,7 +211,6 @@ class Deployer
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
-
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 

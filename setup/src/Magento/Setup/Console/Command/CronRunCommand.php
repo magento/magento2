@@ -89,7 +89,7 @@ class CronRunCommand extends AbstractSetupCommand
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        $returnCode = self::SETUP_CRON_NORMAL_EXIT;
+        $returnCode = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
             while (!empty($this->queue->peek()) && strpos($this->queue->peek()[Queue::KEY_JOB_NAME], 'setup:') === 0) {
                 $job = $this->queue->popQueuedJob();
@@ -109,16 +109,16 @@ class CronRunCommand extends AbstractSetupCommand
                         sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage()),
                         \Magento\Framework\Logger\Monolog::ERROR
                     );
-                    $returnCode = self::SETUP_CRON_EXIT_WITH_ERROR;
+                    $returnCode = \Magento\Framework\Console\Cli::RETURN_FAILURE;
                 }
             }
         } catch (\Exception $e) {
             $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
             $this->status->toggleUpdateError(true);
-            $returnCode = self::SETUP_CRON_EXIT_WITH_ERROR;
+            $returnCode = \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
             $this->status->toggleUpdateInProgress(false);
-            if ($returnCode != self::SETUP_CRON_NORMAL_EXIT) {
+            if ($returnCode != \Magento\Framework\Console\Cli::RETURN_SUCCESS) {
                 $output->writeln($notification);
             }
             return $returnCode;
