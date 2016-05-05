@@ -259,6 +259,29 @@ label.mage-error {
 }
 
 //
+//  Form loader @todo ui - remove after loader consistency
+//  _____________________________________________
+
+.admin__form-loading-mask {
+    background: rgba(255, 255, 255, .5);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: @loader-overlay__z-index;
+
+    .spinner {
+        font-size: @data-grid-spinner__size;
+        left: 50%;
+        margin-left: -(@data-grid-spinner__size / 2);
+        margin-top: -(@data-grid-spinner__size / 2);
+        position: absolute;
+        top: 50%;
+    }
+}
+
+//
 //  Selectbox in calendar @todo ui - Remove after default select styles set
 //  _____________________________________________
 

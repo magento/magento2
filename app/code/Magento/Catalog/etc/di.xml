@@ -473,6 +473,14 @@
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
         <plugin name="attributeValidation" type="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation"/>
     </type>
+    <type name="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation">
+        <arguments>
+            <argument name="allowedEntityTypes" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Api\Data\CategoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
             <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Proxy</argument>
@@ -531,18 +539,6 @@
         <arguments>
             <argument name="processorPool" xsi:type="array">
                 <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Model\OrchestratorPool">
-        <arguments>
-            <argument name="operations" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Create</item>
-                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Delete</item>
-                </item>
             </argument>
         </arguments>
     </type>
