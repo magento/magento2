@@ -1029,7 +1029,8 @@ class Installer
         } catch (\Exception $e) {
             $this->log->log(
                 'Can\'t clear cache due to following error: '
-                . $e->getMessage()
+                . $e->getMessage() . PHP_EOL
+                . 'To fully clean up your uninstallation, you must manually clear your cache files.'
             );
         }
 
