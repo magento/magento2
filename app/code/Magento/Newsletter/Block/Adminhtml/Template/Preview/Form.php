@@ -35,6 +35,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if ($data = $this->getFormData()) {
             $mapper = ['preview_store_id' => 'store_id'];
 
+            if (empty($data['id']) && !empty($data['text'])) {
+                $this->_backendSession->setPreviewData($data);
+            }
+
             foreach ($data as $key => $value) {
                 if (array_key_exists($key, $mapper)) {
                     $name = $mapper[$key];
