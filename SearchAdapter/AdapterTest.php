@@ -190,10 +190,25 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     }
 
     /**
+     * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      */
     public function testCustomFilterableAttribute()
     {
         parent::testCustomFilterableAttribute();
+    }
+
+    /**
+     * Advanced search request using date product attribute
+     *
+     * @param $rangeFilter
+     * @param $expectedRecordsCount
+     * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
+     * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @dataProvider dateDataProvider
+     */
+    public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
+    {
+        parent::testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount);
     }
 }
