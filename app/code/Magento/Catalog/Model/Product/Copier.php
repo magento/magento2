@@ -47,8 +47,10 @@ class Copier
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
+        /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
         $duplicate->setData($product->getData());
+        $duplicate->setOptions([]);
         $duplicate->setIsDuplicate(true);
         $duplicate->setOriginalId($product->getEntityId());
         $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
