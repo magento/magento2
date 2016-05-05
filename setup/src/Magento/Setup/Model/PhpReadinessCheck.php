@@ -216,7 +216,7 @@ class PhpReadinessCheck
             $warning = true;
             $message = sprintf(
                 'Your current PHP memory limit is memory_limit=%s.
-                 Magento 2 recommend it to be set to %s or more to use Setup Wizard.
+                 We recommend it to be set to %s or more to use Setup Wizard.
                  As a user with root privileges, edit your php.ini file to increase memory_limit. 
                  (The command php --ini tells you where it is located.) 
                  After that, restart your web server and try again.',
