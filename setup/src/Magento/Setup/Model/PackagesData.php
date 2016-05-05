@@ -6,11 +6,6 @@
 
 namespace Magento\Setup\Model;
 
-use Composer\Package\Version\VersionParser;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Model\DateTime\TimeZoneProvider;
-use Magento\Setup\Model\ObjectManagerProvider;
-
 /**
  * Class SyncPackages returns system package and available for update versions
  */
@@ -205,7 +200,7 @@ class PackagesData
      * @return string
      * @throws \RuntimeException
      */
-    public function getPackagesJson()
+    private function getPackagesJson()
     {
         try {
             $packagesJson = '';
@@ -340,7 +335,7 @@ class PackagesData
      * @param array $packages
      * @return array
      */
-    protected function getMetaPackageForPackage($packages)
+    private function getMetaPackageForPackage($packages)
     {
         $result = [];
         foreach ($packages as $package) {
