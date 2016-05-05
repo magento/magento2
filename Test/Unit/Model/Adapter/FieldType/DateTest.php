@@ -83,12 +83,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->dateTime->expects($this->once())
             ->method('isEmptyDate')
             ->willReturn(false);
-        $this->localeDate->expects($this->once())
-            ->method('getDefaultTimezonePath')
-            ->willReturn('timezonePath');
-        $this->scopeConfig->expects($this->once())
-            ->method('getValue')
-            ->willReturn('Europe/Kiev');
-        $this->model->formatDate(1, '1997-12-31');
+        $this->assertEquals('1997-12-31T00:00:00+00:00Z', $this->model->formatDate(1, '1997-12-31'));
     }
 }
