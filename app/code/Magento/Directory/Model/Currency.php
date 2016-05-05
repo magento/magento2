@@ -233,7 +233,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             return $price * $rate;
         }
 
-        throw new \Exception(__('Undefined rate from "%1-%2".', $this->getCode(), $toCurrency->getCode()));
+        throw new \Exception(
+            __(
+                'Undefined rate from "%1-%2".',
+                $this->getCode(),
+                (is_string($toCurrency)) ? $toCurrency : $toCurrency->getCode()
+            )
+        );
     }
 
     /**
