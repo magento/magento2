@@ -8,30 +8,28 @@ namespace Magento\Customer\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
+use Magento\Customer\Test\Page\Adminhtml\CustomerGroupEdit;
 
 /**
  * Assert that group field is not available.
  */
-class AssertGroupNotAvailableInField extends AbstractConstraint
+class AssertCustomerGroupFieldDisabled extends AbstractConstraint
 {
     /**
      * Assert that customer group field is not available.
      *
-     * @param CustomerGroupIndex $customerGroupIndex
-     * @param CustomerGroup $customerGroup
+     * @param CustomerGroupEdit $customerGroupEdit
      * @param array $disabledFields
      * @return void
      */
     public function processAssert(
-        CustomerGroupIndex $customerGroupIndex,
-        CustomerGroup $customerGroup,
+        CustomerGroupEdit $customerGroupEdit,
         array $disabledFields
     ) {
         foreach ($disabledFields as $field) {
             \PHPUnit_Framework_Assert::assertTrue(
-                $customerGroupIndex->getPageMainForm()->isFieldDisabled($field),
-                "Field for group {$customerGroup->getCustomerGroupCode()} is not disabled."
+                $customerGroupEdit->getPageMainForm()->isFieldDisabled($field),
+                "Field $field is not disabled."
             );
         }
     }
