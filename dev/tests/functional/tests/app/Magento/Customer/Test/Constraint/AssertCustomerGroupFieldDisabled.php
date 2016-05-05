@@ -16,7 +16,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerGroupEdit;
 class AssertCustomerGroupFieldDisabled extends AbstractConstraint
 {
     /**
-     * Assert that customer group field is not available.
+     * Assert that field is disabled on customer group form.
      *
      * @param CustomerGroupEdit $customerGroupEdit
      * @param array $disabledFields
