@@ -18,12 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronRunCommand extends AbstractSetupCommand
 {
     /**
-     *  Cron execution return codes
-     */
-    const SETUP_CRON_NORMAL_EXIT = 0;
-    const SETUP_CRON_EXIT_WITH_ERROR = 1;
-
-    /**
      * @var DeploymentConfig
      */
     protected $deploymentConfig;
@@ -83,14 +77,16 @@ class CronRunCommand extends AbstractSetupCommand
         $notification = 'setup-cron: Please check var/log/update.log for errors.';
         if (!$this->checkRun()) {
             $output->writeln($notification);
-            return self::SETUP_CRON_EXIT_WITH_ERROR;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
             $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
             $output->writeln($notification);
-            return self::SETUP_CRON_EXIT_WITH_ERROR;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         $returnCode = self::SETUP_CRON_NORMAL_EXIT;
@@ -127,6 +123,13 @@ class CronRunCommand extends AbstractSetupCommand
             }
             return $returnCode;
         }
+
+        if ($this->status->isUpdateError()) {
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

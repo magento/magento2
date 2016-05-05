@@ -196,7 +196,8 @@ class ThemeUninstallCommand extends Command
         $messages = array_merge($messages, $this->validate($themePaths));
         if (!empty($messages)) {
             $output->writeln($messages);
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         $messages = array_merge(
             $messages,
@@ -209,7 +210,8 @@ class ThemeUninstallCommand extends Command
                 '<error>Unable to uninstall. Please resolve the following issues:</error>'
                 . PHP_EOL . implode(PHP_EOL, $messages)
             );
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         try {
@@ -230,6 +232,8 @@ class ThemeUninstallCommand extends Command
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 
