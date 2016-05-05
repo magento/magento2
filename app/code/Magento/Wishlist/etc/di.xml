@@ -61,13 +61,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\GiftCard\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
-        <arguments>
-            <argument name="prices" xsi:type="array">
-                <item name="wishlist_configured_price" xsi:type="string">Magento\GiftCard\Pricing\Price\ConfiguredPrice</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\GroupedProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
         <arguments>
             <argument name="prices" xsi:type="array">
