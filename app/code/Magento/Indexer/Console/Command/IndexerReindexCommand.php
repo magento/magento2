@@ -44,6 +44,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $indexers = $this->getIndexers($input);
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         foreach ($indexers as $indexer) {
             try {
                 $this->validateIndexerStatus($indexer);
@@ -64,11 +65,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 );
             } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage());
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . ' indexer process unknown error:');
                 $output->writeln($e->getMessage());
+                // we must have an exit code higher than zero to indicate something was wrong
+                $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
         }
+        return $returnValue;
     }
 
     /**

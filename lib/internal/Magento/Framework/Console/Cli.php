@@ -29,8 +29,12 @@ class Cli extends SymfonyApplication
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
     /**
-     * @var \Zend\ServiceManager\ServiceManager
+     * Cli exit codes
      */
+    const RETURN_SUCCESS = 0;
+    const RETURN_FAILURE = 1;
+
+    /** @var \Zend\ServiceManager\ServiceManager */
     private $serviceManager;
 
     /**
