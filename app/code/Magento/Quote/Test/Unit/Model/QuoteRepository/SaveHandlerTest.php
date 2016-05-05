@@ -120,7 +120,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->itemMock);
         $this->quoteMock->expects($this->once())->method('setLastAddedItem')->with($this->itemMock);
         $this->quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($this->billingAddressMock);
-        $this->quoteMock->expects($this->once())->method('getIsActive')->willReturn(true);
+        $this->quoteMock->expects($this->exactly(2))->method('getIsActive')->willReturn(true);
         $this->billingAddressPersister
             ->expects($this->once())
             ->method('save')
