@@ -18,10 +18,6 @@
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="active_rma" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enabled for RMA</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
                 <field id="allowed_methods" translate="label" type="multiselect" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Allowed Methods</label>
                     <source_model>Magento\Ups\Model\Config\Source\Method</source_model>
