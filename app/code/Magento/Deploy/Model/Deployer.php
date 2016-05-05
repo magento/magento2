@@ -180,9 +180,8 @@ class Deployer
                         }
                     }
                     if ($this->jsTranslationConfig->dictionaryEnabled()) {
-                        $this->deployFile(
-                            $this->jsTranslationConfig->getDictionaryFileName(), $area, $themePath, $locale, null
-                        );
+                        $getDictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
+                        $this->deployFile($getDictionaryFileName, $area, $themePath, $locale, null);
                     }
                     $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
