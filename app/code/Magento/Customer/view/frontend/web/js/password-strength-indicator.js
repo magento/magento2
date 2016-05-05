@@ -6,20 +6,20 @@
 /**
  * jshint browser:true
  */
-/*eslint no-unused-vars: 0*/
 define([
     'jquery',
     'Magento_Customer/js/zxcvbn',
-    'mage/translate',
-    'mage/validation'
-], function ($, zxcvbn, $t, validation) {
+    'mage/translate'
+], function ($, zxcvbn, $t) {
     'use strict';
 
     $.widget('mage.passwordStrengthIndicator', {
         options: {
+            cache: {},
             defaultClassName: 'password-strength-meter-',
-            passwordStrengthMeterId: 'password-strength-meter-container',
-            passwordStrengthMeterLabelId: 'password-strength-meter-label'
+            passwordSelector: '[type=password]',
+            passwordStrengthMeterSelector: '[data-role=password-strength-meter]',
+            passwordStrengthMeterLabelSelector: '[data-role=password-strength-meter-label]'
         },
 
         /**
@@ -27,6 +27,9 @@ define([
          * @private
          */
         _create: function () {
+            this.options.cache.input = $(this.options.passwordSelector, this.element);
+            this.options.cache.meter = $(this.options.passwordStrengthMeterSelector, this.element);
+            this.options.cache.label = $(this.options.passwordStrengthMeterLabelSelector, this.element);
             this._bind();
         },
 
@@ -35,10 +38,10 @@ define([
          * @private
          */
         _bind: function () {
-            this._on({
-                'change input[type="password"]': this._calculateStrength,
-                'keyup input[type="password"]': this._calculateStrength,
-                'paste input[type="password"]': this._calculateStrength
+            this._on(this.options.cache.input, {
+                'change': this._calculateStrength,
+                'keyup': this._calculateStrength,
+                'paste': this._calculateStrength
             });
         },
 
@@ -54,7 +57,7 @@ define([
 
             this._displayStrength(className, score, isEmpty);
             //update error messages
-            $.validator.validateSingleElement(this.element.find('input[type="password"]'));
+            $.validator.validateSingleElement(this.options.cache.input);
         },
 
         /**
@@ -65,11 +68,7 @@ define([
          * @private
          */
         _displayStrength: function (className, score, isEmpty) {
-            var strengthContainer = this.element.find('#' + this.options.passwordStrengthMeterId),
-                strengthLabel = '';
-
-            strengthContainer.removeClass();
-            strengthContainer.addClass(className);
+            var strengthLabel = '';
 
             if (isEmpty) {
                 strengthLabel = $t('No Password');
@@ -94,7 +93,10 @@ define([
                 }
             }
 
-            this.element.find('#' + this.options.passwordStrengthMeterLabelId).text(strengthLabel);
+            this.options.cache.meter
+                .removeClass()
+                .addClass(className);
+            this.options.cache.label.text(strengthLabel);
         },
 
         /**
@@ -103,7 +105,7 @@ define([
          * @private
          */
         _getPassword: function () {
-            return this.element.find('input[type="password"]').val();
+            return this.options.cache.input.val();
         },
 
         /**
@@ -114,8 +116,7 @@ define([
          * @private
          */
         _getClassName: function (score, isEmpty) {
-            var suffix = isEmpty ? 'no-pwd' : score;
-            return this.options.defaultClassName + suffix;
+            return this.options.defaultClassName + (isEmpty ? 'no-pwd' : score);
         }
     });
 
