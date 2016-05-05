@@ -97,7 +97,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->hydratorMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityHydrator',
+            'Magento\Framework\Model\Entity\Hydrator',
             ['extract'],
             [],
             '',

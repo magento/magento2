@@ -33,7 +33,6 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
             ->with(['options'])
             ->willReturn('expected value');
 
-
         $this->assertEquals('expected value', $model->getOptions());
     }
 
@@ -174,5 +173,60 @@ class AbstractAttributeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals([], $model->getValidationRules());
+    }
+
+    /**
+     * @param bool $isEmpty
+     * @param mixed $value
+     * @param string $attributeType
+     * @dataProvider attributeValueDataProvider
+     */
+    public function testIsValueEmpty($isEmpty, $value, $attributeType)
+    {
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $model */
+        $model = $this->getMockForAbstractClass(
+            '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
+            [],
+            '',
+            false,
+            false,
+            true,
+            [
+                'getBackend'
+            ]
+        );
+        $backendModelMock = $this->getMockForAbstractClass(
+            '\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend',
+            [],
+            '',
+            false,
+            false,
+            true,
+            [
+                'getType'
+            ]
+        );
+        $backendModelMock->expects($this->any())->method('getType')->willReturn($attributeType);
+        $model->expects($this->once())->method('getBackend')->willReturn($backendModelMock);
+        $this->assertEquals($isEmpty, $model->isValueEmpty($value));
+    }
+
+    /**
+     * @return array
+     */
+    public function attributeValueDataProvider()
+    {
+        return [
+            [true, '', 'int'],
+            [true, '', 'decimal'],
+            [true, '', 'datetime'],
+            [true, '', 'varchar'],
+            [true, '', 'text'],
+            [true, null, 'varchar'],
+            [true, [], 'varchar'],
+            [true, false, 'varchar'],
+            [false, 'not empty value', 'varchar'],
+            [false, false, 'int'],
+        ];
     }
 }

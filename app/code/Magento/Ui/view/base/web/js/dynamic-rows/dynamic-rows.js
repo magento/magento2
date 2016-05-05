@@ -283,6 +283,15 @@ define([
         },
 
         /**
+         * Get number of columns
+         *
+         * @returns {Number} columns
+         */
+        getColumnsCount: function () {
+            return this.labels().length + (this.dndConfig.enabled ? 1 : 0);
+        },
+
+        /**
          * Processing pages before addChild
          *
          * @param {Object} ctx - element context
@@ -602,7 +611,9 @@ define([
             _.extend(data.additionalClasses, {
                 '_fit': data.fit,
                 '_required': data.required,
-                '_error': data.error
+                '_error': data.error,
+                '_empty': !this.elems().length,
+                '_no-header': this.columnsHeaderAfterRender || this.collapsibleHeader
             });
 
             return data.additionalClasses;
@@ -615,7 +626,7 @@ define([
          */
         initChildren: function () {
             this.showSpinner(true);
-            this.getChildItems().each(function (data, index) {
+            this.getChildItems().forEach(function (data, index) {
                 this.addChild(data, this.startIndex + index);
             }, this);
 
