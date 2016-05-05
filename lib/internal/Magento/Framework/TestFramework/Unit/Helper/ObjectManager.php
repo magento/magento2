@@ -170,7 +170,7 @@ class ObjectManager
                     $reflectionProperty->setValue($newObject, $value);
                     break;
                 }
-                $propertyReflectionClass = $reflectionClass->getParentClass();
+                $propertyReflectionClass = $propertyReflectionClass->getParentClass();
             }
         }
         return $newObject;
