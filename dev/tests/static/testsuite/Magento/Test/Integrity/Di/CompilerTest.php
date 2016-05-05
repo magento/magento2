@@ -393,6 +393,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompiler()
     {
+        $this->markTestSkipped('MAGETWO-52570');
         try {
             $this->_shell->execute($this->_command);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
