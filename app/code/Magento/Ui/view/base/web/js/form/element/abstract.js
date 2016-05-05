@@ -380,7 +380,7 @@ define([
          */
         validate: function () {
             var value   = this.value(),
-                result  = validator(this.validation, value),
+                result  = validator(this.validation, value, this.validationParams),
                 message = !this.disabled() && this.visible() ? result.message : '',
                 isValid = this.disabled() || !this.visible() || result.passed;
 
