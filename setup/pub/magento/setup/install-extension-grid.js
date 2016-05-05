@@ -143,6 +143,7 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
                             version: extension.version
                         }
                     ];
+                    $localStorage.moduleName = extension.name;
                     $scope.error = false;
                     $scope.errorMessage = '';
                 }
