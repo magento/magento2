@@ -14,6 +14,9 @@ use Magento\Framework\Event;
 use Magento\Cms\Model\Page;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -81,7 +84,6 @@ class ProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
         $this->eventMock->expects($this->once())
             ->method('getObject')
             ->willReturn($this->pageMock);
-
 
         $this->observer = $this->objectManagerHelper->getObject(
             ProcessUrlRewriteSavingObserver::class,
