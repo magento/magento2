@@ -273,7 +273,7 @@ class Install extends AbstractActionController
     private function getDeploymentConfig()
     {
         if ($this->deploymentConfig === null) {
-            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->deploymentConfig = $this->installer->getObjectManagerProvider()->get()
                 ->get(\Magento\Framework\App\DeploymentConfig::class);
         }
         return $this->deploymentConfig;

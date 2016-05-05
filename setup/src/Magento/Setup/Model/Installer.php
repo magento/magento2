@@ -477,6 +477,16 @@ class Installer
     }
 
     /**
+     * Get Object Manager Provider
+     *
+     * @return ObjectManagerProvider
+     */
+    public function getObjectManagerProvider()
+    {
+        return $this->objectManagerProvider;
+    }
+
+    /**
      * Set up setup_module table to register modules' versions, skip this process if it already exists
      *
      * @param SchemaSetupInterface $setup
