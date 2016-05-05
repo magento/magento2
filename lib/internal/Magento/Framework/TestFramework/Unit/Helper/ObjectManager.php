@@ -162,15 +162,15 @@ class ObjectManager
         $newObject = $reflectionClass->newInstanceArgs($constructArguments);
 
         foreach (array_diff_key($arguments, $constructArguments) as $key => $value) {
-            if ($reflectionClass->hasProperty($key)) {
-                $reflectionProperty = $reflectionClass->getProperty($key);
-                $reflectionProperty->setAccessible(true);
-                $reflectionProperty->setValue($newObject, $value);
-            } elseif ($reflectionClass->getParentClass() && $reflectionClass->getParentClass()->hasProperty($key)) {
-                //catch use case when private property is declared in parent class
-                $reflectionProperty = $reflectionClass->getParentClass()->getProperty($key);
-                $reflectionProperty->setAccessible(true);
-                $reflectionProperty->setValue($newObject, $value);
+            $propertyReflectionClass = $reflectionClass;
+            while ($propertyReflectionClass) {
+                if ($propertyReflectionClass->hasProperty($key)) {
+                    $reflectionProperty = $propertyReflectionClass->getProperty($key);
+                    $reflectionProperty->setAccessible(true);
+                    $reflectionProperty->setValue($newObject, $value);
+                    break;
+                }
+                $propertyReflectionClass = $reflectionClass->getParentClass();
             }
         }
         return $newObject;
