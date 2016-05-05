@@ -1033,8 +1033,7 @@ class Installer
                 . 'To fully clean up your uninstallation, you must manually clear your cache files.'
             );
         }
-
-
+        
         $this->cleanupDb();
 
         $this->log->log('File system cleanup:');
