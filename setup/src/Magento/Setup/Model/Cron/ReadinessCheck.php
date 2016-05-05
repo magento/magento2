@@ -122,7 +122,7 @@ class ReadinessCheck
         } else {
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_DB_WRITE_PERMISSION_VERIFIED] = false;
             $resultJsonRawData[self::KEY_READINESS_CHECKS][self::KEY_ERROR] = $errorMessage;
-            $errorLogMessages [] = $errorMessage;
+            $errorLogMessages[] = $errorMessage;
         }
 
         // updates timestamp
@@ -206,7 +206,7 @@ class ReadinessCheck
             $phpSettingsCheckResult['responseType'] == ResponseTypeInterface::RESPONSE_TYPE_ERROR) {
             foreach ($phpSettingsCheckResult['data'] as $valueArray) {
                 if ($valueArray['error'] == true) {
-                    $messages [] = preg_replace('/\s+/S', " ", $valueArray['message']);
+                    $messages[] = preg_replace('/\s+/S', " ", $valueArray['message']);
                 }
             }
         }
