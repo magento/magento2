@@ -14,11 +14,6 @@ use \Magento\Setup\Model\PackagesData;
 class PackagesDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var PackagesData
      */
     private $packagesData;
@@ -39,7 +34,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $timeZone = $this->getMock('\Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false);
         $timeZoneProvider->expects($this->any())->method('get')->willReturn($timeZone);
         $packagesAuth = $this->getMock('\Magento\Setup\Model\PackagesAuth', [], [], '', false);
-        $this->filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $objectManagerProvider = $this->getMock('\Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface');
         $applicationFactory = $this->getMock(
@@ -62,8 +57,8 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
 
         $directoryWrite = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
         $directoryRead = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
-        $this->filesystem->expects($this->any())
+        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
+        $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($directoryWrite));
         $directoryWrite->expects($this->any())->method('isExist')->willReturn(true);
@@ -74,21 +69,27 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $directoryRead->expects($this->any())->method('stat')->willReturn(['mtime' => '1462460216076']);
         $directoryRead->expects($this->any())
             ->method('readFile')
-            ->willReturn('{"packages":{"magento\/package-1":{'
-            . '"1.0.0":{"name":"magento\/package-1","version":"1.0.0","vendor":"test","type":"magento2-module"},'
-            . '"1.0.1":{"name":"magento\/package-1","version":"1.0.1","vendor":"test","type":"magento2-module"},'
-            . '"1.0.2":{"name":"magento\/package-1","version":"1.0.2","vendor":"test","type":"magento2-module"}'
-            . '}, "magento\/package-2":{'
-            . '"1.0.0":{"name":"magento\/package-2","version":"1.0.0","vendor":"test","type":"magento2-module"},'
-            . '"1.0.1":{"name":"magento\/package-2","version":"1.0.1","vendor":"test","type":"magento2-module"}'
-            . '}, "magento\/package-3":{'
-            . '"1.0.0":{"name":"magento\/package-3","version":"1.0.0","vendor":"test","type":"magento2-module"},'
-            . '"1.0.1":{"name":"magento\/package-3","version":"1.0.1","vendor":"test","type":"magento2-module"},'
-            . '"1.0.2":{"name":"magento\/package-3","version":"1.0.2","vendor":"test","type":"magento2-module"}'
-            . '}}}');
+            ->willReturn(
+                '{"packages":{"magento\/package-1":{'
+                . '"1.0.0":{"name":"magento\/package-1","version":"1.0.0","vendor":"test","type":"magento2-module"},'
+                . '"1.0.1":{"name":"magento\/package-1","version":"1.0.1","vendor":"test","type":"magento2-module"},'
+                . '"1.0.2":{"name":"magento\/package-1","version":"1.0.2","vendor":"test","type":"magento2-module"}'
+                . '}, "magento\/package-2":{'
+                . '"1.0.0":{"name":"magento\/package-2","version":"1.0.0","vendor":"test","type":"magento2-module"},'
+                . '"1.0.1":{"name":"magento\/package-2","version":"1.0.1","vendor":"test","type":"magento2-module"}'
+                . '}, "magento\/package-3":{'
+                . '"1.0.0":{"name":"magento\/package-3","version":"1.0.0","vendor":"test","type":"magento2-module"},'
+                . '"1.0.1":{"name":"magento\/package-3","version":"1.0.1","vendor":"test","type":"magento2-module"},'
+                . '"1.0.2":{"name":"magento\/package-3","version":"1.0.2","vendor":"test","type":"magento2-module"}'
+                . '}}}'
+            );
 
         $this->packagesData = new PackagesData(
-            $composerInformation, $timeZoneProvider, $packagesAuth, $this->filesystem, $objectManagerProvider
+            $composerInformation,
+            $timeZoneProvider,
+            $packagesAuth,
+            $filesystem,
+            $objectManagerProvider
         );
     }
 
