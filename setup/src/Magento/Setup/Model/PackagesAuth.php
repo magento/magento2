@@ -131,7 +131,7 @@ class PackagesAuth
                 $data = $directory->readFile(self::PATH_TO_AUTH_FILE);
                 return json_decode($data, true);
             } catch (\Exception $e) {
-                throw new \Exception ('Error in reading Auth file');
+                throw new \Exception('Error in reading Auth file');
             }
         }
         return false;
