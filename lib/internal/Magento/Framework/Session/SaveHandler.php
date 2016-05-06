@@ -6,6 +6,7 @@
 namespace Magento\Framework\Session;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Session\Config\ConfigInterface;
 
@@ -136,10 +137,8 @@ class SaveHandler implements SaveHandlerInterface
      */
     private function getConfig()
     {
-        if (!($this->config instanceof ConfigInterface)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                ConfigInterface::class
-            );
+        if ($this->config === null) {
+            $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
         }
         return $this->config;
     }
