@@ -77,9 +77,8 @@ CalendarTest.prototype.testDateTimeMapping = function() {
     assertEquals('mm/d/yy', calendar.calendar('option', 'dateFormat'));
     assertEquals('h:mm TT', calendar.calendar('option', 'timeFormat'));
     calendar.calendar('destroy');
-    calendar.calendar({dateFormat: 'MMMM/EEEE/yyyy', timeFormat: 'HH:mm'});
+    calendar.calendar({dateFormat: 'MMMM/EEEE/yyyy'});
     assertEquals('MM/DD/yy', calendar.calendar('option', 'dateFormat'));
-    assertEquals('hh:mm', calendar.calendar('option', 'timeFormat'));
     calendar.calendar('destroy');
 };
 CalendarTest.prototype.testDestroy = function() {
