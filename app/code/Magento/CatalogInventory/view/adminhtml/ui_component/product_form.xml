@@ -177,7 +177,6 @@
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">min_sale_qty</item>
-                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                                 <item name="validate-digits" xsi:type="boolean">true</item>
