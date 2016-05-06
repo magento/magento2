@@ -15,6 +15,9 @@ use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {
     /**
