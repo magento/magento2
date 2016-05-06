@@ -15,7 +15,7 @@ module.exports = function (grunt) {
         tasks = grunt.file.expand('./dev/tools/grunt/tasks/*');
 
     tasks = _.map(tasks, function(task){ return task.replace('.js', '') });
-
+    tasks.push('time-grunt');
     tasks.forEach(function (task) {
         require(task)(grunt);
     });
