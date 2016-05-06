@@ -12,6 +12,14 @@ use Magento\Framework\App\ObjectManager;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var string Original session.save_handler ini config value */
+    private $originalSaveHandler;
+
+    public function setUp()
+    {
+        $this->originalSaveHandler = ini_get('session.save_handler');
+    }
+
     /**
      * Tests that the session handler is correctly set when object is created.
      *
@@ -36,7 +44,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Set ini configuration
         if ($iniHandler) {
-            $oldIni = ini_set('session.save_handler', $iniHandler);
+            ini_set('session.save_handler', $iniHandler);
         }
 
         /** @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject $deploymentConfigMock */
@@ -58,10 +66,12 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             $expected,
             ObjectManager::getInstance()->get(ConfigInterface::class)->getOption('session.save_handler')
         );
+    }
 
-        // Reset ini configuration
-        if (isset($oldIni)) {
-            ini_set('session.save_handler', $oldIni);
+    public function tearDown()
+    {
+        if (isset($this->originalSaveHandler)) {
+            ini_set('session.save_handler', $this->originalSaveHandler);
         }
     }
 
