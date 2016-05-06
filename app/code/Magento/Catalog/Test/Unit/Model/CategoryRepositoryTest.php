@@ -38,7 +38,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPoolMock;
 
@@ -66,7 +66,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn('entity_id');
 
         $this->metadataPoolMock = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
+            'Magento\Framework\EntityManager\MetadataPool',
             [],
             [],
             '',
@@ -91,9 +91,13 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Catalog\Model\CategoryRepository(
             $this->categoryFactoryMock,
             $this->categoryResourceMock,
-            $this->storeManagerMock,
-            $this->metadataPoolMock
+            $this->storeManagerMock
         );
+
+        $this->setProperties($this->model, [
+            'metadataPool' => $this->metadataPoolMock
+        ]);
+
         // Todo: \Magento\Framework\TestFramework\Unit\Helper\ObjectManager to do this automatically (MAGETWO-49793)
         $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty('extensibleDataObjectConverter');
@@ -366,5 +370,21 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             $categoryId
         );
         $this->model->deleteByIdentifier($categoryId);
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

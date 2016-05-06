@@ -233,7 +233,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'display_mode' => true,
                     'meta_title' => true,
                     'custom_design' => true,
-                    'page_layout' => true,
+                    'page_layout' => false,
                     'is_active' => true,
                     'include_in_menu' => true,
                     'landing_page' => true,
@@ -242,7 +242,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'description' => true,
                     'meta_keywords' => true,
                     'meta_description' => true,
-                    'custom_layout_update' => true,
+                    'custom_layout_update' => false,
                     'custom_design_from' => true,
                     'custom_design_to' => true,
                     'filter_price_range' => false
@@ -339,7 +339,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-            $this->equalTo(['Something went wrong while saving the category.']),
+            $this->equalTo(['The value of attribute "is_active" must be set']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

@@ -24,6 +24,7 @@ define([
             updateContainerSelector: '#details-reload',
             waitLoadingContainer: '#review-please-wait',
             shippingMethodContainer: '#shipping-method-container',
+            agreementSelector: 'div.checkout-agreements input',
             isAjax: false,
             updateShippingMethodSubmitSelector: "#update-shipping-method-submit",
             reviewSubmitSelector: "#review-submit",
@@ -63,7 +64,6 @@ define([
                     .find('select').not(this.options.shippingSelector).on('change', this._propertyChange);
                 this._updateOrderSubmit(isDisable);
             }
-
         },
 
         /**
@@ -102,8 +102,8 @@ define([
                 this.element.find(this.options.updateOrderSelector).fadeTo(0, 0.5)
                     .end().find(this.options.waitLoadingContainer).show()
                     .end().submit();
+                this._updateOrderSubmit(true);
             }
-            this._updateOrderSubmit(true);
         },
 
         /**
@@ -163,6 +163,11 @@ define([
          * Validate Order form
          */
         _validateForm: function () {
+            this.element.find(this.options.agreementSelector).off('change').on('change', $.proxy(function (e) {
+                var isValid = this._validateForm();
+                this._updateOrderSubmit(!isValid);
+            }, this));
+
             if (this.element.data('mageValidation')) {
                 return this.element.validation().valid();
             }
@@ -236,9 +241,11 @@ define([
                 callBackResponseHandler = null,
                 shippingMethod = $.trim($(this.options.shippingSelector).val());
             this._shippingTobilling();
-            if (url && resultId && this._validateForm() && shippingMethod) {
+
+            if (url && resultId && shippingMethod) {
                 this._updateOrderSubmit(true);
                 this._toggleButton(this.options.updateOrderSelector, true);
+
                 // form data and callBack updated based on the shippping Form element
                 if (this.isShippingSubmitForm) {
                     formData = $(this.options.shippingSubmitFormSelector).serialize() + "&isAjax=true";

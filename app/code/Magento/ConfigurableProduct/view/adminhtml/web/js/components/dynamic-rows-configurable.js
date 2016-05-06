@@ -24,12 +24,14 @@ define([
             insertDataFromWizard: [],
             map: null,
             isEmpty: true,
+            isShowAddProductButton: false,
             cacheGridData: [],
             unionInsertData: [],
             deleteProperty: false,
             dataLength: 0,
             identificationProperty: 'id',
             'attribute_set_id': '',
+            attributesTmp: [],
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
@@ -79,9 +81,9 @@ define([
         openModalWithGrid: function (rowIndex) {
             var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex),
                 product = {
-                'id': productSource.id,
-                'attributes': productSource['configurable_attribute']
-            };
+                    'id': productSource.id,
+                    'attributes': productSource['configurable_attribute']
+                };
 
             this.modalWithGrid().openModal();
             this.gridWithProducts().showGridChangeProduct(rowIndex, product);
@@ -110,18 +112,39 @@ define([
          * @param {Number} index - row index
          */
         deleteRecord: function (index) {
-            var tmpArray;
+            var tmpArray,
+                lastRecord;
 
             this.reRender = false;
-            tmpArray = this.unionInsertData();
+            tmpArray = this.getUnionInsertData();
             tmpArray.splice(index, 1);
 
             if (!tmpArray.length) {
+                this.attributesTmp = this.source.get('data.attributes');
                 this.source.set('data.attributes', []);
+                this.cacheGridData = [];
+            }
+
+            if (parseInt(this.currentPage(), 10) === this.pages()) {
+                lastRecord =
+                    _.findWhere(this.elems(), {
+                        index: this.startIndex + this.getChildItems().length - 1
+                    }) ||
+                    _.findWhere(this.elems(), {
+                        index: (this.startIndex + this.getChildItems().length - 1).toString()
+                    });
+
+                lastRecord.destroy();
             }
 
             this.unionInsertData(tmpArray);
+
+            if (this.pages() < parseInt(this.currentPage(), 10)) {
+                this.currentPage(this.pages());
+            }
+
             this.reRender = true;
+            this.showSpinner(false);
         },
 
         /**
@@ -130,7 +153,7 @@ define([
         generateAssociatedProducts: function () {
             var productsIds = [];
 
-            this.unionInsertData().each(function (data) {
+            this.getUnionInsertData().each(function (data) {
                 if (data.id !== null) {
                     productsIds.push(data.id);
                 }
@@ -147,10 +170,26 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'actionsListOpened'
+                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'isShowAddProductButton', 'actionsListOpened'
                 ]);
 
             return this;
+        },
+
+        /**
+         * Get union insert data from source
+         *
+         * @returns {Array}
+         */
+        getUnionInsertData: function () {
+            var source = this.source.get(this.dataScope + '.' + this.index),
+                result = [];
+
+            _.each(source, function (data) {
+                result.push(data);
+            });
+
+            return result;
         },
 
         /**
@@ -159,44 +198,41 @@ define([
          * @param {Array} data
          */
         processingUnionInsertData: function (data) {
-            var dataInc = 0,
-                diff = 0,
-                dataCount,
+            var dataCount,
                 elemsCount,
-                lastRecord;
+                tmpData,
+                path,
+                attributeCodes = this.source.get('data.attribute_codes');
 
-            this.source.remove(this.dataScope + '.' + this.index);
             this.isEmpty(data.length === 0);
+            this.isShowAddProductButton(
+                (!attributeCodes || data.length > 0 ? data.length : attributeCodes.length) > 0
+            );
 
-            _.each(data, function (row) {
-                _.each(row, function (value, key) {
-                    var path = this.dataScope + '.' + this.index + '.' + dataInc + '.' + key;
+            tmpData = data.slice(this.pageSize * (this.currentPage() - 1),
+                                 this.pageSize * (this.currentPage() - 1) + this.pageSize);
 
-                    this.source.set(path, value);
-                }, this);
+            this.source.set(this.dataScope + '.' + this.index, []);
 
-                ++dataInc;
+            _.each(tmpData, function (row, index) {
+                path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
+                this.source.set(path, row);
             }, this);
+
+            this.source.set(this.dataScope + '.' + this.index, data);
+            this.parsePagesData(data);
 
             // Render
             dataCount = data.length;
             elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
-                for (diff = dataCount - elemsCount; diff > 0; diff--) {
-                    this.addChild(data, false);
-                }
+                this.getChildItems().each(function (elemData, index) {
+                    this.addChild(elemData, this.startIndex + index);
+                }, this);
             } else {
-                for (diff = elemsCount - dataCount; diff > 0; diff--) {
-                    lastRecord =
-                        _.findWhere(this.elems(), {
-                            index: this.recordIterator - 1
-                        }) ||
-                        _.findWhere(this.elems(), {
-                            index: (this.recordIterator - 1).toString()
-                        });
-                    lastRecord.destroy();
-                    --this.recordIterator;
+                for (elemsCount; elemsCount > dataCount; elemsCount--) {
+                    this.elems()[elemsCount - 1].destroy();
                 }
             }
 
@@ -217,7 +253,7 @@ define([
                 return;
             }
 
-            tmpArray = this.unionInsertData();
+            tmpArray = this.getUnionInsertData();
 
             changes = this._checkGridData(data);
             this.cacheGridData = data;
@@ -232,6 +268,10 @@ define([
                 tmpArray.push(mappedData);
             }, this);
 
+            // Attributes cannot be changed before regeneration thought wizard
+            if (!this.source.get('data.attributes').length) {
+                this.source.set('data.attributes', this.attributesTmp);
+            }
             this.unionInsertData(tmpArray);
         },
 
@@ -241,7 +281,7 @@ define([
          * @param {Object} data
          */
         processingChangeDataFromGrid: function (data) {
-            var tmpArray = this.unionInsertData(),
+            var tmpArray = this.getUnionInsertData(),
                 mappedData = this.mappingValue(data.product);
 
             mappedData[this.canEditField] = 0;
@@ -295,7 +335,7 @@ define([
          * @param {Object} data
          */
         processingInsertDataFromWizard: function (data) {
-            var tmpArray = this.unionInsertData(),
+            var tmpArray = this.getUnionInsertData(),
                 productIdsToDelete = this.source.get(this.dataScopeAssociatedProduct),
                 index,
                 product = {};
@@ -349,6 +389,7 @@ define([
                     'media_gallery': row['media_gallery'],
                     'swatch_image': row['swatch_image'],
                     'small_image': row['small_image'],
+                    image: row.image,
                     'thumbnail': row.thumbnail,
                     'attributes': attributesText
                 };
@@ -465,7 +506,7 @@ define([
          * @param {Number} rowIndex
          */
         toggleStatusProduct: function (rowIndex) {
-            var tmpArray = this.unionInsertData(),
+            var tmpArray = this.getUnionInsertData(),
                 status = parseInt(tmpArray[rowIndex].status, 10);
 
             if (status === 1) {

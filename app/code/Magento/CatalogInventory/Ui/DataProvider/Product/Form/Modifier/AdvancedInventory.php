@@ -8,8 +8,8 @@ namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Source\Stock;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 
 /**
  * Data provider for advanced inventory form
@@ -21,7 +21,7 @@ class AdvancedInventory extends AbstractModifier
     /**
      * @var LocatorInterface
      */
-    protected $locator;
+    private $locator;
 
     /**
      * @var StockRegistryInterface
@@ -29,35 +29,27 @@ class AdvancedInventory extends AbstractModifier
     private $stockRegistry;
 
     /**
-     * @var Stock
-     */
-    private $stock;
-
-    /**
      * @var ArrayManager
      */
-    protected $arrayManager;
+    private $arrayManager;
 
     /**
      * @var array
      */
-    protected $meta = [];
+    private $meta = [];
 
     /**
      * @param LocatorInterface $locator
-     * @param Stock $stock
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         LocatorInterface $locator,
-        Stock $stock,
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
-        $this->stock = $stock;
         $this->arrayManager = $arrayManager;
     }
 
@@ -71,12 +63,13 @@ class AdvancedInventory extends AbstractModifier
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
 
+        /** @var StockItemInterface $stockItem */
         $stockItem = $this->stockRegistry->getStockItem(
             $modelId,
             $model->getStore()->getWebsiteId()
         );
 
-        $stockData = $stockItem->getData();
+        $stockData = $modelId ? $this->getData($stockItem) : [];
         if (!empty($stockData)) {
             $data[$modelId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS] = $stockData;
         }
@@ -85,34 +78,33 @@ class AdvancedInventory extends AbstractModifier
                 (int)$stockData['is_in_stock'];
         }
 
-        return $this->prepareStockData($data);
+        return $data;
     }
 
     /**
-     * Prepare data for stock_data fields
+     * Get Stock Data
      *
-     * @param array $data
+     * @param StockItemInterface $stockItem
      * @return array
      */
-    protected function prepareStockData(array $data)
+    private function getData(StockItemInterface $stockItem)
     {
-        $productId = $this->locator->getProduct()->getId();
-        $stockDataFields = [
-            'qty_increments',
-            'min_qty',
-            'min_sale_qty',
-            'max_sale_qty',
-            'notify_stock_qty',
-        ];
+        $result = $stockItem->getData();
 
-        foreach ($stockDataFields as $field) {
-            if (isset($data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field])) {
-                $data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field] =
-                    (float)$data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field];
-            }
-        }
+        $result[StockItemInterface::MANAGE_STOCK] = (int)$stockItem->getManageStock();
+        $result[StockItemInterface::QTY] = (float)$stockItem->getQty();
+        $result[StockItemInterface::MIN_QTY] = (float)$stockItem->getMinQty();
+        $result[StockItemInterface::MIN_SALE_QTY] = (float)$stockItem->getMinSaleQty();
+        $result[StockItemInterface::MAX_SALE_QTY] = (float)$stockItem->getMaxSaleQty();
+        $result[StockItemInterface::IS_QTY_DECIMAL] = (int)$stockItem->getIsQtyDecimal();
+        $result[StockItemInterface::IS_DECIMAL_DIVIDED]= (int)$stockItem->getIsDecimalDivided();
+        $result[StockItemInterface::BACKORDERS] = (int)$stockItem->getBackorders();
+        $result[StockItemInterface::NOTIFY_STOCK_QTY] = (float)$stockItem->getNotifyStockQty();
+        $result[StockItemInterface::ENABLE_QTY_INCREMENTS] = (int)$stockItem->getEnableQtyIncrements();
+        $result[StockItemInterface::QTY_INCREMENTS] = (float)$stockItem->getQtyIncrements();
+        $result[StockItemInterface::IS_IN_STOCK] = (int)$stockItem->getIsInStock();
 
-        return $data;
+        return $result;
     }
 
     /**
@@ -184,6 +176,8 @@ class AdvancedInventory extends AbstractModifier
                 'visible' => '1',
                 'require' => '0',
                 'additionalClasses' => 'admin__field-small',
+                'label' => __('Quantity'),
+                'scopeLabel' => '[GLOBAL]',
                 'dataScope' => 'qty',
                 'validation' => [
                     'validate-number' => true,
