@@ -222,9 +222,7 @@ class ProductRepositoryTest extends WebapiAbstract
             'price' => 5.0,
             'number_of_downloads' => 999,
             'link_type' => 'file',
-            'sample_type' => 'file',
-            'link_file' =>  'http://www.example.com/invalid', //this field will be overridden
-            'sample_file' => 'http://www.example.com/invalid', //this field will be overridden
+            'sample_type' => 'file'
         ];
         $linkData = $this->getLinkData();
 
