@@ -9,10 +9,14 @@
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
 $formName = $block->getFormName();
+$parentComponent = $block->getData('config/parentComponent')
+    ? 'data-parent-component="' . $block->getData('config/parentComponent') . '"'
+    : '';
 ?>
 <div id="<?php echo $block->getHtmlId() ?>"
      class="gallery"
      data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
+     <?php echo $parentComponent ?>
      data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
      data-types="<?php echo $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
