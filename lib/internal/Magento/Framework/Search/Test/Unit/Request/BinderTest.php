@@ -31,7 +31,11 @@ class BinderTest extends \PHPUnit_Framework_TestCase
     {
         $requestData = [
             'dimensions' => ['scope' => ['value' => '$sss$']],
-            'queries' => ['query' => ['value' => '$query$']],
+            'queries' => [
+                'query' => ['value' => '$query$'],
+                'empty_query' => ['value' => '$empty_query$'],
+                'space_query' => ['value' => '$space_query$']
+            ],
             'filters' => ['filter' => ['from' => '$from$', 'to' => '$to$', 'value' => '$filter$']],
             'aggregations' => ['price' => ['method' => '$method$']],
             'from' => 0,
@@ -41,6 +45,8 @@ class BinderTest extends \PHPUnit_Framework_TestCase
             'dimensions' => ['scope' => 'default'],
             'placeholder' => [
                 '$query$' => 'match_query',
+                '$empty_query$' => '  ',
+                '$space_query$' => '  value',
                 '$from$' => 'filter_from',
                 '$to$' => 'filter_to',
                 '$filter$' => 'filter_value',
@@ -51,7 +57,11 @@ class BinderTest extends \PHPUnit_Framework_TestCase
         ];
         $expectedResult = [
             'dimensions' => ['scope' => ['value' => 'default']],
-            'queries' => ['query' => ['value' => 'match_query', 'is_bind' => true]],
+            'queries' => [
+                'query' => ['value' => 'match_query', 'is_bind' => true],
+                'empty_query' => ['value' => '$empty_query$'],
+                'space_query' => ['value' => 'value', 'is_bind' => true]
+            ],
             'filters' => [
                 'filter' => [
                     'from' => 'filter_from',
@@ -67,6 +77,6 @@ class BinderTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->binder->bind($requestData, $bindData);
 
-        $this->assertEquals($result, $expectedResult);
+        $this->assertEquals($expectedResult, $result);
     }
 }
