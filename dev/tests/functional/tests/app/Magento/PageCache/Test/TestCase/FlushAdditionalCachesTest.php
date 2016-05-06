@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Test\TestCase;
+namespace Magento\PageCache\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 
 /**
  * Steps:
@@ -18,10 +18,10 @@ use Magento\Backend\Test\Page\Adminhtml\AdminCache;
  *
  * @ZephyrId MAGETWO-34052, MAGETWO-34053, MAGETWO-39934
  */
-class CacheManagementTest extends Injectable
+class FlushAdditionalCachesTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
+    const MVP = 'yes';
     const DOMAIN = 'PS';
     /* end tags */
 
