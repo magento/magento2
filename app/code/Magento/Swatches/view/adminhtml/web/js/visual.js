@@ -9,6 +9,7 @@ define([
     'jquery',
     'mage/template',
     'uiRegistry',
+    'jquery/colorpicker/js/colorpicker',
     'prototype',
     'jquery/ui'
 ], function (jQuery, mageTemplate, rg) {
