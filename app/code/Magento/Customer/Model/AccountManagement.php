@@ -17,9 +17,11 @@ use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Metadata\Validator;
+use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
@@ -279,6 +281,11 @@ class AccountManagement implements AccountManagementInterface
      * @var EmailNotificationInterface
      */
     private $emailNotification;
+
+    /**
+     * @var \Magento\Eav\Model\Validator\Attribute\Backend
+     */
+    private $eavValidator;
 
     /**
      * @param CustomerFactory $customerFactory
@@ -832,19 +839,22 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * @return Backend
+     */
+    private function getEavValidator()
+    {
+        if ($this->eavValidator === null) {
+            $this->eavValidator = ObjectManager::getInstance()->get(Backend::class);
+        }
+        return $this->eavValidator;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function validate(CustomerInterface $customer)
     {
-        $customerData = $this->extensibleDataObjectConverter
-            ->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
-        $customerErrors = $this->validator->validateData($customerData, [], 'customer');
-
         $validationResults = $this->validationResultsDataFactory->create();
-        if ($customerErrors !== true) {
-            return $validationResults->setIsValid(false)
-                ->setMessages($this->validator->getMessages());
-        }
 
         $oldAddresses = $customer->getAddresses();
         $customerModel = $this->customerFactory->create()->updateData(
@@ -852,10 +862,15 @@ class AccountManagement implements AccountManagementInterface
         );
         $customer->setAddresses($oldAddresses);
 
-        $result = $customerModel->validate();
-        if (true !== $result && is_array($result)) {
+        $result = $this->getEavValidator()->isValid($customerModel);
+        if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)
-                ->setMessages($result);
+                ->setMessages(
+                    call_user_func_array(
+                        'array_merge',
+                        $this->getEavValidator()->getMessages()
+                    )
+                );
         }
         return $validationResults->setIsValid(true)
             ->setMessages([]);
