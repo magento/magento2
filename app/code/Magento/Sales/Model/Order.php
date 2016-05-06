@@ -1443,7 +1443,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment = null)
     {
         $this->setData(OrderInterface::PAYMENT, $payment);
-
         if ($payment !== null) {
             $payment->setOrder($this)->setParentId($this->getId());
             if (!$payment->getId()) {
@@ -1879,6 +1878,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $this->_actionFlag = [];
         $this->setAddresses(null);
         $this->setItems(null);
+        $this->setPayment(null);
         $this->setStatusHistories(null);
         $this->_invoices = null;
         $this->_tracks = null;
