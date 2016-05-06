@@ -181,12 +181,7 @@ class AccountManagementTest extends WebapiAbstract
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
-                $expectedException->addError(
-                    __(
-                        'Invalid value of "%value" provided for the %fieldName field.',
-                        ['fieldName' => 'email', 'value' => $invalidEmail]
-                    )
-                );
+                $expectedException->addError(__('"Email" is not a valid email address.'));
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
@@ -198,11 +193,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => 'Invalid value of "%value" provided for the %fieldName field.',
-                    'parameters' => [
-                        'fieldName' => 'email',
-                        'value' => $invalidEmail,
-                    ],
+                    'message' => '"Email" is not a valid email address.',
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }
@@ -571,8 +562,9 @@ class AccountManagementTest extends WebapiAbstract
         $requestData = ['customer' => $customerData];
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
-        $this->assertEquals('Please enter a first name.', $validationResponse['messages'][0]);
-        $this->assertEquals('Please enter a last name.', $validationResponse['messages'][1]);
+
+        $this->assertEquals('The value of attribute "firstname" must be set', $validationResponse['messages'][0]);
+        $this->assertEquals('The value of attribute "lastname" must be set', $validationResponse['messages'][1]);
     }
 
     public function testIsReadonly()
