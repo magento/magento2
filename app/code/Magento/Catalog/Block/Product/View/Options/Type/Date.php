@@ -200,8 +200,11 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
         }
         $extraParams .= ' data-role="calendar-dropdown" data-calendar-role="' . $name . '"';
         $extraParams .= ' data-selector="' . $select->getName() . '"';
-        $select->setExtraParams($extraParams);
+        if ($this->getOption()->getIsRequire()) {
+            $extraParams .= ' data-validate=\'{"datetime-validation": true}\'';
+        }
 
+        $select->setExtraParams($extraParams);
         if ($value === null) {
             $value = $this->getProduct()->getPreconfiguredValues()->getData(
                 'options/' . $option->getId() . '/' . $name
