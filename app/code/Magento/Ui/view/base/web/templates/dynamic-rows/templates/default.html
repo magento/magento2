@@ -39,14 +39,14 @@
                             class="col-draggable"
                             template="name: dndConfig.template, data: dnd"/>
 
-                        <!-- ko fastForEach: { data: $record().elems, as: 'elem'}  -->
-                        <td if="elem.template"
-                            css="$parent.setClasses(elem)"
-                            visible="elem.visible"
-                            disable="elem.disabled"
-                            template="elem.template"/>
-                        <!-- /ko -->
-                    </tr>
+                    <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
+                    <td if="elem.template"
+                        css="$parent.setClasses(elem)"
+                        visible="elem.visible"
+                        disable="elem.disabled"
+                        template="elem.template"/>
+                    <!-- /ko -->
+                </tr>
                 </tbody>
 
                 <tfoot>
