@@ -19,6 +19,11 @@
                 </argument>
             </arguments>
             <block class="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content" as="content">
+                <arguments>
+                    <argument name="config" xsi:type="array">
+                        <item name="parentComponent" xsi:type="string">product_form.product_form.block_gallery.block_gallery</item>
+                    </argument>
+                </arguments>
                 <block class="Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo" name="new-video" template="Magento_ProductVideo::product/edit/slideout/form.phtml"/>
             </block>
         </block>
