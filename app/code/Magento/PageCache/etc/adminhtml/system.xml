@@ -10,7 +10,7 @@
         <section id="system">
             <group id="full_page_cache" translate="label" showInDefault="1" showInWebsite="0" showInStore="0" sortOrder="600">
                 <label>Full Page Cache</label>
-                <field id="caching_application" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="caching_application" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Caching Application</label>
                     <source_model>Magento\PageCache\Model\System\Config\Source\Application</source_model>
                 </field>
@@ -58,7 +58,7 @@
                         <field id="caching_application">2</field>
                     </depends>
                 </group>
-                <field id="ttl" type="text" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="ttl" type="text" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>TTL for public content</label>
                     <comment>Public content cache lifetime in seconds. If field is empty default value 86400 will be saved. </comment>
                     <backend_model>Magento\PageCache\Model\System\Config\Backend\Ttl</backend_model>
