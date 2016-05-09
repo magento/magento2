@@ -322,12 +322,10 @@ class TypeProcessor
         if (preg_match("/.*\\@return\\s+({$escapedReturnType}).*/i", $methodDocBlock->getContents(), $matches)) {
             $returnType = $matches[1];
         }
-        $isRequired = preg_match("/.*\@return\s+\S+\|null.*/i", $methodDocBlock->getContents(), $matches)
-            ? false
-            : true;
+        $isNotRequired = (bool)preg_match("/.*\@return\s+\S+\|null.*/i", $methodDocBlock->getContents(), $matches);
         return [
             'type' => $returnType,
-            'isRequired' => $isRequired,
+            'isRequired' => !$isNotRequired,
             'description' => $returnAnnotation->getDescription(),
             'parameterCount' => $methodReflection->getNumberOfRequiredParameters()
         ];
@@ -385,13 +383,8 @@ class TypeProcessor
      */
     public function isTypeSimple($type)
     {
-        $type = $this->normalizeType($type);
-        if ($this->isArrayType($type)) {
-            $type = $this->getArrayItemType($type);
-        }
-
         return in_array(
-            $type,
+            $this->getNormalizedType($type),
             [
                 self::NORMALIZED_STRING_TYPE,
                 self::NORMALIZED_INT_TYPE,
@@ -410,12 +403,7 @@ class TypeProcessor
      */
     public function isTypeAny($type)
     {
-        $type = $this->normalizeType($type);
-        if ($this->isArrayType($type)) {
-            $type = $this->getArrayItemType($type);
-        }
-
-        return ($type == self::NORMALIZED_ANY_TYPE);
+        return ($this->getNormalizedType($type) == self::NORMALIZED_ANY_TYPE);
     }
 
     /**
@@ -623,11 +611,13 @@ class TypeProcessor
     {
         // settype doesn't work for boolean string values.
         // ex: custom_attributes passed from SOAP client can have boolean values as string
-        if ($type == 'bool' || $type == 'boolean') {
+        $booleanTypes = ['bool', 'boolean'];
+        if (in_array($type, $booleanTypes)) {
             $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
             return true;
         }
-        if (($type == 'int' || $type == 'float') && !is_numeric($value)) {
+        $numType = ['int', 'float'];
+        if (in_array($type, $numType) && !is_numeric($value)) {
             return false;
         }
         return settype($value, $type);
@@ -730,5 +720,20 @@ class TypeProcessor
     public function getOperationName($serviceName, $methodName)
     {
         return $serviceName . ucfirst($methodName);
+    }
+
+    /**
+     * Get normalized type
+     *
+     * @param string $type
+     * @return string
+     */
+    private function getNormalizedType($type)
+    {
+        $type = $this->normalizeType($type);
+        if ($this->isArrayType($type)) {
+            $type = $this->getArrayItemType($type);
+        }
+        return $type;
     }
 }
