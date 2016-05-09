@@ -201,39 +201,25 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $result = [];
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
-        $camelCaseAttributeCodeKey = lcfirst(
-            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
-        );
         foreach ($customAttributesValueArray as $key => $customAttribute) {
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-            if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
-                $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
-            } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
-                $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
-            } else {
-                $customAttributeCode = null;
-            }
+
+            list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
 
             $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
-            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
+            $type = $type ? $type : TypeProcessor::ANY_TYPE;
 
-            if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
-                || !is_array($customAttributeValue)
-            ) {
-                try {
-                    $attributeValue = $this->convertValue($customAttributeValue, $type);
-                } catch (SerializationException $e) {
-                    throw new SerializationException(
-                        new Phrase(
-                            'Attribute "%attribute_code" has invalid value. %details',
-                            ['attribute_code' => $customAttributeCode, 'details' => $e->getMessage()]
-                        )
-                    );
+            if (is_array($customAttributeValue)) {
+                //If type for AttributeValue's value as array is mixed, further processing is not possible
+                if ($type === TypeProcessor::ANY_TYPE) {
+                    $attributeValue = $customAttributeValue;
+                } else {
+                    $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
                 }
             } else {
-                $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
+                $attributeValue = $this->convertValue($customAttributeValue, $type);
             }
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
@@ -242,6 +228,39 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Derive the custom attribute code and value.
+     *
+     * @param string[] $customAttribute
+     * @return string[]
+     */
+    private function processCustomAttribute($customAttribute)
+    {
+        $camelCaseAttributeCodeKey = lcfirst(
+            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
+        );
+        // attribute code key could be snake or camel case, depending on whether SOAP or REST is used.
+        if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
+            $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
+        } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
+            $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
+        } else {
+            $customAttributeCode = null;
+        }
+
+        if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
+            throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
+        } else if (!$customAttributeCode) {
+            throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
+        } else if (!isset($customAttribute[AttributeValue::VALUE])) {
+            throw new SerializationException(
+                new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
+            );
+        }
+
+        return [$customAttributeCode, $customAttribute[AttributeValue::VALUE]];
     }
 
     /**
