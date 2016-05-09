@@ -104,6 +104,13 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'methodsMap' => $this->methodsMap
             ]
         );
+
+        /** @var \Magento\Framework\Reflection\NameFinder $nameFinder */
+        $nameFinder = $objectManager->getObject('\Magento\Framework\Reflection\NameFinder');
+        $serviceInputProcessorReflection = new \ReflectionClass(get_class($this->serviceInputProcessor));
+        $typeResolverReflection = $serviceInputProcessorReflection->getProperty('nameFinder');
+        $typeResolverReflection->setAccessible(true);
+        $typeResolverReflection->setValue($this->serviceInputProcessor, $nameFinder);
     }
 
     public function testSimpleProperties()
