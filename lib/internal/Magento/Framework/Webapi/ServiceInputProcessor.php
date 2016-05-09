@@ -209,18 +209,24 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
 
             $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
-            $type = $type ? $type : TypeProcessor::ANY_TYPE;
 
-            if (is_array($customAttributeValue)) {
-                //If type for AttributeValue's value as array is mixed, further processing is not possible
-                if ($type === TypeProcessor::ANY_TYPE) {
-                    $attributeValue = $customAttributeValue;
-                } else {
-                    $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
+            if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
+                || !is_array($customAttributeValue)
+            ) {
+                try {
+                    $attributeValue = $this->convertValue($customAttributeValue, $type);
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        new Phrase(
+                            'Attribute "%attribute_code" has invalid value. %details',
+                            ['attribute_code' => $customAttributeCode, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
             } else {
-                $attributeValue = $this->convertValue($customAttributeValue, $type);
+                $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
             }
+
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
                 ->setAttributeCode($customAttributeCode)
