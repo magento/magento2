@@ -183,9 +183,13 @@ define([
         /**
          * Mouse up handler
          */
-        mouseupHandler: function () {
+        mouseupHandler: function (event) {
             var depElementCtx,
-                drEl = this.draggableElement;
+                drEl = this.draggableElement,
+                pageY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY,
+                positionY = pageY - drEl.eventMousedownY;
+
+            drEl.depElement = this.getDepElement(drEl.instance, positionY);
 
             if (drEl.depElement) {
                 depElementCtx = this.getRecord(drEl.depElement.elem[0]);
@@ -272,12 +276,12 @@ define([
                 rec = collection.eq(i);
 
                 if (position === 'before') {
-                    rangeStart = collection.eq(i).position().top;
-                    rangeEnd = rangeStart + this.step;
+                    rangeStart = collection.eq(i).position().top - this.step;
+                    rangeEnd = rangeStart + this.step * 2;
                     className = this.separatorsClass.top;
                 } else if (position === 'after') {
-                    rangeEnd = rec.position().top + rec.height();
-                    rangeStart = rangeEnd - this.step;
+                    rangeEnd = rec.position().top + rec.height() + this.step;
+                    rangeStart = rangeEnd - this.step * 2;
                     className = this.separatorsClass.bottom;
                 }
 
