@@ -147,10 +147,19 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                         throw $e;
                     }
                 }
-                if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $className);
-                } else {
-                    $setterValue = $this->convertValue($value, $returnType);
+                try {
+                    if ($camelCaseProperty === 'CustomAttributes') {
+                        $setterValue = $this->convertCustomAttributeValue($value, $className);
+                    } else {
+                        $setterValue = $this->convertValue($value, $returnType);
+                    }
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        new Phrase(
+                            'Error occurred during "%field_name" processing. %details',
+                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
                 $object->{$setterName}($setterValue);
             }
@@ -303,7 +312,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if (!empty($inputError)) {
             $exception = new InputException();
             foreach ($inputError as $errorParamField) {
-                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
+                $exception->addError(new Phrase('%fieldName is a required field.', ['fieldName' => $errorParamField]));
             }
             if ($exception->wasErrorAdded()) {
                 throw $exception;

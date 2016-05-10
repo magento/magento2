@@ -14,6 +14,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class TypeProcessor
 {
@@ -420,6 +421,18 @@ class TypeProcessor
     }
 
     /**
+     * Check if given type is valid to use as an argument type declaration
+     *
+     * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
+     * @param string $type
+     * @return bool
+     */
+    public function isValidTypeDeclaration($type)
+    {
+        return !($this->isTypeSimple($type) || $this->isTypeAny($type) || $this->isArrayType($type));
+    }
+
+    /**
      * Get item type of the array.
      *
      * @param string $arrayType
@@ -490,7 +503,7 @@ class TypeProcessor
                 if ($value !== null && !settype($value[$key], $arrayItemType)) {
                     throw new SerializationException(
                         new Phrase(
-                            SerializationException::TYPE_MISMATCH,
+                            'Invalid type for value: "%value". Expected Type: "%type".',
                             ['value' => $value, 'type' => $type]
                         )
                     );
@@ -502,7 +515,7 @@ class TypeProcessor
             if ($value !== null && $type !== self::ANY_TYPE && !$this->setType($value, $type)) {
                 throw new SerializationException(
                     new Phrase(
-                        SerializationException::TYPE_MISMATCH,
+                        'Invalid type for value: "%value". Expected Type: "%type".',
                         ['value' => (string)$value, 'type' => $type]
                     )
                 );
@@ -510,7 +523,7 @@ class TypeProcessor
         } else {
             throw new SerializationException(
                 new Phrase(
-                    SerializationException::TYPE_MISMATCH,
+                    'Invalid type for value: "%value". Expected Type: "%type".',
                     ['value' => gettype($value), 'type' => $type]
                 )
             );
@@ -599,6 +612,9 @@ class TypeProcessor
         if ($type == 'bool' || $type == 'boolean') {
             $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
             return true;
+        }
+        if (($type == 'int' || $type == 'float') && !is_numeric($value)) {
+            return false;
         }
         return settype($value, $type);
     }

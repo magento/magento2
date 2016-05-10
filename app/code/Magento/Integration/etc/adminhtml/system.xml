@@ -13,26 +13,26 @@
             <resource>Magento_Integration::config_oauth</resource>
             <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Cleanup Settings</label>
-                <field id="cleanup_probability" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="cleanup_probability" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Cleanup Probability</label>
                     <comment>Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup</comment>
                 </field>
-                <field id="expiration_period" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="expiration_period" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Expiration Period</label>
                     <comment>Cleanup entries older than X minutes.</comment>
                 </field>
             </group>
             <group id="consumer" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Consumer Settings</label>
-                <field id="expiration_period" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="expiration_period" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Expiration Period</label>
                     <comment>Consumer key/secret will expire if not used within X seconds after Oauth token exchange starts.</comment>
                 </field>
-                <field id="post_maxredirects" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="post_maxredirects" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>OAuth consumer credentials HTTP Post maxredirects</label>
                     <comment>Number of maximum redirects for OAuth consumer credentials Post request.</comment>
                 </field>
-                <field id="post_timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="post_timeout" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>OAuth consumer credentials HTTP Post timeout</label>
                     <comment>Timeout for OAuth consumer credentials Post request within X seconds.</comment>
                 </field>
