@@ -79,8 +79,8 @@ class Size
     public function getMaxFileSize()
     {
         if (self::$_maxFileSize < 0) {
-            $postMaxSize = $this->getNewDependency()->convertSizeToBytes($this->getPostMaxSize());
-            $uploadMaxSize = $this->getNewDependency()->convertSizeToBytes($this->getUploadMaxSize());
+            $postMaxSize = $this->getDataSize()->convertSizeToBytes($this->getPostMaxSize());
+            $uploadMaxSize = $this->getDataSize()->convertSizeToBytes($this->getUploadMaxSize());
             $min = max($postMaxSize, $uploadMaxSize);
 
             if ($postMaxSize > 0) {
@@ -107,7 +107,7 @@ class Size
      */
     public function convertSizeToInteger($size)
     {
-        return $this->getNewDependency()->convertSizeToBytes($size);
+        return $this->getDataSize()->convertSizeToBytes($size);
     }
 
     /**
@@ -129,7 +129,7 @@ class Size
      *
      * @deprecated
      */
-    private function getNewDependency()
+    private function getDataSize()
     {
         if ($this->dataSize === null) {
             $this->dataSize =
