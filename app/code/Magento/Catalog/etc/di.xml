@@ -473,6 +473,14 @@
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
         <plugin name="attributeValidation" type="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation"/>
     </type>
+    <type name="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation">
+        <arguments>
+            <argument name="allowedEntityTypes" xsi:type="array">
+                <item name="product" xsi:type="string">Magento\Catalog\Api\Data\ProductInterface</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Api\Data\CategoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
             <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Proxy</argument>
@@ -534,18 +542,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\OrchestratorPool">
-        <arguments>
-            <argument name="operations" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Create</item>
-                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Delete</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
@@ -604,6 +600,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+         <arguments>
+            <argument name="serviceEntityTypeMap" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</item>
+            </argument>
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="Magento\Catalog\Model\Product\Attribute\Backend\Media" xsi:type="string">Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation"  shared="false"/>
     <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
         <arguments>
@@ -634,7 +642,7 @@
                 <item name="watermark_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/image</item>
-                    <item name="default" xsi:type="string">stretch</item>
+
                 </item>
                 <item name="watermark_small_image_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_size</item>
@@ -662,7 +670,6 @@
                 <item name="watermark_small_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/small_image</item>
-                    <item name="default" xsi:type="string">stretch</item>
                 </item>
                 <item name="watermark_thumbnail_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_size</item>
@@ -690,7 +697,6 @@
                 <item name="watermark_thumbnail_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
-                    <item name="default" xsi:type="string">stretch</item>
                 </item>
             </argument>
         </arguments>

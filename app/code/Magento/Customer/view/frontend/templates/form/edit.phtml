@@ -38,16 +38,16 @@
 
     <fieldset class="fieldset password" data-container="change-email-password">
         <legend class="legend"><span data-title="change-email-password"><?php /* @escapeNotVerified */ echo __('Change Email and Password') ?></span></legend><br>
+        <div class="field email required" data-container="change-email">
+            <label class="label" for="email"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+            <div class="control">
+                <input type="email" name="email" id="email" autocomplete="email" data-input="change-email" value="<?php echo $block->escapeHtml($block->getCustomer()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}" />
+            </div>
+        </div>
         <div class="field password current required">
             <label class="label" for="current-password"><span><?php /* @escapeNotVerified */ echo __('Current Password') ?></span></label>
             <div class="control">
                 <input type="password" class="input-text" name="current_password" id="current-password" data-input="current-password" autocomplete="off" />
-            </div>
-        </div>
-        <div class="field email required" data-container="change-email">
-            <label class="label" for="email"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
-            <div class="control">
-                <input type="email" name="email" id="email" data-input="change-email" value="<?php echo $block->escapeHtml($block->getCustomer()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}" />
             </div>
         </div>
         <div class="field new password required" data-container="new-password" data-mage-init='{"passwordStrengthIndicator": {}}'>
@@ -60,7 +60,12 @@
                     data-validate="{required:true, 'validate-customer-password':true}"
                     autocomplete="off" />
                 <div id="password-strength-meter-container">
-                    <p id="password-strength-meter">&nbsp;</p>
+                    <div id="password-strength-meter" class="password-strength-meter">
+                        <?php /* @escapeNotVerified */ echo __('Password Strength'); ?>:
+                        <span id="password-strength-meter-label">
+                            <?php /* @escapeNotVerified */ echo __('No password'); ?>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>

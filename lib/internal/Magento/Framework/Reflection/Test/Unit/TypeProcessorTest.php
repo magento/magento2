@@ -7,6 +7,7 @@
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Zend\Code\Reflection\ClassReflection;
+use Magento\Framework\Exception\SerializationException;
 
 /**
  * Type processor Test
@@ -115,6 +116,26 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_typeProcessor->isArrayType('string[]'));
     }
 
+    public function testIsValidTypeDeclaration()
+    {
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('Traversable')); // Interface
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('stdObj')); // Class
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('array'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('callable'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('string'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('string[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('int'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('float'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('double'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('boolean'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('mixed[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('stdObj[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('Traversable[]'));
+    }
+
     public function getArrayItemType()
     {
         $this->assertEquals('string', $this->_typeProcessor->getArrayItemType('str[]'));
@@ -183,6 +204,25 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $value = ['1', '2', '3', '4', '5'];
         $type = 'int[]';
         $this->assertSame([1, 2, 3, 4, 5], $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    /**
+     * @dataProvider processSimpleTypeExceptionProvider
+     */
+    public function testProcessSimpleTypeException($value, $type)
+    {
+        $this->setExpectedException(
+            SerializationException::class, 'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+        );
+        $this->_typeProcessor->processSimpleAndAnyType($value, $type);
+    }
+
+    public static function processSimpleTypeExceptionProvider()
+    {
+        return [
+            "int type, string value" => ['test', 'int'],
+            "float type, string value" => ['test', 'float'],
+        ];
     }
 
     /**

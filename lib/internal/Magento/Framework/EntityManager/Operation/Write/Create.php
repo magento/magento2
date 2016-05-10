@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\EntityManager\Operation\Write;
 
-use Magento\Framework\EntityManager\Operation\Write\Create\ValidateCreate;
 use Magento\Framework\EntityManager\Operation\Write\Create\CreateMain;
 use Magento\Framework\EntityManager\Operation\Write\Create\CreateAttributes;
 use Magento\Framework\EntityManager\Operation\Write\Create\CreateExtensions;

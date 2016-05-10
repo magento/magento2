@@ -15,7 +15,7 @@
         <button attr="{disabled: disabled}"
                 class="action-secondary"
                 type="button"
-                click="addChild.bind($data, false, false)">
+                click="processingAddChild.bind($data, false, false, false)">
             <span text="addButtonLabel"/>
         </button>
     </div>
@@ -46,7 +46,7 @@
             <table class="admin__dynamic-rows data-grid" data-role="grid">
                 <thead if="element.columnsHeader">
                     <tr>
-                        <th if="dndConfig.enabled"
+                        <th if="$data.dndConfig.enabled"
                             class="data-grid-draggable-row-cell"/>
 
                         <th repeat="foreach: labels, item: '$label'"
@@ -59,7 +59,7 @@
                     </tr>
                 </thead>
 
-                <tbody data-bind="foreach: elems">
+                <tbody>
                     <tr repeat="foreach: elems, item: '$record'"
                         class="data-row"
                         css="'_odd-row': $index % 2">
@@ -67,7 +67,7 @@
                             class="data-grid-draggable-row-cell"
                             template="name: dndConfig.template, data: dnd"/>
 
-                        <!-- ko fastForEach: { data: $record().elems, as: 'elem'}  -->
+                        <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
                         <td if="elem.template"
                             visible="elem.visible"
                             disable="elem.disabled"
