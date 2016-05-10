@@ -108,7 +108,7 @@ class TableMapper
                 && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
             ) {
                 $table = $this->resource->getTableName('catalog_product_index_eav');
-                $alias = $field . '_filter';
+                $alias = $field . RequestGenerator::FILTER_SUFFIX;
                 $mapOn = sprintf(
                     'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
                     $alias,
@@ -118,7 +118,7 @@ class TableMapper
                 $mappedFields = [];
             } elseif ($attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                 $table = $attribute->getBackendTable();
-                $alias = $field . '_filter';
+                $alias = $field . RequestGenerator::FILTER_SUFFIX;
                 $mapOn = 'search_index.entity_id = ' . $alias . '.entity_id';
                 $mappedFields = null;
             }
