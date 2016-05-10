@@ -17,6 +17,9 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TableMapper
 {
     /**
