@@ -34,7 +34,7 @@ class Wildcard implements FilterInterface
         return [
             [
                 'wildcard' => [
-                    $fieldName => $filter->getValue() . '*',
+                    $fieldName => '*' . $filter->getValue() . '*',
                 ],
             ]
         ];
