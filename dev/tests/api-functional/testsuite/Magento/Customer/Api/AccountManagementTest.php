@@ -181,12 +181,7 @@ class AccountManagementTest extends WebapiAbstract
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
-                $expectedException->addError(
-                    __(
-                        InputException::INVALID_FIELD_VALUE,
-                        ['fieldName' => 'email', 'value' => $invalidEmail]
-                    )
-                );
+                $expectedException->addError(__('"Email" is not a valid email address.'));
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
@@ -198,11 +193,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => InputException::INVALID_FIELD_VALUE,
-                    'parameters' => [
-                        'fieldName' => 'email',
-                        'value' => $invalidEmail,
-                    ],
+                    'message' => '"Email" is not a valid email address.',
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }
@@ -360,16 +351,16 @@ class AccountManagementTest extends WebapiAbstract
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => InputException::DEFAULT_MESSAGE,
+                'message' => 'One or more input exceptions have occurred.',
                 'errors' => [
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'email',
                         ],
                     ],
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'template',
                         ]
@@ -438,7 +429,7 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -447,7 +438,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
@@ -531,7 +522,7 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -540,7 +531,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
@@ -571,8 +562,9 @@ class AccountManagementTest extends WebapiAbstract
         $requestData = ['customer' => $customerData];
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
-        $this->assertEquals('Please enter a first name.', $validationResponse['messages'][0]);
-        $this->assertEquals('Please enter a last name.', $validationResponse['messages'][1]);
+
+        $this->assertEquals('The value of attribute "firstname" must be set', $validationResponse['messages'][0]);
+        $this->assertEquals('The value of attribute "lastname" must be set', $validationResponse['messages'][1]);
     }
 
     public function testIsReadonly()
