@@ -9,6 +9,8 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory class to create jobs
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class JobFactory
 {
@@ -21,6 +23,8 @@ class JobFactory
     const JOB_MODULE_ENABLE = 'setup:module:enable';
     const JOB_MODULE_DISABLE = 'setup:module:disable';
     const JOB_STATIC_REGENERATE = 'setup:static:regenerate';
+    const JOB_ENABLE_CACHE = 'setup:cache:enable';
+    const JOB_DISABLE_CACHE = 'setup:cache:disable';
 
     /**
      * @var ServiceLocatorInterface
@@ -127,6 +131,14 @@ class JobFactory
                     $name,
                     $params
                 );
+                break;
+            case self::JOB_ENABLE_CACHE:
+                $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheEnableCommand');
+                return new JobSetCache($cmd, $objectManagerProvider, $multipleStreamOutput, $cronStatus, $name);
+                break;
+            case self::JOB_DISABLE_CACHE:
+                $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheDisableCommand');
+                return new JobSetCache($cmd, $objectManagerProvider, $multipleStreamOutput, $cronStatus, $name);
                 break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
