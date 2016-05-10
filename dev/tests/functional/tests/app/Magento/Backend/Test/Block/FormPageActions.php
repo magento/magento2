@@ -109,6 +109,7 @@ class FormPageActions extends PageActions
      */
     public function delete()
     {
+        $this->waitBeforeClick();
         $this->_rootElement->find($this->deleteButton)->click();
     }
 
