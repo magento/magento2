@@ -45,6 +45,9 @@
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="catalogsearchFulltextCategory" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Category"/>
+    </type>
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
     </type>
