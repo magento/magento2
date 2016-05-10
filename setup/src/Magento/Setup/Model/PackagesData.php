@@ -7,22 +7,18 @@
 namespace Magento\Setup\Model;
 
 /**
- * Class SyncPackages returns system package and available for update versions
+ * Class PackagesData returns system packages and available for update versions
  */
 class PackagesData
 {
     /**#@+
-     * Composer command
-     */
-    const COMPOSER_SHOW = 'show';
-    /**#@-*/
-
-    /**#@+
      * Composer command params and options
      */
+    const COMPOSER_SHOW = 'show';
     const PARAM_COMMAND = 'command';
     const PARAM_PACKAGE = 'package';
     const PARAM_AVAILABLE = '--available';
+    /**#@-*/
 
     /**
      * @var \Magento\Framework\Composer\ComposerInformation
@@ -59,7 +55,6 @@ class PackagesData
      *
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation,
      * @param \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider,
-     * @param \Magento\Framework\HTTP\Client\Curl $curl,
      * @param \Magento\Setup\Model\PackagesAuth $packagesAuth,
      * @param \Magento\Framework\Filesystem $filesystem,
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
@@ -368,13 +363,9 @@ class PackagesData
             count($magentoRepositories) === 1
             && strpos($magentoRepositories[0], $this->packagesAuth->getCredentialBaseUrl())
         ) {
-            $packagesJsonData = [];
-            if (empty($this->packagesJsonData)) {
-                $this->packagesJsonData = $this->getPackagesJson();
-            }
-
-            if ($this->packagesJsonData) {
-                $packagesJsonData = json_decode($this->packagesJsonData, true);
+            $packagesJsonData = $this->getPackagesJson();
+            if ($packagesJsonData) {
+                $packagesJsonData = json_decode($packagesJsonData, true);
             } else {
                 $packagesJsonData['packages'] = [];
             }
