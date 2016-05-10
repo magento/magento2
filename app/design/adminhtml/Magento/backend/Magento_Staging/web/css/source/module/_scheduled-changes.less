@@ -272,17 +272,20 @@
 
 //  Create/Edit update form
 .fieldset-schedule {
-    border-bottom: 1px solid @collapsible__border-color;
+    &:last-child {
+        border-bottom: 1px solid @collapsible__border-color;
+    }
 
     .admin__fieldset {
         padding: 0;
-        
+
         > :last-child {
             margin-bottom: @indent__l;
         }
-        
+
         > .fieldset-wrapper {
             &:last-child {
+                border-bottom: 1px solid @collapsible__border-color;
                 margin-bottom: 0;
             }
         }
