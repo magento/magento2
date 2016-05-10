@@ -116,6 +116,26 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_typeProcessor->isArrayType('string[]'));
     }
 
+    public function testIsValidTypeDeclaration()
+    {
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('Traversable')); // Interface
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('stdObj')); // Class
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('array'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('callable'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertTrue($this->_typeProcessor->isValidTypeDeclaration('self'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('string'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('string[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('int'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('float'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('double'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('boolean'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('mixed[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('stdObj[]'));
+        $this->assertFalse($this->_typeProcessor->isValidTypeDeclaration('Traversable[]'));
+    }
+
     public function getArrayItemType()
     {
         $this->assertEquals('string', $this->_typeProcessor->getArrayItemType('str[]'));

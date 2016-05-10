@@ -312,7 +312,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if (!empty($inputError)) {
             $exception = new InputException();
             foreach ($inputError as $errorParamField) {
-                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
+                $exception->addError(new Phrase('%fieldName is a required field.', ['fieldName' => $errorParamField]));
             }
             if ($exception->wasErrorAdded()) {
                 throw $exception;
