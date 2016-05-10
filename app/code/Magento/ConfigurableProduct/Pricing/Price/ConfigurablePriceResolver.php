@@ -44,11 +44,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {
         $price = null;
-        $configurableProducts = $this->configurable->getUsedProductCollection($product)
-            ->setFlag('has_stock_status_filter', true)
-            ->addAttributeToSelect('price');
-
-        foreach ($configurableProducts as $subProduct) {
+        foreach ($this->configurable->getUsedProducts($product) as $subProduct) {
             $productPrice = $this->priceResolver->resolvePrice($subProduct);
             $price = $price ? min($price, $productPrice) : $productPrice;
         }
