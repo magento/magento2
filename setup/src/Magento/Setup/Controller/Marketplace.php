@@ -61,7 +61,7 @@ class Marketplace extends AbstractActionController
         try {
             $userName = isset($params['username']) ? $params['username'] : '';
             $password = isset($params['password']) ? $params['password'] : '';
-            $isValid = $this->packagesAuth->checkCredentialsAction($userName, $password);
+            $isValid = $this->packagesAuth->checkCredentials($userName, $password);
             $isValid = json_decode($isValid, true);
             if ($isValid['success'] === true && $this->packagesAuth->saveAuthJson($userName, $password)) {
                 $this->packagesData->syncPackagesData();
@@ -84,10 +84,7 @@ class Marketplace extends AbstractActionController
         try {
             $authDataJson = $this->packagesAuth->getAuthJsonData();
             if ($authDataJson) {
-                $isValid = $this->packagesAuth->checkCredentialsAction(
-                    $authDataJson['username'],
-                    $authDataJson['password']
-                );
+                $isValid = $this->packagesAuth->checkCredentials($authDataJson['username'], $authDataJson['password']);
                 $isValid = json_decode($isValid, true);
                 if ($isValid['success'] === true) {
                     return new JsonModel(['success' => true, 'data' => [

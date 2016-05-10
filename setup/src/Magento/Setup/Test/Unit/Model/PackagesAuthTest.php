@@ -50,11 +50,11 @@ class PackagesAuthTest extends \PHPUnit_Framework_TestCase
         $this->curl->expects($this->once())->method('setCredentials')->with('username', 'password');
         $this->curl->expects($this->once())->method('getStatus');
         $expectedValue = '{"success":false,"message":"Bad credentials"}';
-        $returnValue = $this->packagesAuth->checkCredentialsAction('username', 'password');
+        $returnValue = $this->packagesAuth->checkCredentials('username', 'password');
         $this->assertSame($expectedValue, $returnValue);
     }
 
-    public function testCheckCredentialsAction()
+    public function testCheckCredentials()
     {
         $this->curl->expects($this->once())->method('setCredentials')->with('username', 'password');
         $this->curl->expects($this->once())->method('getStatus')->willReturn(200);
@@ -65,7 +65,7 @@ class PackagesAuthTest extends \PHPUnit_Framework_TestCase
             ->method('writeFile')
             ->with(PackagesAuth::PATH_TO_PACKAGES_FILE, "{'someJson'}");
         $expectedValue = '{"success":true}';
-        $returnValue = $this->packagesAuth->checkCredentialsAction('username', 'password');
+        $returnValue = $this->packagesAuth->checkCredentials('username', 'password');
         $this->assertSame($expectedValue, $returnValue);
     }
 
@@ -78,7 +78,7 @@ class PackagesAuthTest extends \PHPUnit_Framework_TestCase
         $this->curl->expects($this->never())->method('getBody')->willReturn("{'someJson}");
 
         $expectedValue = '{"success":false,"message":"Test error"}';
-        $returnValue = $this->packagesAuth->checkCredentialsAction('username', 'password');
+        $returnValue = $this->packagesAuth->checkCredentials('username', 'password');
         $this->assertSame($expectedValue, $returnValue);
     }
 

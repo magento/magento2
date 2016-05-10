@@ -9,6 +9,9 @@ namespace Magento\Setup\Model;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Zend\View\Model\JsonModel;
 
+/**
+ * Class PackagesAuth, checks, saves and removes auth details related to packages.
+ */
 class PackagesAuth
 {
     /**#@+
@@ -17,12 +20,14 @@ class PackagesAuth
     const KEY_HTTPBASIC = 'http-basic';
     const KEY_USERNAME = 'username';
     const KEY_PASSWORD = 'password';
+    /**#@-/
 
     /**#@+
      * Filenames for auth and package info
      */
     const PATH_TO_AUTH_FILE = 'auth.json';
     const PATH_TO_PACKAGES_FILE = 'packages.json';
+    /**#@-/
 
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
@@ -81,7 +86,7 @@ class PackagesAuth
      * @param string $secretKey
      * @return string
      */
-    public function checkCredentialsAction($token, $secretKey)
+    public function checkCredentials($token, $secretKey)
     {
         $serviceUrl = $this->getPackagesJsonUrl();
         $this->curlClient->setCredentials($token, $secretKey);
