@@ -382,7 +382,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $expectedException = new InputException();
                 $expectedException->addError(
                     __(
-                        InputException::REQUIRED_FIELD,
+                        '%fieldName is a required field.',
                         ['fieldName' => Address::FIRSTNAME]
                     )
                 );
@@ -397,7 +397,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => InputException::REQUIRED_FIELD,
+                    'message' => '%fieldName is a required field.',
                     'parameters' => ['fieldName' => Address::FIRSTNAME],
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
@@ -504,7 +504,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => InputException::REQUIRED_FIELD,
+                'message' => '%fieldName is a required field.',
                 'parameters' => [
                     'fieldName' => 'searchCriteria'
                 ],
