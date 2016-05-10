@@ -5,10 +5,15 @@
  */
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryRepository;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\CategoryRepository
+     * @var CategoryRepository
      */
     protected $model;
 
@@ -88,21 +93,16 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Api\Data\CategoryInterface::class)
             ->willReturn($metadataMock);
 
-        $this->model = new \Magento\Catalog\Model\CategoryRepository(
-            $this->categoryFactoryMock,
-            $this->categoryResourceMock,
-            $this->storeManagerMock
+        $this->model = (new ObjectManager($this))->getObject(
+            CategoryRepository::class,
+            [
+                'categoryFactory' => $this->categoryFactoryMock,
+                'categoryResource' => $this->categoryResourceMock,
+                'storeManager' => $this->storeManagerMock,
+                'metadataPool' => $this->metadataPoolMock,
+                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
+            ]
         );
-
-        $this->setProperties($this->model, [
-            'metadataPool' => $this->metadataPoolMock
-        ]);
-
-        // Todo: \Magento\Framework\TestFramework\Unit\Helper\ObjectManager to do this automatically (MAGETWO-49793)
-        $reflection = new \ReflectionClass(get_class($this->model));
-        $reflectionProperty = $reflection->getProperty('extensibleDataObjectConverter');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->model, $this->extensibleDataObjectConverterMock);
     }
 
     public function testGet()
@@ -370,21 +370,5 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             $categoryId
         );
         $this->model->deleteByIdentifier($categoryId);
-    }
-
-    /**
-     * @param $object
-     * @param array $properties
-     */
-    private function setProperties($object, $properties = [])
-    {
-        $reflectionClass = new \ReflectionClass(get_class($object));
-        foreach ($properties as $key => $value) {
-            if ($reflectionClass->hasProperty($key)) {
-                $reflectionProperty = $reflectionClass->getProperty($key);
-                $reflectionProperty->setAccessible(true);
-                $reflectionProperty->setValue($object, $value);
-            }
-        }
     }
 }
