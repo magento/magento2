@@ -41,7 +41,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
     {
         $this->packagesAuth
             ->expects($this->once())
-            ->method('checkCredentialsAction')
+            ->method('checkCredentials')
             ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
         $this->packagesAuth
             ->expects($this->once())
@@ -61,7 +61,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
     {
         $this->packagesAuth
             ->expects($this->once())
-            ->method('checkCredentialsAction')
+            ->method('checkCredentials')
             ->will($this->throwException(new \Exception));
         $this->packagesAuth->expects($this->never())->method('saveAuthJson');
         $jsonModel = $this->controller->saveAuthJsonAction();
@@ -83,7 +83,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['username' => 'test', 'password' => 'test']));
         $this->packagesAuth
             ->expects($this->once())
-            ->method('checkCredentialsAction')
+            ->method('checkCredentials')
             ->will($this->returnValue(\Zend_Json::encode(['success' => true])));
         $jsonModel = $this->controller->checkAuthAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $jsonModel);
