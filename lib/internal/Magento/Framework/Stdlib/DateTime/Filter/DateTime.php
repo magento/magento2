@@ -41,10 +41,10 @@ class DateTime extends Date
     public function filter($value)
     {
         try {
-            $value = new \DateTime($value);
-            return $value->format('Y-m-d H:i:s');
+            $dateTime = new \DateTime($value);
+            return $dateTime->format('Y-m-d H:i:s');
         } catch (\Exception $e) {
-            throw new \Exception("Invalid input datetime format '$value'");
+            throw new \Exception("Invalid input datetime format of value '$value'", $e->getCode(), $e);
         }
     }
 }
