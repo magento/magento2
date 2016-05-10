@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Test\Block\Cache;
+namespace Magento\PageCache\Test\Block\Cache;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
@@ -41,6 +41,6 @@ class Additional extends Block
     public function isFlushCacheButtonVisible($flushButtonName)
     {
         return $this->_rootElement->find(sprintf($this->flushButton, $flushButtonName), Locator::SELECTOR_XPATH)
-            ->isVisible();
+                ->isVisible();
     }
 }
