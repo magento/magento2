@@ -22,6 +22,11 @@ class Shipment extends AbstractPdf
     protected $_localeResolver;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    protected $_appEmulation;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -34,6 +39,7 @@ class Shipment extends AbstractPdf
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -51,10 +57,12 @@ class Shipment extends AbstractPdf
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
         $this->_localeResolver = $localeResolver;
+        $this->_appEmulation = $appEmulation;
         parent::__construct(
             $paymentData,
             $string,
@@ -118,6 +126,7 @@ class Shipment extends AbstractPdf
         $this->_setFontBold($style, 10);
         foreach ($shipments as $shipment) {
             if ($shipment->getStoreId()) {
+                $this->_appEmulation->startEnvironmentEmulation($shipment->getStoreId(), \Magento\Framework\App\Area::AREA_FRONTEND, true);
                 $this->_localeResolver->emulate($shipment->getStoreId());
                 $this->_storeManager->setCurrentStore($shipment->getStoreId());
             }
@@ -153,6 +162,7 @@ class Shipment extends AbstractPdf
         }
         $this->_afterGetPdf();
         if ($shipment->getStoreId()) {
+            $this->_appEmulation->stopEnvironmentEmulation();
             $this->_localeResolver->revert();
         }
         return $pdf;
