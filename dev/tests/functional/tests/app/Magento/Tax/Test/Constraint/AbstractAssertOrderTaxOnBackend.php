@@ -93,6 +93,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
         $this->orderInvoiceNew = $orderInvoiceNew;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
         $orderIndex->open();
+        $this->waitBeforeClick();
         $orderIndex->getSalesOrderGrid()->openFirstRow();
         //Check prices on order page
         $actualPrices = [];
@@ -172,10 +173,10 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     public function getOrderPrices($actualPrices, InjectableFixture $product)
     {
         $viewBlock = $this->salesOrderView->getItemsOrderedBlock();
-        $actualPrices['cart_item_price_excl_tax'] = $viewBlock->getItemPriceExclTax($product->getName());
-        $actualPrices['cart_item_price_incl_tax'] = $viewBlock->getItemPriceInclTax($product->getName());
         $actualPrices['cart_item_subtotal_excl_tax'] = $viewBlock->getItemSubExclTax($product->getName());
         $actualPrices['cart_item_subtotal_incl_tax'] = $viewBlock->getItemSubInclTax($product->getName());
+        $actualPrices['cart_item_price_excl_tax'] = $actualPrices['cart_item_subtotal_excl_tax'];
+        $actualPrices['cart_item_price_incl_tax'] = $actualPrices['cart_item_subtotal_incl_tax'];
         return $actualPrices;
     }
 
@@ -221,5 +222,16 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     public function toString()
     {
         return 'Prices on backend after order creation is correct.';
+    }
+
+    /**
+     * Wait for User before click
+     *
+     * @return void
+     */
+    protected function waitBeforeClick()
+    {
+        time_nanosleep(0, 600000000);
+        usleep(1000000);
     }
 }
