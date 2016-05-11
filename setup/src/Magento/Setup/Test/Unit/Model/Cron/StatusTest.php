@@ -79,8 +79,8 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->varReaderWriter->expects($this->once())->method('isExist')->willReturn(false);
         $this->varReaderWriter->expects($this->once())->method('writeFile');
-        $this->logger->expects($this->once())->method('log')->with(\Magento\Framework\Logger\Monolog::ERROR, 'test1');
-        $this->status->add('test1', \Magento\Framework\Logger\Monolog::ERROR);
+        $this->logger->expects($this->once())->method('log')->with(\Psr\Log\LogLevel::ERROR, 'test1');
+        $this->status->add('test1', \Psr\Log\LogLevel::ERROR);
     }
 
     public function testToggleUpdateInProgressTrue()

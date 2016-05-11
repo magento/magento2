@@ -88,7 +88,7 @@ class CronRunCommand extends AbstractSetupCommand
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
-            $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
+            $this->status->add($e->getMessage(), \Psr\Log\LogLevel::ERROR);
             $output->writeln($notification);
             return self::SETUP_CRON_EXIT_WITH_ERROR;
         }
@@ -99,25 +99,25 @@ class CronRunCommand extends AbstractSetupCommand
                 $job = $this->queue->popQueuedJob();
                 $this->status->add(
                     sprintf('Job "%s" has started' . PHP_EOL, $job),
-                    \Magento\Framework\Logger\Monolog::INFO
+                    \Psr\Log\LogLevel::INFO
                 );
                 try {
                     $job->execute();
                     $this->status->add(
                         sprintf('Job "%s" has been successfully completed', $job),
-                        \Magento\Framework\Logger\Monolog::INFO
+                        \Psr\Log\LogLevel::INFO
                     );
                 } catch (\Exception $e) {
                     $this->status->toggleUpdateError(true);
                     $this->status->add(
                         sprintf('An error occurred while executing job "%s": %s', $job, $e->getMessage()),
-                        \Magento\Framework\Logger\Monolog::ERROR
+                        \Psr\Log\LogLevel::ERROR
                     );
                     $returnCode = self::SETUP_CRON_EXIT_WITH_ERROR;
                 }
             }
         } catch (\Exception $e) {
-            $this->status->add($e->getMessage(), \Magento\Framework\Logger\Monolog::ERROR);
+            $this->status->add($e->getMessage(), \Psr\Log\LogLevel::ERROR);
             $this->status->toggleUpdateError(true);
             $returnCode = self::SETUP_CRON_EXIT_WITH_ERROR;
         } finally {

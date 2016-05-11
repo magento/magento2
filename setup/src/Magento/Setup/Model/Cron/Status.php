@@ -122,7 +122,7 @@ class Status
      * @return $this
      * @throws \RuntimeException
      */
-    public function add($text, $severity = \Magento\Framework\Logger\Monolog::INFO, $writeToStatusFile = true)
+    public function add($text, $severity = \Psr\Log\LogLevel::INFO, $writeToStatusFile = true)
     {
         $this->logger->log($severity, $text);
         $currentUtcTime = '[' . date('Y-m-d H:i:s T', time()) . '] ';

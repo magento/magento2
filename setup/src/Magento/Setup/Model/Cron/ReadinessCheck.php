@@ -141,7 +141,7 @@ class ReadinessCheck
 
         // write to permanent log file, var/log/update.log
         foreach ($errorLogMessages as $errorLog) {
-            $this->status->add($errorLog, \Magento\Framework\Logger\Monolog::ERROR, false);
+            $this->status->add($errorLog, \Psr\Log\LogLevel::ERROR, false);
         }
         return (empty($errorLogMessages));
     }
