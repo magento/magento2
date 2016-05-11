@@ -58,6 +58,6 @@
         <plugin name="customer_cart" type="\Magento\Customer\Model\Cart\ConfigPlugin" />
     </type>
     <type name="Magento\Customer\Model\Session">
-        <plugin name="session_checker" type="Magento\Customer\CustomerData\SessionChecker" />
+        <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />
     </type>
 </config>
