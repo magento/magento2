@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Setup\Model\DateTime\TimezoneProvider;
+
 /**
  * Controller for component grid tasks
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -52,10 +54,15 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     private $timezone;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
-     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
+     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
@@ -64,13 +71,40 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
         \Magento\Setup\Model\MarketplaceManager $marketplaceManager
     ) {
         $this->composerInformation = $composerInformation;
-        $objectManager = $objectManagerProvider->get();
-        $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
-        $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
-        $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->objectManager = $objectManagerProvider->get();
+        $this->enabledModuleList = $this->objectManager->get('Magento\Framework\Module\ModuleList');
+        $this->fullModuleList = $this->objectManager->get('Magento\Framework\Module\FullModuleList');
+        $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->marketplaceManager = $marketplaceManager;
         $this->updatePackagesCache = $updatePackagesCache;
-        $this->timezone = $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+    }
+
+    /**
+     * Get timezone
+     *
+     * @return \Magento\Framework\Stdlib\DateTime\TimezoneInterface|null
+     */
+    private function getTimezone()
+    {
+        if ($this->timezone === null) {
+            $this->timezone = $this->objectManager->get('Magento\Setup\Model\DateTime\TimezoneProvider')->get();
+        }
+        return $this->timezone;
+    }
+
+    /**
+     * Set timezone
+     *
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @return void
+     * @throws \Exception
+     */
+    public function setTimezone(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone)
+    {
+        if ($this->timezone !== null) {
+            throw new \Exception('timezone is already set');
+        }
+        $this->timezone = $timezone;
     }
 
     /**
@@ -214,12 +248,12 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     private function formatSyncDate($syncDate)
     {
         return [
-            'date' => $this->timezone->formatDateTime(
+            'date' => $this->getTimezone()->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::MEDIUM,
                 \IntlDateFormatter::NONE
             ),
-            'time' => $this->timezone->formatDateTime(
+            'time' => $this->getTimezone()->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::NONE,
                 \IntlDateFormatter::MEDIUM
