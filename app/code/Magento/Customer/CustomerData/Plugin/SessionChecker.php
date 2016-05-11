@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\CustomerData;
+namespace Magento\Customer\CustomerData\Plugin;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
