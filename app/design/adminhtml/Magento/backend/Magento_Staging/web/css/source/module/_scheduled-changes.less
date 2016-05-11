@@ -9,7 +9,7 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @scheduled-changes-block__border-color: @color-gray-light2;
 @scheduled-changes-block-title__background-color: @color-white-fog;
@@ -145,8 +145,8 @@
 
         &:before {
             background: @scheduled-changes-scale-from__background-color;
-            border-radius: 50%;
             border: @scheduled-changes-mark__border-width solid @scheduled-changes-scale__color;
+            border-radius: 50%;
             box-sizing: content-box;
             content: '';
             display: inline-block;
@@ -209,10 +209,11 @@
                     color: @scheduled-changes-table-accent__color;
                     content: '|';
                     display: inline-block;
-                    margin: 0 .3rem 0 0.4rem;
+                    margin: 0 .3rem 0 .4rem;
                 }
             }
         }
+
         .action-menu-item {
             cursor: pointer;
         }
@@ -293,8 +294,8 @@
 
     .fieldset-wrapper-title {
         border-bottom: 0;
-        margin: @indent__base 0 @indent__s;
         line-height: 1.2;
+        margin: @indent__base 0 @indent__s;
         padding: 0;
 
         strong {
@@ -303,8 +304,10 @@
         }
     }
 
-    .hasDatepicker.admin__control-text {
-        width: 19rem;
+    ._has-datepicker {
+        &.admin__control-text {
+            width: 19rem;
+        }
     }
 }
 
