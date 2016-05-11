@@ -400,7 +400,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $result = [];
         $aggregations = $this->searchResult->getAggregations();
         // This behavior is for case with empty object when we got EmptyRequestDataException
-        // TODO: Cover this behavior with unit test in scope of MAGETWO-51447
         if (null !== $aggregations) {
             $bucket = $aggregations->getBucket($field . RequestGenerator::BUCKET_SUFFIX);
             if ($bucket) {
