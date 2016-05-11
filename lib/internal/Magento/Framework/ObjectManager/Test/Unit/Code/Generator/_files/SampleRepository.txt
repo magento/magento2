@@ -1,8 +1,7 @@
 namespace Magento\Framework\ObjectManager\Code\Generator;
 
 /**
- * Repository class for @see
- * \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
+ * Repository class for @see \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
  */
 class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generator\SampleRepositoryInterface
 {
@@ -16,8 +15,7 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
     /**
      * Collection Factory
      *
-     * @var
-     * \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory
+     * @var \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory
      */
     protected $sampleInterfaceSearchResultFactory = null;
 
@@ -40,13 +38,9 @@ class SampleRepository implements \Magento\Framework\ObjectManager\Code\Generato
     /**
      * Repository constructor
      *
-     * @param \Magento\Framework\ObjectManager\Code\Generator\SampleInterface
-     * $sampleInterfacePersistor
-     * @param
-     * \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory
-     * $sampleInterfaceSearchResultFactory
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
-     * $extensionAttributesJoinProcessor
+     * @param \Magento\Framework\ObjectManager\Code\Generator\SampleInterface $sampleInterfacePersistor
+     * @param \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory $sampleInterfaceSearchResultFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      */
     public function __construct(\Magento\Framework\ObjectManager\Code\Generator\SampleInterfacePersistor $sampleInterfacePersistor, \Magento\Framework\ObjectManager\Code\Generator\SampleSearchResultInterfaceFactory $sampleInterfaceSearchResultFactory, \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor)
     {

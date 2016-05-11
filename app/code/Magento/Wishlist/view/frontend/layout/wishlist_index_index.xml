@@ -21,7 +21,7 @@
                         <block class="Magento\Catalog\Pricing\Render" name="product.price.render.wishlist">
                             <arguments>
                                 <argument name="price_render" xsi:type="string">product.price.render.default</argument>
-                                <argument name="price_type_code" xsi:type="string">configured_price</argument>
+                                <argument name="price_type_code" xsi:type="string">wishlist_configured_price</argument>
                                 <argument name="price_label" xsi:type="boolean">false</argument>
                                 <argument name="zone" xsi:type="string">item_list</argument>
                             </arguments>

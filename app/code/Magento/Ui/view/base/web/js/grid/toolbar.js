@@ -7,8 +7,9 @@ define([
     'underscore',
     'Magento_Ui/js/lib/view/utils/async',
     'Magento_Ui/js/lib/view/utils/raf',
+    'rjsResolver',
     'uiCollection'
-], function (_, $, raf, Collection) {
+], function (_, $, raf, resolver, Collection) {
     'use strict';
 
     var transformProp;
@@ -195,6 +196,7 @@ define([
          */
         setNode: function (key, node) {
             var nodes = this._requiredNodes,
+                promise = this._domPromise,
                 defined;
 
             this[key] = node;
@@ -204,7 +206,7 @@ define([
             }, this);
 
             if (defined) {
-                this._domPromise.resolve();
+                resolver(promise.resolve, promise);
             }
         },
 
