@@ -16,7 +16,7 @@ class StockDataFilter
     /**
      * The greatest value which could be stored in CatalogInventory Qty field
      */
-    const MAX_QTY_VALUE = 99999999.9999;
+    const MAX_QTY_VALUE = 99999999;
 
     /**
      * @var ScopeConfigInterface
