@@ -368,7 +368,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             $product
         );
 
-        $options = $optionCollection->appendSelections($selectionCollection);
+        $options = $optionCollection->appendSelections($selectionCollection, true);
         return $options;
     }
 
