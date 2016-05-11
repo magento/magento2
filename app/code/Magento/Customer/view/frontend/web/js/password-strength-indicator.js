@@ -9,7 +9,8 @@
 define([
     'jquery',
     'Magento_Customer/js/zxcvbn',
-    'mage/translate'
+    'mage/translate',
+    'mage/validation'
 ], function ($, zxcvbn, $t) {
     'use strict';
 
