@@ -12,6 +12,11 @@ namespace Magento\Framework\View\Test\Unit\Page;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\View\Page\Config;
 
+/**
+ * @covers Magento\Framework\View\Page\Config
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -59,6 +64,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $title;
 
+    /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $areaResolverMock;
+
     public function setUp()
     {
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
@@ -84,6 +94,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'localeResolver' => $locale,
                 ]
             );
+
+        $this->areaResolverMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
+        $areaResolverReflection = (new \ReflectionClass(get_class($this->model)))->getProperty('areaResolver');
+        $areaResolverReflection->setAccessible(true);
+        $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
     }
 
     public function testSetBuilder()
@@ -202,6 +217,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testRobots()
     {
+        $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('frontend');
         $robots = 'test_robots';
         $this->model->setRobots($robots);
         $this->assertEquals($robots, $this->model->getRobots());
@@ -209,6 +225,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testRobotsEmpty()
     {
+        $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('frontend');
         $expectedData = 'default_robots';
         $this->scopeConfig->expects($this->once())->method('getValue')->with(
             'design/search_engine_robots/default_robots',
@@ -216,6 +233,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )
             ->will($this->returnValue('default_robots'));
         $this->assertEquals($expectedData, $this->model->getRobots());
+    }
+
+    public function testRobotsAdminhtml()
+    {
+        $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('adminhtml');
+        $robots = 'test_robots';
+        $this->model->setRobots($robots);
+        $this->assertEquals('NOINDEX,NOFOLLOW', $this->model->getRobots());
     }
 
     public function testGetAssetCollection()

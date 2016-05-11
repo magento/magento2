@@ -9,7 +9,6 @@
  */
 error_reporting(E_ALL);
 #ini_set('display_errors', 1);
-umask(0);
 
 /* PHP version validation */
 if (version_compare(phpversion(), '5.5.0', '<') === true) {
@@ -30,6 +29,11 @@ HTML;
 
 require_once __DIR__ . '/autoload.php';
 require_once BP . '/app/functions.php';
+
+/* Custom umask value may be provided in optional mage_umask file in root */
+$umaskFile = BP . '/magento_umask';
+$mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
+umask($mask);
 
 if (!empty($_SERVER['MAGE_PROFILER'])
     && isset($_SERVER['HTTP_ACCEPT'])

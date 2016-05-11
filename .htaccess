@@ -279,6 +279,10 @@
         order allow,deny
         deny from all
     </Files>
+    <Files magento_umask>
+            order allow,deny
+            deny from all
+    </Files>
 
 ################################
 ## If running in cluster environment, uncomment this

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Module;
+namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
@@ -149,7 +149,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
         $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
     }
-    
+
     /**
      * @param string $hosts
      * @param bool $expectedError
