@@ -373,6 +373,7 @@ class Eav extends AbstractModifier
     private function resolvePersistentData(array $data)
     {
         $persistentData = (array)$this->dataPersistor->get('catalog_product');
+        $this->dataPersistor->clear('catalog_product');
         $productId = $this->locator->getProduct()->getId();
 
         if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
