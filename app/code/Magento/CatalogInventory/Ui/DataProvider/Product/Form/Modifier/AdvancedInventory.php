@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
@@ -182,6 +183,7 @@ class AdvancedInventory extends AbstractModifier
                 'validation' => [
                     'validate-number' => true,
                     'validate-digits' => true,
+                    'less-than-equals-to' => StockDataFilter::MAX_QTY_VALUE,
                 ],
                 'imports' => [
                     'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',
