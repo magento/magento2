@@ -3,9 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Test\Unit\Model\Plugin;
+namespace Magento\Customer\Test\Unit\CustomerData;
 
-use Magento\Customer\Model\Plugin\SessionChecker;
+use Magento\Customer\CustomerData\SessionChecker;
 
 class SessionCheckerTest extends \PHPUnit_Framework_TestCase
 {
