@@ -157,6 +157,12 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/creditmemo/refund" method="POST">
+        <service class="Magento\Sales\Api\CreditmemoManagementInterface" method="refund"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
     <route url="/V1/creditmemo/:id/comments" method="POST">
         <service class="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" method="save"/>
         <resources>
