@@ -516,7 +516,7 @@ class AccountManagement implements AccountManagementInterface
                 default:
                     throw new InputException(
                         __(
-                            InputException::INVALID_FIELD_VALUE,
+                            'Invalid value of "%value" provided for the %fieldName field.',
                             ['value' => $template, 'fieldName' => 'email type']
                         )
                     );
@@ -923,12 +923,14 @@ class AccountManagement implements AccountManagementInterface
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
         if (empty($customerId) || $customerId < 0) {
-            $params = ['value' => $customerId, 'fieldName' => 'customerId'];
-            throw new InputException(__(InputException::INVALID_FIELD_VALUE, $params));
+            throw new InputException(__(
+                'Invalid value of "%value" provided for the %fieldName field.',
+                ['value' => $customerId, 'fieldName' => 'customerId']
+            ));
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
-            throw new InputException(__(InputException::REQUIRED_FIELD, $params));
+            throw new InputException(__('%fieldName is a required field.', $params));
         }
 
         $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
@@ -1179,7 +1181,7 @@ class AccountManagement implements AccountManagementInterface
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new InputException(
                 __(
-                    InputException::INVALID_FIELD_VALUE,
+                    'Invalid value of "%value" provided for the %fieldName field.',
                     ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
                 )
             );

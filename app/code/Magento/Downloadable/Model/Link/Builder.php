@@ -88,17 +88,11 @@ class Builder
             'to_link',
             $this->data
         );
-        $downloadableLinkSampleData = $this->objectCopyService->getDataFromFieldset(
-            'downloadable_link_sample_data',
-            'to_link_sample',
-            $this->data['sample']
-        );
         $this->dataObjectHelper->populateWithArray(
             $link,
             array_merge(
                 $this->data,
-                $downloadableData,
-                $downloadableLinkSampleData
+                $downloadableData
             ),
             \Magento\Downloadable\Api\Data\LinkInterface::class
         );
@@ -114,8 +108,10 @@ class Builder
             $link->setLinkFile($linkFileName);
             $link->setLinkUrl(null);
         }
-
-        $link = $this->buildSample($link, $this->data['sample']);
+        
+        if (isset($this->data['sample'])) {
+            $link = $this->buildSample($link, $this->data['sample']);
+        }
 
         if (!$link->getSortOrder()) {
             $link->setSortOrder(1);
@@ -161,6 +157,19 @@ class Builder
     private function buildSample(\Magento\Downloadable\Api\Data\LinkInterface $link, array $sample)
     {
         if (!empty($sample['url']) || !empty($sample['file'])) {
+            $downloadableLinkSampleData = $this->objectCopyService->getDataFromFieldset(
+                'downloadable_link_sample_data',
+                'to_link_sample',
+                $this->data['sample']
+            );
+            $this->dataObjectHelper->populateWithArray(
+                $link,
+                array_merge(
+                    $this->data,
+                    $downloadableLinkSampleData
+                ),
+                \Magento\Downloadable\Api\Data\LinkInterface::class
+            );
             if ($link->getSampleType() === \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE) {
                 $linkSampleFileName = $this->downloadableFile->moveFileFromTmp(
                     $this->getComponent()->getBaseSampleTmpPath(),
