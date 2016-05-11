@@ -1,7 +1,7 @@
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
+// /**
+//  * Copyright © 2016 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
 
 @import 'source/lib/_lib.less'; // Global lib
 @import 'source/lib/_utilities.less';
@@ -1050,7 +1050,7 @@
         width: auto;
     }
 
-    .control > input.hasDatepicker {
+    .control > input._has-datepicker {
         width: 160px;
     }
 
@@ -1083,7 +1083,7 @@
     }
 
     .control {
-        .hasDatepicker {
+        ._has-datepicker {
             & + .ui-datepicker-trigger {
                 .lib-button-reset();
                 .lib-icon-font(
@@ -2214,7 +2214,7 @@
         }
 
         .field {
-            margin: 0 0 @indent__s;
+            margin: 0 0 5px;
 
             input[type="checkbox"] {
                 &:not(.banner-content-checkbox) {
@@ -2826,7 +2826,7 @@
         width: 160px;
     }
 
-    .reports-content input.hasDatepicker {
+    .reports-content input._has-datepicker {
         width: 133px;
     }
 
@@ -2834,7 +2834,7 @@
         position: relative;
     }
 
-    .reports-content input.hasDatepicker + label.mage-error {
+    .reports-content input._has-datepicker + label.mage-error {
         left: 0;
         position: absolute;
         top: 30px;
@@ -5073,7 +5073,7 @@
                 width: 37%;
             }
 
-            .hasDatepicker {
+            ._has-datepicker {
                 margin: 0 5px;
                 width: 32%;
             }
