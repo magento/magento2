@@ -101,7 +101,7 @@ class CustomAttribute extends SimpleElement
      */
     private function getAttributeCode($attributeSelector)
     {
-        preg_match('/data-index="(.*?)"/', $attributeSelector, $matches);
+        preg_match('/data-index="(.*)"/', $attributeSelector, $matches);
         $code = !empty($matches[1]) ? $matches[1] : '';
 
         return $code;

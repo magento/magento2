@@ -7,20 +7,23 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Mtf\ObjectManager;
 
 /**
  * Check attribute on product form.
  */
 class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
 {
+    /**
+     *  Attributes section.
+     */
+    const ATTRIBUTES = 'attributes';
+
     /**
      * Fixture factory.
      *
@@ -89,8 +92,8 @@ class AssertAddedProductAttributeOnProductForm extends AbstractConstraint
         $catalogProductAttribute = ($productAttributeOriginal !== null)
             ? array_merge($productAttributeOriginal->getData(), $attribute->getData())
             : $attribute->getData();
-        if (!$catalogProductEdit->getProductForm()->getSection('attributes')->isVisible()) {
-            $catalogProductEdit->getProductForm()->openSection('attributes');
+        if ($catalogProductEdit->getProductForm()->isSectionVisible(self::ATTRIBUTES)) {
+            $catalogProductEdit->getProductForm()->openSection(self::ATTRIBUTES);
         }
         \PHPUnit_Framework_Assert::assertTrue(
             $catalogProductEdit->getProductForm()->checkAttributeLabel($catalogProductAttribute),

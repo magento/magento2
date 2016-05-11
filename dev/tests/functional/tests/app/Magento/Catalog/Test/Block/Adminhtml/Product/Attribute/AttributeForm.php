@@ -7,9 +7,7 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
 use Magento\Ui\Test\Block\Adminhtml\FormSections;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
@@ -18,35 +16,11 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AttributeForm extends FormSections
 {
     /**
-     * New Attribute modal locator.
-     *
-     * @var string
-     */
-    protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
-
-    /**
      * Save button selector.
      *
      * @var string
      */
     protected $saveButton = '#save';
-
-    /**
-     * Attribute to determine whether tab is opened.
-     *
-     * @var string
-     */
-    protected $isTabOpened = '.opened ';
-
-    /**
-     * Initialize block. Switch to frame.
-     *
-     * @return void
-     */
-    protected function init()
-    {
-        parent::init();
-    }
 
     /**
      * Fill the attribute form.

@@ -8,16 +8,17 @@ namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Helper\Product\Options\Loader;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
-use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
-use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -83,7 +84,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param ConfigurableType\AttributeFactory $configurableAttributeFactory
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource
-     * @param MetadataPool $metadataPool
      * @param Loader $optionLoader
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -97,7 +97,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource,
-        MetadataPool $metadataPool,
         Loader $optionLoader
     ) {
         $this->productRepository = $productRepository;
@@ -108,7 +107,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $this->productAttributeRepository = $productAttributeRepository;
         $this->configurableAttributeFactory = $configurableAttributeFactory;
         $this->configurableTypeResource = $configurableTypeResource;
-        $this->metadataPool = $metadataPool;
         $this->optionLoader = $optionLoader;
     }
 
@@ -185,7 +183,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      */
     public function save($sku, OptionInterface $option)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         if ($option->getId()) {
             /** @var Product $product */
             $product = $this->getProduct($sku);
@@ -288,5 +286,17 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         if ($inputException->wasErrorAdded()) {
             throw $inputException;
         }
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

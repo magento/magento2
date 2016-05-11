@@ -887,6 +887,7 @@
             background-color: #e9e9e9;
             border-color: #adadad;
             opacity: .5;
+
             &.admin__control-checkbox,
             &.admin__control-radio {
                 opacity: 0.01;
@@ -1387,6 +1388,7 @@
             line-height: 1.33;
             vertical-align: middle;
             white-space: normal;
+            word-break: break-all;
 
             &[data-config-scope] {
                 position: relative;
@@ -1423,6 +1425,7 @@
                 font-weight: 500;
                 line-height: 1;
                 margin-left: 10px;
+                margin-top: 0;
                 position: absolute;
                 top: 1.2rem;
                 z-index: 1;
@@ -2168,7 +2171,7 @@
             font-weight: bold;
         }
         .webiste-groups {
-            margin: 5px 0 20px 18px;
+            margin: 5px 0 20px 25px;
 
             dt {
                 font-weight: bold;
@@ -2192,7 +2195,8 @@
 
     //
     //  Tree Store Scope
-    //  --------------------------------------
+    //  ---------------------------------------------
+
     .tree-store-scope {
         .buttons-set {
             margin-bottom: 9px;
@@ -2203,12 +2207,14 @@
         }
 
         .field {
-            margin: 0 0 5px;
+            margin: 0 0 @indent__s;
 
-            input[type="checkbox"]:not(.banner-content-checkbox) {
-                margin-right: 8px;
-                position: relative;
-                top: 2px;
+            input[type="checkbox"] {
+                &:not(.banner-content-checkbox) {
+                    margin-right: 8px;
+                    position: relative;
+                    top: 2px;
+                }
             }
 
             .addafter {
@@ -2217,23 +2223,10 @@
             }
         }
 
-        [class^="field field-website_"] .label,
-        [class^="field field-group_"] .label,
-        [class^="field field-w_"] .label,
-        [class^="field field-sg_"] .label {
-            text-align: left;
-            font-size: 18px;
-            padding-right: 0;
-            width: auto;
-        }
-
-        [class^="field field-group_"] .label,
-        [class^="field field-sg_"] .label {
-            padding-left: 20px;
-        }
-
-        .tooltip .help {
-            margin-top: 11px;
+        .tooltip {
+            .help {
+                margin-top: 11px;
+            }
         }
     }
 
@@ -3731,6 +3724,7 @@
         width: 31.9149%;
     }
 
+    .edit-attribute-set,
     .attribute-set-col:first-child {
         margin-left: 0;
     }
@@ -5006,6 +5000,32 @@
         .col-required,
         .col-system {
             &:extend(.col-70 all);
+        }
+    }
+}
+
+//  Stores -> Product Attribute Edit
+.catalog-product-attribute-edit {
+    .admin__scope-old {
+        .data-table {
+            th {
+                &._required {
+                    span {
+                        &:after {
+                            content: '*';
+                            .lib-typography(
+                            @_font-size: @form-field-label-asterisk__font-size,
+                            @_color: @form-field-label-asterisk__color,
+                            @_font-family: @form-field-label-asterisk__font-family,
+                            @_font-weight: @form-field-label-asterisk__font-weight,
+                            @_line-height: @form-field-label-asterisk__line-height,
+                            @_font-style: @form-field-label-asterisk__font-style
+                            );
+                            .lib-css(margin, @form-field-label-asterisk__margin);
+                        }
+                    }
+                }
+            }
         }
     }
 }

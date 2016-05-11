@@ -93,7 +93,7 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedExceptionMessage Cannot place order
+     * @expectedExceptionMessage Unable to place order. Please try again later.
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()

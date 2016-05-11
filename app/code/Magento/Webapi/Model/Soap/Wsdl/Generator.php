@@ -12,6 +12,7 @@ use Magento\Webapi\Model\Soap\Wsdl;
 use Magento\Webapi\Model\Soap\WsdlFactory;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Webapi\Model\ServiceMetadata;
+use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * WSDL generator.
@@ -363,5 +364,22 @@ class Generator extends AbstractSchemaGenerator
     protected function getServiceMetadata($serviceName)
     {
         return $this->serviceMetadata->getServiceMetadata($serviceName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAllowedServicesMetadata($requestedServices)
+    {
+        $allowedServicesMetadata = parent::getAllowedServicesMetadata($requestedServices);
+        if (!$allowedServicesMetadata) {
+            throw new AuthorizationException(
+                __(
+                    'Consumer is not authorized to access %resources',
+                    ['resources' => implode(', ', $requestedServices)]
+                )
+            );
+        }
+        return $allowedServicesMetadata;
     }
 }

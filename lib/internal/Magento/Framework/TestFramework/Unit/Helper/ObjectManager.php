@@ -159,7 +159,21 @@ class ObjectManager
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
         $reflectionClass = new \ReflectionClass($className);
-        return $reflectionClass->newInstanceArgs($constructArguments);
+        $newObject = $reflectionClass->newInstanceArgs($constructArguments);
+
+        foreach (array_diff_key($arguments, $constructArguments) as $key => $value) {
+            $propertyReflectionClass = $reflectionClass;
+            while ($propertyReflectionClass) {
+                if ($propertyReflectionClass->hasProperty($key)) {
+                    $reflectionProperty = $propertyReflectionClass->getProperty($key);
+                    $reflectionProperty->setAccessible(true);
+                    $reflectionProperty->setValue($newObject, $value);
+                    break;
+                }
+                $propertyReflectionClass = $propertyReflectionClass->getParentClass();
+            }
+        }
+        return $newObject;
     }
 
     /**
@@ -312,5 +326,21 @@ class ObjectManager
             $object = $this->_createArgumentMock($argClassName, $arguments);
             return $object;
         }
+    }
+
+    /**
+     * Set mocked property
+     *
+     * @param object $object
+     * @param string $propertyName
+     * @param object $propertyValue
+     * @return void
+     */
+    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $propertyValue);
     }
 }

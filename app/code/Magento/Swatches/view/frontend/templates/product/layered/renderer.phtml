@@ -10,7 +10,7 @@
 ?>
 <?php $swatchData = $block->getSwatchData(); ?>
 <div class="swatch-attribute swatch-layered <?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>"
-     attribute-code="<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>" attribute-id="174">
+     attribute-code="<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>" attribute-id="<?php /* @escapeNotVerified */ echo $swatchData['attribute_id'] ?>">
     <div class="swatch-attribute-options clearfix">
         <?php foreach ($swatchData['options'] as $option => $label): ?>
             <a href="<?php /* @escapeNotVerified */ echo $label['link'] ?>" class="swatch-option-link-layered">
@@ -69,7 +69,7 @@
 </div>
 
 <script>
-    require(["jquery", "jquery/ui", "swatchRenderer"], function ($) {
+    require(["jquery", "jquery/ui", "Magento_Swatches/js/swatch-renderer"], function ($) {
         $('.swatch-layered.<?php /* @escapeNotVerified */ echo $swatchData['attribute_code'] ?>')
             .find('[option-type="1"], [option-type="2"], [option-type="0"], [option-type="3"]')
             .SwatchRendererTooltip();

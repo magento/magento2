@@ -58,9 +58,12 @@ class CopierTest extends \PHPUnit_Framework_TestCase
 
         $this->_model = new Copier(
             $this->copyConstructorMock,
-            $this->productFactoryMock,
-            $this->optionRepositoryMock
+            $this->productFactoryMock
         );
+
+        $this->setProperties($this->_model, [
+            'optionRepository' => $this->optionRepositoryMock
+        ]);
     }
 
     public function testCopy()
@@ -76,6 +79,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
             [
                 '__wakeup',
                 'setData',
+                'setOptions',
                 'setIsDuplicate',
                 'setOriginalId',
                 'setStatus',
@@ -94,6 +98,7 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         );
         $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
 
+        $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
         $duplicateMock->expects($this->once())->method('setOriginalId')->with(1);
         $duplicateMock->expects(
@@ -125,5 +130,21 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         $resourceMock->expects($this->once())->method('duplicate')->with(1, 2);
 
         $this->assertEquals($duplicateMock, $this->_model->copy($this->productMock));
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

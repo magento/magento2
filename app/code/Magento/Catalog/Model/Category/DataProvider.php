@@ -201,9 +201,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $category = $this->getCurrentCategory();
-        if (!$category->getId()) {
-            return [];
-        } else {
+        if ($category) {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);
@@ -277,12 +275,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseConfigSettings($categoryData)
     {
         foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
-            if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
-                ($categoryData[$elementsWithUseConfigSetting] == '')
-            ) {
-                $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
-            } else {
-                $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
+            if (!isset($categoryData['use_config'][$elementsWithUseConfigSetting])) {
+                if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
+                    ($categoryData[$elementsWithUseConfigSetting] == '')
+                ) {
+                    $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
+                } else {
+                    $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
+                }
             }
         }
         return $categoryData;

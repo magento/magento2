@@ -41,9 +41,6 @@ define([
                         data.intype = this.getOptionInputType();
                     }
 
-                    if (!this.totalItems) {
-                        data.checked = 'checked';
-                    }
                     element = this.template({
                         data: data
                     });
@@ -57,6 +54,7 @@ define([
 
                     if (render) {
                         this.render();
+                        this.updateItemsCountField();
                     }
                 },
                 remove: function (event) {
@@ -142,7 +140,6 @@ define([
         if ($('add_new_option_button')) {
             Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
         }
-
         $('manage-options-panel').on('click', '.delete-option', function (event) {
             attributeOption.remove(event);
         });

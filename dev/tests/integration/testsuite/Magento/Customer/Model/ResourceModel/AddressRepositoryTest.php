@@ -37,6 +37,11 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /* @var \Magento\Framework\Config\CacheInterface $cache */
+        $cache = $this->_objectManager->create('Magento\Framework\Config\CacheInterface');
+        $cache->remove('extension_attributes_config');
+        
         $this->repository = $this->_objectManager->create('Magento\Customer\Api\AddressRepositoryInterface');
         $this->_addressFactory = $this->_objectManager->create('Magento\Customer\Api\Data\AddressInterfaceFactory');
         $this->dataObjectHelper = $this->_objectManager->create('Magento\Framework\Api\DataObjectHelper');
@@ -202,7 +207,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         try {
             $this->repository->save($address);
         } catch (InputException $exception) {
-            $this->assertEquals(InputException::DEFAULT_MESSAGE, $exception->getMessage());
+            $this->assertEquals('One or more input exceptions have occurred.', $exception->getMessage());
             $errors = $exception->getErrors();
             $this->assertCount(2, $errors);
             $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());

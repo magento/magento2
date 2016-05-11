@@ -48,14 +48,8 @@
     </type>
     <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
         <arguments>
-            <argument name="serviceEntityTypeMap" xsi:type="array">
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</item>
-            </argument>
-            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
-                    <item name="Magento\Catalog\Model\Product\Attribute\Backend\Media" xsi:type="string">Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface</item>
-                </item>
-            </argument>
+            <argument name="serviceEntityTypeMap" xsi:type="array" />
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array" />
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute">
@@ -63,7 +57,7 @@
             <argument name="reservedAttributeList" xsi:type="object">Magento\Catalog\Model\Product\ReservedAttributeList\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+    <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
                 <item name="eav" xsi:type="array">
@@ -83,11 +77,6 @@
                     <item name="eav" xsi:type="string">\Magento\Eav\Model\AttributeProvider</item>
                 </item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Eav\Model\ResourceModel\ReadHandler">
-        <arguments>
-            <argument name="contextHandler" xsi:type="object">Magento\Eav\Model\ResourceModel\ContextHandler</argument>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\AbstractEntity">

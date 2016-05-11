@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
 

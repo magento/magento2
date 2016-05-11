@@ -14,42 +14,60 @@ use Magento\Mtf\Client\Locator;
 class Section extends AbstractContainer
 {
     /**
-     * Field with Mage error.
+     * Field with error.
      *
      * @var string
      */
-    protected $mageErrorField = '//fieldset/*[contains(@class,"field ")][.//*[contains(@class,"error")]]';
+    protected $errorField = '//fieldset/*[contains(@class,"field ")][.//*[contains(@class,"error")]]';
 
     /**
-     * Fields label with mage error.
+     * Error label.
      *
      * @var string
      */
-    protected $mageErrorLabel = './/*[contains(@class,"label")]';
+    protected $errorLabel = './/*[contains(@class,"label")]';
 
     /**
-     * Mage error text.
+     * Error text.
      *
      * @var string
      */
-    protected $mageErrorText = './/label[contains(@class,"error")]';
+    protected $errorText = './/label[contains(@class,"error")]';
 
     /**
-     * Get array of label => js error text.
+     * Locator for section.
+     *
+     * @var string
+     */
+    protected $section = '[data-index="%s"]';
+
+    /**
+     * Get array of label => validation error text.
      *
      * @return array
      */
-    public function getJsErrors()
+    public function getValidationErrors()
     {
         $data = [];
-        $elements = $this->_rootElement->getElements($this->mageErrorField, Locator::SELECTOR_XPATH);
+        $elements = $this->_rootElement->getElements($this->errorField, Locator::SELECTOR_XPATH);
         foreach ($elements as $element) {
-            $error = $element->find($this->mageErrorText, Locator::SELECTOR_XPATH);
+            $error = $element->find($this->errorText, Locator::SELECTOR_XPATH);
             if ($error->isVisible()) {
-                $label = $element->find($this->mageErrorLabel, Locator::SELECTOR_XPATH)->getText();
+                $label = $element->find($this->errorLabel, Locator::SELECTOR_XPATH)->getText();
                 $data[$label] = $error->getText();
             }
         }
         return $data;
+    }
+
+    /**
+     * Check whether section is visible.
+     *
+     * @param string $sectionName
+     * @return bool
+     */
+    public function isSectionVisible($sectionName)
+    {
+        return $this->_rootElement->find(sprintf($this->section, $sectionName))->isVisible();
     }
 }

@@ -129,7 +129,7 @@
         </fields>
     </content>
     <attributes>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Section\Attributes</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes</class>
         <selector>[data-index="attributes"]</selector>
         <strategy>css selector</strategy>
         <fields>

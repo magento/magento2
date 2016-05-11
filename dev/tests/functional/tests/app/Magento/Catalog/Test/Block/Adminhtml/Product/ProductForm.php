@@ -11,12 +11,8 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
@@ -97,32 +93,9 @@ class ProductForm extends FormSections
                 $sections['product-details']['category_ids']['value'] = $category->getName();
             }
             $this->fillContainers($sections, $element);
-
-            if ($product->hasData('custom_attribute')) {
-                $this->createCustomAttribute($product);
-            }
         }
 
         return $this;
-    }
-
-    /**
-     * Create custom attribute.
-     *
-     * @param InjectableFixture $product
-     * @param string $sectionName
-     * @return void
-     */
-    protected function createCustomAttribute(InjectableFixture $product, $sectionName = 'product-details')
-    {
-        $attribute = $product->getDataFieldConfig('custom_attribute')['source']->getAttribute();
-        $this->openSection('product-details');
-        if (!$this->checkAttributeLabel($attribute)) {
-            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails $section */
-            $section = $this->openSection($sectionName);
-            $section->addNewAttribute($sectionName);
-            $this->getAttributeForm()->fill($attribute);
-        }
     }
 
     /**
@@ -169,23 +142,11 @@ class ProductForm extends FormSections
     }
 
     /**
-     * Check if attribute exists in product attributes grid.
-     *
-     * @param array $filter
-     * @return bool
-     */
-    public function checkIfAttributeExistsInGrid(array $filter)
-    {
-        $this->waitPageToLoad();
-        return $this->getAttributesSearchGrid()->isRowVisible($filter);
-    }
-
-    /**
      * Get attributes search grid.
      *
      * @return DataGrid
      */
-    protected function getAttributesSearchGrid()
+    public function getAttributesSearchGrid()
     {
         return $this->blockFactory->create(
             '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes\Grid',
@@ -203,7 +164,6 @@ class ProductForm extends FormSections
     {
         $sectionName = strtolower($sectionName);
         $selector = sprintf($this->attributeBlock, $sectionName);
-        $this->waitForElementVisible($selector);
 
         return $this->_rootElement->find($selector)->isVisible();
     }
