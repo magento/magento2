@@ -219,14 +219,7 @@ define(
              * Apply resolved billing address to quote
              */
             applyBillingAddress: function () {
-                var shippingAddress;
-
-                if (quote.billingAddress()) {
-                    selectBillingAddress(quote.billingAddress());
-
-                    return;
-                }
-                shippingAddress = quote.shippingAddress();
+                var shippingAddress = quote.shippingAddress();
 
                 if (shippingAddress &&
                     shippingAddress.canUseForBilling() &&
@@ -234,6 +227,12 @@ define(
                 ) {
                     //set billing address same as shipping by default if it is not empty
                     selectBillingAddress(quote.shippingAddress());
+                }
+                
+                if (quote.billingAddress()) {
+                    selectBillingAddress(quote.billingAddress());
+
+                    return;
                 }
             }
         };
