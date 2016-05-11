@@ -64,7 +64,7 @@ define([
          * @returns {Object} Chainable.
          */
         initChildren: function () {
-            this.getChildItems().each(function (data, index) {
+            this.getChildItems().forEach(function (data, index) {
                 this.processingAddChild(data, this.startIndex + index, data[this.identificationDRProperty]);
             }, this);
 
@@ -164,7 +164,7 @@ define([
                 tmpObj = {};
 
             if (data.length !== this.relatedData) {
-                data.each(function (obj) {
+                data.forEach(function (obj) {
                     tmpObj[this.identificationDRProperty] = obj[this.identificationDRProperty];
 
                     if (!_.findWhere(this.relatedData, tmpObj)) {
