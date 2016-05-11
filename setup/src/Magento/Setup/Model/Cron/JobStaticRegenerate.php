@@ -70,14 +70,14 @@ class JobStaticRegenerate extends AbstractJob
             } else {
                 $this->getStatusObject()->add(
                     'Cleaning generated files...',
-                    \Magento\Framework\Logger\Monolog::INFO
+                    \Psr\Log\LogLevel::INFO
                 );
                 $this->getCleanFilesObject()->clearCodeGeneratedFiles();
-                $this->getStatusObject()->add('Clearing cache...', \Magento\Framework\Logger\Monolog::INFO);
+                $this->getStatusObject()->add('Clearing cache...', \Psr\Log\LogLevel::INFO);
                 $this->getCacheObject()->clean();
                 $this->getStatusObject()->add(
                     'Cleaning static view files',
-                    \Magento\Framework\Logger\Monolog::INFO
+                    \Psr\Log\LogLevel::INFO
                 );
                 $this->getCleanFilesObject()->clearMaterializedViewFiles();
             }
