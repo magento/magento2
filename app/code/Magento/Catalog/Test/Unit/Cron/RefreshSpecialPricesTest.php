@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Cron;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,6 +50,16 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
      */
     protected $_priceProcessorMock;
 
+    /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
+
+    /**
+     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataMock;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -72,6 +83,8 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->metadataMock = $this->getMock(\Magento\Framework\EntityManager\EntityMetadata::class, [], [], '', false);
+
         $this->_model = $this->_objectManager->getObject(
             'Magento\Catalog\Cron\RefreshSpecialPrices',
             [
@@ -83,14 +96,30 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
                 'processor' => $this->_priceProcessorMock
             ]
         );
+
+        $this->metadataPool = $this->getMock(MetadataPool::class, [], [], '', false);
+
+        $reflection = new \ReflectionClass(get_class($this->_model));
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->_model, $this->metadataPool);
     }
 
     public function testRefreshSpecialPrices()
     {
         $idsToProcess = [1, 2, 3];
 
+        $this->metadataPool->expects($this->atLeastOnce())
+            ->method('getMetadata')
+            ->willReturn($this->metadataMock);
+
+        $this->metadataMock->expects($this->atLeastOnce())->method('getLinkField')->willReturn('row_id');
+
+        $this->metadataMock->expects($this->atLeastOnce())->method('getIdentifierField')->willReturn('entity_id');
+
         $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $selectMock->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $selectMock->expects($this->any())->method('where')->will($this->returnSelf());
 
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
@@ -99,18 +128,24 @@ class RefreshSpecialPricesTest extends \PHPUnit_Framework_TestCase
             $this->any()
         )->method(
             'fetchCol'
-        )->with(
-            $selectMock,
-            ['entity_id']
         )->will(
             $this->returnValue($idsToProcess)
         );
+
         $this->_resourceMock->expects(
             $this->once()
         )->method(
             'getConnection'
         )->will(
             $this->returnValue($connectionMock)
+        );
+
+        $this->_resourceMock->expects(
+            $this->any()
+        )->method(
+            'getTableName'
+        )->will(
+            $this->returnValue('category')
         );
 
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
