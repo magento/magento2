@@ -10,10 +10,6 @@
 error_reporting(E_ALL);
 #ini_set('display_errors', 1);
 
-/* Custom umask value may be provided in MAGE_UMASK environment variable */
-$mask = isset($_SERVER['MAGE_UMASK']) ? octdec($_SERVER['MAGE_UMASK']) : 002;
-umask($mask);
-
 /* PHP version validation */
 if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50522) {
     if (PHP_SAPI == 'cli') {
@@ -30,6 +26,11 @@ HTML;
     }
     exit(1);
 }
+
+/* Custom umask value may be provided in optional mage_umask file in root */
+$umaskFile = BP . '/magento_umask';
+$mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
+umask($mask);
 
 require_once __DIR__ . '/autoload.php';
 require_once BP . '/app/functions.php';
