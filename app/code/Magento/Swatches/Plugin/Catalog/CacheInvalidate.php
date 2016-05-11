@@ -5,6 +5,9 @@
  */
 namespace Magento\Swatches\Plugin\Catalog;
 
+use \Magento\Framework\App\Cache\Type\Block;
+use \Magento\Framework\App\Cache\Type\Collection;
+
 class CacheInvalidate
 {
     /**
@@ -39,9 +42,8 @@ class CacheInvalidate
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $result
     ) {
         if ($this->swatchHelper->isSwatchAttribute($subject)) {
-            $this->typeList->invalidate('block_html');
-            $this->typeList->invalidate('collections');
-            $this->typeList->invalidate('full_page');
+            $this->typeList->invalidate(Block::TYPE_IDENTIFIER);
+            $this->typeList->invalidate(Collection::TYPE_IDENTIFIER);
         }
         return $result;
     }

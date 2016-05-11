@@ -67,7 +67,6 @@ class CacheInvalidateTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->typeList->expects($this->at(0))->method('invalidate')->with('block_html');
         $this->typeList->expects($this->at(1))->method('invalidate')->with('collections');
-        $this->typeList->expects($this->at(2))->method('invalidate')->with('full_page');
         $this->assertSame($this->attribute, $this->cacheInvalidate->afterSave($this->attribute, $this->attribute));
     }
 
