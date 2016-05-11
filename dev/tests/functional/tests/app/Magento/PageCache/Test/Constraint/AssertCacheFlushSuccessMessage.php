@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Test\Constraint;
+namespace Magento\PageCache\Test\Constraint;
 
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert Cache Management Action.
+ * Class AssertCacheFlushSuccessMessage
  */
-class AssertCacheManagementAction extends AbstractConstraint
+class AssertCacheFlushSuccessMessage extends AbstractConstraint
 {
     /**
-     * Assert success message for cache flush.
+     * Assert that success message is displayed after cache flush.
      *
      * @param AdminCache $adminCache
      * @param string $successMessage
@@ -37,6 +37,6 @@ class AssertCacheManagementAction extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Cache management action is successful.';
+        return 'Flush additional caches are successful.';
     }
 }

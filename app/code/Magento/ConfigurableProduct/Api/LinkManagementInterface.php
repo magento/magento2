@@ -14,7 +14,7 @@ namespace Magento\ConfigurableProduct\Api;
 interface LinkManagementInterface
 {
     /**
-     * Get all children for Bundle product
+     * Get all children for Configurable product
      *
      * @param string $sku
      * @return \Magento\Catalog\Api\Data\ProductInterface[]
