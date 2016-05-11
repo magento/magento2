@@ -7,11 +7,11 @@
 @account-table-border-bottom-color: @color-gray-middle1;
 @account-table-action-delete: @color-red12;
 
-@password-strength-color__default: @color-gray-light01;
-@password-strength-color__weak: #ffafae;
-@password-strength-color__medium: #ffd6b3;
-@password-strength-color__strong: #c5eeac;
-@password-strength-color__very-strong: #81b562;
+@password-default: @color-gray-light01;
+@password-weak: #ffafae;
+@password-medium: #ffd6b3;
+@password-strong: #c5eeac;
+@password-very-strong: #81b562;
 
 //
 //  Common
@@ -233,7 +233,7 @@
     }
 
     .password-strength-meter {
-        background-color: @password-strength-color__default;
+        background-color: @password-default;
         height: @form-element-input__height;
         line-height: @form-element-input__height;
         padding: @form-element-input__padding;
@@ -251,7 +251,7 @@
 
         .password-strength-meter-no-pwd & {
             &:before {
-                background-color: @password-strength-color__default;
+                background-color: @password-default;
                 width: 100%;
             }
         }
@@ -259,28 +259,28 @@
         .password-strength-meter-0 &,
         .password-strength-meter-1 & {
             &:before {
-                background-color: @password-strength-color__weak;
+                background-color: @password-weak;
                 width: 25%;
             }
         }
 
         .password-strength-meter-2 & {
             &:before {
-                background-color: @password-strength-color__medium;
+                background-color: @password-medium;
                 width: 50%;
             }
         }
 
         .password-strength-meter-3 & {
             &:before {
-                background-color: @password-strength-color__strong;
+                background-color: @password-strong;
                 width: 75%;
             }
         }
 
         .password-strength-meter-4 & {
             &:before {
-                background-color: @password-strength-color__very-strong;
+                background-color: @password-very-strong;
                 width: 100%;
             }
         }
