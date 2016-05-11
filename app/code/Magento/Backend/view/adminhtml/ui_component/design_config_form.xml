@@ -74,7 +74,7 @@
                 </field>
                 <field name="theme">
                     <argument name="data" xsi:type="array">
-                        <item name="options" xsi:type="object">Magento\Theme\Model\Design\Theme\Labell</item>
+                        <item name="options" xsi:type="object">Magento\Theme\Model\Design\Theme\Label</item>
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataType" xsi:type="string">text</item>
