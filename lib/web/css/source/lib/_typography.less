@@ -271,9 +271,9 @@
 //  ---------------------------------------------
 
 .lib-typography-headings(
-    @_heading-small-size: @heading__small-size,
     @_heading-small-color: @heading__small-color,
-    @_heading-small-line-height: @heading__small-line-height
+    @_heading-small-line-height: @heading__small-line-height,
+    @_heading-small-size: @heading__small-size
 ) {
     h1 {
         .lib-heading(h1);
@@ -328,17 +328,17 @@
 //  ---------------------------------------------
 
 .lib-typography-lists(
-    @_list-margin-top: @list__margin-top,
     @_list-margin-bottom: @list__margin-bottom,
-    @_list-item-margin-top: @list-item__margin-top,
+    @_list-margin-top: @list__margin-top,
     @_list-item-margin-bottom: @list-item__margin-bottom,
+    @_list-item-margin-top: @list-item__margin-top,
     @_dl-margin-bottom: @dl__margin-bottom,
     @_dl-margin-top: @dl__margin-top,
+    @_dd-margin-bottom: @dd__margin-bottom,
+    @_dd-margin-top: @dd__margin-top,
     @_dt-font-weight: @dt__font-weight,
     @_dt-margin-bottom: @dt__margin-bottom,
-    @_dt-margin-top: @dt__margin-top,
-    @_dd-margin-bottom: @dd__margin-bottom,
-    @_dd-margin-top: @dd__margin-top
+    @_dt-margin-top: @dt__margin-top
 ) {
     ul,
     ol {
@@ -352,7 +352,6 @@
             .lib-css(margin-bottom, @fontValue);
         }
 
-        //  .lib-typography(@list__font-size__base, @list__color__base);
         > li {
             & {
                 .lib-font-size-value(@_list-item-margin-top);
@@ -397,20 +396,20 @@
     @_font-family-monospace: @font-family__monospace,
     @_code-background-color: @code__background-color,
     @_code-color: @code__color,
-    @_code-padding: @code__padding,
     @_code-font-size: @code__font-size,
+    @_code-padding: @code__padding,
     @_kbd-background-color: @kbd__background-color,
     @_kbd-color: @kbd__color,
-    @_kbd-padding: @code__padding,
     @_kbd-font-size: @code__font-size,
+    @_kbd-padding: @code__padding,
     @_pre-background-color: @pre__background-color,
-    @_pre-border-width: @pre__border-width,
     @_pre-border-color: @pre__border-color,
+    @_pre-border-width: @pre__border-width,
     @_pre-color: @pre__color,
+    @_pre-font-size: @code__font-size,
     @_pre-line-height: @line-height__base,
     @_pre-margin: 0 0 @indent__s,
-    @_pre-padding: @indent__s,
-    @_pre-font-size: @code__font-size
+    @_pre-padding: @indent__s
 ) {
     code,
     kbd,
@@ -464,16 +463,16 @@
 //  ---------------------------------------------
 
 .lib-typography-blockquote(
-    @_blockquote-border-width: @blockquote__border-width,
     @_blockquote-border-color: @blockquote__border-color,
-    @_blockquote-margin: @blockquote__margin,
-    @_blockquote-padding: @blockquote__padding,
+    @_blockquote-border-width: @blockquote__border-width,
     @_blockquote-font-size: @blockquote__font-size,
     @_blockquote-font-style: @blockquote__font-style,
-    @_blockquote-small-color: @blockquote-small__color,
-    @_blockquote-small-line-height: @line-height__base,
-    @_blockquote-small-font-size: @blockquote-small__font-size,
+    @_blockquote-margin: @blockquote__margin,
+    @_blockquote-padding: @blockquote__padding,
     @_blockquote-small-before-content: @blockquote__content-before,
+    @_blockquote-small-color: @blockquote-small__color,
+    @_blockquote-small-font-size: @blockquote-small__font-size,
+    @_blockquote-small-line-height: @line-height__base,
     @_blockquote-cite: @cite__font-style,
     @_cite: @cite__font-style
 ) {
