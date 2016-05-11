@@ -173,10 +173,10 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     public function getOrderPrices($actualPrices, InjectableFixture $product)
     {
         $viewBlock = $this->salesOrderView->getItemsOrderedBlock();
+        $actualPrices['cart_item_price_excl_tax'] = $viewBlock->getItemPriceExclTax($product->getName());
+        $actualPrices['cart_item_price_incl_tax'] = $viewBlock->getItemPriceInclTax($product->getName());
         $actualPrices['cart_item_subtotal_excl_tax'] = $viewBlock->getItemSubExclTax($product->getName());
         $actualPrices['cart_item_subtotal_incl_tax'] = $viewBlock->getItemSubInclTax($product->getName());
-        $actualPrices['cart_item_price_excl_tax'] = $actualPrices['cart_item_subtotal_excl_tax'];
-        $actualPrices['cart_item_price_incl_tax'] = $actualPrices['cart_item_subtotal_incl_tax'];
         return $actualPrices;
     }
 
