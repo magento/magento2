@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Backend\Test\Block\Cache;
+namespace Magento\PageCache\Test\Block\Cache;
 
 use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
 
