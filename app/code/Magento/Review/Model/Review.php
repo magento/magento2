@@ -503,23 +503,16 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         return $this;
     }
 
-
     /**
      * {@inheritdoc}
      */
     public function getStatus()
     {
-//        if(!$this->getData('status')) {
-            /** @var \Magento\Review\Model\Review\Status $status */
-            $status = $this->_reviewStatusFactory->create();
-            $status->load($this->getStatusId());
+        /** @var \Magento\Review\Model\Review\Status $status */
+        $status = $this->_reviewStatusFactory->create();
+        $status->load($this->getStatusId());
 
         return $status->getStatusCode();
-//            $this->setData('status', $status->getStatusCode());
-//        }
-
-        
-//        return $this->getData('status');
     }
 
     /**
@@ -530,7 +523,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         $status = $this->_statusFactory->create()
             ->addFieldToFilter('status_code', $statusCode)
             ->getFirstItem();
-        if(!$status->getId()) {
+        if (!$status->getId()) {
             throw new NoSuchEntityException(__("Status doesn't exist"));
         }
         $this->setStatusId($status->getId());

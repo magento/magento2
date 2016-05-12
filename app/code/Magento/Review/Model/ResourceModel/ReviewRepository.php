@@ -41,12 +41,11 @@ class ReviewRepository implements ReviewRepositoryInterface
         \Magento\Review\Model\ResourceModel\Review\CollectionFactory $collectionFactory,
         \Magento\Review\Api\Data\ReviewSearchResultsInterfaceFactory $searchResultsInterface,
         \Magento\Framework\Api\SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
-    )
-    {
+    ) {
         $this->reviewFactory = $reviewFactory;
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsInterface;
-        $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
+        $this->searchCriteriaFactory = $searchCriteriaBuilderFactory;
     }
 
     /**
@@ -58,7 +57,7 @@ class ReviewRepository implements ReviewRepositoryInterface
         $review = $this->reviewFactory->create()
             ->load($reviewId);
 
-        if(!$review->getId()) {
+        if (!$review->getId()) {
             throw new NoSuchEntityException(__("Requested Review doesn't exist"));
         }
         return $review;
@@ -89,7 +88,7 @@ class ReviewRepository implements ReviewRepositoryInterface
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->collectionFactory->create();
-        foreach($searchCriteria->getFilterGroups() as $filterGroup) {
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             $this->addFilterGroupToCollection($filterGroup, $collection);
         }
 
@@ -105,12 +104,10 @@ class ReviewRepository implements ReviewRepositoryInterface
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->load();
 
-
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
-
 
         return $searchResult;
     }
@@ -123,7 +120,7 @@ class ReviewRepository implements ReviewRepositoryInterface
         $review = $this->reviewFactory->create()
             ->load($reviewId);
 
-        if(!$review->getId()) {
+        if (!$review->getId()) {
             throw new NoSuchEntityException(__("Requested Review doesn't exist"));
         }
         
@@ -163,5 +160,4 @@ class ReviewRepository implements ReviewRepositoryInterface
             $collection->addFieldToFilter($fields);
         }
     }
-    
 }

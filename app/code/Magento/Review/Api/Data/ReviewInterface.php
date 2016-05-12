@@ -107,7 +107,6 @@ interface ReviewInterface
      * @return \Magento\Review\Model\Review
      */
     public function setCustomerId($customerId);
-    
 
     /**
      * Gets the status code of the review.
