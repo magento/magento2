@@ -53,45 +53,50 @@ define([
         _calculateStrength: function () {
             var password = this._getPassword(),
                 isEmpty = password.length === 0,
-                score = zxcvbn(password).score,
-                className = this._getClassName(score, isEmpty);
+                zxcvbnScore = zxcvbn(password).score,
+                isValid = $.validator.validateSingleElement(this.options.cache.input),
+                displayScore = zxcvbnScore;
 
-            this._displayStrength(className, score, isEmpty);
-            //update error messages
-            $.validator.validateSingleElement(this.options.cache.input);
+                // Display score is based on combination of whether password is empty, valid, and zxcvbn strength
+                if (isEmpty) {
+                    displayScore = 0;
+                } else if (!isValid) {
+                    displayScore = 1;
+                }
+
+            // Update label
+            this._displayStrength(displayScore);
         },
 
         /**
          * Display strength
-         * @param {String} className
-         * @param {Number} score
-         * @param {Boolean} isEmpty
+         * @param {Number} displayScore
          * @private
          */
-        _displayStrength: function (className, score, isEmpty) {
-            var strengthLabel = '';
+        _displayStrength: function (displayScore) {
+            var strengthLabel = '',
+                className = this._getClassName(displayScore);
 
-            if (isEmpty) {
-                strengthLabel = $t('No Password');
-            } else {
-                switch (score) {
-                    case 0:
-                    case 1:
-                        strengthLabel = $t('Weak');
-                        break;
+            switch (displayScore) {
+                case 0:
+                    strengthLabel = $t('No Password');
+                    break;
 
-                    case 2:
-                        strengthLabel = $t('Medium');
-                        break;
+                case 1:
+                    strengthLabel = $t('Weak');
+                    break;
 
-                    case 3:
-                        strengthLabel = $t('Strong');
-                        break;
+                case 2:
+                    strengthLabel = $t('Medium');
+                    break;
 
-                    case 4:
-                        strengthLabel = $t('Very Strong');
-                        break;
-                }
+                case 3:
+                    strengthLabel = $t('Strong');
+                    break;
+
+                case 4:
+                    strengthLabel = $t('Very Strong');
+                    break;
             }
 
             this.options.cache.meter
@@ -111,13 +116,12 @@ define([
 
         /**
          * Get class name for score
-         * @param {int} score
-         * @param {Boolean} isEmpty
+         * @param {int} displayScore
          * @returns {String}
          * @private
          */
-        _getClassName: function (score, isEmpty) {
-            return this.options.defaultClassName + (isEmpty ? 'no-pwd' : score);
+        _getClassName: function (displayScore) {
+            return this.options.defaultClassName + displayScore;
         }
     });
 
