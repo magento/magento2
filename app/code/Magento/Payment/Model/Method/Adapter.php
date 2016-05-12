@@ -611,8 +611,7 @@ class Adapter implements MethodInterface
                 'data' => $data
             ]
         );
-
-        $this->getInfoInstance()->addData($data->getData());
+        
         return $this;
     }
 

@@ -62,6 +62,11 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     protected $_tokenProvider;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $_dateHelper;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -91,6 +96,22 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
         $this->_logger = $logger;
         $this->_oauthHelper = $oauthHelper;
         $this->_tokenProvider = $tokenProvider;
+    }
+
+    /**
+     * The getter function to get the new DateTime dependency
+     *
+     * @return \Magento\Framework\Stdlib\DateTime\DateTime
+     *
+     * @deprecated
+     */
+    private function getDateHelper()
+    {
+        if ($this->_dateHelper === null) {
+            $this->_dateHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\DateTime::class);
+        }
+        return $this->_dateHelper;
     }
 
     /**
@@ -193,6 +214,8 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     {
         try {
             $consumer = $this->_consumerFactory->create()->load($consumerId);
+            $consumer->setUpdatedAt($this->getDateHelper()->gmtDate());
+            $consumer->save();
             if (!$consumer->getId()) {
                 throw new \Magento\Framework\Oauth\Exception(
                     __('A consumer with ID %1 does not exist', $consumerId)

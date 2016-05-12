@@ -223,9 +223,6 @@ class Info extends AbstractModel implements InfoInterface
     {
         $additionalInfo = $this->getData('additional_information');
         if (empty($this->additionalInformation) && $additionalInfo) {
-            if (!is_array($additionalInfo)) {
-                $additionalInfo = unserialize($additionalInfo);
-            }
             $this->additionalInformation = $additionalInfo;
         }
     }
