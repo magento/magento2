@@ -99,9 +99,9 @@
     }
 
     .action-menu {
-        z-index: @data-grid-search-menu__z-index;
         max-height: 3.85rem * @data-grid-search-control-action-menu-item__quantity; // ToDo UI: change static item height
         overflow-y: auto;
+        z-index: @data-grid-search-menu__z-index;
     }
 
     .action-menu-item {
@@ -264,8 +264,8 @@
     }
 
     .admin__control-select {
-        padding-top: @action__padding-top - .1rem;
         height: @action__height;
+        padding-top: @action__padding-top - .1rem;
     }
 
     .admin__action-multiselect {
@@ -276,7 +276,7 @@
     }
 
     //  Date control
-    .admin__control-text.hasDatepicker,
+    .admin__control-text._has-datepicker,
     .admin__control-select {
         width: 100%;
     }
