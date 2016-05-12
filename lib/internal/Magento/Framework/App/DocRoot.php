@@ -28,15 +28,20 @@ class DocRoot
      * @param RequestInterface $request
      * @param ReadFactory $readFactory
      */
-    public function __construct(RequestInterface $request, ReadFactory $readFactory) {
+    public function __construct(RequestInterface $request, ReadFactory $readFactory)
+    {
         $this->request = $request;
         $this->readFactory = $readFactory;
     }
 
+
     /**
      * Returns true if doc root is pub/ and not BP
      *
-     * @return string
+     * @param $dirToCheck
+     * @param $missingDir
+     *
+     * @return bool
      */
     public function hasThisSubDir($dirToCheck, $missingDir)
     {
