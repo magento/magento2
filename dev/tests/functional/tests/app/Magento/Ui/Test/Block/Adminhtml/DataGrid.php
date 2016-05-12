@@ -236,6 +236,7 @@ class DataGrid extends Grid
         } else {
             throw new \Exception('Searched item was not found.');
         }
+        $this->waitLoader();
     }
 
     /**
@@ -253,6 +254,7 @@ class DataGrid extends Grid
         } else {
             throw new \Exception('Searched item was not found.');
         }
+        $this->waitLoader();
     }
 
     /**
