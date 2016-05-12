@@ -61,9 +61,20 @@
     }
 }
 
-.catalog-category-edit {
+.catalog-category-edit,
+.catalog-category-add {
     // TODO: refactor trees
     .x-tree.tree-wrapper {
         overflow-x: auto;
+    }
+}
+
+//
+//  Advanced Inventory panel
+//  ---------------------------------------------
+
+.admin__field-use-config {
+    .admin__field + {
+        margin-top: -@indent__base;
     }
 }

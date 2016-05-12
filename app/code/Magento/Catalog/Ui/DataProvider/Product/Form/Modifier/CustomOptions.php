@@ -156,12 +156,12 @@ class CustomOptions extends AbstractModifier
 
         /** @var \Magento\Catalog\Model\Product\Option $option */
         foreach ($productOptions as $index => $option) {
-            $options[$index] = $this->formatFloat(static::FIELD_PRICE_NAME, $option->getData());
+            $options[$index] = $this->formatFloatByPath(static::FIELD_PRICE_NAME, $option->getData());
             $values = $option->getValues() ?: [];
 
             /** @var \Magento\Catalog\Model\Product\Option $value */
             foreach ($values as $value) {
-                $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatFloat(
+                $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatFloatByPath(
                     static::FIELD_PRICE_NAME,
                     $value->getData()
                 );
@@ -188,12 +188,12 @@ class CustomOptions extends AbstractModifier
      * @param array $data
      * @return array
      */
-    protected function formatFloat($path, array $data)
+    protected function formatFloatByPath($path, array $data)
     {
         $value = $this->arrayManager->get($path, $data);
 
         if (is_numeric($value)) {
-            $data = $this->arrayManager->replace($path, $data, number_format($value, 2, '.', ''));
+            $data = $this->arrayManager->replace($path, $data, $this->formatFloat($value));
         }
 
         return $data;
@@ -320,7 +320,7 @@ class CustomOptions extends AbstractModifier
                                 'actions' => [
                                     [
                                         'targetName' => 'ns = ${ $.ns }, index = ' . static::GRID_OPTIONS_NAME,
-                                        'actionName' => 'addChild',
+                                        'actionName' => 'processingAddChild',
                                     ]
                                 ]
                             ]
@@ -497,7 +497,7 @@ class CustomOptions extends AbstractModifier
      */
     protected function getCommonContainerConfig($sortOrder)
     {
-        return [
+        $commonContainer = [
             'arguments' => [
                 'data' => [
                     'config' => [
@@ -522,6 +522,9 @@ class CustomOptions extends AbstractModifier
                                     'label' => __('Option Title'),
                                     'component' => 'Magento_Catalog/component/static-type-input',
                                     'valueUpdate' => 'input',
+                                    'imports' => [
+                                        'optionId' => '${ $.provider }:${ $.parentScope }.option_id'
+                                    ]
                                 ],
                             ],
                         ],
@@ -531,6 +534,19 @@ class CustomOptions extends AbstractModifier
                 static::FIELD_IS_REQUIRE_NAME => $this->getIsRequireFieldConfig(40)
             ]
         ];
+
+        if ($this->locator->getProduct()->getStoreId()) {
+            $useDefaultConfig = [
+                'service' => [
+                    'template' => 'Magento_Catalog/form/element/helper/custom-option-service',
+                ]
+            ];
+            $titlePath = $this->arrayManager->findPath(static::FIELD_TITLE_NAME, $commonContainer, null)
+                . static::META_CONFIG_PATH;
+            $commonContainer = $this->arrayManager->merge($titlePath, $commonContainer, $useDefaultConfig);
+        }
+
+        return $commonContainer;
     }
 
     /**
@@ -812,7 +828,7 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'componentType' => ActionDelete::NAME,
                         'fit' => true,
-                        'sortOrder' => $sortOrder,
+                        'sortOrder' => $sortOrder
                     ],
                 ],
             ],
