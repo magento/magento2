@@ -238,6 +238,9 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             return self::FILTER_TYPE_INPUT;
         }
         $columns = $attribute->getFlatColumns();
+        if (empty($columns)) {
+            return self::FILTER_TYPE_INPUT;
+        }
         switch ($columns[$attribute->getAttributeCode()]['type']) {
             case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
             case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:
