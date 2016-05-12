@@ -27,13 +27,13 @@ HTML;
     exit(1);
 }
 
+require_once __DIR__ . '/autoload.php';
+require_once BP . '/app/functions.php';
+
 /* Custom umask value may be provided in optional mage_umask file in root */
 $umaskFile = BP . '/magento_umask';
 $mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
 umask($mask);
-
-require_once __DIR__ . '/autoload.php';
-require_once BP . '/app/functions.php';
 
 if (!empty($_SERVER['MAGE_PROFILER'])
     && isset($_SERVER['HTTP_ACCEPT'])
