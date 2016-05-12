@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class AbstractModifier
@@ -195,13 +195,24 @@ abstract class AbstractModifier implements ModifierInterface
     }
 
     /**
-     * Format number to have only two decimals after delimiter
+     * Format price to have only two decimals after delimiter
      *
      * @param mixed $value
      * @return string
      */
-    protected function formatFloat($value)
+    protected function formatPrice($value)
     {
-        return $value !== null ? number_format((float)$value, 2, '.', '') : '';
+        return $value !== null ? number_format((float)$value, PriceCurrencyInterface::DEFAULT_PRECISION, '.', '') : '';
+    }
+
+    /**
+     * Strip excessive decimal digits from weight number
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatWeight($value)
+    {
+        return (float)$value;
     }
 }
