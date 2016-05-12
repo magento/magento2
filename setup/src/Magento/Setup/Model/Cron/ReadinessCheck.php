@@ -88,7 +88,7 @@ class ReadinessCheck
         // checks PHP
         $phpVersionCheckResult = $this->phpReadinessCheck->checkPhpVersion();
         $phpExtensionsCheckResult = $this->phpReadinessCheck->checkPhpExtensions();
-        $phpSettingsCheckResult = $this->phpReadinessCheck->checkPhpSettings();
+        $phpSettingsCheckResult = $this->phpReadinessCheck->checkPhpCronSettings();
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_VERSION_VERIFIED] = $phpVersionCheckResult;
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_EXTENSIONS_VERIFIED] = $phpExtensionsCheckResult;
         $resultJsonRawData[self::KEY_PHP_CHECKS][self::KEY_PHP_SETTINGS_VERIFIED] = $phpSettingsCheckResult;
