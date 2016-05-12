@@ -10,6 +10,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class IdentifierTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @return \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected function setUp()
@@ -26,7 +31,10 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     {
         $requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $requestMock->expects($this->once())
-            ->method('getUriString')
+            ->method('isSecure')
+            ->willReturn(false);
+        $requestMock->expects($this->once())
+            ->method('getRequestUri')
             ->willReturn($uri);
         $requestMock->expects($this->once())
             ->method('get')
@@ -78,7 +86,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     {
         $uri = 'http://domain.com/customer';
         $vary = 1;
-        $data = [$uri, $vary];
+        $data = [false, $uri, $vary];
         ksort($data);
         $expected = md5(serialize($data));
 
