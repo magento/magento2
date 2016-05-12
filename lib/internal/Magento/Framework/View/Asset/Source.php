@@ -146,8 +146,8 @@ class Source
         }
 
         $chain = $this->createChain($asset, $dir, $path);
-        $this->sourceContentType = $chain->getContentType();
         $this->preProcessorPool->process($chain);
+        $asset->setSourceContentType($chain->getContentType());
         $chain->assertValid();
         if ($chain->isChanged()) {
             $dir = $this->varDir->getAbsolutePath();
@@ -160,27 +160,6 @@ class Source
             $result = [$dir, $path];
         }
         return $result;
-    }
-
-    /**
-     * Get source content type
-     *
-     * @return string
-     */
-    public function getSourceContentType()
-    {
-        return $this->sourceContentType;
-    }
-
-    /**
-     * Set source content type
-     * 
-     * @param string|null $type
-     * @return void
-     */
-    public function setSourceContentType($type)
-    {
-        $this->sourceContentType = $type;
     }
 
     /**
