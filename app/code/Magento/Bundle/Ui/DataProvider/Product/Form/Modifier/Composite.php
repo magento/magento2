@@ -124,12 +124,14 @@ class Composite extends AbstractModifier
                         'selection_can_change_qty' => $productLink->getCanChangeQuantity(),
                         'selection_qty_is_integer' => (bool)$integerQty,
                         'position' => $productLink->getPosition(),
+                        'delete' => '',
                     ];
                 }
                 $data[$modelId][BundlePanel::CODE_BUNDLE_OPTIONS][BundlePanel::CODE_BUNDLE_OPTIONS][] = [
                     'position' => $option->getPosition(),
                     'option_id' => $option->getOptionId(),
                     'title' => $option->getTitle(),
+                    'default_title' => $option->getDefaultTitle(),
                     'type' => $option->getType(),
                     'required' => ($option->getRequired()) ? '1' : '0',
                     'bundle_selections' => $selections,

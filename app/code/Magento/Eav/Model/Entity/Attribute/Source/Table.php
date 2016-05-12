@@ -66,7 +66,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         }
         $options = $defaultValues ? $this->_optionsDefault[$storeId] : $this->_options[$storeId];
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            $options = $this->addEmptyOption($options);
         }
 
         return $options;
@@ -89,8 +89,18 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             ->load()
             ->toOptionArray();
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            $options = $this->addEmptyOption($options);
         }
+        return $options;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    private function addEmptyOption(array $options)
+    {
+        array_unshift($options, ['label' => $this->getAttribute()->getIsRequired() ? '' : ' ', 'value' => '']);
         return $options;
     }
 
@@ -144,13 +154,13 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $linkField = $attribute->getEntity()->getLinkField();
         $collection->getSelect()->joinLeft(
             [$valueTable1 => $attribute->getBackend()->getTable()],
-            "e.entity_id={$valueTable1}." . $linkField .
+            "e.{$linkField}={$valueTable1}." . $linkField .
             " AND {$valueTable1}.attribute_id='{$attribute->getId()}'" .
             " AND {$valueTable1}.store_id=0",
             []
         )->joinLeft(
             [$valueTable2 => $attribute->getBackend()->getTable()],
-            "e.entity_id={$valueTable2}." . $linkField .
+            "e.{$linkField}={$valueTable2}." . $linkField .
             " AND {$valueTable2}.attribute_id='{$attribute->getId()}'" .
             " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
             []

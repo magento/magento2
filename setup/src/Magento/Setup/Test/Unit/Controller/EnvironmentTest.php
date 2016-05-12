@@ -58,6 +58,23 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testFilePermissionsInstaller()
+    {
+        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
+        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
+        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+
+        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $this->permissions->expects($this->once())->method('getMissingWritablePathsForInstallation');
+        $this->environment->setEvent($mvcEvent);
+        $this->environment->dispatch($request, $response);
+        $this->environment->filePermissionsAction();
+    }
+
     public function testPhpVersionActionInstaller()
     {
         $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
@@ -288,5 +305,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());
+    }
+
+    public function testIndexAction()
+    {
+        $model = $this->environment->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $model);
     }
 }
