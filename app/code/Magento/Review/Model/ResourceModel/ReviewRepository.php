@@ -105,26 +105,11 @@ class ReviewRepository implements ReviewRepositoryInterface
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->load();
 
-//        echo get_class(current($collection->getItems()));die();
 
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
-//        print_r(count($searchResult->getItems()));die();
         $searchResult->setTotalCount($collection->getSize());
-
-
-        return $searchResult;
-    }
-
-    /**
-     * @param Review\Collection $collection
-     * @return ReviewSearchResultsInterface
-     */
-    protected function _addCollectionToSearchResult(\Magento\Review\Model\ResourceModel\Review\Collection $collection,
-            SearchCriteria $searchCriteria)
-    {
-        /** @var ReviewSearchResultsInterface $searchResult */
 
 
         return $searchResult;
