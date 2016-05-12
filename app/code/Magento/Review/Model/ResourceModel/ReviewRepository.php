@@ -116,6 +116,23 @@ class ReviewRepository implements ReviewRepositoryInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function delete($reviewId)
+    {
+        $review = $this->reviewFactory->create()
+            ->load($reviewId);
+
+        if(!$review->getId()) {
+            throw new NoSuchEntityException(__("Requested Review doesn't exist"));
+        }
+        
+        $review->delete();
+        
+        return $review;
+    }
+
+    /**
      * Helper function that adds a FilterGroup to the collection.
      *
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup

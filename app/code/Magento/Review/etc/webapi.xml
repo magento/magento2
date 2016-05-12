@@ -28,4 +28,11 @@
             <resource ref="Magento_Review::reviews_all" />
         </resources>
     </route>
+
+    <route url="/V1/reviews/:reviewId" method="DELETE">
+        <service class="Magento\Review\Api\ReviewRepositoryInterface" method="delete" />
+        <resources>
+            <resource ref="Magento_Review::reviews_all" />
+        </resources>
+    </route>
  </routes>

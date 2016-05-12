@@ -31,4 +31,13 @@ interface ReviewRepositoryInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save(\Magento\Review\Api\Data\ReviewInterface $review);
+
+    /**
+     * Deletes a review.
+     *
+     * @param int $reviewId
+     * @return \Magento\Review\Api\Data\ReviewInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function delete($reviewId);
 }
