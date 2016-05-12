@@ -12,6 +12,7 @@ define([
     'uiRegistry',
     'prototype',
     'Magento_Ui/js/form/element/abstract',
+    'jquery/colorpicker/js/colorpicker',
     'jquery/ui'
 ], function (_, jQuery, mageTemplate, rg, prototype, Abstract) {
     'use strict';
