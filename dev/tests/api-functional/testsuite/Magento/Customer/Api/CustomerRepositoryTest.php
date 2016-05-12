@@ -14,7 +14,6 @@ use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Test class for Magento\Customer\Api\CustomerRepositoryInterface
