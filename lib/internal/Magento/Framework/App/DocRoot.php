@@ -34,12 +34,11 @@ class DocRoot
         $this->readFactory = $readFactory;
     }
 
-
     /**
      * Returns true if doc root is pub/ and not BP
      *
-     * @param $dirToCheck
-     * @param $missingDir
+     * @param string $dirToCheck
+     * @param string $missingDir
      *
      * @return bool
      */
