@@ -125,31 +125,32 @@ class Source extends AbstractEav
             ['s' => $this->getTable('store')],
             ['store_id', 'website_id']
         )->joinLeft(
-            ['d' => $this->getTable('catalog_product_entity_int')],
-            'd.store_id = 0 OR d.store_id = s.store_id',
-            ['attribute_id', 'value']
+            ['dd' => $this->getTable('catalog_product_entity_int')],
+            'dd.store_id = 0',
+            ['attribute_id']
         )->joinLeft(
-            ['d2' => $this->getTable('catalog_product_entity_int')],
-            sprintf(
-                "d.{$productIdField} = d2.{$productIdField}"
-                . ' AND d2.attribute_id = %s AND d2.value = %s AND d.store_id = d2.store_id',
-                $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId(),
-                ProductStatus::STATUS_ENABLED
-            ),
+            ['ds' => $this->getTable('catalog_product_entity_int')],
+            "ds.store_id = s.store_id AND ds.attribute_id = dd.attribute_id AND ds.{$productIdField} = dd.{$productIdField}",
+            ['value' =>  new \Zend_Db_Expr('COALESCE(ds.value, dd.value)')]
+        )->joinLeft(
+            ['d2d' => $this->getTable('catalog_product_entity_int')],
+            sprintf("d2d.store_id = 0 AND d2d.{$productIdField} = dd.{$productIdField} AND d2d.attribute_id = %s", $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId()),
+            []
+        )->joinLeft(
+            ['d2s' => $this->getTable('catalog_product_entity_int')],
+            "d2s.store_id = s.store_id AND d2s.attribute_id = d2d.attribute_id AND d2s.{$productIdField} = d2d.{$productIdField}",
             []
         )->joinLeft(
             ['cpe' => $this->getTable('catalog_product_entity')],
-            "cpe.{$productIdField} = d.{$productIdField}",
+            "cpe.{$productIdField} = dd.{$productIdField}",
             array_unique([$productIdField, 'entity_id'])
         )->where(
             's.store_id != 0'
         )->where(
-            'd.value IS NOT NULL'
+            '(ds.value IS NOT NULL OR dd.value IS NOT NULL)'
         )->where(
-            'd2.value IS NOT NULL'
-        )->group([
-            's.store_id', 's.website_id', 'cpe.entity_id', 'd.attribute_id', 'd.value',
-        ]);
+            (new \Zend_Db_Expr('COALESCE(d2s.value, d2d.value)')) . ' = ' . ProductStatus::STATUS_ENABLED
+        )->distinct(true);
 
         if ($entityIds !== null) {
             $subSelect->where('cpe.entity_id IN(?)', $entityIds);
