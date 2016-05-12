@@ -317,7 +317,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         );
 
         $rawPostMessage =
-                'Your current PHP memory limit is memory_limit=512M.
+                'Your current PHP memory limit is 512M.
                  Magento 2 requires it to be set to 756M or more.
                  As a user with root privileges, edit your php.ini file to increase memory_limit. 
                  (The command php --ini tells you where it is located.) 
