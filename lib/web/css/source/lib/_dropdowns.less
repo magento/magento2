@@ -59,6 +59,7 @@
     @{_toggle-selector} {
         .lib-css(padding, @_dropdown-actions-padding);
         cursor: pointer;
+
         ._lib-dropdown-icon(
             @_dropdown-toggle-icon-content,
             @_dropdown-toggle-active-icon-content,
@@ -74,6 +75,7 @@
             @_icon-font-text-hide
         );
     }
+
     ._lib-dropdown-styles(
         @_options-selector: @_options-selector,
         @_dropdown-list-min-width,
@@ -154,6 +156,7 @@
     .lib-clearfix();
     display: inline-block;
     position: relative;
+
     ._lib-dropdown-split-toggle-position(
         @_button-selector,
         @_toggle-selector,
@@ -182,6 +185,7 @@
             @_icon-font-text-hide
         );
     }
+
     ._lib-dropdown-styles(
         @_options-selector: @_options-selector,
         @_dropdown-split-list-min-width,
@@ -239,12 +243,16 @@
     @_dropdown-list-pointer-position-left-right
 ) {
     @{_options-selector} {
+        .lib-list-reset-styles();
         .lib-css(background, @_dropdown-list-background);
         .lib-css(border, @_dropdown-list-border);
+        .lib-css(height, @_dropdown-list-height);
+        .lib-css(margin-top, @_dropdown-list-margin-top);
+        .lib-css(min-width, @_dropdown-list-min-width);
+        .lib-css(width, @_dropdown-list-width);
         .lib-css(z-index, @_dropdown-list-z-index);
-        .lib-list-reset-styles();
         box-sizing: border-box;
-        position: absolute;
+        display: none;
 
         ._lib-dropdown-list-position(
             @_dropdown-list-position-top,
@@ -254,15 +262,11 @@
         );
 
         ._lib-dropdown-list-shadow(@_dropdown-list-shadow);
-        .lib-css(height, @_dropdown-list-height);
-        .lib-css(margin-top, @_dropdown-list-margin-top);
-        .lib-css(min-width, @_dropdown-list-min-width);
-        .lib-css(width, @_dropdown-list-width);
-        display: none;
 
         li {
             .lib-css(margin, @_dropdown-list-item-margin);
             .lib-css(padding, @_dropdown-list-item-padding);
+
             ._lib-dropdown-list-item-border(
                 @_dropdown-list-item-border
             );
@@ -281,10 +285,13 @@
             @_dropdown-list-pointer-position-left-right
         );
     }
+
     &.active {
         overflow: visible;
+
         @{_options-selector} {
             display: block;
+            position: absolute;
         }
     }
 }
