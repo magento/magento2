@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @account-title-border-color: @color-gray-middle2;
 @account-table-border-bottom-color: @color-gray-middle1;
 @account-table-action-delete: @color-red12;
@@ -15,7 +19,7 @@
 
 //
 //  Common
-//  ---------------------------------------------
+//  _____________________________________________
 
 & when (@media-common = true) {
     .login-container {
@@ -143,7 +147,7 @@
     }
 
     .account,
-    [class^="sales-guest-"],
+    [class^='sales-guest-'],
     .sales-guest-view {
         .column.main {
             .order-details-items {
@@ -303,7 +307,7 @@
 
 //
 //  Desktop
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .login-container {
@@ -354,8 +358,8 @@
     .form.send.confirmation,
     .form.password.forget,
     .form.create.account {
-        width: 50%;
         min-width: 600px;
+        width: 50%;
     }
 
     //  My account
@@ -462,7 +466,7 @@
 
 //
 //  Mobile @screen__s
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .account {
@@ -479,7 +483,7 @@
 
 //
 //  Mobile @screen__m
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .login-container {
