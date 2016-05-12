@@ -6,8 +6,7 @@
 
 namespace Magento\Framework\Controller\Result;
 
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 use Magento\Framework\Translate\InlineInterface;
 
@@ -60,22 +59,13 @@ class Json extends AbstractResult
     }
 
     /**
-     * @param HttpResponse|ResponseInterface $response
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
-    {
-        return $this->renderHttpResponse($response);
-    }
-
-    /**
-     * @param HttpResponse $response
-     * @return $this
-     */
-    private function renderHttpResponse(HttpResponse $response)
+    protected function render(HttpResponseInterface $response)
     {
         $this->translateInline->processResponseBody($this->json, true);
-        $response->representJson($this->json);
+        $response->setHeader('Content-Type', 'application/json', true);
+        $response->setBody($this->json);
         return $this;
     }
 }

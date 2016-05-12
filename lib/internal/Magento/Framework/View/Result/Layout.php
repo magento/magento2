@@ -102,7 +102,7 @@ class Layout extends AbstractResult
     /**
      * Get layout instance for current page
      *
-     * @return \Magento\Framework\View\Layout
+     * @return \Magento\Framework\View\LayoutInterface
      */
     public function getLayout()
     {
@@ -153,19 +153,10 @@ class Layout extends AbstractResult
     /**
      * Render current layout
      *
-     * @param HttpResponseInterface|ResponseInterface $response
+     * @param HttpResponseInterface|ResponseInterface $httpResponse
      * @return $this
      */
-    public function renderResult(ResponseInterface $response)
-    {
-        return $this->renderHttpResult($response);
-    }
-
-    /**
-     * @param HttpResponseInterface $httpResponse
-     * @return $this
-     */
-    private function renderHttpResult(HttpResponseInterface $httpResponse)
+    public function renderResult(ResponseInterface $httpResponse)
     {
         \Magento\Framework\Profiler::start('LAYOUT');
         \Magento\Framework\Profiler::start('layout_render');
@@ -182,25 +173,13 @@ class Layout extends AbstractResult
     }
 
     /**
-     * Render current layout
-     *
-     * @param HttpResponseInterface|ResponseInterface $response
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
-    {
-        return $this->renderHttpResponse($response);
-    }
-
-    /**
-     * @param HttpResponseInterface $httpResponse
-     * @return $this
-     */
-    private function renderHttpResponse(HttpResponseInterface $httpResponse)
+    protected function render(HttpResponseInterface $response)
     {
         $output = $this->layout->getOutput();
         $this->translateInline->processResponseBody($output);
-        $httpResponse->appendBody($output);
+        $response->appendBody($output);
         return $this;
     }
 }

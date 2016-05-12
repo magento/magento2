@@ -8,7 +8,6 @@ namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\App;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 
 /**
@@ -92,21 +91,11 @@ class Redirect extends AbstractResult
     }
 
     /**
-     * @param HttpResponseInterface|ResponseInterface $response
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
-        return $this->renderHttpResponse($response);
-    }
-
-    /**
-     * @param HttpResponseInterface $httpResponse
-     * @return $this
-     */
-    private function renderHttpResponse(HttpResponseInterface $httpResponse)
-    {
-        $httpResponse->setRedirect($this->url);
+        $response->setRedirect($this->url);
         return $this;
     }
 }

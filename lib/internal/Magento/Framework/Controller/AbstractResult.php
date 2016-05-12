@@ -108,10 +108,10 @@ abstract class AbstractResult implements ResultInterface
     }
     
     /**
-     * @param ResponseInterface $response
+     * @param HttpResponseInterface $response
      * @return $this
      */
-    abstract protected function render(ResponseInterface $response);
+    abstract protected function render(HttpResponseInterface $response);
 
     /**
      * Render content

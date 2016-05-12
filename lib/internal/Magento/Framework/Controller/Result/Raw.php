@@ -7,7 +7,6 @@
 namespace Magento\Framework\Controller\Result;
 
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
-use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\AbstractResult;
 
 /**
@@ -32,21 +31,11 @@ class Raw extends AbstractResult
     }
 
     /**
-     * @param HttpResponseInterface|ResponseInterface $response
-     * @return $this
+     * {@inheritdoc}
      */
-    protected function render(ResponseInterface $response)
+    protected function render(HttpResponseInterface $response)
     {
-        return $this->renderHttpResponse($response);
-    }
-
-    /**
-     * @param HttpResponseInterface $httpResponse
-     * @return $this
-     */
-    private function renderHttpResponse(HttpResponseInterface $httpResponse)
-    {
-        $httpResponse->setBody($this->contents);
+        $response->setBody($this->contents);
         return $this;
     }
 }
