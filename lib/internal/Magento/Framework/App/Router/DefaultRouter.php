@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Router;
 use Magento\Framework\App\ActionFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
+use Magento\Framework\App\ActionInterface;
 
 class DefaultRouter implements RouterInterface
 {
@@ -37,7 +38,7 @@ class DefaultRouter implements RouterInterface
      * Modify request and set to no-route action
      *
      * @param RequestInterface $request
-     * @return boolean
+     * @return ActionInterface
      */
     public function match(RequestInterface $request)
     {
