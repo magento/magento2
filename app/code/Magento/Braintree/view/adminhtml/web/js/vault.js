@@ -114,6 +114,7 @@ define([
                 self.placeOrder();
             }).fail(function (response) {
                 var failed = JSON.parse(response.responseText);
+
                 self.error(failed.message);
             }).always(function () {
                 $('body').trigger('processStop');
