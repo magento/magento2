@@ -214,4 +214,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Backend\Model\Menu\Builder">
+        <plugin name="SetupMenuBuilder" type="Magento\Backend\Model\Setup\MenuBuilder" />
+    </type>
 </config>
