@@ -204,6 +204,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -238,19 +239,25 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         if ($linkProductModel->isComposite()) {
             throw new InputException(__('Bundle product could not contain another composite product'));
         }
+
         if ($selections) {
             foreach ($selections as $selection) {
                 if ($selection['option_id'] == $optionId &&
                     $selection['product_id'] == $linkProductModel->getEntityId()) {
-                    throw new CouldNotSaveException(
-                        __(
-                            'Child with specified sku: "%1" already assigned to product: "%2"',
-                            [$linkedProduct->getSku(), $product->getSku()]
-                        )
-                    );
+                    if (!$product->getCopyFromView()) {
+                        throw new CouldNotSaveException(
+                            __(
+                                'Child with specified sku: "%1" already assigned to product: "%2"',
+                                [$linkedProduct->getSku(), $product->getSku()]
+                            )
+                        );
+                    } else {
+                        return $this->bundleSelection->create()->load($linkProductModel->getEntityId());
+                    }
                 }
             }
         }
+
         $selectionModel = $this->bundleSelection->create();
         $selectionModel = $this->mapProductLinkToSelectionModel(
             $selectionModel,
@@ -361,7 +368,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             $product
         );
 
-        $options = $optionCollection->appendSelections($selectionCollection);
+        $options = $optionCollection->appendSelections($selectionCollection, true);
         return $options;
     }
 

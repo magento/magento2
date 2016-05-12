@@ -82,6 +82,17 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * Add filter by status to collection
+     *
+     * @param int $status
+     * @return $this
+     */
+    public function addStatusFilter($status)
+    {
+        return $this->addFieldToFilter('main_table.is_active', ['eq' => $status]);
+    }
+
+    /**
      * Add store id(s) filter to collection
      *
      * @param int|array $store

@@ -36,6 +36,19 @@ class Marketplace extends AbstractActionController
     }
 
     /**
+     * No index action, return 404 error page
+     *
+     * @return ViewModel
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
+    }
+
+    /**
      * Save auth.json
      *
      * @return array|ViewModel
@@ -77,12 +90,12 @@ class Marketplace extends AbstractActionController
                 );
                 $isValid = json_decode($isValid, true);
                 if ($isValid['success'] === true) {
-                    return new JsonModel(['success' => true, 'data' => $authDataJson]);
+                    return new JsonModel(['success' => true, 'data' => ['username' => $authDataJson['username']]]);
                 } else {
                     return new JsonModel(['success' => false, 'message' => $isValid['message']]);
                 }
             }
-            return new JsonModel(['success' => false, 'data' => $authDataJson]);
+            return new JsonModel(['success' => false, 'data' => ['username' => $authDataJson['username']]]);
         } catch (\Exception $e) {
             return new JsonModel(['success' => false, 'message' => $e->getMessage()]);
         }
