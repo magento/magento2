@@ -59,7 +59,7 @@
     }
 
     .legend {
-        span {
+        > span {
             margin-right: @indent__xs;
         }
     }
@@ -130,7 +130,7 @@
     }
 
     .hasDatepicker {
-        + .ui-datepicker-trigger {
+        ~ .ui-datepicker-trigger {
             .lib-button-reset();
             .lib-icon-font(
             @_icon-font-content: @icon-calendar,
@@ -141,6 +141,7 @@
             @_icon-font-text-hide: true
             );
             display: inline-block;
+            margin-top: -4px;
             vertical-align: middle;
 
             &:focus {
@@ -150,6 +151,7 @@
         }
     }
 
+    .field.date,
     .field-dob {
         .hasDatepicker {
             &:extend(.abs-field-date-input all);
