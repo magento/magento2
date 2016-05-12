@@ -90,10 +90,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
             foreach ($options as $optionId => $optionValue) {
                 if (is_array($optionValue)) {
                     $optionValue = $this->processFileOptionValue($optionValue);
-                    $filter = function ($item) {
-                        return !is_array($item);
-                    };
-                    $optionValue = array_filter($optionValue, $filter);
                     $optionValue = implode(',', $optionValue);
                 }
 
