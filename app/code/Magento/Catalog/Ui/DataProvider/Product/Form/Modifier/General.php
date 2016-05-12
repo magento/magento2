@@ -42,7 +42,7 @@ class General extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        $data = $this->customizeNumberFormat($data);
+        $data = $this->customizeWeightFormat($data);
         $data = $this->customizeAdvancedPriceFormat($data);
         $modelId = $this->locator->getProduct()->getId();
 
@@ -54,40 +54,27 @@ class General extends AbstractModifier
     }
 
     /**
-     * Customizing number fields
+     * Customizing weight fields
      *
      * @param array $data
      * @return array
      */
-    protected function customizeNumberFormat(array $data)
+    protected function customizeWeightFormat(array $data)
     {
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
-        $numberFields = [ProductAttributeInterface::CODE_WEIGHT];
+        $weightFields = [ProductAttributeInterface::CODE_WEIGHT];
 
-        foreach ($numberFields as $fieldCode) {
+        foreach ($weightFields as $fieldCode) {
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/' . $fieldCode;
-            $number = (float)$this->arrayManager->get($path, $data);
             $data = $this->arrayManager->replace(
                 $path,
                 $data,
-                $this->formatNumber($number)
+                $this->formatWeight($this->arrayManager->get($path, $data))
             );
         }
 
         return $data;
-    }
-
-    /**
-     * Formatting numeric field
-     *
-     * @param float $number
-     * @param int $decimals
-     * @return string
-     */
-    protected function formatNumber($number, $decimals = 2)
-    {
-        return number_format($number, $decimals);
     }
 
     /**
@@ -104,7 +91,7 @@ class General extends AbstractModifier
         if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode])) {
             foreach ($data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode] as &$value) {
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
-                    $this->formatNumber($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
+                    $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
                     (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }

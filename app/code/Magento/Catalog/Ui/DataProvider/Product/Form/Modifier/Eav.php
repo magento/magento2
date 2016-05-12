@@ -354,7 +354,7 @@ class Eav extends AbstractModifier
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
                     if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
-                        $attributeValue = $this->formatFloat($attributeValue);
+                        $attributeValue = $this->formatPrice($attributeValue);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
                 }
