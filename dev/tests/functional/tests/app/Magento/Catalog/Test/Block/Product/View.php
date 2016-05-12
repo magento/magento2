@@ -190,6 +190,13 @@ class View extends AbstractConfigureBlock
     protected $baseImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img';
 
     /**
+     * Video Container selector
+     *
+     * @var string
+     */
+    private $videoContainer = 'div.fotorama-video-container';
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -552,5 +559,15 @@ class View extends AbstractConfigureBlock
     public function closeFullImage()
     {
         $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Check is video is visible on product page
+     *
+     * @return bool
+     */
+    public function isVideoVisible()
+    {
+        return $this->_rootElement->find($this->videoContainer)->isVisible();
     }
 }

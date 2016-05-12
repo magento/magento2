@@ -28,6 +28,18 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->prepareObjectManager([
+            [
+                'Magento\Framework\Api\ExtensionAttributesFactory',
+                $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\Api\AttributeValueFactory',
+                $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false)
+            ],
+        ]);
+
         $this->rule = $objectManagerHelper->getObject(
             'Magento\CatalogWidget\Model\Rule',
             [
@@ -49,5 +61,21 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     public function testGetActionsInstance()
     {
         $this->assertNull($this->rule->getActionsInstance());
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

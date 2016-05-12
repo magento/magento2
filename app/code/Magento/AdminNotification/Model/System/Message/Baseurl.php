@@ -8,6 +8,9 @@ namespace Magento\AdminNotification\Model\System\Message;
 
 use Magento\Store\Model\Store;
 
+/**
+ * @deprecated 
+ */
 class Baseurl implements \Magento\Framework\Notification\MessageInterface
 {
     /**
