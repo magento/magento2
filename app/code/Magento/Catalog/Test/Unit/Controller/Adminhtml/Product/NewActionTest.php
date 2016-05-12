@@ -70,19 +70,14 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         $resultForwardFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultForward);
-        $this->initializationHelper = $this->getMock(Helper::class, [], [], '', false);
-        $stockDataFilter = $this->getMockBuilder(StockDataFilter::class)
-            ->disableOriginalConstructor()->getMock();
 
         $this->action = (new ObjectManager($this))->getObject(
             NewAction::class,
             [
                 'context' => $this->initContext(),
                 'productBuilder' => $this->productBuilder,
-                'stockFilter' => $stockDataFilter,
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
-                'initializationHelper' => $this->initializationHelper,
             ]
         );
 
@@ -96,25 +91,6 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         $this->action->getRequest()->expects($this->any())->method('getParam')->willReturn(true);
         $this->action->getRequest()->expects($this->any())->method('getFullActionName')
             ->willReturn('catalog_product_new');
-        $this->action->execute();
-    }
-
-    public function testExecuteObtainsProductDataFromSession()
-    {
-        $this->action->getRequest()->expects($this->any())->method('getParam')->willReturn(true);
-        $this->action->getRequest()->expects($this->any())->method('getFullActionName')
-            ->willReturn('catalog_product_new');
-
-        $productData = ['name' => 'test-name', 'stock_data' => null];
-        $this->session->expects($this->any())->method('getProductData')
-            ->willReturn(['product' => $productData]);
-
-        $this->initializationHelper
-            ->expects($this->once())
-            ->method('initializeFromData')
-            ->with($this->product, $productData)
-            ->willReturn($this->product);
-
         $this->action->execute();
     }
 }

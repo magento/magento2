@@ -236,36 +236,6 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_typeProcessor->processSimpleAndAnyType($value, $type);
     }
 
-    public function testFindSetterMethodName()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $setterName = $this->_typeProcessor->findSetterMethodName($class, 'AttrName');
-        $this->assertEquals("setAttrName", $setterName);
-
-        $booleanSetterName = $this->_typeProcessor->findSetterMethodName($class, 'Active');
-        $this->assertEquals("setIsActive", $booleanSetterName);
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameInvalidAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'InvalidAttribute');
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp /Property :"InvalidAttribute" does not exist in the provided class: \w+/
-     */
-    public function testFindSetterMethodNameWrongCamelCasedAttribute()
-    {
-        $class = new ClassReflection("\\Magento\\Framework\\Reflection\\Test\\Unit\\DataObject");
-        $this->_typeProcessor->findSetterMethodName($class, 'ActivE');
-    }
-
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessageRegExp /@param annotation is incorrect for the parameter "name" \w+/

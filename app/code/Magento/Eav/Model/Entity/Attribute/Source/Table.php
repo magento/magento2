@@ -66,7 +66,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         }
         $options = $defaultValues ? $this->_optionsDefault[$storeId] : $this->_options[$storeId];
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            $options = $this->addEmptyOption($options);
         }
 
         return $options;
@@ -89,8 +89,18 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             ->load()
             ->toOptionArray();
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            $options = $this->addEmptyOption($options);
         }
+        return $options;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    private function addEmptyOption(array $options)
+    {
+        array_unshift($options, ['label' => $this->getAttribute()->getIsRequired() ? '' : ' ', 'value' => '']);
         return $options;
     }
 

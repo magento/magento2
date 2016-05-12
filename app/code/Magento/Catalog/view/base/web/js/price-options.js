@@ -29,6 +29,13 @@ define([
         options: globalOptions,
 
         /**
+         * @private
+         */
+        _init: function initPriceBundle() {
+            $(this.options.optionsSelector, this.element).trigger('change');
+        },
+
+        /**
          * Widget creating method.
          * Triggered once.
          * @private
