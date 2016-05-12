@@ -24,7 +24,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
         </variation>
-        <variation name="UpdateCustomerFrontendEntityTestVariation2" summary="Update customer information and add UK address">
+        <variation name="UpdateCustomerFrontendEntityTestVariation2" summary="Update customer information and add UK address, assert customer name and address on address book tab">
             <data name="customer/data/firstname" xsi:type="string">Jonny %isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
             <data name="customer/data/email" xsi:type="string">jonny%isolation%@example.com</data>
@@ -40,6 +40,8 @@
             <data name="address/data/postcode" xsi:type="string">12345</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerAddressSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddresses" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerDefaultAddressFrontendAddressBook" />
+            <constraint name="Magento\Customer\Test\Constraint\AssertCustomerNameFrontend" />
         </variation>
         <variation name="UpdateCustomerFrontendEntityTestVariation3" summary="Update customer information and add France address">
             <data name="customer/data/firstname" xsi:type="string">Jean %isolation%</data>

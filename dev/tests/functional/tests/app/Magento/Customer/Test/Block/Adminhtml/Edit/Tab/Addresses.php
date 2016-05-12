@@ -250,7 +250,7 @@ class Addresses extends Tab
     {
         $addressRenderer = $this->objectManager->create(
             \Magento\Customer\Test\Block\Address\Renderer::class,
-            ['address' => $addressToDelete, 'type' => 'htmlInBackend']
+            ['address' => $addressToDelete, 'type' => 'html']
         );
         $addressToDelete = $addressRenderer->render();
 
