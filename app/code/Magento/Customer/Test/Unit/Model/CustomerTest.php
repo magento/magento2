@@ -139,49 +139,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $data
-     * @param $expected
-     *
-     * @dataProvider validateDataProvider
-     */
-    public function testValidate($data, $expected)
-    {
-        $this->_config->expects($this->exactly(3))
-            ->method('getAttribute')
-            ->will($this->returnValue($this->attributeCustomerMock));
-        $this->attributeCustomerMock->expects($this->exactly(3))
-            ->method('getIsRequired')
-            ->will($this->returnValue(true));
-        $this->_model->setData($data);
-        $this->assertEquals($expected, $this->_model->validate());
-    }
-
-    public function validateDataProvider()
-    {
-        $data = [
-            'firstname' => 'First Name',
-            'lastname' => 'Last Name',
-            'email' => 'email@example.com',
-            'dob' => '01.01.1970',
-            'taxvat' => '10',
-            'gender' => 'm',
-        ];
-        return [
-            [array_diff_key($data, ['firstname' => '']), ['Please enter a first name.']],
-            [array_diff_key($data, ['lastname' => '']), ['Please enter a last name.']],
-            [array_diff_key($data, ['email' => '']), ['Please correct this email address: "".']],
-            [
-                array_merge($data, ['email' => 'wrong@email']),
-                ['Please correct this email address: "wrong@email".']
-            ],
-            [array_diff_key($data, ['dob' => '']), ['Please enter a date of birth.']],
-            [array_diff_key($data, ['taxvat' => '']), ['Please enter a TAX/VAT number.']],
-            [array_diff_key($data, ['gender' => '']), ['Please enter a gender.']],
-            [$data, true],
-        ];
-    }
-
-    /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Please correct the transactional account email type.
      */
