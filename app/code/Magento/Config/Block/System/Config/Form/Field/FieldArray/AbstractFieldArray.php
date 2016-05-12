@@ -148,7 +148,7 @@ abstract class AbstractFieldArray extends \Magento\Config\Block\System\Config\Fo
             foreach ($element->getValue() as $rowId => $row) {
                 $rowColumnValues = [];
                 foreach ($row as $key => $value) {
-                    $row[$key] = $this->escapeHtml($value);
+                    $row[$key] = $value;
                     $rowColumnValues[$this->_getCellInputElementId($rowId, $key)] = $row[$key];
                 }
                 $row['_id'] = $rowId;
