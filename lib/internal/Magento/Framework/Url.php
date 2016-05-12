@@ -449,11 +449,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $this->getRouteParamsResolver()->setType(UrlInterface::URL_TYPE_DIRECT_LINK);
         }
 
-        $result = $this->getUrlModifier()->execute(
-            $this->_getScope()->getBaseUrl($this->_getType(), $this->_isSecure()),
-            $params,
-            \Magento\Framework\Url\ModifierInterface::MODE_BASE
-        );
+        $result = $this->_getScope()->getBaseUrl($this->_getType(), $this->_isSecure());
 
         // setting back the original scope
         $this->setScope($origScope);
@@ -835,8 +831,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         if(!$isCached) {
             return $this->getUrlModifier()->execute(
-                $this->createUrl($routePath, $routeParams),
-                $routeParams
+                $this->createUrl($routePath, $routeParams)
             );
         }
 
@@ -848,8 +843,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $cacheKey = md5($routePath . serialize($cashedParams));
         if (!isset($this->cacheUrl[$cacheKey])) {
             $this->cacheUrl[$cacheKey] = $this->getUrlModifier()->execute(
-                $this->createUrl($routePath, $routeParams),
-                $routeParams
+                $this->createUrl($routePath, $routeParams)
             );
         }
 

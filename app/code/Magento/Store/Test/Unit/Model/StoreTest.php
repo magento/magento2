@@ -39,6 +39,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemMock;
 
+    /**
+     * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlModifierMock;
+
     protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -61,6 +66,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'Magento\Store\Model\Store',
             ['filesystem' => $this->filesystemMock]
         );
+
+        $this->urlModifierMock = $this->getMock('Magento\Framework\Url\ModifierInterface');
+        $this->urlModifierMock->expects($this->any())
+            ->method('execute')
+            ->willReturnArgument(0);
     }
 
     /**
@@ -242,6 +252,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $model->setCode('scopeCode');
+
+        $this->setUrlModifier($model);
+
         $this->assertEquals($expectedBaseUrl, $model->getBaseUrl($type, $secure));
     }
 
@@ -321,6 +334,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $model->setCode('scopeCode');
+
+        $this->setUrlModifier($model);
+
         $server = $_SERVER;
         $_SERVER['SCRIPT_FILENAME'] = 'test_script.php';
         $this->assertEquals(
@@ -595,5 +611,17 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testGetScopeTypeName()
     {
         $this->assertEquals('Store View', $this->store->getScopeTypeName());
+    }
+
+    /**
+     * @param \Magento\Store\Model\Store $model
+     */
+    private function setUrlModifier(\Magento\Store\Model\Store $model)
+    {
+        $property = (new \ReflectionClass(get_class($model)))
+            ->getProperty('urlModifier');
+
+        $property->setAccessible(true);
+        $property->setValue($model, $this->urlModifierMock);
     }
 }
