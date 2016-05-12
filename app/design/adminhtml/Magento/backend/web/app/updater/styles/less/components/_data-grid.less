@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @component-indicator__size: 20px;
 
 //
@@ -28,8 +32,8 @@
     }
 
     &::before {
-        border-radius: 1px;
         border: 1px solid @color-gray68;
+        border-radius: 1px;
         box-shadow: 0 0 2px rgba(0,0,0,.4);
         content: attr(data-label);
         font-size: @font-size__s;
@@ -39,7 +43,8 @@
     }
 
     &::after {
-        border: 1px solid darken(@color-gray68, 8);
+        border-color: darken(@color-gray68, 8);
+        border-style: solid;
         border-width: 1px 0 0 1px;
         box-shadow: -1px -1px 1px rgba(0,0,0,.1);
         content: '';

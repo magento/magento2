@@ -58,11 +58,11 @@
     }
 }
 
-// @todo ui Move to other place - will be done in upcoming task "Address Tabs":
+//  @todo ui Move to other place - will be done in upcoming task 'Address Tabs':
 
 .address-item-edit-content {
     background: @color-white;
-    border: 1px solid #dad1c8;
+    border: 1px solid @color-gray-brown;
     box-shadow: 0 2px 1px 0 rgba(217, 210, 202, .5);
     margin-left: 359px;
     max-width: 500px;
@@ -80,7 +80,7 @@
 .address-list {
     float: left;
     list-style-type: none;
-    margin:0;
+    margin: 0;
     padding: 0;
     width: 360px;
 
@@ -91,8 +91,8 @@
     }
 
     .address-list-item {
-        background: #f1f1f1;
-        border: 1px solid #d9d2ca;
+        background: @color-white-fog2;
+        border: 1px solid @color-gray-brown;
         cursor: pointer;
         margin-bottom: -1px;
         padding: 10px 10px 15px;
@@ -127,22 +127,22 @@
             }
 
             &:before {
-                color: #d9d2ca;
+                color: @color-gray-brown;
                 right: -11px;
                 z-index: 1;
             }
         }
     }
 
-    address:first-line {
-        //  its not work  if First Name and Last Name in two lines
-        font-weight: bold;
-    }
-
     address {
         font-style: normal;
         line-height: 1.5;
         margin: 0 20px 15px 0;
+
+        &:first-line {
+            //  It does not work if First Name and Last Name are arranged in two lines
+            font-weight: bold;
+        }
     }
 
     .address-list-actions {
@@ -181,8 +181,8 @@
             //  @Todo ui - testing solution to show action hint without title attribute
             span {
                 background-color: @color-very-light-gray;
-                border-radius: .4rem;
                 border: 1px solid @color-heathered-grey;
+                border-radius: .4rem;
                 bottom: 100%;
                 clip: auto;
                 font-size: @font-size__s;
@@ -285,7 +285,9 @@ label.mage-error {
 //  Selectbox in calendar @todo ui - Remove after default select styles set
 //  _____________________________________________
 
-.ui-datepicker .ui-datepicker-title select:extend(.admin__control-select all) {};
+.ui-datepicker .ui-datepicker-title select {
+    &:extend(.admin__control-select all);
+}
 
 //
 //  Data grid
@@ -300,12 +302,12 @@ label.mage-error {
 
     .data-grid-filters {
         td {
-            padding: 1rem;
             border-bottom: 1px solid @color-gray84;
+            padding: 1rem;
         }
 
         select,
-        input[type="text"]{
+        input[type='text'] {
             font-size: 1.3rem;
             height: 2.8rem;
             min-width: 5rem;
@@ -318,7 +320,6 @@ label.mage-error {
         }
 
         select {
-            padding: .2rem 1.8rem .2rem .3rem;
             background-position+: ~'calc(100% - 5px)' -37px;
             background-size+: auto;
             background-position+: 100%;
@@ -326,6 +327,7 @@ label.mage-error {
             background-position+: ~'calc(100% - 18px)' 0;
             background-size+: 1px 100%;
             height: 2.8rem;
+            padding: .2rem 1.8rem .2rem .3rem;
 
             &:focus {
                 background-position+: ~'calc(100% - 5px)' 11px;
@@ -335,7 +337,7 @@ label.mage-error {
         }
 
         td {
-            .hasDatepicker {
+            ._has-datepicker {
                 + .ui-datepicker-trigger {
                     height: 2.8rem;
                     margin-left: -3.2rem;
@@ -392,8 +394,8 @@ label.mage-error {
         cursor: pointer;
         height: 22px;
         left: 0;
-        opacity: 0.01;
-        position:absolute;
+        opacity: .01;
+        position: absolute;
         top: 0;
         width: 22px;
         z-index: 2;
@@ -439,7 +441,7 @@ label.mage-error {
                     &:before {
                         content: '-';
                         font-size: 2rem;
-                        line-height: 0.7rem;
+                        line-height: .7rem;
                     }
                 }
             }
@@ -614,7 +616,7 @@ label.mage-error {
 .attribute-popup {
     background-color: @color-white;
 
-    #edit_form {
+    .edit-form {
         padding-left: 1.8rem;
         padding-right: 1.8rem;
     }

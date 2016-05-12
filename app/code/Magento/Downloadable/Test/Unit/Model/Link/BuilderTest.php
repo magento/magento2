@@ -108,13 +108,24 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         )->willReturn($downloadableData);
         $this->service->setData($data);
         $this->dataObjectHelperMock->method('populateWithArray')
-            ->with(
-                $this->linkMock,
-                array_merge(
-                    $data,
-                    $downloadableData
-                ),
-                LinkInterface::class
+            ->withConsecutive(
+                [
+                    $this->linkMock,
+                    array_merge(
+                        $data,
+                        $downloadableData
+                    ),
+                    LinkInterface::class
+                ],
+                [
+                    $this->linkMock,
+                    array_merge(
+                        $data,
+                        $downloadableData,
+                        $data['sample']
+                    ),
+                    LinkInterface::class
+                ]
             )->willReturn($this->linkMock);
         $this->linkMock->expects($this->once())->method('getLinkType')->willReturn(Download::LINK_TYPE_FILE);
         $linkModel = $this->getMockBuilder(Link::class)
@@ -172,16 +183,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $downloadableData = ['sort_order' => 1];
-        $this->objectCopyServiceMock->expects($this->exactly(2))->method('getDataFromFieldset')->withConsecutive(
+        $this->objectCopyServiceMock->expects($this->once())->method('getDataFromFieldset')->withConsecutive(
             [
                 'downloadable_data',
                 'to_link',
                 $data
-            ],
-            [
-                'downloadable_link_sample_data',
-                'to_link_sample',
-                $data['sample']
             ]
         )->willReturn($downloadableData);
         $this->service->setData($data);
