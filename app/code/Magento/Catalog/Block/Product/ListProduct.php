@@ -122,7 +122,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                 }
             }
             $this->_productCollection = $layer->getProductCollection();
-            $this->_productCollection->addOptionsToResult();
 
             $this->prepareSortableFieldsByCategory($layer->getCurrentCategory());
 
