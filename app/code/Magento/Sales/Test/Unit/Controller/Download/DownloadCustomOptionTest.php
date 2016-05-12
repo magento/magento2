@@ -72,6 +72,16 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectMock;
 
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productRepositoryMock;
+
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productMock;
+
     protected function setUp()
     {
         $resultForwardFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\ForwardFactory')
@@ -113,14 +123,25 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['load', 'getId', 'getCode', 'getProductId', 'getValue'])
             ->getMock();
 
+        $this->productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->setMethods(['getId'])
+            ->getMock();
+
+        $this->productRepositoryMock = $this->getMockBuilder('\Magento\Catalog\Api\ProductRepositoryInterface')
+            ->setMethods(['getById'])
+            ->getMockForAbstractClass();
+        $this->productRepositoryMock->expects($this->any())->method('getById')->willReturn($this->productMock);
+
         $this->productOptionMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'getProductId', 'getType'])
+            ->setMethods(['load', 'getId', 'getProductId', 'getType', 'getProduct', 'setProduct'])
             ->getMock();
+        $this->productOptionMock->expects($this->any())->method('getProduct')->willReturn($this->productMock);
 
         $objectManagerMock = $this->getMockBuilder('Magento\Sales\Model\Download')
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['create', 'get'])
             ->getMock();
         $objectManagerMock->expects($this->any())->method('create')
             ->will(
@@ -131,6 +152,11 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
+        $objectManagerMock->expects($this->any())->method('get')->willReturnMap(
+            [
+                ['\Magento\Catalog\Api\ProductRepositoryInterface', $this->productRepositoryMock],
+            ]
+        );
 
         $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
             ->disableOriginalConstructor()
@@ -191,6 +217,8 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
             $this->productOptionMock->expects($this->any())
                 ->method('getType')
                 ->willReturn($productOptionValues[self::OPTION_TYPE]);
+
+            $this->productMock->expects($this->any())->method('getId')->willReturn($productOptionValues[self::OPTION_PRODUCT_ID]);
         }
         if ($noRouteOccurs) {
             $this->resultForwardMock->expects($this->once())->method('forward')->with('noroute')->willReturn(true);
@@ -320,6 +348,8 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         $this->productOptionMock->expects($this->any())->method('getId')->willReturn(self::OPTION_ID);
         $this->productOptionMock->expects($this->any())->method('getProductId')->willReturn(self::OPTION_PRODUCT_ID);
         $this->productOptionMock->expects($this->any())->method('getType')->willReturn(self::OPTION_TYPE);
+
+        $this->productMock->expects($this->any())->method('getId')->willReturn(self::OPTION_PRODUCT_ID);
 
         $this->unserializeMock->expects($this->once())
             ->method('unserialize')
