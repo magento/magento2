@@ -6,6 +6,7 @@
 namespace Magento\Customer\CustomerData\Plugin;
 
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 
@@ -22,32 +23,37 @@ class SessionChecker
     private $cookieMetadataFactory;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * @param PhpCookieManager $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param Session $session
      */
     public function __construct(
         PhpCookieManager $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory
+        CookieMetadataFactory $cookieMetadataFactory,
+        Session $session
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->session = $session;
     }
 
     /**
      * Delete frontend session cookie if customer session is expired
      *
-     * @param Session $session
-     * @param bool $isLoggedIn
-     * @return bool
+     * @param Http $response
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterIsLoggedIn(Session $session, $isLoggedIn)
+    public function beforeSendVary(Http $response)
     {
-        if (!$isLoggedIn) {
+        if (!$this->session->isLoggedIn()) {
             $metadata = $this->cookieMetadataFactory->createCookieMetadata();
             $metadata->setPath('/');
             $this->cookieManager->deleteCookie('mage-cache-sessid', $metadata);
         }
-        return $isLoggedIn;
     }
 }
