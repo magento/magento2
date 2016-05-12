@@ -7,22 +7,24 @@ namespace Magento\Review\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductCollection;
 use Magento\Review\Model\ResourceModel\Review\Status\Collection as StatusCollection;
+use Magento\Review\Api\Data\ReviewInterface;
 
 /**
  * Review model
  *
  * @method string getCreatedAt()
- * @method \Magento\Review\Model\Review setCreatedAt(string $value)
- * @method \Magento\Review\Model\Review setEntityId(int $value)
+ * @method \Magento\Review\Model\Review setCreatedAt($date)
+ * @method \Magento\Review\Model\Review setEntityId($entityId)
  * @method int getEntityPkValue()
- * @method \Magento\Review\Model\Review setEntityPkValue(int $value)
+ * @method \Magento\Review\Model\Review setEntityPkValue($entityPkValue)
  * @method int getStatusId()
- * @method \Magento\Review\Model\Review setStatusId(int $value)
+ * @method \Magento\Review\Model\Review setStatusId($statusId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Review extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
+class Review extends \Magento\Framework\Model\AbstractModel implements IdentityInterface, ReviewInterface
 {
     /**
      * Event prefix for observer
@@ -138,6 +140,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory $summaryFactory,
         \Magento\Review\Model\Review\SummaryFactory $summaryModFactory,
         \Magento\Review\Model\Review\Summary $reviewSummary,
+        \Magento\Review\Model\Review\StatusFactory $reviewStatusFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -149,6 +152,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
         $this->_summaryFactory = $summaryFactory;
         $this->_summaryModFactory = $summaryModFactory;
         $this->_reviewSummary = $reviewSummary;
+        $this->_reviewStatusFactory = $reviewStatusFactory;
         $this->_storeManager = $storeManager;
         $this->_urlModel = $urlModel;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -378,5 +382,159 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
             $tags[] = Product::CACHE_TAG . '_' . $this->getEntityPkValue();
         }
         return $tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getReviewId()
+    {
+        return $this->_getData('review_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setReviewId($reviewId)
+    {
+        $this->setData('review_id', $reviewId);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDetailId()
+    {
+        return $this->_getData('detail_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDetailId($detailId)
+    {
+        $this->setData('detail_id', $detailId);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTitle()
+    {
+        return $this->_getData('title');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTitle($title)
+    {
+        $this->setData('title', $title);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDetail()
+    {
+        return $this->_getData('detail');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDetail($detail)
+    {
+        $this->setData('detail', $detail);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNickname()
+    {
+        return $this->_getData('nickname');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setNickname($nickname)
+    {
+        $this->setData('nickname', $nickname);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomerId()
+    {
+        return $this->_getData('customer_id');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->setData('customer_id', $customerId);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEntityCode()
+    {
+        return $this->_getData('entity_code');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setEntityCode($entityCode)
+    {
+        $this->setData('entity_code', $entityCode);
+        return $this;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatus()
+    {
+//        if(!$this->getData('status')) {
+            /** @var \Magento\Review\Model\Review\Status $status */
+            $status = $this->_reviewStatusFactory->create();
+            $status->load($this->getStatusId());
+
+        return $status->getStatusCode();
+//            $this->setData('status', $status->getStatusCode());
+//        }
+
+        
+//        return $this->getData('status');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStatus($statusCode)
+    {
+        $status = $this->_statusFactory->create()
+            ->addFieldToFilter('status_code', $statusCode)
+            ->getFirstItem();
+        if(!$status->getId()) {
+            throw new NoSuchEntityException(__("Status doesn't exist"));
+        }
+        $this->setStatusId($status->getId());
+        
+        return $this;
     }
 }

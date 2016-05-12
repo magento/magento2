@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <route url="/V1/reviews/:reviewId" method="GET">
+        <service class="Magento\Review\Api\ReviewRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Review::reviews_all" />
+        </resources>
+    </route>
+
+    <route url="/V1/reviews" method="GET">
+        <service class="Magento\Review\Api\ReviewRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Review::reviews_all" />
+        </resources>
+    </route>
+
+    <route url="/V1/reviews" method="POST">
+        <service class="Magento\Review\Api\ReviewRepositoryInterface" method="save" />
+        <resources>
+            <resource ref="Magento_Review::reviews_all" />
+        </resources>
+    </route>
+ </routes>
