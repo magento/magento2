@@ -130,15 +130,20 @@ class Source extends AbstractEav
             ['attribute_id']
         )->joinLeft(
             ['ds' => $this->getTable('catalog_product_entity_int')],
-            "ds.store_id = s.store_id AND ds.attribute_id = dd.attribute_id AND ds.{$productIdField} = dd.{$productIdField}",
+            "ds.store_id = s.store_id AND ds.attribute_id = dd.attribute_id AND " .
+            "ds.{$productIdField} = dd.{$productIdField}",
             ['value' =>  new \Zend_Db_Expr('COALESCE(ds.value, dd.value)')]
         )->joinLeft(
             ['d2d' => $this->getTable('catalog_product_entity_int')],
-            sprintf("d2d.store_id = 0 AND d2d.{$productIdField} = dd.{$productIdField} AND d2d.attribute_id = %s", $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId()),
+            sprintf(
+                "d2d.store_id = 0 AND d2d.{$productIdField} = dd.{$productIdField} AND d2d.attribute_id = %s",
+                $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId()
+            ),
             []
         )->joinLeft(
             ['d2s' => $this->getTable('catalog_product_entity_int')],
-            "d2s.store_id = s.store_id AND d2s.attribute_id = d2d.attribute_id AND d2s.{$productIdField} = d2d.{$productIdField}",
+            "d2s.store_id = s.store_id AND d2s.attribute_id = d2d.attribute_id AND " .
+            "d2s.{$productIdField} = d2d.{$productIdField}",
             []
         )->joinLeft(
             ['cpe' => $this->getTable('catalog_product_entity')],
