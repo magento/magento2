@@ -9,9 +9,13 @@ namespace Magento\Bundle\Test\Unit\Pricing\Price;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
-
+use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class FinalPriceTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Bundle\Pricing\Price\FinalPrice */
@@ -45,9 +49,14 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
     protected $customOptionPriceMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceCurrencyMock;
+
+    /**
+     * @var ProductCustomOptionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $productOptionRepositoryMock;
 
     /**
      * @return void
@@ -96,6 +105,14 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
             $this->bundleCalculatorMock,
             $this->priceCurrencyMock
         );
+
+        $this->productOptionRepositoryMock = $this->getMockForAbstractClass(
+            ProductCustomOptionRepositoryInterface::class
+        );
+        $reflection = new \ReflectionClass(get_class($this->finalPrice));
+        $reflectionProperty = $reflection->getProperty('productOptionRepository');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->finalPrice, $this->productOptionRepositoryMock);
     }
 
     /**
@@ -172,6 +189,16 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
         $this->baseAmount = 5;
         $result = 7;
         $this->prepareMock();
+        $customOptions = [
+            $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductCustomOptionInterface::class)
+                ->setMethods(['setProduct'])
+                ->getMockForAbstractClass()
+        ];
+
+        $this->productOptionRepositoryMock->expects(static::once())
+            ->method('getProductOptions')
+            ->with($this->saleableInterfaceMock)
+            ->willReturn($customOptions);
 
         $this->saleableInterfaceMock->expects($this->once())
             ->method('getPriceType')
