@@ -49,6 +49,23 @@
                 padding-top: 0;
             }
         }
+
+        td {
+            border-top: 1px solid @control-table-cell__border-color;
+        }
+
+        .admin__control-table-pagination {
+            float: right;
+            padding-bottom: 0;
+        }
+
+        .action-previous {
+            margin-right: .5rem;
+        }
+
+        .action-next {
+            margin-left: .9rem;
+        }
     }
 
     tr {
@@ -188,6 +205,7 @@
 
 .admin__dynamic-rows {
     &._dragged {
+        opacity: .95;
         position: absolute;
         z-index: 999;
     }

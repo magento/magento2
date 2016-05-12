@@ -1270,7 +1270,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 );
             }
             if ($categoriesIn) {
-                $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['position']);
+                $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['product_id', 'category_id']);
             }
         }
         return $this;

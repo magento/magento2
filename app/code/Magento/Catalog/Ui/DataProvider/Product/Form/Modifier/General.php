@@ -259,14 +259,12 @@ class General extends AbstractModifier
         if ($fromFieldPath && $toFieldPath) {
             $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
             $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
-            $scopeLabel = $this->arrayManager->get($fromFieldPath . self::META_CONFIG_PATH . '/scopeLabel', $meta);
 
             $meta = $this->arrayManager->merge(
                 $fromFieldPath . self::META_CONFIG_PATH,
                 $meta,
                 [
                     'label' => __('Set Product as New From'),
-                    'scopeLabel' => null,
                     'additionalClasses' => 'admin__field-date',
                 ]
             );
@@ -287,7 +285,6 @@ class General extends AbstractModifier
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
-                    'scopeLabel' => $scopeLabel,
                 ]
             );
             $meta = $this->arrayManager->set(
