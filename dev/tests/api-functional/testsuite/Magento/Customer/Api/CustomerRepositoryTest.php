@@ -85,11 +85,6 @@ class CustomerRepositoryTest extends WebapiAbstract
     private $dataObjectProcessor;
 
     /**
-     * @var TokenModel
-     */
-    private $token;
-
-    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -154,14 +149,21 @@ class CustomerRepositoryTest extends WebapiAbstract
      * @expectedException \Exception
      * @expectedExceptionMessage Consumer is not authorized to access %resources
      *
-    */
+     */
     public function testInvalidCustomerUpdate()
     {
-        //Create customer 1 and retrieve customer token.
-        $customerData1 = $this->_createCustomer();
-        $this->resetTokenForCustomer(($customerData1[Customer::EMAIL]), 'test@123');
+        $this->_markTestAsRestOnly();
 
-        //Create customer 2 and update lastname.
+        //Create first customer and retrieve customer token.
+        $firstCustomerData = $this->_createCustomer();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        //$customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
+        $customerTokenService = Bootstrap::getObjectManager()->create('Magento\Integration\Api\CustomerTokenServiceInterface');
+        $token = $customerTokenService->createCustomerAccessToken($firstCustomerData[Customer::EMAIL], 'test@123');
+
+        //Create second customer and update lastname.
         $customerData = $this->_createCustomer();
         $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
         $lastName = $existingCustomerDataObject->getLastname();
@@ -177,14 +179,8 @@ class CustomerRepositoryTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/{$customerData[Customer::ID]}",
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-                'token' => $this->token,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
-                'token' => $this->token,
-            ],
+                'token' => $token,
+            ]
         ];
 
         $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
@@ -803,26 +799,5 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerData = $this->customerHelper->createSampleCustomer();
         $this->currentCustomerId[] = $customerData['id'];
         return $customerData;
-    }
-
-    /**
-     * Sets the test's access token for a particular username and password.
-     *
-     * @param string $username
-     * @param string $password
-     */
-
-    protected function resetTokenForCustomer($username, $password)
-    {
-
-        // get customer ID token
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH_CUSTOMER_TOKEN,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-        ];
-        $requestData = ['username' => $username, 'password' => $password];
-        $this->token = $this->_webApiCall($serviceInfo, $requestData);
     }
 }
