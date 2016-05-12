@@ -112,11 +112,13 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         Customer $customer,
         Customer $initialCustomer
     ) {
-        $data = $customer->hasData()
-            ? array_replace_recursive($initialCustomer->getData(), $customer->getData())
-            : $initialCustomer->getData();
-        $groupId = $customer->hasData('group_id') ? $customer : $initialCustomer;
-        $data['group_id'] = ['customerGroup' => $groupId->getDataFieldConfig('group_id')['source']->getCustomerGroup()];
+        if (!$customer->hasData()) {
+            return $initialCustomer;
+        }
+        $data = array_replace_recursive($initialCustomer->getData(), $customer->getData());
+        $data['group_id'] = [
+            'customerGroup' => $initialCustomer->getDataFieldConfig('group_id')['source']->getCustomerGroup()
+        ];
 
         return $this->fixtureFactory->createByCode('customer', ['data' => $data]);
     }
@@ -155,8 +157,6 @@ class UpdateCustomerFrontendEntityTest extends Injectable
         $this->customerAddressEdit->getEditForm()->fill($address);
         $this->customerAddressEdit->getEditForm()->saveAddress();
 
-        return [
-            'customer' => $this->prepareCustomer($customer, $initialCustomer)
-        ];
+        return ['customer' => $this->prepareCustomer($customer, $initialCustomer)];
     }
 }
