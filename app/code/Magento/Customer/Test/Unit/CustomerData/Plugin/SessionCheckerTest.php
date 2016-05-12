@@ -34,6 +34,11 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
      */
     protected $session;
 
+    /**
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $response;
+
     public function setUp()
     {
         $this->cookieManager = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PhpCookieManager')
@@ -48,8 +53,11 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->session = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->response = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->plugin = new SessionChecker($this->cookieManager, $this->metadataFactory);
+        $this->plugin = new SessionChecker($this->cookieManager, $this->metadataFactory, $this->session);
     }
 
     /**
@@ -58,8 +66,12 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @dataProvider testAfterIsLoggedInDataProvider
      */
-    public function testAfterIsLoggedIn($result, $callCount)
+    public function testBeforeSendVary($result, $callCount)
     {
+        $this->session->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn($result);
+
         $this->metadataFactory->expects($this->{$callCount}())
             ->method('createCookieMetadata')
             ->willReturn($this->metadata);
@@ -69,7 +81,7 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->cookieManager->expects($this->{$callCount}())
             ->method('deleteCookie')
             ->with('mage-cache-sessid', $this->metadata);
-        $this->assertEquals($result, $this->plugin->afterIsLoggedIn($this->session, $result));
+        $this->plugin->beforeSendVary($this->response);
     }
 
     public function testAfterIsLoggedInDataProvider()
