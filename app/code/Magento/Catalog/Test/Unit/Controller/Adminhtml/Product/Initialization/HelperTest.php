@@ -326,25 +326,72 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     public function mergeProductOptionsDataProvider()
     {
         return [
-            [
+            'options are not array, empty array is returned' => [
                 null,
                 [],
                 [],
             ],
-            [
-                ['key' => 'val'],
+            'replacement is not array, original options are returned' => [
+                ['val'],
                 null,
-                ['key' => 'val'],
+                ['val'],
             ],
-            [
-                ['key' => ['key' => 'val']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
+            'ids do not match, no replacement occurs' => [
+                [
+                    [
+                        'option_id' => '3',
+                        'key1' => 'val1',
+                        'default_key1' => 'val2'
+                    ]
+                ],
+                [4 => ['key1' => '1']],
+                [
+                    [
+                        'option_id' => '3',
+                        'key1' => 'val1',
+                        'default_key1' => 'val2'
+                    ]
+                ]
             ],
-            [
-                ['key' => ['key' => 'val', 'another_key' => 'another_value']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
-                ['key' => ['key' => 'val2', 'another_key' => 'another_value', 'key2' => 'val2',]],
+            'key2 is replaced, key1 is not (checkbox is not checked)' => [
+                [
+                    [
+                        'option_id' => '5',
+                        'key1' => 'val1',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3',
+                        'default_key2' => 'val4'
+                    ]
+                ],
+                [5 => ['key1' => '0', 'key2' => '1']],
+                [
+                    [
+                        'option_id' => '5',
+                        'key1' => 'val1',
+                        'key2' => 'val4',
+                        'default_key1' => 'val3',
+                        'default_key2' => 'val4'
+                    ]
+                ]
+            ],
+            'key1 is replaced, key2 has no default value' => [
+                [
+                    [
+                        'option_id' => '7',
+                        'key1' => 'val1',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3'
+                    ]
+                ],
+                [7 => ['key1' => '1', 'key2' => '1']],
+                [
+                    [
+                        'option_id' => '7',
+                        'key1' => 'val3',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3'
+                    ]
+                ],
             ],
         ];
     }
