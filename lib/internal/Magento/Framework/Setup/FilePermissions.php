@@ -160,7 +160,7 @@ class FilePermissions
         try {
             foreach ($directoryIterator as $subDirectory) {
                 if (!$subDirectory->isWritable() && !$subDirectory->isLink()) {
-                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory;
+                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory->getPathname();
                     $foundNonWritable = true;
                 }
             }
@@ -226,22 +226,31 @@ class FilePermissions
     }
 
     /**
-     * Checks writable paths for installation
+     * Checks writable paths for installation, returns associative array if input is true, else returns simple array
      *
+     * @param bool $associative
      * @return array
      */
-    public function getMissingWritablePathsForInstallation()
+    public function getMissingWritablePathsForInstallation($associative = false)
     {
         $required = $this->getInstallationWritableDirectories();
         $current = $this->getInstallationCurrentWritableDirectories();
         $missingPaths = [];
         foreach (array_diff($required, $current) as $missingPath) {
             if (isset($this->nonWritablePathsInDirectories[$missingPath])) {
-                $missingPaths = array_merge(
-                    $missingPaths,
-                    $this->nonWritablePathsInDirectories[$missingPath]
-                );
+                if ($associative) {
+                    $missingPaths[$missingPath] = $this->nonWritablePathsInDirectories[$missingPath];
+                } else {
+                    $missingPaths = array_merge(
+                        $missingPaths,
+                        $this->nonWritablePathsInDirectories[$missingPath]
+                    );
+                }
             }
+        }
+        if ($associative) {
+            $required = array_flip($required);
+            $missingPaths = array_merge($required, $missingPaths);
         }
         return $missingPaths;
     }
