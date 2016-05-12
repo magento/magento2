@@ -47,20 +47,17 @@ class PriceBoxTags
      * @param TimezoneInterface $dateTime
      * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
-     * @param TaxCalculation $taxCalculation
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
         TimezoneInterface $dateTime,
         ScopeResolverInterface $scopeResolver,
-        Session $customerSession,
-        TaxCalculation $taxCalculation
+        Session $customerSession
     ) {
         $this->dateTime = $dateTime;
         $this->customerSession = $customerSession;
         $this->priceCurrency = $priceCurrency;
         $this->scopeResolver = $scopeResolver;
-        $this->taxCalculation = $taxCalculation;
     }
 
     /**
@@ -104,7 +101,7 @@ class PriceBoxTags
         }
 
         if (!empty($billingAddress) || !empty($shippingAddress)) {
-            $rateRequest = $this->taxCalculation->getRateRequest(
+            $rateRequest = $this->getTaxCalculation()->getRateRequest(
                 $billingAddress,
                 $shippingAddress,
                 $customerTaxClassId,
@@ -113,9 +110,24 @@ class PriceBoxTags
             );
 
             $rateRequest->setProductClassId($subject->getSaleableItem()->getTaxClassId());
-            $rateIds = $this->taxCalculation->getResource()->getRateIds($rateRequest);
+            $rateIds = $this->getTaxCalculation()->getResource()->getRateIds($rateRequest);
         }
 
         return implode('_', $rateIds);
+    }
+
+    /**
+     * Get the TaxCalculation model
+     *
+     * @return \Magento\Tax\Model\Calculation
+     *
+     * @deprecated
+     */
+    private function getTaxCalculation()
+    {
+        if ($this->taxCalculation === null) {
+            $this->taxCalculation = \Magento\Framework\App\ObjectManager::getInstance()->get(TaxCalculation::class);
+        }
+        return $this->taxCalculation;
     }
 }
