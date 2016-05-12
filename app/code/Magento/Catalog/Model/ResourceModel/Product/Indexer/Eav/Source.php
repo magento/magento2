@@ -103,6 +103,7 @@ class Source extends AbstractEav
      * @param array $entityIds the entity ids limitation
      * @param int $attributeId the attribute id limitation
      * @return $this
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareSelectIndex($entityIds = null, $attributeId = null)
     {
