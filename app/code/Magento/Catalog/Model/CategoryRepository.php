@@ -94,8 +94,11 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 if (is_array($existingData['image']) && !empty($existingData['image']['delete'])) {
                     $existingData['image'] = null;
                 } else {
-                    $existingData['image_new_data'] = $existingData['image'];
-                    unset($existingData['image']);
+                    if (isset($existingData['image'][0]['name']) && isset($existingData['image'][0]['tmp_name'])) {
+                        $existingData['image'] = $existingData['image'][0]['name'];
+                    } else {
+                        unset($existingData['image']);
+                    }
                 }
             }
         } else {
