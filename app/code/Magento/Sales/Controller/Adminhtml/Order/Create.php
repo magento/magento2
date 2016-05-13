@@ -243,6 +243,7 @@ abstract class Create extends \Magento\Backend\App\Action
         $removeFrom = (string)$this->getRequest()->getPost('from');
         if ($removeItemId && $removeFrom) {
             $this->_getOrderCreateModel()->removeItem($removeItemId, $removeFrom);
+            $this->_getOrderCreateModel()->recollectCart();
         }
 
         /**
