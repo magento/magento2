@@ -31,7 +31,7 @@ define([
         /**
          * Choose notice function
          *
-         * @returns {void}
+         * @returns void
          */
         chooseNotice: function () {
             var checkedNoticeNumber = Number(this.checked());
@@ -42,7 +42,7 @@ define([
         /**
          * Choose notice on update
          *
-         * @returns {void}
+         * @returns void
          */
         onUpdate: function () {
             this._super();
