@@ -159,7 +159,9 @@ class CustomerRepositoryTest extends WebapiAbstract
         // get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         //$customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
-        $customerTokenService = Bootstrap::getObjectManager()->create('Magento\Integration\Api\CustomerTokenServiceInterface');
+        $customerTokenService = Bootstrap::getObjectManager()->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
         $token = $customerTokenService->createCustomerAccessToken($firstCustomerData[Customer::EMAIL], 'test@123');
 
         //Create second customer and update lastname.
