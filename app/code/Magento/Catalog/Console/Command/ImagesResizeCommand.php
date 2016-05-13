@@ -106,5 +106,6 @@ class ImagesResizeCommand extends Command
 
         $output->write("\n");
         $output->writeln("<info>Product images resized successfully</info>");
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
