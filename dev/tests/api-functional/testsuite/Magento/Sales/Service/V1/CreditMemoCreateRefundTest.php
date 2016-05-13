@@ -43,12 +43,13 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
         ];
         /** @var \Magento\Sales\Model\Order\Item $orderItem */
         foreach ($order->getAllItems() as $orderItem) {
-            $items[] = [
+            $items[] = array_merge($orderItem->getData(), [
                 'order_item_id' => $orderItem->getId(),
                 'qty' => $orderItem->getQtyInvoiced(),
                 'price' => $orderItem->getPrice(),
                 'row_total' => $orderItem->getRowTotal(),
-            ];
+                'entity_id' => null,
+            ]);
         }
 
         $serviceInfo = [
