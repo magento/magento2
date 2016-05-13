@@ -288,7 +288,6 @@ class CreateHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->subject->beforeExecute(
             $this->mediaGalleryCreateHandler,
-            'Magento\Catalog\Api\Data\ProductInterface',
             $this->product
         );
     }

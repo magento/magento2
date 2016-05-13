@@ -570,6 +570,14 @@
                         <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -712,19 +720,12 @@
             <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+    <type name="Magento\Framework\EntityManager\HydratorPool">
         <arguments>
-            <argument name="extensionActions" xsi:type="array">
-                <item name="eav" xsi:type="array">
-                    <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
-                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
-                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
-                    </item>
-                    <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
-                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
-                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
-                    </item>
-                </item>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
             </argument>
         </arguments>
     </type>
