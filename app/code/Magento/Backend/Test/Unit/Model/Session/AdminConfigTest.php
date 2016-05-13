@@ -112,7 +112,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetSessionSettingsByConstructor($secureRequest)
     {
         $sessionName = 'admin';
-        $this->requestMock->expects($this->once())->method('isSecure')->willReturn($secureRequest);
+        $this->requestMock->expects($this->exactly(2))->method('isSecure')->willReturn($secureRequest);
 
         $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
             ->disableOriginalConstructor()
