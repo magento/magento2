@@ -8,6 +8,9 @@ namespace Magento\Customer\Test\Unit\Controller\Address;
 use Magento\Customer\Controller\Address\Delete;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeleteTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Delete */
