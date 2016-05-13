@@ -41,9 +41,9 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private $readinessCheck;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PathBuilder
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\BasePackageInfo
      */
-    private $pathBuilder;
+    private $basePackageInfo;
 
     /**
      * @var array
@@ -68,14 +68,14 @@ class ReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->write = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
         $this->phpReadinessCheck = $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false);
-        $this->pathBuilder = $this->getMock('Magento\Setup\Model\PathBuilder', [], [], '', false);
-        $this->pathBuilder->expects($this->once())->method('build')->willReturn([__FILE__]);
+        $this->basePackageInfo = $this->getMock('Magento\Setup\Model\BasePackageInfo', [], [], '', false);
+        $this->basePackageInfo->expects($this->once())->method('getPaths')->willReturn([__FILE__]);
         $this->readinessCheck = new ReadinessCheck(
             $this->dbValidator,
             $this->deploymentConfig,
             $this->filesystem,
             $this->phpReadinessCheck,
-            $this->pathBuilder
+            $this->basePackageInfo
         );
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpVersion')->willReturn(['success' => true]);
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(['success' => true]);

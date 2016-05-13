@@ -8,9 +8,10 @@ namespace Magento\Setup\Model;
 use Magento\Framework\FileSystem\Directory\ReadFactory;
 
 /**
- * Prepares list of magento specific files and directory paths that updater will need access to perform the upgrade
+ * Information about the Magento base package.
+ *
  */
-class PathBuilder
+class BasePackageInfo
 {
     const MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE = 'magento/magento2-base/composer.json';
 
@@ -34,17 +35,14 @@ class PathBuilder
     }
 
     /**
-     * Builds list of important files and directory paths that used by magento that updater application will need
-     * access to perform upgrade operation
+     * Get the list of files and directory paths from magento-base extra/map section.
      *
      * @return string []
      * @throws \Magento\Setup\Exception
      */
-    public function build()
+    public function getPaths()
     {
-        // Locate composer.json for magento2-base module and read the extra map section for the list of
-        // magento specific files and directories that updater will need access to perform the upgrade
-
+        // Locate composer.json for magento2-base module
         $filesPathList = [];
         $vendorDir = require VENDOR_PATH;
         $basePackageComposerFilePath = $vendorDir . '/' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE;
@@ -58,6 +56,8 @@ class PathBuilder
                 'Could not read ' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE . ' file.'
             );
         }
+
+        // Fill array with list of files and directories from extra/map section
         $composerJsonFileData = json_decode($this->reader->readFile($basePackageComposerFilePath), true);
         if (!isset($composerJsonFileData[self::COMPOSER_KEY_EXTRA][self::COMPOSER_KEY_MAP])) {
             return $filesPathList;
