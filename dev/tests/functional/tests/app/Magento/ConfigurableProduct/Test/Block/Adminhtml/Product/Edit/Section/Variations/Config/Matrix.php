@@ -79,7 +79,7 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $deleteVariation = '[data-bind*="deleteRecord"]';
+    protected $deleteVariation = '[data-bind*="Remove Product"]';
 
     /**
      * Choose a different Product button selector.
@@ -193,8 +193,14 @@ class Matrix extends Form
 
     public function deleteVariations()
     {
-        $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
-        foreach (array_reverse($variations) as $variation) {
+        $rowLocator = sprintf($this->variationRowByNumber, 1);
+        $variationText = '';
+        while ($this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH)->isVisible()) {
+            $variation = $this->_rootElement->find($rowLocator, Locator::SELECTOR_XPATH);
+            if ($variationText == $variation->getText()) {
+                throw new \Exception("Failed to delete configurable product variation");
+            }
+            $variationText = $variation->getText();
             $variation->find($this->actionMenu)->hover();
             $variation->find($this->actionMenu)->click();
             $variation->find($this->deleteVariation)->click();
