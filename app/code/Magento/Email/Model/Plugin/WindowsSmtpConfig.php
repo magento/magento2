@@ -46,7 +46,7 @@ class WindowsSmtpConfig
      * To configure smtp settings for session right before sending message on windows server
      *
      * @param \Magento\Framework\Mail\TransportInterface $subject
-     * return void
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSendMessage(\Magento\Framework\Mail\TransportInterface $subject)
