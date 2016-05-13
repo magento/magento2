@@ -48,6 +48,8 @@ define([
             this.parentOption(function (component) {
                 component.set('label', value ? value : component.get('headerLabel'));
             });
+
+            return this._super();
         }
     });
 });

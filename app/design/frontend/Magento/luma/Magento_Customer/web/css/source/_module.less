@@ -3,20 +3,25 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @account-title-border-color: @color-gray-middle2;
 @account-table-border-bottom-color: @color-gray-middle1;
 @account-table-action-delete: @color-red12;
 
+@password-strength-color__default: @color-gray-light01;
+@password-strength-color__weak: #ffafae;
+@password-strength-color__medium: #ffd6b3;
+@password-strength-color__strong: #c5eeac;
+@password-strength-color__very-strong: #81b562;
+
 //
 //  Common
-//  ---------------------------------------------
+//  _____________________________________________
 
 & when (@media-common = true) {
-
-    #password-strength-meter-container {
-        background-color: silver;
-    }
-
     .login-container {
         .block {
             &-new-customer {
@@ -142,7 +147,7 @@
     }
 
     .account,
-    [class^="sales-guest-"],
+    [class^='sales-guest-'],
     .sales-guest-view {
         .column.main {
             .order-details-items {
@@ -212,33 +217,74 @@
         }
     }
 
-    .password-strength-meter-0 {
-        background-color: red;
-        width: 0%;
+    //
+    //  Password Strength Meter
+    //  ---------------------------------------------
+
+    .field.password {
+        .control {
+            .lib-vendor-prefix-display();
+            .lib-vendor-prefix-flex-direction();
+
+            .mage-error {
+                .lib-vendor-prefix-order(2);
+            }
+
+            .input-text {
+                .lib-vendor-prefix-order(0);
+            }
+        }
     }
 
-    .password-strength-meter-1 {
-        background-color: orange;
-        width: 25%;
-    }
+    .password-strength-meter {
+        background-color: @password-strength-color__default;
+        height: @form-element-input__height;
+        line-height: @form-element-input__height;
+        padding: @form-element-input__padding;
+        position: relative;
+        z-index: 1;
 
-    .password-strength-meter-2 {
-        background-color: yellow;
-        width: 50%;
-    }
+        &:before {
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            z-index: -1;
+        }
 
-    .password-strength-meter-3 {
-        background-color: yellowgreen;
-        width: 75%;
-    }
+        .password-strength-meter-1 & {
+            &:before {
+                background-color: @password-strength-color__weak;
+                width: 25%;
+            }
+        }
 
-    .password-strength-meter-4 {
-        background-color: green;
-        width: 100%;
+        .password-strength-meter-2 & {
+            &:before {
+                background-color: @password-strength-color__medium;
+                width: 50%;
+            }
+        }
+
+        .password-strength-meter-3 & {
+            &:before {
+                background-color: @password-strength-color__strong;
+                width: 75%;
+            }
+        }
+
+        .password-strength-meter-4 & {
+            &:before {
+                background-color: @password-strength-color__very-strong;
+                width: 100%;
+            }
+        }
     }
 
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
+
         .captcha-img {
             vertical-align: middle;
         }
@@ -261,7 +307,7 @@
 
 //
 //  Desktop
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .login-container {
@@ -312,8 +358,8 @@
     .form.send.confirmation,
     .form.password.forget,
     .form.create.account {
-        width: 50%;
         min-width: 600px;
+        width: 50%;
     }
 
     //  My account
@@ -420,7 +466,7 @@
 
 //
 //  Mobile @screen__s
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .account {
@@ -437,7 +483,7 @@
 
 //
 //  Mobile @screen__m
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .login-container {

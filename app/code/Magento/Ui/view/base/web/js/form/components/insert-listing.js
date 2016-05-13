@@ -92,7 +92,8 @@ define([
         /** @inheritdoc */
         destroyInserted: function () {
             if (this.isRendered && this.externalListing()) {
-                this.externalListing().destroy();
+                this.externalListing().source.storage().clearRequests();
+                this.externalListing().delegate('destroy');
             }
 
             return this._super();
