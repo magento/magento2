@@ -82,8 +82,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $data = $rawData;
         // @todo It is a workaround to prevent saving this data in category model and it has to be refactored in future
         if (isset($data['image']) && is_array($data['image'])) {
-            $data['image_additional_data'] = $data['image'];
-            unset($data['image']);
+            if (is_array($data['image']) && !empty($data['image']['delete'])) {
+                $data['image'] = null;
+            } else {
+                $data['image_new_data'] = $data['image'];
+                unset($data['image']);
+            }
         }
         return $data;
     }
