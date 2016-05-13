@@ -1,3 +1,16 @@
+2.0.6
+=============
+* Functional fixes:
+    * Fixed issue with Redis sessions.
+    * Fixed issue with Varnish cache on GoDaddy.
+
+* Security fixes:
+    * This release contains several security fixes. We describe each issue in detail in the Magento Security Center (https://www.magento.com/security).
+
+* Enhancements:
+    * Management of file ownership and permissions have been made more flexible.
+    * Support for using the Redis adapter to provide session storage.
+
 2.0.5
 =============
 * Fixed bugs:
