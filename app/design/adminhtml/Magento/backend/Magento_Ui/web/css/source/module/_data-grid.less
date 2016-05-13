@@ -8,6 +8,14 @@
 //  _____________________________________________
 
 //
+//  Variables
+//  _____________________________________________
+
+//  Data Grid Change Indicator
+@data-grid-row-changed__icon: @icon-edit__content;
+@data-grid-row-changed-tooltip__background: @color-white-fog2;
+
+//
 //  Components
 //  ---------------------------------------------
 
@@ -67,11 +75,11 @@
 }
 
 body._in-resize {
-    -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;
+    -webkit-user-select: none;
     cursor: col-resize;
+    user-select: none;
 
     .data-grid-th,
     .data-grid-th._sortable,
@@ -262,12 +270,12 @@ body._in-resize {
         }
 
         .action-select {
+            .link-pattern();
             background-color: transparent;
             border: none;
             font-size: @data-grid__font-size;
-            position: relative;
-            .link-pattern();
             padding: 0 3rem 0 0;
+            position: relative;
 
             &:hover {
                 &:after {
@@ -354,8 +362,8 @@ body._in-resize {
 
         &._draggable {
             cursor: -webkit-grab;
-            cursor:    -moz-grab;
-            cursor:         grab;
+            cursor: -moz-grab;
+            cursor: grab;
         }
 
         &._sortable {
@@ -446,8 +454,8 @@ body._in-resize {
         .data-grid-th,
         .data-grid-th._sortable {
             cursor: -webkit-grabbing;
-            cursor:    -moz-grabbing;
-            cursor:         grabbing;
+            cursor: -moz-grabbing;
+            cursor: grabbing;
         }
 
         tr {
@@ -940,10 +948,6 @@ body._in-resize {
     }
 }
 
-//  Data Grid Change Indicator
-@data-grid-row-changed__icon: @icon-edit__content;
-@data-grid-row-changed-tooltip__background: @color-white-fog2;
-
 .data-grid-row-changed {
     cursor: default;
     display: block;
@@ -960,8 +964,8 @@ body._in-resize {
 
     .data-grid-row-changed-tooltip {
         background: @data-grid-row-changed-tooltip__background;
-        border-radius: 1px;
         border: 1px solid @data-grid-row-changed-tooltip__background;
+        border-radius: 1px;
         bottom: 100%;
         box-shadow: 0 3px 9px 0 rgba(0, 0, 0, .3);
         display: none;
@@ -990,7 +994,7 @@ body._in-resize {
                 background: @data-grid-row-changed-tooltip__background;
                 border: 1px solid @data-grid-row-changed-tooltip__background;
                 bottom: 100%;
-                box-shadow: 4px 4px 3px -1px rgba(0, 0, 0, 0.15);
+                box-shadow: 4px 4px 3px -1px rgba(0, 0, 0, .15);
                 content: '';
                 display: block;
                 height: 1.6rem;
