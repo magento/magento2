@@ -1536,7 +1536,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $item->setQuote($this);
         if (!$item->getId()) {
             $this->getItemsCollection()->addItem($item);
-            $this->setItems($this->getAllVisibleItems());
             $this->_eventManager->dispatch('sales_quote_add_item', ['quote_item' => $item]);
         }
         return $this;
