@@ -8,7 +8,11 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
+use Magento\Framework\Search\Request\EmptyRequestDataException;
+use Magento\Framework\Search\Request\NonExistingRequestNameException;
 
 /**
  * Collection Advanced
@@ -40,6 +44,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $searchCriteriaBuilder;
 
     /**
+     * @var SearchResultFactory
+     */
+    private $searchResultFactory;
+
+    /**
      * @var FilterBuilder
      */
     private $filterBuilder;
@@ -69,6 +78,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Zend_Db_Adapter_Abstract $connection
+     * @param SearchResultFactory $searchResultFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -94,11 +104,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
-        $connection = null
+        $connection = null,
+        SearchResultFactory $searchResultFactory = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
+        if ($searchResultFactory === null) {
+            $this->searchResultFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\Search\SearchResultFactory');
+        }
         parent::__construct(
             $entityFactory,
             $logger,
@@ -152,8 +167,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             }
             $searchCriteria = $this->getSearchCriteriaBuilder()->create();
             $searchCriteria->setRequestName('advanced_search_container');
-            $searchResult = $this->getSearch()->search($searchCriteria);
-
+            try {
+                $searchResult = $this->getSearch()->search($searchCriteria);
+            } catch (EmptyRequestDataException $e) {
+                /** @var \Magento\Framework\Api\Search\SearchResultInterface $searchResult */
+                $searchResult = $this->searchResultFactory->create()->setItems([]);
+            } catch (NonExistingRequestNameException $e) {
+                $this->_logger->error($e->getMessage());
+                throw new LocalizedException(__('Sorry, something went wrong. You can find out more in the error log.'));
+            }
             $temporaryStorage = $this->temporaryStorageFactory->create();
             $table = $temporaryStorage->storeApiDocuments($searchResult->getItems());
 

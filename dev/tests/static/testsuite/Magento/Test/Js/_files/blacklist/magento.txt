@@ -113,7 +113,6 @@ app/code/Magento/Checkout/view/frontend/web/js/view/authentication-messages.js
 app/code/Magento/Checkout/view/frontend/web/js/view/authentication.js
 app/code/Magento/Checkout/view/frontend/web/js/view/beforePlaceOrder.js
 app/code/Magento/Checkout/view/frontend/web/js/view/billing-address.js
-app/code/Magento/Checkout/view/frontend/web/js/view/cart/shipping-estimation.js
 app/code/Magento/Checkout/view/frontend/web/js/view/cart/shipping-rates.js
 app/code/Magento/Checkout/view/frontend/web/js/view/cart/totals.js
 app/code/Magento/Checkout/view/frontend/web/js/view/cart/totals/shipping.js
@@ -675,7 +674,6 @@ vendor/magento/module-checkout/view/frontend/web/js/sidebar.js
 vendor/magento/module-checkout/view/frontend/web/js/view/authentication.js
 vendor/magento/module-checkout/view/frontend/web/js/view/before-place-order.js
 vendor/magento/module-checkout/view/frontend/web/js/view/billing-address.js
-vendor/magento/module-checkout/view/frontend/web/js/view/cart/shipping-estimation.js
 vendor/magento/module-checkout/view/frontend/web/js/view/cart/shipping-rates.js
 vendor/magento/module-checkout/view/frontend/web/js/view/cart/totals.js
 vendor/magento/module-checkout/view/frontend/web/js/view/cart/totals/shipping.js

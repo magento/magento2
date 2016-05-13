@@ -283,6 +283,16 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
     }
 
     /**
+     * Check if the field can be restored to default
+     *
+     * @return bool
+     */
+    public function canRestore()
+    {
+        return isset($this->_data['canRestore']) && (int)$this->_data['canRestore'];
+    }
+
+    /**
      * Populate form element with field data
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $formField
