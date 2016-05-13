@@ -902,6 +902,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     $this->removeItem($itemId, 'cart');
                 }
             }
+            $this->recollectCart();
         }
         if (isset($data['add_wishlist_item'])) {
             foreach ($data['add_wishlist_item'] as $itemId => $qty) {
@@ -925,6 +926,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             foreach ($data['remove'] as $itemId => $from) {
                 $this->removeItem($itemId, $from);
             }
+            $this->recollectCart();
         }
         if (isset($data['empty_customer_cart']) && (int)$data['empty_customer_cart'] == 1) {
             $this->getCustomerCart()->removeAllItems()->collectTotals();
@@ -951,8 +953,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $cart = $this->getCustomerCart();
                 if ($cart) {
                     $cart->removeItem($itemId);
-                    $cart->collectTotals();
-                    $this->quoteRepository->save($cart);
+                    $this->_needCollectCart = true;
                 }
                 break;
             case 'wishlist':
