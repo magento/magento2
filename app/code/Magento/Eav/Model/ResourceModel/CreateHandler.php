@@ -14,6 +14,7 @@ use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
 /**
  * Class CreateHandler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandler implements AttributeInterface
 {
@@ -87,6 +88,7 @@ class CreateHandler implements AttributeInterface
      * @return array
      * @throws \Exception
      * @throws \Magento\Framework\Exception\ConfigurationMismatchException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {
@@ -100,6 +102,7 @@ class CreateHandler implements AttributeInterface
                     continue;
                 }
                 if (isset($entityData[$attribute->getAttributeCode()])
+                    && !is_array($entityData[$attribute->getAttributeCode()])
                     && !$attribute->isValueEmpty($entityData[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerInsert(
