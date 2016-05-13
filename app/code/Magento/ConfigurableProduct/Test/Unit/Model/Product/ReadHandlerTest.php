@@ -56,7 +56,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::never())
             ->method('getExtensionAttributes');
 
-        $entity = $this->readHandler->execute('Entity', $product);
+        $entity = $this->readHandler->execute($product);
         static::assertSame($product, $entity);
     }
 
@@ -118,7 +118,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
 
-        $entity = $this->readHandler->execute('Entity', $product);
+        $entity = $this->readHandler->execute($product);
         static::assertSame($product, $entity);
     }
 }

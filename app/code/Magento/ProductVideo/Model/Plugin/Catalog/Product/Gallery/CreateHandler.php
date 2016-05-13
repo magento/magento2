@@ -20,7 +20,6 @@ class CreateHandler extends AbstractHandler
 
     /**
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
-     * @param string $entityType
      * @param \Magento\Catalog\Model\Product $product
      * @param array $arguments
      * @return void
@@ -28,7 +27,6 @@ class CreateHandler extends AbstractHandler
      */
     public function beforeExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
-        $entityType,
         \Magento\Catalog\Model\Product $product,
         array $arguments = []
     ) {

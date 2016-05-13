@@ -60,7 +60,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $variationProduct->expects($this->any())->method('getImage')->willReturn('image.jpg');
         $variationProduct->expects($this->any())->method('getData')->with('configurable_attribute')->willReturn(1);
 
-        $this->galleryHandler->expects($this->once())->method('execute')->with('', $variationProduct);
+        $this->galleryHandler->expects($this->once())->method('execute')->with($variationProduct);
 
         $configurableType = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable')
             ->disableOriginalConstructor()
