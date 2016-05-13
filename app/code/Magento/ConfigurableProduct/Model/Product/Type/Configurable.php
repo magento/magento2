@@ -538,7 +538,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $usedProducts[] = $item;
             }
 
-            $prodgiuct->setData($this->_usedProducts, $usedProducts);
+            $product->setData($this->_usedProducts, $usedProducts);
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
         return $product->getData($this->_usedProducts);
