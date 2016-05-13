@@ -25,7 +25,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param object $dataObject
-     * @param string[] $interfaceNames
+     * @param string $interfaceNames
      * @dataProvider resolveDataProvider
      */
     public function testResolve($dataObject, $interfaceName)
@@ -46,15 +46,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 \Magento\Catalog\Model\Category::class,
-                \Magento\Catalog\Api\Data\CategoryTreeInterface::class,
-            ],
-            [
-                \Magento\SalesRule\Model\Rule::class,
-                \Magento\SalesRule\Api\Data\RuleInterface::class,
-            ],
-            [
-                \Magento\SalesRule\Model\Rule\Interceptor::class,
-                \Magento\SalesRule\Api\Data\RuleInterface::class,
+                \Magento\Catalog\Api\Data\CategoryInterface::class,
             ]
         ];
     }
