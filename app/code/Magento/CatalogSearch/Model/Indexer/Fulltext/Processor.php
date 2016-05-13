@@ -16,5 +16,5 @@ class Processor extends AbstractProcessor
     /**
      * Indexer ID
      */
-    const INDEXER_ID = Fulltext::INDEXER_ID; 
+    const INDEXER_ID = Fulltext::INDEXER_ID;
 }
