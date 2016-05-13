@@ -135,7 +135,7 @@ define(
              */
             postcodeValidation: function () {
                 var countryId = $('select[name="country_id"]').val(),
-                    validationResult = postcodeValidator.validate(postcodeElement.value(), countryId),
+                    validationResult,
                     warnMessage;
 
                 if (postcodeElement == null || postcodeElement.value() == null) {
@@ -143,6 +143,7 @@ define(
                 }
 
                 postcodeElement.warn(null);
+                validationResult = postcodeValidator.validate(postcodeElement.value(), countryId);
 
                 if (!validationResult) {
                     warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');
