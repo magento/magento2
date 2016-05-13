@@ -47,6 +47,7 @@ class SessionChecker
      *
      * @param Http $response
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return void
      */
     public function beforeSendVary(Http $response)
     {
