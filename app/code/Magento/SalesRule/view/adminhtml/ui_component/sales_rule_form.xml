@@ -445,6 +445,9 @@
                         <item name="true" xsi:type="number">1</item>
                         <item name="false" xsi:type="number">0</item>
                     </item>
+                    <item name="notice" xsi:type="string" translate="true">
+                        If is checked discount amount will be applied to subtotal and shipping amount separately
+                    </item>
                     <item name="default" xsi:type="number">0</item>
                     <item name="label" xsi:type="string" translate="true">Apply to Shipping Amount</item>
                 </item>
