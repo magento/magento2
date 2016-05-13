@@ -38,18 +38,12 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
         /** @var \Magento\Sales\Model\Order $order */
         $orderCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Collection');
         $order = $orderCollection->getFirstItem();
-        $items = [
+        $items = [];
 
-        ];
-        /** @var \Magento\Sales\Model\Order\Item $orderItem */
-        foreach ($order->getAllItems() as $orderItem) {
-            $items[] = array_merge($orderItem->getData(), [
-                'order_item_id' => $orderItem->getId(),
-                'qty' => $orderItem->getQtyInvoiced(),
-                'price' => $orderItem->getPrice(),
-                'row_total' => $orderItem->getRowTotal(),
-                'entity_id' => null,
-            ]);
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
+            $items = $this->getItemsForRest($order);
+        } else {
+            $items = $this->getItemsForSoap($order);
         }
 
         $serviceInfo = [
@@ -122,5 +116,37 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
         $this->assertNotEmpty($result);
         $order = $this->objectManager->get(OrderRepositoryInterface::class)->get($order->getId());
         $this->assertEquals(Order::STATE_CLOSED, $order->getState());
+    }
+
+    private function getItemsForRest($order)
+    {
+        $items = [];
+        /** @var \Magento\Sales\Model\Order\Item $orderItem */
+        foreach ($order->getAllItems() as $orderItem) {
+            $items[] = [
+                'order_item_id' => $orderItem->getId(),
+                'qty' => $orderItem->getQtyInvoiced(),
+                'price' => $orderItem->getPrice(),
+                'row_total' => $orderItem->getRowTotal(),
+                'entity_id' => null,
+            ];
+        }
+        return $items;
+    }
+
+    private function getItemsForSoap($order)
+    {
+        $items = [];
+        /** @var \Magento\Sales\Model\Order\Item $orderItem */
+        foreach ($order->getAllItems() as $orderItem) {
+            $items[] = array_merge($orderItem->getData(), [
+                'order_item_id' => $orderItem->getId(),
+                'qty' => $orderItem->getQtyInvoiced(),
+                'price' => $orderItem->getPrice(),
+                'row_total' => $orderItem->getRowTotal(),
+                'entity_id' => null,
+            ]);
+        }
+        return $items;
     }
 }
