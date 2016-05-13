@@ -14,6 +14,8 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * MySQL Search Adapter
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Adapter implements AdapterInterface
 {
