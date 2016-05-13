@@ -527,6 +527,48 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     }
 
     /**
+     * Applies the given callable to each element in the collection.
+     *
+     * @param callable $callback
+     * @return static
+     */
+    public function map(callable $callback)
+    {
+        $this->load();
+        $new = clone $this;
+        $new->_items = array_map($callback, $this->_items);
+        return $new;
+    }
+
+    /**
+     * Applies the given callable to each element in the collection and removes items
+     * which do not pass the callable criteria.
+     *
+     * @param callable $callback
+     * @return static
+     */
+    public function filter(callable  $callback)
+    {
+        $this->load();
+        $new = clone $this;
+        $new->_items = array_filter($this->_items, $callback);
+        return $new;
+    }
+
+    /**
+     * Return a single result from all of the elements in the collection. Optionally takes an initial value.
+     *
+     * @param callable $callback
+     * @param mixed $initial
+     * @return mixed
+     */
+    public function reduce(callable $callback, $initial = null)
+    {
+        $this->load();
+        return array_reduce($this->_items, $callback, $initial);
+    }
+
+    /**
      * Setting data for all collection items
      *
      * @param   mixed $key

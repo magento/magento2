@@ -167,4 +167,63 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->_model->removeAllItems();
         $this->assertEquals([], $this->_model->getItems());
     }
+
+    public function testMap()
+    {
+        $item1 = new \Magento\Framework\DataObject();
+        $item2 = new \Magento\Framework\DataObject();
+
+        $this->_model->addItem($item1);
+        $this->_model->addItem($item2);
+        $this->assertCount(2, $this->_model->getItems());
+
+        $mapped = $this->_model->map(function (\Magento\Framework\DataObject $obj) {
+            return $obj->setData('map_test', true);
+        });
+
+        $this->assertNotSame($mapped, $this->_model);
+        $this->assertTrue($item1->getData('map_test'));
+        $this->assertTrue($item2->getData('map_test'));
+    }
+
+    public function testFilter()
+    {
+        $item1 = new \Magento\Framework\DataObject(['price' => 10]);
+        $item2 = new \Magento\Framework\DataObject(['price' => 20]);
+        $item3 = new \Magento\Framework\DataObject(['price' => 30]);
+
+        $this->_model->addItem($item1);
+        $this->_model->addItem($item2);
+        $this->_model->addItem($item3);
+
+        $this->assertCount(3, $this->_model->getItems());
+
+        $filtered = $this->_model->filter(function (\Magento\Framework\DataObject $obj) {
+            return $obj->getData('price') >= 20;
+        });
+
+        $this->assertNotSame($filtered, $this->_model);
+        $this->assertCount(2, $filtered->getItems());
+        $this->assertCount(3, $this->_model->getItems());
+
+    }
+
+    public function testReduce()
+    {
+        $item1 = new \Magento\Framework\DataObject(['price' => 10]);
+        $item2 = new \Magento\Framework\DataObject(['price' => 20]);
+        $item3 = new \Magento\Framework\DataObject(['price' => 30]);
+
+        $this->_model->addItem($item1);
+        $this->_model->addItem($item2);
+        $this->_model->addItem($item3);
+
+        $this->assertCount(3, $this->_model->getItems());
+
+        $totalPrice = $this->_model->reduce(function ($carry, \Magento\Framework\DataObject $obj) {
+            return $carry + $obj->getData('price');
+        }, 0);
+
+        $this->assertEquals(60, $totalPrice);
+    }
 }
