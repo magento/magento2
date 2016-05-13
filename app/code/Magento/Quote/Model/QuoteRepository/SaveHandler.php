@@ -59,10 +59,11 @@ class SaveHandler
      */
     public function save(CartInterface $quote)
     {
+        // todo: remove getIsActive check
         /** @var \Magento\Quote\Model\Quote $quote */
         // Quote Item processing
         $items = $quote->getItems();
-        if ($items && $quote->getIsActive()) {
+        if ($items) {
             foreach ($items as $item) {
                 /** @var \Magento\Quote\Model\Quote\Item $item */
                 if (!$item->isDeleted()) {
@@ -73,7 +74,7 @@ class SaveHandler
 
         // Billing Address processing
         $billingAddress = $quote->getBillingAddress();
-        if ($billingAddress && $quote->getIsActive()) {
+        if ($billingAddress) {
             $this->billingAddressPersister->save($quote, $billingAddress);
         }
 
