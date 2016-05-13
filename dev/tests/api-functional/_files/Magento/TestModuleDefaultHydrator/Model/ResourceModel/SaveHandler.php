@@ -7,7 +7,7 @@ namespace Magento\TestModuleDefaultHydrator\Model\ResourceModel;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface;
-use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\EntityManager\EntityManager;
 
 class SaveHandler implements ExtensionInterface
