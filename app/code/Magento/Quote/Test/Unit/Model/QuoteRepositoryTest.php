@@ -7,12 +7,13 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use Magento\Quote\Api\CartRepositoryInterface;
-
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Quote\Model\QuoteRepository\LoadHandler;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -170,8 +171,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->quoteMock);
 
-        $this->assertEquals($this->quoteMock, $this->model->get($cartId));
-        $this->assertEquals($this->quoteMock, $this->model->get($cartId));
+        static::assertEquals($this->quoteMock, $this->model->get($cartId));
+        static::assertEquals($this->quoteMock, $this->model->get($cartId));
     }
 
     public function testGetForCustomerAfterGet()
@@ -208,8 +209,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->quoteMock);
 
-        $this->assertEquals($this->quoteMock, $this->model->get($cartId));
-        $this->assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
+        static::assertEquals($this->quoteMock, $this->model->get($cartId));
+        static::assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
     }
 
     public function testGetWithSharedStoreIds()
@@ -263,8 +264,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->quoteMock);
 
-        $this->assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
-        $this->assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
+        static::assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
+        static::assertEquals($this->quoteMock, $this->model->getForCustomer($customerId));
     }
 
     /**
