@@ -28,11 +28,11 @@ $orderItem->setName('Test item')
     ->setQtyInvoiced(10)
     ->setId($orderItemId)
     ->setOriginalPrice(20);
+$order->addItem($orderItem);
 
 /** @var \Magento\Sales\Model\Order\Creditmemo\Item $creditItem */
 $creditItem = $objectManager->get('Magento\Sales\Model\Order\Creditmemo\Item');
 $creditItem->setCreditmemo($creditmemo)
-    ->setOrderItem($orderItem)
     ->setName('Creditmemo item')
     ->setOrderItemId($orderItemId)
     ->setQty(1)
