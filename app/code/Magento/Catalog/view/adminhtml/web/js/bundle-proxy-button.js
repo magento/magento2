@@ -55,6 +55,19 @@ define([
         },
 
         /**
+         * Calls 'destroy' of parent and
+         * clear listing provider source
+         *
+         * @returns {Object} Chainable.
+         */
+        destroy: function () {
+            this._super();
+            this.source.set(this.listingDataProvider, []);
+
+            return this;
+        },
+
+        /**
          * Call parent "action" method
          * and set new data to record and listing.
          *
