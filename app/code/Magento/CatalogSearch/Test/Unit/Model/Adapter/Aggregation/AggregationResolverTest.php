@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -39,6 +40,11 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
     private $request;
 
     /**
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $config;
+
+    /**
      * @var AggregationResolver
      */
     private $aggregationResolver;
@@ -51,6 +57,7 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->request = $this->getMock(RequestInterface::class);
+        $this->config = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,
@@ -58,6 +65,7 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
                 'attributeSetFinder' => $this->attributeSetFinder,
                 'productAttributeRepository' => $this->productAttributeRepository,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
+                'config' => $this->config,
             ]
         );
     }
@@ -66,6 +74,7 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
     {
         $documentIds = [1, 2, 3];
         $attributeSetIds = [4, 5];
+        $requestName = 'request_name';
 
         $this->attributeSetFinder
             ->expects($this->once())
@@ -113,11 +122,28 @@ class AggregationResolverTest extends \PHPUnit_Framework_TestCase
         $bucketSecond->expects($this->once())
             ->method('getField')
             ->willReturn('some_another_code');
+        $bucketThird = $this->getMock(BucketInterface::class);
+        $bucketThird->expects($this->once())
+            ->method('getName')
+            ->willReturn('custom_not_attribute_field');
 
         $this->request->expects($this->once())
             ->method('getAggregation')
-            ->willReturn([$bucketFirst, $bucketSecond]);
+            ->willReturn([$bucketFirst, $bucketSecond, $bucketThird]);
+        $this->request->expects($this->once())
+            ->method('getName')
+            ->willReturn($requestName);
 
-        $this->assertEquals([$bucketFirst], $this->aggregationResolver->resolve($this->request, $documentIds));
+        $this->config->expects($this->once())
+            ->method('get')
+            ->with($requestName)
+            ->willReturn([
+                'aggregations' => ['custom_not_attribute_field' => []],
+            ]);
+
+        $this->assertEquals(
+            [$bucketFirst, $bucketThird],
+            $this->aggregationResolver->resolve($this->request, $documentIds)
+        );
     }
 }
