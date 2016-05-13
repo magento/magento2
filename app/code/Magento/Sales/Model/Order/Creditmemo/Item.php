@@ -605,6 +605,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */
