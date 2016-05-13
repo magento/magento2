@@ -10,6 +10,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface;
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\RequestInterface;
 
 class AggregationResolver implements AggregationResolverInterface
@@ -28,6 +29,11 @@ class AggregationResolver implements AggregationResolverInterface
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
+
+    /**
+     * @var Config
+     */
+    private $config;
     
     /**
      * AggregationResolver constructor
@@ -35,15 +41,18 @@ class AggregationResolver implements AggregationResolverInterface
      * @param AttributeSetFinderInterface $attributeSetFinder
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Config $config
      */
     public function __construct(
         AttributeSetFinderInterface $attributeSetFinder,
         ProductAttributeRepositoryInterface $productAttributeRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        Config $config
     ) {
         $this->attributeSetFinder = $attributeSetFinder;
         $this->productAttributeRepository = $productAttributeRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->config = $config;
     }
 
     /**
@@ -51,13 +60,19 @@ class AggregationResolver implements AggregationResolverInterface
      */
     public function resolve(RequestInterface $request, array $documentIds)
     {
+        $data = $this->config->get($request->getName());
+
+        $bucketKeys = isset($data['aggregations']) ? array_keys($data['aggregations']) : [];
         $attributeCodes = $this->getApplicableAttributeCodes($documentIds);
 
-        $resolvedAggregation = array_filter($request->getAggregation(), function ($bucket) use ($attributeCodes) {
-            /** @var BucketInterface $bucket */
-            return in_array($bucket->getField(), $attributeCodes);
-        });
-        return $resolvedAggregation;
+        $resolvedAggregation = array_filter(
+            $request->getAggregation(),
+            function ($bucket) use ($attributeCodes, $bucketKeys) {
+                /** @var BucketInterface $bucket */
+                return in_array($bucket->getField(), $attributeCodes) || in_array($bucket->getName(), $bucketKeys);
+            }
+        );
+        return array_values($resolvedAggregation);
     }
 
     /**
