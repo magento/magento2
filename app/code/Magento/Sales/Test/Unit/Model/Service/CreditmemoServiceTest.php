@@ -21,6 +21,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Api\CreditmemoRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoRepositoryMock;
+
     /**
      * @var \Magento\Sales\Api\CreditmemoCommentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
