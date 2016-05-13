@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Model\ResourceModel\Db;
 
+use Magento\Framework\Model\ResourceModel\Db\ExtensionActionInterface;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 
 /**
@@ -38,7 +39,7 @@ class ExtensionPool
     /**
      * @param string $entityType
      * @param string $actionName
-     * @return object[]
+     * @return ExtensionActionInterface[]
      * @throws \Exception
      */
     public function getActions($entityType, $actionName)
