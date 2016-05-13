@@ -184,7 +184,8 @@ class CustomAttributesMapperTest extends \PHPUnit_Framework_TestCase
                     \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => 'test',
                     \Magento\Framework\Api\AttributeInterface::VALUE => 'test'
                 ]
-            ]
+            ],
+            'test' => 'test'
         ];
         $this->assertEquals($expected, $actual);
     }
