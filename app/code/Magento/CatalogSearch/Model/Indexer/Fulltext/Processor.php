@@ -8,6 +8,9 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Indexer\AbstractProcessor;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 
+/**
+ * Class Processor
+ */
 class Processor extends AbstractProcessor
 {
     /**
