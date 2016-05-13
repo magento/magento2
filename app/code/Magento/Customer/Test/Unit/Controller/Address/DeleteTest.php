@@ -25,29 +25,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject */
     protected $validatorMock;
 
-    /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $formFactoryMock;
-
     /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $addressRepositoryMock;
-
-    /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $addressInterfaceFactoryMock;
-
-    /** @var \Magento\Customer\Api\Data\RegionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $regionInterfaceFactoryMock;
-
-    /** @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dataObjectProcessorMock;
-
-    /** @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dataObjectHelperMock;
-
-    /** @var \Magento\Framework\Controller\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $forwardFactoryMock;
-
-    /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $pageFactoryMock;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $request;
@@ -72,30 +51,30 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->formFactoryMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\FormFactory')
+        $formFactoryMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\FormFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressRepositoryMock = $this->getMockBuilder('Magento\Customer\Api\AddressRepositoryInterface')
             ->getMockForAbstractClass();
-        $this->addressInterfaceFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
+        $addressInterfaceFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->regionInterfaceFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterfaceFactory')
+        $regionInterfaceFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+        $dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+        $dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\ForwardFactory')
+        $forwardFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\ForwardFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->pageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $pageFactoryMock = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
@@ -125,14 +104,14 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             $this->context,
             $this->sessionMock,
             $this->validatorMock,
-            $this->formFactoryMock,
+            $formFactoryMock,
             $this->addressRepositoryMock,
-            $this->addressInterfaceFactoryMock,
-            $this->regionInterfaceFactoryMock,
-            $this->dataObjectProcessorMock,
-            $this->dataObjectHelperMock,
-            $this->forwardFactoryMock,
-            $this->pageFactoryMock
+            $addressInterfaceFactoryMock,
+            $regionInterfaceFactoryMock,
+            $dataObjectProcessorMock,
+            $dataObjectHelperMock,
+            $forwardFactoryMock,
+            $pageFactoryMock
         );
     }
 
