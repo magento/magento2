@@ -55,7 +55,7 @@ define([
                 isEmpty = password.length === 0,
                 zxcvbnScore = zxcvbn(password).score,
                 isValid = $.validator.validateSingleElement(this.options.cache.input),
-                displayScore = zxcvbnScore;
+                displayScore = zxcvbnScore || 1;
 
                 // Display score is based on combination of whether password is empty, valid, and zxcvbn strength
                 if (isEmpty) {
