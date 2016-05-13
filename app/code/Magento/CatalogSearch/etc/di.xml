@@ -227,4 +227,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="catalogsearch_fulltext" xsi:type="object">Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
