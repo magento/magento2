@@ -193,4 +193,15 @@ abstract class AbstractModifier implements ModifierInterface
 
         return false;
     }
+
+    /**
+     * Format number to have only two decimals after delimiter
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatFloat($value)
+    {
+        return $value !== null ? number_format((float)$value, 2, '.', '') : '';
+    }
 }
