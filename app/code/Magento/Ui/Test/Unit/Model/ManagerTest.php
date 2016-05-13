@@ -126,11 +126,11 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->uiReader, $this->manager->getReader('some_name'));
     }
 
-    public function testPrepareDataWithException()
+    public function testPrepareDataWithoutName()
     {
         $this->setExpectedException(
             'Magento\Framework\Exception\LocalizedException',
-            __('Initialization error component, check the spelling of the name or the correctness of the call.')
+            __("Invalid UI Component element name: ''")
         );
         $this->manager->prepareData(null);
     }
