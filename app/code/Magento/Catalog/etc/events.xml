@@ -36,4 +36,19 @@
     <event name="magento_catalog_api_data_categoryinterface_load_after">
         <observer name="legacy_category_load_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
     </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_save_before">
+        <observer name="legacy_categorytree_save_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntitySave" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_save_after">
+        <observer name="legacy_categorytree_save_after" instance="Magento\Framework\EntityManager\Observer\AfterEntitySave" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_delete_before">
+        <observer name="legacy_categorytree_delete_before" instance="Magento\Framework\EntityManager\Observer\BeforeEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_delete_after">
+        <observer name="legacy_categorytree_delete_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityDelete" />
+    </event>
+    <event name="magento_catalog_api_data_categorytreeinterface_load_after">
+        <observer name="legacy_categorytree_load_after" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
+    </event>
 </config>
