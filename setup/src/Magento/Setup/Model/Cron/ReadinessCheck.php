@@ -9,10 +9,9 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
-use Magento\Framework\View\Design\Theme\Customization\Path;
 use Magento\Setup\Model\PhpReadinessCheck;
 use Magento\Setup\Validator\DbValidator;
-use Magento\Setup\Model\PathBuilder;
+use Magento\Setup\Model\BasePackageInfo;
 
 /**
  * This class is used by setup:cron:run command to check if this command can be run properly. It also checks if PHP
@@ -62,9 +61,9 @@ class ReadinessCheck
     private $phpReadinessCheck;
 
     /**
-     * @var PathBuilder
+     * @var BasePackageInfo
      */
-    private $pathBuilder;
+    private $basePackageInfo;
 
     /**
      * Constructor
@@ -73,20 +72,20 @@ class ReadinessCheck
      * @param DeploymentConfig $deploymentConfig
      * @param Filesystem $filesystem
      * @param PhpReadinessCheck $phpReadinessCheck
-     * @param PathBuilder $pathBuilder
+     * @param BasePackageInfo $basePackageInfo
      */
     public function __construct(
         DbValidator $dbValidator,
         DeploymentConfig $deploymentConfig,
         Filesystem $filesystem,
         PhpReadinessCheck $phpReadinessCheck,
-        PathBuilder $pathBuilder
+        BasePackageInfo $basePackageInfo
     ) {
         $this->dbValidator = $dbValidator;
         $this->deploymentConfig = $deploymentConfig;
         $this->filesystem = $filesystem;
         $this->phpReadinessCheck = $phpReadinessCheck;
-        $this->pathBuilder = $pathBuilder;
+        $this->basePackageInfo = $basePackageInfo;
     }
 
     /**
@@ -127,7 +126,7 @@ class ReadinessCheck
         // Prepare list of magento specific files and directory paths for updater application to check write
         // permissions
         try {
-            $filePaths = $this->pathBuilder->build();
+            $filePaths = $this->basePackageInfo->getPaths();
             $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = $filePaths;
         } catch (\Exception $e) {
             $errorMsg = $e->getMessage();
