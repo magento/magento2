@@ -17,6 +17,9 @@ use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AggregationResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
