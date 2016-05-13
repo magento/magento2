@@ -152,7 +152,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->method('getElements')
             ->willReturn($structureElements);
 
-        $this->structureMock->expects($this->once())
+        $this->structureMock->expects($this->never())
             ->method('setAttribute')
             ->willReturnSelf();
 
