@@ -27,9 +27,9 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * @param object $entity
+     * @param CustomerInterface $entity
      * @param array $arguments
-     * @return array
+     * @return CustomerInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

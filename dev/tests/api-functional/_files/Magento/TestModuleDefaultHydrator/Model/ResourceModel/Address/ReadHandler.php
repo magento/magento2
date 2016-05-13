@@ -5,9 +5,10 @@
  */
 namespace Magento\TestModuleDefaultHydrator\Model\ResourceModel\Address;
 
-use \Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\EntityManager\EntityManager;
 
 class ReadHandler implements ExtensionInterface
@@ -15,24 +16,28 @@ class ReadHandler implements ExtensionInterface
     /**
      * @var EntityManager
      */
-    private $addressRepositoryInterface;
+    private $addressRepository;
 
+    /**
+     * @var SearchCriteriaBuilder
+     */
     private $searchCriteriaBuilder;
 
     /**
-     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepositoryInterface
+     * @param AddressRepositoryInterface $addressRepositoryInterface
+     * @param SearchCriteriaBuilder $SearchCriteriaBuilder
      */
     public function __construct(
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepositoryInterface,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriBuilder
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
-        $this->addressRepositoryInterface = $addressRepositoryInterface;
-        $this->searchCriteriaBuilder = $searchCriteriBuilder;
+        $this->addressRepository = $addressRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * @param object $entity
-     * @return array
+     * @param CustomerInterface $entity
+     * @return CustomerInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -40,7 +45,7 @@ class ReadHandler implements ExtensionInterface
     {
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $entity->getId())
             ->create();
-        $addressesResult = $this->addressRepositoryInterface->getList($searchCriteria);
+        $addressesResult = $this->addressRepository->getList($searchCriteria);
         $entity->setAddresses($addressesResult->getItems());
         return $entity;
     }
