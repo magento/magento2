@@ -63,7 +63,7 @@ class ShippingAssignmentProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * Test saving shipping assignments with deleted cart items
      *
-     * @covers ShippingAssignmentProcessor::save
+     * @covers \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor::save
      */
     public function testSaveWithDeletedCartItems()
     {
