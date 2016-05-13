@@ -85,8 +85,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             if (is_array($data['image']) && !empty($data['image']['delete'])) {
                 $data['image'] = null;
             } else {
-                $data['image_new_data'] = $data['image'];
-                unset($data['image']);
+                if (isset($data['image'][0]['name']) && isset($data['image'][0]['tmp_name'])) {
+                    $data['image'] = $data['image'][0]['name'];
+                } else {
+                    unset($data['image']);
+                }
             }
         }
         return $data;

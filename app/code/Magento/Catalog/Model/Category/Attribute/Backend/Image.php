@@ -94,14 +94,11 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
-        $value = $object->getData($this->getAttribute()->getName() . '_new_data');
+        $image = $object->getData($this->getAttribute()->getName(), null);
 
-        if (isset($value[0]['name']) && isset($value[0]['tmp_name'])) {
+        if ($image !== null) {
             try {
-                $result = $this->getImageUploader()->moveFileFromTmp($value[0]['name']);
-
-                $object->setData($this->getAttribute()->getName(), $result);
-                $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
+                $this->getImageUploader()->moveFileFromTmp($image);
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
             }
