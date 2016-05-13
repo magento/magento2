@@ -35,7 +35,6 @@ define([
          */
         chooseNotice: function () {
             var checkedNoticeNumber = Number(this.checked());
-            
             this.notice = this.notices[checkedNoticeNumber];
         },
 
