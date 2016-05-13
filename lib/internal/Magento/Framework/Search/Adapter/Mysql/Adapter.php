@@ -78,7 +78,7 @@ class Adapter implements AdapterInterface
 
         $documents = $this->getDocuments($table);
 
-        $aggregations = $this->aggregationBuilder->build($request, $table);
+        $aggregations = $this->aggregationBuilder->build($request, $table, $documents);
         $response = [
             'documents' => $documents,
             'aggregations' => $aggregations,
