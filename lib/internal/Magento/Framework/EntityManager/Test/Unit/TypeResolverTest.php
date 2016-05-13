@@ -11,12 +11,12 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManager;
-    
+
     /**
      * @var \Magento\Framework\EntityManager\TypeResolver
      */
     private $resolver;
-    
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
