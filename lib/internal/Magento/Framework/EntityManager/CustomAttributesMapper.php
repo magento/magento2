@@ -87,7 +87,6 @@ class CustomAttributesMapper implements MapperInterface
                     AttributeInterface::ATTRIBUTE_CODE => $attribute->getAttributeCode(),
                     AttributeInterface::VALUE => $data[$attribute->getAttributeCode()]
                 ];
-                //unset($data[$attribute->getAttributeCode()]);
             }
         }
         return $data;

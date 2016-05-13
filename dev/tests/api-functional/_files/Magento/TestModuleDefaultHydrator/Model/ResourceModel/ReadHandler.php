@@ -9,6 +9,10 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerExtensionFactory;
+use Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface;
+use Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterfaceFactory as ExtensionAttributeFactory;
 
 class ReadHandler implements ExtensionInterface
 {
@@ -16,6 +20,16 @@ class ReadHandler implements ExtensionInterface
      * @var EntityManager
      */
     private $entityManager;
+
+    /**
+     * @var ExtensionAttributeFactory
+     */
+    private $extensionAttributeFactory;
+
+    /**
+     * @var CustomerExtensionFactory
+     */
+    private $customerExtensionFactory;
 
     /**
      * @var MetadataPool
@@ -29,52 +43,51 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * @param EntityManager $entityManager
+     * @param ExtensionAttributeFactory $extensionAttributeFactory
+     * @param CustomerExtensionFactory $customerExtensionFactory
+     * @param MetadataPool $metadataPool
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         EntityManager $entityManager,
+        ExtensionAttributeFactory $extensionAttributeFactory,
+        CustomerExtensionFactory $customerExtensionFactory,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection
     ) {
         $this->entityManager = $entityManager;
+        $this->extensionAttributeFactory = $extensionAttributeFactory;
+        $this->customerExtensionFactory = $customerExtensionFactory;
         $this->metadataPool = $metadataPool;
         $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * @param object $entity
+     * @param CustomerInterface $entity
      * @param array $arguments
-     * @return array
+     * @return CustomerInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
     {
-        $metadata = $this->metadataPool->getMetadata(
-            \Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface::class
-        );
+        $metadata = $this->metadataPool->getMetadata(ExtensionAttributeInterface::class);
         $connection = $this->resourceConnection->getConnectionByName(
             $metadata->getEntityConnectionName()
         );
-
         $id = $connection->fetchOne(
             $connection->select()
                 ->from($metadata->getEntityTable(), [$metadata->getIdentifierField()])
                 ->where('customer_id = ?', $entity->getId())
                 ->limit(1)
         );
-
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-
-        /** @var \Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface $extensionAttribute */
-        $extensionAttribute = $objectManager->create(
-            \Magento\TestModuleDefaultHydrator\Api\Data\ExtensionAttributeInterface::class
-        );
+        $extensionAttribute = $this->extensionAttributeFactory->create();
         $extensionAttribute = $this->entityManager->load($extensionAttribute, $id);
-
-        /** @var \Magento\Customer\Api\Data\CustomerExtensionInterface $customerExtension */
-        $customerExtension = $objectManager->create(\Magento\Customer\Api\Data\CustomerExtension::class);
-        $customerExtension->setExtensionAttribute($extensionAttribute);
-
+        $customerExtension = $this->customerExtensionFactory->create(
+            [
+                'data' => ['extension_attribute' => $extensionAttribute]
+            ]
+        );
         $entity->setExtensionAttributes($customerExtension);
         return $entity;
     }

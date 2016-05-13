@@ -8,6 +8,7 @@ namespace Magento\TestModuleDefaultHydrator\Model\ResourceModel\Address;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Customer\Api\Data\CustomerInterface;
 
 class SaveHandler implements ExtensionInterface
 {
@@ -26,9 +27,9 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * @param object $entity
+     * @param CustomerInterface $entity
      * @param array $arguments
-     * @return array
+     * @return CustomerInterface
      * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
