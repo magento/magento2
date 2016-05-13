@@ -59,11 +59,6 @@ class Source
     private $readFactory;
 
     /**
-     * @var string
-     */
-    private $sourceContentType;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
