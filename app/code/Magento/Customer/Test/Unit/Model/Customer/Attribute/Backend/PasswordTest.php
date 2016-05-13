@@ -29,9 +29,9 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
 
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
-                       ->disableOriginalConstructor()
-                       ->setMethods(['getPassword', 'getPasswordConfirm'])
-                       ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['getPassword', 'getPasswordConfirm'])
+            ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
         $object->expects($this->once())->method('getPasswordConfirm')->willReturn($password);
@@ -56,9 +56,9 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     {
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
-                       ->disableOriginalConstructor()
-                       ->setMethods(['getPassword'])
-                       ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['getPassword'])
+            ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
 
@@ -72,9 +72,9 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
 
         /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
-                       ->disableOriginalConstructor()
-                       ->setMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
-                       ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
+            ->getMock();
 
         $object->expects($this->once())->method('getPassword')->willReturn($password);
         $object->expects($this->once())->method('hashPassword')->willReturn($passwordHash);
@@ -89,15 +89,15 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     public function randomValuesProvider()
     {
         return [
-            [ false ],
-            [ 1 ],
-            [ "23" ],
-            [ null ],
-            [ "" ],
-            [ -1 ],
-            [ 12.3 ],
-            [ true ],
-            [ 0 ],
+            [false],
+            [1],
+            ["23"],
+            [null],
+            [""],
+            [-1],
+            [12.3],
+            [true],
+            [0],
         ];
     }
 
@@ -109,9 +109,9 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject $customer */
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
-                         ->disableOriginalConstructor()
-                         ->setMethods(['getData'])
-                         ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['getData'])
+            ->getMock();
 
         $customer->expects($this->exactly(2))->method('getData')->willReturn($randomValue);
 

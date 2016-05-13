@@ -1330,6 +1330,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return Password Confirmation
+     *
      * @return string
      */
     public function getPasswordConfirm()
@@ -1338,6 +1340,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return Password Confirmation
+     *
      * @return string
      */
     public function getPassword()
