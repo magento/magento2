@@ -150,7 +150,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'new_video_screenshot_preview',
             'button',
             [
-                'class' => 'preview_hidden_image_input_button',
+                'class' => 'preview-image-hidden-input',
                 'label' => '',
                 'name' => '_preview',
             ]
@@ -232,7 +232,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function addMediaRoleAttributes(Fieldset $fieldset)
     {
-        $fieldset->addField('roleLabel', 'note', ['text' => __('Role')]);
+        $fieldset->addField('role-label', 'note', ['text' => __('Role')]);
         $mediaRoles = $this->getProduct()->getMediaAttributes();
         ksort($mediaRoles);
         foreach ($mediaRoles as $mediaRole) {

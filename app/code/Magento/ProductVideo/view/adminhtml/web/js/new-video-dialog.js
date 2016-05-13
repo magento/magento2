@@ -40,6 +40,10 @@ define([
             }
         },
 
+        _FINISH_CREATE_VIDEO_TRIGGER: 'finish_create_video',
+
+        _FINISH_UPDATE_VIDEO_TRIGGER: 'finish_update_video',
+
         /**
          * @private
          */
@@ -59,15 +63,21 @@ define([
          */
         update: function () {
             var checkVideoID = this.element.find(this.options.container).find(
-                '.' + this.options.videoClass
-            ).data('code');
+                    '.' + this.options.videoClass
+                ).data('code'),
+                eventVideoData = {
+                    oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
+                    newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
+                };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_UPDATE_VIDEO_TRIGGER, eventVideoData);
             } else if (checkVideoID && checkVideoID === this.options.videoId) {
                 return false;
             } else if (!checkVideoID) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_CREATE_VIDEO_TRIGGER, eventVideoData);
             }
 
         },
@@ -306,41 +316,52 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function (e, data) {
-            var player = this.element.createVideoPlayer({
-                videoId: data.videoId,
-                videoProvider: data.videoProvider,
-                reset: false,
-                metaData: {
-                    DOM: {
-                        title: '.video-information.title span',
-                        uploaded: '.video-information.uploaded span',
-                        uploader: '.video-information.uploader span',
-                        duration: '.video-information.duration span',
-                        all: '.video-information span',
-                        wrapper: '.video-information'
-                    },
-                    data: {
-                        title: data.title,
-                        uploaded: data.uploaded,
-                        uploader: data.channel,
-                        duration: data.duration,
-                        uploaderUrl: data.channelId
+            var self = this;
+
+            self.element.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
+                    if (!self._onlyVideoPlayer ||
+                        !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
+                        playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
+                    ) {
+                        self.element.updateInputFields({
+                            reset: false,
+                            data: {
+                                title: data.title,
+                                description: data.description
+                            }
+                        });
                     }
-                }
-            });
+
+                    if (playerData.oldVideoId !== playerData.newVideoId) {
+                        this._loadRemotePreview(data.thumbnail);
+                    }
+                    self._onlyVideoPlayer = true;
+                }, this))
+                .createVideoPlayer({
+                    videoId: data.videoId,
+                    videoProvider: data.videoProvider,
+                    reset: false,
+                    metaData: {
+                        DOM: {
+                            title: '.video-information.title span',
+                            uploaded: '.video-information.uploaded span',
+                            uploader: '.video-information.uploader span',
+                            duration: '.video-information.duration span',
+                            all: '.video-information span',
+                            wrapper: '.video-information'
+                        },
+                        data: {
+                            title: data.title,
+                            uploaded: data.uploaded,
+                            uploader: data.channel,
+                            duration: data.duration,
+                            uploaderUrl: data.channelId
+                        }
+                    }
+                })
+                .off('finish_update_video finish_create_video');
 
             this._videoRequestComplete = true;
-
-            if (!this._isEditPage) {
-                player.updateInputFields({
-                    reset: false,
-                    data: {
-                        title: data.title,
-                        description: data.description
-                    }
-                });
-                this._loadRemotePreview(data.thumbnail);
-            }
         },
 
         /**
@@ -352,16 +373,15 @@ define([
             var url = this.options.saveRemoteVideoUrl,
                 self = this;
 
+            this._getPreviewImage().attr('src', sourceUrl).hide();
             this._blockActionButtons(true, true);
             $.ajax({
                 url: url,
                 data: 'remote_image=' + sourceUrl,
                 type: 'post',
                 success: $.proxy(function (result) {
-                    if (!this._isEditPage) {
-                        this._tempPreviewImageData = result;
-                        this._getPreviewImage().attr('src', sourceUrl).show();
-                    }
+                    this._tempPreviewImageData = result;
+                    this._getPreviewImage().attr('src', sourceUrl).show();
                     this._blockActionButtons(false, true);
                 }, self)
             });
@@ -609,7 +629,7 @@ define([
          * @private
          */
         _create: function () {
-            var imgs = this.element.closest(this.options.videoSelector).data('images') || [],
+            var imgs = _.values(this.element.closest(this.options.videoSelector).data('images')) || [],
                 widget,
                 uploader,
                 tmp,
@@ -678,7 +698,7 @@ define([
                     roles.prop('disabled', false);
                     file = widget.element.find('#file_name').val();
                     widget._onGetVideoInformationEditClick();
-                    modalTitleElement = widget.element.closest('.mage-new-video-dialog .modal-title');
+                    modalTitleElement = modal.find('.modal-title');
 
                     if (!file) {
                         widget._blockActionButtons(true);

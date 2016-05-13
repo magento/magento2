@@ -110,6 +110,10 @@
                 <input>checkbox</input>
                 <selector>input[name='custom_use_parent_settings']</selector>
             </use_parent_category_settings>
+            <theme>
+                <input>select</input>
+                <selector>select[name='custom_design']</selector>
+            </theme>
             <layout>
                 <input>select</input>
                 <selector>select[name='page_layout']</selector>
@@ -137,10 +141,6 @@
                 <input>text</input>
                 <selector>input[name='custom_design_to']</selector>
             </schedule_update_to>
-            <new_theme>
-                <input>select</input>
-                <selector>select[name='custom_design']</selector>
-            </new_theme>
         </fields>
     </schedule_design_update>
 </sections>
