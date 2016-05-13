@@ -74,7 +74,16 @@ class CronRunCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $notification = 'setup-cron: Please check var/log/update.log for errors.';
+        $notification = 'setup-cron: Please check var/log/update.log for execution summary.';
+
+        if (!$this->deploymentConfig->isAvailable()) {
+            $output->writeln($notification);
+            $this->status->add('Magento is not installed.', \Psr\Log\LogLevel::INFO);
+
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        }
+
         if (!$this->checkRun()) {
             $output->writeln($notification);
             // we must have an exit code higher than zero to indicate something was wrong
@@ -139,8 +148,7 @@ class CronRunCommand extends AbstractSetupCommand
      */
     private function checkRun()
     {
-        return $this->deploymentConfig->isAvailable()
-        && $this->readinessCheck->runReadinessCheck()
+        return $this->readinessCheck->runReadinessCheck()
         && !$this->status->isUpdateInProgress()
         && !$this->status->isUpdateError();
     }

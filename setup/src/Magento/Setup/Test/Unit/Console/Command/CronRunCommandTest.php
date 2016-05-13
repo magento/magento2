@@ -59,7 +59,7 @@ class CronRunCommandTest extends \PHPUnit_Framework_TestCase
     public function testExecuteNotInstalled()
     {
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
-        $this->status->expects($this->never())->method($this->anything());
+        $this->status->expects($this->once())->method($this->anything());
         $this->queue->expects($this->never())->method($this->anything());
         $this->readinessCheck->expects($this->never())->method($this->anything());
         $this->commandTester->execute([]);
