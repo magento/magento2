@@ -8,7 +8,7 @@ namespace Magento\Email\Model\Plugin;
 /**
  * Plugin for \Magento\Framework\Mail\TransportInterface
  */
-class WindowsSMTPConfig
+class WindowsSmtpConfig
 {
     /**
      * host config path
@@ -43,14 +43,15 @@ class WindowsSMTPConfig
     }
 
     /**
+     * To configure smtp settings for session right before sending message on windows server
+     *
      * @param \Magento\Framework\Mail\TransportInterface $subject
      * return void
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSendMessage(\Magento\Framework\Mail\TransportInterface $subject)
     {
-        if (!$this->osInfo->isWindows()) {
+        if ($this->osInfo->isWindows()) {
             ini_set('SMTP', $this->config->getValue(self::XML_SMTP_HOST));
             ini_set('smtp_port', $this->config->getValue(self::XML_SMTP_PORT));
         }

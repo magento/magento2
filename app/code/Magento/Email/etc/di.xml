@@ -58,6 +58,6 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Mail\TransportInterface">
-        <plugin name="WindowsSMTPConfig" type="Magento\Email\Model\Plugin\WindowsSMTPConfig" />
+        <plugin name="WindowsSmtpConfig" type="Magento\Email\Model\Plugin\WindowsSmtpConfig" />
     </type>
 </config>
