@@ -55,30 +55,25 @@ class AnchorUrlRewriteGenerator
             $anchorCategoryIds = $category->getAnchorsAbove();
             if ($anchorCategoryIds) {
                 foreach ($anchorCategoryIds as $anchorCategoryId) {
-                    try {
-                        $anchorCategory = $this->categoryRepository->get($anchorCategoryId);
-                        $urls[] = $this->urlRewriteFactory->create()
-                            ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
-                            ->setEntityId($product->getId())
-                            ->setRequestPath(
-                                $this->urlPathGenerator->getUrlPathWithSuffix(
-                                    $product,
-                                    $storeId,
-                                    $anchorCategory
-                                )
+                    $anchorCategory = $this->categoryRepository->get($anchorCategoryId);
+                    $urls[] = $this->urlRewriteFactory->create()
+                        ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
+                        ->setEntityId($product->getId())
+                        ->setRequestPath(
+                            $this->urlPathGenerator->getUrlPathWithSuffix(
+                                $product,
+                                $storeId,
+                                $anchorCategory
                             )
-                            ->setTargetPath(
-                                $this->urlPathGenerator->getCanonicalUrlPath(
-                                    $product,
-                                    $anchorCategory
-                                )
+                        )
+                        ->setTargetPath(
+                            $this->urlPathGenerator->getCanonicalUrlPath(
+                                $product,
+                                $anchorCategory
                             )
-                            ->setStoreId($storeId)
-                            ->setMetadata(['category_id' => $anchorCategory->getId()]);
-                    } catch (NoSuchEntityException $e) {
-                        continue;
-                    }
-
+                        )
+                        ->setStoreId($storeId)
+                        ->setMetadata(['category_id' => $anchorCategory->getId()]);
                 }
             }
         }
