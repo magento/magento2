@@ -40,6 +40,9 @@
 
 @timeline-priority-scale__color: @color-gray80;
 
+@timeline-unit-gradient-end__color: #979999;
+@timeline-unit-gradient-start__color: #3e4040;
+
 //
 //  Timeline
 //  ---------------------------------------------
@@ -69,7 +72,7 @@
 }
 
 .timeline-past {
-    background: linear-gradient(to left, fade(@color-white, 0.1), fade(@color-white, 50) 25%, @color-white);
+    background: linear-gradient(to left, fade(@color-white, .1), fade(@color-white, 50) 25%, @color-white);
     border-right: 2px solid @timeline-past__boder-color;
     height: 100%;
     left: 0;
@@ -155,13 +158,13 @@
     cursor: pointer;
     height: @timeline-item__height;
     left: -1px;
+    min-width: 5.5rem;
     overflow: hidden;
     padding: 0 @indent__s;
     position: absolute;
     right: 0;
     white-space: nowrap;
     width: auto;
-    min-width: 5.5rem;
 
     ._permanent._active &,
     ._no-records & {
@@ -351,13 +354,13 @@ svg {
 
     &:before {
         background-image: repeating-linear-gradient(
-                180deg,
-                transparent,
-                transparent 5px,
-                #3e4040 5px,
-                #3e4040 6px,
-                #979999 6px,
-                #979999 7px
+        180deg,
+        transparent,
+        transparent 5px,
+        @timeline-unit-gradient-start__color 5px,
+        @timeline-unit-gradient-start__color 6px,
+        @timeline-unit-gradient-end__color 6px,
+        @timeline-unit-gradient-end__color 7px
         );
         bottom: 0;
         content: '';
