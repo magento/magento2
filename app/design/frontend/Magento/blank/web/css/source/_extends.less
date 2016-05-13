@@ -48,8 +48,8 @@
     }
 
     dd {
-        float: left;
         display: inline-block;
+        float: left;
         margin: 0 0 @indent__xs;
     }
 };
@@ -100,8 +100,8 @@
     width: 48.8%;
 
     &:nth-child(odd) {
-        float: left;
         clear: left;
+        float: left;
     }
 
     &:nth-child(even) {
@@ -246,8 +246,8 @@
 
 & when (@media-common = true) {
     .abs-input-qty {
-        width: 47px;
         text-align: center;
+        width: 47px;
     }
 }
 
@@ -683,8 +683,8 @@
     .abs-action-button-as-link {
         .lib-button-as-link(@_margin: false);
         border-radius: 0;
-        font-weight: @font-weight__regular;
         font-size: inherit;
+        font-weight: @font-weight__regular;
 
         &:active,
         &:not(:focus) {
@@ -1078,6 +1078,8 @@
     .abs-shopping-cart-items {
         .action {
             &.continue {
+                border-radius: 3px;
+                font-weight: @font-weight__bold;
                 .lib-link-as-button();
                 .lib-button(
                 @_button-padding: 7px 15px 7px 0,
@@ -1087,8 +1089,6 @@
                 @_button-icon-font-line-height: 16px,
                 @_button-icon-font-position: before
                 );
-                border-radius: 3px;
-                font-weight: bold;
 
                 &:active {
                     .lib-css(box-shadow, @button__shadow);
@@ -1174,7 +1174,7 @@
 & when (@media-common = true) {
     .abs-field-date-input {
         .lib-css(margin-right, @indent__s);
-        width: calc(~"100% - (@{icon-calendar__font-size} + @{indent__s})");
+        width: calc(~'100% - (@{icon-calendar__font-size} + @{indent__s})');
     }
 }
 
@@ -1189,7 +1189,7 @@
 
         input {
             .lib-css(margin-right, @indent__s);
-            width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
+            width: calc(~'100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})');
         }
     }
 }
@@ -1311,8 +1311,6 @@
                 }
 
                 .amount .price {
-                    position: relative;
-                    padding-right: @indent__m;
                     .lib-icon-font(
                     @icon-down,
                     @_icon-font-size: 30px,
@@ -1320,6 +1318,8 @@
                     @_icon-font-position: after,
                     @_icon-font-display: block
                     );
+                    padding-right: @indent__m;
+                    position: relative;
 
                     &:after {
                         position: absolute;

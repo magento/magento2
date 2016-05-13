@@ -120,7 +120,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\AbstractAttribute',
-            ['getId', 'getStoreId', '__wakeup'],
+            ['getId', 'getStoreId', 'getIsRequired', '__wakeup'],
             [],
             '',
             false
@@ -131,6 +131,9 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->once())
             ->method('getStoreId')
             ->willReturn($storeId);
+        $attribute->expects($this->any())
+            ->method('getIsRequired')
+            ->willReturn(false);
 
         $this->model->setAttribute($attribute);
 
@@ -160,7 +163,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->willReturn($options);
 
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            array_unshift($options, ['label' => ' ', 'value' => '']);
         }
 
         $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, $withEmpty));
