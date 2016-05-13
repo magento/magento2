@@ -137,7 +137,7 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
             )->getBody();
 
             $jsonResponse = json_decode($jsonResponse, true);
-            if (!empty($jsonResponse['query']['results']['rate']) ) {
+            if (!empty($jsonResponse['query']['results']['rate'])) {
                 $response = array_column($jsonResponse['query']['results']['rate'], 'Rate', 'id');
             }
         } catch (\Exception $e) {
