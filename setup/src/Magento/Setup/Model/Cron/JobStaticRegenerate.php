@@ -11,11 +11,6 @@ namespace Magento\Setup\Model\Cron;
 class JobStaticRegenerate extends AbstractJob
 {
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider
-     */
-    protected $objectManagerProvider;
-
-    /**
      * @var \Magento\Framework\App\Cache
      */
     protected $cache;
@@ -134,7 +129,7 @@ class JobStaticRegenerate extends AbstractJob
      */
     public function getFilesystem()
     {
-        return $this->objectManagerProvider->get()->create('Magento\Deploy\Model\Filesystem');
+        return $this->objectManager->create('Magento\Deploy\Model\Filesystem');
     }
 
     /**
@@ -144,7 +139,7 @@ class JobStaticRegenerate extends AbstractJob
      */
     public function getModeObject()
     {
-        return $this->objectManagerProvider->get()->create(
+        return $this->objectManager->create(
             'Magento\Deploy\Model\Mode',
             [
                 'input' => new \Symfony\Component\Console\Input\ArrayInput([]),
