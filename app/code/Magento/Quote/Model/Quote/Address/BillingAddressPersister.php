@@ -47,9 +47,7 @@ class BillingAddressPersister
     public function save(CartInterface $quote, AddressInterface $address, $useForShipping = false)
     {
         /** @var \Magento\Quote\Model\Quote $quote */
-        if ($quote->getIsActive()) {
-            $this->addressValidator->validate($address);
-        }
+        $this->addressValidator->validate($address);
         $customerAddressId = $address->getCustomerAddressId();
         $shippingAddress = null;
         $addressData = [];
