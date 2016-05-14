@@ -27,7 +27,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $cacheState = $this->objectManager->get(\Magento\Framework\App\Cache\StateInterface::class);
         $cacheState->setEnabled(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER, true);
 
-        $this->action = $this->objectManager->create(\Magento\Catalog\Model\Product\Action\Interceptor::class);
+        $this->action = $this->objectManager->create(\Magento\Catalog\Model\Product\Action::class);
     }
 
     /**
