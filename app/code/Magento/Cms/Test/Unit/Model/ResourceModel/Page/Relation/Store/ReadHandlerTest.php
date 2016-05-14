@@ -63,7 +63,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('store_id', [$storeId])
             ->willReturnSelf();
 
-        $result = $this->model->execute('', $page);
+        $result = $this->model->execute($page);
         $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
     }
 
@@ -77,7 +77,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(false);
 
-        $result = $this->model->execute('', $page);
+        $result = $this->model->execute($page);
         $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
     }
 }
