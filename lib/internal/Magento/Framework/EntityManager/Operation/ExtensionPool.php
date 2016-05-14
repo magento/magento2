@@ -7,6 +7,7 @@
 namespace Magento\Framework\EntityManager\Operation;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ExtensionPool
@@ -38,7 +39,7 @@ class ExtensionPool
     /**
      * @param string $entityType
      * @param string $actionName
-     * @return object[]
+     * @return ExtensionInterface[]
      * @throws \Exception
      */
     public function getActions($entityType, $actionName)
@@ -49,6 +50,9 @@ class ExtensionPool
         }
         foreach ($this->actions[$entityType][$actionName] as $actionClassName) {
             $action = $this->objectManager->get($actionClassName);
+            if (!($action instanceof ExtensionInterface)) {
+                throw new \LogicException(get_class($action) . ' must implement ' . ExtensionInterface::class);
+            }
             $actions[] = $action;
         }
         return $actions;
