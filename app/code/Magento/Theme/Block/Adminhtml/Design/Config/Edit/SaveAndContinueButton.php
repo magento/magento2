@@ -7,21 +7,24 @@ namespace Magento\Theme\Block\Adminhtml\Design\Config\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
-class SaveButton implements ButtonProviderInterface
+class SaveAndContinueButton implements ButtonProviderInterface
 {
+
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getButtonData()
     {
         return [
-            'label' => __('Save Configuration'),
-            'class' => 'save primary',
+            'label' => __('Save and Continue'),
+            'class' => 'save',
             'data_attribute' => [
-                'mage-init' => ['button' => ['event' => 'save']],
-                'form-role' => 'save',
+                'mage-init' => [
+                    'button' => ['event' => 'saveAndContinue'],
+                ],
+                'form-role' => 'saveAndContinue'
             ],
-            'sort_order' => 20,
+            'sort_order' => 15,
         ];
     }
 }
