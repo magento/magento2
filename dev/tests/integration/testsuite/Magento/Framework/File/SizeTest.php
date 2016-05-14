@@ -30,30 +30,4 @@ class SizeTest extends \PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(0, $this->_fileSize->getMaxFileSize());
         $this->assertGreaterThanOrEqual(0, $this->_fileSize->getMaxFileSizeInMb());
     }
-
-    /**
-     * @dataProvider getConvertSizeToIntegerDataProvider
-     * @backupStaticAttributes
-     * @param string $value
-     * @param int $expected
-     */
-    public function testConvertSizeToInteger($value, $expected)
-    {
-        $this->assertEquals($expected, $this->_fileSize->convertSizeToInteger($value));
-    }
-
-    /**
-     * @return array
-     */
-    public function getConvertSizeToIntegerDataProvider()
-    {
-        return [
-            ['0K', 0],
-            ['123K', 125952],
-            ['1K', 1024],
-            ['1g', 1073741824],
-            ['asdas', 0],
-            ['1M', 1048576]
-        ];
-    }
 }
