@@ -5,25 +5,28 @@
  */
 namespace Magento\Framework\App\Test\Unit\Config;
 
+use Magento\Framework\App\Config\Scope\ReaderInterface;
+use Magento\Framework\App\Config\Scope\ReaderPoolInterface;
+
 class ScopePoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\Scope\Reader|PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_reader;
 
     /**
-     * @var \Magento\Framework\App\Config\Scope\ReaderPoolInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderPoolInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_readerPool;
 
     /**
-     * @var \Magento\Framework\App\Config\DataFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\DataFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_dataFactory;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cache;
 
@@ -35,14 +38,14 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_readerPool = $this->getMockForAbstractClass('\Magento\Framework\App\Config\Scope\ReaderPoolInterface');
-        $this->_reader = $this->getMockForAbstractClass('\Magento\Framework\App\Config\Scope\ReaderInterface');
+        $this->_readerPool = $this->getMockForAbstractClass(ReaderPoolInterface::class);
+        $this->_reader = $this->getMockForAbstractClass(ReaderInterface::class);
         $this->_dataFactory = $this->getMockBuilder(
-            '\Magento\Framework\App\Config\DataFactory'
+            \Magento\Framework\App\Config\DataFactory::class
         )->disableOriginalConstructor()->getMock();
-        $this->_cache = $this->getMock('\Magento\Framework\Cache\FrontendInterface');
+        $this->_cache = $this->getMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->_object = $helper->getObject(
-            '\Magento\Framework\App\Config\ScopePool',
+            \Magento\Framework\App\Config\ScopePool::class,
             [
                 'readerPool' => $this->_readerPool,
                 'dataFactory' => $this->_dataFactory,
@@ -50,6 +53,30 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
                 'cacheId' => 'test_cache_id'
             ]
         );
+
+        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getDistroBaseUrl',
+                    'getModuleName',
+                    'setModuleName',
+                    'getActionName',
+                    'setActionName',
+                    'getParam',
+                    'getParams',
+                    'setParams',
+                    'getCookie',
+                    'isSecure',
+                ]
+            )->getMock();
+        $reflection = new \ReflectionClass(get_class($this->_object));
+        $reflectionProperty = $reflection->getProperty('request');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->_object, $requestMock);
+        $requestMock->expects($this->any())
+            ->method('getDistroBaseUrl')
+            ->willReturn('baseUrl');
     }
 
     /**
@@ -63,7 +90,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
     public function testGetScope($scopeType, $scope, array $data, $cachedData)
     {
         $scopeCode = $scope instanceof \Magento\Framework\App\ScopeInterface ? $scope->getCode() : $scope;
-        $cacheKey = "test_cache_id|{$scopeType}|{$scopeCode}";
+        $cacheKey = "test_cache_id|{$scopeType}|{$scopeCode}|baseUrl";
 
         $this->_readerPool->expects(
             $this->any()

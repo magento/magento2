@@ -50,6 +50,7 @@
             <data name="saveAction" xsi:type="string">save</data>
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableSuccessSaveMessage" />
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInGrid" />
+            <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableForm" />
             <constraint name="Magento\Variable\Test\Constraint\AssertCustomVariableInPage" />
         </variation>
     </testCase>

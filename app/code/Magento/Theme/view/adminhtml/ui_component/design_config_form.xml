@@ -20,6 +20,7 @@
         <item name="buttons" xsi:type="array">
             <item name="back" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\BackButton</item>
             <item name="save" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveButton</item>
+            <item name="save_and_continue" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveAndContinueButton</item>
         </item>
     </argument>
     <dataSource name="design_config_form_data_source">
