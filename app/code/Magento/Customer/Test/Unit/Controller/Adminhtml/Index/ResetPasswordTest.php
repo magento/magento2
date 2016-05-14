@@ -266,7 +266,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
             $this->throwException(
                 new NoSuchEntityException(
                     __(
-                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        'No such entity with %fieldName = %fieldValue',
                         ['fieldName' => 'customerId', 'fieldValue' => $customerId]
                     )
                 )

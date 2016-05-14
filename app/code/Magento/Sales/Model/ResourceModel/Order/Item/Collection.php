@@ -55,6 +55,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection\Abs
          * Assign parent items
          */
         foreach ($this as $item) {
+            $this->_resource->unserializeFields($item);
             if ($item->getParentItemId()) {
                 $item->setParentItem($this->getItemById($item->getParentItemId()));
             }

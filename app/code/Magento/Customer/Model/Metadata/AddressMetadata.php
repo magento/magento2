@@ -79,12 +79,12 @@ class AddressMetadata implements AddressMetadataInterface
         } else {
             throw new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     [
                         'fieldName' => 'entityType',
                         'fieldValue' => AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
                         'field2Name' => 'attributeCode',
-                        'field2Value' => $attributeCode,
+                        'field2Value' => $attributeCode
                     ]
                 )
             );
