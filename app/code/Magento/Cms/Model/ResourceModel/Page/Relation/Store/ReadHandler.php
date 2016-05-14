@@ -37,13 +37,12 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param array $arguments
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity, $arguments = [])
+    public function execute($entity, $arguments = [])
     {
         if ($entity->getId()) {
             $stores = $this->resourcePage->lookupStoreIds((int)$entity->getId());
