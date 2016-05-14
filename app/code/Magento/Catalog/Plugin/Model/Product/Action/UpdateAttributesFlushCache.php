@@ -50,7 +50,7 @@ class UpdateAttributesFlushCache
 
     /**
      * @param Action $subject
-     * @return Action
+     * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

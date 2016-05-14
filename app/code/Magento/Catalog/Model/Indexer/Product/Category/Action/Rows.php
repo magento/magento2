@@ -46,7 +46,10 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     }
 
     /**
+     * Register affected products
+     * 
      * @param array $entityIds
+     * @return void
      */
     private function registerProducts($entityIds)
     {
@@ -65,10 +68,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->connection->select()
                 ->from($this->getMainTable(), ['category_id'])
                 ->where('product_id IN (?)', $entityIds)
+                ->distinct()
         );
 
         if ($categories) {
-            $this->getCacheContext()->registerEntities(Category::CACHE_TAG, array_unique($categories));
+            $this->getCacheContext()->registerEntities(Category::CACHE_TAG, $categories);
         }
     }
 
@@ -137,7 +141,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @return \Magento\Framework\Indexer\CacheContext
      * @deprecated
      */
-    protected function getCacheContext()
+    private function getCacheContext()
     {
         if ($this->cacheContext === null) {
             $this->cacheContext = \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
