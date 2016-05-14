@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
     <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
-    <preference for="Magento\Framework\EntityManager\EntityHydratorInterface" type="Magento\Framework\Model\Entity\Hydrator" />
+    <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator" />
     <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
     <preference for="Magento\Framework\Model\Entity\ScopeInterface" type="Magento\Framework\Model\Entity\Scope" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
@@ -16,6 +16,7 @@
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Field"/>
+    <preference for="Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface" type="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver"/>
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
@@ -149,6 +150,7 @@
     <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple" />
     <preference for="Cm\RedisSession\Handler\ConfigInterface" type="Magento\Framework\Session\SaveHandler\Redis\Config"/>
     <preference for="Cm\RedisSession\Handler\LoggerInterface" type="Magento\Framework\Session\SaveHandler\Redis\Logger"/>
+    <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -1176,11 +1178,11 @@
         <arguments>
             <argument name="operations" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="checkIsExists" xsi:type="string">Magento\Framework\EntityManager\Operation\Read\CheckIsExists</item>
+                    <item name="checkIfExists" xsi:type="string">Magento\Framework\EntityManager\Operation\CheckIfExists</item>
                     <item name="read" xsi:type="string">Magento\Framework\EntityManager\Operation\Read</item>
-                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Create</item>
-                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Write\Delete</item>
+                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Delete</item>
                 </item>
             </argument>
         </arguments>
@@ -1194,5 +1196,13 @@
     </type>
     <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
         <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
+    </type>
+    <type name="Magento\Framework\EntityManager\CompositeMapper">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="mapper" xsi:type="object">Magento\Framework\EntityManager\Mapper</item>
+                <item name="customAttributesMapper" xsi:type="object">Magento\Framework\EntityManager\CustomAttributesMapper</item>
+            </argument>
+        </arguments>
     </type>
 </config>

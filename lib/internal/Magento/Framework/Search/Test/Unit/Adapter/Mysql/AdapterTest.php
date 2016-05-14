@@ -180,7 +180,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with($selectResult)
             ->will($this->returnArgument(0));
-        $this->aggregatioBuilder->expects($this->once())->method('build')->willReturn($selectResult['aggregations']);
+        $this->aggregatioBuilder->expects($this->once())
+            ->method('build')
+            ->with($this->request, $table, $selectResult['documents'])
+            ->willReturn($selectResult['aggregations']);
         $response = $this->adapter->query($this->request);
         $this->assertEquals($selectResult, $response);
     }
