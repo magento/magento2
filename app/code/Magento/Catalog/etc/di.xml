@@ -728,6 +728,11 @@
                         <item name="store" xsi:type="string">Magento\Store\Model\DefaultStoreScopeProvider</item>
                     </item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\DefaultStoreScopeProvider</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -751,6 +756,10 @@
         <arguments>
             <argument name="extensionActions" xsi:type="array">
                 <item name="eav" xsi:type="array">
+                    <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
+                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
+                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
+                    </item>
                     <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
                         <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
                         <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
