@@ -6,6 +6,9 @@
 
 namespace Magento\Catalog\Test\Unit\Block\Category\Plugin;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PriceBoxTagsTest extends \PHPUnit_Framework_TestCase
 {
     /**
