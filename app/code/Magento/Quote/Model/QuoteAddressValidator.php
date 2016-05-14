@@ -66,15 +66,17 @@ class QuoteAddressValidator
             }
         }
 
-        if ($addressData->getCustomerAddressId()) {
+        if ($addressData->getId()) {
             try {
-                $this->addressRepository->getById($addressData->getCustomerAddressId());
+                $this->addressRepository->getById($addressData->getId());
             } catch (NoSuchEntityException $e) {
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
                     __('Invalid address id %1', $addressData->getId())
                 );
             }
+        }
 
+        if ($addressData->getCustomerAddressId()) {
             $applicableAddressIds = array_map(function ($address) {
                 /** @var \Magento\Customer\Api\Data\AddressInterface $address */
                 return $address->getId();
