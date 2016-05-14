@@ -19,6 +19,14 @@ class ActionTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    public static function setUpBeforeClass()
+    {
+        /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
+        $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Indexer\IndexerRegistry::class);
+        $indexerRegistry->get(Fulltext::INDEXER_ID)->setScheduled(true);
+    }
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -34,13 +42,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Store/_files/core_second_third_fixturestore.php
      * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testUpdateWebsites()
     {
-        /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
-        $indexerRegistry = $this->objectManager->get(\Magento\Framework\Indexer\IndexerRegistry::class);
-        $indexerRegistry->get(Fulltext::INDEXER_ID)->setScheduled(true);
-
         /** @var \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository */
         $websiteRepository = $this->objectManager->create(\Magento\Store\Api\WebsiteRepositoryInterface::class);
 
@@ -76,5 +82,13 @@ class ActionTest extends \PHPUnit_Framework_TestCase
                 $pageCache->load('test_data_category_id_' . $categoryId)
             );
         }
+    }
+
+    public static function tearDownAfterClass()
+    {
+        /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
+        $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Indexer\IndexerRegistry::class);
+        $indexerRegistry->get(Fulltext::INDEXER_ID)->setScheduled(false);
     }
 }
