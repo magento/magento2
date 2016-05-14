@@ -102,6 +102,7 @@ HTML;
 
         $topmenu =  new Topmenu($this->context, $nodeFactory, $treeFactory);
         $this->urlBuilder->expects($this->once())->method('getUrl')->with('*/*/*')->willReturn('123');
+        $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('baseUrl');
         $store = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
@@ -110,7 +111,7 @@ HTML;
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
         $this->assertEquals(
-            ['BLOCK_TPL', '321', null, 'template' => null, '123'],
+            ['BLOCK_TPL', '321', null, 'base_url' => 'baseUrl', 'template' => null, '123'],
             $topmenu->getCacheKeyInfo()
         );
     }
