@@ -161,7 +161,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->entityManager->expects($this->once())
             ->method('load')
-            ->with($abstractModel, $ruleId, RuleInterface::class);
+            ->with($abstractModel, $ruleId);
         $result = $this->model->load($abstractModel, $ruleId);
         $this->assertSame($this->model, $result);
     }
@@ -170,7 +170,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager->expects($this->once())
             ->method('save')
-            ->with($this->rule, RuleInterface::class);
+            ->with($this->rule);
         $this->assertEquals($this->model->save($this->rule), $this->model);
     }
 
@@ -178,7 +178,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager->expects($this->once())
             ->method('delete')
-            ->with($this->rule, RuleInterface::class);
+            ->with($this->rule);
         $this->assertEquals($this->model->delete($this->rule), $this->model);
     }
 
