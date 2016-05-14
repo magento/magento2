@@ -66,8 +66,9 @@ class CssTest extends \PHPUnit_Framework_TestCase
     public function testGetUploadCssFileNote()
     {
         $method = self::getMethod('_getUploadCssFileNote');
-        /** @var $sizeModel \Magento\Framework\File\Size */
-        $sizeModel = $this->getMock('Magento\Framework\File\Size', null, [], '', false);
+        /** @var $sizeModel \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\File\Size  */
+        $sizeModel = $this->getMock('Magento\Framework\File\Size', [], [], '', false);
+        $sizeModel->expects($this->any())->method('getMaxFileSizeInMb')->willReturn('2M');
 
         $this->_objectManager->expects(
             $this->any()

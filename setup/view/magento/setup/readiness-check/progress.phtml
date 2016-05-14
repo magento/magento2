@@ -243,7 +243,7 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <h3 class="readiness-check-title">Checking PHP Settings....</h3>
+        <h3 class="readiness-check-title">Checking PHP Settings *....</h3>
     </div>
 
     <div ng-show="settings.processed" ng-switch="settings.responseType">
@@ -253,10 +253,18 @@
             <span class="readiness-check-icon icon-success-round"></span>
 
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
                 <p>
                     Your PHP settings are correct.
                 </p>
+            </div>
+
+            <div ng-repeat="setting in settings.data">
+                <div class="message" ng-show="setting.warning">
+                    <p>
+                        {{setting.message}}
+                    </p>
+                </div>
             </div>
 
         </div>
@@ -265,7 +273,7 @@
 
             <span class="readiness-check-icon icon-failed-round"></span>
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
 
                 <div ng-show="settings.isRequestError">
                     <p>Server failed to respond. Please try again.</p>
@@ -474,8 +482,7 @@
                             </span>
                         </li>
                     </ul>
-
-
+                    
                 </div>
 
             </div>
@@ -484,4 +491,8 @@
 
     </div>
 
+</div>
+
+<div class="readiness-check-item" id="warning-message" ng-show="true">
+    * - In some cases, you might have two PHP configuration files: one for the PHP command line and for the web server. If so, make the change in both php.ini files. For details, see the <a href="http://php.net/manual/en/configuration.file.php">php.ini reference</a>.
 </div>

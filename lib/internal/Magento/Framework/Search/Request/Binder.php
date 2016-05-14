@@ -73,7 +73,10 @@ class Binder
         array_walk_recursive($bindData, function (&$item) {
             $item = trim($item);
         });
-        $bindData = array_filter($bindData);
+        $bindData = array_filter($bindData, function ($element) {
+            return is_array($element) ? count($element) : strlen($element);
+        });
+
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 $data[$key] = $this->processData($value, $bindData);
