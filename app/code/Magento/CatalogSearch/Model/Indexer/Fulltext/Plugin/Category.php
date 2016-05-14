@@ -9,7 +9,10 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin;
 use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\Framework\Model\AbstractModel;
 
-
+/**
+ * Class Category
+ * @package Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin
+ */
 class Category extends AbstractPlugin
 {
     /**
