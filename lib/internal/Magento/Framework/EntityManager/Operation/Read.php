@@ -3,21 +3,22 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\EntityManager\Operation;
 
-use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\Operation\ReadInterface;
 use Magento\Framework\EntityManager\Operation\Read\ReadMain;
 use Magento\Framework\EntityManager\Operation\Read\ReadAttributes;
 use Magento\Framework\EntityManager\Operation\Read\ReadExtensions;
+use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\EventManager;
+use Magento\Framework\EntityManager\TypeResolver;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class Read
  */
-class Read
+class Read implements ReadInterface
 {
     /**
      * @var MetadataPool
@@ -35,6 +36,11 @@ class Read
     private $eventManager;
 
     /**
+     * @var TypeResolver
+     */
+    private $typeResolver;
+
+    /**
      * @var ReadMain
      */
     private $readMain;
@@ -50,10 +56,9 @@ class Read
     private $readExtensions;
 
     /**
-     * Read constructor
-     *
      * @param MetadataPool $metadataPool
      * @param HydratorPool $hydratorPool
+     * @param TypeResolver $typeResolver
      * @param EventManager $eventManager
      * @param ReadMain $readMain
      * @param ReadAttributes $readAttributes
@@ -62,6 +67,7 @@ class Read
     public function __construct(
         MetadataPool $metadataPool,
         HydratorPool $hydratorPool,
+        TypeResolver $typeResolver,
         EventManager $eventManager,
         ReadMain $readMain,
         ReadAttributes $readAttributes,
@@ -69,6 +75,7 @@ class Read
     ) {
         $this->metadataPool = $metadataPool;
         $this->hydratorPool = $hydratorPool;
+        $this->typeResolver = $typeResolver;
         $this->eventManager = $eventManager;
         $this->readMain = $readMain;
         $this->readAttributes = $readAttributes;
@@ -76,15 +83,15 @@ class Read
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param string $identifier
      * @param array $arguments
      * @return object
      * @throws \Exception
      */
-    public function execute($entityType, $entity, $identifier, $arguments = [])
+    public function execute($entity, $identifier, $arguments = [])
     {
+        $entityType = $this->typeResolver->resolve($entity);
         $metadata = $this->metadataPool->getMetadata($entityType);
         $hydrator = $this->hydratorPool->getHydrator($entityType);
         $this->eventManager->dispatch(
@@ -103,11 +110,11 @@ class Read
                 'arguments' => $arguments
             ]
         );
-        $entity = $this->readMain->execute($entityType, $entity, $identifier, $arguments);
-        $entityData = $hydrator->extract($entity);
+        $entity = $this->readMain->execute($entity, $identifier, $arguments);
+        $entityData = array_merge($hydrator->extract($entity), $arguments);
         if (isset($entityData[$metadata->getLinkField()])) {
-            $entity = $this->readAttributes->execute($entityType, $entity, $arguments);
-            $entity = $this->readExtensions->execute($entityType, $entity, $arguments);
+            $entity = $this->readAttributes->execute($entity, $arguments);
+            $entity = $this->readExtensions->execute($entity, $arguments);
         }
         $this->eventManager->dispatchEntityEvent(
             $entityType,
