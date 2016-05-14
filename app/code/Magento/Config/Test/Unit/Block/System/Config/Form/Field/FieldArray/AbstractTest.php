@@ -23,16 +23,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $element = $objectManager->getObject('Magento\Framework\Data\Form\Element\Multiselect');
-        $element->setValue([['test' => 'test', 'data1' => 'data1']]);
+        $element->setValue([['te<s>t' => 't<e>st', 'data&1' => 'da&ta1']]);
         $block->setElement($element);
         $this->assertEquals(
             [
                 new \Magento\Framework\DataObject(
                     [
-                        'test' => 'test',
-                        'data1' => 'data1',
+                        'te<s>t' => 't<e>st',
+                        'data&1' => 'da&ta1',
                         '_id' => 0,
-                        'column_values' => ['0_test' => 'test', '0_data1' => 'data1'],
+                        'column_values' => ['0_te<s>t' => 't<e>st', '0_data&1' => 'da&ta1'],
                     ]
                 ),
             ],

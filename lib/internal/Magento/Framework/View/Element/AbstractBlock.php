@@ -1044,7 +1044,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     protected function _saveCache($data)
     {
-        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+        if (!$this->getCacheLifetime() || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
