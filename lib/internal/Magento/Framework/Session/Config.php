@@ -144,6 +144,11 @@ class Config implements ConfigInterface
         $this->setCookieHttpOnly(
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)
         );
+
+        $secureURL = $this->_scopeConfig->getValue('web/secure/base_url', $this->_scopeType);
+        $unsecureURL = $this->_scopeConfig->getValue('web/unsecure/base_url', $this->_scopeType);
+        $isFullySecuredURL = $secureURL == $unsecureURL;
+        $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
     }
 
     /**

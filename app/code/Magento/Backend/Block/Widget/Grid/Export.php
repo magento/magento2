@@ -257,6 +257,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $break = false;
 
         while ($break !== true) {
+            $originalCollection->clear();
             $originalCollection->setPageSize($this->getExportPageSize());
             $originalCollection->setCurPage($page);
             $originalCollection->load();

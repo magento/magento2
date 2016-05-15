@@ -9,6 +9,10 @@
     <type name="Magento\Directory\Model\Currency\Import\Config">
         <arguments>
             <argument name="servicesConfig" xsi:type="array">
+                <item name="yahoofinance" xsi:type="array">
+                    <item name="label" xsi:type="string">Yahoo Finance Exchange</item>
+                    <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\YahooFinance</item>
+                </item>
                 <item name="webservicex" xsi:type="array">
                     <item name="label" xsi:type="string">Webservicex</item>
                     <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\Webservicex</item>
