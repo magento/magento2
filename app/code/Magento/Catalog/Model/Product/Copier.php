@@ -75,7 +75,7 @@ class Copier
                 : $urlKey . '-1';
             $duplicate->setUrlKey($urlKey);
             try {
-                $duplicate->save();
+                $duplicate->getResource()->save($duplicate);
                 $isDuplicateSaved = true;
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             }

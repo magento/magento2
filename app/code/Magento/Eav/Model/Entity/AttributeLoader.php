@@ -34,17 +34,24 @@ class AttributeLoader implements AttributeLoaderInterface
     private $config;
 
     /**
+     * @var AttributeCache
+     */
+    private $cache;
+
+    /**
      * AttributeLoader constructor.
-     *
      * @param Config $config
+     * @param AttributeCache $cache
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         Config $config,
+        AttributeCache $cache,
         ObjectManagerInterface $objectManager
     ) {
         $this->config = $config;
         $this->objectManager = $objectManager;
+        $this->cache = $cache;
     }
 
     /**
@@ -57,7 +64,17 @@ class AttributeLoader implements AttributeLoaderInterface
      */
     public function loadAllAttributes(AbstractEntity $resource, DataObject $object = null)
     {
+        $typeCode = $resource->getEntityType()->getEntityTypeCode();
+        $attributes = $this->cache->getAttributes($typeCode);
+        if ($attributes) {
+            foreach ($attributes as $attribute) {
+                $resource->addAttribute($attribute);
+            }
+            return $resource;
+        }
+
         $attributeCodes = $this->config->getEntityAttributeCodes($resource->getEntityType(), $object);
+        $attributes = [];
         /**
          * Check and init default attributes
          */
@@ -65,15 +82,20 @@ class AttributeLoader implements AttributeLoaderInterface
         foreach ($defaultAttributes as $attributeCode) {
             $attributeIndex = array_search($attributeCode, $attributeCodes);
             if ($attributeIndex !== false) {
-                $resource->getAttribute($attributeCodes[$attributeIndex]);
+                $attribute = $resource->getAttribute($attributeCodes[$attributeIndex]);
+                $attributes[] = $attribute;
                 unset($attributeCodes[$attributeIndex]);
             } else {
-                $resource->addAttribute($this->_getDefaultAttribute($resource, $attributeCode));
+                $attribute = $this->_getDefaultAttribute($resource, $attributeCode);
+                $attributes[] = $attribute;
+                $resource->addAttribute($attribute);
             }
         }
         foreach ($attributeCodes as $code) {
-            $resource->getAttribute($code);
+            $attribute = $resource->getAttribute($code);
+            $attributes[] = $attribute;
         }
+        $this->cache->saveAttributes($typeCode, $attributes);
         return $resource;
     }
 

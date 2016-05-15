@@ -12,12 +12,18 @@ use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Model\Entity\ScopeResolver;
 use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
+use Magento\Eav\Model\Entity\AttributeCache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadHandler implements AttributeInterface
 {
+    /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
+
     /**
      * @var AttributeRepository
      */
@@ -51,19 +57,22 @@ class ReadHandler implements AttributeInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AppResource $appResource
      * @param ScopeResolver $scopeResolver
+     * @param AttributeCache $attributeCache
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AppResource $appResource,
-        ScopeResolver $scopeResolver
+        ScopeResolver $scopeResolver,
+        AttributeCache $attributeCache
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->appResource = $appResource;
         $this->scopeResolver = $scopeResolver;
+        $this->attributeCache = $attributeCache;
     }
 
     /**
@@ -73,13 +82,19 @@ class ReadHandler implements AttributeInterface
      */
     protected function getAttributes($entityType)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
 
+        $attributes = $this->attributeCache->getAttributes($entityType);
+        if ($attributes) {
+            return $attributes;
+        }
+        $metadata = $this->metadataPool->getMetadata($entityType);
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
+            $this->searchCriteriaBuilder->create()
         );
-        return $searchResult->getItems();
+        $attributes = $searchResult->getItems();
+        $this->attributeCache->saveAttributes($entityType, $attributes);
+        return $attributes;
     }
 
     /**

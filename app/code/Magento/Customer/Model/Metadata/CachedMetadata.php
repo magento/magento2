@@ -7,6 +7,8 @@
 namespace Magento\Customer\Model\Metadata;
 
 use Magento\Customer\Api\MetadataInterface;
+use Magento\Eav\Model\Entity\AttributeCache;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Cached attribute metadata service
@@ -14,6 +16,16 @@ use Magento\Customer\Api\MetadataInterface;
 class CachedMetadata implements MetadataInterface
 {
     const CACHE_SEPARATOR = ';';
+
+    /**
+     * @var string
+     */
+    protected $entityType = 'customer';
+
+    /**
+     * @var AttributeCache
+     */
+    private $cache;
 
     /**
      * @var MetadataInterface
@@ -90,8 +102,15 @@ class CachedMetadata implements MetadataInterface
         if ($this->allAttributeMetadataCache !== null) {
             return $this->allAttributeMetadataCache;
         }
+        $attributes = $this->getCache()->getAttributes($this->entityType, 'all');
+        if ($attributes) {
+            $this->allAttributeMetadataCache = $attributes;
+            return $this->allAttributeMetadataCache;
+        }
+
 
         $this->allAttributeMetadataCache = $this->metadata->getAllAttributesMetadata();
+        $this->getCache()->saveAttributes($this->entityType, $this->allAttributeMetadataCache, 'all');
         return $this->allAttributeMetadataCache;
     }
 
@@ -103,8 +122,25 @@ class CachedMetadata implements MetadataInterface
         if ($this->customAttributesMetadataCache !== null) {
             return $this->customAttributesMetadataCache;
         }
-
+        $attributes = $this->getCache()->getAttributes($this->entityType, 'custom');
+        if ($attributes) {
+            $this->customAttributesMetadataCache = $attributes;
+            return $this->customAttributesMetadataCache;
+        }
         $this->customAttributesMetadataCache = $this->metadata->getCustomAttributesMetadata();
+        $this->getCache()->saveAttributes($this->entityType, $attributes, 'custom');
         return $this->customAttributesMetadataCache;
+    }
+
+    /**
+     * @return AttributeCache
+     * @deprecated
+     */
+    protected function getCache()
+    {
+        if (!$this->cache) {
+            $this->cache = ObjectManager::getInstance()->get(AttributeCache::class);
+        }
+       return $this->cache;
     }
 }
