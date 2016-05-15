@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Model\Cron;
 
-use Monolog\Handler\StreamHandler;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Setup specific stream handler
@@ -22,4 +22,15 @@ class SetupStreamHandler extends \Magento\Framework\Logger\Handler\Base
      * @var int
      */
     protected $loggerType = \Magento\Framework\Logger\Monolog::ERROR;
+
+    /**
+     * @param DriverInterface $filesystem
+     * @param string $filePath
+     */
+    public function __construct(
+        DriverInterface $filesystem,
+        $filePath = null
+    ) {
+        parent::__construct($filesystem, $filePath);
+    }
 }

@@ -79,8 +79,6 @@ class CronRunCommand extends AbstractSetupCommand
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln($notification);
             $this->status->add('Magento is not installed.', \Psr\Log\LogLevel::INFO);
-
-            // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         }
 
