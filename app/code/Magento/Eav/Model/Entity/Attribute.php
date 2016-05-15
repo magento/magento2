@@ -221,7 +221,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function beforeSave()
     {
         // prevent overriding product data
-        if (isset($this->_data['attribute_code']) && $this->reservedAttributeList->isReservedAttribute($this)) {
+        if (isset($this->_data['attribute_code']) && $this->getReservedAttributeList()->isReservedAttribute($this)) {
             throw new LocalizedException(
                 __(
                     'The attribute code \'%1\' is reserved by system. Please try another attribute code',
@@ -487,4 +487,16 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         $this->reservedAttributeList = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
         $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
     }
+
+    /**
+     * @return \Magento\Catalog\Model\Product\ReservedAttributeList|mixed
+     */
+    private function getReservedAttributeList()
+    {
+        if($this->reservedAttributeList) {
+            $this->reservedAttributeList = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+        }
+        return $this->reservedAttributeList;
+    }
+
 }
