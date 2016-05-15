@@ -6,14 +6,24 @@
 namespace Magento\Directory\Model\Currency\Import;
 
 /**
- * Currency rate import model (From http://fixer.io/)
+ * Currency rate import model (From http://query.yahooapis.com/)
  */
-class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
+class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
     /**
+     * Currency converter url string
+     *
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://api.fixer.io/latest?base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
+    private $currencyConverterUrl = 'http://query.yahooapis.com/v1/public/yql?format=json&q={{YQL_STRING}}'
+        .'&env=store://datatables.org/alltableswithkeys';
+
+    /**
+     * Config path for service timeout
+     *
+     * @var string
+     */
+    private $timeoutConfigPath = 'currency/yahoofinance/timeout';
 
     /**
      * Http Client Factory
@@ -75,10 +85,7 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
      */
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
-        $currenciesStr = implode(',', $currenciesTo);
-        $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
-        $url = str_replace('{{CURRENCY_TO}}', $currenciesStr, $url);
-
+        $url = $this->buildUrl($currencyFrom, $currenciesTo);
         set_time_limit(0);
         try {
             $response = $this->getServiceResponse($url);
@@ -90,12 +97,12 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
             if ($currencyFrom == $currencyTo) {
                 $data[$currencyFrom][$currencyTo] = $this->_numberFormat(1);
             } else {
-                if (empty($response['rates'][$currencyTo])) {
+                if (empty($response[$currencyFrom . $currencyTo])) {
                     $this->_messages[] = __('We can\'t retrieve a rate from %1 for %2.', $url, $currencyTo);
                     $data[$currencyFrom][$currencyTo] = null;
                 } else {
                     $data[$currencyFrom][$currencyTo] = $this->_numberFormat(
-                        (double)$response['rates'][$currencyTo]
+                        (double)$response[$currencyFrom . $currencyTo]
                     );
                 }
             }
@@ -115,14 +122,13 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
         /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
         $httpClient = $this->httpClientFactory->create();
         $response = [];
-
         try {
             $jsonResponse = $httpClient->setUri(
                 $url
             )->setConfig(
                 [
                     'timeout' => $this->scopeConfig->getValue(
-                        'currency/fixerio/timeout',
+                        $this->timeoutConfigPath,
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
                 ]
@@ -130,7 +136,10 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
                 'GET'
             )->getBody();
 
-            $response = json_decode($jsonResponse, true);
+            $jsonResponse = json_decode($jsonResponse, true);
+            if (!empty($jsonResponse['query']['results']['rate'])) {
+                $response = array_column($jsonResponse['query']['results']['rate'], 'Rate', 'id');
+            }
         } catch (\Exception $e) {
             if ($retry == 0) {
                 $response = $this->getServiceResponse($url, 1);
@@ -144,5 +153,31 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
      */
     protected function _convert($currencyFrom, $currencyTo)
     {
+    }
+
+    /**
+     * Build url for Currency Service
+     *
+     * @param string $currencyFrom
+     * @param string[] $currenciesTo
+     * @return string
+     */
+    private function buildUrl($currencyFrom, $currenciesTo)
+    {
+        $query = urlencode('select ') . '*' . urlencode(' from yahoo.finance.xchange where pair in (');
+        $query .=
+            urlencode(
+                implode(
+                    ',',
+                    array_map(
+                        function ($currencyTo) use ($currencyFrom) {
+                            return '"' . $currencyFrom . $currencyTo . '"';
+                        },
+                        $currenciesTo
+                    )
+                )
+            );
+        $query .= ')';
+        return str_replace('{{YQL_STRING}}', $query, $this->currencyConverterUrl);
     }
 }
