@@ -81,10 +81,10 @@ class CustomerNotification
                 $this->session->getCustomerId()
             )
         ) {
-            $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-                ->setDurationOneYear()
-                ->setPath('/')
-                ->setHttpOnly(false);
+            $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
+            $publicCookieMetadata->setDurationOneYear();
+            $publicCookieMetadata->setPath('/');
+            $publicCookieMetadata->setHttpOnly(false);
             $this->cookieManager->setPublicCookie(
                 NotificationStorage::UPDATE_CUSTOMER_SESSION,
                 $this->session->getCustomerId(),
