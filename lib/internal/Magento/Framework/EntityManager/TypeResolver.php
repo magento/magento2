@@ -11,6 +11,20 @@ namespace Magento\Framework\EntityManager;
 class TypeResolver
 {
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * TypeResolver constructor.
+     * @param MetadataPool $metadataPool
+     */
+    public function __construct(MetadataPool $metadataPool)
+    {
+        $this->metadataPool = $metadataPool;
+    }
+
+    /**
      * @var array
      */
     private $typeMapping = [
@@ -45,6 +59,12 @@ class TypeResolver
             throw new \Exception('Unable to determine data interface for ' . $className);
         }
 
-        return reset($dataInterfaces);
+        foreach ($dataInterfaces as $dataInterface) {
+            if ($this->metadataPool->hasConfiguration($dataInterface)) {
+                break;
+            }
+        }
+
+        return $dataInterface;
     }
 }
