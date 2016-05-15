@@ -57,6 +57,7 @@ class CreateTaxRuleStep implements TestStepInterface
      */
     public function run()
     {
+        $this->deleteAllTaxRule->run();
         $result['taxRule'] = null;
         if ($this->taxRule !== null) {
             $taxRuleDataSets = explode(',', $this->taxRule);
