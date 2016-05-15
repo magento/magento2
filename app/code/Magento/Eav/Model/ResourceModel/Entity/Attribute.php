@@ -9,6 +9,8 @@ use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV attribute resource model
@@ -33,6 +35,11 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var Type
      */
     protected $_eavEntityType;
+
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * Class constructor
@@ -196,10 +203,21 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->_saveOption(
             $object
         );
-
+        $this->getConfig()->clear();
         return parent::_afterSave($object);
     }
 
+    /**
+     * @return Config
+     * @deprecated
+     */
+    private function getConfig()
+    {
+        if (!$this->config) {
+            $this->config = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->config;
+    }
     /**
      * Save store labels
      *
@@ -668,4 +686,29 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $connection->fetchCol($select);
     }
+
+    /**
+     * Provide variables to serialize
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        $properties = parent::__sleep();
+        $properties = array_diff($properties, ['_storeManager']);
+        return $properties;
+    }
+
+    /**
+     * Restore global dependencies
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+    }
+
 }
