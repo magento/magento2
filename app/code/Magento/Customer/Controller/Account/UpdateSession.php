@@ -7,7 +7,7 @@ namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Customer\Model\Customer\NotificationStorage;
-use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Json\Helper\Data;
@@ -20,7 +20,7 @@ class UpdateSession extends AbstractAccount
     private $notificationStorage;
 
     /**
-     * @var CustomerRepository
+     * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
@@ -37,14 +37,14 @@ class UpdateSession extends AbstractAccount
     /**
      * @param Context $context
      * @param NotificationStorage $notificationStorage
-     * @param CustomerRepository $customerRepository
+     * @param CustomerRepositoryInterface $customerRepository
      * @param Session $customerSession
      * @param Data $jsonHelper
      */
     public function __construct(
         Context $context,
         NotificationStorage $notificationStorage,
-        CustomerRepository $customerRepository,
+        CustomerRepositoryInterface $customerRepository,
         Session $customerSession,
         Data $jsonHelper
     ) {
