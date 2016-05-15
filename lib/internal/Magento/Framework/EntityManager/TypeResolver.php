@@ -16,6 +16,14 @@ class TypeResolver
     private $metadataPool;
 
     /**
+     * @var array
+     */
+    private $typeMapping = [
+        \Magento\SalesRule\Model\Rule::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
+        \Magento\SalesRule\Model\Rule\Interceptor::class => \Magento\SalesRule\Api\Data\RuleInterface::class
+    ];
+
+    /**
      * TypeResolver constructor.
      * @param MetadataPool $metadataPool
      */
@@ -23,14 +31,6 @@ class TypeResolver
     {
         $this->metadataPool = $metadataPool;
     }
-
-    /**
-     * @var array
-     */
-    private $typeMapping = [
-        \Magento\SalesRule\Model\Rule::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
-        \Magento\SalesRule\Model\Rule\Interceptor::class => \Magento\SalesRule\Api\Data\RuleInterface::class
-    ];
 
     /**
      * @param object $type
@@ -61,10 +61,10 @@ class TypeResolver
 
         foreach ($dataInterfaces as $dataInterface) {
             if ($this->metadataPool->hasConfiguration($dataInterface)) {
-                break;
+                $this->typeMapping[$className] = $dataInterface;
             }
         }
 
-        return $dataInterface;
+        return $this->typeMapping[$className];
     }
 }
