@@ -96,6 +96,33 @@ class CronRunCommand extends AbstractSetupCommand
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
+        $returnCode = $this->executeJobsFromQueue();
+        if ($returnCode != \Magento\Framework\Console\Cli::RETURN_SUCCESS) {
+            $output->writeln($notification);
+        }
+
+        return $returnCode;
+    }
+
+    /**
+     * Check if Cron job can be run
+     *
+     * @return bool
+     */
+    private function checkRun()
+    {
+        return $this->readinessCheck->runReadinessCheck()
+        && !$this->status->isUpdateInProgress()
+        && !$this->status->isUpdateError();
+    }
+
+    /**
+     * Executes setup jobs from the queue
+     *
+     * @return int
+     */
+    private function executeJobsFromQueue()
+    {
         $returnCode = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
             while (!empty($this->queue->peek()) && strpos($this->queue->peek()[Queue::KEY_JOB_NAME], 'setup:') === 0) {
@@ -125,29 +152,7 @@ class CronRunCommand extends AbstractSetupCommand
             $returnCode = \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
             $this->status->toggleUpdateInProgress(false);
-            if ($returnCode != \Magento\Framework\Console\Cli::RETURN_SUCCESS) {
-                $output->writeln($notification);
-            }
-            return $returnCode;
         }
-
-        if ($this->status->isUpdateError()) {
-            // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
-        }
-
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * Check if Cron job can be run
-     *
-     * @return bool
-     */
-    private function checkRun()
-    {
-        return $this->readinessCheck->runReadinessCheck()
-        && !$this->status->isUpdateInProgress()
-        && !$this->status->isUpdateError();
+        return $returnCode;
     }
 }
