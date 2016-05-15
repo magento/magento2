@@ -224,26 +224,6 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                 'attributeCache' => $attributeCacheMock
             ]
         );
-//            = new Attribute(
-//            $this->contextMock,
-//            $this->registryMock,
-//            $this->extensionAttributesFactory,
-//            $this->attributeValueFactoryMock,
-//            $this->configMock,
-//            $this->typeFactoryMock,
-//            $this->storeManagerMock,
-//            $this->helperMock,
-//            $this->universalFactoryMock,
-//            $this->attributeOptionFactoryMock,
-//            $this->dataObjectProcessorMock,
-//            $this->dataObjectHelperMock,
-//            $this->timezoneMock,
-//            $this->reservedAttributeListMock,
-//            $this->resolverMock,
-//            $this->dateTimeFormatter,
-//            $this->lockValidatorMock,
-//            $this->resourceMock
-//        );
     }
 
     public function testAfterSaveEavCache()
