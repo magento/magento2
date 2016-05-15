@@ -36,7 +36,6 @@ class NotificationStorageTest extends \PHPUnit_Framework_TestCase
         $this->model = new NotificationStorage($this->cache);
     }
 
-
     public function testAdd()
     {
         $customerId = 1;
