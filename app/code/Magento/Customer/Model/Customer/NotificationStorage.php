@@ -33,15 +33,13 @@ class NotificationStorage
      */
     public function add($notificationType, $customerId)
     {
-        if (!$this->isExists($notificationType, $customerId)) {
-            $this->cache->save(
-                serialize([
-                    'customer_id' => $customerId,
-                    'notification_type' => $notificationType
-                ]),
-                $this->getCacheKey($notificationType, $customerId)
-            );
-        }
+        $this->cache->save(
+            serialize([
+                'customer_id' => $customerId,
+                'notification_type' => $notificationType
+            ]),
+            $this->getCacheKey($notificationType, $customerId)
+        );
     }
 
     /**
@@ -53,7 +51,7 @@ class NotificationStorage
      */
     public function isExists($notificationType, $customerId)
     {
-        return $this->cache->load($this->getCacheKey($notificationType, $customerId));
+        return $this->cache->test($this->getCacheKey($notificationType, $customerId));
     }
 
     /**
@@ -77,6 +75,6 @@ class NotificationStorage
      */
     private function getCacheKey($notificationType, $customerId)
     {
-        return 'notification-' . $notificationType . '-' . $customerId;
+        return 'notification_' . $notificationType . '_' . $customerId;
     }
 }

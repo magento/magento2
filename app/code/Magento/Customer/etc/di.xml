@@ -310,9 +310,9 @@
     <type name="Magento\Framework\App\Action\AbstractAction">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
-    <type name="\Magento\Customer\Model\Customer\NotificationStorage">
+    <type name="Magento\Customer\Model\Customer\NotificationStorage">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
         </arguments>
     </type>
 </config>

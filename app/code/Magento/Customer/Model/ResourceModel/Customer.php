@@ -195,7 +195,7 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     {
         $this->getNotificationStorage()->add(
             NotificationStorage::UPDATE_CUSTOMER_SESSION,
-            $customer->getData('id')
+            $customer->getId()
         );
         return parent::_afterSave($customer);
     }
