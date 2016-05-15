@@ -11,12 +11,26 @@ namespace Magento\Framework\EntityManager;
 class TypeResolver
 {
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @var array
      */
     private $typeMapping = [
         \Magento\SalesRule\Model\Rule::class => \Magento\SalesRule\Api\Data\RuleInterface::class,
         \Magento\SalesRule\Model\Rule\Interceptor::class => \Magento\SalesRule\Api\Data\RuleInterface::class
     ];
+
+    /**
+     * TypeResolver constructor.
+     * @param MetadataPool $metadataPool
+     */
+    public function __construct(MetadataPool $metadataPool)
+    {
+        $this->metadataPool = $metadataPool;
+    }
 
     /**
      * @param object $type
@@ -45,6 +59,12 @@ class TypeResolver
             throw new \Exception('Unable to determine data interface for ' . $className);
         }
 
-        return reset($dataInterfaces);
+        foreach ($dataInterfaces as $dataInterface) {
+            if ($this->metadataPool->hasConfiguration($dataInterface)) {
+                $this->typeMapping[$className] = $dataInterface;
+            }
+        }
+
+        return $this->typeMapping[$className];
     }
 }
