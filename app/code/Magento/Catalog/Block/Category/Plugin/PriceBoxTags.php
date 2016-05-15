@@ -12,6 +12,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\PriceBox;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Tax\Model\Calculation as TaxCalculation;
 
 class PriceBoxTags
 {
@@ -36,6 +37,11 @@ class PriceBoxTags
     private $scopeResolver;
 
     /**
+     * @var TaxCalculation
+     */
+    private $taxCalculation;
+
+    /**
      * PriceBoxTags constructor.
      * @param PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $dateTime
@@ -58,8 +64,6 @@ class PriceBoxTags
      * @param PriceBox $subject
      * @param string $result
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetCacheKey(PriceBox $subject, $result)
     {
@@ -71,7 +75,59 @@ class PriceBoxTags
                 $this->dateTime->scopeDate($this->scopeResolver->getScope()->getId())->format('Ymd'),
                 $this->scopeResolver->getScope()->getId(),
                 $this->customerSession->getCustomerGroupId(),
+                $this->getTaxRateIds($subject),
             ]
         );
+    }
+
+    /**
+     * @param PriceBox $subject
+     * @return string
+     */
+    private function getTaxRateIds(PriceBox $subject)
+    {
+        $rateIds = [];
+
+        $customerSession = $this->customerSession;
+        $billingAddress = $customerSession->getDefaultTaxBillingAddress();
+        $shippingAddress = $customerSession->getDefaultTaxShippingAddress();
+        $customerTaxClassId = $customerSession->getCustomerTaxClassId();
+
+        if (!empty($billingAddress)) {
+            $billingAddress = new \Magento\Framework\DataObject($billingAddress);
+        }
+        if (!empty($shippingAddress)) {
+            $shippingAddress = new \Magento\Framework\DataObject($shippingAddress);
+        }
+
+        if (!empty($billingAddress) || !empty($shippingAddress)) {
+            $rateRequest = $this->getTaxCalculation()->getRateRequest(
+                $billingAddress,
+                $shippingAddress,
+                $customerTaxClassId,
+                $this->scopeResolver->getScope()->getId(),
+                $this->customerSession->getCustomerId()
+            );
+
+            $rateRequest->setProductClassId($subject->getSaleableItem()->getTaxClassId());
+            $rateIds = $this->getTaxCalculation()->getResource()->getRateIds($rateRequest);
+        }
+
+        return implode('_', $rateIds);
+    }
+
+    /**
+     * Get the TaxCalculation model
+     *
+     * @return \Magento\Tax\Model\Calculation
+     *
+     * @deprecated
+     */
+    private function getTaxCalculation()
+    {
+        if ($this->taxCalculation === null) {
+            $this->taxCalculation = \Magento\Framework\App\ObjectManager::getInstance()->get(TaxCalculation::class);
+        }
+        return $this->taxCalculation;
     }
 }
