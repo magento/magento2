@@ -57,6 +57,7 @@ class CreateSalesRuleStep implements TestStepInterface
      */
     public function run()
     {
+        $this->deleteAllSalesRule->run();
         $result['salesRule'] = null;
         if ($this->salesRule !== null) {
             $salesRule = $this->fixtureFactory->createByCode(
