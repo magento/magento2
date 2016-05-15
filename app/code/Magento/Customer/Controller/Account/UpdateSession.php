@@ -70,8 +70,10 @@ class UpdateSession extends AbstractAccount
     public function execute()
     {
         $customerData = $this->jsonHelper->jsonDecode($this->getRequest()->getContent());
-        $result = $this->notificationStorage->isExists(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerData['customer_id']);
-        if (isset($customerData['customer_id']) && $result) {
+        if (isset($customerData['customer_id']) && $this->notificationStorage->isExists(
+                NotificationStorage::UPDATE_CUSTOMER_SESSION,
+                $customerData['customer_id'])
+        ) {
             $customer = $this->customerRepository->getById($customerData['customer_id']);
             $this->session->setCustomerData($customer);
             $this->session->setCustomerGroupId($customer->getGroupId());
