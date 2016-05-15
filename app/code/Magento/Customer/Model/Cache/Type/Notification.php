@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Model\Cache\Type;
 
+/**
+ * System / Cache Management / Cache type "Customer Notification"
+ */
 class Notification extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
 {
     /**
