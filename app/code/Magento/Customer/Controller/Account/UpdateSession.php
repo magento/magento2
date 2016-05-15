@@ -11,7 +11,6 @@ use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 
 class UpdateSession extends AbstractAccount
 {
@@ -31,11 +30,6 @@ class UpdateSession extends AbstractAccount
     private $session;
 
     /**
-     * @var CookieManagerInterface
-     */
-    private $cookieManager;
-
-    /**
      * @var Data $helper
      */
     private $jsonHelper;
@@ -45,7 +39,6 @@ class UpdateSession extends AbstractAccount
      * @param NotificationStorage $notificationStorage
      * @param CustomerRepository $customerRepository
      * @param Session $customerSession
-     * @param CookieManagerInterface $cookieManager
      * @param Data $jsonHelper
      */
     public function __construct(
@@ -53,14 +46,12 @@ class UpdateSession extends AbstractAccount
         NotificationStorage $notificationStorage,
         CustomerRepository $customerRepository,
         Session $customerSession,
-        CookieManagerInterface $cookieManager,
         Data $jsonHelper
     ) {
         parent::__construct($context);
         $this->notificationStorage = $notificationStorage;
         $this->customerRepository = $customerRepository;
         $this->session = $customerSession;
-        $this->cookieManager = $cookieManager;
         $this->jsonHelper = $jsonHelper;
     }
 
