@@ -1024,7 +1024,16 @@ class Installer
     {
         $this->log->log('Starting Magento uninstallation:');
 
-        $this->cleanCaches();
+        try {
+            $this->cleanCaches();
+        } catch (\Exception $e) {
+            $this->log->log(
+                'Can\'t clear cache due to the following error: '
+                . $e->getMessage() . PHP_EOL
+                . 'To fully clean up your uninstallation, you must manually clear your cache.'
+            );
+        }
+        
         $this->cleanupDb();
 
         $this->log->log('File system cleanup:');

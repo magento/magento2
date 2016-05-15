@@ -13,7 +13,7 @@
 
         <div class="message message-error" ng-switch-when="true">
             <span class="message-text">
-                <strong>Completed!</strong> You need to resolve these issues to continue.
+               <strong>Error!</strong> You need to resolve these issues to continue.
             </span>
         </div>
 
@@ -243,7 +243,7 @@
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
         </span>
-        <h3 class="readiness-check-title">Checking PHP Settings....</h3>
+        <h3 class="readiness-check-title">Checking PHP Settings *....</h3>
     </div>
 
     <div ng-show="settings.processed" ng-switch="settings.responseType">
@@ -253,10 +253,18 @@
             <span class="readiness-check-icon icon-success-round"></span>
 
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
                 <p>
                     Your PHP settings are correct.
                 </p>
+            </div>
+
+            <div ng-repeat="setting in settings.data">
+                <div class="message" ng-show="setting.warning">
+                    <p>
+                        {{setting.message}}
+                    </p>
+                </div>
             </div>
 
         </div>
@@ -265,7 +273,7 @@
 
             <span class="readiness-check-icon icon-failed-round"></span>
             <div class="readiness-check-content">
-                <h3 class="readiness-check-title">PHP Settings Check</h3>
+                <h3 class="readiness-check-title">PHP Settings Check *</h3>
 
                 <div ng-show="settings.isRequestError">
                     <p>Server failed to respond. Please try again.</p>
@@ -443,29 +451,38 @@
                             <span ng-show="permissions.expanded">Hide detail</span>
                         </a>
                     </p>
-                    <p>
-                        The best way to resolve this is to allow write permissions for the following Magento
-                        directories and their sub-directories. The exact fix depends on your server, your host,
+                    <p ng-show="permissions.expanded">
+                        The best way to resolve this is to allow write permissions for files in the following Magento directories and subdirectories. The exact fix depends on your server, your host,
                         and other system variables.
                         <br>
-                        Our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a> can get you started.
+                        For help, see our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/file-system-perms.html" target="_blank">File Permission Help</a> or call your hosting provider.
                     </p>
-                    <p>
-                        If you need more help, please call your hosting provider.
-                    </p>
-
-                    <ul class="list" ng-show="permissions.expanded">
+                    <ul class="list" ng-show="permissions.expanded" ng-init="showDetails=false">
                         <li
                             class="list-item-icon"
                             ng-repeat="name in permissions.data.required"
-                            ng-switch="hasItem(permissions.data.current, name)">
+                            ng-switch="hasItem(permissions.data.current, name.path)">
                             <span ng-switch-when="true" class="icon-success"></span>
                             <span ng-switch-default class="icon-failed"></span>
-                            <span>"{{name}}" writable directory permission.</span>
+                            <span>"{{name.path}}"</span>
+                            <span ng-switch-when="true">
+                                 - Writable.
+                            </span>
+                            <span ng-switch-default ng-hide="permission.expanded">
+                                - Not writable, change the permissions.
+                                <a href="#" ng-click="showDetails = !showDetails"">
+                                    <span ng-hide="showDetails">Show details</span>
+                                    <span ng-show="showDetails">Hide details</span>
+                                </a>
+                                <ul ng-show="showDetails" ng-repeat="file in name.missing">
+                                    <li class="icon-failed">
+                                        {{file}}<br>
+                                    </li>
+                                </ul>
+                            </span>
                         </li>
                     </ul>
-
-
+                    
                 </div>
 
             </div>
@@ -474,4 +491,8 @@
 
     </div>
 
+</div>
+
+<div class="readiness-check-item" id="warning-message" ng-show="true">
+    * - In some cases, you might have two PHP configuration files: one for the PHP command line and for the web server. If so, make the change in both php.ini files. For details, see the <a href="http://php.net/manual/en/configuration.file.php">php.ini reference</a>.
 </div>
