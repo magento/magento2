@@ -36,7 +36,7 @@ class ReadinessCheck
     /**#@-*/
 
     /**
-     * @var DbValidator
+     * @var \Magento\Setup\Validator\DbValidator
      */
     private $dbValidator;
 
@@ -138,6 +138,7 @@ class ReadinessCheck
         
         // Prepare list of magento specific files and directory paths for updater application to check write
         // permissions
+        $errorMessage = '';
         try {
             $filePaths = $this->basePackageInfo->getPaths();
             $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = $filePaths;
@@ -146,7 +147,7 @@ class ReadinessCheck
             $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_LIST] = [];
             $errorLogMessages[] = $errorMessage;
         }
-        $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_ERROR] = $errorMsg;
+        $resultJsonRawData[self::KEY_FILE_PATHS][self::KEY_ERROR] = $errorMessage;
 
         // updates timestamp
         $write = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
