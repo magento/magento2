@@ -72,27 +72,24 @@ class CustomerNotification
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {
-        if (
-            $this->state->getAreaCode() === Area::AREA_FRONTEND
+        if ($this->state->getAreaCode() == Area::AREA_FRONTEND
             && $this->notificationStorage->isExists(
                 NotificationStorage::UPDATE_CUSTOMER_SESSION,
                 $this->session->getCustomerId()
             )
         ) {
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-                ->setDuration(315360000)
+                ->setDurationOneYear()
                 ->setPath('/')
                 ->setHttpOnly(false);
             $this->cookieManager->setPublicCookie(
                 NotificationStorage::UPDATE_CUSTOMER_SESSION,
-                '1',
+                $this->session->getCustomerId(),
                 $publicCookieMetadata
             );
-            $this->notificationStorage->remove(
-                NotificationStorage::UPDATE_CUSTOMER_SESSION,
-                $this->session->getCustomerId()
-            );
-            $this->cookieManager->deleteCookie(Http::COOKIE_VARY_STRING);
+
+            $cookieMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
+            $this->cookieManager->deleteCookie(Http::COOKIE_VARY_STRING, $cookieMetadata);
         }
     }
 }
