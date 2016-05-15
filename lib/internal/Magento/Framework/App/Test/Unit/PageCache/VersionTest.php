@@ -89,6 +89,11 @@ class VersionTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnSelf());
 
             $publicCookieMetadataMock->expects($this->once())
+                ->method('setSecure')
+                ->with(false)
+                ->will($this->returnSelf());
+                
+            $publicCookieMetadataMock->expects($this->once())
                 ->method('setHttpOnly')
                 ->with(false)
                 ->will($this->returnSelf());

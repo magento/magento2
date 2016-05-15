@@ -3,19 +3,23 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @account-title-border-color: @color-gray-middle2;
 @account-table-border-bottom-color: @color-gray-middle1;
 @account-table-action-delete: @color-red12;
 
-@password-strength-color__default: @color-gray-light01;
-@password-strength-color__weak: #ffafae;
-@password-strength-color__medium: #ffd6b3;
-@password-strength-color__strong: #c5eeac;
-@password-strength-color__very-strong: #81b562;
+@_password-default: @color-gray-light01;
+@_password-weak: #ffafae;
+@_password-medium: #ffd6b3;
+@_password-strong: #c5eeac;
+@_password-very-strong: #81b562;
 
 //
 //  Common
-//  ---------------------------------------------
+//  _____________________________________________
 
 & when (@media-common = true) {
     .login-container {
@@ -143,7 +147,7 @@
     }
 
     .account,
-    [class^="sales-guest-"],
+    [class^='sales-guest-'],
     .sales-guest-view {
         .column.main {
             .order-details-items {
@@ -233,7 +237,7 @@
     }
 
     .password-strength-meter {
-        background-color: @password-strength-color__default;
+        background-color: @_password-default;
         height: @form-element-input__height;
         line-height: @form-element-input__height;
         padding: @form-element-input__padding;
@@ -249,30 +253,37 @@
             z-index: -1;
         }
 
+        .password-strength-meter-0 & {
+            &:before {
+                background-color: @_password-default;
+                width: 100%;
+            }
+        }
+
         .password-strength-meter-1 & {
             &:before {
-                background-color: @password-strength-color__weak;
+                background-color: @_password-weak;
                 width: 25%;
             }
         }
 
         .password-strength-meter-2 & {
             &:before {
-                background-color: @password-strength-color__medium;
+                background-color: @_password-medium;
                 width: 50%;
             }
         }
 
         .password-strength-meter-3 & {
             &:before {
-                background-color: @password-strength-color__strong;
+                background-color: @_password-strong;
                 width: 75%;
             }
         }
 
         .password-strength-meter-4 & {
             &:before {
-                background-color: @password-strength-color__very-strong;
+                background-color: @_password-very-strong;
                 width: 100%;
             }
         }
@@ -303,7 +314,7 @@
 
 //
 //  Desktop
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .login-container {
@@ -354,8 +365,8 @@
     .form.send.confirmation,
     .form.password.forget,
     .form.create.account {
-        width: 50%;
         min-width: 600px;
+        width: 50%;
     }
 
     //  My account
@@ -462,7 +473,7 @@
 
 //
 //  Mobile @screen__s
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .account {
@@ -479,7 +490,7 @@
 
 //
 //  Mobile @screen__m
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .login-container {

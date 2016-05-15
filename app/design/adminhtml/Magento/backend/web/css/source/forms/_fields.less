@@ -34,13 +34,13 @@
 
 .abs-field-sizes {
     &.admin__field-x-small {
-        > .admin__field-control  {
+        > .admin__field-control {
             &:extend(.abs-field-size-x-small all);
         }
     }
 
     &.admin__field-small {
-        > .admin__field-control  {
+        > .admin__field-control {
             &:extend(.abs-field-size-small all);
         }
     }
@@ -223,9 +223,9 @@
         }
     }
 
-    .required > &, //  ToDo UI: change classes "required" to "_required".
+    .required > &, // ToDo UI: change classes 'required' to '_required'.
     ._required > & {
-        span {
+        > span {
             &:after {
                 color: @field-label__required__color;
                 content: '*';
@@ -234,8 +234,8 @@
                 font-weight: @font-weight__heavier;
                 line-height: 1;
                 margin-left: 10px;
-                position: absolute;
                 margin-top: .2rem;
+                position: absolute;
                 z-index: 1;
             }
         }
@@ -243,6 +243,7 @@
 
     ._disabled > & {
         color: @field-label__disabled__color;
+        cursor: default;
     }
 }
 
@@ -275,6 +276,13 @@
         position: relative;
     }
 
+    //  Hide group legend and show first field label instead
+    legend {
+        &.admin__field-label {
+            opacity: 0;
+        }
+    }
+
     //  ToDo UI: Scope Labels must be moved from right side of each control to the place under the label of the control.
     //  This code must be removed after Scope Labels are moved completely.
     //  Till that time they'll be disabled by commenting pseudo-element content property.
@@ -295,7 +303,7 @@
             }
         }
 
-        .admin__field-control &:nth-child(n+2):before {
+        .admin__field-control &:nth-child(n + 2):before {
             content: '';
         }
     }
@@ -383,7 +391,7 @@
             padding: 1.7rem 0;
             width: calc(100% - @indent__l);
         }
-        
+
         .admin__field-option {
             padding-top: 0;
         }
@@ -491,16 +499,38 @@
 
 [class*='admin__control-grouped'],
 .admin__control-fields {
-    & > .admin__field:first-child {
-        position: static;
+    & > .admin__field {
+        &:first-child {
+            position: static;
+
+            & > .admin__field-label {
+                #mix-grid .column(@field-label-grid__column, @field-grid__columns);
+                background: @color-white;
+                cursor: pointer;
+                left: 0;
+                position: absolute;
+                top: 0;
+
+                span {
+                    &:before {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        &._disabled {
+            & > .admin__field-label {
+                cursor: default;
+            }
+        }
 
         & > .admin__field-label {
-            #mix-grid .column(@field-label-grid__column, @field-grid__columns);
-            cursor: pointer;
-            left: 0;
-            opacity: 0;
-            position: absolute;
-            top: 0;
+            span {
+                &:before {
+                    display: none;
+                }
+            }
         }
     }
 }
@@ -511,7 +541,7 @@
         width: 100%;
     }
 
-    .admin__field:nth-child(n+2):not(.admin__field-option):not(.admin__field-group-show-label) {
+    .admin__field:nth-child(n + 2):not(.admin__field-option):not(.admin__field-group-show-label) {
         > .admin__field-label {
             &:extend(.abs-visually-hidden all);
         }
@@ -552,7 +582,7 @@
 
         &:extend(.abs-field-sizes all);
 
-        &:nth-child(n+2) {
+        &:nth-child(n + 2) {
             padding-left: @field-group-label__padding;
 
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
@@ -589,7 +619,7 @@
         width: 1px;
 
         &.admin__field {
-            > .admin__field-control  {
+            > .admin__field-control {
                 &:extend(.abs-field-size-small all);
                 float: left;
                 position: relative;
@@ -607,10 +637,10 @@
             }
         }
     }
-    
+
     .ui-datepicker-trigger {
-        top: 0;
         left: 100%;
+        top: 0;
     }
 }
 
@@ -631,7 +661,7 @@
             }
         }
 
-        &:nth-child(n+2) {
+        &:nth-child(n + 2) {
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label[class] {
                     &:extend(.abs-visually-hidden-reset all);
@@ -678,7 +708,7 @@
 //  Complex Field
 //  _____________________________________________
 
-.admin_field-complex {
+.admin__field-complex {
     &:extend(.abs-clearfix all);
     margin: @indent__s 0 @indent__l;
     padding-left: @indent__s;
@@ -687,7 +717,7 @@
         margin-top: 3rem;
     }
 
-    .admin_field-complex-title {
+    .admin__field-complex-title {
         clear: both;
         color: @collapsible-title__color;
         font-size: @collapsible-title__font-size;
@@ -696,7 +726,7 @@
         margin-bottom: @indent__s;
     }
 
-    .admin_field-complex-elements {
+    .admin__field-complex-elements {
         float: right;
         max-width: 40%;
 
@@ -705,7 +735,7 @@
         }
     }
 
-    .admin_field-complex-content {
+    .admin__field-complex-content {
         max-width: 60%;
         overflow: hidden;
     }
