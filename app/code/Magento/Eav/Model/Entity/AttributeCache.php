@@ -38,16 +38,24 @@ class AttributeCache
     private $isAttributeCacheEnabled;
 
     /**
+     * @var array
+     */
+    private $unsupportedTypes;
+
+    /**
      * AttributeCache constructor.
      * @param CacheInterface $cache
      * @param StateInterface $state
+     * @param array $unsupportedTypes
      */
     public function __construct(
         CacheInterface $cache,
-        StateInterface $state
+        StateInterface $state,
+        $unsupportedTypes = []
     ) {
         $this->cache = $cache;
         $this->state = $state;
+        $this->unsupportedTypes = $unsupportedTypes;
     }
 
     /**
@@ -70,6 +78,9 @@ class AttributeCache
      */
     public function getAttributes($entityType, $suffix = '')
     {
+        if (in_array($entityType, $this->unsupportedTypes)) {
+            return false;
+        }
         if (isset($this->attributeInstances[$entityType . $suffix])) {
             return $this->attributeInstances[$entityType . $suffix];
         }
@@ -95,6 +106,9 @@ class AttributeCache
      */
     public function saveAttributes($entityType, $attributes, $suffix  = '')
     {
+        if (in_array($entityType, $this->unsupportedTypes)) {
+            return true;
+        }
         $this->attributeInstances[$entityType . $suffix] = $attributes;
         if ($this->isAttributeCacheEnabled()) {
             $cacheKey = self::ATTRIBUTES_CACHE_PREFIX . $entityType . $suffix;
