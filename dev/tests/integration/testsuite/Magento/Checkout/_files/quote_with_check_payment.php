@@ -16,8 +16,12 @@ $quote->getShippingAddress()->setShippingMethod('freeshipping_freeshipping');
 $quote->getShippingAddress()->addShippingRate($rate);
 $quote->getPayment()->setMethod('checkmo');
 
-$quote->collectTotals();
-$quote->save();
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var \Magento\Quote\Api\CartRepositoryInterface $repository */
+$repository = $objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+$repository->save($quote);
+//$quote->collectTotals();
+//$quote->save();
 $quote->getPayment()->setMethod('checkmo');
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
