@@ -44,7 +44,6 @@ class UpdateSessionTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsonHelper;
 
-
     protected function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
