@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -43,26 +42,26 @@ class UpdaterTaskCreator
     private $updater;
 
     /**
-     * @var \Magento\Framework\App\Cache\Manager
+     * @var \Magento\Setup\Model\ObjectManagerProvider
      */
-    private $cacheManager;
+    private $objectManagerProvider;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\Navigation $navigation
      * @param \Magento\Setup\Model\Updater $updater
-     * @param \Magento\Framework\App\Cache\Manager $cacheManager
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\Navigation $navigation,
         \Magento\Setup\Model\Updater $updater,
-        \Magento\Framework\App\Cache\Manager $cacheManager
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
     ) {
         $this->filesystem = $filesystem;
         $this->navigation = $navigation;
         $this->updater = $updater;
-        $this->cacheManager = $cacheManager;
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -113,7 +112,11 @@ class UpdaterTaskCreator
             ['enable' => true]
         );
 
-        $cacheStatus = $this->cacheManager->getStatus();
+        /**
+         * @var \Magento\Framework\App\Cache\Manager $cacheManager
+         */
+        $cacheManager = $this->objectManagerProvider->get()->get(\Magento\Framework\App\Cache\Manager::class);
+        $cacheStatus = $cacheManager->getStatus();
 
         $errorMessage .= $this->updater->createUpdaterTask(
             [],
@@ -150,11 +153,13 @@ class UpdaterTaskCreator
             }
         }
 
-        $errorMessage .= $this->updater->createUpdaterTask(
-            [],
-            \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
-            [implode(' ', $enabledCaches)]
-        );
+        if (!empty($enabledCaches)) {
+            $errorMessage .= $this->updater->createUpdaterTask(
+                [],
+                \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
+                [implode(' ', $enabledCaches)]
+            );
+        }
 
         return $errorMessage;
     }
