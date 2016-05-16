@@ -17,15 +17,17 @@
 
 @account-nav-item-hover: @color-gray91;
 
+@_password-default: @color-gray-light01;
+@_password-weak: #ffafae;
+@_password-medium: #ffd6b3;
+@_password-strong: #c5eeac;
+@_password-very-strong: #81b562;
+
 //
 //  Common
 //  _____________________________________________
 
 & when (@media-common = true) {
-#password-strength-meter-container {
-    background-color: silver;
-}
-
     .login-container {
         .block {
             &-new-customer {
@@ -233,33 +235,81 @@
         }
     }
 
-.password-strength-meter-0 {
-    background-color: red;
-    width: 0%;
-}
+    //
+    //  Password Strength Meter
+    //  ---------------------------------------------
 
-.password-strength-meter-1 {
-    background-color: orange;
-    width: 25%;
-}
+    .field.password {
+        .control {
+            .lib-vendor-prefix-display();
+            .lib-vendor-prefix-flex-direction();
 
-.password-strength-meter-2 {
-    background-color: yellow;
-    width: 50%;
-}
+            .mage-error {
+                .lib-vendor-prefix-order(2);
+            }
 
-.password-strength-meter-3 {
-    background-color: yellowgreen;
-    width: 75%;
-}
+            .input-text {
+                .lib-vendor-prefix-order(0);
+            }
+        }
+    }
 
-.password-strength-meter-4 {
-    background-color: green;
-    width: 100%;
-}
+    .password-strength-meter {
+        background-color: @_password-default;
+        height: @form-element-input__height;
+        line-height: @form-element-input__height;
+        padding: @form-element-input__padding;
+        position: relative;
+        z-index: 1;
+
+        &:before {
+            content: '';
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            z-index: -1;
+        }
+
+        .password-strength-meter-0 & {
+            &:before {
+                background-color: @_password-default;
+                width: 100%;
+            }
+        }
+
+        .password-strength-meter-1 & {
+            &:before {
+                background-color: @_password-weak;
+                width: 25%;
+            }
+        }
+
+        .password-strength-meter-2 & {
+            &:before {
+                background-color: @_password-medium;
+                width: 50%;
+            }
+        }
+
+        .password-strength-meter-3 & {
+            &:before {
+                background-color: @_password-strong;
+                width: 75%;
+            }
+        }
+
+        .password-strength-meter-4 & {
+            &:before {
+                background-color: @_password-very-strong;
+                width: 100%;
+            }
+        }
+    }
     
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
+
         .captcha-img {
             vertical-align: middle;
         }

@@ -112,15 +112,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->redirectFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->redirect);
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->exactly(3))
             ->method('getParam')
             ->withConsecutive(
                 ['scope'],
-                ['scope_id']
+                ['scope_id'],
+                ['back', false]
             )
             ->willReturnOnConsecutiveCalls(
                 $scope,
-                $scopeId
+                $scopeId,
+                true
             );
         $this->request->expects($this->once())
             ->method('getParams')
@@ -150,9 +152,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->dataPersistor->expects($this->once())
             ->method('clear')
             ->with('theme_design_config');
-        $this->redirect->expects($this->once())
+        $this->redirect->expects($this->exactly(2))
             ->method('setPath')
-            ->with('theme/design_config/');
+            ->withConsecutive(
+                ['theme/design_config/'],
+                ['theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]]
+            );
 
         $this->assertSame($this->redirect, $this->controller->execute());
     }

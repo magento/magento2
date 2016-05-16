@@ -76,9 +76,6 @@ class Config implements ConfigInterface
     /** @var string */
     protected $lifetimePath;
 
-    /** @var string */
-    private $saveHandlerName;
-
     /** @var \Magento\Framework\ValidatorFactory */
     protected $_validatorFactory;
 
@@ -109,20 +106,6 @@ class Config implements ConfigInterface
         $this->_httpRequest = $request;
         $this->_scopeType = $scopeType;
         $this->lifetimePath = $lifetimePath;
-
-        /**
-         * Session handler
-         *
-         * Save handler may be set to custom value in deployment config, which will override everything else.
-         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
-         */
-        $defaultSaveHandler = $this->getStorageOption('session.save_handler')
-            ?: SaveHandlerInterface::DEFAULT_HANDLER;
-        $saveMethod = $deploymentConfig->get(
-            self::PARAM_SESSION_SAVE_METHOD,
-            $defaultSaveHandler
-        );
-        $this->setSaveHandler($saveMethod);
 
         /**
          * Session path
@@ -161,6 +144,11 @@ class Config implements ConfigInterface
         $this->setCookieHttpOnly(
             $this->_scopeConfig->getValue(self::XML_PATH_COOKIE_HTTPONLY, $this->_scopeType)
         );
+
+        $secureURL = $this->_scopeConfig->getValue('web/secure/base_url', $this->_scopeType);
+        $unsecureURL = $this->_scopeConfig->getValue('web/unsecure/base_url', $this->_scopeType);
+        $isFullySecuredURL = $secureURL == $unsecureURL;
+        $this->setCookieSecure($isFullySecuredURL && $this->_httpRequest->isSecure());
     }
 
     /**
@@ -269,38 +257,6 @@ class Config implements ConfigInterface
     public function getName()
     {
         return (string)$this->getOption('session.name');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSaveHandler($saveHandler)
-    {
-        $this->setSaveHandlerName($saveHandler);
-        if ($saveHandler === 'db' || $saveHandler === 'redis') {
-            $saveHandler = 'user';
-        }
-        $this->setOption('session.save_handler', $saveHandler);
-        return $this;
-    }
-
-    /**
-     * Set save handler name
-     *
-     * @param string $saveHandlerName
-     * @return void
-     */
-    private function setSaveHandlerName($saveHandlerName)
-    {
-        $this->saveHandlerName = $saveHandlerName;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSaveHandlerName()
-    {
-        return $this->saveHandlerName;
     }
 
     /**

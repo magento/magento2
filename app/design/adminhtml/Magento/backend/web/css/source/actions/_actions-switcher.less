@@ -9,7 +9,7 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @actions-switcher-speed: .2s;
 
@@ -25,6 +25,7 @@
 @actions-switcher-handler__height: @actions-switcher__height;
 @actions-switcher-handler__width: @actions-switcher__height;
 
+//
 
 .admin__actions-switch {
     display: inline-block;
@@ -33,6 +34,10 @@
 
     .admin__field-control & {
         line-height: @action__height;
+    }
+
+    + .admin__field-service {
+        min-width: @field-size__m;
     }
 }
 
@@ -107,8 +112,8 @@
 
     &:before {
         background: @actions-switcher-handler__background-color;
-        border-radius: 100%;
         border: @actions-switcher__border;
+        border-radius: 100%;
         content: '';
         display: block;
         height: @actions-switcher-handler__height;
@@ -119,8 +124,8 @@
 
     &:after {
         background: @actions-switcher__background-color;
-        border-radius: @actions-switcher__border-radius;
         border: @actions-switcher__border;
+        border-radius: @actions-switcher__border-radius;
         content: '';
         display: block;
         height: @actions-switcher__height;

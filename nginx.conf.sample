@@ -1,6 +1,10 @@
 # Magento Vars
 # set $MAGE_ROOT /path/to/magento/root;
-# set $MAGE_MODE default; # or production or developer
+#
+# ############################################
+## Optional override of deployment mode. We recommend you use the
+## command bin/magento deploy:mode:set to switch modes instead
+## set $MAGE_MODE default; # or production or developer
 #
 # Example configuration:
 # upstream fastcgi_backend {
@@ -13,7 +17,6 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
-#    set $MAGE_MODE developer;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 
@@ -24,7 +27,7 @@ index index.php;
 autoindex off;
 charset off;
 
-location /setup {
+location ~* ^/setup($|/) {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
         fastcgi_pass   fastcgi_backend;
@@ -42,7 +45,7 @@ location /setup {
     }
 }
 
-location /update {
+location ~* ^/update($|/) {
     root $MAGE_ROOT;
 
     location ~ ^/update/index.php {
@@ -54,7 +57,7 @@ location /update {
         include        fastcgi_params;
     }
 
-    # deny everything but index.php
+    # Deny everything but index.php
     location ~ ^/update/(?!pub/). {
         deny all;
     }
@@ -68,11 +71,11 @@ location / {
     try_files $uri $uri/ /index.php?$args;
 }
 
-location /pub {
+location /pub/ {
     location ~ ^/pub/media/(downloadable|customer|import|theme_customization/.*\.xml) {
         deny all;
     }
-    alias $MAGE_ROOT/pub;
+    alias $MAGE_ROOT/pub/;
     add_header X-Frame-Options "SAMEORIGIN";
 }
 

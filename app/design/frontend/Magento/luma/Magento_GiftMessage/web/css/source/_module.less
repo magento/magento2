@@ -16,7 +16,7 @@
 @gift-item-block-title-icon__content: @icon-down;
 @gift-item-block-title-icon__active__content: @icon-up;
 @gift-item-block-title-icon__color: @color-gray52;
-@gift-item-block-title-icon__font-size: 18px;
+@gift-item-block-title-icon__font-size: 1.2rem;
 @gift-item-block-title-icon__line-height: 20px;
 @gift-item-block-title-icon__margin: 0 0 0 @indent__s;
 
@@ -115,8 +115,8 @@
 
     .cart.table-wrapper {
         .gift-content {
-            display: none;
             clear: left;
+            display: none;
             float: left;
             margin-right: -100%;
             padding: @indent__base 0;
@@ -292,9 +292,9 @@
         .gift-content {
             border-top: @border-width__base solid @color-gray-light5;
             margin-right: -@mobile-cart-padding;
+            overflow: hidden;
             padding-left: @mobile-cart-padding;
             padding-right: @mobile-cart-padding;
-            overflow: hidden;
         }
     }
 
@@ -350,7 +350,7 @@
                 &:before {
                     .lib-css(border-left, 1px solid @gift-item-block__border-color);
                     bottom: 5rem;
-                    content: "";
+                    content: '';
                     display: block;
                     left: 50%;
                     overflow: hidden;
@@ -389,7 +389,7 @@
             float: left;
             .lib-icon-font(
             @icon-down,
-            @_icon-font-size: 18px,
+            @_icon-font-size: 1.2rem,
             @_icon-font-line-height: 20px,
             @_icon-font-color: @minicart-icons-color,
             @_icon-font-color-hover: @primary__color,
