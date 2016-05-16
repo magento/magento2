@@ -208,7 +208,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
     /**
      * Sample Advanced search request test
      *
-     * @dataProvider advancedSearchDataProvider
+     * @dataProvider elasticSearchAdvancedSearchDataProvider
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
@@ -226,6 +226,28 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
             $rangeFilter,
             $expectedRecordsCount
         );
+    }
+
+    /**
+     * Elastic Search specific data provider for advanced search test.
+     *
+     * The expected array is for Elastic Search is different that the one for MySQL
+     * because sometimes more matches are returned. For instance, 3rd index below
+     * will return 3 matches instead of 1 (which is what MySQL returns).
+     *
+     * @return array
+     */
+    public function elasticSearchAdvancedSearchDataProvider()
+    {
+        return [
+            ['white', 'shorts', ['from' => '16', 'to' => '18'], 0],
+            ['white', 'shorts',['from' => '12', 'to' => '18'], 1],
+            ['black', 'tshirts', ['from' => '12', 'to' => '20'], 0],
+            ['shorts', 'green', ['from' => '12', 'to' => '22'], 3],
+            //Search with empty fields/values
+            ['white', '  ', ['from' => '12', 'to' => '22'], 1],
+            ['  ', 'green', ['from' => '12', 'to' => '22'], 2]
+        ];
     }
 
     /**
