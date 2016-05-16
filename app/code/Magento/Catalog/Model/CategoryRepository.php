@@ -91,8 +91,15 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             );
 
             if (isset($existingData['image']) && is_array($existingData['image'])) {
-                $existingData['image_additional_data'] = $existingData['image'];
-                unset($existingData['image']);
+                if (!empty($existingData['image']['delete'])) {
+                    $existingData['image'] = null;
+                } else {
+                    if (isset($existingData['image'][0]['name']) && isset($existingData['image'][0]['tmp_name'])) {
+                        $existingData['image'] = $existingData['image'][0]['name'];
+                    } else {
+                        unset($existingData['image']);
+                    }
+                }
             }
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();

@@ -53,13 +53,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $objId = $this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
-            $deleteConfirmMsg = __("Are you sure you want to revoke the user\'s tokens?");
+            $deleteConfirmMsg = __("Are you sure you want to revoke the users\\\\'s tokens?");
             $this->addButton(
                 'invalidate',
                 [
                     'label' => __('Force Sign-In'),
                     'class' => 'invalidate-token',
-                    'onclick' => 'deleteConfirm(\'' . $deleteConfirmMsg . '\', \'' . $this->getInvalidateUrl() . '\')',
+                    'onclick' => "deleteConfirm('" . $deleteConfirmMsg . "', '" . $this->getInvalidateUrl() . "')",
                 ]
             );
         }

@@ -13,6 +13,7 @@
         '*' => ['Magento_Customer/js/customer-data' => [
             'sectionLoadUrl' => $block->getCustomerDataUrl('customer/section/load'),
             'cookieLifeTime' => $block->getCookieLifeTime(),
+            'updateSessionUrl' => $block->getCustomerDataUrl('customer/account/updateSession'),
         ]],
     ]);
 ?>
