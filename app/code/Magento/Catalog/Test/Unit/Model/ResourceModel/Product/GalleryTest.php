@@ -63,7 +63,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->method('setCacheAdapter');
 
         $metadata = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->connection);
 
         $metadataPool = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
+            'Magento\Framework\EntityManager\MetadataPool',
             [],
             [],
             '',

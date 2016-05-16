@@ -18,7 +18,7 @@ class ProductDataProvider extends AbstractDataProvider
     /**
      * @var PoolInterface
      */
-    protected $pool;
+    private $pool;
 
     /**
      * @param string $name

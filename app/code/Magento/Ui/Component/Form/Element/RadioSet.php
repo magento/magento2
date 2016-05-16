@@ -13,12 +13,18 @@ class RadioSet extends AbstractOptionsField
     const NAME = 'radioset';
 
     /**
-     * Get component name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getComponentName()
     {
         return static::NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsSelected($optionValue)
+    {
+        return $this->getValue() == $optionValue;
     }
 }

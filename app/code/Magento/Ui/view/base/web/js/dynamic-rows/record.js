@@ -27,7 +27,7 @@ define([
                 position: '${ $.name }.${ $.positionProvider }:value'
             },
             exports: {
-                index: '${ $.provider }:${ $.dataScope }.record_id'
+                recordId: '${ $.provider }:${ $.dataScope }.record_id'
             },
             modules: {
                 parentComponent: '${ $.parentName }'
@@ -71,9 +71,11 @@ define([
          * @param {Number} position - element position
          */
         initPosition: function (position) {
-            this.parentComponent().setMaxPosition(position, this);
+            var pos = ~~position;
 
-            if (!position) {
+            this.parentComponent().setMaxPosition(pos, this);
+
+            if (!pos) {
                 this.position = this.parentComponent().maxPosition;
             }
         },
@@ -87,11 +89,15 @@ define([
             });
 
             if (!elem) {
-                return false;
+                return;
             }
 
             this.childVisibleListener(elem);
-            !elem.visibleListener ? elem.on('visible', this.childVisibleListener.bind(this, elem)) : false;
+
+            if (!elem.visibleListener) {
+                elem.on('visible', this.childVisibleListener.bind(this, elem));
+            }
+
             elem.visibleListener = true;
         },
 
@@ -223,7 +229,7 @@ define([
          * @param {Boolean} state
          */
         setDisabledColumn: function (index, state) {
-            index = parseInt(index, 10);
+            index = ~~index;
             this.elems()[index].disabled(state);
         }
     });

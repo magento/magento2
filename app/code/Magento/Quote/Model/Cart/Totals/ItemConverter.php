@@ -8,6 +8,7 @@ namespace Magento\Quote\Model\Cart\Totals;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Cart item totals converter.
@@ -68,6 +69,8 @@ class ItemConverter
         $this->eventManager->dispatch('items_additional_data', ['item' => $item]);
         $items = $item->toArray();
         $items['options'] = $this->getFormattedOptionValue($item);
+        unset($items[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+
         $itemsData = $this->totalsItemFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $itemsData,

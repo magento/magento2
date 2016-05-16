@@ -614,6 +614,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $data = $this->getResource()->loadByUsername($username);
         if ($data !== false) {
             $this->setData($data);
+            $this->setOrigData();
         }
         return $this;
     }

@@ -25,13 +25,6 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
     }
 
-    public function testCreateInstallConfig()
-    {
-        $returnValue = $this->configGeneratorObject->createInstallConfig([]);
-        $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $returnValue);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
-    }
-
     public function testCreateCryptConfigWithInput()
     {
         $testData = [ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY => 'some-test_key'];

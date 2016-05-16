@@ -7,10 +7,10 @@
 namespace Magento\Framework\Model\Test\Unit\EntitySnapshot;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\Model\EntitySnapshot\AttributeProvider;
 use Magento\Framework\Model\EntitySnapshot\AttributeProviderInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
 
 /**

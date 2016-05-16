@@ -7,7 +7,7 @@ namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
 use Magento\SalesRule\Model\ResourceModel\SaveHandler;
 use Magento\SalesRule\Model\ResourceModel\Rule;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
@@ -19,6 +19,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      * @var SaveHandler
      */
     protected $model;
+
     /**
      * @var Rule|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -44,7 +45,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $className = 'Magento\SalesRule\Model\ResourceModel\Rule';
         $this->ruleResource = $this->getMock($className, [], [], '', false);
 
-        $className = 'Magento\Framework\Model\Entity\MetadataPool';
+        $className = 'Magento\Framework\EntityManager\MetadataPool';
         $this->metadataPool = $this->getMock($className, [], [], '', false);
 
         $this->model = $this->objectManager->getObject(
@@ -66,7 +67,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'rule_id' => 1
         ];
 
-        $className = '\Magento\Framework\Model\Entity\EntityMetadata';
+        $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
 
         $metadata->expects($this->once())
@@ -93,9 +94,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'customer_group_ids' => $customers
         ];
 
-
-
-        $className = '\Magento\Framework\Model\Entity\EntityMetadata';
+        $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
 
         $metadata->expects($this->once())
@@ -125,7 +124,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'customer_group_ids' => $customers
         ];
 
-        $className = '\Magento\Framework\Model\Entity\EntityMetadata';
+        $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
 
         $metadata->expects($this->once())

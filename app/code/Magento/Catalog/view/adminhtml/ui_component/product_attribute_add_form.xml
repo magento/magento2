@@ -158,6 +158,7 @@
                             <item name="prefer" xsi:type="string">radio</item>
                             <item name="sortOrder" xsi:type="string">0</item>
                             <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
+                            <item name="additionalClasses" xsi:type="string">control-table-options-cell</item>
                             <item name="modules" xsi:type="array">
                                 <item name="rows" xsi:type="string">ns = ${ $.ns }, index = attribute_options_select</item>
                             </item>
@@ -229,6 +230,7 @@
                             <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
                             <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
+                            <item name="additionalClasses" xsi:type="string">control-table-options-cell</item>
                             <item name="modules" xsi:type="array">
                                 <item name="rows" xsi:type="string">ns = ${ $.ns }, index = attribute_options_multiselect</item>
                             </item>

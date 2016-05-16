@@ -20,7 +20,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 abstract class AbstractGroupPrice extends Price
 {
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -59,7 +59,6 @@ abstract class AbstractGroupPrice extends Price
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
@@ -68,12 +67,10 @@ abstract class AbstractGroupPrice extends Price
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        GroupManagementInterface $groupManagement,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        GroupManagementInterface $groupManagement
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_groupManagement = $groupManagement;
-        $this->metadataPool = $metadataPool;
         parent::__construct($currencyFactory, $storeManager, $catalogData, $config, $localeFormat);
     }
 
@@ -282,7 +279,7 @@ abstract class AbstractGroupPrice extends Price
         }
 
         $data = $this->_getResource()->loadPriceData(
-            $object->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()),
+            $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()),
             $websiteId
         );
         foreach ($data as $k => $v) {
@@ -392,7 +389,7 @@ abstract class AbstractGroupPrice extends Price
         $update = array_intersect_key($new, $old);
 
         $isChanged = false;
-        $productId = $object->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField());
+        $productId = $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField());
 
         if (!empty($delete)) {
             foreach ($delete as $data) {
@@ -405,7 +402,7 @@ abstract class AbstractGroupPrice extends Price
             foreach ($insert as $data) {
                 $price = new \Magento\Framework\DataObject($data);
                 $price->setData(
-                    $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField(),
+                    $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField(),
                     $productId
                 );
                 $this->_getResource()->savePriceData($price);
@@ -463,5 +460,17 @@ abstract class AbstractGroupPrice extends Price
     public function getResource()
     {
         return $this->_getResource();
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

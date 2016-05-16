@@ -12,6 +12,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
@@ -58,7 +59,9 @@ class PaymentTokenAssignerTest extends \PHPUnit_Framework_TestCase
     {
         $dataObject = new DataObject(
             [
-                PaymentTokenInterface::PUBLIC_HASH => 'public_hash_value'
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    PaymentTokenInterface::PUBLIC_HASH => 'public_hash_value'
+                ]
             ]
         );
         $paymentModel = $this->getMock(InfoInterface::class);
@@ -79,7 +82,9 @@ class PaymentTokenAssignerTest extends \PHPUnit_Framework_TestCase
     {
         $dataObject = new DataObject(
             [
-                PaymentTokenInterface::PUBLIC_HASH => 'public_hash_value'
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    PaymentTokenInterface::PUBLIC_HASH => 'public_hash_value'
+                ]
             ]
         );
 
@@ -117,7 +122,9 @@ class PaymentTokenAssignerTest extends \PHPUnit_Framework_TestCase
         $publicHash = 'public_hash_value';
         $dataObject = new DataObject(
             [
-                PaymentTokenInterface::PUBLIC_HASH => $publicHash
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
+                ]
             ]
         );
 
@@ -161,7 +168,9 @@ class PaymentTokenAssignerTest extends \PHPUnit_Framework_TestCase
         $publicHash = 'public_hash_value';
         $dataObject = new DataObject(
             [
-                PaymentTokenInterface::PUBLIC_HASH => $publicHash
+                PaymentInterface::KEY_ADDITIONAL_DATA => [
+                    PaymentTokenInterface::PUBLIC_HASH => $publicHash
+                ]
             ]
         );
 

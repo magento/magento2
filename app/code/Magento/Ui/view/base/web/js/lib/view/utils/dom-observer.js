@@ -5,7 +5,8 @@
 define([
     'jquery',
     'underscore',
-    'MutationObserver'
+    'MutationObserver',
+    'domReady!'
 ], function ($, _) {
     'use strict';
 

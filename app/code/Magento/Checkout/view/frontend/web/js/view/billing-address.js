@@ -79,7 +79,7 @@ define(
                         isAddressDetailsVisible: quote.billingAddress() != null,
                         isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length == 1,
                         isAddressSameAsShipping: false,
-                        saveInAddressBook: true
+                        saveInAddressBook: 1
                     });
 
                 quote.billingAddress.subscribe(function (newAddress) {
@@ -95,7 +95,7 @@ define(
                     if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
                         this.saveInAddressBook(newAddress.saveInAddressBook);
                     } else {
-                        this.saveInAddressBook(true);
+                        this.saveInAddressBook(1);
                     }
                     this.isAddressDetailsVisible(true);
                 }, this);
@@ -157,7 +157,7 @@ define(
                             newBillingAddress;
 
                         if (customer.isLoggedIn() && !this.customerHasAddresses) {
-                            this.saveInAddressBook(true);
+                            this.saveInAddressBook(1);
                         }
                         addressData.save_in_address_book = this.saveInAddressBook();
                         newBillingAddress = createBillingAddress(addressData);

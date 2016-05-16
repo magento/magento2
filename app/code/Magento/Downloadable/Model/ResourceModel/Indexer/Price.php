@@ -97,7 +97,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $this->_prepareDownloadableLinkPriceTable();
 
         $dlType = $this->_getAttribute('links_purchased_separately');
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         $ifPrice = $connection->getIfNullSql('dlpw.price_id', 'dlpd.price');
 

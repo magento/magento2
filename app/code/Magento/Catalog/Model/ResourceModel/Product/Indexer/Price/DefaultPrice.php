@@ -49,7 +49,6 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string $connectionName
@@ -58,14 +57,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
-        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
     /**
@@ -242,7 +240,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     protected function prepareFinalPriceDataForType($entityIds, $type)
     {
         $this->_prepareDefaultFinalPriceTable();
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],

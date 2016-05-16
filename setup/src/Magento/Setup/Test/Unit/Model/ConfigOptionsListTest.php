@@ -79,7 +79,6 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
     public function testCreateOptions()
     {
         $configDataMock = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
-        $this->generator->expects($this->once())->method('createInstallConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createCryptConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createSessionConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createDefinitionsConfig')->willReturn($configDataMock);
@@ -88,13 +87,12 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createCacheHostsConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([], $this->deploymentConfig);
-        $this->assertEquals(9, count($configData));
+        $this->assertEquals(8, count($configData));
     }
 
     public function testCreateOptionsWithOptionalNull()
     {
         $configDataMock = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
-        $this->generator->expects($this->once())->method('createInstallConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createCryptConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createSessionConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createDefinitionsConfig')->willReturn(null);
@@ -103,7 +101,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createCacheHostsConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([], $this->deploymentConfig);
-        $this->assertEquals(8, count($configData));
+        $this->assertEquals(7, count($configData));
     }
 
     public function testValidateSuccess()

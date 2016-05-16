@@ -184,7 +184,8 @@
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
                 <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
-                <item name="isMultiselect" xsi:type="boolean">false</item>
+                <item name="multiple" xsi:type="boolean">false</item>
+                <item name="elementTmpl" xsi:type="string"/>
             </item>
         </argument>
     </radioset>
@@ -193,7 +194,8 @@
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
                 <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
-                <item name="isMultiselect" xsi:type="boolean">true</item>
+                <item name="multiple" xsi:type="boolean">true</item>
+                <item name="elementTmpl" xsi:type="string"/>
             </item>
         </argument>
     </checkboxset>

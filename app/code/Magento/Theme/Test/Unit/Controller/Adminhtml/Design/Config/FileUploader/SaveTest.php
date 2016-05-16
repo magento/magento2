@@ -19,8 +19,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Controller\ResultInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultPage;
 
-    /** @var \Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor|\PHPUnit_Framework_MockObject_MockObject */
-    protected $imageProcessor;
+    /** @var \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $fileProcessor;
 
     /** @var Save */
     protected $controller;
@@ -36,14 +36,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->resultPage = $this->getMockBuilder('Magento\Framework\Controller\ResultInterface')
             ->setMethods(['setData'])
             ->getMockForAbstractClass();
-        $this->imageProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor')
+        $this->fileProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\FileUploader\FileProcessor')
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->controller = new Save($this->context, $this->imageProcessor);
+        $this->controller = new Save($this->context, $this->fileProcessor);
     }
 
     public function testExecute()
@@ -55,7 +55,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         ];
         $resultJson = '{"file": "", "url": ""}';
 
-        $this->imageProcessor->expects($this->once())
+        $this->fileProcessor->expects($this->once())
             ->method('saveToTmp')
             ->with('test_key')
             ->willReturn($result);

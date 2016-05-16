@@ -30,7 +30,7 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
         $resultData = $collection->getColumnValues('sku');
         $this->assertNotEmpty($resultData);
 
-        $expected = ['virtual-product', 'simple-1'];
+        $expected = ['virtual-product', 'simple'];
         sort($expected);
         sort($resultData);
         $this->assertEquals($expected, $resultData);

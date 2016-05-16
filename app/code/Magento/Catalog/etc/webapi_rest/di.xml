@@ -8,7 +8,6 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Model\Product\Option\Type\Date" type="Magento\Catalog\Model\Webapi\Product\Option\Type\Date" />
-    <preference for="Magento\Catalog\Model\Product\Option\Type\File\ValidatorInfo" type="Magento\Catalog\Model\Webapi\Product\Option\Type\File\Validator" />
 
     <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
         <arguments>

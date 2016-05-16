@@ -15,7 +15,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class TierpriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -38,7 +38,7 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\ProductRepository'
         );
         $this->metadataPool = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Model\Entity\MetadataPool'
+            'Magento\Framework\EntityManager\MetadataPool'
         );
         $this->_model->setAttribute(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

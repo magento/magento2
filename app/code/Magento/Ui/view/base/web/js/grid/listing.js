@@ -278,7 +278,7 @@ define([
          * @returns {Boolean}
          */
         hasData: function () {
-            return !!this.rows.length;
+            return !!this.rows && !!this.rows.length;
         },
 
         /**

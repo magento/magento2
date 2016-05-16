@@ -17,9 +17,11 @@ use Magento\Customer\Helper\View as CustomerViewHelper;
 use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Metadata\Validator;
+use Magento\Eav\Model\Validator\Attribute\Backend;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Event\ManagerInterface;
@@ -281,6 +283,11 @@ class AccountManagement implements AccountManagementInterface
     private $emailNotification;
 
     /**
+     * @var \Magento\Eav\Model\Validator\Attribute\Backend
+     */
+    private $eavValidator;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -509,7 +516,7 @@ class AccountManagement implements AccountManagementInterface
                 default:
                     throw new InputException(
                         __(
-                            InputException::INVALID_FIELD_VALUE,
+                            'Invalid value of "%value" provided for the %fieldName field.',
                             ['value' => $template, 'fieldName' => 'email type']
                         )
                     );
@@ -632,10 +639,10 @@ class AccountManagement implements AccountManagementInterface
     {
         // load customer by id
         $customer = $this->customerRepository->getById($customerId);
-        if (!$customer->getConfirmation()) {
-            return self::ACCOUNT_CONFIRMED;
-        }
         if ($this->isConfirmationRequired($customer)) {
+            if (!$customer->getConfirmation()) {
+                return self::ACCOUNT_CONFIRMED;
+            }
             return self::ACCOUNT_CONFIRMATION_REQUIRED;
         }
         return self::ACCOUNT_CONFIRMATION_NOT_REQUIRED;
@@ -673,6 +680,7 @@ class AccountManagement implements AccountManagementInterface
             }
             // Existing password hash will be used from secured customer data registry when saving customer
         }
+
         // Make sure we have a storeId to associate this customer with.
         if (!$customer->getStoreId()) {
             if ($customer->getWebsiteId()) {
@@ -680,14 +688,18 @@ class AccountManagement implements AccountManagementInterface
             } else {
                 $storeId = $this->storeManager->getStore()->getId();
             }
-
             $customer->setStoreId($storeId);
+        }
+
+        // Associate website_id with customer
+        if (!$customer->getWebsiteId()) {
+            $websiteId = $this->storeManager->getStore($customer->getStoreId())->getWebsiteId();
+            $customer->setWebsiteId($websiteId);
         }
 
         // Update 'created_in' value with actual store name
         if ($customer->getId() === null) {
-            $storeName = $this->storeManager->getStore($customer->getStoreId())
-                ->getName();
+            $storeName = $this->storeManager->getStore($customer->getStoreId())->getName();
             $customer->setCreatedIn($storeName);
         }
 
@@ -827,19 +839,22 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
+     * @return Backend
+     */
+    private function getEavValidator()
+    {
+        if ($this->eavValidator === null) {
+            $this->eavValidator = ObjectManager::getInstance()->get(Backend::class);
+        }
+        return $this->eavValidator;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function validate(CustomerInterface $customer)
     {
-        $customerData = $this->extensibleDataObjectConverter
-            ->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
-        $customerErrors = $this->validator->validateData($customerData, [], 'customer');
-
         $validationResults = $this->validationResultsDataFactory->create();
-        if ($customerErrors !== true) {
-            return $validationResults->setIsValid(false)
-                ->setMessages($this->validator->getMessages());
-        }
 
         $oldAddresses = $customer->getAddresses();
         $customerModel = $this->customerFactory->create()->updateData(
@@ -847,10 +862,15 @@ class AccountManagement implements AccountManagementInterface
         );
         $customer->setAddresses($oldAddresses);
 
-        $result = $customerModel->validate();
-        if (true !== $result && is_array($result)) {
+        $result = $this->getEavValidator()->isValid($customerModel);
+        if ($result === false && is_array($this->getEavValidator()->getMessages())) {
             return $validationResults->setIsValid(false)
-                ->setMessages($result);
+                ->setMessages(
+                    call_user_func_array(
+                        'array_merge',
+                        $this->getEavValidator()->getMessages()
+                    )
+                );
         }
         return $validationResults->setIsValid(true)
             ->setMessages([]);
@@ -903,12 +923,14 @@ class AccountManagement implements AccountManagementInterface
     private function validateResetPasswordToken($customerId, $resetPasswordLinkToken)
     {
         if (empty($customerId) || $customerId < 0) {
-            $params = ['value' => $customerId, 'fieldName' => 'customerId'];
-            throw new InputException(__(InputException::INVALID_FIELD_VALUE, $params));
+            throw new InputException(__(
+                'Invalid value of "%value" provided for the %fieldName field.',
+                ['value' => $customerId, 'fieldName' => 'customerId']
+            ));
         }
         if (!is_string($resetPasswordLinkToken) || empty($resetPasswordLinkToken)) {
             $params = ['fieldName' => 'resetPasswordLinkToken'];
-            throw new InputException(__(InputException::REQUIRED_FIELD, $params));
+            throw new InputException(__('%fieldName is a required field.', $params));
         }
 
         $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
@@ -1084,9 +1106,12 @@ class AccountManagement implements AccountManagementInterface
         if ($this->canSkipConfirmation($customer)) {
             return false;
         }
-        $storeId = $customer->getStoreId() ? $customer->getStoreId() : null;
 
-        return (bool)$this->scopeConfig->getValue(self::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_STORE, $storeId);
+        return (bool)$this->scopeConfig->getValue(
+            self::XML_PATH_IS_CONFIRM,
+            ScopeInterface::SCOPE_WEBSITES,
+            $customer->getWebsiteId()
+        );
     }
 
     /**
@@ -1156,7 +1181,7 @@ class AccountManagement implements AccountManagementInterface
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new InputException(
                 __(
-                    InputException::INVALID_FIELD_VALUE,
+                    'Invalid value of "%value" provided for the %fieldName field.',
                     ['value' => $passwordLinkToken, 'fieldName' => 'password reset token']
                 )
             );

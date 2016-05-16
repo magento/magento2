@@ -5,16 +5,17 @@
  */
 namespace Magento\Deploy\Model;
 
+use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Symfony\Component\Console\Output\OutputInterface;
+use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
- * Class Filesystem
+ * Generate static files, compile; clear var/generation, var/di/, var/view_preprocessed and pub/static directories
  *
- * A class to manage Magento modes
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filesystem
 {
@@ -37,32 +38,55 @@ class Filesystem
      */
     const DEFAULT_THEME = 'Magento/blank';
 
-    /** @var \Magento\Framework\App\DeploymentConfig\Writer */
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig\Writer
+     */
     private $writer;
 
-    /** @var \Magento\Framework\App\DeploymentConfig\Reader */
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig\Reader
+     */
     private $reader;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var \Magento\Framework\Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     private $filesystem;
 
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList */
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     */
     private $directoryList;
 
-    /** @var \Magento\Framework\Filesystem\Driver\File */
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
     private $driverFile;
 
-    /** @var \Magento\Store\Model\Config\StoreView */
+    /**
+     * @var \Magento\Store\Model\Config\StoreView
+     */
     private $storeView;
 
-    /** @var \Magento\Framework\ShellInterface */
+    /**
+     * @var \Magento\Framework\ShellInterface
+     */
     private $shell;
 
-    /** @var  string */
+    /**
+     * @var string
+     */
     private $functionCallPath;
+
+    /**
+     * @var UserCollection
+     */
+    private $userCollection;
 
     /**
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
@@ -92,7 +116,8 @@ class Filesystem
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
-        $this->functionCallPath = 'php -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
+        $this->functionCallPath =
+            PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
     /**
@@ -104,7 +129,7 @@ class Filesystem
     public function regenerateStatic(
         OutputInterface $output
     ) {
-        // Сlean up /var/generation, /var/di/, /var/view_preprocessed and /pub/static directories
+        // Сlear var/generation, var/di/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
@@ -129,12 +154,12 @@ class Filesystem
     protected function deployStaticContent(
         OutputInterface $output
     ) {
-        $output->writeln('Starting static content deployment');
+        $output->writeln('Starting deployment of static content');
         $cmd = $this->functionCallPath . 'setup:static-content:deploy '
-            . implode(' ', $this->storeView->retrieveLocales());
+            . implode(' ', $this->getUsedLocales());
 
         /**
-         * @todo build a solution that does not depend on exec
+         * @todo eliminate exec
          */
         try {
             $execOutput = $this->shell->execute($cmd);
@@ -143,11 +168,55 @@ class Filesystem
             throw $e;
         }
         $output->writeln($execOutput);
-        $output->writeln('Static content deployment complete');
+        $output->writeln('Deployment of static content complete');
     }
 
     /**
-     * Runs code multi-tenant compiler to generate code and DI information
+     * Get admin user locales
+     *
+     * @return []string
+     */
+    private function getAdminUserInterfaceLocales()
+    {
+        $locales = [];
+        foreach ($this->getUserCollection() as $user) {
+            $locales[] = $user->getInterfaceLocale();
+        }
+        return $locales;
+    }
+
+    /**
+     * Get used store and admin user locales
+     *
+     * @return []string
+     */
+    private function getUsedLocales()
+    {
+        $usedLocales = array_merge(
+            $this->storeView->retrieveLocales(),
+            $this->getAdminUserInterfaceLocales()
+        );
+        return array_unique($usedLocales);
+    }
+
+    /**
+     * Get user collection
+     *
+     * @return UserCollection
+     * @deprecated
+     */
+    private function getUserCollection()
+    {
+        if (!($this->userCollection instanceof UserCollection)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                UserCollection::class
+            );
+        }
+        return $this->userCollection;
+    }
+
+    /**
+     * Runs compiler
      *
      * @param OutputInterface $output
      * @return void
@@ -169,7 +238,7 @@ class Filesystem
          * exec command is necessary for now to isolate the autoloaders in the compiler from the memory state
          * of this process, which would prevent some classes from being generated
          *
-         * @todo build a solution that does not depend on exec
+         * @todo eliminate exec
          */
         try {
             $execOutput = $this->shell->execute($cmd);
@@ -222,7 +291,6 @@ class Filesystem
      * @param int $dirPermissions
      * @param int $filePermissions
      * @return void
-     *
      * @deprecated
      */
     protected function changePermissions($directoryCodeList, $dirPermissions, $filePermissions)
@@ -242,7 +310,6 @@ class Filesystem
      * Chenge permissions on static resources
      *
      * @return void
-     *
      * @deprecated
      */
     public function lockStaticResources()

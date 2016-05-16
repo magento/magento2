@@ -206,11 +206,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'region_id' => 1,
             ]
         );
-        $this->assertEquals(
-            $expectedAddressData,
-            $this->_model->getBillingAddress()->getData(),
-            'Created billing address is invalid.'
-        );
+
+        $result = $this->_model->getBillingAddress()->getData();
+        foreach ($expectedAddressData as $key => $value) {
+            $this->assertArrayHasKey($key, $result);
+            $this->assertEquals($value, $result[$key]);
+        }
     }
 
     /**

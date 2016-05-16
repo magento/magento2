@@ -67,8 +67,7 @@ class DataProvider
         Table $entityIdsTable
     ) {
         if ($bucket->getField() == 'category_ids') {
-            $currentScope = $dimensions['scope']->getValue();
-            $currentScopeId = $this->scopeResolver->getScope($currentScope)->getId();
+            $currentScopeId = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
             $currentCategory = $this->layer->getCurrentCategory();
 
             $derivedTable = $this->resource->getConnection()->select();

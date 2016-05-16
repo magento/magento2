@@ -12,7 +12,8 @@ define([
     'Magento_Ui/js/modal/confirm',
     'jquery/ui',
     'mage/decorate',
-    'mage/collapsible'
+    'mage/collapsible',
+    'mage/cookies'
 ], function ($, authenticationPopup, customerData, alert, confirm) {
 
     $.widget('mage.sidebar', {
@@ -190,12 +191,16 @@ define([
         },
 
         /**
-         * @param url - ajax url
-         * @param data - post data for ajax call
-         * @param elem - element that initiated the event
-         * @param callback - callback method to execute after AJAX success
+         * @param {String} url - ajax url
+         * @param {Object} data - post data for ajax call
+         * @param {Object} elem - element that initiated the event
+         * @param {Function} callback - callback method to execute after AJAX success
          */
         _ajax: function (url, data, elem, callback) {
+            $.extend(data, {
+                'form_key': $.mage.cookies.get('form_key')
+            });
+
             $.ajax({
                 url: url,
                 data: data,

@@ -257,9 +257,10 @@
                 </item>
             </argument>
         </column>
-        <column name="confirmation">
+        <column name="confirmation" class="Magento\Customer\Ui\Component\Listing\Column\Confirmation">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Confirmed email</item>
                     <item name="sortOrder" xsi:type="number">130</item>

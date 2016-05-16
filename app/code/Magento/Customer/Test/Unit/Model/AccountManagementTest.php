@@ -543,7 +543,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getName')
             ->willReturn($storeName);
 
-        $this->storeManager->expects($this->once())
+        $this->storeManager->expects($this->exactly(2))
             ->method('getStore')
             ->with($storeId)
             ->willReturn($storeMock);
@@ -1463,5 +1463,137 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertEquals($customerData, $this->accountManagement->authenticate($username, $password));
+    }
+
+    /**
+     * @param string|null $skipConfirmationIfEmail
+     * @param int $isConfirmationRequired
+     * @param string|null $confirmation
+     * @param string $expected
+     * @dataProvider dataProviderGetConfirmationStatus
+     */
+    public function testGetConfirmationStatus(
+        $skipConfirmationIfEmail,
+        $isConfirmationRequired,
+        $confirmation,
+        $expected
+    ) {
+        $websiteId = 1;
+        $customerId = 1;
+        $customerEmail = 'test1@example.com';
+
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customerMock->expects($this->any())
+            ->method('getConfirmation')
+            ->willReturn($confirmation);
+        $customerMock->expects($this->any())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customerMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+
+        $this->registry->expects($this->once())
+            ->method('registry')
+            ->with('skip_confirmation_if_email')
+            ->willReturn($skipConfirmationIfEmail);
+
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, $websiteId)
+            ->willReturn($isConfirmationRequired);
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+
+        $this->assertEquals($expected, $this->accountManagement->getConfirmationStatus($customerId));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderGetConfirmationStatus()
+    {
+        return [
+            [null, 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            ['test1@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            ['test2@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            ['test2@example.com', 1, null, AccountManagement::ACCOUNT_CONFIRMED],
+            ['test2@example.com', 1, 'test', AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED],
+        ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testCreateAccountWithPasswordHashForGuest()
+    {
+        $storeId = 1;
+        $storeName = 'store_name';
+        $websiteId = 1;
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
+        $storeMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $storeMock->expects($this->once())
+            ->method('getName')
+            ->willReturn($storeName);
+
+        $this->storeManager->expects($this->exactly(3))
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+        $customerMock->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn(null);
+        $customerMock->expects($this->exactly(3))
+            ->method('getStoreId')
+            ->willReturn(null);
+        $customerMock->expects($this->exactly(2))
+            ->method('getWebsiteId')
+            ->willReturn(null);
+        $customerMock->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId)
+            ->willReturnSelf();
+        $customerMock->expects($this->once())
+            ->method('setWebsiteId')
+            ->with($websiteId)
+            ->willReturnSelf();
+        $customerMock->expects($this->once())
+            ->method('setCreatedIn')
+            ->with($storeName)
+            ->willReturnSelf();
+        $customerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn(null);
+        $customerMock->expects($this->once())
+            ->method('setAddresses')
+            ->with(null)
+            ->willReturnSelf();
+
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($customerMock, $hash)
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Exception message')));
+
+        $this->accountManagement->createAccountWithPasswordHash($customerMock, $hash);
     }
 }

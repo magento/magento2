@@ -116,7 +116,12 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($attributeCode == 'available_sort_by') {
             $data = $object->getData($attributeCode);
             if ($data) {
-                $object->setData($attributeCode, explode(',', $data));
+                if (!is_array($data)) {
+                    $object->setData($attributeCode, explode(',', $data));
+                } else {
+                    $object->setData($attributeCode, $data);
+                }
+
             }
         }
         return $this;

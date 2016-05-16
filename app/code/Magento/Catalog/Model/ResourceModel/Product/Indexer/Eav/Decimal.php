@@ -46,7 +46,7 @@ class Decimal extends AbstractEav
             return $this;
         }
 
-        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $productValueExpression = $connection->getCheckSql('pds.value_id > 0', 'pds.value', 'pdd.value');
 
         $select = $connection->select()->from(

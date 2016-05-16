@@ -309,7 +309,7 @@ class Widget
             } elseif (trim($value) == '') {
                 $widget = $this->getConfigAsObject($type);
                 $parameters = $widget->getParameters();
-                if (is_object($parameters[$name])) {
+                if (isset($parameters[$name]) && is_object($parameters[$name])) {
                     $value = $parameters[$name]->getValue();
                 }
             }

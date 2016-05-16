@@ -79,7 +79,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory
      * @param mixed $connection
@@ -106,7 +105,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
@@ -133,7 +131,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
-            $productLimitation,
             $connection
         );
     }

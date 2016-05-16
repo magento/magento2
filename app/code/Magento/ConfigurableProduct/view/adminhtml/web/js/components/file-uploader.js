@@ -3,13 +3,17 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/element/file-uploader'
-], function (Element) {
+    'Magento_Ui/js/form/element/file-uploader',
+    'underscore'
+], function (Element, _) {
     'use strict';
 
     return Element.extend({
         processedFile: {},
         actionsListOpened: false,
+        thumbnailUrl: '',
+        thumbnail: null,
+        smallImage: null,
         defaults: {
             fileInputName: ''
         },
@@ -20,7 +24,18 @@ define([
          * @returns {Object} Chainable.
          */
         initObservable: function () {
-            this._super().observe(['processedFile', 'actionsListOpened']);
+            this._super().observe(['processedFile', 'actionsListOpened', 'thumbnailUrl', 'thumbnail', 'smallImage']);
+
+            return this;
+        },
+
+        /** @inheritdoc */
+        setInitialValue: function () {
+            var value = this.getInitialValue();
+
+            if (!_.isString(value)) {
+                this._super();
+            }
 
             return this;
         },
@@ -75,6 +90,9 @@ define([
         deleteImage: function () {
             this.processedFile({});
             this.value(null);
+            this.thumbnail(null);
+            this.thumbnailUrl(null);
+            this.smallImage(null);
 
             return this;
         }

@@ -267,11 +267,15 @@ class Phrase
     private function getCompiledString($string)
     {
         $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
-        //find all occurrences of ' and ", with no \ before it.
+        /* Find all occurrences of ' and ", with no \ before it for concatenation */
         preg_match_all('/[^\\\\]' . $encloseQuote . '|' . $encloseQuote . '[^\\\\]/', $string, $matches);
         if (count($matches[0])) {
             $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
         }
+        /* Remove all occurrences of escaped quotes because it is not desirable in csv file.
+           Translation for such phrases will use translation for phrase without escaped quote. */
+        $string = str_replace('\"', '"', $string);
+        $string = str_replace("\\'", "'", $string);
         return $string;
     }
 }

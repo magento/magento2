@@ -14,10 +14,10 @@ define([
         defaults: {
             template: 'ui/form/components/single/field',
             checked: false,
-            isMultiple: false,
+            initialChecked: false,
+            multiple: false,
             prefer: 'checkbox', // 'radio' | 'checkbox' | 'toggle'
             valueMap: {},
-            keyboard: {},
 
             templates: {
                 radio: 'ui/form/components/single/radio',
@@ -32,22 +32,13 @@ define([
         },
 
         /**
-         * @returns {Element}
-         */
-        initialize: function () {
-            return this
-                ._super()
-                .initKeyboardHandlers();
-        },
-
-        /**
-         * @returns {Element}
+         * @inheritdoc
          */
         initConfig: function (config) {
             this._super();
 
             if (!config.elementTmpl) {
-                if (!this.prefer && !this.isMultiple) {
+                if (!this.prefer && !this.multiple) {
                     this.elementTmpl = this.templates.radio;
                 } else if (this.prefer === 'radio') {
                     this.elementTmpl = this.templates.radio;
@@ -78,52 +69,22 @@ define([
                 this.initialValue = this.value;
             }
 
-            if (this.isMultiple && !_.isArray(this.value)) {
-                this.value = []; // needed for correct observable assingment
+            if (this.multiple && !_.isArray(this.value)) {
+                this.value = []; // needed for correct observable assignment
             }
+
+            this.initialChecked = this.checked;
 
             return this;
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         initObservable: function () {
             return this
                 ._super()
                 .observe('checked');
-        },
-
-        /**
-         * Initialize keyboard handlers
-         * @returns {Element}
-         */
-        initKeyboardHandlers: function () {
-            _.bindAll(this, 'goToPrevious', 'goToNext');
-            _.extend(this.keyboard, {
-                37: this.goToPrevious, // Left arrow
-                38: this.goToPrevious, // Up arrow
-                39: this.goToNext,     // Right arrow
-                40: this.goToNext      // down arrow
-            });
-
-            return this;
-        },
-
-        /**
-         * (Should) Move focus to previous <checkbox>
-         * @param {jQuery.Event} event
-         */
-        goToPrevious: function (event) {
-            event.preventDefault();
-        },
-
-        /**
-         * (Should) Move focus to next <checkbox>
-         * @param {jQuery.Event} event
-         */
-        goToNext: function (event) {
-            event.preventDefault();
         },
 
         /**
@@ -147,7 +108,7 @@ define([
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         setInitialValue: function () {
             if (_.isEmpty(this.valueMap)) {
@@ -171,7 +132,7 @@ define([
                 oldValue = this.initialValue,
                 newChecked;
 
-            if (this.isMultiple) {
+            if (this.multiple) {
                 newChecked = newExportedValue.indexOf(oldValue) !== -1;
             } else if (isMappedUsed) {
                 newChecked = this.getReverseValueMap(newExportedValue);
@@ -202,9 +163,9 @@ define([
                 newValue = oldValue;
             }
 
-            if (!this.isMultiple && newChecked) {
+            if (!this.multiple && newChecked) {
                 this.value(newValue);
-            } else if (!this.isMultiple && !newChecked) {
+            } else if (!this.multiple && !newChecked) {
                 if (typeof newValue === 'boolean') {
                     this.value(newChecked);
                 } else if (newValue === this.value.peek()) {
@@ -214,15 +175,15 @@ define([
                 if (isMappedUsed) {
                     this.value(newValue);
                 }
-            } else if (this.isMultiple && newChecked && this.value.indexOf(newValue) === -1) {
+            } else if (this.multiple && newChecked && this.value.indexOf(newValue) === -1) {
                 this.value.push(newValue);
-            } else if (this.isMultiple && !newChecked && this.value.indexOf(newValue) !== -1) {
+            } else if (this.multiple && !newChecked && this.value.indexOf(newValue) !== -1) {
                 this.value.splice(this.value.indexOf(newValue), 1);
             }
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         onUpdate: function () {
             if (this.hasUnique) {
@@ -230,6 +191,38 @@ define([
             }
 
             return this._super();
+        },
+
+        /**
+         * @inheritdoc
+         */
+        reset: function () {
+            if (this.multiple && this.initialChecked) {
+                this.value.push(this.initialValue);
+            } else if (this.multiple && !this.initialChecked) {
+                this.value.splice(this.value.indexOf(this.initialValue), 1);
+            } else {
+                this.value(this.initialValue);
+            }
+
+            this.error(false);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        clear: function () {
+            if (this.multiple) {
+                this.value([]);
+            } else {
+                this.value('');
+            }
+
+            this.error(false);
+
+            return this;
         }
     });
 });

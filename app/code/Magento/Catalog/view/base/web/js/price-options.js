@@ -18,7 +18,7 @@ define([
         optionsSelector: '.product-custom-option',
         optionConfig: {},
         optionHandlers: {},
-        optionTemplate: '<%- data.label %>' +
+        optionTemplate: '<%= data.label %>' +
         '<% if (data.finalPrice.value) { %>' +
         ' +<%- data.finalPrice.formatted %>' +
         '<% } %>',
@@ -27,6 +27,13 @@ define([
 
     $.widget('mage.priceOptions', {
         options: globalOptions,
+
+        /**
+         * @private
+         */
+        _init: function initPriceBundle() {
+            $(this.options.optionsSelector, this.element).trigger('change');
+        },
 
         /**
          * Widget creating method.

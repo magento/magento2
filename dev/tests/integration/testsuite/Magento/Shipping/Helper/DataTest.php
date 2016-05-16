@@ -45,6 +45,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
         if ('Magento\Sales\Model\Order' == $modelName) {
             $model->setProtectCode($code);
         }
+        if ('Magento\Sales\Model\Order\Shipment\Track' == $modelName) {
+            $model->setParentId(1);
+        }
 
         $actual = $this->_helper->getTrackingPopupUrlBySalesModel($model);
         $this->assertEquals($expected, $actual);

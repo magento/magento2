@@ -9,8 +9,10 @@ use Magento\Ui\Component\Form\Element\Select;
 
 /**
  * Class SelectTest
+ *
+ * @method Select getModel
  */
-class SelectTest extends AbstractOptionsFieldTest
+class SelectTest extends AbstractElementTest
 {
     /**
      * {@inheritdoc}

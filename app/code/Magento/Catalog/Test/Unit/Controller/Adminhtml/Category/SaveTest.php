@@ -84,6 +84,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->contextMock = $this->getMock(
@@ -432,7 +433,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getPostValue')
             ->willReturn($postData);
         $addData = $postData;
-        $addData['image_additional_data'] = ['delete' => true];
+        $addData['image'] = ['delete' => true];
         $categoryMock->expects($this->once())
             ->method('addData')
             ->with($addData);
