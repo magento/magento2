@@ -522,10 +522,12 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     private function getReservedAttributeList()
     {
-        if($this->reservedAttributeList) {
-            $this->reservedAttributeList = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+        if ($this->reservedAttributeList) {
+            $this->reservedAttributeList = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Catalog\Model\Product\ReservedAttributeList::class
+            );
         }
+
         return $this->reservedAttributeList;
     }
-
 }
