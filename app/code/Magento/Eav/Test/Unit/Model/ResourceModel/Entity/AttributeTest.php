@@ -22,7 +22,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->markTestSkipped();
+        $this->markTestSkipped('Unreliable implementation, MAGETWO-52857');
         $this->contextMock = $this->getMock(
             '\Magento\Framework\Model\Context',
             ['getCacheManager', 'getEventDispatcher', 'getLogger', 'getAppState', 'getActionValidator'],

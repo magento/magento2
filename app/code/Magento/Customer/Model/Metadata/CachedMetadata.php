@@ -102,7 +102,7 @@ class CachedMetadata implements MetadataInterface
      * @return AttributeCache
      * @deprecated
      */
-    protected function getCache()
+    private function getCache()
     {
         if (!$this->cache) {
             $this->cache = ObjectManager::getInstance()->get(AttributeCache::class);
