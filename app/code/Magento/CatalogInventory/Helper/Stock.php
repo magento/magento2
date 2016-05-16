@@ -93,6 +93,7 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
+     * @deprecated Use Stock::addIsInStockFilterToCollection instead
      * @return void
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)

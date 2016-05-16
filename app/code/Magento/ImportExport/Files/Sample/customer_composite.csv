@@ -1,0 +1,3 @@
+email,_website,_store,confirmation,created_at,created_in,disable_auto_group_change,dob,firstname,gender,group_id,lastname,middlename,password_hash,prefix,rp_token,rp_token_created_at,store_id,suffix,taxvat,website_id,password,_address_city,_address_company,_address_country_id,_address_fax,_address_firstname,_address_lastname,_address_middlename,_address_postcode,_address_prefix,_address_region,_address_street,_address_suffix,_address_telephone,_address_vat_id,_address_default_billing_,_address_default_shipping_
+jondoe@example.com,base,admin,,"2016-04-19 12:55:51",Admin,0,"2016-04-19 00:00:00",Jon,Male,1,Doe,,703feeb7a8a5195cf1cc9b759ba1e113:V2h36OrOJRh56MyGHw9NF1J855eL9X4P,,,,0,,,1,,Campbell,,US,,Jon,Doe,,95008,,California,"Main Street 1
+Suite 200",,123456789,,1,1
