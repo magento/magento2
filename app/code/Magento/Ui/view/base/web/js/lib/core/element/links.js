@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -54,7 +54,7 @@ define([
             value = data.inversionValue ? !utils.copy(value) : utils.copy(value);
         }
 
-        component.set(property, value);
+        component.set(property, value, owner);
 
         if (linked) {
             linked.mute = false;

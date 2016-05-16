@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,8 +80,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
@@ -91,8 +89,6 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -104,8 +100,8 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
         parent::__construct(
             $context,
             $registry,
-            $extensionFactory,
-            $customAttributeFactory,
+            $this->getExtensionFactory(),
+            $this->getCustomAttributeFactory(),
             $resource,
             $resourceCollection,
             $data
@@ -463,5 +459,25 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensible
             $this->setData('website_ids', (array)$websiteIds);
         }
         return $this->_getData('website_ids');
+    }
+
+    /**
+     * @return \Magento\Framework\Api\ExtensionAttributesFactory
+     * @deprecated
+     */
+    private function getExtensionFactory()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\ExtensionAttributesFactory::class);
+    }
+
+    /**
+     * @return \Magento\Framework\Api\AttributeValueFactory
+     * @deprecated
+     */
+    private function getCustomAttributeFactory()
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Api\AttributeValueFactory::class);
     }
 }

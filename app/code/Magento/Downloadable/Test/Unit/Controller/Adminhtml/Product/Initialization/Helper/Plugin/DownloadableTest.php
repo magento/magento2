@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -40,12 +40,18 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     protected $sampleFactoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\Data
+     */
+    protected $jsonHelperMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\linkFactory
      */
     protected $linkFactory;
 
     protected function setUp()
     {
+        $this->jsonHelperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
@@ -77,7 +83,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             new \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable(
                 $this->requestMock,
                 $this->sampleFactoryMock,
-                $this->linkFactoryMock
+                $this->linkFactoryMock,
+                $this->jsonHelperMock
             );
     }
 

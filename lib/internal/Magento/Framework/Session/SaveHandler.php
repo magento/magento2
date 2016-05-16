@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Session\Config\ConfigInterface;
 
@@ -21,23 +23,39 @@ class SaveHandler implements SaveHandlerInterface
     protected $saveHandlerAdapter;
 
     /**
+     * Config
+     *
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
      * Constructor
      *
      * @param SaveHandlerFactory $saveHandlerFactory
-     * @param ConfigInterface $config
+     * @param DeploymentConfig $deploymentConfig
      * @param string $default
      */
     public function __construct(
         SaveHandlerFactory $saveHandlerFactory,
-        ConfigInterface $config,
+        DeploymentConfig $deploymentConfig,
         $default = self::DEFAULT_HANDLER
     ) {
-        $saveMethod = $config->getSaveHandlerName();
+        /**
+         * Session handler
+         *
+         * Save handler may be set to custom value in deployment config, which will override everything else.
+         * Otherwise, try to read PHP settings for session.save_handler value. Otherwise, use 'files' as default.
+         */
+        $defaultSaveHandler = ini_get('session.save_handler') ?: SaveHandlerInterface::DEFAULT_HANDLER;
+        $saveMethod = $deploymentConfig->get(Config::PARAM_SESSION_SAVE_METHOD, $defaultSaveHandler);
+        $this->setSaveHandler($saveMethod);
+
         try {
             $connection = $saveHandlerFactory->create($saveMethod);
         } catch (SessionException $e) {
             $connection = $saveHandlerFactory->create($default);
-            $config->setSaveHandler($default);
+            $this->setSaveHandler($default);
         }
         $this->saveHandlerAdapter = $connection;
     }
@@ -109,5 +127,34 @@ class SaveHandler implements SaveHandlerInterface
     public function gc($maxLifetime)
     {
         return $this->saveHandlerAdapter->gc($maxLifetime);
+    }
+
+    /**
+     * Get config
+     *
+     * @return ConfigInterface
+     * @deprecated
+     */
+    private function getConfig()
+    {
+        if ($this->config === null) {
+            $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
+        }
+        return $this->config;
+    }
+
+    /**
+     * Set session.save_handler option
+     *
+     * @param string $saveHandler
+     * @return $this
+     */
+    private function setSaveHandler($saveHandler)
+    {
+        if ($saveHandler === 'db' || $saveHandler === 'redis') {
+            $saveHandler = 'user';
+        }
+        $this->getConfig()->setOption('session.save_handler', $saveHandler);
+        return $this;
     }
 }

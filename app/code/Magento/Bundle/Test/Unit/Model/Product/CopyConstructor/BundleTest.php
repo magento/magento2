@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Model\Product\CopyConstructor;
@@ -86,6 +86,48 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $extensionAttributesDuplicate->expects($this->once())
             ->method('setBundleProductOptions')
             ->withConsecutive([$bundleOptions]);
+
+        $this->model->build($product, $duplicate);
+    }
+
+    /**
+     * @return void
+     */
+    public function testBuildWithoutOptions()
+    {
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesProduct = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['getBundleProductOptions'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $product->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(Type::TYPE_BUNDLE);
+        $product->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributesProduct);
+
+        $extensionAttributesProduct->expects($this->once())
+            ->method('getBundleProductOptions')
+            ->willReturn(null);
+
+        $duplicate = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesDuplicate = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods(['setBundleProductOptions'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $duplicate->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributesDuplicate);
+        $extensionAttributesDuplicate->expects($this->once())
+            ->method('setBundleProductOptions')
+            ->with([]);
 
         $this->model->build($product, $duplicate);
     }

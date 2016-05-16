@@ -1,16 +1,17 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,7 +51,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -60,7 +61,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      * @param \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory $optionCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -69,8 +69,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         \Magento\Bundle\Model\ResourceModel\BundleFactory $bundleFactory,
         \Magento\Bundle\Model\ResourceModel\Option\CollectionFactory $optionCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        MetadataPool $metadataPool
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
         $this->productRepository = $productRepository;
         $this->linkFactory = $linkFactory;
@@ -79,7 +78,6 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $this->optionCollection = $optionCollection;
         $this->storeManager = $storeManager;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -87,7 +85,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      */
     public function getChildren($productSku, $optionId = null)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($productSku, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(__('Only implemented for bundle product'));
         }
@@ -111,7 +109,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
         return $this->addChild($product, $optionId, $linkedProduct);
     }
 
@@ -124,7 +122,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $sku,
         \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
     ) {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(
                 __('Product with specified sku: "%1" is not a bundle product', [$product->getSku()])
@@ -147,7 +145,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         if (!$selectionModel->getId()) {
             throw new InputException(__('Can not find product link with id "%1"', [$linkedProduct->getId()]));
         }
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $selectionModel = $this->mapProductLinkToSelectionModel(
             $selectionModel,
             $linkedProduct,
@@ -206,6 +204,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,
@@ -231,7 +230,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             );
         }
 
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         /* @var $resource \Magento\Bundle\Model\ResourceModel\Bundle */
         $resource = $this->bundleFactory->create();
         $selections = $resource->getSelectionsData($product->getData($linkField));
@@ -240,19 +239,25 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         if ($linkProductModel->isComposite()) {
             throw new InputException(__('Bundle product could not contain another composite product'));
         }
+
         if ($selections) {
             foreach ($selections as $selection) {
                 if ($selection['option_id'] == $optionId &&
                     $selection['product_id'] == $linkProductModel->getEntityId()) {
-                    throw new CouldNotSaveException(
-                        __(
-                            'Child with specified sku: "%1" already assigned to product: "%2"',
-                            [$linkedProduct->getSku(), $product->getSku()]
-                        )
-                    );
+                    if (!$product->getCopyFromView()) {
+                        throw new CouldNotSaveException(
+                            __(
+                                'Child with specified sku: "%1" already assigned to product: "%2"',
+                                [$linkedProduct->getSku(), $product->getSku()]
+                            )
+                        );
+                    } else {
+                        return $this->bundleSelection->create()->load($linkProductModel->getEntityId());
+                    }
                 }
             }
         }
+
         $selectionModel = $this->bundleSelection->create();
         $selectionModel = $this->mapProductLinkToSelectionModel(
             $selectionModel,
@@ -277,7 +282,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      */
     public function removeChild($sku, $optionId, $childSku)
     {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(__('Product with specified sku: %1 is not a bundle product', $sku));
@@ -303,7 +308,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
                 __('Requested bundle option product doesn\'t exist')
             );
         }
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         /* @var $resource \Magento\Bundle\Model\ResourceModel\Bundle */
         $resource = $this->bundleFactory->create();
         $resource->dropAllUnneededSelections($product->getData($linkField), $excludeSelectionIds);
@@ -363,7 +368,19 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
             $product
         );
 
-        $options = $optionCollection->appendSelections($selectionCollection);
+        $options = $optionCollection->appendSelections($selectionCollection, true);
         return $options;
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

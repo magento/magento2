@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
@@ -390,7 +390,7 @@ abstract class AbstractAction
             $pairs = $this->_connection->fetchPairs($select);
             foreach ($pairs as $productId => $productType) {
                 if (!in_array($productId, $changedIds)) {
-                    $changedIds[] = $productId;
+                    $changedIds[] = (string) $productId;
                     $byType[$productType][$productId] = $productId;
                     $compositeIds[$productId] = $productId;
                 }

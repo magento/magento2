@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,17 +10,16 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class ListAssociatedProducts
- * List associated products on the page
+ * List associated products on product page.
  */
 class ListAssociatedProducts extends Form
 {
     /**
-     * Selector with item product
+     * Selector with item product.
      *
      * @var string
      */
-    protected $itemProduct = '//tr[@data-role="row"][@class="pointer"][%d]';
+    protected $itemProduct = '//table[contains(@data-role,"grid")]/tbody/tr[%d]';
 
     /**
      * Getting block products

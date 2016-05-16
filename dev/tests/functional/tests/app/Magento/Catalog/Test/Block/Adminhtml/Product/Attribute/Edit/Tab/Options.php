@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,8 +11,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Element;
 
 /**
- * Class Options
- * Options form
+ * Options form.
  */
 class Options extends Tab
 {
@@ -29,6 +28,7 @@ class Options extends Tab
      * @param array $fields
      * @param SimpleElement|null $element
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setFieldsData(array $fields, SimpleElement $element = null)
     {

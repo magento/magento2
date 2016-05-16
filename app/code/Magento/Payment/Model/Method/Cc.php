@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
@@ -144,6 +144,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
                     '|8[6-9][0-9]{10}|9[0-9]{11})|62(2(12[6-9][0-9]{10}|1[3-9][0-9]{11}|[2-8][0-9]{12}' .
                     '|9[0-1][0-9]{11}|92[0-5][0-9]{10})|[4-6][0-9]{13}|8[2-8][0-9]{12})|6(4[4-9][0-9]{13}' .
                     '|5[0-9]{14}))$/',
+                    'MI' => '/^(5(0|[6-9])|63|67(?!59|6770|6774))\d*$/',
+                    'MD' => '/^(6759(?!24|38|40|6[3-9]|70|76)|676770|676774)\d*$/',
                 ];
 
                 $ccNumAndTypeMatches = isset(
@@ -213,6 +215,8 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             'SO' => '/^[0-9]{3,4}$/',
             'OT' => '/^[0-9]{3,4}$/',
             'JCB' => '/^[0-9]{3,4}$/',
+            'MI' => '/^[0-9]{3}$/',
+            'MD' => '/^[0-9]{3}$/',
         ];
         return $verificationExpList;
     }

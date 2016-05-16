@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,6 +8,7 @@ return [
     'catalogsearch_fulltext' =>
         [
             'indexer_id' => 'catalogsearch_fulltext',
+            'shared_index' => null,
             'primary' => 'first',
             'view_id' => 'catalogsearch_fulltext',
             'action_class' => 'Magento\\CatalogSearch\\Model\\Indexer\\Fulltext',

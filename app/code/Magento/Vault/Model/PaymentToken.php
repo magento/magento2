@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
@@ -99,17 +99,17 @@ class PaymentToken extends AbstractModel implements PaymentTokenInterface
     /**
      * @inheritdoc
      */
-    public function getExpireAt()
+    public function getExpiresAt()
     {
-        return $this->getData(PaymentTokenInterface::EXPIRE_AT);
+        return $this->getData(PaymentTokenInterface::EXPIRES_AT);
     }
 
     /**
      * @inheritdoc
      */
-    public function setExpireAt($timestamp)
+    public function setExpiresAt($timestamp)
     {
-        $this->setData(PaymentTokenInterface::EXPIRE_AT, $timestamp);
+        $this->setData(PaymentTokenInterface::EXPIRES_AT, $timestamp);
         return $this;
     }
 

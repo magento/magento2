@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section;
@@ -18,7 +18,7 @@ class RuleInformation extends Section
      *
      * @var string
      */
-    protected $customerGroup = '#rule_customer_group_ids';
+    protected $customerGroup = '[name=customer_group_ids]';
 
     /**
      * Check whether Customer Group is visible.

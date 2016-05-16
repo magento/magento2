@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\App;
@@ -102,7 +102,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed(self::ADMIN_RESOURCE);
+        return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
     }
 
     /**

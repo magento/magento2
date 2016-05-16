@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
  */
-class ReadHandler
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var OptionRepository
@@ -28,12 +29,12 @@ class ReadHandler
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    public function execute($entity, $arguments = [])
     {
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
         if ($entity->getTypeId() != \Magento\Bundle\Model\Product\Type::TYPE_CODE) {

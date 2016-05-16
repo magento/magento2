@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -91,7 +91,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      */
     public function getStores()
     {
-        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
+        return $this->hasData('stores') ? $this->getData('stores') : (array)$this->getData('store_id');
     }
 
     /**
@@ -166,6 +166,16 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     public function getPageLayout()
     {
         return $this->getData(self::PAGE_LAYOUT);
+    }
+
+    /**
+     * Get meta title
+     *
+     * @return string|null
+     */
+    public function getMetaTitle()
+    {
+        return $this->getData(self::META_TITLE);
     }
 
     /**
@@ -350,6 +360,17 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     public function setPageLayout($pageLayout)
     {
         return $this->setData(self::PAGE_LAYOUT, $pageLayout);
+    }
+
+    /**
+     * Set meta title
+     *
+     * @param string $metaTitle
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        return $this->setData(self::META_TITLE, $metaTitle);
     }
 
     /**

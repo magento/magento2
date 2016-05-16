@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -501,5 +501,21 @@
 
     input, select {
         vertical-align: middle;
+    }
+}
+
+//
+//  Global border-box
+//  ---------------------------------------------
+
+.lib-set-default-border-box() {
+    html {
+        box-sizing: border-box;
+    }
+
+    *,
+    *:before,
+    *:after {
+        box-sizing: inherit;
     }
 }

@@ -1,0 +1,43 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<fieldset class="admin__field"
+     visible="visible"
+     css="$data.additionalClasses"
+     attr="'data-config-scope': $data.scopeLabel, 'data-index': index">
+    <legend class="admin__field-label" if="$data.label" attr="for: uid">
+        <span text="label"/>
+    </legend>
+
+    <div class="admin__field-control"
+         css="'_with-tooltip': $data.tooltip">
+        <div class="admin__field admin__field-option" outereach="options">
+            <input 
+                ko-checked="$parent.value"
+                ko-disabled="$parent.disabled"
+                css="
+                    'admin__control-radio': !$parent.multiple,
+                    'admin__control-checkbox': $parent.multiple"
+                attr="
+                    id: ++ko.uid, 
+                    value: value,
+                    type: $parent.multiple ? 'checkbox' : 'radio'"/>
+
+            <label class="admin__field-label" text="label" attr="for: ko.uid"/>
+        </div>
+
+        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+
+        <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
+            <span html="notice"/>
+        </div>
+
+        <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfo"></div>
+
+        <render args="$data.service.template" if="$data.hasService()"/>
+    </div>
+</fieldset>

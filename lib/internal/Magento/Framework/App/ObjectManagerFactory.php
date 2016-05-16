@@ -2,7 +2,7 @@
 /**
  * Initialize application object manager.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App;
@@ -13,6 +13,7 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\Definition\Compiled\Serialized;
 use Magento\Framework\App\ObjectManager\Environment;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Code\GeneratedFiles;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -108,6 +109,10 @@ class ObjectManagerFactory
      */
     public function create(array $arguments)
     {
+        $writeFactory = new \Magento\Framework\Filesystem\Directory\WriteFactory($this->driverPool);
+        $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory);
+        $generatedFiles->regenerate();
+
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $this->configFilePool, $arguments);
         $arguments = array_merge($deploymentConfig->get(), $arguments);
         $definitionFactory = new \Magento\Framework\ObjectManager\DefinitionFactory(

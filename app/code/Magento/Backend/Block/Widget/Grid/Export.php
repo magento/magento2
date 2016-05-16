@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -257,6 +257,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
         $break = false;
 
         while ($break !== true) {
+            $originalCollection->clear();
             $originalCollection->setPageSize($this->getExportPageSize());
             $originalCollection->setCurPage($page);
             $originalCollection->load();

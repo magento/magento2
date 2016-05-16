@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,6 +35,11 @@ class InstallTest extends \PHPUnit_Framework_TestCase
      */
     private $sampleDataState;
 
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfig;
+
     public function setUp()
     {
         $this->webLogger = $this->getMock('\Magento\Setup\Model\WebLogger', [], [], '', false);
@@ -42,6 +47,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->installer = $this->getMock('\Magento\Setup\Model\Installer', [], [], '', false);
         $this->progressFactory = $this->getMock('\Magento\Setup\Model\Installer\ProgressFactory', [], [], '', false);
         $this->sampleDataState = $this->getMock('\Magento\Framework\Setup\SampleData\State', [], [], '', false);
+        $this->deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
 
         $installerFactory->expects($this->once())->method('create')->with($this->webLogger)
             ->willReturn($this->installer);
@@ -49,7 +55,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
             $this->webLogger,
             $installerFactory,
             $this->progressFactory,
-            $this->sampleDataState
+            $this->sampleDataState,
+            $this->deploymentConfig
         );
     }
 
@@ -65,6 +72,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->webLogger->expects($this->once())->method('clear');
         $this->installer->expects($this->once())->method('install');
         $this->installer->expects($this->exactly(2))->method('getInstallInfo');
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $jsonModel = $this->controller->startAction();
         $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -74,9 +82,23 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    public function testStartActionException()
+    public function testStartActionPriorInstallException()
     {
         $this->webLogger->expects($this->once())->method('clear');
+        $this->installer->expects($this->never())->method('install');
+        $this->installer->expects($this->never())->method('getInstallInfo');
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
+        $jsonModel = $this->controller->startAction();
+        $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('success', $variables);
+        $this->assertArrayHasKey('messages', $variables);
+        $this->assertFalse($variables['success']);
+    }
+    public function testStartActionInstallException()
+    {
+        $this->webLogger->expects($this->once())->method('clear');
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->installer->expects($this->once())->method('install')
             ->willThrowException($this->getMock('\Exception'));
         $jsonModel = $this->controller->startAction();
@@ -87,6 +109,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
     {
         $this->webLogger->expects($this->once())->method('clear');
         $this->webLogger->expects($this->never())->method('logError');
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->installer->method('install');
         $this->sampleDataState->expects($this->once())->method('hasError')->willReturn(true);
         $jsonModel = $this->controller->startAction();

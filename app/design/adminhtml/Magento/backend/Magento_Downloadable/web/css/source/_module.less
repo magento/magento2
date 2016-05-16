@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -144,5 +144,13 @@
 @-moz-document url-prefix() { // Firefox fieldset overflow bug fix: horizontal scroll for the table does not appear
     .downloadable-form {
         display: table-column;
+    }
+}
+
+.admin__dynamic-rows {
+    &.admin__control-table {
+        .file-uploader-filename {
+            max-width: 170px;
+        }
     }
 }

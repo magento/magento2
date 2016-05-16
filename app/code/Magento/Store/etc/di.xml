@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -21,6 +21,9 @@
     <preference for="Magento\Store\Api\Data\StoreConfigInterface" type="Magento\Store\Model\Data\StoreConfig"/>
     <preference for="Magento\Store\Api\StoreManagementInterface" type="Magento\Store\Model\StoreManagement"/>
     <preference for="Magento\Store\Api\WebsiteManagementInterface" type="Magento\Store\Model\WebsiteManagement"/>
+    <preference for="Magento\Framework\App\ScopeFallbackResolverInterface" type="Magento\Store\Model\ScopeFallbackResolver"/>
+    <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
+    <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="genericHeaderPlugin" type="Magento\Framework\App\Response\HeaderManager"/>
     </type>
@@ -48,12 +51,17 @@
     <type name="Magento\Store\Model\Config\Reader\Store">
         <arguments>
             <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
-        <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Store">
         <arguments>
-        <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\Resolver\Group">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Website">
@@ -115,6 +123,12 @@
     <type name="Magento\Store\Model\StoreResolver">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
+            <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\App\FrontController\Plugin\DefaultStore">
+        <arguments>
             <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
             <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
         </arguments>
@@ -242,6 +256,7 @@
             <argument name="scopeResolvers" xsi:type="array">
                 <item name="store" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
                 <item name="stores" xsi:type="object">Magento\Store\Model\Resolver\Store</item>
+                <item name="group" xsi:type="object">Magento\Store\Model\Resolver\Group</item>
                 <item name="website" xsi:type="object">Magento\Store\Model\Resolver\Website</item>
                 <item name="websites" xsi:type="object">Magento\Store\Model\Resolver\Website</item>
             </argument>

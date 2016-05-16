@@ -1,19 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Customer repository.
@@ -139,8 +136,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      */
     public function save(\Magento\Customer\Api\Data\CustomerInterface $customer, $passwordHash = null)
     {
-        $this->validate($customer);
-
         $prevCustomerData = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
@@ -179,6 +174,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken($customerSecure->getRpToken());
             $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
             $customerModel->setPasswordHash($customerSecure->getPasswordHash());
+            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
+            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
+            $customerModel->setLockExpires($customerSecure->getLockExpires());
         } else {
             if ($passwordHash) {
                 $customerModel->setPasswordHash($passwordHash);
@@ -315,75 +313,6 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $customerModel->delete();
         $this->customerRegistry->remove($customerId);
         return true;
-    }
-
-    /**
-     * Validate customer attribute values.
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @throws InputException
-     * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    private function validate(\Magento\Customer\Api\Data\CustomerInterface $customer)
-    {
-        $exception = new InputException();
-        if (!\Zend_Validate::is(trim($customer->getFirstname()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'firstname']));
-        }
-
-        if (!\Zend_Validate::is(trim($customer->getLastname()), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'lastname']));
-        }
-
-        $isEmailAddress = \Zend_Validate::is(
-            $customer->getEmail(),
-            'EmailAddress'
-        );
-
-        if (!$isEmailAddress) {
-            $exception->addError(
-                __(
-                    InputException::INVALID_FIELD_VALUE,
-                    ['fieldName' => 'email', 'value' => $customer->getEmail()]
-                )
-            );
-        }
-
-        $dob = $this->getAttributeMetadata('dob');
-        if ($dob !== null && $dob->isRequired() && '' == trim($customer->getDob())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'dob']));
-        }
-
-        $taxvat = $this->getAttributeMetadata('taxvat');
-        if ($taxvat !== null && $taxvat->isRequired() && '' == trim($customer->getTaxvat())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'taxvat']));
-        }
-
-        $gender = $this->getAttributeMetadata('gender');
-        if ($gender !== null && $gender->isRequired() && '' == trim($customer->getGender())) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'gender']));
-        }
-
-        if ($exception->wasErrorAdded()) {
-            throw $exception;
-        }
-    }
-
-    /**
-     * Get attribute metadata.
-     *
-     * @param string $attributeCode
-     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface|null
-     */
-    private function getAttributeMetadata($attributeCode)
-    {
-        try {
-            return $this->customerMetadata->getAttributeMetadata($attributeCode);
-        } catch (NoSuchEntityException $e) {
-            return null;
-        }
     }
 
     /**

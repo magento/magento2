@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Dashboard\Tab\Customers;
@@ -78,7 +78,14 @@ class Newest extends \Magento\Backend\Block\Dashboard\Grid
 
         $this->addColumn(
             'orders_count',
-            ['header' => __('Orders'), 'sortable' => false, 'index' => 'orders_count', 'type' => 'number']
+            [
+                'header' => __('Orders'),
+                'sortable' => false,
+                'index' => 'orders_count',
+                'type' => 'number',
+                'header_css_class' => 'col-orders',
+                'column_css_class' => 'col-orders'
+            ]
         );
 
         $baseCurrencyCode = (string)$this->_storeManager->getStore(

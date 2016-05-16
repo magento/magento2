@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module;
@@ -23,13 +23,6 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $deployConfig= $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
         $this->configGeneratorObject = new ConfigGenerator($random, $deployConfig);
-    }
-
-    public function testCreateInstallConfig()
-    {
-        $returnValue = $this->configGeneratorObject->createInstallConfig([]);
-        $this->assertInstanceOf('Magento\Framework\Config\Data\ConfigData', $returnValue);
-        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
     }
 
     public function testCreateCryptConfigWithInput()

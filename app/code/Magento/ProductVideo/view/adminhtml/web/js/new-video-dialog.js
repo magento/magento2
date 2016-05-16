@@ -1,16 +1,17 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
     'jquery',
+    'underscore',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation',
     'Magento_ProductVideo/js/get-video-information'
-], function ($) {
+], function ($, _) {
     'use strict';
 
     $.widget('mage.createVideoPlayer', {
@@ -39,6 +40,10 @@ define([
             }
         },
 
+        _FINISH_CREATE_VIDEO_TRIGGER: 'finish_create_video',
+
+        _FINISH_UPDATE_VIDEO_TRIGGER: 'finish_update_video',
+
         /**
          * @private
          */
@@ -57,14 +62,22 @@ define([
          * @returns {Boolean}
          */
         update: function () {
-            var checkVideoID = $(this.options.container).find('.' + this.options.videoClass).data('code');
+            var checkVideoID = this.element.find(this.options.container).find(
+                    '.' + this.options.videoClass
+                ).data('code'),
+                eventVideoData = {
+                    oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
+                    newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
+                };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_UPDATE_VIDEO_TRIGGER, eventVideoData);
             } else if (checkVideoID && checkVideoID === this.options.videoId) {
                 return false;
             } else if (!checkVideoID) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_CREATE_VIDEO_TRIGGER, eventVideoData);
             }
 
         },
@@ -74,20 +87,20 @@ define([
          */
         _doUpdate: function () {
             this.reset();
-            $(this.options.container).append('<div class="' +
-                this.options.videoClass +
-                '" data-type="' +
-                this.options.videoProvider +
-                '" data-code="' +
-                this.options.videoId +
-                '" data-width="100%" data-height="100%"></div>');
-            $(this.options.metaData.DOM.wrapper).show();
-            $(this.options.metaData.DOM.title).text(this.options.metaData.data.title);
-            $(this.options.metaData.DOM.uploaded).text(this.options.metaData.data.uploaded);
-            $(this.options.metaData.DOM.duration).text(this.options.metaData.data.duration);
+            this.element.find(this.options.container).append('<div class="' +
+            this.options.videoClass +
+            '" data-type="' +
+            this.options.videoProvider +
+            '" data-code="' +
+            this.options.videoId +
+            '" data-width="100%" data-height="100%"></div>');
+            this.element.find(this.options.metaData.DOM.wrapper).show();
+            this.element.find(this.options.metaData.DOM.title).text(this.options.metaData.data.title);
+            this.element.find(this.options.metaData.DOM.uploaded).text(this.options.metaData.data.uploaded);
+            this.element.find(this.options.metaData.DOM.duration).text(this.options.metaData.data.duration);
 
             if (this.options.videoProvider === 'youtube') {
-                $(this.options.metaData.DOM.uploader).html(
+                this.element.find(this.options.metaData.DOM.uploader).html(
                     '<a href="https://youtube.com/channel/' +
                     this.options.metaData.data.uploaderUrl +
                     '" target="_blank">' +
@@ -95,13 +108,13 @@ define([
                     '</a>'
                 );
             } else if (this.options.videoProvider === 'vimeo') {
-                $(this.options.metaData.DOM.uploader).html(
+                this.element.find(this.options.metaData.DOM.uploader).html(
                     '<a href="' +
                     this.options.metaData.data.uploaderUrl +
                     '" target="_blank">' + this.options.metaData.data.uploader +
                     '</a>');
             }
-            $('.' + this.options.videoClass).productVideoLoader();
+            this.element.find('.' + this.options.videoClass).productVideoLoader();
 
         },
 
@@ -109,9 +122,9 @@ define([
          * Reset
          */
         reset: function () {
-            $(this.options.container).find('.' + this.options.videoClass).remove();
-            $(this.options.metaData.DOM.wrapper).hide();
-            $(this.options.metaData.DOM.all).text('');
+            this.element.find(this.options.container).find('.' + this.options.videoClass).remove();
+            this.element.find(this.options.metaData.DOM.wrapper).hide();
+            this.element.find(this.options.metaData.DOM.all).text('');
 
         }
     });
@@ -184,8 +197,6 @@ define([
             '.gif'
         ],
 
-        _imageWidgetSelector: '#media_gallery_content',
-
         _imageProductGalleryWrapperSelector: '#image-container',
 
         _videoPreviewInputSelector: '#new_video_screenshot',
@@ -208,7 +219,7 @@ define([
 
         _videoInformationBtnSelector: '[name="new_video_get"]',
 
-        _editVideoBtnSelector: '#media_gallery_content .image',
+        _editVideoBtnSelector: '.image',
 
         _deleteGalleryVideoSelector: '[data-role=delete-button]',
 
@@ -230,6 +241,8 @@ define([
 
         _videoRequestComplete: null,
 
+        _gallery: null,
+
         /**
          * Bind events
          * @private
@@ -241,14 +254,14 @@ define([
 
             this._on(events);
 
-            this._videoUrlWidget = $(this._videoUrlSelector).videoData({
+            this._videoUrlWidget = this.element.find(this._videoUrlSelector).videoData({
                 youtubeKey: this.options.youTubeApiKey,
                 eventSource: 'focusout'
             });
 
-            this._videoInformationGetBtn = $(this._videoInformationBtnSelector);
-            this._videoInformationGetUrlField = $(this._videoUrlSelector);
-            this._videoInformationGetEditBtn = $(this._editVideoBtnSelector);
+            this._videoInformationGetBtn = this.element.find(this._videoInformationBtnSelector);
+            this._videoInformationGetUrlField = this.element.find(this._videoUrlSelector);
+            this._videoInformationGetEditBtn = this._gallery.find(this._editVideoBtnSelector);
 
             this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
             this._videoInformationGetUrlField.on('focusout', $.proxy(this._onGetVideoInformationFocusOut, this));
@@ -303,41 +316,52 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function (e, data) {
-            var player = $(this._videoPlayerSelector).createVideoPlayer({
-                videoId: data.videoId,
-                videoProvider: data.videoProvider,
-                reset: false,
-                metaData: {
-                    DOM: {
-                        title: '.video-information.title span',
-                        uploaded: '.video-information.uploaded span',
-                        uploader: '.video-information.uploader span',
-                        duration: '.video-information.duration span',
-                        all: '.video-information span',
-                        wrapper: '.video-information'
-                    },
-                    data: {
-                        title: data.title,
-                        uploaded: data.uploaded,
-                        uploader: data.channel,
-                        duration: data.duration,
-                        uploaderUrl: data.channelId
+            var self = this;
+
+            self.element.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
+                    if (!self._onlyVideoPlayer ||
+                        !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
+                        playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
+                    ) {
+                        self.element.updateInputFields({
+                            reset: false,
+                            data: {
+                                title: data.title,
+                                description: data.description
+                            }
+                        });
                     }
-                }
-            });
+
+                    if (playerData.oldVideoId !== playerData.newVideoId) {
+                        this._loadRemotePreview(data.thumbnail);
+                    }
+                    self._onlyVideoPlayer = true;
+                }, this))
+                .createVideoPlayer({
+                    videoId: data.videoId,
+                    videoProvider: data.videoProvider,
+                    reset: false,
+                    metaData: {
+                        DOM: {
+                            title: '.video-information.title span',
+                            uploaded: '.video-information.uploaded span',
+                            uploader: '.video-information.uploader span',
+                            duration: '.video-information.duration span',
+                            all: '.video-information span',
+                            wrapper: '.video-information'
+                        },
+                        data: {
+                            title: data.title,
+                            uploaded: data.uploaded,
+                            uploader: data.channel,
+                            duration: data.duration,
+                            uploaderUrl: data.channelId
+                        }
+                    }
+                })
+                .off('finish_update_video finish_create_video');
 
             this._videoRequestComplete = true;
-
-            if (!this._isEditPage) {
-                player.updateInputFields({
-                    reset: false,
-                    data: {
-                        title: data.title,
-                        description: data.description
-                    }
-                });
-                this._loadRemotePreview(data.thumbnail);
-            }
         },
 
         /**
@@ -347,18 +371,17 @@ define([
          */
         _loadRemotePreview: function (sourceUrl) {
             var url = this.options.saveRemoteVideoUrl,
-            self = this;
+                self = this;
 
+            this._getPreviewImage().attr('src', sourceUrl).hide();
             this._blockActionButtons(true, true);
             $.ajax({
                 url: url,
                 data: 'remote_image=' + sourceUrl,
                 type: 'post',
                 success: $.proxy(function (result) {
-                    if (!this._isEditPage) {
-                        this._tempPreviewImageData = result;
-                        this._getPreviewImage().attr('src', sourceUrl).show();
-                    }
+                    this._tempPreviewImageData = result;
+                    this._getPreviewImage().attr('src', sourceUrl).show();
                     this._blockActionButtons(false, true);
                 }, self)
             });
@@ -400,7 +423,7 @@ define([
         _setImage: function (file, imageData) {
             file = this.__prepareFilename(file);
             this._images[file] = imageData;
-            $(this._imageWidgetSelector).trigger('addItem', imageData);
+            this._gallery.trigger('addItem', imageData);
             this.element.trigger('setImage', imageData);
             this._addVideoClass(imageData.url);
         },
@@ -443,6 +466,8 @@ define([
             if (newFile === oldFile) {
                 this._images[newFile] = imageData;
                 this.saveImageRoles(imageData);
+                this._updateVisibility(imageData);
+                this._updateImageTitle(imageData);
 
                 return null;
             }
@@ -455,19 +480,19 @@ define([
             }
 
             newImageId = this.findElementId(tmpNewFile);
-            fc = $(this._itemIdSelector).val();
+            fc = this.element.find(this._itemIdSelector).val();
 
             suff = 'product[media_gallery][images]' + fc;
 
             searchsuff = 'input[name="' + suff + '[value_id]"]';
-            key = $(searchsuff).val();
+            key = this._gallery.find(searchsuff).val();
 
             if (!key) {
                 return null;
             }
 
             oldValIdElem = document.createElement('input');
-            $('form[data-form="edit-product"]').append(oldValIdElem);
+            this._gallery.find('form[data-form="edit-product"]').append(oldValIdElem);
             $(oldValIdElem).attr({
                 type: 'hidden',
                 name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
@@ -476,7 +501,7 @@ define([
             oldNewFilePosition = parseInt(tmpOldImage.position, 10);
             imageData.position = oldNewFilePosition;
 
-            $(this._imageWidgetSelector).trigger('setPosition', {
+            this._gallery.trigger('setPosition', {
                 imageData: imageData,
                 position: oldNewFilePosition
             });
@@ -494,7 +519,7 @@ define([
                 return null;
             }
 
-            $(this._imageWidgetSelector).trigger('removeItem', imageData);
+            this._gallery.trigger('removeItem', imageData);
             this.element.trigger('removeImage', imageData);
             delete this._images[file];
         },
@@ -518,11 +543,11 @@ define([
          * @private
          */
         _uploadImage: function (file, oldFile, callback) {
-            var url         = this.options.saveVideoUrl,
-            data = {
-                files: file,
-                url: url
-            };
+            var url = this.options.saveVideoUrl,
+                data = {
+                    files: file,
+                    url: url
+                };
 
             this._blockActionButtons(true, true);
             this._uploadFile(data, $.proxy(function (result) {
@@ -542,24 +567,24 @@ define([
         _onImageLoaded: function (result, file, oldFile, callback) {
             var data = JSON.parse(result);
 
-            if ($('#video_url').parent().find('.image-upload-error').length > 0) {
-                $('.image-upload-error').remove();
+            if (this.element.find('#video_url').parent().find('.image-upload-error').length > 0) {
+                this.element.find('.image-upload-error').remove();
             }
 
             if (data.errorcode || data.error) {
-                $('#video_url').parent().append('<div class="image-upload-error">' +
+                this.element.find('#video_url').parent().append('<div class="image-upload-error">' +
                 '<div class="image-upload-error-cross"></div><span>' + data.error + '</span></div>');
 
                 return;
             }
-            $.each($(this._videoFormSelector).serializeArray(), function (i, field) {
+            $.each(this.element.find(this._videoFormSelector).serializeArray(), function (i, field) {
                 data[field.name] = field.value;
             });
-            data.disabled = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+            data.disabled = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.oldFile = oldFile;
 
-            oldFile  ?
+            oldFile ?
                 this._replaceImage(oldFile, data.file, data) :
                 this._setImage(data.file, data);
             callback.call(0, data);
@@ -570,8 +595,8 @@ define([
          * @private
          */
         _uploadFile: function (data, callback) {
-            var fu = $(this._videoPreviewInputSelector),
-                tmpInput   = document.createElement('input'),
+            var fu = this.element.find(this._videoPreviewInputSelector),
+                tmpInput = document.createElement('input'),
                 fileUploader = null;
 
             $(tmpInput).attr({
@@ -596,7 +621,7 @@ define([
         _addVideoClass: function (url) {
             var classVideo = 'video-item';
 
-            $('img[src="' + url + '"]').addClass(classVideo);
+            this._gallery.find('img[src="' + url + '"]').addClass(classVideo);
         },
 
         /**
@@ -604,11 +629,13 @@ define([
          * @private
          */
         _create: function () {
-            var imgs = $(this._imageWidgetSelector).data('images') || [],
+            var imgs = _.values(this.element.closest(this.options.videoSelector).data('images')) || [],
                 widget,
                 uploader,
                 tmp,
                 i;
+
+            this._gallery =  this.element.closest(this.options.videoSelector);
 
             for (i = 0; i < imgs.length; i++) {
                 tmp = imgs[i];
@@ -619,16 +646,18 @@ define([
                     this._addVideoClass(tmp.url);
                 }
             }
-            $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
+
+            this._gallery.on('openDialog', $.proxy(this._onOpenDialog, this));
             this._bind();
             this.createVideoItemIcons();
             widget = this;
-            uploader = $(this._videoPreviewInputSelector);
+            uploader = this.element.find(this._videoPreviewInputSelector);
             uploader.on('change', this._onImageInputChange.bind(this));
             uploader.attr('accept', this._imageTypes.join(','));
 
             this.element.modal({
                 type: 'slide',
+                //appendTo: this._gallery,
                 modalClass: 'mage-new-video-dialog form-inline',
                 title: $.mage.__('New Video'),
                 buttons: [
@@ -658,26 +687,44 @@ define([
                  * @returns {null}
                  */
                 opened: function () {
-                    var roles, file, modalTitleElement, imageData;
+                    var roles,
+                        file,
+                        modalTitleElement,
+                        imageData,
+                        modal = widget.element.closest('.mage-new-video-dialog');
 
-                    $('#video_url').focus();
-                    roles = $('.video_image_role');
+                    widget.element.find('#video_url').focus();
+                    roles = widget.element.find('.video_image_role');
                     roles.prop('disabled', false);
-                    file = $('#file_name').val();
+                    file = widget.element.find('#file_name').val();
                     widget._onGetVideoInformationEditClick();
-                    modalTitleElement = $('.mage-new-video-dialog .modal-title');
+                    modalTitleElement = modal.find('.modal-title');
 
                     if (!file) {
                         widget._blockActionButtons(true);
-                        roles.prop('checked', $('.image.item:not(.removed)').length < 1);
+
+                        modal.find('.video-delete-button').hide();
+                        modal.find('.video-edit').hide();
+                        modal.find('.video-create-button').show();
+                        roles.prop('checked', widget._gallery.find('.image.item:not(.removed)').length < 1);
                         modalTitleElement.text($.mage.__('New Video'));
                         widget._isEditPage = false;
 
                         return null;
                     }
+                    widget._blockActionButtons(false);
                     modalTitleElement.text($.mage.__('Edit Video'));
                     widget._isEditPage = true;
                     imageData = widget._getImage(file);
+
+                    if (!imageData) {
+                        imageData = {
+                            url: _.find(widget._gallery.find('.product-image'), function (image) {
+                                return image.src.indexOf(file) > -1;
+                            }).src
+                        };
+                    }
+
                     widget._onPreview(null, imageData.url, false);
                 },
 
@@ -697,8 +744,10 @@ define([
          * @private
          */
         _blockActionButtons: function (status) {
-            $('.page-actions-buttons').find('button.video-create-button').attr('disabled', status);
-            $('.page-actions-buttons').find('button.video-edit').attr('disabled', status);
+            this.element
+                .closest('.mage-new-video-dialog')
+                .find('.page-actions-buttons button.video-create-button, .page-actions-buttons button.video-edit')
+                .attr('disabled', status);
         },
 
         /**
@@ -706,51 +755,50 @@ define([
          * @param {Function} callback
          */
         isValid: function (callback) {
-            var videoForm = $(this._videoFormSelector),
+            var videoForm = this.element.find(this._videoFormSelector),
                 videoLoaded = true;
 
             this._blockActionButtons(true);
-            this._videoUrlWidget.on('finish_update_information.validation', $.proxy(
-                function (event, status) {
-                    videoForm.mage('validation', {
 
-                        /**
-                         * @param {jQuery} error
-                         * @param {jQuery} element
-                         */
-                        errorPlacement: function (error, element) {
-                            error.insertAfter(element);
-                        }
-                    }).on('highlight.validate', function () {
-                        $(this).validation('option');
-                    });
-                    videoForm.validation();
+            this._videoUrlWidget.trigger('validate_video_url', $.proxy(function () {
 
-                    if (this._videoRequestComplete === false) {
-                        videoLoaded = false;
+                videoForm.mage('validation', {
+
+                    /**
+                     * @param {jQuery} error
+                     * @param {jQuery} element
+                     */
+                    errorPlacement: function (error, element) {
+                        error.insertAfter(element);
                     }
+                }).on('highlight.validate', function () {
+                    $(this).validation('option');
+                });
 
-                    callback(status && videoForm.valid() && videoLoaded);
-                    this._videoUrlWidget.off('finish_update_information.validation');
-                    this._blockActionButtons(false);
-                }, this
-            ));
+                videoForm.validation();
 
-            this._videoUrlWidget.trigger('update_video_information');
+                if (this._videoRequestComplete === false) {
+                    videoLoaded = false;
+                }
+
+                callback(videoForm.valid() && videoLoaded);
+            }, this));
+
+            this._blockActionButtons(false);
         },
 
         /**
          * Create video item icons
          */
         createVideoItemIcons: function () {
-            var $imageWidget = $(this._imageWidgetSelector).find('.product-image.video-item'),
+            var $imageWidget = this._gallery.find('.product-image.video-item'),
                 $productGalleryWrapper = $(this._imageProductGalleryWrapperSelector).find('.product-image.video-item');
 
             $imageWidget.parent().addClass('video-item');
             $productGalleryWrapper.parent().addClass('video-item');
             $imageWidget.removeClass('video-item');
             $productGalleryWrapper.removeClass('video-item');
-            $('.video-item .action-delete').attr('title',  $.mage.__('Delete video'));
+            $('.video-item .action-delete').attr('title', $.mage.__('Delete video'));
             $('.video-item .action-delete span').html($.mage.__('Delete video'));
         },
 
@@ -759,12 +807,12 @@ define([
          * @private
          */
         _onCreate: function () {
-            var nvs = $(this._videoPreviewInputSelector),
-            file = nvs.get(0),
-            reqClass = 'required-entry _required';
+            var nvs = this.element.find(this._videoPreviewInputSelector),
+                file = nvs.get(0),
+                reqClass = 'required-entry _required';
 
             if (file && file.files && file.files.length) {
-                file =  file.files[0];
+                file = file.files[0];
             } else {
                 file = null;
             }
@@ -807,28 +855,30 @@ define([
                         return;
                     }
 
-                    imageData = this.imageData;
-                    inputFile       = $(this._videoPreviewInputSelector);
-                    itemId          = $(this._itemIdSelector).val();
-                    itemId              = itemId.slice(1, itemId.length - 1);
-                    _inputSelector  = '[name*="[' + itemId + ']"]';
-                    mediaFields     = $('input' + _inputSelector);
+                    imageData = this.imageData || {};
+                    inputFile = this.element.find(this._videoPreviewInputSelector);
+                    itemId = this.element.find(this._itemIdSelector).val();
+                    itemId = itemId.slice(1, itemId.length - 1);
+                    _inputSelector = '[name*="[' + itemId + ']"]';
+                    mediaFields = this._gallery.find('input' + _inputSelector);
                     $.each(mediaFields, function (i, el) {
-                        var elName      = el.name,
-                            start       = elName.indexOf(itemId) + itemId.length + 2,
-                            fieldName   = elName.substring(start, el.name.length - 1),
-                            _field      = $('#' + fieldName),
+                        var elName = el.name,
+                            start = elName.indexOf(itemId) + itemId.length + 2,
+                            fieldName = elName.substring(start, el.name.length - 1),
+                            _field = this.element.find('#' + fieldName),
                             _tmp;
 
                         if (_field.length > 0) {
                             _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
-                            $(_tmp).val(_field.val());
+                            this._gallery.find(_tmp).val(_field.val());
                             imageData[fieldName] = _field.val();
                         }
-                    });
-                    flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
-                    $('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
-                    $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
+                    }.bind(this));
+                    flagChecked = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+                    this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
+                    this._gallery.find(_inputSelector).siblings('.image-fade').css(
+                        'visibility', flagChecked ? 'visible' : 'hidden'
+                    );
                     imageData.disabled = flagChecked;
 
                     if (this._tempPreviewImageData) {
@@ -860,6 +910,29 @@ define([
                     }
                 }, this
             ));
+        },
+
+        /**
+         * Delegates call to producwt gallery to update video visibility.
+         *
+         * @param {Object} imageData
+         */
+        _updateVisibility: function (imageData) {
+            this._gallery.trigger('updateVisibility', {
+                disabled: imageData.disabled,
+                imageData: imageData
+            });
+        },
+
+        /**
+         * Delegates call to product gallery to update video title.
+         *
+         * @param {Object} imageData
+         */
+        _updateImageTitle: function (imageData) {
+            this._gallery.trigger('updateImageTitle', {
+                imageData: imageData
+            });
         },
 
         /**
@@ -907,11 +980,11 @@ define([
          * @private
          */
         _onImageInputChange: function () {
-            var jFile = $(this._videoPreviewInputSelector),
-            file = jFile[0],
-            val = jFile.val(),
-            prev = this._getPreviewImage(),
-            ext = '.' + val.split('.').pop();
+            var jFile = this.element.find(this._videoPreviewInputSelector),
+                file = jFile[0],
+                val = jFile.val(),
+                prev = this._getPreviewImage(),
+                ext = '.' + val.split('.').pop();
 
             if (!val) {
                 return;
@@ -920,9 +993,7 @@ define([
 
             if (
                 ext.length < 2 ||
-                this._imageTypes.indexOf(ext.toLowerCase()) === -1 ||
-                !file.files ||
-                !file.files.length
+                this._imageTypes.indexOf(ext.toLowerCase()) === -1 || !file.files || !file.files.length
             ) {
                 prev.remove();
                 this._previewImage = null;
@@ -982,7 +1053,7 @@ define([
                     'display': 'none',
                     'src': ''
                 });
-                $(this._previewImage).insertAfter(this._videoPreviewImagePointer);
+                $(this._previewImage).insertAfter(this.element.find(this._videoPreviewImagePointer));
                 $(this._previewImage).attr('data-role', 'video_preview_image');
             }
 
@@ -993,7 +1064,7 @@ define([
          * Close slideout dialog
          */
         close: function () {
-            this.element.trigger('closeModal');
+            this.element.modal('closeModal');
         },
 
         /**
@@ -1011,11 +1082,13 @@ define([
                 this._previewImage = null;
             }
             this._tempPreviewImageData = null;
-            $(this._videoPlayerSelector).trigger('reset');
+            this.element.trigger('reset');
             newVideoForm = this.element.find(this._videoFormSelector);
 
             $(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
-            $('input[name*="' + $(this._itemIdSelector).val() + '"]').parent().removeClass('active');
+            this._gallery.find('input[name*="' + this.element.find(
+                    this._itemIdSelector).val() + '"]'
+            ).parent().removeClass('active');
 
             try {
                 newVideoForm.validation('clearError');
@@ -1030,9 +1103,9 @@ define([
          * @param {String} file
          */
         findElementId: function (file) {
-            var elem = $('.image.item').find('input[value="' + file + '"]');
+            var elem = this._gallery.find('.image.item').find('input[value="' + file + '"]');
 
-            if (!elem) {
+            if (!elem.length) {
                 return null;
             }
 
@@ -1049,12 +1122,14 @@ define([
                 containers;
 
             if (data && data.length > 0) {
-                containers = $('.image-placeholder').siblings('input');
+                containers = this._gallery.find('.image-placeholder').siblings('input');
                 $.each(containers, function (i, el) {
                     var start = el.name.indexOf('[') + 1,
                         end = el.name.indexOf(']'),
                         imageType = el.name.substring(start, end),
-                        imageCheckbox = $(self._videoFormSelector + ' input[value="' + imageType + '"]');
+                        imageCheckbox = self.element.find(
+                            self._videoFormSelector + ' input[value="' + imageType + '"]'
+                        );
 
                     self._changeRole(imageType, imageCheckbox.attr('checked'), imageData);
                 });
@@ -1072,15 +1147,15 @@ define([
             var needCheked = true;
 
             if (!isEnabled) {
-                needCheked = $('input[name="product[' + imageType + ']"]').val() === imageData.file;
+                needCheked = this._gallery.find('input[name="product[' + imageType + ']"]').val() === imageData.file;
             }
 
             if (!needCheked) {
                 return null;
             }
 
-            $(this._imageWidgetSelector).trigger('setImageType', {
-                type:  imageType,
+            this._gallery.trigger('setImageType', {
+                type: imageType,
                 imageData: isEnabled ? imageData : null
             });
         },
@@ -1092,40 +1167,41 @@ define([
          * @private
          */
         _onOpenDialog: function (e, imageData) {
-            var formFields, flagChecked, file;
+            var formFields, flagChecked, file,
+                modal = this.element.closest('.mage-new-video-dialog');
 
             if (imageData['media_type'] === 'external-video') {
                 this.imageData = imageData;
-                $('.video-create-button').hide();
-                $('.video-delete-button').show();
-                $('.video-edit').show();
-                $('.mage-new-video-dialog').createVideoPlayer({
+                modal.find('.video-create-button').hide();
+                modal.find('.video-delete-button').show();
+                modal.find('.video-edit').show();
+                modal.createVideoPlayer({
                     reset: true
                 }).createVideoPlayer('reset');
 
-                formFields = $(this._videoFormSelector).find('.edited-data');
+                formFields = modal.find(this._videoFormSelector).find('.edited-data');
 
                 $.each(formFields, function (i, field) {
                     $(field).val(imageData[field.name]);
                 });
 
                 flagChecked = imageData.disabled > 0;
-                $(this._videoDisableinputSelector).prop('checked', flagChecked);
+                modal.find(this._videoDisableinputSelector).prop('checked', flagChecked);
 
-                file = $('#file_name').val(imageData.file);
+                file = modal.find('#file_name').val(imageData.file);
 
-                $.each($('.video_image_role'), function () {
+                $.each(modal.find('.video_image_role'), function () {
                     $(this).prop('checked', false).prop('disabled', false);
                 });
 
-                $.each($('.image-placeholder').siblings('input:hidden'), function () {
+                $.each(this._gallery.find('.image-placeholder').siblings('input:hidden'), function () {
                     var start, end, imageRole;
 
                     if ($(this).val() === file.val()) {
                         start = this.name.indexOf('[') + 1;
                         end = this.name.length - 1;
                         imageRole = this.name.substring(start, end);
-                        $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
+                        modal.find('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
                     }
                 });
             }
@@ -1136,30 +1212,31 @@ define([
          * Toggle buttons
          */
         toggleButtons: function () {
-            var self = this;
+            var self = this,
+                modal = this.element.closest('.mage-new-video-dialog');
 
-            $('.video-placeholder, .add-video-button-container > button').click(function () {
-                $('.video-create-button').show();
-                $('.video-delete-button').hide();
-                $('.video-edit').hide();
-                $('.mage-new-video-dialog').createVideoPlayer({
+            modal.find('.video-placeholder, .add-video-button-container > button').click(function () {
+                modal.find('.video-create-button').show();
+                modal.find('.video-delete-button').hide();
+                modal.find('.video-edit').hide();
+                modal.createVideoPlayer({
                     reset: true
                 }).createVideoPlayer('reset').updateInputFields({
                     reset: true
                 }).updateInputFields('reset');
             });
-            $(document).on('click', '#media_gallery_content .item.video-item', function () {
-                $('.video-create-button').hide();
-                $('.video-delete-button').show();
-                $('.video-edit').show();
-                $('.mage-new-video-dialog').createVideoPlayer({
+            this._gallery.on('click', '.item.video-item', function () {
+                modal.find('.video-create-button').hide();
+                modal.find('.video-delete-button').show();
+                modal.find('.video-edit').show();
+                modal.find('.mage-new-video-dialog').createVideoPlayer({
                     reset: true
                 }).createVideoPlayer('reset');
             });
-            $(document).on('click', '#media_gallery_content .item.video-item:not(.removed)', function () {
+            this._gallery.on('click', '.item.video-item:not(.removed)', function () {
                 var flagChecked,
                     file,
-                    formFields = $(self._videoFormSelector).find('.edited-data'),
+                    formFields = modal.find('.edited-data'),
                     container = $(this);
 
                 $.each(formFields, function (i, field) {
@@ -1167,15 +1244,15 @@ define([
                 });
 
                 flagChecked = container.find('input[name*="disabled"]').val() > 0;
-                $(self._videoDisableinputSelector).attr('checked', flagChecked);
+                self._gallery.find(self._videoDisableinputSelector).attr('checked', flagChecked);
 
-                file = $('#file_name').val(container.find('input[name*="file"]').val());
+                file = self._gallery.find('#file_name').val(container.find('input[name*="file"]').val());
 
-                $.each($('.video_image_role'), function () {
+                $.each(self._gallery.find('.video_image_role'), function () {
                     $(this).prop('checked', false).prop('disabled', false);
                 });
 
-                $.each($('.image-placeholder').siblings('input:hidden'), function () {
+                $.each(self._gallery.find('.image-placeholder').siblings('input:hidden'), function () {
                     var start, end, imageRole;
 
                     if ($(this).val() !== file.val()) {
@@ -1185,7 +1262,7 @@ define([
                     start = this.name.indexOf('[') + 1;
                     end = this.name.length - 1;
                     imageRole = this.name.substring(start, end);
-                    $('input[value="' + imageRole + '"]').prop('checked', true);
+                    self._gallery.find('input[value="' + imageRole + '"]').prop('checked', true);
                 });
             });
         }

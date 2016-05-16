@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\AdminOrder;
@@ -206,11 +206,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'region_id' => 1,
             ]
         );
-        $this->assertEquals(
-            $expectedAddressData,
-            $this->_model->getBillingAddress()->getData(),
-            'Created billing address is invalid.'
-        );
+
+        $result = $this->_model->getBillingAddress()->getData();
+        foreach ($expectedAddressData as $key => $value) {
+            $this->assertArrayHasKey($key, $result);
+            $this->assertEquals($value, $result[$key]);
+        }
     }
 
     /**

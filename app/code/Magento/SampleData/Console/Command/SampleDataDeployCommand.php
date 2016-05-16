@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,6 +35,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * @var ArrayInputFactory
+     * @deprecated
      */
     private $arrayInputFactory;
 
@@ -88,8 +89,7 @@ class SampleDataDeployCommand extends Command
             }
             $commonArgs = array_merge(['packages' => $packages], $commonArgs);
             $arguments = array_merge(['command' => 'require'], $commonArgs);
-            /** @var ArrayInput $commandInput */
-            $commandInput = $this->arrayInputFactory->create(['parameters' => $arguments]);
+            $commandInput = new ArrayInput($arguments);
 
             /** @var Application $application */
             $application = $this->applicationFactory->create();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -75,7 +75,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Framework\Model\EntityManager
+     * @var \Magento\Framework\EntityManager\EntityManager
      */
     protected $entityManager;
 
@@ -91,8 +91,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Model\EntityManager $entityManager
-     * @param array $associatedEntitiesMap
      * @param null $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -107,8 +105,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Model\EntityManager $entityManager,
-        array $associatedEntitiesMap = [],
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
@@ -120,8 +116,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->_logger = $logger;
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
-        $this->entityManager = $entityManager;
-        $this->_associatedEntitiesMap = $associatedEntitiesMap;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
         parent::__construct($context, $connectionName);
     }
 
@@ -232,11 +227,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        $this->entityManager->load('Magento\CatalogRule\Api\Data\RuleInterface', $object, $value);
-
-        $this->unserializeFields($object);
-        $this->_afterLoad($object);
-
+        $this->getEntityManager()->load($object, $value);
         return $this;
     }
 
@@ -247,42 +238,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-
-        $this->beginTransaction();
-
-        try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-
-                $this->entityManager->save(
-                    'Magento\CatalogRule\Api\Data\RuleInterface',
-                    $object
-                );
-
-                $this->unserializeFields($object);
-                $this->processAfterSaves($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
+        $this->getEntityManager()->save($object);
         return $this;
     }
 
@@ -295,20 +251,34 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function delete(AbstractModel $object)
     {
-        $this->transactionManager->start($this->getConnection());
-        try {
-            $object->beforeDelete();
-            $this->_beforeDelete($object);
-            $this->entityManager->delete('Magento\CatalogRule\Api\Data\RuleInterface', $object);
-            $this->_afterDelete($object);
-            $object->isDeleted(true);
-            $object->afterDelete();
-            $this->transactionManager->commit();
-            $object->afterDeleteCommit();
-        } catch (\Exception $exception) {
-            $this->transactionManager->rollBack();
-            throw $exception;
-        }
+        $this->getEntityManager()->delete($object);
         return $this;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    private function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\EntityManager
+     * @deprecated
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+        }
+        return $this->entityManager;
     }
 }

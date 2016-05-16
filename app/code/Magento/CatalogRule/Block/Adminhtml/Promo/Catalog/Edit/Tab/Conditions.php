@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tab;
@@ -153,7 +153,7 @@ class Conditions extends Generic implements TabInterface
 
         $renderer = $this->_rendererFieldset->setTemplate('Magento_CatalogRule::promo/fieldset.phtml')
             ->setNewChildUrl($newChildUrl)
-            ->setConditionsFieldSetId($model->getConditionsFieldSetId($formName));
+            ->setFieldSetId($model->getConditionsFieldSetId($formName));
 
         $fieldset = $form->addFieldset(
             $fieldsetId,
@@ -187,6 +187,7 @@ class Conditions extends Generic implements TabInterface
     private function setConditionFormName(\Magento\Rule\Model\Condition\AbstractCondition $conditions, $formName)
     {
         $conditions->setFormName($formName);
+        $conditions->setJsFormObject($formName);
         if ($conditions->getConditions() && is_array($conditions->getConditions())) {
             foreach ($conditions->getConditions() as $condition) {
                 $this->setConditionFormName($condition, $formName);

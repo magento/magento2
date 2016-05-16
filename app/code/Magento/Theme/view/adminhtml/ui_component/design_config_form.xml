@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">design_config_form.design_config_form_data_source</item>
+            <item name="deps" xsi:type="string">design_config_form.design_config_form_data_source</item>
+        </item>
+        <item name="config" xsi:type="array">
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">design_config_form</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Theme Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\BackButton</item>
+            <item name="save" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveButton</item>
+            <item name="save_and_continue" xsi:type="string">Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveAndContinueButton</item>
+        </item>
+    </argument>
+    <dataSource name="design_config_form_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Magento\Theme\Model\Design\Config\DataProvider</argument>
+            <argument name="name" xsi:type="string">design_config_form_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">scope</argument>
+            <argument name="requestFieldName" xsi:type="string">scope</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="theme/design_config/save"/>
+                    <item name="clientConfig" xsi:type="array">
+                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+    <fieldset name="other_settings">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Other Settings</item>
+                <item name="sortOrder" xsi:type="number">30</item>
+            </item>
+        </argument>
+        <fieldset name="head">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">HTML Head</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="level" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <field name="head_shortcut_icon">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Favicon Icon</item>
+                        <item name="formElement" xsi:type="string">fileUploader</item>
+                        <item name="componentType" xsi:type="string">fileUploader</item>
+                        <item name="notice" xsi:type="string" translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng, svg. Not all browsers support all these formats!</item>
+                        <item name="maxFileSize" xsi:type="number">2097152</item>
+                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
+                        <item name="uploaderConfig" xsi:type="array">
+                            <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="head_default_title">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Default Title</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">head_default_title</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="head_title_prefix">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Title Prefix</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">head_title_prefix</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="head_title_suffix">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Title Suffix</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">head_title_suffix</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="head_default_description">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Default Description</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">textarea</item>
+                        <item name="dataScope" xsi:type="string">head_default_description</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="head_default_keywords">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Default Keywords</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">textarea</item>
+                        <item name="dataScope" xsi:type="string">head_default_keywords</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="head_includes">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Scripts and Style Sheets</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">textarea</item>
+                        <item name="dataScope" xsi:type="string">head_includes</item>
+                        <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="head_demonotice">
+                <argument name="data" xsi:type="array">
+                    <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Display Demo Store Notice</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="dataScope" xsi:type="string">head_demonotice</item>
+                    </item>
+                </argument>
+            </field>
+        </fieldset>
+        <fieldset name="header">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Header</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="level" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <field name="header_logo_src">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Logo Image</item>
+                        <item name="formElement" xsi:type="string">fileUploader</item>
+                        <item name="componentType" xsi:type="string">fileUploader</item>
+                        <item name="notice" xsi:type="string" translate="true">Allowed file types: png, gif, jpg, jpeg, svg.</item>
+                        <item name="maxFileSize" xsi:type="number">2097152</item>
+                        <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
+                        <item name="uploaderConfig" xsi:type="array">
+                            <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="header_logo_width">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Logo Image Width</item>
+                        <item name="dataType" xsi:type="string">number</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">header_logo_width</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-digits" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="header_logo_height">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Logo Image Height</item>
+                        <item name="dataType" xsi:type="string">number</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">header_logo_height</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-digits" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="header_welcome">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Welcome Text</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">header_welcome</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+            <field name="header_logo_alt">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Logo Image Alt</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">header_logo_alt</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+        </fieldset>
+        <fieldset name="footer">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Footer</item>
+                    <item name="collapsible" xsi:type="boolean">true</item>
+                    <item name="level" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <field name="footer_absolute_footer">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Miscellaneous HTML</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">textarea</item>
+                        <item name="dataScope" xsi:type="string">footer_absolute_footer</item>
+                        <item name="notice" xsi:type="string" translate="true">This will be displayed just before the body closing tag.</item>
+                    </item>
+                </argument>
+            </field>
+            <field name="footer_copyright">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Copyright</item>
+                        <item name="dataType" xsi:type="string">text</item>
+                        <item name="formElement" xsi:type="string">textarea</item>
+                        <item name="dataScope" xsi:type="string">footer_copyright</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+        </fieldset>
+    </fieldset>
+</form>

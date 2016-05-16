@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -129,6 +129,18 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->prepareObjectManager([
+            [
+                'Magento\Framework\Api\ExtensionAttributesFactory',
+                $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\Api\AttributeValueFactory',
+                $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false)
+            ],
+        ]);
+
         $this->rule = $this->objectManagerHelper->getObject(
             'Magento\CatalogRule\Model\Rule',
             [
@@ -163,7 +175,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             'created_at' => '2014-06-25 13:14:30',
             'updated_at' => '2014-06-25 14:37:15'
         ];
-        $this->storeManager->expects($this->any())->method('getWebsites')->with(true)
+        $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
             ->will($this->returnValue([$this->websiteModel, $this->websiteModel]));
         $this->websiteModel->expects($this->at(0))->method('getId')
             ->will($this->returnValue('1'));
@@ -362,5 +374,21 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->rule->setId(100);
         $expectedResult = 'form_namerule_conditions_fieldset_100';
         $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

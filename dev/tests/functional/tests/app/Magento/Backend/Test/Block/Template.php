@@ -1,7 +1,7 @@
 <?php
 /**
  * @api
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,7 +36,7 @@ class Template extends Block
     protected $loaderOld = '#loading-mask #loading_mask_loader';
 
     /**
-     * Wait until loader will be disappeared.
+     * Wait until loader disappears.
      *
      * @return void
      */

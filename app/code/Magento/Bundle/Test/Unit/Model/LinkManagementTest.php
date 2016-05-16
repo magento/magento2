@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@
 namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Bundle\Model\LinkManagement;
 
 /**
  * Class LinkManagementTest
@@ -100,12 +101,12 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataMock;
 
@@ -158,10 +159,10 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             '\Magento\Bundle\Model\ResourceModel\Option\CollectionFactory', ['create'], [], '', false
         );
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\EntityMetadata')
+        $this->metadataMock = $this->getMockBuilder('\Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')
@@ -172,7 +173,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $helper->getObject(
-            '\Magento\Bundle\Model\LinkManagement',
+            LinkManagement::class,
             [
                 'productRepository' => $this->productRepository,
                 'linkFactory' => $this->linkFactory,
@@ -181,9 +182,12 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
                 'optionCollection' => $this->optionCollectionFactoryMock,
                 'storeManager' => $this->storeManagerMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
-                'metadataPool' => $this->metadataPoolMock
             ]
         );
+        $refClass = new \ReflectionClass(LinkManagement::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
     public function testGetChildren()
@@ -413,6 +417,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with($this->linkField)
             ->willReturn($this->linkField);
+        $productMock->expects($this->any())->method('getCopyFromView')->will($this->returnValue(false));
 
         $linkedProductMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $linkedProductMock->expects($this->any())->method('getEntityId')->will($this->returnValue(13));
@@ -1043,7 +1048,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
 
         $this->optionCollection->expects($this->any())->method('appendSelections')
-            ->with($this->equalTo([]))
+            ->with($this->equalTo([]), true)
             ->will($this->returnValue([$this->option]));
     }
 }

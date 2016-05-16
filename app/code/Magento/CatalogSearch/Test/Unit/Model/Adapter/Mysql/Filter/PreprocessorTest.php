@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Filter;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -21,6 +21,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogSearch\Model\Search\TableMapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $tableMapper;
+
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
@@ -143,7 +144,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->tableMapper = $this->getMockBuilder('\Magento\CatalogSearch\Model\Search\TableMapper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\Model\Entity\MetadataPool::class)
+        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 

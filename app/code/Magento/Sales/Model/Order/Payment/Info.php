@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -226,9 +226,6 @@ class Info extends AbstractModel implements InfoInterface
     {
         $additionalInfo = $this->getData('additional_information');
         if (empty($this->additionalInformation) && $additionalInfo) {
-            if (!is_array($additionalInfo)) {
-                $additionalInfo = unserialize($additionalInfo);
-            }
             $this->additionalInformation = $additionalInfo;
         }
     }

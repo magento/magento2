@@ -1,11 +1,11 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @product-name-link__color: @text__color;
 @product-name-link__color__active: @text__color;
@@ -19,8 +19,6 @@
 
 @product-item__hover__background-color: @color-white;
 @product-item__hover__box-shadow: 3px 3px 4px 0 rgba(0, 0, 0, .3);
-
-//
 
 //
 //  Common
@@ -49,13 +47,13 @@
 
             &-name {
                 &:extend(.abs-product-link all);
+                -moz-hyphens: auto;
+                -ms-hyphens: auto;
+                -webkit-hyphens: auto;
                 display: block;
+                hyphens: auto;
                 margin: @indent__xs 0;
                 word-wrap: break-word;
-                -webkit-hyphens: auto;
-                   -moz-hyphens: auto;
-                    -ms-hyphens: auto;
-                        hyphens: auto;
             }
 
             &-info {
@@ -105,6 +103,7 @@
                 
                 .price {
                     font-weight: @font-weight__bold;
+                    white-space: nowrap;
                 }
                 
                 .price-label {
@@ -327,7 +326,7 @@
 
         .product-item-actions {
             position: relative;
-            z-index: 2;
+            z-index: 1;
         }
     }
 
@@ -424,11 +423,11 @@
             }
             
             .product-item {
-                margin-left: calc(~"(100% - 4 * 24.439%) / 3");
+                margin-left: calc(~'(100% - 4 * 24.439%) / 3');
                 padding: 0;
                 width: 24.439%;
 
-                &:nth-child(4n+1) {
+                &:nth-child(4n + 1) {
                     margin-left: 0;
                 }
             }
@@ -455,7 +454,7 @@
                         margin-left: 1%;
                     }
 
-                    &:nth-child(3n+1) {
+                    &:nth-child(3n + 1) {
                         margin-left: 0;
                     }
                 }

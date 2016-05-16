@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -89,14 +89,11 @@
 
                     img {
                         -webkit-filter: grayscale(0%);
-                        filter: grayscale(0%);
-                        filter: none;
                     }
                 }
 
                 &._inactive {
-                    opacity: 0.4;
-                    filter: alpha(opacity=40);
+                    opacity: .4;
                 }
 
                 span {
@@ -109,8 +106,6 @@
             img {
                 -webkit-filter: grayscale(100%); // For Webkit browsers
                 -webkit-transition: all .6s ease; // Fade to color for Chrome and Safari
-                filter: grayscale(100%);
-                filter: gray; // For IE 6 - 9
             }
         }
 

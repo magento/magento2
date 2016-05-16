@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -7,8 +7,9 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
+    'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig) {
+], function ($, _, ko, sectionConfig, mageStorage) {
     'use strict';
 
     var options,
@@ -93,10 +94,17 @@ define([
      * @return {*}
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
-        storage.remove(sectionName);
+        var sectionDataIds, newSectionDataIds = {};
         target.subscribe(function () {
             setTimeout(function () {
                 storage.remove(sectionName);
+                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
+                _.each(sectionDataIds, function (data, name) {
+                    if (name != sectionName) {
+                        newSectionDataIds[name] = data;
+                    }
+                });
+                $.cookieStorage.set('section_data_ids', newSectionDataIds);
             }, 3000);
         });
 
@@ -166,7 +174,9 @@ define([
         remove: function (sections) {
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
-                storageInvalidation.set(sectionName, true);
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    storageInvalidation.set(sectionName, true);
+                }
             });
         }
     };
@@ -178,7 +188,21 @@ define([
          */
         init: function() {
             var countryData,
-                privateContent = $.cookieStorage.get('private_content_version');
+                privateContent = $.cookieStorage.get('private_content_version'),
+                updateSession = $.cookieStorage.get('update_customer_session');
+            if (updateSession) {
+                mageStorage.post(
+                    options.updateSessionUrl,
+                    JSON.stringify({
+                        'customer_id': updateSession,
+                        'form_key': window.FORM_KEY
+                    })
+                ).done(
+                    function () {
+                        $.cookieStorage.setConf({path: '/', expires: -1}).set('update_customer_session', null);
+                    }
+                );
+            }
 
             if (_.isEmpty(storage.keys())) {
                 if (!_.isEmpty(privateContent)) {
@@ -202,7 +226,7 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
                 if (_.isEmpty(countryData())) {
-                    countryData(customerData.reload(['directory-data'], false));
+                    customerData.reload(['directory-data'], false);
                 }
             }
         },
@@ -304,7 +328,9 @@ define([
 
             // Invalidate section in cookie (increase version of section with 1000)
             _.each(sectionsNamesForInvalidation, function (sectionName) {
-                sectionDataIds[sectionName] += 1000;
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    sectionDataIds[sectionName] += 1000;
+                }
             });
             $.cookieStorage.set('section_data_ids', sectionDataIds);
         },

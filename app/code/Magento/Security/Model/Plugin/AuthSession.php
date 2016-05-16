@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model\Plugin;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Security\Model\AdminSessionsManager;
-use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 
 /**
  * Magento\Backend\Model\Auth\Session decorator
@@ -17,39 +16,39 @@ class AuthSession
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected $request;
+    private $request;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var AdminSessionsManager
      */
-    protected $sessionsManager;
+    private $sessionsManager;
 
     /**
-     * @var \Magento\Security\Helper\SecurityCookie
+     * @var \Magento\Security\Model\SecurityCookie
      */
-    protected $securityCookieHelper;
+    protected $securityCookie;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
-     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     * @param \Magento\Security\Model\SecurityCookie $securityCookie
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+        \Magento\Security\Model\SecurityCookie $securityCookie
     ) {
         $this->request = $request;
         $this->messageManager = $messageManager;
         $this->sessionsManager = $sessionsManager;
-        $this->securityCookieHelper = $securityCookieHelper;
+        $this->securityCookie = $securityCookie;
     }
 
     /**
@@ -61,16 +60,14 @@ class AuthSession
      */
     public function aroundProlong(Session $session, \Closure $proceed)
     {
-        if (!$this->isSessionCheckRequest()) {
-            if (!$this->sessionsManager->getCurrentSession()->isActive()) {
-                $session->destroy();
-                $this->addUserLogoutNotification();
-                return null;
-            }
-            $result = $proceed();
-            $this->sessionsManager->processProlong();
-            return $result;
+        if (!$this->sessionsManager->getCurrentSession()->isLoggedInStatus()) {
+            $session->destroy();
+            $this->addUserLogoutNotification();
+            return null;
         }
+        $result = $proceed();
+        $this->sessionsManager->processProlong();
+        return $result;
     }
 
     /**
@@ -78,29 +75,17 @@ class AuthSession
      *
      * @return $this
      */
-    protected function addUserLogoutNotification()
+    private function addUserLogoutNotification()
     {
         if ($this->isAjaxRequest()) {
-            $this->securityCookieHelper->setLogoutReasonCookie(
+            $this->securityCookie->setLogoutReasonCookie(
                 $this->sessionsManager->getCurrentSession()->getStatus()
             );
-        } else {
-            $this->messageManager->addError(
-                $this->sessionsManager->getLogoutReasonMessage()
-            );
+        } else if ($message = $this->sessionsManager->getLogoutReasonMessage()) {
+            $this->messageManager->addError($message);
         }
 
         return $this;
-    }
-
-    /**
-     * Check if a request is session check
-     *
-     * @return bool
-     */
-    protected function isSessionCheckRequest()
-    {
-        return $this->request->getModuleName() == 'security' && $this->request->getActionName() == 'check';
     }
 
     /**
@@ -108,7 +93,7 @@ class AuthSession
      *
      * @return bool
      */
-    protected function isAjaxRequest()
+    private function isAjaxRequest()
     {
         return (bool) $this->request->getParam('isAjax');
     }

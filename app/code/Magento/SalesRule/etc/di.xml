@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -42,22 +42,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesRule\Model\ResourceModel\Rule\Collection" shared="false">
-        <arguments>
-            <argument name="associatedEntitiesMap" xsi:type="array">
-                <item name="website" xsi:type="array">
-                    <item name="associations_table" xsi:type="string">salesrule_website</item>
-                    <item name="rule_id_field" xsi:type="string">rule_id</item>
-                    <item name="entity_id_field" xsi:type="string">website_id</item>
-                </item>
-                <item name="customer_group" xsi:type="array">
-                    <item name="associations_table" xsi:type="string">salesrule_customer_group</item>
-                    <item name="rule_id_field" xsi:type="string">rule_id</item>
-                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
+    <type name="Magento\SalesRule\Model\ResourceModel\Rule\Collection" shared="false" />
     <type name="Magento\Quote\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
     </type>
@@ -90,23 +75,14 @@
             <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
-    <type name="Magento\SalesRule\Model\ResourceModel\Rule">
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
-            <argument name="associatedEntitiesMap" xsi:type="array">
-                <item name="website" xsi:type="array">
-                    <item name="associations_table" xsi:type="string">salesrule_website</item>
-                    <item name="rule_id_field" xsi:type="string">rule_id</item>
-                    <item name="entity_id_field" xsi:type="string">website_id</item>
-                </item>
-                <item name="customer_group" xsi:type="array">
-                    <item name="associations_table" xsi:type="string">salesrule_customer_group</item>
-                    <item name="rule_id_field" xsi:type="string">rule_id</item>
-                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
-                </item>
+            <argument name="entities" xsi:type="array">
+                <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="string">Magento\SalesRule\Api\RuleRepositoryInterface</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\Entity\MetadataPool">
+    <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="array">
@@ -116,19 +92,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\OrchestratorPool">
-        <arguments>
-            <argument name="operations" xsi:type="array">
-                <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="string">Magento\Framework\Model\Operation\Write\Create</item>
-                    <item name="update" xsi:type="string">Magento\Framework\Model\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="string">Magento\Framework\Model\Operation\Write\Delete</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+    <type name="Magento\Framework\EntityManager\Operation\AttributePool">
         <arguments>
             <argument name="extensionActions" xsi:type="array">
                 <item name="salesRule" xsi:type="array">
@@ -187,6 +151,30 @@
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="form_name" xsi:type="string">sales_rule_form</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap" type="Magento\Framework\DataObject">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="website" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_website</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">website_id</item>
+                </item>
+                <item name="customer_group" xsi:type="array">
+                    <item name="associations_table" xsi:type="string">salesrule_customer_group</item>
+                    <item name="rule_id_field" xsi:type="string">rule_id</item>
+                    <item name="entity_id_field" xsi:type="string">customer_group_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\SalesRule\Api\Data\RuleInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\SalesRule\Api\Data\CouponInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
             </argument>
         </arguments>
     </type>

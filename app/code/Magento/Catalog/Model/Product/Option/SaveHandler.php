@@ -1,24 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface as OptionRepository;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
  */
-class SaveHandler
+class SaveHandler implements ExtensionInterface
 {
-    /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
     /**
      * @var OptionRepository
      */
@@ -29,20 +23,18 @@ class SaveHandler
      * @param MetadataPool $metadataPool
      */
     public function __construct(
-        OptionRepository $optionRepository,
-        MetadataPool $metadataPool
+        OptionRepository $optionRepository
     ) {
         $this->optionRepository = $optionRepository;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
-     * @return object
+     * @param array $arguments
+     * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    public function execute($entity, $arguments = [])
     {
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($this->optionRepository->getProductOptions($entity) as $option) {

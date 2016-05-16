@@ -1,7 +1,8 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
+
 //
 //  Main elements -> Actions bar
 //  _____________________________________________
@@ -30,6 +31,10 @@
         .store-switcher {
             display: none;
         }
+        
+        .page-actions-placeholder {
+            min-height: 50px;
+        }
     }
 }
 
@@ -47,7 +52,7 @@
             position: fixed;
             right: 0;
             top: 0;
-            z-index: @page-actions__fixed__z-index + 1;
+            z-index: @page-actions__fixed__z-index + 101;
 
             .page-actions-inner {
                 &:before {
@@ -95,6 +100,11 @@
             &:extend(.abs-action-primary all);
             &:extend(.abs-action-l all);
             .lib-vendor-prefix-order(2);
+        }
+
+        &.action-secondary {
+            &:extend(.abs-action-secondary all);
+            &:extend(.abs-action-l all);
         }
 
         &.save {

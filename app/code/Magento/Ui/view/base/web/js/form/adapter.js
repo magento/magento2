@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -9,10 +9,10 @@ define([
     'use strict';
 
     var buttons = {
-        'reset':            '#reset',
-        'save':             '#save',
-        'saveAndContinue':  '#save_and_continue'
-    },
+            'reset':            '#reset',
+            'save':             '#save',
+            'saveAndContinue':  '#save_and_continue'
+        },
         selectorPrefix = '',
         eventPrefix;
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,12 +39,17 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
      * @param CatalogRule $catalogPriceRule
      * @param string $product
      * @param string $conditionEntity
+     * @param bool $isWithApply
      * @param Customer $customer
      * @return array
      */
-    public function testCreate(CatalogRule $catalogPriceRule, $product, $conditionEntity, Customer $customer = null)
-    {
-        $this->markTestIncomplete('MAGETWO-48731');
+    public function testCreate(
+        CatalogRule $catalogPriceRule,
+        $product,
+        $conditionEntity,
+        $isWithApply = true,
+        Customer $customer = null
+    ) {
         /** @var CatalogProductSimple $productSimple */
         $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => $product]);
         // Prepare data
@@ -61,8 +66,10 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->save();
 
-        // Apply Catalog Price Rule
-        $this->catalogRuleIndex->getGridPageActions()->applyRules();
+        if ($isWithApply) {
+            // Apply Catalog Price Rule
+            $this->catalogRuleIndex->getGridPageActions()->applyRules();
+        }
 
         // Create simple product
         $productSimple->persist();

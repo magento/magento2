@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -209,14 +209,13 @@
 }
 
 //  Messages in tooltip
-
 .admin__page-nav-item-messages {
     display: inline-block;
 
     .admin__page-nav-item-message-tooltip {
         background: @admin__page-nav-tooltip__background;
-        border-radius: 1px;
         border: 1px solid @admin__page-nav-tooltip__background;
+        border-radius: 1px;
         bottom: 3.7rem;
         box-shadow: @admin__page-nav-tooltip__box-shadow;
         display: none;
@@ -299,29 +298,29 @@
         padding-left: .8em;
         vertical-align: baseline;
 
-            &:after {
-                color: @admin__page-nav-link__changed__color;
-                content: @admin__page-nav-icon-changed__content;
-            }
+        &:after {
+            color: @admin__page-nav-link__changed__color;
+            content: @admin__page-nav-icon-changed__content;
+        }
+    }
+}
+
+&._changed {
+    ._changed:not(._error) > .admin__page-nav-item-messages & {
+        display: inline-block;
+    }
+}
+
+&._error {
+    .admin__page-nav-item-message-icon {
+        &:after {
+            color: @admin__page-nav-icon-error__color;
+            content: @admin__page-nav-icon-error__content;
         }
     }
 
-    &._changed {
-        ._changed:not(._error) > .admin__page-nav-item-messages & {
-            display: inline-block;
-        }
-    }
-
-    &._error {
-        .admin__page-nav-item-message-icon {
-            &:after {
-                color: @admin__page-nav-icon-error__color;
-                content: @admin__page-nav-icon-error__content;
-            }
-        }
-
-        ._error > .admin__page-nav-item-messages & {
-            display: inline-block;
+    ._error > .admin__page-nav-item-messages & {
+        display: inline-block;
 
         .spinner {
             font-size: @admin__page-nav-item-message-loader__font-size;

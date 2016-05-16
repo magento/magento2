@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,6 +43,8 @@ class DataProvider
     {
         $result['category_view_optimization']['arguments']['data']['disabled'] =
             !$this->_helper->isGoogleExperimentActive();
+        $result['category_view_optimization']['arguments']['data']['config']['componentType'] =
+            \Magento\Ui\Component\Form\Fieldset::NAME;
 
         return $result;
     }

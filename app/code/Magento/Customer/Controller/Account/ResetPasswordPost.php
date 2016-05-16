@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -10,6 +10,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Exception\InputException;
 
 class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
@@ -77,10 +78,15 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount
             $this->messageManager->addSuccess(__('You updated your password.'));
             $resultRedirect->setPath('*/*/login');
             return $resultRedirect;
+        } catch (InputException $e) {
+            $this->messageManager->addError($e->getMessage());
+            foreach ($e->getErrors() as $error) {
+                $this->messageManager->addError($error->getMessage());
+            }
         } catch (\Exception $exception) {
             $this->messageManager->addError(__('Something went wrong while saving the new password.'));
-            $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
-            return $resultRedirect;
         }
+        $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
+        return $resultRedirect;
     }
 }

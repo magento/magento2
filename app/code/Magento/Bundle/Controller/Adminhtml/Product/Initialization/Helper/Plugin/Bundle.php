@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -73,7 +73,7 @@ class Bundle
     }
 
     /**
-     * Setting Bundle Items Data to product for father processing
+     * Setting Bundle Items Data to product for further processing
      *
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject
      * @param \Magento\Catalog\Model\Product $product
@@ -88,19 +88,26 @@ class Bundle
         \Magento\Catalog\Model\Product $product
     ) {
         $compositeReadonly = $product->getCompositeReadonly();
-        $selections = $this->request->getPost('bundle_selections');
-        if ($selections && !$compositeReadonly) {
-            $product->setBundleSelectionsData($selections);
+        $result['bundle_selections'] = $result['bundle_options'] = [];
+        if (isset($this->request->getPost('bundle_options')['bundle_options'])) {
+            foreach ($this->request->getPost('bundle_options')['bundle_options'] as $key => $option) {
+                if (empty($option['bundle_selections'])) {
+                    continue;
+                }
+                $result['bundle_selections'][$key] = $option['bundle_selections'];
+                unset($option['bundle_selections']);
+                $result['bundle_options'][$key] = $option;
+            }
+            if ($result['bundle_selections'] && !$compositeReadonly) {
+                $product->setBundleSelectionsData($result['bundle_selections']);
+            }
+
+            if ($result['bundle_options'] && !$compositeReadonly) {
+                $product->setBundleOptionsData($result['bundle_options']);
+            }
+            $this->processBundleOptionsData($product);
+            $this->processDynamicOptionsData($product);
         }
-
-        $items = $this->request->getPost('bundle_options');
-        if ($items && !$compositeReadonly) {
-            $product->setBundleOptionsData($items);
-        }
-
-        $this->processBundleOptionsData($product);
-
-        $this->processDynamicOptionsData($product);
 
         $affectProductSelections = (bool)$this->request->getPost('affect_bundle_product_selections');
         $product->setCanSaveBundleSelections($affectProductSelections && !$compositeReadonly);
@@ -123,6 +130,7 @@ class Bundle
             if ((bool)$optionData['delete']) {
                 continue;
             }
+
             $option = $this->optionFactory->create(['data' => $optionData]);
             $option->setSku($product->getSku());
             $option->setOptionId(null);
@@ -139,12 +147,13 @@ class Bundle
                 }
                 $link = $this->linkFactory->create(['data' => $linkData]);
 
-                if (array_key_exists('selection_price_value', $linkData)) {
-                    $link->setPrice($linkData['selection_price_value']);
-                }
-
-                if (array_key_exists('selection_price_type', $linkData)) {
-                    $link->setPriceType($linkData['selection_price_type']);
+                if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+                    if (array_key_exists('selection_price_value', $linkData)) {
+                        $link->setPrice($linkData['selection_price_value']);
+                    }
+                    if (array_key_exists('selection_price_type', $linkData)) {
+                        $link->setPriceType($linkData['selection_price_type']);
+                    }
                 }
 
                 $linkProduct = $this->productRepository->getById($linkData['product_id']);
@@ -172,7 +181,7 @@ class Bundle
      */
     protected function processDynamicOptionsData(\Magento\Catalog\Model\Product $product)
     {
-        if ($product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+        if ((int)$product->getPriceType() !== \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
             return;
         }
 

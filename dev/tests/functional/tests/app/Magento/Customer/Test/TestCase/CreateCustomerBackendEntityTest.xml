@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -27,7 +27,7 @@
             <data name="customer/data/lastname" xsi:type="string">Doe%isolation%</data>
             <data name="customer/data/suffix" xsi:type="string">S</data>
             <data name="customer/data/email" xsi:type="string">JohnDoe%isolation%@example.com</data>
-            <data name="customer/data/dob" xsi:type="string">03/16/2004</data>
+            <data name="customer/data/dob" xsi:type="string">Mar 16, 2004</data>
             <data name="customer/data/gender" xsi:type="string">Male</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerSuccessSaveMessage" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerInGrid" />

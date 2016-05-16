@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Product\Renderer;
@@ -24,7 +24,8 @@ use Magento\Swatches\Model\Swatch;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
+class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Path to template file with Swatch renderer.
@@ -35,11 +36,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Path to default template file with standard Configurable renderer.
      */
     const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
-
-    /**
-     * When we init media gallery empty image types contain this value.
-     */
-    const EMPTY_IMAGE_VALUE = 'no_selection';
 
     /**
      * Action name for ajax request
@@ -109,6 +105,26 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             $configurableAttributeData,
             $data
         );
+    }
+
+    /**
+     * Get Key for caching block content
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return parent::getCacheKey() . '-' . $this->getProduct()->getId();
+    }
+
+    /**
+     * Get block cache life time
+     *
+     * @return int
+     */
+    protected function getCacheLifetime()
+    {
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : 3600;
     }
 
     /**
@@ -278,9 +294,15 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     {
         $variationProduct = $this->swatchHelper->loadFirstVariationWithSwatchImage(
             $this->getProduct(),
-            $attributeCode,
-            $optionId
+            [$attributeCode => $optionId]
         );
+
+        if (!$variationProduct) {
+            $variationProduct = $this->swatchHelper->loadFirstVariationWithImage(
+                $this->getProduct(),
+                [$attributeCode => $optionId]
+            );
+        }
 
         $variationMediaArray = [];
         if ($variationProduct) {
@@ -319,7 +341,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function isProductHasImage(Product $product, $imageType)
     {
-        return $product->getData($imageType) !== null && $product->getData($imageType) != self::EMPTY_IMAGE_VALUE;
+        return $product->getData($imageType) !== null && $product->getData($imageType) != SwatchData::EMPTY_IMAGE_VALUE;
     }
 
     /**
@@ -382,6 +404,20 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     public function getMediaCallback()
     {
-        return $this->getBaseUrl() . self::MEDIA_CALLBACK_ACTION;
+        return $this->getUrl(self::MEDIA_CALLBACK_ACTION, ['_secure' => $this->getRequest()->isSecure()]);
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        if ($this->product instanceof \Magento\Framework\DataObject\IdentityInterface) {
+            return $this->product->getIdentities();
+        } else {
+            return [];
+        }
     }
 }

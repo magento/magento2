@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -11,7 +11,7 @@
 .admin__control-radio,
 .admin__control-checkbox {
     cursor: pointer;
-    opacity: 0.01; // hack for successful selenium tests
+    opacity: .01; // hack for successful selenium tests
     overflow: hidden;
     position: absolute;
     vertical-align: top;
@@ -58,8 +58,8 @@
     &.disabled,
     &[disabled] {
         + label {
-            cursor: default;
             color: @field-control__color;
+            cursor: default;
             opacity: .5;
 
             &:before {
@@ -190,10 +190,10 @@
 //  ToDo UI: Delete with old scope
 //  ---------------------------------------------
 
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
     &.admin__control-checkbox {
-        position: absolute;
         margin: 0;
+        position: absolute;
     }
 }

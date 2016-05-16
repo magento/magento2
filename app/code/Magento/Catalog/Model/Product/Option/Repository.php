@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,8 @@ namespace Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\HydratorPool;
 
 /**
  * Class Repository
@@ -43,24 +44,29 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     protected $metadataPool;
 
     /**
+     * @var HydratorPool
+     */
+    protected $hydratorPool;
+
+    /**
+     * @var Converter
+     */
+    protected $converter;
+
+    /**
+     * Repository constructor.
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
-     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
-     * @param MetadataPool $metadataPool
+     * @param Converter $converter
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
-        \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
-        MetadataPool $metadataPool
+        \Magento\Catalog\Model\Product\Option\Converter $converter
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
-        $this->optionFactory = $optionFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->metadataPool = $metadataPool;
+        $this->converter = $converter;
     }
 
     /**
@@ -77,7 +83,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function getProductOptions(ProductInterface $product, $requiredOnly = false)
     {
-        return $this->collectionFactory->create()->getProductOptions(
+        return $this->getCollectionFactory()->create()->getProductOptions(
             $product->getEntityId(),
             $product->getStoreId(),
             $requiredOnly
@@ -113,10 +119,12 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Catalog\Api\Data\ProductInterface $duplicate
     ) {
+        $hydrator = $this->getHydratorPool()->getHydrator(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         return $this->optionResource->duplicate(
-            $this->optionFactory->create([]),
-            $product->getId(),
-            $duplicate->getId()
+            $this->getOptionFactory()->create([]),
+            $hydrator->extract($product)[$metadata->getLinkField()],
+            $hydrator->extract($duplicate)[$metadata->getLinkField()]
         );
     }
 
@@ -125,8 +133,12 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
-        $product = $this->productRepository->get($option->getProductSku());
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $productSku = $option->getProductSku();
+        if (!$productSku) {
+            throw new CouldNotSaveException(__('ProductSku should be specified'));
+        }
+        $product = $this->productRepository->get($productSku);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $option->setData('product_id', $product->getData($metadata->getLinkField()));
         $option->setOptionId(null);
         $option->save();
@@ -181,5 +193,57 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         }
 
         return $newValues;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Product\OptionFactory
+     * @deprecated
+     */
+    private function getOptionFactory()
+    {
+        if (null === $this->optionFactory) {
+            $this->optionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\OptionFactory');
+        }
+        return $this->optionFactory;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
+     * @deprecated
+     */
+    private function getCollectionFactory()
+    {
+        if (null === $this->collectionFactory) {
+            $this->collectionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory');
+        }
+        return $this->collectionFactory;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @deprecated
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\HydratorPool
+     * @deprecated
+     */
+    private function getHydratorPool()
+    {
+        if (null === $this->hydratorPool) {
+            $this->hydratorPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\HydratorPool');
+        }
+        return $this->hydratorPool;
     }
 }

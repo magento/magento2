@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -8,7 +8,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .form.wishlist.items {
         .actions-toolbar {
             &:extend(.abs-reset-left-margin all);
@@ -342,11 +341,11 @@
             }
 
             .product-item {
-                margin-left: calc(~"(100% - 4 * 24.439%) / 3");
+                margin-left: calc(~'(100% - 4 * 24.439%) / 3');
                 padding: 0;
                 width: 24.439%;
 
-                &:nth-child(4n+1) {
+                &:nth-child(4n + 1) {
                     margin-left: 0;
                 }
             }

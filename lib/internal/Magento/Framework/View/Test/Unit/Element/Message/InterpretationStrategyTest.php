@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Test\Unit\Element\Message;
@@ -38,7 +38,7 @@ class InterpretationStrategyTest extends \PHPUnit_Framework_TestCase
      */
     private $interpretationStrategy;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->renderersPool = $this->getMockBuilder(
             'Magento\Framework\View\Element\Message\Renderer\RenderersPool'

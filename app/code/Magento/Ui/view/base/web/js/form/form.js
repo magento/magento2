@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -7,19 +7,38 @@ define([
     'Magento_Ui/js/lib/spinner',
     'rjsResolver',
     './adapter',
-    'uiCollection'
-], function (_, loader, resolver, adapter, Collection) {
+    'uiCollection',
+    'mageUtils',
+    'jquery',
+    'Magento_Ui/js/core/app',
+    'mage/validation'
+], function (_, loader, resolver, adapter, Collection, utils, $, app) {
     'use strict';
+
+    /**
+     * Format params
+     *
+     * @param {Object} params
+     * @returns {Array}
+     */
+    function prepareParams(params) {
+        var result = '?';
+
+        _.each(params, function (value, key) {
+            result += key + '=' + value + '&';
+        });
+
+        return result.slice(0, -1);
+    }
 
     /**
      * Collect form data.
      *
-     * @param {String} selector
+     * @param {Array} items
      * @returns {Object}
      */
-    function collectData(selector) {
-        var items = document.querySelectorAll(selector),
-            result = {};
+    function collectData(items) {
+        var result = {};
 
         items = Array.prototype.slice.call(items);
 
@@ -43,14 +62,112 @@ define([
         return result;
     }
 
+    /**
+     * Makes ajax request
+     *
+     * @param {Object} params
+     * @param {Object} data
+     * @param {String} url
+     * @returns {*}
+     */
+    function makeRequest(params, data, url) {
+        var save = $.Deferred();
+
+        data = utils.serialize(data);
+        data['form_key'] = window.FORM_KEY;
+
+        if (!url) {
+            save.resolve();
+        }
+
+        $('body').trigger('processStart');
+
+        $.ajax({
+            url: url + prepareParams(params),
+            data: data,
+            dataType: 'json',
+
+            /**
+             * Success callback.
+             * @param {Object} resp
+             * @returns {Boolean}
+             */
+            success: function (resp) {
+                if (resp.ajaxExpired) {
+                    window.location.href = resp.ajaxRedirect;
+                }
+
+                if (!resp.error) {
+                    save.resolve(resp);
+
+                    return true;
+                }
+
+                $('body').notification('clear');
+                $.each(resp.messages, function (key, message) {
+                    $('body').notification('add', {
+                        error: resp.error,
+                        message: message,
+
+                        /**
+                         * Inserts message on page
+                         * @param {String} msg
+                         */
+                        insertMethod: function (msg) {
+                            $('.page-main-actions').after(msg);
+                        }
+                    });
+                });
+            },
+
+            /**
+             * Complete callback.
+             */
+            complete: function () {
+                $('body').trigger('processStop');
+            }
+        });
+
+        return save.promise();
+    }
+
+    /**
+     * Check if fields is valid.
+     *
+     * @param {Array}items
+     * @returns {Boolean}
+     */
+    function isValidFields(items) {
+        var result = true;
+
+        _.each(items, function (item) {
+            if (!$.validator.validateSingleElement(item)) {
+                result = false;
+            }
+        });
+
+        return result;
+    }
+
     return Collection.extend({
         defaults: {
-            selectorPrefix: false,
+            additionalFields: [],
+            additionalInvalid: false,
+            selectorPrefix: '.page-content',
+            messagesClass: 'messages',
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
+            imports: {
+                reloadUrl: '${ $.provider}:reloadUrl'
+            },
             listens: {
-                selectorPrefix: 'destroyAdapter initAdapter'
+                selectorPrefix: 'destroyAdapter initAdapter',
+                '${ $.name }.${ $.reloadItem }': 'params.set reload'
+            },
+            exports: {
+                selectorPrefix: '${ $.provider }:client.selectorPrefix',
+                messagesClass: '${ $.provider }:client.messagesClass'
             }
         },
 
@@ -132,7 +249,7 @@ define([
         save: function (redirect, data) {
             this.validate();
 
-            if (!this.source.get('params.invalid')) {
+            if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.setAdditionalData(data)
                     .submit(redirect);
             }
@@ -158,7 +275,7 @@ define([
          * @param {String} redirect
          */
         submit: function (redirect) {
-            var additional = collectData(this.selector),
+            var additional = collectData(this.additionalFields),
                 source = this.source;
 
             _.each(additional, function (value, name) {
@@ -183,10 +300,11 @@ define([
          * Validates each element and returns true, if all elements are valid.
          */
         validate: function () {
+            this.additionalFields = document.querySelectorAll(this.selector);
             this.source.set('params.invalid', false);
             this.source.trigger('data.validate');
+            this.set('additionalInvalid', !isValidFields(this.additionalFields));
         },
-
 
         /**
          * Trigger reset form data.
@@ -200,6 +318,15 @@ define([
          */
         overload: function () {
             this.source.trigger('data.overload');
+        },
+
+        /**
+         * Updates data from server.
+         */
+        reload: function () {
+            makeRequest(this.params, this.data, this.reloadUrl).then(function (data) {
+                app(data, true);
+            });
         }
     });
 });

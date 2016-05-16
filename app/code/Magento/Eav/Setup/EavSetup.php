@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Setup;
@@ -609,6 +609,27 @@ class EavSetup
     }
 
     /**
+     * Retrieve Attribute Group Data by Code
+     *
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param string $code
+     * @param string $field
+     * @return mixed
+     */
+    public function getAttributeGroupByCode($entityTypeId, $setId, $code, $field = null)
+    {
+        return $this->setup->getTableRow(
+            'eav_attribute_group',
+            'attribute_group_code',
+            $code,
+            $field,
+            'attribute_set_id',
+            $this->getAttributeSetId($entityTypeId, $setId)
+        );
+    }
+
+    /**
      * Retrieve Attribute Group Id by Id or Name
      *
      * @param int|string $entityTypeId
@@ -888,7 +909,7 @@ class EavSetup
      *
      * @param int|string $entityTypeId
      * @param int|string $id
-     * @param string $field
+     * @param string|array $field
      * @param mixed $value
      * @param int $sortOrder
      * @return $this

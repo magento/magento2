@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Widget;
@@ -175,12 +175,18 @@ class Dob extends AbstractWidget
     public function getFieldHtml()
     {
         $this->dateElement->setData([
+            'extra_params' => $this->isRequired() ? 'data-validate="{required:true}"' : '',
             'name' => $this->getHtmlId(),
             'id' => $this->getHtmlId(),
             'class' => $this->getHtmlClass(),
             'value' => $this->getValue(),
             'date_format' => $this->getDateFormat(),
             'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
+            'years_range' => '-120y:c+nn',
+            'max_date' => '-1d',
+            'change_month' => 'true',
+            'change_year' => 'true',
+            'show_on' => 'both'
         ]);
         return $this->dateElement->getHtml();
     }

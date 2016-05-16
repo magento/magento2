@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -102,7 +102,7 @@ class AdminTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function assertInputExceptionMessages($e)
     {
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $e->getMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $e->getMessage());
         $errors = $e->getErrors();
         $this->assertCount(2, $errors);
         $this->assertEquals('username is a required field.', $errors[0]->getLogMessage());
