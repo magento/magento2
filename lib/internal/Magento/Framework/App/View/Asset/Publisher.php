@@ -42,7 +42,10 @@ class Publisher
      */
     public function publish(Asset\LocalInterface $asset)
     {
-        if ($this->isFileEquals($asset)) {
+        $source = $asset->getSourceFile();
+        $destination = $asset->getPath();
+
+        if ($this->isFilesEqual($source, $destination)) {
             return true;
         }
 
@@ -50,32 +53,81 @@ class Publisher
     }
 
     /**
-     * @param Asset\LocalInterface $asset
+     * @param string $source
+     * @param string $destination
      * @return bool
      */
-    public function isFileEquals(Asset\LocalInterface $asset)
+    public function isFilesEqual($source, $destination)
     {
-        $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        $source = $asset->getSourceFile();
-        $destination = $asset->getPath();
+        $destinationDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
 
-        if ($dir->isExist($source) === false) {
+        if ($this->isSourceFileExists($source) == false) {
+            return false;
+        }
+        
+        if ($this->isDestinationFileExists($destination) == false) {
             return false;
         }
 
-        if ($dir->isExist($destination) === false) {
-            return false;
-        }
-
-        $destination = $dir->getAbsolutePath($destination);
-        $sourceSum = md5_file($source);
-        $destinationSum = md5_file($destination);
+        $sourceSum = $this->getMd5FileSum($source);
+        $destination = $destinationDir->getAbsolutePath($destination);
+        $destinationSum = $this->getMd5FileSum($destination);
 
         if ($sourceSum !== $destinationSum) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * @param $destination
+     *
+     * @return bool
+     */
+    protected function isDestinationFileExists($destination)
+    {
+        $destinationDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+        $destination = $destinationDir->getRelativePath($destination);
+
+        if (empty($destination) || $destinationDir->isExist($destination) == false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $source
+     *
+     * @return bool
+     */
+    protected function isSourceFileExists($source)
+    {
+        $sourceDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $source = $sourceDir->getRelativePath($source);
+
+        if (empty($source)) {
+            return false;
+        }
+
+        if ($sourceDir->isExist($source) === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Calculate the MD5 sum for a file
+     *
+     * @param $file
+     *
+     * @return string
+     */
+    public function getMd5FileSum($file)
+    {
+        return md5_file($file);
     }
 
     /**
