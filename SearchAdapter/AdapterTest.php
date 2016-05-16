@@ -255,6 +255,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @param $expectedRecordsCount
      * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
      * @magentoConfigFixture current_store catalog/search/engine elasticsearch
+     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @dataProvider dateDataProvider
      */
     public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
