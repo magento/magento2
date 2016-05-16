@@ -203,5 +203,4 @@ class Attribute extends \Magento\Eav\Model\Attribute
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->indexerRegistry = $objectManager->get(\Magento\Framework\Indexer\IndexerRegistry::class);
     }
-
 }

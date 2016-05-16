@@ -107,6 +107,7 @@ class CachedMetadata implements MetadataInterface
         if (!$this->cache) {
             $this->cache = ObjectManager::getInstance()->get(AttributeCache::class);
         }
-       return $this->cache;
+        
+        return $this->cache;
     }
 }
