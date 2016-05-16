@@ -17,6 +17,9 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MessagePluginTest extends \PHPUnit_Framework_TestCase
 {
     /** @var MessagePlugin */
@@ -125,16 +128,14 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->dataMock->expects($this->any())
             ->method('jsonDecode')
             ->willReturnCallback(
-                function ($data)
-                {
+                function ($data) {
                     return \Zend_Json::decode($data);
                 }
             );
         $this->dataMock->expects($this->any())
             ->method('jsonEncode')
             ->willReturnCallback(
-                function ($data)
-                {
+                function ($data) {
                     return \Zend_Json::encode($data);
                 }
             );
@@ -210,16 +211,14 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->dataMock->expects($this->any())
             ->method('jsonDecode')
             ->willReturnCallback(
-                function ($data)
-                {
+                function ($data) {
                     return \Zend_Json::decode($data);
                 }
             );
         $this->dataMock->expects($this->any())
             ->method('jsonEncode')
             ->willReturnCallback(
-                function ($data)
-                {
+                function ($data) {
                     return \Zend_Json::encode($data);
                 }
             );
@@ -298,8 +297,7 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->dataMock->expects($this->any())
             ->method('jsonEncode')
             ->willReturnCallback(
-                function ($data)
-                {
+                function ($data) {
                     return \Zend_Json::encode($data);
                 }
             );
@@ -375,16 +373,14 @@ class MessagePluginTest extends \PHPUnit_Framework_TestCase
         $this->dataMock->expects($this->any())
             ->method('jsonDecode')
             ->willReturnCallback(
-                function ($data)
-                {
+                function ($data) {
                     return \Zend_Json::decode($data);
                 }
             );
         $this->dataMock->expects($this->any())
             ->method('jsonEncode')
             ->willReturnCallback(
-                function ($data)
-                {
+                function ($data) {
                     return \Zend_Json::encode($data);
                 }
             );
