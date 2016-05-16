@@ -7,6 +7,7 @@ namespace Magento\Eav\Model\ResourceModel\Entity;
 
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\AttributeCache;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Eav\Model\Config;
@@ -40,6 +41,11 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var Config
      */
     private $config;
+
+    /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
 
     /**
      * Class constructor
@@ -204,9 +210,21 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $object
         );
         $this->getConfig()->clear();
+        $this->getAttributeCache()->clear();
         return parent::_afterSave($object);
     }
 
+    /**
+     * @return AttributeCache
+     * @deprecated
+     */
+    private function getAttributeCache()
+    {
+        if (!$this->attributeCache) {
+            $this->attributeCache = ObjectManager::getInstance()->get(Config::class);
+        }
+        return $this->attributeCache;
+    }
     /**
      * @return Config
      * @deprecated
