@@ -98,8 +98,8 @@ class MetadataPool
 
     /**
      * @param string $entityType
+     * @return HydratorInterface
      * @deprecated
-     * @return EntityHydratorInterface
      */
     public function getHydrator($entityType)
     {

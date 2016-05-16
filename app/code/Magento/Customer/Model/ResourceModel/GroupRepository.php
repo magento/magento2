@@ -317,7 +317,7 @@ class GroupRepository implements \Magento\Customer\Api\GroupRepositoryInterface
     {
         $exception = new InputException();
         if (!\Zend_Validate::is($group->getCode(), 'NotEmpty')) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'code']));
+            $exception->addError(__('%fieldName is a required field.', ['fieldName' => 'code']));
         }
 
         if ($exception->wasErrorAdded()) {

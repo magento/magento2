@@ -27,7 +27,7 @@
 
             <?php if ($_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME
                 || $_option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME): ?>
-                <span class="time-picker"><?php echo $block->getTimeHtml() ?></span>
+                <?php echo $block->getTimeHtml() ?>
             <?php endif; ?>
 
             <?php if ($_option->getIsRequire()): ?>
