@@ -49,13 +49,6 @@ var config = {
         "domReady": "requirejs/domReady",
         "tinymce": "tiny_mce/tiny_mce_src"
     },
-    "config": {
-        "text": {
-            "headers": {
-                "X-Requested-With": "XMLHttpRequest"
-            }
-        }
-    },
     "deps": [
         "jquery/jquery-migrate"
     ],
@@ -63,6 +56,11 @@ var config = {
         "mixins": {
             "jquery/jstree/jquery.jstree": {
                 "mage/backend/jstree-mixin": true
+            }
+        },
+        "text": {
+            "headers": {
+                "X-Requested-With": "XMLHttpRequest"
             }
         }
     }
