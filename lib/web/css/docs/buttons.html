@@ -21,8 +21,7 @@
   &lt;button class="example-button-1 example-button-3 :hover" type="button"&gt;&lt;span&gt;Hover&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-1 example-button-3 :active" type="button"&gt;&lt;span&gt;Active&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-1 example-button-3" type="button" disabled&gt;&lt;span&gt;Disabled&lt;/span&gt;&lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-button {
+</div><div class="code"><pre><code>button {
     .lib-button(@_button-margin: 3px);
     border-radius: 3px;
     &:active,
@@ -44,8 +43,7 @@ button {
             color: #000;
         }
     }
-}
-</code></pre></div></article><article id="button-variables" class="section"><div class="docs"><a href="#button-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-variables">Button variables</h1>
+}</code></pre></div></article><article id="button-variables" class="section"><div class="docs"><a href="#button-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-variables">Button variables</h1>
   <pre>
     <table>
       <tr>
@@ -197,7 +195,7 @@ button {
       <tr>
         <th>@_button-border-hover</th>
         <td>@button__hover__border</td>
-        <td class="vars_value">v</td>
+        <td class="vars_value">@button__border</td>
         <td class="vars_value">'' | false | value</td>
         <td>Hovered button border</td>
       </tr>
@@ -359,8 +357,7 @@ button {
     &lt;button class="example-button-10 :active" type="button"&gt;
         &lt;span&gt;Add to cart&lt;/span&gt;
     &lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-10 {
+</div><div class="code"><pre><code>.example-button-10 {
     .lib-button(
         @_button-margin: 3px,
         @_button-icon-use: true,
@@ -368,8 +365,7 @@ button {
         @_button-icon-font-text-hide: true
     );
     .lib-button-reset();
-}
-</code></pre></div></article><article id="button-with-an-icon-on-the-left-or-right-side-of-the-text" class="section"><div class="docs"><a href="#button-with-an-icon-on-the-left-or-right-side-of-the-text" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-with-an-icon-on-the-left-or-right-side-of-the-text">Button with an icon on the left or right side of the text</h1>
+}</code></pre></div></article><article id="button-with-an-icon-on-the-left-or-right-side-of-the-text" class="section"><div class="docs"><a href="#button-with-an-icon-on-the-left-or-right-side-of-the-text" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-with-an-icon-on-the-left-or-right-side-of-the-text">Button with an icon on the left or right side of the text</h1>
 <p>  <code>@_button-icon-font-position</code> variable is used to set up the icon postiton</p>
 <p>  Use <code>before</code> to set up button icon position on the left:</p>
 <pre><code class="lang-css">  @_button-icon-font-position: before</code></pre>
@@ -398,8 +394,7 @@ button {
     &lt;button class="example-button-12 disabled" type="button" title="Add to cart"&gt;
         &lt;span&gt;Disabled&lt;/span&gt;
     &lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-11 {
+</div><div class="code"><pre><code>.example-button-11 {
     .lib-button(
         @_button-margin: 3px,
         @_button-icon-use: true,
@@ -415,8 +410,7 @@ button {
         @_button-font-content: @icon-cart,
         @_button-icon-font-position: after
    );
-}
-</code></pre></div></article><article id="button-with-fixed-width" class="section"><div class="docs"><a href="#button-with-fixed-width" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-with-fixed-width">Button with fixed width</h1>
+}</code></pre></div></article><article id="button-with-fixed-width" class="section"><div class="docs"><a href="#button-with-fixed-width" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-with-fixed-width">Button with fixed width</h1>
 <p>  To get a fixed width button, you need to set:</p>
 <pre><code class="lang-css">  @_button-width: 100px</code></pre>
 <textarea class="preview-code" spellcheck="false">    &lt;button class="example-button-13" type="button" title="Add to cart"&gt;
@@ -431,11 +425,9 @@ button {
     &lt;button class="example-button-13 disabled" type="button" title="Add to cart"&gt;
         &lt;span&gt;Disabled&lt;/span&gt;
     &lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-13 {
+</div><div class="code"><pre><code>.example-button-13 {
     .lib-button(@_button-width: 100px, @_button-margin: 3px);
-}
-</code></pre></div></article><article id="primary-button" class="section"><div class="docs"><a href="#primary-button" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="primary-button">Primary button</h1>
+}</code></pre></div></article><article id="primary-button" class="section"><div class="docs"><a href="#primary-button" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="primary-button">Primary button</h1>
 <p>  The <code>.lib-button-primary()</code> mixin is used to create a <strong>primary button</strong>. By default it uses Primary button variables from _variables.less file.</p>
 <h2 id="primary-button-big">Primary button big</h2>
 <textarea class="preview-code" spellcheck="false">  &lt;button class="example-button-4 example-button-5" type="button"&gt;&lt;span&gt;Button&lt;/span&gt;&lt;/button&gt;
@@ -450,8 +442,7 @@ button {
   &lt;button class="example-button-4 example-button-6 :hover" type="button"&gt;&lt;span&gt;Hover&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-4 example-button-6 :active" type="button"&gt;&lt;span&gt;Active&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-4 example-button-6" type="button" disabled&gt;&lt;span&gt;Disabled&lt;/span&gt;&lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-4 {
+</div><div class="code"><pre><code>.example-button-4 {
     .lib-button-primary(
         @_button-margin: 3px
     );
@@ -469,8 +460,7 @@ button {
             color: #fff;
         }
     }
-}
-</code></pre></div></article><article id="primary-button-variables" class="section"><div class="docs"><a href="#primary-button-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="primary-button-variables">Primary button variables</h1>
+}</code></pre></div></article><article id="primary-button-variables" class="section"><div class="docs"><a href="#primary-button-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="primary-button-variables">Primary button variables</h1>
 <p>  In the variables list primary buttons are configured with <code>@button-primary<strong></code> prefix. So for example to configure primary button background you should use <code>@_button-background</code> variable of the mixin or <code>@button-primary</strong>background</code> of the global variables list.</p>
   <pre>
     <table>
@@ -639,14 +629,13 @@ button {
         </tr>
     </table>
   </pre>
-</div><div class="code"><pre><code></code></pre></div></article><article id="button-with-gradient-background" class="section"><div class="docs"><a href="#button-with-gradient-background" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-with-gradient-background">Button with gradient background</h1>
+</div></article><article id="button-with-gradient-background" class="section"><div class="docs"><a href="#button-with-gradient-background" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-with-gradient-background">Button with gradient background</h1>
 <p>  The <code>.lib-button()</code> mixin can get its values from _variables.less file or directly</p>
 <textarea class="preview-code" spellcheck="false">  &lt;button class="example-button-7" type="button"&gt;&lt;span&gt;Button&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-7 :hover" type="button"&gt;&lt;span&gt;Hover&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-7 :active" type="button"&gt;&lt;span&gt;Active&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-7 disabled" type="button"&gt;&lt;span&gt;Disabled&lt;/span&gt;&lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-7 {
+</div><div class="code"><pre><code>.example-button-7 {
     .lib-button(
         @_button-margin: 3px,
         @_button-padding: @button__padding,
@@ -669,23 +658,20 @@ button {
     &:active {
         box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
     }
-}
-</code></pre></div></article><article id="button-as-a-link" class="section"><div class="docs"><a href="#button-as-a-link" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-as-a-link">Button as a link</h1>
+}</code></pre></div></article><article id="button-as-a-link" class="section"><div class="docs"><a href="#button-as-a-link" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-as-a-link">Button as a link</h1>
 <p>  The <code>.lib-button-as-link()</code> mixin is used to make button look like a link. It resets default button styles.</p>
 <textarea class="preview-code" spellcheck="false">  &lt;button class="example-button-8" type="button"&gt;&lt;span&gt;Button&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-8 :visited" type="button"&gt;&lt;span&gt;Visited&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-8 :hover" type="button"&gt;&lt;span&gt;Hover&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-8 :active" type="button"&gt;&lt;span&gt;Active&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-8 disabled" type="button"&gt;&lt;span&gt;Disabled&lt;/span&gt;&lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-8 {
+</div><div class="code"><pre><code>.example-button-8 {
     .lib-button-as-link();
     font-weight: normal;
     &:active {
         box-shadow: none;
     }
-}
-</code></pre></div></article><article id="button-as-a-link-variables" class="section"><div class="docs"><a href="#button-as-a-link-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-as-a-link-variables">Button as a link variables</h1>
+}</code></pre></div></article><article id="button-as-a-link-variables" class="section"><div class="docs"><a href="#button-as-a-link-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-as-a-link-variables">Button as a link variables</h1>
 <p>  <pre>
     <table>
         <tr>
@@ -738,14 +724,13 @@ button {
             <td>Button as a link opacity</td>
         </tr>
     </table></p>
-</div><div class="code"><pre><code></code></pre></div></article><article id="link-as-a-button" class="section"><div class="docs"><a href="#link-as-a-button" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="link-as-a-button">Link as a button</h1>
+</div></article><article id="link-as-a-button" class="section"><div class="docs"><a href="#link-as-a-button" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="link-as-a-button">Link as a button</h1>
 <p>  The <code>.lib-link-as-button()</code> mixin is used to reset link styles (text-decoration and display inline). Then to make it look like a button, you need to add the <code>.lib-button()</code> mixin with appropriate paremeters.</p>
 <textarea class="preview-code" spellcheck="false">  &lt;a href="#" class="example-button-9"&gt;&lt;span&gt;Button&lt;/span&gt;&lt;/a&gt;
   &lt;a href="#" class="example-button-9 :hover"&gt;&lt;span&gt;Hover&lt;/span&gt;&lt;/a&gt;
   &lt;a href="#" class="example-button-9 :active"&gt;&lt;span&gt;Active&lt;/span&gt;&lt;/a&gt;
   &lt;a href="#" class="example-button-9 disabled"&gt;&lt;span&gt;Disabled&lt;/span&gt;&lt;/a&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-9 {
+</div><div class="code"><pre><code>.example-button-9 {
     .lib-link-as-button();
     .lib-button();
     margin: 3px;
@@ -754,25 +739,20 @@ button {
     &:active {
         box-shadow: inset 0 3px 1px rgba(0,0,0,.29);
     }
-}
-</code></pre></div></article><article id="button-reset" class="section"><div class="docs"><a href="#button-reset" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-reset">Button reset</h1>
+}</code></pre></div></article><article id="button-reset" class="section"><div class="docs"><a href="#button-reset" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-reset">Button reset</h1>
 <p>  The <code>.lib-button-reset()</code> mixin is used to fully reset button styles.</p>
 <textarea class="preview-code" spellcheck="false">  &lt;button class="example-button-14" type="button"&gt;&lt;span&gt;Button with reset styles&lt;/span&gt;&lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-14 {
+</div><div class="code"><pre><code>.example-button-14 {
     .lib-button-reset();
-}
-</code></pre></div></article><article id="button-revert-secondary-color" class="section"><div class="docs"><a href="#button-revert-secondary-color" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-color">Button revert secondary color</h1>
+}</code></pre></div></article><article id="button-revert-secondary-color" class="section"><div class="docs"><a href="#button-revert-secondary-color" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-color">Button revert secondary color</h1>
 <p>  The <code>.lib-button-revert-secondary-color()</code> mixin is used to revert button styles (primary for example) to secondary color styles.
   Also can be passed any color, background and border if needed.</p>
 <textarea class="preview-code" spellcheck="false">  &lt;button class="example-button-15" type="button"&gt;&lt;span&gt;Reverted color&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-16" type="button"&gt;&lt;span&gt;Custom colors&lt;/span&gt;&lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-15 {
+</div><div class="code"><pre><code>.example-button-15 {
     .lib-button-primary();
     .lib-button-revert-secondary-color();
-}
-</code></pre></div></article><article id="button-revert-secondary-color-variables" class="section"><div class="docs"><a href="#button-revert-secondary-color-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-color-variables">Button revert secondary color variables</h1>
+}</code></pre></div></article><article id="button-revert-secondary-color-variables" class="section"><div class="docs"><a href="#button-revert-secondary-color-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-color-variables">Button revert secondary color variables</h1>
   <pre>
     <table>
       <tr>
@@ -847,13 +827,12 @@ button {
       </tr>
     </table>
   </pre>
-</div><div class="code"><pre><code></code></pre></div></article><article id="button-revert-secondary-size" class="section"><div class="docs"><a href="#button-revert-secondary-size" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-size">Button revert secondary size</h1>
+</div></article><article id="button-revert-secondary-size" class="section"><div class="docs"><a href="#button-revert-secondary-size" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-size">Button revert secondary size</h1>
 <p>  The <code>.lib-button-revert-secondary-size()</code> mixin is used to revert button sizes to secondary button sizes.
   Also can be passed font-size, line-height and padding if needed.</p>
 <textarea class="preview-code" spellcheck="false">  &lt;button class="example-button-17" type="button"&gt;&lt;span&gt;Reverted size&lt;/span&gt;&lt;/button&gt;
   &lt;button class="example-button-18" type="button"&gt;&lt;span&gt;Custom sizes&lt;/span&gt;&lt;/button&gt;</textarea>
-</div><div class="code"><pre><code>
-.example-button-17 {
+</div><div class="code"><pre><code>.example-button-17 {
     .lib-button-l();
     .lib-button-revert-secondary-size();
 }
@@ -863,8 +842,7 @@ button {
         @_button-line-height: 12px,
         @_button-padding: 4px 10px
     );
-}
-</code></pre></div></article><article id="button-revert-secondary-size-variables" class="section"><div class="docs"><a href="#button-revert-secondary-size-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-size-variables">Button revert secondary size variables</h1>
+}</code></pre></div></article><article id="button-revert-secondary-size-variables" class="section"><div class="docs"><a href="#button-revert-secondary-size-variables" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="button-revert-secondary-size-variables">Button revert secondary size variables</h1>
   <pre>
     <table>
       <tr>
