@@ -41,6 +41,11 @@ class PackagesData
     private $packagesAuth;
 
     /**
+     * @var \Magento\Setup\Model\DateTime\TimeZoneProvider
+     */
+    private $timeZoneProvider;
+
+    /**
      * @var  \Magento\Setup\Model\ObjectManagerProvider
      */
     private $objectManagerProvider;
@@ -49,18 +54,21 @@ class PackagesData
      * PackagesData constructor.
      *
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation,
+     * @param \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider,
      * @param \Magento\Setup\Model\PackagesAuth $packagesAuth,
      * @param \Magento\Framework\Filesystem $filesystem,
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Setup\Model\DateTime\TimeZoneProvider $timeZoneProvider,
         \Magento\Setup\Model\PackagesAuth $packagesAuth,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
     ) {
         $this->objectManagerProvider = $objectManagerProvider;
         $this->composerInformation = $composerInformation;
+        $this->timeZoneProvider = $timeZoneProvider;
         $this->packagesAuth = $packagesAuth;
         $this->filesystem = $filesystem;
     }
@@ -125,9 +133,7 @@ class PackagesData
      */
     private function formatSyncDate($syncDate)
     {
-        $objectManager = $this->objectManagerProvider->get();
-        $timeZoneProvider = $objectManager->get('Magento\Setup\Model\DateTime\TimeZoneProvider');
-        $timezone = $timeZoneProvider->get();
+        $timezone = $this->timeZoneProvider->get();
         return [
             'date' => $timezone->formatDateTime(
                 new \DateTime('@'.$syncDate),

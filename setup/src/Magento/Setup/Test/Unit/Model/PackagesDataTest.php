@@ -51,10 +51,8 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $applicationFactory->expects($this->any())->method('create')->willReturn($application);
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
-                ['Magento\Framework\Composer\MagentoComposerApplicationFactory', $applicationFactory],
-                ['Magento\Setup\Model\DateTime\TimeZoneProvider', $timeZoneProvider]
-            ]));
+            ->with('Magento\Framework\Composer\MagentoComposerApplicationFactory')
+            ->willReturn($applicationFactory);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
 
         $directoryWrite = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
@@ -88,6 +86,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
 
         $this->packagesData = new PackagesData(
             $composerInformation,
+            $timeZoneProvider,
             $packagesAuth,
             $filesystem,
             $objectManagerProvider
