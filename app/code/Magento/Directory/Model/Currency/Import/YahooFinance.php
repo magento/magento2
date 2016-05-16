@@ -15,8 +15,9 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
      *
      * @var string
      */
-    private $currencyConverterUrl = 'http://query.yahooapis.com/v1/public/yql?format=json&q={{YQL_STRING}}'
-        .'&env=store://datatables.org/alltableswithkeys';
+    // @codingStandardsIgnoreStart
+    private $currencyConverterUrl = 'http://query.yahooapis.com/v1/public/yql?format=json&q={{YQL_STRING}}&env=store://datatables.org/alltableswithkeys';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Config path for service timeout
