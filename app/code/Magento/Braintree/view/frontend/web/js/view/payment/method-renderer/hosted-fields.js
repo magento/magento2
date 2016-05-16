@@ -115,12 +115,12 @@ define([
                 if (event.target.fieldKey === 'number' && event.card) {
                     if (event.isValid) {
                         self.cardNumber = event.card;
+                        self.selectedCardType(
+                            validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
+                        );
                     } else {
                         self.cardNumber = null;
                     }
-                    self.selectedCardType(
-                        validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
-                    );
                 }
             };
 
