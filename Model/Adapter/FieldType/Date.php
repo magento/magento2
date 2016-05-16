@@ -28,13 +28,6 @@ class Date
     private $scopeConfig;
 
     /**
-     * Array of \DateTime objects per store
-     *
-     * @var \DateTime[]
-     */
-    protected $dateFormats = [];
-
-    /**
      * Construct
      *
      * @param DateTime $dateTime
@@ -58,23 +51,14 @@ class Date
      * @param int $storeId
      * @param string|null $date
      * @return string|null
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function formatDate($storeId, $date = null)
     {
         if ($this->dateTime->isEmptyDate($date)) {
             return null;
         }
-        if (!array_key_exists($storeId, $this->dateFormats)) {
-            $timezone = $this->scopeConfig->getValue(
-                $this->localeDate->getDefaultTimezonePath(),
-                ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $dateObj = new \DateTime();
-            $dateObj->setTimezone(new \DateTimeZone($timezone));
-            $this->dateFormats[$storeId] = $dateObj;
-        }
-        $dateObj = $this->dateFormats[$storeId];
-        return $dateObj->format('c');
+        $dateObj = new \DateTime($date, new \DateTimeZone('UTC'));
+        return $dateObj->format('c') . 'Z';
     }
 }
