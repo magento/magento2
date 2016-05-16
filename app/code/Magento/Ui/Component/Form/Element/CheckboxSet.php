@@ -13,12 +13,18 @@ class CheckboxSet extends AbstractOptionsField
     const NAME = 'checkboxset';
 
     /**
-     * Get component name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getComponentName()
     {
         return static::NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsSelected($optionValue)
+    {
+        return in_array($optionValue, (array) $this->getValue());
     }
 }

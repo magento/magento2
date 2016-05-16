@@ -77,18 +77,6 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
 
-    public function testAddAssetWithHtmlTypeAndWithoutModule()
-    {
-        $this->asset->expects($this->once())
-            ->method('getContentType')
-            ->willReturn('html');
-        $this->asset->expects($this->once())
-            ->method('getModule')
-            ->willReturn('');
-
-        $this->assertFalse($this->manager->addAsset($this->asset));
-    }
-
     public function testAddAssetWithExcludedFile()
     {
         $dirRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
@@ -113,6 +101,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn('Lib');
         $this->asset->expects($this->atLeastOnce())
             ->method('getSourceFile')
+            ->willReturn('source/file.min.js');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getFilePath')
             ->willReturn('source/file.min.js');
         $this->filesystem->expects($this->once())
             ->method('getDirectoryRead')

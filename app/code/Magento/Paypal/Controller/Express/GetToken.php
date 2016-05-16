@@ -53,8 +53,9 @@ class GetToken extends AbstractExpress
             if ($token === null) {
                 $token = false;
             }
+            $url = $this->_checkout->getRedirectUrl();
             $this->_initToken($token);
-            $controllerResult->setData(['token' => $token]);
+            $controllerResult->setData(['url' => $url]);
         } catch (LocalizedException $exception) {
             $this->messageManager->addExceptionMessage(
                 $exception,

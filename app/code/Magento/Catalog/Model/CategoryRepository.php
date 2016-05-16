@@ -38,7 +38,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $categoryResource;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -58,18 +58,15 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -84,7 +81,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         $existingData['store_id'] = $storeId;
 
         if ($category->getId()) {
-            $metadata = $this->metadataPool->getMetadata(
+            $metadata = $this->getMetadataPool()->getMetadata(
                 CategoryInterface::class
             );
 
@@ -94,8 +91,15 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             );
 
             if (isset($existingData['image']) && is_array($existingData['image'])) {
-                $existingData['image_additional_data'] = $existingData['image'];
-                unset($existingData['image']);
+                if (!empty($existingData['image']['delete'])) {
+                    $existingData['image'] = null;
+                } else {
+                    if (isset($existingData['image'][0]['name']) && isset($existingData['image'][0]['tmp_name'])) {
+                        $existingData['image'] = $existingData['image'][0]['name'];
+                    } else {
+                        unset($existingData['image']);
+                    }
+                }
             }
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
@@ -215,5 +219,17 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 ->get('Magento\Framework\Api\ExtensibleDataObjectConverter');
         }
         return $this->extensibleDataObjectConverter;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

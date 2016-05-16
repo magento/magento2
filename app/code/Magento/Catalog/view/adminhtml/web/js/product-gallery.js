@@ -165,7 +165,7 @@ define([
                 imgElement;
 
             imageData = $.extend({
-                'file_id': Math.random().toString(33).substr(2, 18),
+                'file_id': imageData.value_id ? imageData.value_id : Math.random().toString(33).substr(2, 18),
                 'disabled': imageData.disabled ? imageData.disabled : 0,
                 'position': count + 1,
                 sizeLabel: bytesToSize(imageData.size)

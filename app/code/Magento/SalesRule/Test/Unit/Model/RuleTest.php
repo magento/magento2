@@ -57,6 +57,17 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->prepareObjectManager([
+            [
+                'Magento\Framework\Api\ExtensionAttributesFactory',
+                $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\Api\AttributeValueFactory',
+                $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false)
+            ],
+        ]);
+
         $this->model = $objectManager->getObject(
             'Magento\SalesRule\Model\Rule',
             [
@@ -167,5 +178,21 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->model->setId(100);
         $expectedResult = 'form_namerule_actions_fieldset_100';
         $this->assertEquals($expectedResult, $this->model->getActionsFieldSetId($formName));
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

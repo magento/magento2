@@ -112,13 +112,13 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'dbAttributes' => [],
-                'returnedAttibutes' => null
+                'returnedAttributes' => null
             ],
             [
                 'dbAttributes' => [
                     ['code' => 2, 'id' => 6, 'type' => 'sometable']
                 ],
-                'returnedAttibutes' => [
+                'returnedAttributes' => [
                     2 => ['id' => 6, 'table' => 'table_name']
                 ]
             ],
@@ -127,7 +127,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
                     ['code' => 8, 'id' => 11, 'type' => 'sometable1'],
                     ['code' => 4, 'id' => 7, 'type' => 'sometable2']
                 ],
-                'returnedAttibutes' => [
+                'returnedAttributes' => [
                     4 => ['id' => 7, 'table' => 'table_name'],
                     8 => ['id' => 11, 'table' => 'table_name']
                 ]
@@ -151,15 +151,15 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $dbAttributes
-     * @param array $returnedAttibutes
+     * @param array $returnedAttributes
      *
      * @dataProvider attributesDataProvider
      */
-    public function testGetAttributes($dbAttributes, $returnedAttibutes)
+    public function testGetAttributes($dbAttributes, $returnedAttributes)
     {
         $this->processAttributeGetter($dbAttributes);
         $actualAttributes = $this->links->getAttributes();
-        $this->assertEquals($returnedAttibutes, $actualAttributes);
+        $this->assertEquals($returnedAttributes, $actualAttributes);
     }
 
     protected function processBehaviorGetter($behavior)

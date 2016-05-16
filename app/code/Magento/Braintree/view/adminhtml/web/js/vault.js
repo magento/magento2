@@ -106,20 +106,19 @@ define([
             var self = this;
 
             $('body').trigger('processStart');
+
             $.get(self.nonceUrl, {
                 'public_hash': self.publicHash
-            })
-                .done(function (response) {
-                    $('body').trigger('processStop');
-                    self.setPaymentDetails(response.paymentMethodNonce);
-                    self.placeOrder();
-                })
-                .fail(function (response) {
-                    var failed = JSON.parse(response.responseText);
+            }).done(function (response) {
+                self.setPaymentDetails(response.paymentMethodNonce);
+                self.placeOrder();
+            }).fail(function (response) {
+                var failed = JSON.parse(response.responseText);
 
-                    $('body').trigger('processStop');
-                    self.error(failed.message);
-                });
+                self.error(failed.message);
+            }).always(function () {
+                $('body').trigger('processStop');
+            });
         },
 
         /**

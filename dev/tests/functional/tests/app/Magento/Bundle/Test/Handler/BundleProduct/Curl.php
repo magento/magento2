@@ -98,7 +98,7 @@ class Curl extends ProductCurl implements BundleProductInterface
         parent::prepareProductDetails();
 
         if (!isset($this->fields['product']['price_type'])) {
-            $this->fields['product']['price_type'] = 'Dynamic';
+            $this->fields['product']['price_type'] = 'Yes';
         }
     }
 

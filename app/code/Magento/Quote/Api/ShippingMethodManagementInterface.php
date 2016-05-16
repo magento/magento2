@@ -17,6 +17,7 @@ interface ShippingMethodManagementInterface
      * @param int $cartId The shopping cart ID.
      * @param \Magento\Quote\Api\Data\EstimateAddressInterface $address The estimate address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods.
+     * @deprecated
      */
     public function estimateByAddress($cartId, \Magento\Quote\Api\Data\EstimateAddressInterface $address);
 

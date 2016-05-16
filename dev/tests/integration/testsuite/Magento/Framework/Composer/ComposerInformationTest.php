@@ -209,4 +209,30 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         $packageName = 'magento/wrong-module-name';
         $this->assertFalse($composerInfo->isPackageInComposerJson($packageName));
     }
+
+    /**
+     * @param $composerDir string Directory under _files that contains composer files
+     *
+     * @dataProvider getRequiredPhpVersionDataProvider
+     */
+    public function testGetRootRepositories($composerDir)
+    {
+        $this->setupDirectory($composerDir);
+
+        /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
+        $composerInfo = $this->objectManager->create(
+            'Magento\Framework\Composer\ComposerInformation',
+            [
+                'applicationFactory' => new MagentoComposerApplicationFactory(
+                    $this->composerJsonFinder,
+                    $this->directoryList
+                )
+            ]
+        );
+        if ($composerDir === 'testFromCreateProject') {
+            $this->assertEquals(['https://repo.magento.com/'], $composerInfo->getRootRepositories());
+        } else {
+            $this->assertEquals([], $composerInfo->getRootRepositories());
+        }
+    }
 }

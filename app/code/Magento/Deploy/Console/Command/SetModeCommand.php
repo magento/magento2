@@ -17,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\State;
 
 /**
- * Command for change the Magento mode
+ * Command to set application mode
  */
 class SetModeCommand extends Command
 {

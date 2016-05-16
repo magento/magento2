@@ -25,7 +25,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resourceMock = $this->getMock('\Magento\CatalogRule\Model\ResourceModel\Rule', [], [], '', false);
-        $this->metadataMock = $this->getMock('\Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataMock = $this->getMock('\Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $this->subject = new \Magento\CatalogRule\Model\ResourceModel\ReadHandler(
             $this->resourceMock,
             $this->metadataMock
@@ -45,7 +45,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $websiteIds = [4, 5, 6];
 
         $metadataMock = $this->getMock(
-            '\Magento\Framework\Model\Entity\EntityMetadata',
+            '\Magento\Framework\EntityManager\EntityMetadata',
             ['getLinkField'],
             [],
             '',

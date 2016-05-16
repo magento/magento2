@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Locator\RegistryLocator;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class RegistryLocatorTest
@@ -26,36 +27,75 @@ class RegistryLocatorTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var Registry
+     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $registryMock;
 
     /**
-     * @var ProductInterface
+     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productMock;
+
+    /**
+     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeMock;
 
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->registryMock = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registryMock = $this->getMockBuilder(Registry::class)
             ->setMethods(['registry'])
             ->getMock();
-        $this->productMock = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
+        $this->productMock = $this->getMockBuilder(ProductInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->getMockForAbstractClass();
 
-        $this->registryMock->expects($this->once())
-            ->method('registry')
-            ->with('current_product')
-            ->willReturn($this->productMock);
-
-        $this->model = $this->objectManager->getObject('Magento\Catalog\Model\Locator\RegistryLocator', [
+        $this->model = $this->objectManager->getObject(RegistryLocator::class, [
             'registry' => $this->registryMock,
         ]);
     }
 
     public function testGetProduct()
     {
-        $this->assertInstanceOf('Magento\Catalog\Api\Data\ProductInterface', $this->model->getProduct());
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->with('current_product')
+            ->willReturn($this->productMock);
+
+        $this->assertInstanceOf(ProductInterface::class, $this->model->getProduct());
+        // Lazy loading
+        $this->assertInstanceOf(ProductInterface::class, $this->model->getProduct());
+    }
+
+    public function testGetStore()
+    {
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->with('current_store')
+            ->willReturn($this->storeMock);
+
+        $this->assertInstanceOf(StoreInterface::class, $this->model->getStore());
+        // Lazy loading
+        $this->assertInstanceOf(StoreInterface::class, $this->model->getStore());
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage Product was not registered
+     */
+    public function testGetProductWithException()
+    {
+        $this->assertInstanceOf(ProductInterface::class, $this->model->getProduct());
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NotFoundException
+     * @expectedExceptionMessage Store was not registered
+     */
+    public function testGetStoreWithException()
+    {
+        $this->assertInstanceOf(StoreInterface::class, $this->model->getStore());
     }
 }

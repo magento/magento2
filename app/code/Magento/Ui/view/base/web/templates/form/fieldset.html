@@ -9,7 +9,7 @@
      attr="'data-level': $data.level, 'data-index': index"
      data-bind="visible: $data.visible === undefined ? true: $data.visible">
     <div class="fieldset-wrapper-title"
-         tabindex="0"
+         attr="tabindex: !collapsible ? -1 : 0"
          click="toggleOpened"
          keyboard="13: toggleOpened"
          if="label">
@@ -20,7 +20,7 @@
                       '_loading': loading,
                       '_error': error">
             <span text="label"/>
-            <span class="admin__page-nav-item-messages" if="element.collapsible">
+            <span class="admin__page-nav-item-messages">
                 <span class="admin__page-nav-item-message _changed">
                     <span class="admin__page-nav-item-message-icon"></span>
                     <span class="admin__page-nav-item-message-tooltip"

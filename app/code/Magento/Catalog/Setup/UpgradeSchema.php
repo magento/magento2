@@ -29,7 +29,28 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->removeGroupPrice($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.6', '<')) {
+            $this->addUniqueKeyToCategoryProductTable($setup);
+        }
         $setup->endSetup();
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    protected function addUniqueKeyToCategoryProductTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addIndex(
+            $setup->getTable('catalog_category_product'),
+            $setup->getIdxName(
+                'catalog_category_product',
+                ['category_id', 'product_id'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['category_id', 'product_id'],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        );
     }
 
     /**

@@ -320,6 +320,32 @@
     cursor: not-allowed;
 }
 
+//  ToDo: remove after "Product Attributes Mass update" implementation
+.attributes-edit-form {
+    .field {
+        .control {
+            input[type='text'][disabled] ~ .addafter,
+            select[disabled] ~ .addafter,
+            .attribute-change-checkbox {
+                background: none;
+                color: #676056;
+                cursor: inherit;
+                opacity: 1;
+
+                strong {
+                    background: none;
+                }
+            }
+        }
+    }
+
+    .weight-switcher {
+        .addafter {
+            margin-top: 30px;
+        }
+    }
+}
+
 .field .control input[type='text'][disabled] ~ .addafter strong,
 .field .control select[disabled] ~ .addafter strong {
     background-color: #e9e9e9;

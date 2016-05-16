@@ -32,18 +32,16 @@ class Link extends AbstractTypeHandler
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Downloadable\Model\LinkFactory $linkFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link $linkResource
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\ResourceModel\Link $linkResource
     ) {
-        parent::__construct($jsonHelper, $downloadableFile, $metadataPool);
+        parent::__construct($jsonHelper, $downloadableFile);
         $this->linkFactory = $linkFactory;
         $this->linkResource = $linkResource;
     }
@@ -106,7 +104,7 @@ class Link extends AbstractTypeHandler
             $data['type']
         )->setProductId(
             $product->getData(
-                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
             )
         )->setStoreId(
             $product->getStoreId()

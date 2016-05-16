@@ -26,12 +26,18 @@ class MultiSelect extends AbstractOptionsField
     }
 
     /**
-     * Get component name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getComponentName()
     {
         return static::NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsSelected($optionValue)
+    {
+        return in_array($optionValue, (array) $this->getValue());
     }
 }

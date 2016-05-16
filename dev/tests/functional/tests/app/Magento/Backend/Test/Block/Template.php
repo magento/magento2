@@ -36,7 +36,7 @@ class Template extends Block
     protected $loaderOld = '#loading-mask #loading_mask_loader';
 
     /**
-     * Wait until loader will be disappeared.
+     * Wait until loader disappears.
      *
      * @return void
      */

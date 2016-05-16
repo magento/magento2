@@ -37,13 +37,15 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
     {
         $connection = $this->getConnection();
-        $connection->delete($this->getTable('oauth_nonce'), ['consumer_id' => $object->getId()]);
-        $connection->delete($this->getTable('oauth_token'), ['consumer_id' => $object->getId()]);
+        $connection->delete($this->getTable('oauth_nonce'), ['consumer_id = ?' => (int)$object->getId()]);
+        $connection->delete($this->getTable('oauth_token'), ['consumer_id = ?' => (int)$object->getId()]);
         return parent::_afterDelete($object);
     }
 
     /**
      * Compute time in seconds since consumer was created.
+     *
+     * @deprecated
      *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds

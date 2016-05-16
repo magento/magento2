@@ -73,6 +73,7 @@ class Minifier implements MinifierInterface
         Filesystem $filesystem,
         Filesystem\Directory\ReadFactory $readFactory
     ) {
+        $this->filesystem = $filesystem;
         $this->htmlDirectory = $filesystem->getDirectoryWrite(DirectoryList::TEMPLATE_MINIFICATION_DIR);
         $this->readFactory = $readFactory;
     }
@@ -158,6 +159,6 @@ class Minifier implements MinifierInterface
      */
     private function getRelativeGeneratedPath($sourcePath)
     {
-        return ltrim($sourcePath, '/');
+        return $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getRelativePath($sourcePath);
     }
 }

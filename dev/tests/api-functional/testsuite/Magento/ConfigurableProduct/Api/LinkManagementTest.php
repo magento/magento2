@@ -36,9 +36,6 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
             $this->assertArrayHasKey('status', $product);
             $this->assertEquals('1', $product['status']);
-
-            $this->assertArrayHasKey('visibility', $product);
-            $this->assertEquals('1', $product['visibility']);
         }
     }
 

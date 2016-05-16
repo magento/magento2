@@ -6,11 +6,9 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Composer\ComposerInformation;
 use Composer\Package\Version\VersionParser;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Setup\Model\DateTime\DateTimeProvider;
 
 /**
  * Class UpdatePackagesCache manages information about available for update packages though the cache file.
@@ -52,24 +50,38 @@ class UpdatePackagesCache
     private $pathToCacheFile = 'update_composer_packages.json';
 
     /**
+     * @var \Magento\Setup\Model\MarketplaceManager
+     */
+    private $marketplaceManager;
+
+    /**
+     * @var string
+     */
+    private $packagesJsonData;
+
+    /**
      * Constructor
      *
-     * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param ComposerInformation $composerInformation
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
      * @param ObjectManagerProvider $objectManagerProvider
-     * @throws \Exception
+     * @param DateTimeProvider $dateTimeProvider
      */
     public function __construct(
-        MagentoComposerApplicationFactory $applicationFactory,
-        Filesystem $filesystem,
-        ComposerInformation $composerInformation,
-        ObjectManagerProvider $objectManagerProvider
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Setup\Model\MarketplaceManager $marketplaceManager,
+        ObjectManagerProvider $objectManagerProvider,
+        DateTimeProvider $dateTimeProvider
     ) {
+        $applicationFactory = $objectManagerProvider->get()
+            ->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
         $this->application = $applicationFactory->create();
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->dateTime = $objectManagerProvider->get()->get('Magento\Framework\Stdlib\DateTime\DateTime');
+        $this->directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+        $this->dateTime = $dateTimeProvider->get();
         $this->composerInformation = $composerInformation;
+        $this->marketplaceManager = $marketplaceManager;
     }
 
     /**
@@ -145,22 +157,50 @@ class UpdatePackagesCache
      */
     private function getPackageAvailableVersions($package)
     {
-        $versionsPattern = '/^versions\s*\:\s(.+)$/m';
+        $magentoRepositories = $this->composerInformation->getRootRepositories();
 
-        $commandParams = [
-            self::PARAM_COMMAND => self::COMPOSER_SHOW,
-            self::PARAM_PACKAGE => $package,
-            self::PARAM_AVAILABLE => true
-        ];
-        $result = $this->application->runComposerCommand($commandParams);
-        $matches = [];
-        preg_match($versionsPattern, $result, $matches);
-        if (!isset($matches[1])) {
-            throw new \RuntimeException(
-                sprintf('Couldn\'t get available versions for package %s', $commandParams[self::PARAM_PACKAGE])
-            );
+        // Check we have only one repo.magento.com repository
+        if (
+            count($magentoRepositories) === 1
+            && strpos($magentoRepositories[0], $this->marketplaceManager->getCredentialBaseUrl())
+        ) {
+            $packagesJsonData = [];
+            if (empty($this->packagesJsonData)) {
+                $this->packagesJsonData = $this->marketplaceManager->getPackagesJson();
+            }
+
+            if ($this->packagesJsonData) {
+                $packagesJsonData = json_decode($this->packagesJsonData, true);
+            } else {
+                $packagesJsonData['packages'] = [];
+            }
+
+            if (isset($packagesJsonData['packages'][$package])) {
+                $packageVersions = $packagesJsonData['packages'][$package];
+                uksort($packageVersions, 'version_compare');
+                $packageVersions = array_reverse($packageVersions);
+
+                return array_keys($packageVersions);
+            }
+        } else {
+            $versionsPattern = '/^versions\s*\:\s(.+)$/m';
+
+            $commandParams = [
+                self::PARAM_COMMAND => self::COMPOSER_SHOW,
+                self::PARAM_PACKAGE => $package,
+                self::PARAM_AVAILABLE => true
+            ];
+            $result = $this->application->runComposerCommand($commandParams);
+            $matches = [];
+            preg_match($versionsPattern, $result, $matches);
+            if (isset($matches[1])) {
+                return explode(', ', $matches[1]);
+            }
         }
-        return explode(', ', $matches[1]);
+
+        throw new \RuntimeException(
+            sprintf('Couldn\'t get available versions for package %s', $package)
+        );
     }
 
     /**

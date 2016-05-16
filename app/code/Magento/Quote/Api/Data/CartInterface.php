@@ -16,6 +16,8 @@ interface CartInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      */
     const KEY_ID = 'id';
 
+    const KEY_ENTITY_ID = 'entity_id';
+
     const KEY_CREATED_AT = 'created_at';
 
     const KEY_UPDATED_AT = 'updated_at';

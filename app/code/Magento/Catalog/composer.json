@@ -26,7 +26,6 @@
         "magento/module-config": "100.0.*",
         "magento/module-media-storage": "100.0.*",
         "magento/framework": "100.0.*",
-        "magento/module-configurable-product": "100.0.*",
         "magento/module-ui": "100.0.*"
     },
     "suggest": {
