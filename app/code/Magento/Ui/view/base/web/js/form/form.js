@@ -256,7 +256,7 @@ define([
                 this.setAdditionalData(data)
                     .submit(redirect);
             } else {
-                scrollTop = $(this.errorClass).offset().top - screen.height / 2;
+                scrollTop = $(this.errorClass).offset().top - window.innerHeight / 2;
                 window.scrollTo(0, scrollTop);
             }
         },
