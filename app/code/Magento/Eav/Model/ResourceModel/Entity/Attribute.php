@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
  * EAV attribute resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
