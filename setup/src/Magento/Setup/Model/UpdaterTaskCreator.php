@@ -138,12 +138,6 @@ class UpdaterTaskCreator
                 \Magento\Setup\Model\Cron\JobFactory::JOB_UPGRADE,
                 []
             );
-        } elseif ($jobType == 'disable') {
-            $errorMessage .= $this->updater->createUpdaterTask(
-                [],
-                \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
-                ['enable' => false]
-            );
         }
 
         $enabledCaches = [];
@@ -158,6 +152,14 @@ class UpdaterTaskCreator
                 [],
                 \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
                 [implode(' ', $enabledCaches)]
+            );
+        }
+
+        if ($jobType == 'disable') {
+            $errorMessage .= $this->updater->createUpdaterTask(
+                [],
+                \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
+                ['enable' => false]
             );
         }
 
