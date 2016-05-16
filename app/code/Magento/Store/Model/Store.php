@@ -313,6 +313,11 @@ class Store extends AbstractExtensibleModel implements
     private $_storeManager;
 
     /**
+     * @var \Magento\Framework\Url\ModifierInterface
+     */
+    private $urlModifier;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -640,7 +645,10 @@ class Store extends AbstractExtensibleModel implements
                 $url = str_replace(self::BASE_URL_PLACEHOLDER, $this->_request->getDistroBaseUrl(), $url);
             }
 
-            $this->_baseUrlCache[$cacheKey] = rtrim($url, '/') . '/';
+            $this->_baseUrlCache[$cacheKey] = $this->getUrlModifier()->execute(
+                rtrim($url, '/') . '/',
+                \Magento\Framework\Url\ModifierInterface::MODE_BASE
+            );
         }
 
         return $this->_baseUrlCache[$cacheKey];
@@ -1305,5 +1313,22 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Gets URL modifier.
+     *
+     * @return \Magento\Framework\Url\ModifierInterface
+     * @deprecated
+     */
+    private function getUrlModifier()
+    {
+        if ($this->urlModifier === null) {
+            $this->urlModifier = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Framework\Url\ModifierInterface'
+            );
+        }
+
+        return $this->urlModifier;
     }
 }

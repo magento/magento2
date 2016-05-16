@@ -7,8 +7,9 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
+    'mage/storage',
     'jquery/jquery-storageapi'
-], function ($, _, ko, sectionConfig) {
+], function ($, _, ko, sectionConfig, mageStorage) {
     'use strict';
 
     var options,
@@ -187,7 +188,21 @@ define([
          */
         init: function() {
             var countryData,
-                privateContent = $.cookieStorage.get('private_content_version');
+                privateContent = $.cookieStorage.get('private_content_version'),
+                updateSession = $.cookieStorage.get('update_customer_session');
+            if (updateSession) {
+                mageStorage.post(
+                    options.updateSessionUrl,
+                    JSON.stringify({
+                        'customer_id': updateSession,
+                        'form_key': window.FORM_KEY
+                    })
+                ).done(
+                    function () {
+                        $.cookieStorage.setConf({path: '/', expires: -1}).set('update_customer_session', null);
+                    }
+                );
+            }
 
             if (_.isEmpty(storage.keys())) {
                 if (!_.isEmpty(privateContent)) {
