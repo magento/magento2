@@ -143,11 +143,10 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * validate update by invalid customer.
+     * Validate update by invalid customer.
      *
      * @expectedException \Exception
      * @expectedExceptionMessage Consumer is not authorized to access %resources
-     *
      */
     public function testInvalidCustomerUpdate()
     {
