@@ -156,12 +156,12 @@ class CustomOptions extends AbstractModifier
 
         /** @var \Magento\Catalog\Model\Product\Option $option */
         foreach ($productOptions as $index => $option) {
-            $options[$index] = $this->formatFloatByPath(static::FIELD_PRICE_NAME, $option->getData());
+            $options[$index] = $this->formatPriceByPath(static::FIELD_PRICE_NAME, $option->getData());
             $values = $option->getValues() ?: [];
 
             /** @var \Magento\Catalog\Model\Product\Option $value */
             foreach ($values as $value) {
-                $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatFloatByPath(
+                $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatPriceByPath(
                     static::FIELD_PRICE_NAME,
                     $value->getData()
                 );
@@ -188,12 +188,12 @@ class CustomOptions extends AbstractModifier
      * @param array $data
      * @return array
      */
-    protected function formatFloatByPath($path, array $data)
+    protected function formatPriceByPath($path, array $data)
     {
         $value = $this->arrayManager->get($path, $data);
 
         if (is_numeric($value)) {
-            $data = $this->arrayManager->replace($path, $data, $this->formatFloat($value));
+            $data = $this->arrayManager->replace($path, $data, $this->formatPrice($value));
         }
 
         return $data;
