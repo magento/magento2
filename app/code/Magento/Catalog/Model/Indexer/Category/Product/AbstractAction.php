@@ -98,6 +98,11 @@ abstract class AbstractAction
     protected $metadataPool;
 
     /**
+     * @var string
+     */
+    protected $tempTreeIndexTableName;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
@@ -460,6 +465,23 @@ abstract class AbstractAction
     }
 
     /**
+     * Get temporary table name for concurrent indexing in persistent connection
+     * Temp table name is NOT shared between action instances and each action has it's own temp tree index
+     *
+     * @return string
+     */
+    protected function getTemporaryTreeIndexTableName()
+    {
+        if (empty($this->tempTreeIndexTableName)) {
+            $this->tempTreeIndexTableName = $this->connection->getTableName('temp_catalog_category_tree_index')
+                . '_'
+                . substr(md5(time() . rand(0, 999999999)), 0, 8);
+        }
+
+        return $this->tempTreeIndexTableName;
+    }
+
+    /**
      * Build and populate the temporary category tree index table
      *
      * Returns the name of the temporary table to use in queries.
@@ -469,7 +491,7 @@ abstract class AbstractAction
     protected function makeTempCategoryTreeIndex()
     {
         // Note: this temporary table is per-connection, so won't conflict by prefix.
-        $temporaryName = $this->connection->getTableName('temp_catalog_category_tree_index');
+        $temporaryName = $this->getTemporaryTreeIndexTableName();
 
         $temporaryTable = $this->connection->newTable($temporaryName);
         $temporaryTable->addColumn(
