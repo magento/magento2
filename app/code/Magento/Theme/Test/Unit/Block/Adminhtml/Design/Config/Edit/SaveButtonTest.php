@@ -32,7 +32,7 @@ class SaveButtonTest extends \PHPUnit_Framework_TestCase
         $result = $this->block->getButtonData();
 
         $this->assertArrayHasKey('label', $result);
-        $this->assertEquals($result['label'], __('Save'));
+        $this->assertEquals($result['label'], __('Save Configuration'));
         $this->assertArrayHasKey('data_attribute', $result);
         $this->assertTrue(is_array($result['data_attribute']));
     }
