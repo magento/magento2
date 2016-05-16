@@ -59,7 +59,6 @@ class SaveHandler
      */
     public function save(CartInterface $quote)
     {
-        // todo: remove getIsActive check
         /** @var \Magento\Quote\Model\Quote $quote */
         // Quote Item processing
         $items = $quote->getItems();
