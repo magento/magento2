@@ -99,8 +99,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
                 $this->messageManager->addException($e, __('Invalid input'));
             } catch (\Exception $e) {
                 $message = __('We can\'t save the customer.')
-                    . $e->getMessage()
-                    . '<pre>' . $e->getTraceAsString() . '</pre>';
+                    . $e->getMessage();
                 $this->messageManager->addException($e, $message);
             }
 
