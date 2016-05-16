@@ -54,7 +54,8 @@ class JobSetCache extends AbstractJob
     public function execute()
     {
         try {
-            $this->command->run(new ArrayInput(['command' => $this->command->getName()]), $this->output);
+            $this->params['command'] = $this->command->getName();
+            $this->command->run(new ArrayInput($this->params), $this->output);
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));
