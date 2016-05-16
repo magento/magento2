@@ -13,6 +13,8 @@ define([
 ], function (_, Abstract, keyCodes, $t, ko, $) {
     'use strict';
 
+    var isTouchDevice = typeof document.ontouchstart !== 'undefined';
+
     /**
      * Processing options list
      *
@@ -362,6 +364,10 @@ define([
          */
         outerClick: function () {
             this.listVisible() ? this.listVisible(false) : false;
+
+            if(isTouchDevice) {
+               this.multiselectFocus(false);
+            }
         },
 
         /**

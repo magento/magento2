@@ -43,6 +43,7 @@
     <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
     <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement" />
+    <preference for="Magento\Catalog\Api\AttributeSetFinderInterface" type="Magento\Catalog\Model\Product\Attribute\AttributeSetFinder" />
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -94,6 +95,11 @@
                 </item>
             </argument>
             <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Product\Edit\Action\Attribute">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
@@ -569,6 +575,14 @@
                         <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -597,6 +611,18 @@
             <argument name="skipStaticColumns" xsi:type="array">
                 <item name="entity_type_id" xsi:type="string">entity_type_id</item>
                 <item name="attribute_set_id" xsi:type="string">attribute_set_id</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
+         <arguments>
+            <argument name="serviceEntityTypeMap" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</item>
+            </argument>
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="Magento\Catalog\Model\Product\Attribute\Backend\Media" xsi:type="string">Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface</item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -630,7 +656,7 @@
                 <item name="watermark_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/image</item>
-                    <item name="default" xsi:type="string">stretch</item>
+
                 </item>
                 <item name="watermark_small_image_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_size</item>
@@ -658,7 +684,6 @@
                 <item name="watermark_small_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/small_image</item>
-                    <item name="default" xsi:type="string">stretch</item>
                 </item>
                 <item name="watermark_thumbnail_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_size</item>
@@ -686,7 +711,6 @@
                 <item name="watermark_thumbnail_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
-                    <item name="default" xsi:type="string">stretch</item>
                 </item>
             </argument>
         </arguments>
@@ -701,19 +725,12 @@
             <argument name="attributePersistor" xsi:type="object">Magento\Catalog\Model\ResourceModel\AttributePersistor</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\Model\ResourceModel\Db\ExtensionPool">
+    <type name="Magento\Framework\EntityManager\HydratorPool">
         <arguments>
-            <argument name="extensionActions" xsi:type="array">
-                <item name="eav" xsi:type="array">
-                    <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
-                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
-                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
-                    </item>
-                    <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
-                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
-                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
-                    </item>
-                </item>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
             </argument>
         </arguments>
     </type>
