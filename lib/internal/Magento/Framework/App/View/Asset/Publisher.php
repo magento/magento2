@@ -57,7 +57,7 @@ class Publisher
     {
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
         $source = $asset->getSourceFile();
-        $destination = $dir->getAbsolutePath($asset->getPath());
+        $destination = $asset->getPath();
 
         if ($dir->isExist($source) === false) {
             return false;
@@ -67,6 +67,7 @@ class Publisher
             return false;
         }
 
+        $destination = $dir->getAbsolutePath($destination);
         $sourceSum = md5_file($source);
         $destinationSum = md5_file($destination);
 
