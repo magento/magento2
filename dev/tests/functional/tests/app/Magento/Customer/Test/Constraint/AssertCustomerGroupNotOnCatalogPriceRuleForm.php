@@ -13,12 +13,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\RuleInformation;
 
 /**
- * Assert that customer group find on catalog price rule page.
+ * Class AssertCustomerGroupNotOnCatalogPriceRuleForm.
  */
-class AssertCustomerGroupOnCatalogPriceRuleForm extends AbstractConstraint
+class AssertCustomerGroupNotOnCatalogPriceRuleForm extends AbstractConstraint
 {
     /**
-     * Assert that customer group find on catalog price rule page.
+     * Assert that customer group is not on catalog price rule page.
      *
      * @param CatalogRuleIndex $catalogRuleIndex
      * @param CatalogRuleNew $catalogRuleNew
@@ -36,19 +36,19 @@ class AssertCustomerGroupOnCatalogPriceRuleForm extends AbstractConstraint
 
         /** @var RuleInformation $ruleInformationSection */
         $ruleInformationSection = $catalogRuleNew->getEditForm()->getSection('rule_information');
-        \PHPUnit_Framework_Assert::assertTrue(
+        \PHPUnit_Framework_Assert::assertFalse(
             $ruleInformationSection->isVisibleCustomerGroup($customerGroup),
-            "Customer group {$customerGroup->getCustomerGroupCode()} not in catalog price rule page."
+            "Customer group {$customerGroup->getCustomerGroupCode()} is still in catalog price rule page."
         );
     }
 
     /**
-     * Success assert of customer group find on catalog price rule page.
+     * Success assert of customer group absent on catalog price rule page.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Customer group find on catalog price rule page.';
+        return 'Customer group is not on catalog price rule page.';
     }
 }
