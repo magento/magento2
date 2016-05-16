@@ -7,12 +7,7 @@ namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * Plugin for putting messages to cookies
@@ -25,43 +20,43 @@ class MessagePlugin
     const MESSAGES_COOKIES_NAME = 'mage-messages';
 
     /**
-     * @var CookieManagerInterface
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
     private $cookieManager;
 
     /**
-     * @var CookieMetadataFactory
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
     private $cookieMetadataFactory;
 
     /**
-     * @var ManagerInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
     private $messageManager;
 
     /**
-     * @var InterpretationStrategyInterface
+     * @var \Magento\Framework\View\Element\Message\InterpretationStrategyInterface
      */
     private $interpretationStrategy;
 
     /**
-     * @var Data
+     * @var \Magento\Framework\Json\Helper\Data
      */
     private $jsonHelper;
 
     /**
-     * @param CookieManagerInterface $cookieManager
-     * @param CookieMetadataFactory $cookieMetadataFactory
-     * @param ManagerInterface $messageManager
-     * @param InterpretationStrategyInterface $interpretationStrategy
-     * @param Data $jsonHelper
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
+     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      */
     public function __construct(
-        CookieManagerInterface $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory,
-        ManagerInterface $messageManager,
-        InterpretationStrategyInterface $interpretationStrategy,
-        Data $jsonHelper
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
+        \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
+        \Magento\Framework\Json\Helper\Data $jsonHelper
     ) {
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
