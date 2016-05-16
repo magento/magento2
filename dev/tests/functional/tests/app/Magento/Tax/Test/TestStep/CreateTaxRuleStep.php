@@ -57,9 +57,9 @@ class CreateTaxRuleStep implements TestStepInterface
      */
     public function run()
     {
-        $this->deleteAllTaxRule->run();
         $result['taxRule'] = null;
         if ($this->taxRule !== null) {
+            $this->deleteAllTaxRule->run();
             $taxRuleDataSets = explode(',', $this->taxRule);
             foreach ($taxRuleDataSets as $taxRuleDataSet) {
                 $taxRule = $this->fixtureFactory->createByCode(
