@@ -51,12 +51,40 @@ class Publisher
      */
     public function publish(Asset\LocalInterface $asset)
     {
-        $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        if ($dir->isExist($asset->getPath())) {
+        if ($this->isFileEquals($asset)) {
             return true;
         }
 
         return $this->publishAsset($asset);
+    }
+
+    /**
+     * @param Asset\LocalInterface $asset
+     * @return bool
+     */
+    public function isFileEquals(Asset\LocalInterface $asset)
+    {
+        $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+        $source = $asset->getSourceFile();
+        $destination = $asset->getPath();
+
+        if ($dir->isExist($source) === false) {
+            return false;
+        }
+
+        if ($dir->isExist($destination) === false) {
+            return false;
+        }
+
+        $destination = $dir->getAbsolutePath($destination);
+        $sourceSum = md5_file($source);
+        $destinationSum = md5_file($destination);
+
+        if ($sourceSum !== $destinationSum) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
