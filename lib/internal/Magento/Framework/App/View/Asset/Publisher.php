@@ -49,6 +49,10 @@ class Publisher
         return $this->publishAsset($asset);
     }
 
+    /**
+     * @param Asset\LocalInterface $asset
+     * @return bool
+     */
     public function isFileEquals(Asset\LocalInterface $asset)
     {
         $dir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
