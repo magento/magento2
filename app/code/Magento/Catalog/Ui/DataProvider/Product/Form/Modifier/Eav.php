@@ -354,7 +354,7 @@ class Eav extends AbstractModifier
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
                     if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
-                        $attributeValue = number_format((float)$attributeValue, 2);
+                        $attributeValue = $this->formatFloat($attributeValue);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
                 }
@@ -373,6 +373,7 @@ class Eav extends AbstractModifier
     private function resolvePersistentData(array $data)
     {
         $persistentData = (array)$this->dataPersistor->get('catalog_product');
+        $this->dataPersistor->clear('catalog_product');
         $productId = $this->locator->getProduct()->getId();
 
         if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
