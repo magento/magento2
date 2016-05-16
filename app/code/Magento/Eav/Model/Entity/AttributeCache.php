@@ -22,6 +22,7 @@ class AttributeCache
      * @var CacheInterface
      */
     private $cache;
+
     /**
      * @var StateInterface
      */
@@ -104,7 +105,7 @@ class AttributeCache
      * @param string $suffix
      * @return bool
      */
-    public function saveAttributes($entityType, $attributes, $suffix  = '')
+    public function saveAttributes($entityType, $attributes, $suffix = '')
     {
         if (in_array($entityType, $this->unsupportedTypes)) {
             return true;

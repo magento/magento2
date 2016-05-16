@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
  * EAV attribute resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -225,6 +226,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         return $this->attributeCache;
     }
+
     /**
      * @return Config
      * @deprecated
@@ -236,6 +238,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         return $this->config;
     }
+
     /**
      * Save store labels
      *
@@ -728,5 +731,4 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_storeManager = \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
     }
-
 }
