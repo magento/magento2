@@ -150,7 +150,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getQuote()
     {
-        $cartManagement = $this->getCartManagementDependency();
+        $cartManagement = $this->getCartManagement();
 
         if ($this->_quote === null) {
             if ($this->getStoreId()) {
@@ -180,7 +180,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
      * @return CartManagementInterface
      * @deprecated
      */
-    private function getCartManagementDependency()
+    private function getCartManagement()
     {
         if ($this->cartManagement === null) {
             $this->cartManagement = ObjectManager::getInstance()->get(CartManagementInterface::class);
