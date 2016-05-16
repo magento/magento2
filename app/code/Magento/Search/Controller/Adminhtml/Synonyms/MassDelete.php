@@ -1,40 +1,57 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory;
-
 /**
  * Mass-Delete Controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassDelete extends \Magento\Backend\App\Action
 {
     /**
-     * @var Filter
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    protected $filter;
+    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
 
     /**
-     * @var CollectionFactory
+     * @var \Magento\Ui\Component\MassAction\Filter
      */
-    protected $collectionFactory;
+    private $filter;
 
     /**
-     * @param Context $context
-     * @param Filter $filter
-     * @param CollectionFactory $collectionFactory
+     * @var \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
-    {
+    private $collectionFactory;
+
+    /**
+     * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     */
+    private $synGroupRepository;
+
+    /**
+     * MassDelete constructor.
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Ui\Component\MassAction\Filter $filter
+     * @param \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
+     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Ui\Component\MassAction\Filter $filter,
+        \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory,
+        \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+    ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
+        $this->synGroupRepository = $synGroupRepository;
         parent::__construct($context);
     }
 
@@ -49,12 +66,10 @@ class MassDelete extends \Magento\Backend\App\Action
         $collection = $this->filter->getCollection($this->collectionFactory->create());
         $collectionSize = $collection->getSize();
 
-        $synonymGroupRepository = $this->_objectManager->create('Magento\Search\Api\SynonymGroupRepositoryInterface');
-
         $deletedItems = 0;
         foreach ($collection as $synonymGroup) {
             try {
-                $synonymGroupRepository->delete($synonymGroup);
+                $this->synGroupRepository->delete($synonymGroup);
                 $deletedItems++;
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -72,7 +87,7 @@ class MassDelete extends \Magento\Backend\App\Action
             );
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/');
     }
 }

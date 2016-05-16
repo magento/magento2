@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true, jquery:true*/
@@ -61,10 +61,12 @@ define([
                 actions: {
                     confirm: function() {
                         if (typeof $(e.target).parent().data('address') !== 'undefined') {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address');
+                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address')
+                                + '/form_key/' + $.mage.cookies.get('form_key');
                         }
                         else {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address');
+                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address')
+                                + '/form_key/' + $.mage.cookies.get('form_key');
                         }
                     }
                 }

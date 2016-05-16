@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Cache\Test\Unit\Config;
@@ -16,7 +16,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolverMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Model\Product;
@@ -164,10 +164,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasLinks($product)
     {
-        if ($product->hasData('links_exist')) {
-            return $product->getData('links_exist');
+        $hasLinks = $product->getData('links_exist');
+        if (null === $hasLinks) {
+            $hasLinks = (count($this->getLinks($product)) > 0);
         }
-        return count($this->getLinks($product)) > 0;
+        return $hasLinks;
     }
 
     /**
@@ -178,7 +179,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasOptions($product)
     {
-        return $product->getLinksPurchasedSeparately() || parent::hasOptions($product);
+        return parent::hasOptions($product) || $this->hasLinks($product);
     }
 
     /**

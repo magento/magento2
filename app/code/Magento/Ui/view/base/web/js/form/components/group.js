@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -12,6 +12,7 @@ define([
         defaults: {
             visible: true,
             label: '',
+            showLabel: true,
             required: false,
             template: 'ui/group/group',
             fieldTemplate: 'ui/form/field',
@@ -66,6 +67,8 @@ define([
             }
 
             _.extend(this.additionalClasses, {
+                'admin__control-grouped': !this.breakLine,
+                'admin__control-fields': this.breakLine,
                 required:   this.required,
                 _error:     this.error,
                 _disabled:  this.disabled

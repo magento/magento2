@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class Save
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
@@ -30,17 +34,19 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @var array
      */
     protected $stringToBoolInputs = [
-        'general' => [
-            'custom_use_parent_settings',
-            'custom_apply_to_products',
-            'is_active',
-            'include_in_menu',
-            'is_anchor',
-            'use_default' => ['url_key'],
-            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by'],
-            'savedImage' => ['delete']
-        ]
+        'custom_use_parent_settings',
+        'custom_apply_to_products',
+        'is_active',
+        'include_in_menu',
+        'is_anchor',
+        'use_default' => ['url_key'],
+        'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by']
     ];
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Constructor
@@ -49,17 +55,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -73,8 +82,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $data = $rawData;
         // @todo It is a workaround to prevent saving this data in category model and it has to be refactored in future
         if (isset($data['image']) && is_array($data['image'])) {
-            $data['image_additional_data'] = $data['image'];
-            unset($data['image']);
+            if (!empty($data['image']['delete'])) {
+                $data['image'] = null;
+            } else {
+                if (isset($data['image'][0]['name']) && isset($data['image'][0]['tmp_name'])) {
+                    $data['image'] = $data['image'][0]['name'];
+                } else {
+                    unset($data['image']);
+                }
+            }
         }
         return $data;
     }
@@ -99,13 +115,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         $data['general'] = $this->getRequest()->getPostValue();
-        $isNewCategory = !isset($data['general']['entity_id']);
-        $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
-        $data = $this->imagePreprocessing($data);
-        $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
-        $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
-        if ($data['general']) {
-            $category->addData($this->_filterCategoryPostData($data['general']));
+        $categoryPostData = $data['general'];
+
+        $isNewCategory = !isset($categoryPostData['entity_id']);
+        $categoryPostData = $this->stringToBoolConverting($categoryPostData);
+        $categoryPostData = $this->imagePreprocessing($categoryPostData);
+        $categoryPostData = $this->dateTimePreprocessing($category, $categoryPostData);
+        $storeId = isset($categoryPostData['store_id']) ? $categoryPostData['store_id'] : null;
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
+        $parentId = isset($categoryPostData['parent']) ? $categoryPostData['parent'] : null;
+        if ($categoryPostData) {
+            $category->addData($this->_filterCategoryPostData($categoryPostData));
             if ($isNewCategory) {
                 $parentCategory = $this->getParentCategory($parentId, $storeId);
                 $category->setPath($parentCategory->getPath());
@@ -115,26 +136,24 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Process "Use Config Settings" checkboxes
              */
-            $generalPost = $data['general'];
+
             $useConfig = [];
-            if (isset($generalPost['use_config']) && !empty($generalPost['use_config'])) {
-                foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
+            if (isset($categoryPostData['use_config']) && !empty($categoryPostData['use_config'])) {
+                foreach ($categoryPostData['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $useConfig[] = $attributeCode;
+                        $category->setData($attributeCode, null);
                     }
-                }
-                foreach ($useConfig as $attributeCode) {
-                    $category->setData($attributeCode, null);
                 }
             }
 
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
-            if (isset($data['general']['category_products'])
-                && is_string($data['general']['category_products'])
+            if (isset($categoryPostData['category_products'])
+                && is_string($categoryPostData['category_products'])
                 && !$category->getProductsReadonly()
             ) {
-                $products = json_decode($data['general']['category_products'], true);
+                $products = json_decode($categoryPostData['category_products'], true);
                 $category->setPostedProducts($products);
             }
             $this->_eventManager->dispatch(
@@ -145,10 +164,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             /**
              * Check "Use Default Value" checkboxes values
              */
-            if (isset($generalPost['use_default']) && !empty($generalPost['use_default'])) {
-                foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
+            if (isset($categoryPostData['use_default']) && !empty($categoryPostData['use_default'])) {
+                foreach ($categoryPostData['use_default'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
-                        $category->setData($attributeCode, false);
+                        $category->setData($attributeCode, null);
                     }
                 }
             }
@@ -164,6 +183,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 if ($category->hasCustomDesignTo()) {
                     $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
                 }
+
                 $validate = $category->validate();
                 if ($validate !== true) {
                     foreach ($validate as $code => $error) {
@@ -173,7 +193,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                                 __('Attribute "%1" is required.', $attribute)
                             );
                         } else {
-                            throw new \Magento\Framework\Exception\LocalizedException(__($error));
+                            throw new \Exception($error);
                         }
                     }
                 }
@@ -185,11 +205,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->_getSession()->setCategoryData($data);
+                $this->_getSession()->setCategoryData($categoryPostData);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_getSession()->setCategoryData($categoryPostData);
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving the category.'));
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-                $this->_getSession()->setCategoryData($data);
+                $this->_getSession()->setCategoryData($categoryPostData);
             }
         }
 
@@ -232,14 +256,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function imagePreprocessing($data)
     {
-        if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
-            unset($data['general']['image']);
-            if (
-                isset($data['general']['savedImage']['delete']) &&
-                $data['general']['savedImage']['delete']
-            ) {
-                $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
-            }
+        if (empty($data['image'])) {
+            unset($data['image']);
+            $data['image']['delete'] = true;
         }
         return $data;
     }
@@ -247,17 +266,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Converting inputs from string to boolean
      *
-     * @param array $stringToBoolInputs
      * @param array $data
+     * @param array $stringToBoolInputs
      *
      * @return array
      */
-    public function stringToBoolConverting($stringToBoolInputs, $data)
+    public function stringToBoolConverting($data, $stringToBoolInputs = null)
     {
+        if (null === $stringToBoolInputs) {
+            $stringToBoolInputs = $this->stringToBoolInputs;
+        }
         foreach ($stringToBoolInputs as $key => $value) {
             if (is_array($value)) {
                 if (isset($data[$key])) {
-                    $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+                    $data[$key] = $this->stringToBoolConverting($data[$key], $value);
                 }
             } else {
                 if (isset($data[$value])) {

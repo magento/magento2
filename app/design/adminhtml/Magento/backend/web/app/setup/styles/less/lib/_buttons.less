@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -8,7 +8,6 @@
 //  _____________________________________________
 
 //  Colors
-
 @btn__base__background-color: @color-gray89;
 @btn__base__color: @color-brownie;
 @btn__base__active__background-color: darken(@btn__base__background-color, 5%);
@@ -29,6 +28,12 @@
 @btn-secondary__active__background-color: lighten(@btn-secondary__background-color, 2%);
 
 @triangle__base__size: @btn__height__base / 2;
+
+//  Expand button
+@color-btn-expand: @base__color;
+@color-btn-expand-hover: lighten(@base__color, 5%);
+@height-triangle-btn-expand: .36em;
+@width-triangle-btn-expand: .57em;
 
 //
 //  Common
@@ -407,11 +412,6 @@
 //
 //  Expand button
 //  ---------------------------------------------
-
-@color-btn-expand: @base__color;
-@color-btn-expand-hover: lighten(@base__color, 5%);
-@width-triangle-btn-expand: .57em;
-@height-triangle-btn-expand: .36em;
 
 .btn-expand {
     background-color: transparent;

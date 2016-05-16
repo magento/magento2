@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Controller\Soap\Request;
@@ -110,7 +110,7 @@ class Handler
         if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
                 __(
-                    AuthorizationException::NOT_AUTHORIZED,
+                    'Consumer is not authorized to access %resources',
                     ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
                 )
             );

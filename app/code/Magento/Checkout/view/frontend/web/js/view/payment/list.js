@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -95,8 +95,19 @@ define([
          * @param {Object} paymentMethodData
          */
         createRenderer: function (paymentMethodData) {
+            var isRendererForMethod = false;
+
             _.find(rendererList(), function (renderer) {
-                if (renderer.type.indexOf(paymentMethodData.method) === 0) {
+
+                if (renderer.hasOwnProperty('typeComparatorCallback') &&
+                    typeof renderer.typeComparatorCallback == 'function'
+                ) {
+                    isRendererForMethod = renderer.typeComparatorCallback(renderer.type, paymentMethodData.method);
+                } else {
+                    isRendererForMethod = renderer.type === paymentMethodData.method;
+                }
+
+                if (isRendererForMethod) {
                     layout(
                         [
                             this.createComponent(
@@ -125,7 +136,7 @@ define([
             _.find(items(), function (value) {
                 if (value.item.method.indexOf(paymentMethodCode) === 0) {
                     value.disposeSubscriptions();
-                    this.removeChild(value);
+                    value.destroy();
                 }
             }, this);
         }

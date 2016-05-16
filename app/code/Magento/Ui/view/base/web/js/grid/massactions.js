@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -147,7 +147,7 @@ define([
          * @param {Object} data - Selections data.
          */
         defaultCallback: function (action, data) {
-            var itemsType = data.excludeMode ? 'excluded' : 'selected',
+            var itemsType = data.excludeMode && data.excluded.length !== 0 ? 'excluded' : 'selected',
                 selections = {};
 
             selections[itemsType] = data[itemsType];

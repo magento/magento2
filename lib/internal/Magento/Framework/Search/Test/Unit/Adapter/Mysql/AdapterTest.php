@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -180,7 +180,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with($selectResult)
             ->will($this->returnArgument(0));
-        $this->aggregatioBuilder->expects($this->once())->method('build')->willReturn($selectResult['aggregations']);
+        $this->aggregatioBuilder->expects($this->once())
+            ->method('build')
+            ->with($this->request, $table, $selectResult['documents'])
+            ->willReturn($selectResult['aggregations']);
         $response = $this->adapter->query($this->request);
         $this->assertEquals($selectResult, $response);
     }

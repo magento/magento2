@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Wysiwyg\Files;
@@ -25,7 +25,7 @@ class ContentsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject */
     protected $storage;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
@@ -45,7 +45,6 @@ class ContentsTest extends \PHPUnit_Framework_TestCase
             ]
         );
     }
-
 
     public function testExecute()
     {

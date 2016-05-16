@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
@@ -8,6 +8,9 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Helper
@@ -31,17 +34,14 @@ class Helper
     protected $stockFilter;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
-     */
-    protected $productLinks;
-
-    /**
      * @var \Magento\Backend\Helper\Js
      */
     protected $jsHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     *
+     * @deprecated
      */
     protected $dateFilter;
 
@@ -61,15 +61,28 @@ class Helper
     protected $productRepository;
 
     /**
+     * @var ProductLinks
+     */
+    protected $productLinks;
+
+    /**
+     * @var LinkResolver
+     */
+    private $linkResolver;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     */
+    private $dateTimeFilter;
+
+    /**
+     * Helper constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
-     * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks
+     * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param CustomOptionFactory $customOptionFactory
-     * @param ProductLinkFactory $productLinkFactory
-     * @param ProductRepository $productRepository
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -77,10 +90,7 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        CustomOptionFactory $customOptionFactory,
-        ProductLinkFactory $productLinkFactory,
-        ProductRepository $productRepository
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -88,23 +98,20 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-        $this->customOptionFactory = $customOptionFactory;
-        $this->productLinkFactory = $productLinkFactory;
-        $this->productRepository = $productRepository;
     }
 
     /**
-     * Initialize product before saving
+     * Initialize product from data
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @param array $productData
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function initialize(\Magento\Catalog\Model\Product $product)
+    public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
     {
-        $productData = $this->request->getPost('product');
         unset($productData['custom_attributes']);
         unset($productData['extension_attributes']);
 
@@ -113,9 +120,21 @@ class Helper
             $productData['stock_data'] = $this->stockFilter->filter($stockData);
         }
 
+        $productData = $this->normalize($productData);
+
+        if (!empty($productData['is_downloadable'])) {
+            $productData['product_has_weight'] = 0;
+        }
+
         foreach (['category_ids', 'website_ids'] as $field) {
             if (!isset($productData[$field])) {
                 $productData[$field] = [];
+            }
+        }
+
+        foreach ($productData['website_ids'] as $websiteId => $checkboxValue) {
+            if (!$checkboxValue) {
+                unset($productData['website_ids'][$websiteId]);
             }
         }
 
@@ -130,7 +149,7 @@ class Helper
         foreach ($attributes as $attrKey => $attribute) {
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                    $dateFieldFilters[$attrKey] = $this->dateFilter;
+                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
                 }
             }
         }
@@ -138,86 +157,54 @@ class Helper
         $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $productData);
         $productData = $inputFilter->getUnescaped();
 
+        if (isset($productData['options'])) {
+            $productOptions = $productData['options'];
+            unset($productData['options']);
+        } else {
+            $productOptions = [];
+        }
+
         $product->addData($productData);
 
         if ($wasLockedMedia) {
             $product->lockAttribute('media');
         }
 
-        if ($this->storeManager->hasSingleStore()) {
+        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
             $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
         }
 
         /**
          * Check "Use Default Value" checkboxes values
          */
-        $useDefaults = $this->request->getPost('use_default');
-        if ($useDefaults) {
-            foreach ($useDefaults as $attributeCode) {
-                $product->setData($attributeCode, false);
+        $useDefaults = (array)$this->request->getPost('use_default', []);
+
+        foreach ($useDefaults as $attributeCode => $useDefaultState) {
+            if ($useDefaultState) {
+                $product->setData($attributeCode, null);
             }
         }
 
-        $links = $this->request->getPost('links');
-        $links = is_array($links) ? $links : [];
-        $linkTypes = ['related', 'upsell', 'crosssell'];
-        foreach ($linkTypes as $type) {
-            if (isset($links[$type])) {
-                $links[$type] = $this->jsHelper->decodeGridSerializedInput($links[$type]);
-            }
-        }
-        $product = $this->productLinks->initializeLinks($product, $links);
-        $productLinks = [];
-        $savedLinksByType = [];
-        foreach ($product->getProductLinks() as $link) {
-            $savedLinksByType[$link->getLinkType()][] = $link;
-        }
-        $this->dropRelationProductsCache($product);
-
-        $linkTypes = [
-            'related' => $product->getRelatedReadonly(),
-            'upsell' => $product->getUpsellReadonly(),
-            'crosssell' => $product->getCrosssellReadonly()
-        ];
-        foreach ($linkTypes as $linkType => $readonly) {
-            if (isset($links[$linkType]) && !$readonly) {
-                foreach ($links[$linkType] as $linkId => $linkData) {
-                    $linkProduct = $this->productRepository->getById($linkId);
-                    $link = $this->productLinkFactory->create();
-                    $link->setSku($product->getSku())
-                        ->setLinkedProductSku($linkProduct->getSku())
-                        ->setLinkType($linkType)
-                        ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
-                    $productLinks[] = $link;
-                }
-            } else {
-                if (array_key_exists($linkType, $savedLinksByType)) {
-                    $productLinks = array_merge($productLinks, $savedLinksByType[$linkType]);
-                }
-            }
-            if (isset($savedLinksByType[$linkType])) {
-                unset($savedLinksByType[$linkType]);
-            }
-        }
-
-        foreach ($savedLinksByType as $links) {
-            $productLinks = array_merge($productLinks, $links);
-        }
-        $product->setProductLinks($productLinks);
+        $product = $this->setProductLinks($product);
 
         /**
          * Initialize product options
          */
-        if (isset($productData['options']) && !$product->getOptionsReadonly()) {
+        if ($productOptions && !$product->getOptionsReadonly()) {
             // mark custom options that should to fall back to default value
             $options = $this->mergeProductOptions(
-                $productData['options'],
+                $productOptions,
                 $this->request->getPost('options_use_default')
             );
             $customOptions = [];
             foreach ($options as $customOptionData) {
-                if (!(bool)$customOptionData['is_delete']) {
-                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+                if (empty($customOptionData['is_delete'])) {
+                    if (isset($customOptionData['values'])) {
+                        $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
+                            return empty($valueData['is_delete']);
+                        });
+                    }
+                    $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
                     $customOption->setOptionId(null);
                     $customOptions[] = $customOption;
@@ -227,10 +214,88 @@ class Helper
         }
 
         $product->setCanSaveCustomOptions(
-            (bool)$this->request->getPost('affect_product_custom_options') && !$product->getOptionsReadonly()
+            !empty($productData['affect_product_custom_options']) && !$product->getOptionsReadonly()
         );
 
         return $product;
+    }
+    
+    /**
+     * Initialize product before saving
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function initialize(\Magento\Catalog\Model\Product $product)
+    {
+        $productData = $this->request->getPost('product', []);
+        return $this->initializeFromData($product, $productData);
+    }
+
+    /**
+     * Setting product links
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function setProductLinks(\Magento\Catalog\Model\Product $product)
+    {
+        $links = $this->getLinkResolver()->getLinks();
+
+        $product->setProductLinks([]);
+
+        $product = $this->productLinks->initializeLinks($product, $links);
+        $productLinks = $product->getProductLinks();
+        $linkTypes = [
+            'related' => $product->getRelatedReadonly(),
+            'upsell' => $product->getUpsellReadonly(),
+            'crosssell' => $product->getCrosssellReadonly()
+        ];
+
+        foreach ($linkTypes as $linkType => $readonly) {
+            if (isset($links[$linkType]) && !$readonly) {
+                foreach ((array) $links[$linkType] as $linkData) {
+                    if (empty($linkData['id'])) {
+                        continue;
+                    }
+
+                    $linkProduct = $this->getProductRepository()->getById($linkData['id']);
+                    $link = $this->getProductLinkFactory()->create();
+                    $link->setSku($product->getSku())
+                        ->setLinkedProductSku($linkProduct->getSku())
+                        ->setLinkType($linkType)
+                        ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
+                    $productLinks[] = $link;
+                }
+            }
+        }
+
+        return $product->setProductLinks($productLinks);
+    }
+
+    /**
+     * Internal normalization
+     * TODO: Remove this method
+     *
+     * @param array $productData
+     * @return array
+     */
+    protected function normalize(array $productData)
+    {
+        foreach ($productData as $key => $value) {
+            if (is_scalar($value)) {
+                if ($value === 'true') {
+                    $productData[$key] = '1';
+                } elseif ($value === 'false') {
+                    $productData[$key] = '0';
+                }
+            } elseif (is_array($value)) {
+                $productData[$key] = $this->normalize($value);
+            }
+        }
+
+        return $productData;
     }
 
     /**
@@ -243,33 +308,89 @@ class Helper
     public function mergeProductOptions($productOptions, $overwriteOptions)
     {
         if (!is_array($productOptions)) {
-            $productOptions = [];
-        }
-        if (is_array($overwriteOptions)) {
-            $options = array_replace_recursive($productOptions, $overwriteOptions);
-            array_walk_recursive($options, function (&$item) {
-                if ($item === "") {
-                    $item = null;
-                }
-            });
-        } else {
-            $options = $productOptions;
+            return [];
         }
 
-        return $options;
+        if (!is_array($overwriteOptions)) {
+            return $productOptions;
+        }
+        
+        foreach ($productOptions as $index => $option) {
+            $optionId = $option['option_id'];
+
+            if (!isset($overwriteOptions[$optionId])) {
+                continue;
+            }
+
+            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                    $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
+                }
+            }
+        }
+
+        return $productOptions;
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
-     * @return void
+     * @return CustomOptionFactory
      */
-    private function dropRelationProductsCache(\Magento\Catalog\Model\Product $product)
+    private function getCustomOptionFactory()
     {
-        $product->unsetData('up_sell_products');
-        $product->unsetData('up_sell_products_ids');
-        $product->unsetData('related_products');
-        $product->unsetData('related_products_ids');
-        $product->unsetData('cross_sell_products');
-        $product->unsetData('cross_sell_products_ids');
+        if (null === $this->customOptionFactory) {
+            $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+        }
+        return $this->customOptionFactory;
+    }
+
+    /**
+     * @return ProductLinkFactory
+     */
+    private function getProductLinkFactory()
+    {
+        if (null === $this->productLinkFactory) {
+            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+        }
+        return $this->productLinkFactory;
+    }
+
+    /**
+     * @return ProductRepository
+     */
+    private function getProductRepository()
+    {
+        if (null === $this->productRepository) {
+            $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
+        }
+        return $this->productRepository;
+    }
+
+    /**
+     * @deprecated
+     * @return LinkResolver
+     */
+    private function getLinkResolver()
+    {
+        if (!is_object($this->linkResolver)) {
+            $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
+        }
+        return $this->linkResolver;
+    }
+
+    /**
+     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     *
+     * @deprecated
+     */
+    private function getDateTimeFilter()
+    {
+        if ($this->dateTimeFilter === null) {
+            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        }
+        return $this->dateTimeFilter;
     }
 }

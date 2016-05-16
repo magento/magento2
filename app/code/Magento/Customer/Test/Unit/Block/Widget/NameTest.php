@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,7 +69,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
@@ -128,7 +128,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -149,7 +149,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -398,7 +398,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))

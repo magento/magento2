@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -162,14 +162,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
                 'basePrice' => 20.,
                 'expectedResult' => [
                     [
-                        'price'         => '50.',
-                        'website_price' => '50.',
-                        'price_qty'     => '2.',
-                        'cust_group'    => Group::CUST_GROUP_ALL,
-                    ],
-                    [
-                        'price'         => '30.',
-                        'website_price' => '30.',
+                        'price'         => '15.',
+                        'website_price' => '15.',
                         'price_qty'     => '5.',
                         'cust_group'    => Group::CUST_GROUP_ALL
                     ],

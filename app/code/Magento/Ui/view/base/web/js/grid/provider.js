@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,8 @@ define([
                 updateUrl: '${ $.update_url }'
             },
             listens: {
-                params: 'onParamsChange'
+                params: 'onParamsChange',
+                requestConfig: 'updateRequestConfig'
             }
         },
 
@@ -149,6 +150,17 @@ define([
 
             this.setData(data)
                 .trigger('reloaded');
+        },
+
+        /**
+         * Updates storage's request configuration
+         *
+         * @param {Object} requestConfig
+         */
+        updateRequestConfig: function (requestConfig) {
+            if (this.storage()) {
+                _.extend(this.storage().requestConfig, requestConfig);
+            }
         }
     });
 });

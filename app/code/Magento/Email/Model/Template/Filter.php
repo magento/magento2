@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template;
@@ -893,6 +893,8 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
+        } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
+            $css = '';
         }
 
         return $css;

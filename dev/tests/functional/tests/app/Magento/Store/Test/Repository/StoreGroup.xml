@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -21,6 +21,16 @@
         <dataset name="custom">
             <field name="website_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">main_website</item>
+            </field>
+            <field name="name" xsi:type="string">store_name_%isolation%</field>
+            <field name="root_category_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_category</item>
+            </field>
+        </dataset>
+
+        <dataset name="custom_new_group">
+            <field name="website_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">custom_website</item>
             </field>
             <field name="name" xsi:type="string">store_name_%isolation%</field>
             <field name="root_category_id" xsi:type="array">

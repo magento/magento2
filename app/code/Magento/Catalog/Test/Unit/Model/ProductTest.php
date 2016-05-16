@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -163,10 +163,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventManagerMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mediaConfig;
+
+    /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appStateMock;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Framework\Indexer\IndexerInterface');
 
@@ -332,7 +340,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
             [
@@ -356,16 +366,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'customAttributeFactory' => $this->attributeValueFactory,
                 'mediaGalleryEntryConverterPool' => $this->mediaGalleryEntryConverterPoolMock,
                 'linkRepository' => $this->productLinkRepositoryMock,
+                'catalogProductMediaConfig' => $this->mediaConfig,
                 'data' => ['id' => 1]
             ]
         );
 
+        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $modelReflection = new \ReflectionClass(get_class($this->model));
+        $appStateReflection = $modelReflection->getProperty('appState');
+        $appStateReflection->setAccessible(true);
+        $appStateReflection->setValue($this->model, $this->appStateMock);
     }
 
     public function testGetAttributes()
     {
         $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
@@ -376,7 +395,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $attribute->expects($this->any())->method('isInGroup')->will($this->returnValue(true));
-        $productType->expects($this->any())->method('getEditableAttributes')->will(
+        $productType->expects($this->any())->method('getSetAttributes')->will(
             $this->returnValue([$attribute])
         );
         $expect = [$attribute];
@@ -799,21 +818,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->afterSave();
     }
 
-    public function testGetIsSalableConfigurable()
-    {
-        $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', ['getIsSalable'], [], '', false);
-
-        $typeInstanceMock
-            ->expects($this->atLeastOnce())
-            ->method('getIsSalable')
-            ->willReturn(true);
-
-        $this->model->setTypeInstance($typeInstanceMock);
-
-        self::assertTrue($this->model->getIsSalable());
-    }
-
     public function testGetIsSalableSimple()
     {
         $typeInstanceMock =
@@ -942,7 +946,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function setupMediaAttributes()
     {
         $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productTypeInstanceMock->expects($this->any())->method('factory')->will(
@@ -971,7 +975,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn($frontendMock);
         $attributeSmallImage->expects($this->any())->method('getAttributeCode')->willReturn('small_image');
 
-        $productType->expects($this->any())->method('getEditableAttributes')->will(
+        $productType->expects($this->any())->method('getSetAttributes')->will(
             $this->returnValue(['image' => $attributeImage, 'small_image' => $attributeSmallImage])
         );
 
@@ -990,8 +994,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaAttributeValues()
     {
-        $this->setupMediaAttributes();
-
+        $this->mediaConfig->expects($this->once())->method('getMediaAttributeCodes')
+            ->willReturn(['image', 'small_image']);
         $this->model->setData('image', 'imageValue');
         $this->model->setData('small_image', 'smallImageValue');
 

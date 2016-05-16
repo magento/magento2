@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Cms\Api\Data\PageInterface;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,7 +72,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('cms_page_store', [$whereForInsert])
             ->willReturnSelf();
 
-        $entityMetadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())
@@ -83,7 +84,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with('Magento\Cms\Model\Page')
+            ->with(PageInterface::class)
             ->willReturn($entityMetadata);
 
         $this->resourcePage->expects($this->once())
@@ -117,7 +118,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($linkField)
             ->willReturn($linkId);
 
-        $result = $this->model->execute('Magento\Cms\Model\Page', $page);
-        $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
+        $result = $this->model->execute($page);
+        $this->assertInstanceOf(PageInterface::class, $result);
     }
 }

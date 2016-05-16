@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -72,6 +72,21 @@
 
     > span {
         &:extend(.abs-visually-hidden all);
+    }
+}
+
+.abs-action-button-as-link {
+    .lib-button-as-link(@_margin: false);
+    .lib-css(font-weight, @font-weight__regular);
+    border-radius: 0;
+
+    &:active,
+    &:not(:focus) {
+        box-shadow: none;
+    }
+
+    &:focus {
+        color: @link__hover__color;
     }
 }
 
@@ -395,6 +410,14 @@ button {
 }
 
 //
+//  Secondary action
+//  ---------------------------------------------
+
+.action-advanced {
+    &:extend(.abs-action-button-as-link all);
+}
+
+//
 //  Action menu
 //  ---------------------------------------------
 
@@ -458,9 +481,9 @@ button {
 
     .item,
     .action-menu-item {
+        cursor: pointer;
         display: block;
         padding: .6875em 1em;
-        cursor: pointer;
     }
 
     .action-submenu {

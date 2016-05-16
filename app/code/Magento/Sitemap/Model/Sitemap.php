@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -630,7 +630,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getDocumentRoot()
     {
-        return $this->_request->getServer('DOCUMENT_ROOT');
+        return realpath($this->_request->getServer('DOCUMENT_ROOT'));
     }
 
     /**

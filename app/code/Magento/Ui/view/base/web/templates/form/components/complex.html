@@ -1,0 +1,20 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="admin__field-complex" css="$data.additionalClasses" attr="'data-index': index">
+
+    <div class="admin__field-complex-title" if="label">
+        <span text="label"/>
+    </div>
+
+    <div class="admin__field-complex-elements"
+         each="data: elems, as: 'element'"
+         render="" />
+
+    <div class="admin__field-complex-content"
+         html="$data.content"></div>
+</div>

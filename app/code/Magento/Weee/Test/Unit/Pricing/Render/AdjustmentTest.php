@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up mocks for tested class
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->priceCurrencyMock = $this->getMockForAbstractClass(

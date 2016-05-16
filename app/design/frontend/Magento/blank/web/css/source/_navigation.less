@@ -1,7 +1,13 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@active-nav-indent: 54px;
 
 //
 //  Common
@@ -42,7 +48,6 @@
 //  Mobile
 //  _____________________________________________
 
-@active-nav-indent: 54px;
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .navigation {
         padding: 0;
@@ -74,15 +79,16 @@
     }
 
     .nav-sections {
+        -webkit-overflow-scrolling: touch;
         .lib-css(transition, left .3s, 1);
         height: 100%;
         left: -80%;
-        left: calc(~"-1 * (100% - @{active-nav-indent})");
+        left: calc(~'-1 * (100% - @{active-nav-indent})');
         overflow: auto;
         position: fixed;
         top: 0;
         width: 80%;
-        width: calc(~"100% - @{active-nav-indent}");
+        width: calc(~'100% - @{active-nav-indent}');
 
         .switcher {
             border-top: 1px solid @color-gray82;
@@ -189,7 +195,7 @@
     .nav-open {
         .page-wrapper {
             left: 80%;
-            left: calc(~"100% - @{active-nav-indent}");
+            left: calc(~'100% - @{active-nav-indent}');
         }
 
         .nav-sections {
@@ -202,12 +208,12 @@
 
         .nav-toggle {
             &:after{
-                background: rgba(0,0,0,.01);
+                background: rgba(0, 0, 0, @overlay__opacity);
                 content: '';
                 display: block;
                 height: 100%;
                 position: fixed;
-                right:0;
+                right: 0;
                 top: 0;
                 width: 100%;
                 z-index: 1;

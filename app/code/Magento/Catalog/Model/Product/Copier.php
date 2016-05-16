@@ -2,10 +2,12 @@
 /**
  * Catalog product copier. Creates product duplicate
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 class Copier
 {
@@ -25,18 +27,20 @@ class Copier
     protected $productFactory;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param CopyConstructorInterface $copyConstructor
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param Option\Repository $optionRepository
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Model\Product\Option\Repository $optionRepository
+        \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
-        $this->optionRepository = $optionRepository;
     }
 
     /**
@@ -50,8 +54,10 @@ class Copier
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
+        /** @var \Magento\Catalog\Model\Product $duplicate */
         $duplicate = $this->productFactory->create();
         $duplicate->setData($product->getData());
+        $duplicate->setOptions([]);
         $duplicate->setIsDuplicate(true);
         $duplicate->setOriginalId($product->getEntityId());
         $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
@@ -74,9 +80,38 @@ class Copier
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             }
         } while (!$isDuplicateSaved);
-
-        $this->optionRepository->duplicate($product, $duplicate);
-        $product->getResource()->duplicate($product->getEntityId(), $duplicate->getEntityId());
+        $this->getOptionRepository()->duplicate($product, $duplicate);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $product->getResource()->duplicate(
+            $product->getData($metadata->getLinkField()),
+            $duplicate->getData($metadata->getLinkField())
+        );
         return $duplicate;
+    }
+
+    /**
+     * @return Option\Repository
+     * @deprecated
+     */
+    private function getOptionRepository()
+    {
+        if (null === $this->optionRepository) {
+            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\Option\Repository');
+        }
+        return $this->optionRepository;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @deprecated
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

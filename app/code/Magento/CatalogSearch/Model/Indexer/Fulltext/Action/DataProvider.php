@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
@@ -90,7 +90,7 @@ class DataProvider
     private $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     private $metadata;
 
@@ -102,7 +102,7 @@ class DataProvider
      * @param \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         ResourceConnection $resource,
@@ -112,7 +112,7 @@ class DataProvider
         \Magento\CatalogSearch\Model\ResourceModel\EngineProvider $engineProvider,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -372,21 +372,13 @@ class DataProvider
                 ['main' => $this->getTable($relation->getTable())],
                 [$relation->getChildFieldName()]
             );
-            //TODO: Will be removed in MAGETWO-47395
-            if ($typeId === 'configurable') {
-                $select->where(
-                    $relation->getParentFieldName() . ' = ?',
-                    $productId
-                );
-            } else {
-                $select->join(
-                    ['e' => $this->resource->getTableName('catalog_product_entity')],
-                    'e.' . $this->metadata->getLinkField() . ' = main.' . $relation->getParentFieldName()
-                )->where(
-                    'e.entity_id = ?',
-                    $productId
-                );
-            }
+            $select->join(
+                ['e' => $this->resource->getTableName('catalog_product_entity')],
+                'e.' . $this->metadata->getLinkField() . ' = main.' . $relation->getParentFieldName()
+            )->where(
+                'e.entity_id = ?',
+                $productId
+            );
 
             if ($relation->getWhere() !== null) {
                 $select->where($relation->getWhere());

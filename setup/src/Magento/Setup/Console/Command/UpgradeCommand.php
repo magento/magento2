@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,13 +31,22 @@ class UpgradeCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
+     * Object Manager
+     *
+     * @var ObjectManagerProvider
+     */
+    private $objectManagerProvider;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(InstallerFactory $installerFactory)
+    public function __construct(InstallerFactory $installerFactory, ObjectManagerProvider $objectManagerProvider)
     {
         $this->installerFactory = $installerFactory;
+        $this->objectManagerProvider = $objectManagerProvider;
         parent::__construct();
     }
 
@@ -65,6 +76,16 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = $this->objectManagerProvider->get();
+        $areaCode = 'setup';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $objectManager->configure($configLoader->load($areaCode));
+
         $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->updateModulesSequence($keepGenerated);

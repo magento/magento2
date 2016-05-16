@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Setup;
@@ -164,6 +164,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ->setComment('table storing various synonyms groups');
 
             $connection->createTable($table);
+        }
+
+        if (version_compare($context->getVersion(), '2.0.4') < 0) {
+            $connection->dropIndex(
+                $setup->getTable('search_query'),
+                $installer->getIdxName('search_query', 'synonym_for')
+            );
+            $connection->dropColumn($setup->getTable('search_query'), 'synonym_for');
         }
     }
 }

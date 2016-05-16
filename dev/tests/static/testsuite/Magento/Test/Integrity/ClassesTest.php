@@ -2,7 +2,7 @@
 /**
  * Scan source code for references to classes and see if they indeed exist
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\Integrity;
@@ -598,7 +598,13 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     {
         $files = Files::init();
         $errors = [];
-        foreach ($files->getFiles([BP . '/dev/tests/{integration,unit}'], '*') as $file) {
+        $filesToTest = $files->getPhpFiles(Files::INCLUDE_TESTS);
+
+        if (($key = array_search(__FILE__, $filesToTest)) !== false) {
+            unset($filesToTest[$key]);
+        }
+
+        foreach ($filesToTest as $file) {
             $code = file_get_contents($file);
             if (preg_match('/@covers(DefaultClass)?\s+([\w\\\\]+)(::([\w\\\\]+))?/', $code, $matches)) {
                 if ($this->isNonexistentEntityCovered($matches)) {

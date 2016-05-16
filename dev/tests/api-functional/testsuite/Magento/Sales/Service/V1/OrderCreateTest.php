@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -148,7 +148,6 @@ class OrderCreateTest extends WebapiAbstract
      */
     public function testOrderCreate()
     {
-        $this->markTestSkipped('MAGETWO-44643');
         $order = $this->prepareOrder();
 
         $serviceInfo = [

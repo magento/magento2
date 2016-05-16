@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -16,8 +16,6 @@
 @product-name-link__text-decoration__active: @link__hover__text-decoration;
 @product-name-link__text-decoration__hover: @link__hover__text-decoration;
 @product-name-link__text-decoration__visited: @link__hover__text-decoration;
-
-//
 
 //
 //  Common
@@ -46,13 +44,13 @@
 
             &-name {
                 &:extend(.abs-product-link all);
+                -moz-hyphens: auto;
+                -ms-hyphens: auto;
+                -webkit-hyphens: auto;
                 display: block;
+                hyphens: auto;
                 margin: @indent__xs 0;
                 word-wrap: break-word;
-                -webkit-hyphens: auto;
-                   -moz-hyphens: auto;
-                    -ms-hyphens: auto;
-                        hyphens: auto;
             }
 
             &-info {
@@ -103,10 +101,12 @@
                 .price {
                     .lib-font-size(14);
                     font-weight: @font-weight__bold;
+                    white-space: nowrap;
                 }
                 
                 .price-label {
                     font-size: @font-size__s;
+
                     &:after {
                         content: ':';
                     }
@@ -385,11 +385,11 @@
             }
             
             .product-item {
-                margin-left: calc(~"(100% - 4 * 23.233%) / 3");
+                margin-left: calc(~'(100% - 4 * 23.233%) / 3');
                 padding: 0;
                 width: 23.233%;
 
-                &:nth-child(4n+1) {
+                &:nth-child(4n + 1) {
                     margin-left: 0;
                 }
             }
@@ -416,7 +416,7 @@
                         margin-left: 1%;
                     }
 
-                    &:nth-child(3n+1) {
+                    &:nth-child(3n + 1) {
                         margin-left: 0;
                     }
                 }

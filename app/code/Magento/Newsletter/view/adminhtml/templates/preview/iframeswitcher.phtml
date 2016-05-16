@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -42,8 +42,8 @@ function unBlockPreview() {
     jQuery('body').trigger('hideLoadingPopup');
 }
 
-Event.observe(window, 'load', preview);
-Event.observe(previewIframe, 'load', unBlockPreview);
+jQuery(document).ready(preview);
+jQuery(previewIframe).ready(unBlockPreview);
 
 jQuery("#preview_iframe").load(function() {
     jQuery(this).height(jQuery(this).contents().find("html").height() );

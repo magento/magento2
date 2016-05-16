@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -51,7 +51,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     protected $moduleManagerMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
 
@@ -68,7 +68,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);

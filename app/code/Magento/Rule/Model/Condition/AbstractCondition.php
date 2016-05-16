@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -531,7 +531,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'values' => $this->getAttributeSelectOptions(),
                 'value' => $this->getAttribute(),
                 'value_name' => $this->getAttributeName(),
-                'data_form_part' => $this->getFormName()
+                'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
             $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')

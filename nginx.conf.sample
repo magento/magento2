@@ -1,6 +1,10 @@
 # Magento Vars
 # set $MAGE_ROOT /path/to/magento/root;
-# set $MAGE_MODE default; # or production or developer
+#
+# ############################################
+## Optional override of deployment mode. We recommend you use the
+## command bin/magento deploy:mode:set to switch modes instead
+## set $MAGE_MODE default; # or production or developer
 #
 # Example configuration:
 # upstream fastcgi_backend {
@@ -13,7 +17,6 @@
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
-#    set $MAGE_MODE developer;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 
@@ -24,7 +27,7 @@ index index.php;
 autoindex off;
 charset off;
 
-location /setup {
+location ~* ^/setup($|/) {
     root $MAGE_ROOT;
     location ~ ^/setup/index.php {
         fastcgi_pass   fastcgi_backend;
@@ -42,7 +45,7 @@ location /setup {
     }
 }
 
-location /update {
+location ~* ^/update($|/) {
     root $MAGE_ROOT;
 
     location ~ ^/update/index.php {
@@ -54,7 +57,7 @@ location /update {
         include        fastcgi_params;
     }
 
-    # deny everything but index.php
+    # Deny everything but index.php
     location ~ ^/update/(?!pub/). {
         deny all;
     }
@@ -68,11 +71,11 @@ location / {
     try_files $uri $uri/ /index.php?$args;
 }
 
-location /pub {
+location /pub/ {
     location ~ ^/pub/media/(downloadable|customer|import|theme_customization/.*\.xml) {
         deny all;
     }
-    alias $MAGE_ROOT/pub;
+    alias $MAGE_ROOT/pub/;
     add_header X-Frame-Options "SAMEORIGIN";
 }
 
@@ -80,6 +83,12 @@ location /static/ {
     if ($MAGE_MODE = "production") {
         expires max;
     }
+    
+    # Remove signature of the static files that is used to overcome the browser cache
+    location ~ ^/static/version {
+        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+    }
+    
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
@@ -138,16 +147,13 @@ location /media/import/ {
     deny all;
 }
 
-location ~ cron\.php {
-    deny all;
-}
-
 location ~ (index|get|static|report|404|503)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
+    fastcgi_buffers 1024 4k;
 
     fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
-    fastcgi_param  PHP_VALUE "memory_limit=256M \n max_execution_time=600";
+    fastcgi_param  PHP_VALUE "memory_limit=768M \n max_execution_time=600";
     fastcgi_read_timeout 600s;
     fastcgi_connect_timeout 600s;
     fastcgi_param  MAGE_MODE $MAGE_MODE;
@@ -155,4 +161,26 @@ location ~ (index|get|static|report|404|503)\.php$ {
     fastcgi_index  index.php;
     fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
     include        fastcgi_params;
+}
+
+gzip on;
+gzip_disable "msie6";
+
+gzip_comp_level 6;
+gzip_min_length 1100;
+gzip_proxied any;
+gzip_types
+    text/plain
+    text/css
+    text/js
+    text/xml
+    text/javascript
+    application/javascript
+    application/x-javascript
+    application/json
+    application/xml
+    application/xml+rss;
+
+location ~ \.php$ {
+    deny all;
 }

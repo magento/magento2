@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,6 +20,7 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\SampleData;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Install controller
@@ -49,23 +50,31 @@ class Install extends AbstractActionController
     protected $sampleDataState;
 
     /**
+     * @var \Magento\Framework\App\DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Default Constructor
      *
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
         ProgressFactory $progressFactory,
-        \Magento\Framework\Setup\SampleData\State $sampleDataState
+        \Magento\Framework\Setup\SampleData\State $sampleDataState,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
         $this->sampleDataState = $sampleDataState;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -89,6 +98,7 @@ class Install extends AbstractActionController
         $this->log->clear();
         $json = new JsonModel;
         try {
+            $this->checkForPriorInstall();
             $data = array_merge(
                 $this->importDeploymentConfigForm(),
                 $this->importUserConfigForm(),
@@ -106,6 +116,7 @@ class Install extends AbstractActionController
             $json->setVariable('messages', $this->installer->getInstallInfo()[Installer::INFO_MESSAGE]);
         } catch (\Exception $e) {
             $this->log->logError($e);
+            $json->setVariable('messages', $e->getMessage());
             $json->setVariable('success', false);
         }
         return $json;
@@ -143,6 +154,19 @@ class Install extends AbstractActionController
             $contents = [(string)$e];
         }
         return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
+    }
+
+    /**
+     * Checks for prior install
+     *
+     * @return void
+     * @throws \Magento\Setup\Exception
+     */
+    private function checkForPriorInstall()
+    {
+        if ($this->deploymentConfig->isAvailable()) {
+            throw new \Magento\Setup\Exception('Magento application is already installed.');
+        }
     }
 
     /**

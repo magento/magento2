@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Test\TestStep;
@@ -33,6 +33,6 @@ class UseVaultPaymentTokenStep implements TestStepInterface
     {
         $block = $this->orderCreatePage->getCreateBlock();
         $block->selectPaymentMethod(['method' => 'vault']);
-        $block->selectVaultToken('token_switcher_vault_item_');
+        $block->selectVaultToken('token_switcher_');
     }
 }

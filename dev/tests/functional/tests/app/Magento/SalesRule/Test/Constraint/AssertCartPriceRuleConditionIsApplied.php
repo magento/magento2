@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\SalesRule\Test\Constraint;
 
 /**
- * Assert that Catalog Price Rule is applied in Shopping Cart.
+ * Assert that Cart Price Rule is applied in Shopping Cart.
  */
 class AssertCartPriceRuleConditionIsApplied extends AssertCartPriceRuleApplying
 {
     /**
-     * Assert that Catalog Price Rule is applied in Shopping Cart.
+     * Assert that Cart Price Rule is applied in Shopping Cart.
      *
      * @return void
      */

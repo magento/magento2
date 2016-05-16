@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -37,7 +37,7 @@
 //  ---------------------------------------------
 
 .form-row {
-    .extend__clearer();
+    &:extend(.abs-clearer all);
     margin-bottom: 2.2rem;
 
     .form-row {
@@ -166,8 +166,8 @@ textarea:not([disabled]) {
 .form-el-insider {
     border-radius: @form-el__border-radius;
     display: table-cell;
-    vertical-align: top;
     padding: @form-el__padding-top + .08em @form-el__padding-side @form-el__padding-bottom 0;
+    vertical-align: top;
 }
 
 //

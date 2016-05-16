@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Widget\Test\Constraint;
 
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductCompare;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
@@ -9,7 +9,7 @@ use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DB\Select;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
@@ -55,22 +55,17 @@ class Rule extends AbstractResource
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
-     * @param EntityManager $entityManager
-     * @param array $associatedEntitiesMap
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon,
-        EntityManager $entityManager,
-        array $associatedEntitiesMap = [],
         $connectionName = null
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
-        $this->entityManager = $entityManager;
-        $this->_associatedEntitiesMap = $associatedEntitiesMap;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
         parent::__construct($context, $connectionName);
     }
 
@@ -138,9 +133,7 @@ class Rule extends AbstractResource
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
-        $this->entityManager->load(RuleInterface::class, $object, $value);
-        $this->unserializeFields($object);
-        $this->_afterLoad($object);
+        $this->getEntityManager()->load($object, $value);
         return $this;
     }
 
@@ -370,37 +363,47 @@ class Rule extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-
-        $this->beginTransaction();
-
-        try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                $this->entityManager->save(RuleInterface::class, $object);
-                $this->unserializeFields($object);
-                $this->processAfterSaves($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
+        $this->getEntityManager()->save($object);
         return $this;
+    }
+
+    /**
+     * Delete the object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->getEntityManager()->delete($object);
+        return $this;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    private function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\EntityManager
+     * @deprecated
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+        }
+        return $this->entityManager;
     }
 }

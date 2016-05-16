@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product\CopyConstructor;
@@ -24,7 +24,7 @@ class Bundle implements \Magento\Catalog\Model\Product\CopyConstructorInterface
             return;
         }
 
-        $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions();
+        $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions() ?: [];
         $duplicatedBundleOptions = [];
         foreach ($bundleOptions as $key => $bundleOption) {
             $duplicatedBundleOptions[$key] = clone $bundleOption;

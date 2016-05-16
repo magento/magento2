@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -95,6 +95,11 @@
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="filterRange">
+        <xs:complexContent>
+            <xs:extension base="input"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="range">
         <xs:complexContent>
             <xs:extension base="input"/>
         </xs:complexContent>
@@ -197,7 +202,34 @@
             <xs:extension base="select"/>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="checkboxset">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="radioset">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="textarea">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="fileUploader">
         <xs:complexContent>
             <xs:extension base="ui_element">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
@@ -335,6 +367,15 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="actionDelete">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="bookmark" xml:base="ui_element">
         <xs:complexContent>
             <xs:extension base="ui_element">
@@ -398,6 +439,15 @@
                     </xs:element>
                 </xs:sequence>
                 <xs:attribute name="path" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="dynamicRows">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

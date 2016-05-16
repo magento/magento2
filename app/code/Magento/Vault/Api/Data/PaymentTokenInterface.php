@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Api\Data;
@@ -42,7 +42,7 @@ interface PaymentTokenInterface
     /*
      * Token expiration timestamp.
      */
-    const EXPIRE_AT = 'expire_at';
+    const EXPIRES_AT = 'expires_at';
     /*
      * Gateway token ID.
      */
@@ -155,7 +155,7 @@ interface PaymentTokenInterface
      *
      * @return string|null
      */
-    public function getExpireAt();
+    public function getExpiresAt();
 
     /**
      * Set token expiration timestamp
@@ -163,7 +163,7 @@ interface PaymentTokenInterface
      * @param string $timestamp
      * @return $this
      */
-    public function setExpireAt($timestamp);
+    public function setExpiresAt($timestamp);
 
     /**
      * Get gateway token ID

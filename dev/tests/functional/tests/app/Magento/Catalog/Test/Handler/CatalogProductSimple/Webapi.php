@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,7 +60,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         'options',
         'media_gallery_entries',
         'tier_prices',
-        'extension_attributes'
+        'extension_attributes',
+        'custom_attributes'
     ];
 
     /**
@@ -97,12 +98,13 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         /** @var CatalogProductSimple $fixture */
         $url = $_ENV['app_frontend_url'] . 'rest/default/V1/products';
         $this->webapiTransport->write($url, $this->fields, CurlInterface::POST);
-        $response = json_decode($this->webapiTransport->read(), true);
+        $encodedResponse = $this->webapiTransport->read();
+        $response = json_decode($encodedResponse, true);
         $this->webapiTransport->close();
 
         if (!isset($response['id'])) {
             $this->eventManager->dispatchEvent(['curl_failed'], [$response]);
-            throw new \Exception('Product creation by webapi handler was not successful!');
+            throw new \Exception("Product creation by webapi handler was not successful! Response: {$encodedResponse}");
         }
 
         return $this->parseResponse($response);

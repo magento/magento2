@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -80,7 +80,7 @@ class FormTabs extends AbstractFormContainers
      * Open tab.
      *
      * @param string $tabName
-     * @return Tab
+     * @return $this
      * @throws \Exception
      */
     public function openTab($tabName)
@@ -91,8 +91,22 @@ class FormTabs extends AbstractFormContainers
                 'Tab "' . $tabName . '" is not visible.'
             );
         }
-        $this->getContainerElement($tabName)->click();
+        $this->browser->find($this->header)->hover();
+        $this->clickOnTabName($tabName);
+        $this->browser->find($this->header)->hover();
+
         return $this;
+    }
+
+    /**
+     * Click on tab name.
+     *
+     * @param string $tabName
+     * @return void
+     */
+    protected function clickOnTabName($tabName)
+    {
+        $this->getContainerElement($tabName)->click();
     }
 
     /**

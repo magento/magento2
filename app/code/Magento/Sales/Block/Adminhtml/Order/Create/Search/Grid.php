@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
@@ -205,7 +205,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'name' => 'in_products',
                 'values' => $this->_getSelectedProducts(),
                 'index' => 'entity_id',
-                'sortable' => false
+                'sortable' => false,
+                'header_css_class' => 'col-select',
+                'column_css_class' => 'col-select'
             ]
         );
 

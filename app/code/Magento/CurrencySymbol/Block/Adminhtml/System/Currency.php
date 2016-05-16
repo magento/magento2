@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,6 +35,14 @@ class Currency extends \Magento\Backend\Block\Template
                     'mage-init' => ['button' => ['event' => 'save', 'target' => '#rate-form']],
                 ]
             ]
+        );
+
+        $onClick = "setLocation('" . $this->getUrl('adminhtml/system_config/edit/section/currency') . "')";
+
+        $this->getToolbar()->addChild(
+            'options_button',
+            'Magento\Backend\Block\Widget\Button',
+            ['label' => __('Options'), 'onclick' => $onClick]
         );
 
         $this->getToolbar()->addChild(

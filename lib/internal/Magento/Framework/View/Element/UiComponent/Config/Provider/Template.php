@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent\Config\Provider;
@@ -97,7 +97,7 @@ class Template
         if (isset($this->cachedTemplates[$hash])) {
             return $this->cachedTemplates[$hash];
         }
-
+        $this->domMerger->unsetDom();
         $this->cachedTemplates[$hash] = $this->readerFactory->create(
             [
                 'fileCollector' => $this->aggregatedFileCollectorFactory->create(['searchPattern' => $template]),

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model;
@@ -345,7 +345,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
                 $one = new \Magento\Framework\DataObject();
                 $one->setName(
-                    __($attribute['label_value']) ? __($attribute['label_value']) : __($attribute['frontend_label'])
+                    $attribute['label_value'] ? __($attribute['label_value']) : __($attribute['frontend_label'])
                 )
                     ->setAmount($amount)
                     ->setTaxAmount($taxAmount)

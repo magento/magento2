@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Setup;
@@ -69,7 +69,7 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Created At'
             )->addColumn(
-                'expiration_at',
+                'expires_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => true],

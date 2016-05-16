@@ -1,15 +1,15 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @data-grid-sticky-header__background-color: @color-white-fog;
 @data-grid-sticky-header__border-color: @color-gray89;
-@data-grid-sticky-header__box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.25);
+@data-grid-sticky-header__box-shadow: 0 5px 5px 0 rgba(0, 0, 0, .25);
 
 @data-grid-sticky-header-actions__background-color: @color-white;
 @data-grid-sticky-header-actions__border-color: @action__border-color;
@@ -27,10 +27,10 @@
     border-bottom: 1px solid @data-grid-sticky-header__border-color;
     box-shadow: @data-grid-sticky-header__box-shadow;
     left: @page-wrapper__indent-left;
-    right: 0;
     margin-top: -1px;
     padding: @indent__xs @indent__l 0;
     position: fixed;
+    right: 0;
     top: 77px;
     z-index: @data-grid-sticky-header__z-index;
 
@@ -130,9 +130,11 @@
 
             &._active {
                 background-color: @data-grid-sticky-header-actions__background-color;
-                border-color: @data-grid-sticky-header-actions__border-color;
                 border-bottom-color: @data-grid-sticky-header-actions__background-color;
-                box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+                border-left-color: @data-grid-sticky-header-actions__border-color;
+                border-right-color: @data-grid-sticky-header-actions__border-color;
+                border-top-color: @data-grid-sticky-header-actions__border-color;
+                box-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
                 z-index: @data-grid-sticky-header-actions__z-index;
 
                 &:after {
@@ -187,8 +189,8 @@
         z-index: @data-grid-sticky-header-actions__z-index + 1;
 
         &:empty {
-            padding-top: 0;
             padding-bottom: 0;
+            padding-top: 0;
         }
     }
 
@@ -207,8 +209,8 @@
 
             .admin__action-dropdown-text {
                 display: inline-block;
-                min-width: 0;
                 max-width: 0;
+                min-width: 0;
                 overflow: hidden;
             }
 
@@ -245,8 +247,8 @@
     }
 
     .admin__data-grid-filters-current {
-        border-top: 0;
         border-bottom: 0;
+        border-top: 0;
         margin-bottom: 0;
         padding-bottom: 0;
         padding-top: 0;

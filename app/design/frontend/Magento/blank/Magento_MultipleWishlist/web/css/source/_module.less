@@ -1,10 +1,10 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
 @desktop-popup-width: 380px;
-@desktop-popup-margin-left: -((@desktop-popup-width+(@popup__padding*2))/2);
+@desktop-popup-margin-left: -((@desktop-popup-width + (@popup__padding * 2)) / 2);
 @desktop-popup-position-left: 50%;
 @desktop-popup-position-top: 20%;
 
@@ -17,7 +17,7 @@
         //  Wish list split button
         &.split.button {
             .lib-dropdown-split(
-            @_options-selector: ~".items",
+            @_options-selector: ~'.items',
             @_dropdown-split-button-border-radius-fix: true,
             @_dropdown-split-list-item-padding: 5px 5px 5px 23px,
             @_dropdown-split-toggle-icon-content: @icon-down,
@@ -74,7 +74,7 @@
 
             .product-info-main &,
             .block-bundle-summary &,
-            .product-add-form &{
+            .product-add-form & {
                 .action {
                     &.split,
                     &.toggle {
@@ -212,7 +212,7 @@
             .lib-css(margin-bottom, @indent__base);
             .lib-font-size(22);
             > strong {
-                font-weight: @font-weight__light ;
+                font-weight: @font-weight__light;
             }
         }
 
@@ -279,7 +279,7 @@
 
                 &-items {
                     border-bottom: @border-width__base solid @border-color__base;
-                    .lib-css(background, @collapsible-nav-background);
+                    .lib-css(background, @account-nav-background);
                     display: none;
                     padding: 15px 0;
 
@@ -304,7 +304,7 @@
                             text-decoration: none;
 
                             &:hover {
-                                .lib-css(background, @collapsible-nav-item-hover);
+                                .lib-css(background, @account-nav-item-hover);
                             }
                         }
                     }

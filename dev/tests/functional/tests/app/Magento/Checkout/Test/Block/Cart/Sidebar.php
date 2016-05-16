@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Block\Cart;
@@ -20,7 +20,7 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
+    private $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
 
     /**
      * Mini cart link selector.
@@ -28,6 +28,13 @@ class Sidebar extends Block
      * @var string
      */
     protected $cartLink = 'a.showcart';
+
+    /**
+     * Locator value for "Check out with Braintree PayPal" button.
+     *
+     * @var string
+     */
+    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
 
     /**
      * Minicart items quantity
@@ -96,6 +103,17 @@ class Sidebar extends Block
         if (!$this->_rootElement->find($this->cartContent)->isVisible()) {
             $this->_rootElement->find($this->cartLink)->click();
         }
+    }
+
+    /**
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return void
+     */
+    public function clickBraintreePaypalButton()
+    {
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
     }
 
     /**

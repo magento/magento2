@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -72,7 +72,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectValidatedAttributes()
     {
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $collection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $condition = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\Combine')

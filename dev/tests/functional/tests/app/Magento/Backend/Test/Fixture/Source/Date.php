@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ use Magento\Mtf\Fixture\DataSource;
  * Class Date.
  *
  * Data keys:
- *  - pattern (Format a local time/date with delta, e.g. 'm-d-Y -3 days' = current day - 3 days)
+ *  - pattern (Format a local time/date with delta, e.g. 'm/d/Y -3 days' = current day - 3 days)
  */
 class Date extends DataSource
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Pricing\Price;
@@ -142,14 +142,18 @@ class BundleSelectionPrice extends AbstractPrice
      */
     public function getAmount()
     {
-        if (null === $this->amount) {
+        if (!isset($this->amount[$this->getValue()])) {
             $exclude = null;
             if ($this->getProduct()->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
                 $exclude = $this->excludeAdjustment;
             }
-            $this->amount = $this->calculator->getAmount($this->getValue(), $this->getProduct(), $exclude);
+            $this->amount[$this->getValue()] = $this->calculator->getAmount(
+                $this->getValue(),
+                $this->getProduct(),
+                $exclude
+            );
         }
-        return $this->amount;
+        return $this->amount[$this->getValue()];
     }
 
     /**

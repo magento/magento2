@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,7 +54,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $currentCustomer;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->currentCustomer = $this->getMock(
             'Magento\Customer\Helper\Session\CurrentCustomer',
@@ -138,7 +138,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->throwException(new NoSuchEntityException(
                     __(
-                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        'No such entity with %fieldName = %fieldValue',
                         ['fieldName' => 'customerId', 'fieldValue' => 1]
                     )
                 ))

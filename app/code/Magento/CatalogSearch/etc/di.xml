@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -44,6 +44,9 @@
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
+        <plugin name="catalogsearchFulltextCategory" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Category"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
@@ -224,6 +227,13 @@
         <arguments>
             <argument name="dataProviders" xsi:type="array">
                 <item name="10" xsi:type="object">Magento\CatalogSearch\Model\Autocomplete\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="catalogsearch_fulltext" xsi:type="object">Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver</item>
             </argument>
         </arguments>
     </type>

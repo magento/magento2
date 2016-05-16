@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\ResourceModel;
@@ -9,8 +9,8 @@ use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\Store;
@@ -95,6 +95,34 @@ class Block extends AbstractDb
     }
 
     /**
+     * @param AbstractModel $object
+     * @param mixed $value
+     * @param null $field
+     * @return bool|int|string
+     * @throws LocalizedException
+     * @throws \Exception
+     */
+    private function getBlockId(AbstractModel $object, $value, $field = null)
+    {
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        if (!is_numeric($value) && $field === null) {
+            $field = 'identifier';
+        } elseif (!$field) {
+            $field = $entityMetadata->getIdentifierField();
+        }
+        $entityId = $value;
+        if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
+            $select = $this->_getLoadSelect($field, $value, $object);
+            $select->reset(Select::COLUMNS)
+                ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
+                ->limit(1);
+            $result = $this->getConnection()->fetchCol($select);
+            $entityId = count($result) ? $result[0] : false;
+        }
+        return $entityId;
+    }
+
+    /**
      * Load an object
      *
      * @param \Magento\Cms\Model\Block|AbstractModel $object
@@ -104,28 +132,9 @@ class Block extends AbstractDb
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
-        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
-
-        if (!is_numeric($value) && $field === null) {
-            $field = 'identifier';
-        } elseif (!$field) {
-            $field = $entityMetadata->getIdentifierField();
-        }
-
-        $isId = true;
-        if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
-            $select = $this->_getLoadSelect($field, $value, $object);
-            $select->reset(Select::COLUMNS)
-                ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
-                ->limit(1);
-            $result = $this->getConnection()->fetchCol($select);
-            $value = count($result) ? $result[0] : $value;
-            $isId = count($result);
-        }
-
-        if ($isId) {
-            $this->entityManager->load(BlockInterface::class, $object, $value);
-            $this->_afterLoad($object);
+        $blockId = $this->getBlockId($object, $value, $field);
+        if ($blockId) {
+            $this->entityManager->load($object, $blockId);
         }
         return $this;
     }
@@ -233,37 +242,7 @@ class Block extends AbstractDb
      */
     public function save(AbstractModel $object)
     {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-
-        $this->beginTransaction();
-
-        try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                $this->entityManager->save(BlockInterface::class, $object);
-                $this->unserializeFields($object);
-                $this->processAfterSaves($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
+        $this->entityManager->save($object);
         return $this;
     }
 
@@ -272,20 +251,7 @@ class Block extends AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->transactionManager->start($this->getConnection());
-        try {
-            $object->beforeDelete();
-            $this->_beforeDelete($object);
-            $this->entityManager->delete(BlockInterface::class, $object);
-            $this->_afterDelete($object);
-            $object->isDeleted(true);
-            $object->afterDelete();
-            $this->transactionManager->commit();
-            $object->afterDeleteCommit();
-        } catch (\Exception $e) {
-            $this->transactionManager->rollBack();
-            throw $e;
-        }
+        $this->entityManager->delete($object);
         return $this;
     }
 }

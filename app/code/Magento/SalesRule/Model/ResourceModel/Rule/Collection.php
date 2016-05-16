@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,9 +11,8 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Quote\Model\Quote\Address;
 
 /**
- * Sales Rules resource collection model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Sales Rules resource collection model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
@@ -40,8 +39,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier
-     * @param array $associatedEntitiesMap
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
@@ -51,15 +48,12 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
-        \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier,
-        array $associatedEntitiesMap = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
-        $this->_associatedEntitiesMap = $associatedEntitiesMap;
-        $this->dateApplier = $dateApplier;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
     /**
@@ -71,6 +65,52 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         $this->_init('Magento\SalesRule\Model\Rule', 'Magento\SalesRule\Model\ResourceModel\Rule');
         $this->_map['fields']['rule_id'] = 'main_table.rule_id';
+    }
+
+    /**
+     * @param string $entityType
+     * @param string $objectField
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     */
+    protected function mapAssociatedEntities($entityType, $objectField)
+    {
+        if (!$this->_items) {
+            return;
+        }
+
+        $entityInfo = $this->_getAssociatedEntityInfo($entityType);
+        $ruleIdField = $entityInfo['rule_id_field'];
+        $entityIds = $this->getColumnValues($ruleIdField);
+
+        $select = $this->getConnection()->select()->from(
+            $this->getTable($entityInfo['associations_table'])
+        )->where(
+            $ruleIdField . ' IN (?)',
+            $entityIds
+        );
+
+        $associatedEntities = $this->getConnection()->fetchAll($select);
+
+        array_map(function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
+            $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
+            $itemAssociatedValue = $item->getData($objectField) === null ? [] : $item->getData($objectField);
+            $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
+            $item->setData($objectField, $itemAssociatedValue);
+        }, $associatedEntities);
+    }
+
+    /**
+     * @return $this
+     * @throws \Exception
+     */
+    protected function _afterLoad()
+    {
+        $this->mapAssociatedEntities('website', 'website_ids');
+        $this->mapAssociatedEntities('customer_group', 'customer_group_ids');
+
+        $this->setFlag('add_websites_to_result', false);
+        return parent::_afterLoad();
     }
 
     /**
@@ -197,7 +237,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 []
             );
 
-            $this->dateApplier->applyDate($this->getSelect(), $now);
+            $this->getDateApplier()->applyDate($this->getSelect(), $now);
 
             $this->addIsActiveFilter();
 
@@ -252,5 +292,56 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         $this->addFieldToFilter('main_table.use_auto_generation', ['neq' => 1]);
 
         return $this;
+    }
+
+    /**
+     * Limit rules collection by specific customer group
+     *
+     * @param int $customerGroupId
+     * @return $this
+     */
+    public function addCustomerGroupFilter($customerGroupId)
+    {
+        $entityInfo = $this->_getAssociatedEntityInfo('customer_group');
+        if (!$this->getFlag('is_customer_group_joined')) {
+            $this->setFlag('is_customer_group_joined', true);
+            $this->getSelect()->join(
+                ['customer_group' => $this->getTable($entityInfo['associations_table'])],
+                $this->getConnection()
+                    ->quoteInto('customer_group.' . $entityInfo['entity_id_field'] . ' = ?', $customerGroupId)
+                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = customer_group.'
+                . $entityInfo['rule_id_field'],
+                []
+            );
+        }
+        return $this;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    private function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
+    }
+
+    /**
+     * @return DateApplier
+     * @deprecated
+     */
+    private function getDateApplier()
+    {
+        if (null === $this->dateApplier) {
+            $this->dateApplier = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\SalesRule\Model\ResourceModel\Rule\DateApplier::class);
+        }
+
+        return $this->dateApplier;
     }
 }

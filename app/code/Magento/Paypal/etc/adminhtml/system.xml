@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -33,6 +33,7 @@
             <group id="payments_pro_hosted_solution_without_bml" extends="payments_pro_hosted_solution">
                 <group id="pphs_required_settings">
                     <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                    <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                     <group id="pphs_advertise_bml" showInDefault="0" showInWebsite="0"/>
                 </group>
             </group>
@@ -73,6 +74,8 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
@@ -125,6 +128,7 @@
                     <comment>Accept payments with a completely customizable checkout page.</comment>
                     <group id="wpp_required_settings">
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                        <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="wpp_advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                 </group>
@@ -137,10 +141,13 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Website Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                        <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                     <group id="settings_ec">
@@ -158,6 +165,7 @@
                 <group id="express_checkout_us" extends="payment_all_paypal/express_checkout">
                     <group id="express_checkout_required">
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                        <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                 </group>
@@ -174,6 +182,7 @@
                 <group id="express_checkout_de" extends="payment_all_paypal/express_checkout">
                     <group id="express_checkout_required">
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                        <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                     <group id="settings_ec">
@@ -200,10 +209,13 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Website Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                        <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                     <group id="settings_ec">
@@ -213,6 +225,7 @@
                 <group id="express_checkout_other" extends="payment_all_paypal/express_checkout">
                     <group id="express_checkout_required">
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                        <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                 </group>
@@ -228,6 +241,8 @@
                         <group id="paypal_payflow_api_settings">
                             <label>Payments Pro</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_paypal_payflow">
                             <frontend_class>paypal-enabler paypal-ec-pe</frontend_class>
                             <attribute type="shared">0</attribute>
@@ -243,6 +258,7 @@
                 <group id="payflow_link_ca" extends="payment_all_paypal/payflow_link" sortOrder="40">
                     <group id="payflow_link_required">
                         <field id="enable_express_checkout_bml" showInDefault="0" showInWebsite="0"/>
+                        <field id="express_checkout_bml_sort_order" showInDefault="0" showInWebsite="0"/>
                         <group id="payflow_link_advertise_bml" showInDefault="0" showInWebsite="0"/>
                     </group>
                 </group>

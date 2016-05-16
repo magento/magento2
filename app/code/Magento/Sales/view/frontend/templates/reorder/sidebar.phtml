@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,12 +46,12 @@
             </ol>
             <div id="cart-sidebar-reorder-advice-container"></div>
             <div class="actions-toolbar">
-                    <div class="primary no-display"
-                         data-bind="css: {'no-display': !lastOrderedItems().isShowAddToCart}">
-                        <button type="submit" title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>" class="action tocart primary">
-                            <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
-                        </button>
-                    </div>
+                <div class="primary no-display"
+                     data-bind="css: {'no-display': !lastOrderedItems().isShowAddToCart}">
+                    <button type="submit" title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>" class="action tocart primary">
+                        <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
+                    </button>
+                </div>
                 <div class="secondary">
                     <a class="action view" href="<?php /* @escapeNotVerified */ echo $block->getUrl('customer/account') ?>">
                         <span><?php /* @escapeNotVerified */ echo __('View All'); ?></span>

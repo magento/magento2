@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -124,14 +124,6 @@
             <argument name="handlers" xsi:type="array">
                 <item name="fraudHandler" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler</item>
                 <item name="creditCardHandler" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <type name="Magento\Vault\Model\PaymentTokenRepositoryProxy">
-        <arguments>
-            <argument name="repositories" xsi:type="array">
-                <item name="payflowpro" xsi:type="string">Magento\Vault\Model\PaymentTokenRepository</item>
             </argument>
         </arguments>
     </type>

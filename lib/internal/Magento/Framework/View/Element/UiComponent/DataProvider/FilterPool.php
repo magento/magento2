@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 
 /**
@@ -28,11 +28,11 @@ class FilterPool
     }
 
     /**
-     * @param AbstractDb $collection
+     * @param Collection $collection
      * @param SearchCriteriaInterface $criteria
      * @return void
      */
-    public function applyFilters(AbstractDb $collection, SearchCriteriaInterface $criteria)
+    public function applyFilters(Collection $collection, SearchCriteriaInterface $criteria)
     {
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {

@@ -1,15 +1,3 @@
-None,None
-"Sort Order","Sort Order"
-Title,Title
-label,label
-Password,Password
-Pounds,Pounds
-Kilograms,Kilograms
-Ground,Ground
-"Not Required","Not Required"
-status,status
-"Empty response","Empty response"
-Mode,Mode
 "UPS Next Day Air","UPS Next Day Air"
 "UPS Second Day Air","UPS Second Day Air"
 "UPS Ground","UPS Ground"
@@ -45,6 +33,7 @@ Mode,Mode
 "2nd Day Air","2nd Day Air"
 "2nd Day Air Letter","2nd Day Air Letter"
 "3 Day Select","3 Day Select"
+Ground,Ground
 "Ground Commercial","Ground Commercial"
 "Ground Residential","Ground Residential"
 "Canada Standard","Canada Standard"
@@ -68,44 +57,57 @@ Pallet,Pallet
 "Large Express Box","Large Express Box"
 Residential,Residential
 Commercial,Commercial
-"Sorry, something went wrong. Please try again or contact us and we'll try to help.","Sorry, something went wrong. Please try again or contact us and we'll try to help."
-"We can't convert a rate from ""%1-%2"".","We can't convert a rate from ""%1-%2""."
+Pounds,Pounds
+Kilograms,Kilograms
+"Sorry, something went wrong. Please try again or contact us and we\'ll try to help.","Sorry, something went wrong. Please try again or contact us and we\'ll try to help."
+"We can\'t convert a rate from ""%1-%2"".","We can\'t convert a rate from ""%1-%2""."
 "Cannot retrieve shipping rates","Cannot retrieve shipping rates"
+status,status
 error_message,error_message
+"Empty response","Empty response"
 "Delivery Confirmation","Delivery Confirmation"
 "Signature Required","Signature Required"
 "Adult Signature Required","Adult Signature Required"
+"Not Required","Not Required"
+None,None
+label,label
 "United Parcel Service","United Parcel Service"
 "United Parcel Service XML","United Parcel Service XML"
-"User ID","User ID"
-Container,Container
-Debug,Debug
-"Gateway URL","Gateway URL"
+"Field ","Field "
+" is required."," is required."
+UPS,UPS
+"Access License Number","Access License Number"
 "Enabled for Checkout","Enabled for Checkout"
+"Allowed Methods","Allowed Methods"
+"Packages Request Type","Packages Request Type"
+Container,Container
+"Free Shipping Amount Threshold","Free Shipping Amount Threshold"
+"Destination Type","Destination Type"
+"Free Method","Free Method"
+"Gateway URL","Gateway URL"
+"Gateway XML URL","Gateway XML URL"
 "Calculate Handling Fee","Calculate Handling Fee"
 "Handling Applied","Handling Applied"
 "Handling Fee","Handling Fee"
-"Weight Unit","Weight Unit"
-"Allowed Methods","Allowed Methods"
-"Displayed Error Message","Displayed Error Message"
-"Free Method","Free Method"
-"Free Shipping Amount Threshold","Free Shipping Amount Threshold"
-"Ship to Applicable Countries","Ship to Applicable Countries"
-"Ship to Specific Countries","Ship to Specific Countries"
-"Show Method if Not Applicable","Show Method if Not Applicable"
-"Packages Request Type","Packages Request Type"
 "Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)","Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)"
-UPS,UPS
-"Access License Number","Access License Number"
-"Destination Type","Destination Type"
-"Gateway XML URL","Gateway XML URL"
 "Minimum Package Weight (Please consult your shipping carrier for minimum supported shipping weight)","Minimum Package Weight (Please consult your shipping carrier for minimum supported shipping weight)"
 "Origin of the Shipment","Origin of the Shipment"
+Password,Password
 "Pickup Method","Pickup Method"
+"Sort Order","Sort Order"
+Title,Title
 "Tracking XML URL","Tracking XML URL"
 "UPS Type","UPS Type"
-"Live account","Live account"
+"Live Account","Live Account"
+"Weight Unit","Weight Unit"
+"User ID","User ID"
 "Enable Negotiated Rates","Enable Negotiated Rates"
 "Shipper Number","Shipper Number"
 "Required for negotiated rates; 6-character UPS","Required for negotiated rates; 6-character UPS"
+"Ship to Applicable Countries","Ship to Applicable Countries"
+"Ship to Specific Countries","Ship to Specific Countries"
+"Show Method if Not Applicable","Show Method if Not Applicable"
+"Displayed Error Message","Displayed Error Message"
+Mode,Mode
 "This enables or disables SSL verification of the Magento server by UPS.","This enables or disables SSL verification of the Magento server by UPS."
+Debug,Debug

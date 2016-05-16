@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ define([
     'jquery',
     'mage/template',
     'uiRegistry',
+    'jquery/colorpicker/js/colorpicker',
     'prototype',
     'jquery/ui'
 ], function (jQuery, mageTemplate, rg) {
@@ -49,9 +50,6 @@ define([
                         data.intype = swatchOptionVisualDefaultInputType;
                     }
 
-                    if (!this.totalItems) {
-                        data.checked = 'checked';
-                    }
                     element = this.template({
                         data: data
                     });
@@ -394,8 +392,9 @@ define([
                 optionPanel.children('input').val('');
                 optionPanel.children('.swatch_window').css('background', '');
 
-                optionPanel.hide();
                 optionPanel.addClass('unavailable');
+
+                jQuery('.swatch_sub-menu_container').hide();
             });
 
             /**

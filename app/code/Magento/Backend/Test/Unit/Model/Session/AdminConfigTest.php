@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -112,7 +112,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     public function testSetSessionSettingsByConstructor($secureRequest)
     {
         $sessionName = 'admin';
-        $this->requestMock->expects($this->once())->method('isSecure')->willReturn($secureRequest);
+        $this->requestMock->expects($this->exactly(2))->method('isSecure')->willReturn($secureRequest);
 
         $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
             ->disableOriginalConstructor()

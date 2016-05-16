@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Indexer\Config;
@@ -29,6 +29,7 @@ class Converter implements ConverterInterface
             $data['primary'] = $this->getAttributeValue($indexerNode, 'primary');
             $data['view_id'] = $this->getAttributeValue($indexerNode, 'view_id');
             $data['action_class'] = $this->getAttributeValue($indexerNode, 'class');
+            $data['shared_index'] = $this->getAttributeValue($indexerNode, 'shared_index');
             $data['title'] = '';
             $data['description'] = '';
 

@@ -1,21 +1,22 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection as AppResource;
-use Magento\Framework\Model\Operation\ContextHandlerInterface;
+use Magento\Framework\Model\Entity\ScopeResolver;
+use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReadHandler
+class ReadHandler implements AttributeInterface
 {
     /**
      * @var AttributeRepository
@@ -38,29 +39,31 @@ class ReadHandler
     protected $searchCriteriaBuilder;
 
     /**
-     * @var ContextHandlerInterface
+     * @var ScopeResolver
      */
-    protected $contextHandler;
+    protected $scopeResolver;
 
     /**
+     * ReadHandler constructor.
+     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AppResource $appResource
-     * @param ContextHandlerInterface $contextHandler
+     * @param ScopeResolver $scopeResolver
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AppResource $appResource,
-        ContextHandlerInterface $contextHandler
+        ScopeResolver $scopeResolver
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->appResource = $appResource;
-        $this->contextHandler = $contextHandler;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -71,77 +74,83 @@ class ReadHandler
     protected function getAttributes($entityType)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
+
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->create()
+            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
         );
         return $searchResult->getItems();
     }
 
     /**
-     * @param string $entityType
-     * @param array $data
+     * @param ScopeInterface $scope
      * @return array
      */
-    protected function getActionContext($entityType, $data)
+    protected function getContextVariables(ScopeInterface $scope)
     {
-        return $this->contextHandler->retrieve(
-            $this->metadataPool->getMetadata($entityType),
-            $data
-        );
+        $data[] = $scope->getValue();
+        if ($scope->getFallback()) {
+            $data = array_merge($data, $this->getContextVariables($scope->getFallback()));
+        }
+        return $data;
     }
 
     /**
      * @param string $entityType
      * @param array $entityData
+     * @param array $arguments
      * @return array
      * @throws \Exception
+     * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entityData)
+    public function execute($entityType, $entityData, $arguments = [])
     {
-        $data = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
-        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        if (!$metadata->getEavEntityType()) {//todo hasCustomAttributes
+            return $entityData;
+        }
+        $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
+        $connection = $metadata->getEntityConnection();
+
         $attributeTables = [];
-        if ($metadata->getEavEntityType()) {
-            $context = $this->getActionContext($entityType, $entityData);
-            foreach ($this->getAttributes($entityType) as $attribute) {
-                if (!$attribute->isStatic()) {
-                    $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
-                }
+        $attributesMap = [];
+        $selects = [];
+
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+        foreach ($this->getAttributes($entityType) as $attribute) {
+            if (!$attribute->isStatic()) {
+                $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
+                $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();
             }
-            $selects = [];
-            foreach ($attributeTables as $attributeTable => $attributeCodes) {
-                $select = $metadata->getEntityConnection()->select()
-                    ->from(['t' => $attributeTable], ['value' => 't.value'])
-                    ->join(
-                        ['a' => $this->appResource->getTableName('eav_attribute')],
-                        'a.attribute_id = t.attribute_id',
-                        ['attribute_code' => 'a.attribute_code']
+        }
+        if (count($attributeTables)) {
+            $attributeTables = array_keys($attributeTables);
+            foreach ($attributeTables as $attributeTable) {
+                $select = $connection->select()
+                    ->from(
+                        ['t' => $attributeTable],
+                        ['value' => 't.value', 'attribute_id' => 't.attribute_id']
                     )
-                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
-                    ->where('t.attribute_id IN (?)', $attributeCodes)
-                    ->order('a.attribute_id');
-                foreach ($context as $field => $value) {
+                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
+                foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
-                        $metadata->getEntityConnection()->quoteIdentifier($field) . ' IN (?)',
-                        $value
-                    )->order('t.' . $field . ' DESC');
+                        $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
+                        $this->getContextVariables($scope)
+                    )->order('t.' . $scope->getIdentifier() . ' DESC');
                 }
                 $selects[] = $select;
             }
-
             $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
                 $selects,
                 \Magento\Framework\DB\Select::SQL_UNION_ALL
             );
-            $attributeValues = $metadata->getEntityConnection()->fetchAll((string)$unionSelect);
-            foreach ($attributeValues as $attributeValue) {
-                $data[$attributeValue['attribute_code']] = $attributeValue['value'];
+            foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
+                $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
             }
         }
-        return $data;
+        return $entityData;
     }
 }

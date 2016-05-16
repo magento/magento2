@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Option\Type\File;
@@ -16,7 +16,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -164,11 +164,13 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
      */
     protected function getOptionValue()
     {
-        $file     = 'var/tmp/magento_small_image.jpg';
+        /** @var \Magento\Catalog\Model\Product\Media\Config $config */
+        $config = $this->objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $file = $config->getBaseTmpMediaPath() . '/magento_small_image.jpg';
 
-        /** @var \Magento\Framework\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
-        $tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::ROOT);
+        $tmpDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $filePath = $tmpDirectory->getAbsolutePath($file);
 
         return [

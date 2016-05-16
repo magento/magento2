@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -21,13 +21,20 @@ $categoryLinkRepository = $objectManager->create(
 );
 
 /** @var Magento\Catalog\Api\CategoryLinkManagementInterface $linkManagement */
-$categoryLinkManagement = $objectManager->create(
-    'Magento\Catalog\Api\CategoryLinkManagementInterface',
-    [
-        'productRepository' => $productRepository,
-        'categoryLinkRepository' => $categoryLinkRepository
-    ]
-);
+$categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
+$reflectionClass = new \ReflectionClass(get_class($categoryLinkManagement));
+$properties = [
+    'productRepository' => $productRepository,
+    'categoryLinkRepository' => $categoryLinkRepository
+];
+foreach ($properties as $key => $value) {
+    if ($reflectionClass->hasProperty($key)) {
+        $reflectionProperty = $reflectionClass->getProperty($key);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($categoryLinkManagement, $value);
+    }
+}
+
 
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
@@ -165,6 +172,20 @@ $category->setId(12)
     ->setPosition(8)
     ->save();
 
+$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
+$category->setId(13)
+    ->setName('Category 1.2')
+    ->setParentId(3)
+    ->setPath('1/2/3/13')
+    ->setLevel(3)
+    ->setAvailableSortBy('name')
+    ->setDefaultSortBy('name')
+    ->setIsActive(true)
+    ->setIsAnchor(true)
+    ->setPosition(2)
+    ->save();
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->isObjectNew(true);
@@ -183,7 +204,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
-    [2, 3, 4]
+    [2, 3, 4, 13]
 );
 
 $product = $objectManager->create('Magento\Catalog\Model\Product');
@@ -203,7 +224,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
-    [5]
+    [5, 4]
 );
 
 $product = $objectManager->create('Magento\Catalog\Model\Product');
@@ -244,5 +265,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
-    [10, 11, 12]
+    [10, 11, 12, 13]
 );

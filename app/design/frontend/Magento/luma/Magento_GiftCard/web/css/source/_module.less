@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -28,20 +28,22 @@
                     font-size: 20px;
                 }
 
-                .price-container.price-final_price {
-                    > span {
-                        display: block;
-                        margin-bottom: @indent__xs;
+                .price-container {
+                    &.price-final {
+                        > span {
+                            display: block;
+                            margin-bottom: @indent__xs;
 
-                        &:last-child {
-                            margin-bottom: 0;
+                            &:last-child {
+                                margin-bottom: 0;
+                            }
                         }
-                    }
 
-                    .price {
-                        font-size: 22px;
-                        font-weight: @font-weight__semibold;
-                        line-height: 22px;
+                        .price {
+                            font-size: 22px;
+                            font-weight: @font-weight__semibold;
+                            line-height: 22px;
+                        }
                     }
                 }
 
@@ -139,18 +141,30 @@
     .page-product-giftcard {
         .product-info-main {
             .price-box {
-                .price-container.price-final_price {
-                    font-size: @font-size__xl;
+                .price-container {
+                    &.price-final {
+                        font-size: @font-size__xl;
 
-                    .price {
-                        font-size: 36px;
-                        line-height: 36px;
+                        .price {
+                            font-size: 36px;
+                            line-height: 36px;
+                        }
                     }
                 }
+            }
+
+            .product-info-stock-sku {
+                padding-bottom: 0;
+            }
+
+            .product-reviews-summary {
+                float: none;
             }
         }
 
         .product-add-form {
+            margin-top: -@indent__base;
+
             .field:not(.text) {
                 .lib-form-field(
                     @_type: block,

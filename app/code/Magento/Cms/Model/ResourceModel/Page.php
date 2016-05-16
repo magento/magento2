@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,13 +10,13 @@ use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Cms\Api\Data\PageInterface;
 
 /**
@@ -111,8 +111,8 @@ class Page extends AbstractDb
          * type NULL so in DB they will be empty and not some default value
          */
         foreach (['custom_theme_from', 'custom_theme_to'] as $field) {
-            $value = !$object->getData($field) ? null : $object->getData($field);
-            $object->setData($field, $this->dateTime->formatDate($value));
+            $value = !$object->getData($field) ? null : $this->dateTime->formatDate($object->getData($field));
+            $object->setData($field, $value);
         }
 
         if (!$this->isValidPageIdentifier($object)) {
@@ -130,14 +130,14 @@ class Page extends AbstractDb
     }
 
     /**
-     * Load an object
-     *
-     * @param CmsPage|AbstractModel $object
-     * @param mixed $value
-     * @param string $field field to load by (defaults to model id)
-     * @return $this
+     * @param AbstractModel $object
+     * @param string $value
+     * @param string|null $field
+     * @return bool|int|string
+     * @throws LocalizedException
+     * @throws \Exception
      */
-    public function load(AbstractModel $object, $value, $field = null)
+    private function getPageId(AbstractModel $object, $value, $field = null)
     {
         $entityMetadata = $this->metadataPool->getMetadata(PageInterface::class);
 
@@ -147,20 +147,31 @@ class Page extends AbstractDb
             $field = $entityMetadata->getIdentifierField();
         }
 
-        $isId = true;
+        $pageId = $value;
         if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
             $select = $this->_getLoadSelect($field, $value, $object);
             $select->reset(Select::COLUMNS)
                 ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
                 ->limit(1);
             $result = $this->getConnection()->fetchCol($select);
-            $value = count($result) ? $result[0] : $value;
-            $isId = count($result);
+            $pageId = count($result) ? $result[0] : false;
         }
+        return $pageId;
+    }
 
-        if ($isId) {
-            $this->entityManager->load(PageInterface::class, $object, $value);
-            $this->_afterLoad($object);
+    /**
+     * Load an object
+     *
+     * @param CmsPage|AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
+     * @return $this
+     */
+    public function load(AbstractModel $object, $value, $field = null)
+    {
+        $pageId = $this->getPageId($object, $value, $field);
+        if ($pageId) {
+            $this->entityManager->load($object, $pageId);
         }
         return $this;
     }
@@ -383,37 +394,7 @@ class Page extends AbstractDb
      */
     public function save(AbstractModel $object)
     {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-
-        $this->beginTransaction();
-
-        try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                $this->entityManager->save(PageInterface::class, $object);
-                $this->unserializeFields($object);
-                $this->processAfterSaves($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
+        $this->entityManager->save($object);
         return $this;
     }
 
@@ -422,20 +403,7 @@ class Page extends AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->transactionManager->start($this->getConnection());
-        try {
-            $object->beforeDelete();
-            $this->_beforeDelete($object);
-            $this->entityManager->delete(PageInterface::class, $object);
-            $this->_afterDelete($object);
-            $object->isDeleted(true);
-            $object->afterDelete();
-            $this->transactionManager->commit();
-            $object->afterDeleteCommit();
-        } catch (\Exception $e) {
-            $this->transactionManager->rollBack();
-            throw $e;
-        }
+        $this->entityManager->delete($object);
         return $this;
     }
 }

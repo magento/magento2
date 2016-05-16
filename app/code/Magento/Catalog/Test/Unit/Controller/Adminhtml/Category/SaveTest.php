@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
@@ -84,6 +84,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->contextMock = $this->getMock(
@@ -431,9 +432,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPostValue')
             ->willReturn($postData);
+        $addData = $postData;
+        $addData['image'] = ['delete' => true];
         $categoryMock->expects($this->once())
             ->method('addData')
-            ->with($postData);
+            ->with($addData);
         $categoryMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($categoryId));

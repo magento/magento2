@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -122,10 +122,6 @@ class InstallData implements InstallDataInterface
                 $attribute['attribute_id'],
                 60
             );
-        }
-
-        if (!$catalogSetup->getAttributesNumberInGroup($entityTypeId, $attributeSetId, 'Gift Options')) {
-            $catalogSetup->removeAttributeGroup($entityTypeId, $attributeSetId, 'Gift Options');
         }
     }
 }

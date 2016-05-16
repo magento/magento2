@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Page;
@@ -49,6 +49,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection = $pageCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
+        $this->meta = $this->prepareMeta($this->meta);
+    }
+
+    /**
+     * Prepares Meta
+     *
+     * @param array $meta
+     * @return array
+     */
+    public function prepareMeta(array $meta)
+    {
+        return $meta;
     }
 
     /**
@@ -62,7 +74,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
-        /** @var \Magento\Cms\Model\Page $page */
+        /** @var $page \Magento\Cms\Model\Page */
         foreach ($items as $page) {
             $this->loadedData[$page->getId()] = $page->getData();
         }
@@ -72,6 +84,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $page = $this->collection->getNewEmptyItem();
             $page->setData($data);
             $this->loadedData[$page->getId()] = $page->getData();
+            $this->dataPersistor->clear('cms_page');
         }
 
         return $this->loadedData;

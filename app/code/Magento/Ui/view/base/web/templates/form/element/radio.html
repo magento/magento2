@@ -1,0 +1,22 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field admin__field-option">
+    <input type="radio"
+           class="admin__control-radio"
+           data-bind="checkedValue: value, checked: checked"
+           ko-disable="disabled"
+           hasFocus="focused"
+           attr="id: uid, name: inputName"/>
+
+    <label class="admin__field-label" text="label" attr="for: uid"/>
+
+    <div class="admin__field-note"
+         if="notice"
+         attr="id: noticeId">
+        <span text="notice"/>
+    </div>
+</div>

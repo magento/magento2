@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule;
@@ -15,13 +15,13 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     protected $_associatedEntitiesMap;
 
     /**
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
-     * @param array $associatedEntitiesMap
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -29,18 +29,10 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        array $associatedEntitiesMap = []
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
-        parent::__construct(
-            $entityFactory,
-            $logger,
-            $fetchStrategy,
-            $eventManager,
-            $connection,
-            $resource
-        );
-        $this->_associatedEntitiesMap = $associatedEntitiesMap;
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
     /**
@@ -136,5 +128,19 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
             );
         }
         return $this;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    private function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
     }
 }

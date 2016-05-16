@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,9 +35,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->controller = new Marketplace($this->composerInformation, $this->marketplaceManager);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::saveAuthJsonAction
-     */
     public function testSaveAuthJsonAction()
     {
         $this->marketplaceManager
@@ -55,9 +52,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::saveAuthJsonAction
-     */
     public function testSaveAuthJsonActionWithError()
     {
         $this->marketplaceManager
@@ -75,9 +69,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::checkAuthAction
-     */
     public function testCheckAuthAction()
     {
         $this->marketplaceManager
@@ -95,9 +86,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::checkAuthAction
-     */
     public function testCheckAuthActionWithError()
     {
         $this->marketplaceManager
@@ -112,10 +100,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::removeAuthAction
-     */
-    public function testRemoveCredetinalsAction()
+    public function testRemoveCredentialsAction()
     {
         $this->marketplaceManager
             ->expects($this->once())
@@ -129,9 +114,6 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::removeAuthAction
-     */
     public function testRemoveCredentialsWithError()
     {
         $this->marketplaceManager
@@ -146,13 +128,16 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
     }
 
-    /**
-     * @covers \Magento\Setup\Controller\Marketplace::popupAuthAction
-     */
     public function testPopupAuthAction()
     {
         $viewModel = $this->controller->popupAuthAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
         $this->assertTrue($viewModel->terminate());
+    }
+
+    public function testIndexAction()
+    {
+        $model = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $model);
     }
 }
