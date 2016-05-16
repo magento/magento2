@@ -20,7 +20,7 @@ class CachedMetadata implements MetadataInterface
     /**
      * @var string
      */
-    protected $entityType = 'customer';
+    protected $entityType = 'none';
 
     /**
      * @var AttributeCache
@@ -79,7 +79,7 @@ class CachedMetadata implements MetadataInterface
         if ($attributes !== false) {
             return $attributes;
         }
-        $attributes = $this->metadata->getCustomAttributesMetadata();
+        $attributes = $this->metadata->getAllAttributesMetadata();
         $this->getCache()->saveAttributes($this->entityType, $attributes, 'all');
         return $attributes;
     }
