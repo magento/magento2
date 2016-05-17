@@ -182,7 +182,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**ishlist/Controller/IndexTest
+    /**
      * Assert that actual session messages meet expectations:
      * Usage examples:
      * $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
