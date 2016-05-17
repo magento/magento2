@@ -228,6 +228,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->getAttributeCache()->clear();
         return $this;
     }
+
     /**
      * @return AttributeCache
      * @deprecated
