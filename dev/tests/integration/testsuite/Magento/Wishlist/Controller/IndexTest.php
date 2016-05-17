@@ -96,28 +96,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $productRepository->get('product-with-xss');
 
         $this->dispatch('wishlist/index/add/product/' . $product->getId() . '?nocookie=1');
-        $messages = $this->_messages->getMessages()->getItems();
-        $isProductNamePresent = false;
 
-        /** @var InterpretationStrategyInterface $interpretationStrategy */
-        $interpretationStrategy = $this->_objectManager->create(
-            'Magento\Framework\View\Element\Message\InterpretationStrategyInterface'
+        $this->assertSessionMessages(
+            $this->equalTo(
+                ['You removed product &lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt; from the comparison list.']
+            ),
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
-        foreach ($messages as $message) {
-            if (
-                strpos(
-                    $interpretationStrategy->interpret($message),
-                    '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;'
-                ) !== false
-            ) {
-                $isProductNamePresent = true;
-            }
-            $this->assertNotContains(
-                '<script>alert("xss");</script>',
-                $interpretationStrategy->interpret($message)
-            );
-        }
-        $this->assertTrue($isProductNamePresent, 'Product name was not found in session messages');
     }
 
     /**
