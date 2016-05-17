@@ -38,6 +38,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected $_eventPrefix = 'eav_entity_attribute';
 
     /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
+
+    /**
      * Parameter name in event
      *
      * In observe method you can use $observer->getEvent()->getAttribute() in this case
@@ -299,7 +304,30 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
+        $this->getAttributeCache()->clear();
         return parent::afterSave();
+    }
+
+    /**
+     * @return $this
+     */
+    public function afterDelete()
+    {
+        $this->getAttributeCache()->clear();
+        return parent::afterDelete();
+    }
+
+    /**
+     * Attribute cache
+     *
+     * @return AttributeCache
+     */
+    private function getAttributeCache()
+    {
+        if (!$this->attributeCache) {
+            $this->attributeCache = ObjectManager::getInstance()->get(AttributeCache::class);
+        }
+        return $this->attributeCache;
     }
 
     /**
