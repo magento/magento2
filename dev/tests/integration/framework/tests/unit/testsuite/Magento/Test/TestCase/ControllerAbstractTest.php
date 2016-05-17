@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\TestCase;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -16,6 +18,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Message\Manager */
     private $messageManager;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject | InterpretationStrategyInterface */
+    private $interpretationStrategyMock;
+
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookieManagerInterface */
     private $cookieManagerMock;
 
@@ -25,6 +30,15 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
 
         $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
         $this->cookieManagerMock = $this->getMock(CookieManagerInterface::class, [], [], '', false);
+        $this->interpretationStrategyMock = $this->getMock(InterpretationStrategyInterface::class, [], [], '', false);
+        $this->interpretationStrategyMock->expects($this->any())
+            ->method('interpret')
+            ->willReturnCallback(
+                function (MessageInterface $message) {
+                    return $message->getText();
+                }
+            );
+
         $request = $testObjectManager->getObject('Magento\TestFramework\Request');
         $response = $testObjectManager->getObject('Magento\TestFramework\Response');
         $this->_objectManager = $this->getMock(
@@ -43,6 +57,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                         ['Magento\Framework\App\ResponseInterface', $response],
                         ['Magento\Framework\Message\Manager', $this->messageManager],
                         [CookieManagerInterface::class, $this->cookieManagerMock],
+                        [InterpretationStrategyInterface::class, $this->interpretationStrategyMock],
                     ]
                 )
             );
@@ -147,19 +162,19 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         return [
             'message warning type filtering' => [
                 ['some_warning', 'warning_cookie'],
-                \Magento\Framework\Message\MessageInterface::TYPE_WARNING,
+                MessageInterface::TYPE_WARNING,
             ],
             'message error type filtering' => [
                 ['error_one', 'error_two', 'error_cookie'],
-                \Magento\Framework\Message\MessageInterface::TYPE_ERROR,
+                MessageInterface::TYPE_ERROR,
             ],
             'message notice type filtering' => [
                 ['some_notice', 'notice_cookie'],
-                \Magento\Framework\Message\MessageInterface::TYPE_NOTICE,
+                MessageInterface::TYPE_NOTICE,
             ],
             'message success type filtering'    => [
                 ['success!', 'success_cookie'],
-                \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS,
+                MessageInterface::TYPE_SUCCESS,
             ],
         ];
     }

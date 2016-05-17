@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
 
 /**
@@ -181,11 +182,11 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
+    /**ishlist/Controller/IndexTest
      * Assert that actual session messages meet expectations:
      * Usage examples:
      * $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
-     * $this->assertSessionMessages($this->equalTo(array('Entity has been saved.')),
+     * $this->assertSessionMessages($this->equalTo(['Entity has been saved.'],
      * \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS);
      *
      * @param \PHPUnit_Framework_Constraint $constraint Constraint to compare actual messages against
@@ -199,6 +200,44 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         $messageManagerClass = 'Magento\Framework\Message\Manager'
     ) {
         $this->_assertSessionErrors = false;
+
+        $messages = $this->getMessages($messageType, $messageManagerClass);
+
+        $this->assertThat(
+            $messages,
+            $constraint,
+            'Session messages do not meet expectations ' . var_export($messages, true)
+        );
+    }
+
+    /**
+     * Return all stored messages
+     *
+     * @param string|null $messageType
+     * @param string $messageManagerClass
+     * @return array
+     */
+    protected function getMessages(
+        $messageType = null,
+        $messageManagerClass = 'Magento\Framework\Message\Manager'
+    ) {
+        return array_merge(
+            $this->getSessionMessages($messageType, $messageManagerClass),
+            $this->getCookieMessages($messageType)
+        );
+    }
+
+    /**
+     * Return messages stored in session
+     *
+     * @param string|null $messageType
+     * @param string $messageManagerClass
+     * @return array
+     */
+    protected function getSessionMessages(
+        $messageType = null,
+        $messageManagerClass = 'Magento\Framework\Message\Manager'
+    ) {
         /** @var $messageManager \Magento\Framework\Message\ManagerInterface */
         $messageManager = $this->_objectManager->get($messageManagerClass);
         /** @var $messages \Magento\Framework\Message\AbstractMessage[] */
@@ -208,18 +247,15 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
             $messages = $messageManager->getMessages()->getItemsByType($messageType);
         }
 
+        /** @var $messageManager InterpretationStrategyInterface */
+        $interpretationStrategy = $this->_objectManager->get(InterpretationStrategyInterface::class);
+
         $actualMessages = [];
         foreach ($messages as $message) {
-            $actualMessages[] = $message->getText();
+            $actualMessages[] = $interpretationStrategy->interpret($message);
         }
 
-        $actualMessages = array_merge($actualMessages, $this->getCookieMessages($messageType));
-
-        $this->assertThat(
-            $actualMessages,
-            $constraint,
-            'Session messages do not meet expectations ' . var_export($actualMessages, true)
-        );
+        return $actualMessages;
     }
 
     /**
@@ -228,7 +264,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * @param string|null $messageType
      * @return array
      */
-    private function getCookieMessages($messageType = null)
+    protected function getCookieMessages($messageType = null)
     {
         /** @var $cookieManager CookieManagerInterface */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
