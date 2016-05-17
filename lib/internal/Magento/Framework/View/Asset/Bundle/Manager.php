@@ -238,10 +238,6 @@ class Manager
             return false;
         }
 
-        if ($type == self::ASSET_TYPE_HTML) {
-            return $asset->getModule() !== '';
-        }
-
         return true;
     }
 

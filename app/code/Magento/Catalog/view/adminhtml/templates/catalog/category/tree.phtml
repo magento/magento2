@@ -493,6 +493,9 @@
                                     } else {
                                         $(obj.tree.container.dom).trigger('categoryMove.tree');
                                     }
+                                    $('.page-main-actions').next('.messages').remove();
+                                    $('.page-main-actions').next('#messages').remove();
+                                    $('.page-main-actions').after(data.messages);
                                 }).fail(function (jqXHR, textStatus) {
                                     if (window.console) {
                                         console.log(textStatus);

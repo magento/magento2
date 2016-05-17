@@ -21,9 +21,8 @@ interface ModifierInterface
      * Modifies URL.
      *
      * @param string $url
-     * @param array|null $params
      * @param string $mode
      * @return string
      */
-    public function execute($url, $params = null, $mode = self::MODE_ENTIRE);
+    public function execute($url, $mode = self::MODE_ENTIRE);
 }

@@ -128,7 +128,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField('customer', 'note', ['label' => __('Author'), 'text' => $customerText]);
 
         $fieldset->addField(
-            'summary_rating',
+            'summary-rating',
             'note',
             [
                 'label' => __('Summary Rating'),
@@ -137,7 +137,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
-            'detailed_rating',
+            'detailed-rating',
             'note',
             [
                 'label' => __('Detailed Rating'),

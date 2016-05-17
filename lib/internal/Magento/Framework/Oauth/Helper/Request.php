@@ -200,7 +200,7 @@ class Request
             $responseCode = self::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof \Magento\Framework\Oauth\OauthInputException) {
             $responseCode = self::HTTP_BAD_REQUEST;
-            if ($errorMsg == \Magento\Framework\Oauth\OauthInputException::DEFAULT_MESSAGE) {
+            if ($errorMsg == 'One or more input exceptions have occurred.') {
                 $errorMsg = $exception->getAggregatedErrorMessage();
             }
         } else {

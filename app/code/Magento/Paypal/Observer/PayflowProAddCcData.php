@@ -8,6 +8,7 @@ namespace Magento\Paypal\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Paypal\Model\Payflow\Transparent;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 class PayflowProAddCcData extends AbstractDataAssignObserver
 {
@@ -29,7 +30,13 @@ class PayflowProAddCcData extends AbstractDataAssignObserver
     {
         $dataObject = $this->readDataArgument($observer);
 
-        $ccData = array_intersect_key($dataObject->getData(), array_flip($this->ccKeys));
+        $additionalData = $dataObject->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+
+        if (!is_array($additionalData)) {
+            return;
+        }
+
+        $ccData = array_intersect_key($additionalData, array_flip($this->ccKeys));
         if (count($ccData) !== count($this->ccKeys)) {
             return;
         }
@@ -39,6 +46,11 @@ class PayflowProAddCcData extends AbstractDataAssignObserver
             Transparent::CC_DETAILS,
             $this->sortCcData($ccData)
         );
+
+        // CC data should be stored explicitly
+        foreach ($ccData as $ccKey => $ccValue) {
+            $paymentModel->setData($ccKey, $ccValue);
+        }
     }
 
     /**

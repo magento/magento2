@@ -75,9 +75,11 @@ define(
              */
             initialize: function () {
                 var self = this,
-                    hasNewAddress;
+                    hasNewAddress,
+                    fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
 
                 this._super();
+                shippingRatesValidator.initFields(fieldsetName);
 
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep(
@@ -128,15 +130,6 @@ define(
              */
             navigate: function () {
                 //load data from server for shipping step
-            },
-
-            /**
-             * @param {Object} element
-             */
-            initElement: function (element) {
-                if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
-                }
             },
 
             /**

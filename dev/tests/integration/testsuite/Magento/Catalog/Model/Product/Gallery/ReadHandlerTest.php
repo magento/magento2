@@ -55,10 +55,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $linkFieldId = $productRepository->get('simple')->getData($entityMetadata->getLinkField());
 
         $product->setData($entityMetadata->getLinkField(), $linkFieldId);
-        $this->readHandler->execute(
-            'Magento\Catalog\Api\Data\ProductInterface',
-            $product
-        );
+        $this->readHandler->execute($product);
 
         $data = $product->getData();
 

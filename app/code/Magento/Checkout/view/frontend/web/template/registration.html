@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko foreach: getRegion('messages') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!--/ko-->
 <div>
-    <!-- ko ifnot: accountCreated -->
+    <!-- ko if: isFormVisible -->
     <p data-bind="i18n: 'You can track your order status by creating an account.'"></p>
     <p><span data-bind="i18n: 'Email Address'"></span>: <span data-bind="text: getEmailAddress()"></span></p>
     <form method="post" data-bind="submit: createAccount">

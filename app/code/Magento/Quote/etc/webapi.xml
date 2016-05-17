@@ -114,7 +114,7 @@
         </resources>
     </route>
     <route url="/V1/carts/:cartId/estimate-shipping-methods" method="POST">
-        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="estimateByAddress"/>
+        <service class="Magento\Quote\Api\ShipmentEstimationInterface" method="estimateByExtendedAddress"/>
         <resources>
             <resource ref="Magento_Cart::manage" />
         </resources>
@@ -137,7 +137,7 @@
         </data>
     </route>
     <route url="/V1/carts/mine/estimate-shipping-methods" method="POST">
-        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="estimateByAddress"/>
+        <service class="Magento\Quote\Api\ShipmentEstimationInterface" method="estimateByExtendedAddress"/>
         <resources>
             <resource ref="self" />
         </resources>
@@ -163,7 +163,7 @@
         </resources>
     </route>
     <route url="/V1/guest-carts/:cartId/estimate-shipping-methods" method="POST">
-        <service class="Magento\Quote\Api\GuestShippingMethodManagementInterface" method="estimateByAddress"/>
+        <service class="Magento\Quote\Api\GuestShipmentEstimationInterface" method="estimateByExtendedAddress"/>
         <resources>
             <resource ref="anonymous" />
         </resources>

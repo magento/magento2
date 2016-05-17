@@ -29,23 +29,27 @@ class AssertProductAttributeIsRequired extends AbstractConstraint
      * @param CatalogProductEdit $catalogProductEdit
      * @param CatalogProductAttribute $attribute
      * @param InjectableFixture $product
+     * @param string $sectionName
      * @return void
      */
     public function processAssert(
         CatalogProductIndex $catalogProductIndex,
         CatalogProductEdit $catalogProductEdit,
         CatalogProductAttribute $attribute,
-        InjectableFixture $product
+        InjectableFixture $product,
+        $sectionName
     ) {
         $catalogProductIndex->open()->getProductGrid()->searchAndOpen(['sku' => $product->getSku()]);
         $productForm = $catalogProductEdit->getProductForm();
         if (!$productForm->checkAttributeLabel($attribute)) {
-            $productForm->openSection('attributes');
+            $productForm->openSection($sectionName);
         }
         $productForm->getAttributeElement($attribute)->setValue('');
         $catalogProductEdit->getFormPageActions()->save();
-        $failedFields = $productForm->getRequireNoticeFields($product);
-        $actualMessage = $failedFields['attributes'][$attribute->getFrontendLabel()];
+        $validationErrors = $productForm->getSection($sectionName)->getValidationErrors();
+        $actualMessage = isset($validationErrors[$attribute->getFrontendLabel()])
+            ? $validationErrors[$attribute->getFrontendLabel()]
+            : '';
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::REQUIRE_MESSAGE,

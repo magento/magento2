@@ -28,6 +28,7 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $assetMinificationMock;
+
     /**
      * {@inheritDoc}
      */
@@ -69,21 +70,20 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
         $this->assetMinificationMock
             ->expects($this->any())
             ->method('isEnabled')
-            ->willReturnMap([['css', $isEnabled]]);
+            ->willReturn($isEnabled);
         $this->assetMinificationMock
             ->expects($this->any())
-            ->method('removeMinifiedSign')
+            ->method('addMinifiedSign')
             ->with($requested)
             ->willReturn($alternative);
 
         $this->resolverMock
             ->expects($this->any())
             ->method('resolve')
-            ->withConsecutive(
-                ['', $requested, null, null, null, null],
-                ['', $alternative, null, null, null, null]
-            )
-            ->willReturnOnConsecutiveCalls($resolvedOriginal, $resolvedAlternative);
+            ->willReturnMap([
+                ['', $requested, null, null, null, null, $resolvedOriginal],
+                ['', $alternative, null, null, null, null, $resolvedAlternative]
+            ]);
 
         $this->assertEquals($expected, $this->minification->resolve('', $requested));
     }
@@ -94,8 +94,10 @@ class MinificationTest extends \PHPUnit_Framework_TestCase
     public function resolveDataProvider()
     {
         return [
-            [true, 'file.min.css', 'file.css', 'found.css', false, 'found.css'],
-            [false, 'file.min.css', 'file.min.css', false, false, 'found.css']
+            [true, 'file.css', 'file.min.css', 'found.min.css', false, 'found.min.css'],
+            [false, 'file.min.css', 'file.min.css', false, false, 'found.css'],
+            [true, 'file.js', 'file.min.js', 'found.min.js', false, 'found.min.js'],
+            [false, 'file.min.js', 'file.min.js', false, false, 'found.js'],
         ];
     }
 }

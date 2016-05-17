@@ -373,6 +373,7 @@ define([
             var url = this.options.saveRemoteVideoUrl,
                 self = this;
 
+            this._getPreviewImage().attr('src', sourceUrl).hide();
             this._blockActionButtons(true, true);
             $.ajax({
                 url: url,
@@ -628,7 +629,7 @@ define([
          * @private
          */
         _create: function () {
-            var imgs = this.element.closest(this.options.videoSelector).data('images') || [],
+            var imgs = _.values(this.element.closest(this.options.videoSelector).data('images')) || [],
                 widget,
                 uploader,
                 tmp,
@@ -697,7 +698,7 @@ define([
                     roles.prop('disabled', false);
                     file = widget.element.find('#file_name').val();
                     widget._onGetVideoInformationEditClick();
-                    modalTitleElement = widget.element.closest('.mage-new-video-dialog .modal-title');
+                    modalTitleElement = modal.find('.modal-title');
 
                     if (!file) {
                         widget._blockActionButtons(true);

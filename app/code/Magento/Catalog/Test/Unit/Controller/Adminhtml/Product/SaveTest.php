@@ -140,7 +140,6 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
             ->willReturn($this->product);
         $this->product->expects($this->any())->method('getSku')->willThrowException(new $exceptionType(__('message')));
 
-        $this->session->expects($this->once())->method('setProductData')->with($productData);
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');
 
         $this->action->execute();
