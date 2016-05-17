@@ -75,7 +75,6 @@ class EavTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifyData()
     {
-        $this->markTestSkipped();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load(1);
