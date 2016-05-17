@@ -7,6 +7,7 @@ namespace Magento\Framework\Console;
 
 /**
  * Contains a list of Console commands
+ * @api
  */
 interface CommandListInterface
 {
