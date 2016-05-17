@@ -15,7 +15,7 @@ class CategoryListiningTest extends WebapiAbstract
     const SERVICE_NAME = 'catalogCategoryListiningV1';
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
      */
     public function testGetList()
     {
