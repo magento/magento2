@@ -216,6 +216,20 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Perform actions after object delete
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getConfig()->clear();
+        $this->getAttributeCache()->clear();
+        return $this;
+    }
+
+    /**
      * @return AttributeCache
      * @deprecated
      */
