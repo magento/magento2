@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\TestCase;
+
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
