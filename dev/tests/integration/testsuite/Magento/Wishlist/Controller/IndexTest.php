@@ -5,8 +5,6 @@
  */
 namespace Magento\Wishlist\Controller;
 
-use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
-
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
@@ -99,7 +97,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertSessionMessages(
             $this->equalTo(
-                ['You removed product &lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt; from the comparison list.']
+                [
+                    "\n&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt; has been added to your Wish List. "
+                    . 'Click <a href="http://localhost/index.php/">here</a> to continue shopping.',
+                ]
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
