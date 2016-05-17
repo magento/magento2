@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Test\TestCase;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -15,11 +16,15 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Message\Manager */
     private $messageManager;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject | CookieManagerInterface */
+    private $cookieManagerMock;
+
     protected function setUp()
     {
         $testObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', [], [], '', false);
+        $this->cookieManagerMock = $this->getMock(CookieManagerInterface::class, [], [], '', false);
         $request = $testObjectManager->getObject('Magento\TestFramework\Request');
         $response = $testObjectManager->getObject('Magento\TestFramework\Response');
         $this->_objectManager = $this->getMock(
@@ -37,6 +42,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                         ['Magento\Framework\App\RequestInterface', $request],
                         ['Magento\Framework\App\ResponseInterface', $response],
                         ['Magento\Framework\Message\Manager', $this->messageManager],
+                        [CookieManagerInterface::class, $this->cookieManagerMock],
                     ]
                 )
             );
@@ -139,16 +145,20 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     public function assertSessionMessagesDataProvider()
     {
         return [
-            'message waning type filtering' => [
-                ['some_warning'],
+            'message warning type filtering' => [
+                ['some_warning', 'warning_cookie'],
                 \Magento\Framework\Message\MessageInterface::TYPE_WARNING,
             ],
             'message error type filtering' => [
-                ['error_one', 'error_two'],
+                ['error_one', 'error_two', 'error_cookie'],
                 \Magento\Framework\Message\MessageInterface::TYPE_ERROR,
             ],
+            'message notice type filtering' => [
+                ['some_notice', 'notice_cookie'],
+                \Magento\Framework\Message\MessageInterface::TYPE_NOTICE,
+            ],
             'message success type filtering'    => [
-                ['success!'],
+                ['success!', 'success_cookie'],
                 \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS,
             ],
         ];
@@ -166,6 +176,10 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
                     'error_two',
                     'some_notice',
                     'success!',
+                    'warning_cookie',
+                    'notice_cookie',
+                    'success_cookie',
+                    'error_cookie',
                 ]
             )
         );
@@ -192,5 +206,28 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
             ->addMessage(new \Magento\Framework\Message\Success('success!'));
         $this->messageManager->expects($this->any())->method('getMessages')
             ->will($this->returnValue($messagesCollection));
+
+        $cookieMessages = [
+            [
+                'type' => 'warning',
+                'text' => 'warning_cookie',
+            ],
+            [
+                'type' => 'notice',
+                'text' => 'notice_cookie',
+            ],
+            [
+                'type' => 'success',
+                'text' => 'success_cookie',
+            ],
+            [
+                'type' => 'error',
+                'text' => 'error_cookie',
+            ],
+        ];
+
+        $this->cookieManagerMock->expects($this->any())
+            ->method('getCookie')
+            ->willReturn(\Zend_Json::encode($cookieMessages));
     }
 }
