@@ -17,27 +17,17 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadataPool;
-
-    /**
      * @var Block|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceBlock;
 
     protected function setUp()
     {
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->resourceBlock = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = new ReadHandler(
-            $this->metadataPool,
             $this->resourceBlock
         );
     }
@@ -65,7 +55,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
                 ['stores', [$storeId], $block],
             ]);
 
-        $result = $this->model->execute('', $block);
+        $result = $this->model->execute($block);
         $this->assertInstanceOf('Magento\Cms\Model\Block', $result);
     }
 
@@ -79,7 +69,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(false);
 
-        $result = $this->model->execute('', $block);
+        $result = $this->model->execute($block);
         $this->assertInstanceOf('Magento\Cms\Model\Block', $result);
     }
 }
