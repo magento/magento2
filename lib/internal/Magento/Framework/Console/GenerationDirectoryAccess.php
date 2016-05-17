@@ -55,7 +55,7 @@ class GenerationDirectoryAccess
                 || $directoryWrite->isReadable()
             ) {
                 try {
-                    $probeFilePath = $generationDirectoryPath . DIRECTORY_SEPARATOR . time();
+                    $probeFilePath = $generationDirectoryPath . DIRECTORY_SEPARATOR . uniqid(mt_rand()).'tmp';
                     $fileWriteFactory->create($probeFilePath, DriverPool::FILE, 'w');
                     $driver->deleteFile($probeFilePath);
                 } catch (\Exception $e) {
