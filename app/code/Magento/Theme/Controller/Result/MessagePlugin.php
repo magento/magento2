@@ -99,7 +99,7 @@ class MessagePlugin
         $messages = $this->getCookiesMessages();
         /** @var MessageInterface $message */
         foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
-            $messages []= [
+            $messages[] = [
                 'type' => $message->getType(),
                 'text' => $this->interpretationStrategy->interpret($message),
             ];
