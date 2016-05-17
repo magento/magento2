@@ -89,7 +89,7 @@ T: {{var telephone}}
 {{if city}}{{var city}},|{{/if}}
 {{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}|
 {{var country}}|
-{{depend telephone}}T: <a href="tel">{{var telephone}}</a>{{/depend}}|
+{{depend telephone}}T: {{var telephone}}{{/depend}}|
 {{depend fax}}<br/>F: {{var fax}}{{/depend}}|
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
