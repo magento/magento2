@@ -36,6 +36,8 @@ define([
             deleteValue: true,
             showSpinner: true,
             isDifferedFromDefault: false,
+            defaultState: [],
+            isDefaultState: true,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
                 name: '${ $.name }_dnd',
@@ -60,9 +62,10 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault parsePagesData',
+                recordData: 'setDifferedFromDefault parsePagesData checkDefaultState',
                 currentPage: 'changePage',
-                elems: 'checkSpinner'
+                elems: 'checkSpinner',
+                isDefaultState: 'updateTrigger'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
@@ -83,6 +86,7 @@ define([
          */
         initialize: function () {
             this._super()
+                .initDefaultState()
                 .initChildren()
                 .initDnd()
                 .setColumnsHeaderListener()
@@ -109,7 +113,8 @@ define([
                     'disabled',
                     'labels',
                     'showSpinner',
-                    'isDifferedFromDefault'
+                    'isDifferedFromDefault',
+                    'isDefaultState'
                 ]);
 
             return this;
@@ -140,6 +145,106 @@ define([
             }
 
             return this;
+        },
+
+        /**
+         * Check default component state or not
+         *
+         * @param {Array} data - records data
+         */
+        checkDefaultState: function (data) {
+            var result = true,
+                recordsData = utils.copy(this.recordData()) || data,
+                i = 0,
+                length = this.defaultState.length,
+                currentData = this.deleteProperty ?
+                    _.filter(recordsData, function (elem) {
+                        return elem[this.deleteProperty] !== this.deleteValue;
+                    }, this) : recordsData;
+
+            if (length !== currentData.length) {
+                this.isDefaultState(false);
+
+                return;
+            }
+
+            for (i; i < length; i++) {
+                if (!this._compareObject(this.defaultState[i], currentData[i])) {
+                    result = false;
+                    break;
+                }
+            }
+
+            this.isDefaultState(result);
+        },
+
+        /**
+         * Compare objects. Compared only properties from origin object,
+         * if current object has more properties - they are not considered
+         *
+         * @param {Object} origin - first object
+         * @param {Object} current - second object
+         *
+         * @returns {Boolean} result - is equal this objects or not
+         */
+        _compareObject: function (origin, current) {
+            var prop,
+                result = true;
+
+            for (prop in origin) {
+                if (this._castValue(origin[prop]) != this._castValue(current[prop])) {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        },
+
+        /**
+         * Check value type and cast to boolean if needed
+         *
+         * @param {*} value
+         *
+         * @returns {Boolean|*} casted or origin value
+         */
+        _castValue: function (value) {
+            if (_.isUndefined(value) || value === '' || _.isNull(value)) {
+                return false;
+            } else {
+                return value;
+            }
+        },
+
+        /**
+         * Init default component state
+         *
+         * @param {Array} data
+         *
+         * @returns Chainable.
+         */
+        initDefaultState: function (data) {
+            var defaultState = data || utils.copy(this.recordData());
+            
+            this.defaultState = defaultState;
+
+            return this;
+        },
+
+        /**
+         * Triggered update event
+         *
+         * @param {Boolean} val
+         */
+        updateTrigger: function (val) {
+            this.trigger('update', !val);
+        },
+
+        /**
+         * Was changes or not
+         */
+        hasChanged: function () {
+          return !this.isDefaultState();
         },
 
         /**
