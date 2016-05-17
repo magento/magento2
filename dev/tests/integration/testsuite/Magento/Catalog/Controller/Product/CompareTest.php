@@ -44,7 +44,10 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             )
         );
 
-        $this->assertSessionMessages($this->contains('Simple Product 1 Name'), MessageInterface::TYPE_SUCCESS);
+        $this->assertSessionMessages(
+            $this->equalTo(['You added product Simple Product 1 Name to the comparison list.']),
+            MessageInterface::TYPE_SUCCESS
+        );
 
         $this->assertRedirect();
 
@@ -68,7 +71,10 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $this->productRepository->get('simple_product_2');
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
 
-        $this->assertSessionMessages($this->contains('Simple Product 2 Name'), MessageInterface::TYPE_SUCCESS);
+        $this->assertSessionMessages(
+            $this->equalTo(['You removed product Simple Product 2 Name from the comparison list.']),
+            MessageInterface::TYPE_SUCCESS
+        );
 
         $this->assertRedirect();
         $restProduct = $this->productRepository->get('simple_product_1');
@@ -82,7 +88,10 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
         $secondProduct = $this->productRepository->get('simple_product_2');
 
-        $this->assertSessionMessages($this->contains('Simple Product 1 Name'), MessageInterface::TYPE_SUCCESS);
+        $this->assertSessionMessages(
+            $this->equalTo(['You removed product Simple Product 1 Name from the comparison list.']),
+            MessageInterface::TYPE_SUCCESS
+        );
 
         $this->assertRedirect();
 
@@ -122,7 +131,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalog/product_compare/clear');
 
         $this->assertSessionMessages(
-            $this->contains('You cleared the comparison list.'), 
+            $this->equalTo(['You cleared the comparison list.']),
             MessageInterface::TYPE_SUCCESS
         );
 
@@ -141,10 +150,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId() . '?nocookie=1');
 
         $this->assertSessionMessages(
-            $this->logicalNot($this->contains('<script>alert("xss");</script>'))
-        );
-        $this->assertSessionMessages(
-            $this->contains('&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;'),
+            $this->equalTo(
+                ['You removed product &lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt; from the comparison list.']
+            ),
             MessageInterface::TYPE_SUCCESS
         );
     }
