@@ -121,7 +121,7 @@ define([
         },
 
         /**
-         * Init DND module
+         * Inits DND module
          *
          * @returns {Object} Chainable.
          */
@@ -134,7 +134,7 @@ define([
         },
 
         /**
-         * Check columnsHeaderAfterRender property,
+         * Checks columnsHeaderAfterRender property,
          * and set listener on elems if needed
          *
          * @returns {Object} Chainable.
@@ -149,12 +149,10 @@ define([
 
         /**
          * Checks whether component's state is default or not
-         *
-         * @param {Array} data - records data
          */
-        checkDefaultState: function (data) {
+        checkDefaultState: function () {
             var result = true,
-                recordsData = utils.copy(this.recordData()) || data,
+                recordsData = utils.copy(this.recordData()),
                 i = 0,
                 length = this.defaultState.length,
                 currentData = this.deleteProperty ?
@@ -179,7 +177,7 @@ define([
         },
 
         /**
-         * Compare objects. Compared only properties from origin object,
+         * Compares objects. Compares only properties from origin object,
          * if current object has more properties - they are not considered
          *
          * @param {Object} origin - first object
@@ -204,7 +202,7 @@ define([
         },
 
         /**
-         * Check value type and cast to boolean if needed
+         * Checks value type and cast to boolean if needed
          *
          * @param {*} value
          *
@@ -219,7 +217,7 @@ define([
         },
 
         /**
-         * Init default component state
+         * Inits default component state
          *
          * @param {Array} data
          *
@@ -234,7 +232,7 @@ define([
         },
 
         /**
-         * Triggered update event
+         * Triggers update event
          *
          * @param {Boolean} val
          */
@@ -243,7 +241,7 @@ define([
         },
 
         /**
-         * Was changes or not
+         * Returns component state
          */
         hasChanged: function () {
           return !this.isDefaultState();
