@@ -38,11 +38,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     protected $_eventPrefix = 'eav_entity_attribute';
 
     /**
-     * @var AttributeCache
-     */
-    private $attributeCache;
-
-    /**
      * Parameter name in event
      *
      * In observe method you can use $observer->getEvent()->getAttribute() in this case
@@ -227,7 +222,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function beforeSave()
     {
         // prevent overriding product data
-        if (isset($this->_data['attribute_code']) && $this->getReservedAttributeList()->isReservedAttribute($this)) {
+        if (isset($this->_data['attribute_code']) && $this->reservedAttributeList->isReservedAttribute($this)) {
             throw new LocalizedException(
                 __(
                     'The attribute code \'%1\' is reserved by system. Please try another attribute code',
@@ -304,30 +299,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
-        $this->getAttributeCache()->clear();
         return parent::afterSave();
-    }
-
-    /**
-     * @return $this
-     */
-    public function afterDelete()
-    {
-        $this->getAttributeCache()->clear();
-        return parent::afterDelete();
-    }
-
-    /**
-     * Attribute cache
-     *
-     * @return AttributeCache
-     */
-    private function getAttributeCache()
-    {
-        if (!$this->attributeCache) {
-            $this->attributeCache = ObjectManager::getInstance()->get(AttributeCache::class);
-        }
-        return $this->attributeCache;
     }
 
     /**
@@ -512,22 +484,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->_localeResolver = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
-        $this->reservedAttributeList = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->_localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
         $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
-    }
-
-    /**
-     * @return \Magento\Catalog\Model\Product\ReservedAttributeList|mixed
-     */
-    private function getReservedAttributeList()
-    {
-        if ($this->reservedAttributeList) {
-            $this->reservedAttributeList = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Catalog\Model\Product\ReservedAttributeList::class
-            );
-        }
-
-        return $this->reservedAttributeList;
     }
 }
