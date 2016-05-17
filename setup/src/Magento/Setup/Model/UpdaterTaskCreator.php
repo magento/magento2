@@ -142,7 +142,7 @@ class UpdaterTaskCreator
 
         $enabledCaches = [];
         foreach ($cacheStatus as $cacheName => $value) {
-            if ($value) {
+            if ($value === 1) {
                 $enabledCaches[] = $cacheName;
             }
         }

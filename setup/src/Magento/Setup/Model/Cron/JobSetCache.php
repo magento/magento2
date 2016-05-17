@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Model\Cron;
 
+use Magento\Backend\Console\Command\AbstractCacheManageCommand;
 use Symfony\Component\Console\Input\ArrayInput;
 
 class JobSetCache extends AbstractJob
@@ -54,8 +55,11 @@ class JobSetCache extends AbstractJob
     public function execute()
     {
         try {
-            $this->params['command'] = $this->command->getName();
-            $this->command->run(new ArrayInput($this->params), $this->output);
+            if (!empty($this->params)) {
+                $arguments[AbstractCacheManageCommand::INPUT_KEY_TYPES] = explode(' ', $this->params[0]);
+            }
+            $arguments['command'] = $this->command->getName();
+            $this->command->run(new ArrayInput($arguments), $this->output);
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));

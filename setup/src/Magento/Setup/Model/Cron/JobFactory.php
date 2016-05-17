@@ -134,7 +134,14 @@ class JobFactory
                 break;
             case self::JOB_ENABLE_CACHE:
                 $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheEnableCommand');
-                return new JobSetCache($cmd, $objectManagerProvider, $multipleStreamOutput, $cronStatus, $name);
+                return new JobSetCache(
+                    $cmd,
+                    $objectManagerProvider,
+                    $multipleStreamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
                 break;
             case self::JOB_DISABLE_CACHE:
                 $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheDisableCommand');
