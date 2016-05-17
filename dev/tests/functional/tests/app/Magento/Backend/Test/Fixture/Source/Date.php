@@ -12,7 +12,7 @@ use Magento\Mtf\Fixture\DataSource;
  * Class Date.
  *
  * Data keys:
- *  - pattern (Format a local time/date with delta, e.g. 'm-d-Y -3 days' = current day - 3 days)
+ *  - pattern (Format a local time/date with delta, e.g. 'm/d/Y -3 days' = current day - 3 days)
  */
 class Date extends DataSource
 {

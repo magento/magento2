@@ -299,7 +299,7 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $this->getEntityManager()->delete($object, \Magento\Catalog\Api\Data\ProductInterface::class, []);
+        $this->getEntityManager()->delete($object);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
@@ -522,9 +522,6 @@ class Product extends AbstractResource
             )->where(
                 $this->getLinkField() . ' = ?',
                 $oldId
-            )->where(
-                'store_id >= ?',
-                0
             );
 
             $connection->query(
@@ -532,7 +529,7 @@ class Product extends AbstractResource
                     $select,
                     $tableName,
                     ['attribute_id', 'store_id', $this->getLinkField(), 'value'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_IGNORE
                 )
             );
         }
@@ -541,7 +538,6 @@ class Product extends AbstractResource
         $statusAttribute = $this->getAttribute('status');
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
-        $updateCond[] = 'store_id >= 0';
         $updateCond[] = $connection->quoteInto($this->getLinkField() . ' = ?', $newId);
         $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
         $connection->update(
@@ -655,7 +651,7 @@ class Product extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->loadAttributesMetadata($attributes);
-        $this->getEntityManager()->load($object, $entityId, \Magento\Catalog\Api\Data\ProductInterface::class, []);
+        $this->getEntityManager()->load($object, $entityId);
         return $this;
     }
 
@@ -695,7 +691,7 @@ class Product extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->getEntityManager()->save($object, ProductInterface::class, []);
+        $this->getEntityManager()->save($object);
         return $this;
     }
 
