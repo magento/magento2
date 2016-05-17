@@ -84,12 +84,6 @@ class Container implements Layout\GeneratorInterface
         $elementName,
         $options
     ) {
-        $structure->setAttribute(
-            $elementName,
-            Layout\Element::CONTAINER_OPT_LABEL,
-            $options[Layout\Element::CONTAINER_OPT_LABEL]
-        );
-        unset($options[Layout\Element::CONTAINER_OPT_LABEL]);
         unset($options['type']);
 
         $this->validateOptions($options);
