@@ -20,7 +20,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * Preconditions:
  *  1. Customer Group is created.
  *  2. Customer is created and assigned to this group.
- *  3. Product is created and has tier price based on created Customer Group.
  * Steps:
  *  1. Log in to backend as admin user.
  *  2. Navigate to Stores > Other Settings > Customer Groups.
