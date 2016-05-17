@@ -9,6 +9,9 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Theme\Controller\Result\MessagePlugin;
+
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
@@ -204,14 +207,48 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         } else {
             $messages = $messageManager->getMessages()->getItemsByType($messageType);
         }
+
         $actualMessages = [];
         foreach ($messages as $message) {
             $actualMessages[] = $message->getText();
         }
+
+        $actualMessages = array_merge($actualMessages, $this->getCookieMessages($messageType));
+
         $this->assertThat(
             $actualMessages,
             $constraint,
             'Session messages do not meet expectations' . var_export($actualMessages, true)
         );
+    }
+
+    /**
+     * Return messages stored in cookies by type
+     *
+     * @param string|null $messageType
+     * @return array
+     */
+    private function getCookieMessages($messageType = null) {
+        /** @var $cookieManager CookieManagerInterface */
+        $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
+        try {
+            $messages = \Zend_Json::decode(
+                $cookieManager->getCookie(MessagePlugin::MESSAGES_COOKIES_NAME, \Zend_Json::encode([]))
+            );
+            if (!is_array($messages)) {
+                $messages = [];
+            }
+        } catch (\Zend_Json_Exception $e) {
+            $messages = [];
+        }
+
+        $actualMessages = [];
+        foreach ($messages as $message) {
+            if ($messageType === null || $message['type'] == $messageType) {
+                $actualMessages[] = $message['text'];
+            }
+        }
+
+        return $actualMessages;
     }
 }
