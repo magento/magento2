@@ -188,8 +188,7 @@ define([
          * @returns {Boolean} result - is equal this objects or not
          */
         _compareObject: function (origin, current) {
-            var prop,
-                result = true;
+            var prop;
 
             for (prop in origin) {
                 if (_.isObject(origin[prop]) && _.isObject(current[prop])) {
@@ -197,12 +196,11 @@ define([
                         return false;
                     }
                 } else if (this._castValue(origin[prop]) != this._castValue(current[prop])) {
-                    result = false;
-                    break;
+                    return false;
                 }
             }
 
-            return result;
+            return true;
         },
 
         /**
