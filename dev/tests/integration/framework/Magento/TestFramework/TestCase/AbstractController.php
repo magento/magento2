@@ -228,7 +228,8 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      * @param string|null $messageType
      * @return array
      */
-    private function getCookieMessages($messageType = null) {
+    private function getCookieMessages($messageType = null)
+    {
         /** @var $cookieManager CookieManagerInterface */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
         try {
