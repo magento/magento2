@@ -26,7 +26,7 @@ class AssertCmsBlockNotOnCategoryPage extends AbstractConstraint
      * @param CmsBlock $cmsBlock
      * @param CatalogCategoryView $catalogCategoryView
      * @param FixtureFactory $fixtureFactory
-     * @param Category $category
+     * @param Category|null $category [optional]
      * @return void
      */
     public function processAssert(

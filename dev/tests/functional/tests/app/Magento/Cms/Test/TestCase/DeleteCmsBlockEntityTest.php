@@ -78,7 +78,6 @@ class DeleteCmsBlockEntityTest extends Injectable
      *
      * @param CmsBlock $cmsBlock
      * @return array
-     * @throws \Exception
      */
     public function test(CmsBlock $cmsBlock)
     {
