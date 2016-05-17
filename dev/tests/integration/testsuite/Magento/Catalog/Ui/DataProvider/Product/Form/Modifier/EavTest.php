@@ -81,8 +81,6 @@ class EavTest extends \PHPUnit_Framework_TestCase
         $product->load(1);
         $this->locatorMock->expects($this->any())->method('getProduct')->willReturn($product);
         $expectedData = include __DIR__ . '/_files/eav_expected_data_output.php';
-
-
         $actualData = $this->eavModifier->modifyData([]);
         $this->prepareDataForComparison($actualData, $expectedData);
         $this->assertEquals($expectedData, $actualData);
