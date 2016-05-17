@@ -148,7 +148,7 @@ define([
         },
 
         /**
-         * Check default component state or not
+         * Checks whether component's state is default or not
          *
          * @param {Array} data - records data
          */
@@ -192,7 +192,11 @@ define([
                 result = true;
 
             for (prop in origin) {
-                if (this._castValue(origin[prop]) != this._castValue(current[prop])) {
+                if (_.isObject(origin[prop]) && _.isObject(current[prop])) {
+                    if (!this._compareObject(origin[prop], current[prop])) {
+                        return false;
+                    }
+                } else if (this._castValue(origin[prop]) != this._castValue(current[prop])) {
                     result = false;
                     break;
                 }
