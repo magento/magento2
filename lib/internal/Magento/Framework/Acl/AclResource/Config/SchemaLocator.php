@@ -1,15 +1,18 @@
 <?php
 /**
- * ACL resources configuration schema locator
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Acl\AclResource\Config;
 
+/**
+ * ACL resources configuration schema locator
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver
+     */
     protected $urnResolver;
 
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
@@ -24,7 +27,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl_merged.xsd');
     }
 
     /**
@@ -34,6 +37,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return null;
+        return $this->urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl.xsd');
     }
 }
