@@ -19,6 +19,9 @@ define([
 
             dateFormat: 'MM/dd/y', // ICU Date Format
             timeFormat: 'HH:mm', // ICU Time Format
+            validationParams: {
+                dateFormat: '${ $.outputDateFormat }'
+            },
 
             /**
              * Format of date that comes from the
@@ -113,10 +116,12 @@ define([
                 }
 
                 shiftedValue = shiftedValue.format(this.datetimeFormat);
+            } else {
+                shiftedValue = '';
+            }
 
-                if (shiftedValue !== this.shiftedValue()) {
-                    this.shiftedValue(shiftedValue);
-                }
+            if (shiftedValue !== this.shiftedValue()) {
+                this.shiftedValue(shiftedValue);
             }
         },
 
@@ -130,6 +135,7 @@ define([
             var value;
 
             if (shiftedValue) {
+
                 if (this.showsTime) {
                     value = moment.utc(shiftedValue, this.datetimeFormat);
                     value = value.subtract(this.timeOffset, 'seconds').toISOString();
@@ -137,10 +143,12 @@ define([
                     value = moment(shiftedValue, this.datetimeFormat);
                     value = value.format(this.outputDateFormat);
                 }
+            } else {
+                value = '';
+            }
 
-                if (value !== this.value()) {
-                    this.value(value);
-                }
+            if (value !== this.value()) {
+                this.value(value);
             }
         },
 
@@ -159,6 +167,7 @@ define([
 
             this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
             this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+            this.validationParams.dateFormat = this.outputDateFormat;
         }
     });
 });

@@ -197,9 +197,12 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         if ($cartExtension === null) {
             $cartExtension = $this->getCartExtensionFactory()->create();
         }
-        $shippingAssignment = $cartExtension->getShippingAssignments()[0];
-        if ($cartExtension->getShippingAssignments() === null) {
+
+        $shippingAssignments = $cartExtension->getShippingAssignments();
+        if (empty($shippingAssignments)) {
             $shippingAssignment = $this->getShippingAssignmentFactory()->create();
+        } else {
+            $shippingAssignment = $shippingAssignments[0];
         }
 
         $shipping = $shippingAssignment->getShipping();

@@ -522,14 +522,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->setCanSaveCustomOptions(true);
         }
 
-        $useValidation = \Magento\Store\Model\Store::ADMIN_CODE === $this->storeManager->getStore()->getCode();
-        if ($useValidation) {
-            $validationResult = $this->resourceModel->validate($product);
-            if (true !== $validationResult) {
-                throw new \Magento\Framework\Exception\CouldNotSaveException(
-                    __('Invalid product data: %1', implode(',', $validationResult))
-                );
-            }
+        $validationResult = $this->resourceModel->validate($product);
+        if (true !== $validationResult) {
+            throw new \Magento\Framework\Exception\CouldNotSaveException(
+                __('Invalid product data: %1', implode(',', $validationResult))
+            );
         }
 
         try {

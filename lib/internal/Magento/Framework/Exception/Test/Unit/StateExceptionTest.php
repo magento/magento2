@@ -11,8 +11,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class StateExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class StateExceptionTest extends \PHPUnit_Framework_TestCase
 {

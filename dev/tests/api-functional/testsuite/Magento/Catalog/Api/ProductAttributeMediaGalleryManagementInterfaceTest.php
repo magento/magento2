@@ -139,6 +139,39 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
+    public function testCreateWithoutFileExtension()
+    {
+        $requestData = [
+            'id' => null,
+            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
+            'label' => 'Image Text',
+            'position' => 1,
+            'types' => ['image'],
+            'disabled' => false,
+            'content' => [
+                ImageContentInterface::BASE64_ENCODED_DATA => base64_encode(file_get_contents($this->testImagePath)),
+                ImageContentInterface::TYPE => 'image/jpeg',
+                ImageContentInterface::NAME => 'test_image'
+            ]
+        ];
+
+        $actualResult = $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
+        $targetProduct = $this->getTargetSimpleProduct();
+        $mediaGallery = $targetProduct->getData('media_gallery');
+
+        $this->assertCount(1, $mediaGallery['images']);
+        $updatedImage = array_shift($mediaGallery['images']);
+        $this->assertEquals($actualResult, $updatedImage['value_id']);
+        $this->assertEquals('Image Text', $updatedImage['label']);
+        $this->assertEquals(1, $updatedImage['position']);
+        $this->assertEquals(0, $updatedImage['disabled']);
+        $this->assertStringStartsWith('/t/e/test_image', $updatedImage['file']);
+        $this->assertEquals($updatedImage['file'], $targetProduct->getData('image'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
     public function testCreateWithNotDefaultStoreId()
     {
         $requestData = [

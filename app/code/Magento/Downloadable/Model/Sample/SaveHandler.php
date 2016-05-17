@@ -27,26 +27,34 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity, $arguments = [])
+    public function execute($entity, $arguments = [])
     {
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
         if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
             return $entity;
         }
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-        foreach ($this->sampleRepository->getList($entity->getSku()) as $sample) {
-            $this->sampleRepository->delete($sample->getId());
-        }
+
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples() ?: [];
+        $updatedSamples = [];
+        $oldSamples = $this->sampleRepository->getList($entity->getSku());
         foreach ($samples as $sample) {
+            if ($sample->getId()) {
+                $updatedSamples[$sample->getId()] = $sample->getId();
+            }
             $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
         }
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
+        foreach ($oldSamples as $sample) {
+            if (!isset($updatedSamples[$sample->getId()])) {
+                $this->sampleRepository->delete($sample->getId());
+            }
+        }
+
         return $entity;
     }
 }

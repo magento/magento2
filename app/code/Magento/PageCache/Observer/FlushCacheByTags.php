@@ -54,7 +54,7 @@ class FlushCacheByTags implements ObserverInterface
             if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
                 $tags = $object->getIdentities();
                 if (!empty($tags)) {
-                    $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_ALL, array_unique($tags));
+                    $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
                 }
             }
         }

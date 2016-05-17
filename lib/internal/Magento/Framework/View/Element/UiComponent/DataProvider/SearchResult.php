@@ -7,10 +7,10 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
+use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -35,6 +35,11 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     protected $totalCount;
 
     /**
+     * @var string class name of document
+     */
+    protected $document = Document::class;
+
+    /**
      * @param EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
@@ -51,7 +56,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
         $mainTable,
         $resourceModel
     ) {
-        $this->_init('Magento\Framework\View\Element\UiComponent\DataProvider\Document', $resourceModel);
+        $this->_init($this->document, $resourceModel);
         $this->setMainTable(true);
         $this->setMainTable($this->_resource->getTable($mainTable));
         parent::__construct(

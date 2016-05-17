@@ -45,6 +45,8 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Compute time in seconds since consumer was created.
      *
+     * @deprecated
+     *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds
      */

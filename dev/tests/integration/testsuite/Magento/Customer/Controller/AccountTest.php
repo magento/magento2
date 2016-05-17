@@ -45,12 +45,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->dispatch('customer/account/create');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<input type="text" id="firstname"', $body);
-        $this->assertContains('<input type="text" id="lastname"', $body);
-        $this->assertContains('<input type="email" name="email" id="email_address"', $body);
-        $this->assertContains('<input type="checkbox" name="is_subscribed"', $body);
-        $this->assertContains('<input type="password" name="password" id="password"', $body);
-        $this->assertContains('<input type="password" name="password_confirmation" title="Confirm Password"', $body);
+
+        $this->assertRegExp('~<input type="text"[^>]*id="firstname"~', $body);
+        $this->assertRegExp('~<input type="text"[^>]*id="lastname"~', $body);
+        $this->assertRegExp('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
+        $this->assertRegExp('~<input type="email"[^>]*id="email_address"~', $body);
+        $this->assertRegExp('~<input type="password"[^>]*id="password"~', $body);
+        $this->assertRegExp('~<input type="password"[^>]*id="password-confirmation"~', $body);
     }
 
     /**
@@ -587,7 +588,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Invalid value of "bad-email" provided for the email field.']),
+            $this->equalTo(['"Email" is not a valid email address.']),
             MessageInterface::TYPE_ERROR
         );
     }

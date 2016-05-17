@@ -1732,6 +1732,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
                 ->setPrefix($customerBillingAddressDataObject->getPrefix())
                 ->setStoreId($store->getId())
+                ->setWebsiteId($store->getWebsiteId())
                 ->setEmail($this->_getNewCustomerEmail());
             $customer = $this->_validateCustomerData($customer);
         }

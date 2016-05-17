@@ -89,14 +89,14 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $productDescription = '.product.attibute.description';
+    protected $productDescription = '.product.attribute.description';
 
     /**
      * Product short-description element.
      *
      * @var string
      */
-    protected $productShortDescription = '.product.attibute.overview';
+    protected $productShortDescription = '.product.attribute.overview';
 
     /**
      * Stock Availability control.
@@ -188,6 +188,13 @@ class View extends AbstractConfigureBlock
      * @var string
      */
     protected $baseImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img';
+
+    /**
+     * Video Container selector
+     *
+     * @var string
+     */
+    private $videoContainer = 'div.fotorama-video-container';
 
     /**
      * Get block price.
@@ -552,5 +559,15 @@ class View extends AbstractConfigureBlock
     public function closeFullImage()
     {
         $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Check is video is visible on product page
+     *
+     * @return bool
+     */
+    public function isVideoVisible()
+    {
+        return $this->_rootElement->find($this->videoContainer)->isVisible();
     }
 }
