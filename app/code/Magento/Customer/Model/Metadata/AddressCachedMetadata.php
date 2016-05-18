@@ -14,6 +14,11 @@ use Magento\Customer\Api\AddressMetadataInterface;
 class AddressCachedMetadata extends CachedMetadata implements AddressMetadataInterface
 {
     /**
+     * @var string
+     */
+    protected $entityType = 'customer_address';
+
+    /**
      * Initialize dependencies.
      *
      * @param AddressMetadata $metadata

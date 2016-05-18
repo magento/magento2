@@ -96,6 +96,7 @@
                         <item name="validation" xsi:type="array">
                             <item name="validate-number" xsi:type="boolean">true</item>
                             <item name="validate-digits" xsi:type="boolean">true</item>
+                            <item name="less-than-equals-to" xsi:type="number">99999999</item>
                         </item>
                         <item name="sortOrder" xsi:type="number">200</item>
                         <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
@@ -325,6 +326,7 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Qty Uses Decimals</item>
                         <item name="formElement" xsi:type="string">select</item>
+                        <item name="rawOptions" xsi:type="boolean">true</item>
                         <item name="dataScope" xsi:type="string">stock_data.is_qty_decimal</item>
                         <item name="value" xsi:type="number">0</item>
                         <item name="sortOrder" xsi:type="number">600</item>

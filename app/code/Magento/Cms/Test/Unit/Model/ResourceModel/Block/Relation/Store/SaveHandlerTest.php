@@ -8,6 +8,7 @@ namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block\Relation\Store;
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Cms\Api\Data\BlockInterface;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +84,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with('Magento\Cms\Model\Block')
+            ->with(BlockInterface::class)
             ->willReturn($entityMetadata);
 
         $this->resourceBlock->expects($this->once())
@@ -113,7 +114,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($linkField)
             ->willReturn($linkId);
 
-        $result = $this->model->execute('Magento\Cms\Model\Block', $block);
-        $this->assertInstanceOf('Magento\Cms\Model\Block', $result);
+        $result = $this->model->execute($block);
+        $this->assertInstanceOf(BlockInterface::class, $result);
     }
 }
