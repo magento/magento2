@@ -7,27 +7,26 @@ namespace Magento\Backend\Model\Setup;
 
 use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Builder;
-use Magento\Framework\App\DocRoot;
+use Magento\Framework\App\DocRootLocator;
 
 /**
  * Plugin class to remove web setup wizard from menu if application root is pub/ and no setup url variable is specified.
  */
 class MenuBuilder
 {
-
     /**
-     * @var DocRoot
+     * @var DocRootLocator
      */
-    protected $docRoot;
+    protected $docRootLocator;
 
     /**
      * MenuBuilder constructor.
      *
-     * @param DocRoot $docRoot
+     * @param DocRootLocator $docRootLocator
      */
-    public function __construct(DocRoot $docRoot)
+    public function __construct(DocRootLocator $docRootLocator)
     {
-        $this->docRoot = $docRoot;
+        $this->docRootLocator = $docRootLocator;
     }
 
     /**
@@ -40,7 +39,7 @@ class MenuBuilder
      */
     public function afterGetResult(Builder $subject, Menu $menu)
     {
-        if ($this->docRoot->hasThisSubDir('pub', 'setup')) {
+        if ($this->docRootLocator->isPub()) {
             $menu->remove('Magento_Backend::setup_wizard');
         }
         return $menu;

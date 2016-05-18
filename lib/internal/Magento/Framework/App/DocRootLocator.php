@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 /**
  * This class calculates if document root is set to pub
  */
-class DocRoot
+class DocRootLocator
 {
     /**
      * @var RequestInterface
@@ -37,15 +37,12 @@ class DocRoot
     /**
      * Returns true if doc root is pub/ and not BP
      *
-     * @param string $dirToCheck
-     * @param string $missingDir
-     *
      * @return bool
      */
-    public function hasThisSubDir($dirToCheck, $missingDir)
+    public function isPub()
     {
         $rootBasePath = $this->request->getServer('DOCUMENT_ROOT');
         $readDirectory = $this->readFactory->create(DirectoryList::ROOT);
-        return strpos($rootBasePath, $dirToCheck) && !$readDirectory->isExist($rootBasePath + $missingDir);
+        return strpos($rootBasePath, 'pub') && !$readDirectory->isExist($rootBasePath . 'setup');
     }
 }
