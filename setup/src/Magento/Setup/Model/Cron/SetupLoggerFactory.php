@@ -6,37 +6,11 @@
 
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Model\ObjectManagerProvider;
-
 /**
  * Class to get PSR-3 compliant logger instance
  */
 class SetupLoggerFactory
 {
-    /**
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
-    /**
-     * @var SetupStreamHandler
-     */
-    private $setupStreamHandler;
-
-    /**
-     * Constructor
-     *
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param SetupStreamHandler $setupStreamHandler
-     */
-    public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
-        SetupStreamHandler $setupStreamHandler
-    ) {
-        $this->objectManagerProvider = $objectManagerProvider;
-        $this->setupStreamHandler = $setupStreamHandler;
-    }
-
     /**
      * Create logger instance.
      *
@@ -44,13 +18,11 @@ class SetupLoggerFactory
      *
      * @return \Psr\Log\LoggerInterface
      */
-    public function create($channelName)
+    public function create($channelName = 'setup-cron')
     {
-        /** @var \Magento\Framework\Logger\Monolog $logger */
-        $logger = $this->objectManagerProvider
-            ->get()
-            ->create('Magento\Framework\Logger\Monolog', ['name' => $channelName]);
-        $logger->pushHandler($this->setupStreamHandler);
+        $logger = new \Monolog\Logger($channelName);
+        $path = BP . '/var/log/update.log';
+        $logger->pushHandler(new \Monolog\Handler\StreamHandler($path));
         return $logger;
     }
 }
