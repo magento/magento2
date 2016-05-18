@@ -197,10 +197,13 @@ class SystemPackage
     }
 
     /**
+     * Re-formats packages array to merge packages, sort versions and add technical data
+     *
      * @param array $packages
      * @return array
      */
-    private function formatPackages($packages) {
+    private function formatPackages($packages)
+    {
 
         $versions = [];
 
