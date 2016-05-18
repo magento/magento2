@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Catalog\Controller\Product;
+use Magento\Framework\Message\MessageInterface;
 
 /**
  * @magentoDataFixture Magento/Catalog/controllers/_files/products.php
@@ -43,15 +44,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             )
         );
 
-        /** @var $messageManager \Magento\Framework\Message\Manager */
-        $messageManager = $objectManager->get('Magento\Framework\Message\Manager');
-        $this->assertInstanceOf(
-            'Magento\Framework\Message\Success',
-            $messageManager->getMessages()->getLastAddedMessage()
-        );
-        $this->assertContains(
-            'Simple Product 1 Name',
-            (string)$messageManager->getMessages()->getLastAddedMessage()->getText()
+        $this->assertSessionMessages(
+            $this->equalTo(['You added product Simple Product 1 Name to the comparison list.']),
+            MessageInterface::TYPE_SUCCESS
         );
 
         $this->assertRedirect();
@@ -76,16 +71,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $this->productRepository->get('simple_product_2');
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
 
-        /** @var $messageManager \Magento\Framework\Message\Manager */
-        $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Message\Manager');
-        $this->assertInstanceOf(
-            'Magento\Framework\Message\Success',
-            $messageManager->getMessages()->getLastAddedMessage()
-        );
-        $this->assertContains(
-            'Simple Product 2 Name',
-            (string)$messageManager->getMessages()->getLastAddedMessage()->getText()
+        $this->assertSessionMessages(
+            $this->equalTo(['You removed product Simple Product 2 Name from the comparison list.']),
+            MessageInterface::TYPE_SUCCESS
         );
 
         $this->assertRedirect();
@@ -99,15 +87,11 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $this->productRepository->get('simple_product_1');
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId());
         $secondProduct = $this->productRepository->get('simple_product_2');
-        /** @var $messageManager \Magento\Framework\Message\Manager */
-        $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Message\Manager');
-        $this->assertInstanceOf(
-            'Magento\Framework\Message\Success',
-            $messageManager->getMessages()->getLastAddedMessage()
+
+        $this->assertSessionMessages(
+            $this->equalTo(['You removed product Simple Product 1 Name from the comparison list.']),
+            MessageInterface::TYPE_SUCCESS
         );
-        $this->assertContains('Simple Product 1 Name',
-            (string)$messageManager->getMessages()->getLastAddedMessage()->getText());
 
         $this->assertRedirect();
 
@@ -146,12 +130,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('catalog/product_compare/clear');
 
-        /** @var $messageManager \Magento\Framework\Message\Manager */
-        $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Message\Manager');
-        $this->assertInstanceOf(
-            'Magento\Framework\Message\Success',
-            $messageManager->getMessages()->getLastAddedMessage()
+        $this->assertSessionMessages(
+            $this->equalTo(['You cleared the comparison list.']),
+            MessageInterface::TYPE_SUCCESS
         );
 
         $this->assertRedirect();
@@ -167,17 +148,13 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->_prepareCompareListWithProductNameXss();
         $product = $this->productRepository->get('product-with-xss');
         $this->dispatch('catalog/product_compare/remove/product/' . $product->getEntityId() . '?nocookie=1');
-        $messages = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Message\Manager'
-        )->getMessages()->getItems();
-        $isProductNamePresent = false;
-        foreach ($messages as $message) {
-            if (strpos($message->getText(), '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;') !== false) {
-                $isProductNamePresent = true;
-            }
-            $this->assertNotContains('<script>alert("xss");</script>', (string)$message->getText());
-        }
-        $this->assertTrue($isProductNamePresent, 'Product name was not found in session messages');
+
+        $this->assertSessionMessages(
+            $this->equalTo(
+                ['You removed product &lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt; from the comparison list.']
+            ),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 
     protected function _prepareCompareListWithProductNameXss()

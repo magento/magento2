@@ -93,6 +93,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $quoteFactoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cartManagementMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -197,9 +202,16 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->quoteFactoryMock = $this->getMock('\Magento\Quote\Model\QuoteFactory', ['create'], [], '', false);
+        $this->cartManagementMock = $this->getMock(
+            \Magento\Quote\Api\CartManagementInterface::class,
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->quote = $this->getMock(
-            'Magento\Backend\Model\Session\Quote',
+            \Magento\Backend\Model\Session\Quote::class,
             ['getStoreId', 'getQuoteId', 'setQuoteId', 'hasCustomerId', 'getCustomerId'],
             [
                 'request' => $this->requestMock,
@@ -217,10 +229,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManagerMock,
                 'groupManagement' => $this->groupManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock
-            ],
-            '',
-            true
+            ]
         );
+
+        $this->prepareObjectManager([
+            [\Magento\Quote\Api\CartManagementInterface::class, $this->cartManagementMock]
+        ]);
     }
 
     /**
@@ -234,6 +248,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $storeId = 10;
         $customerId = 66;
         $customerGroupId = 77;
+
+        $this->cartManagementMock->expects($this->once())->method('createEmptyCart')->willReturn($quoteId);
 
         $this->quote->expects($this->any())
             ->method('getQuoteId')
@@ -271,7 +287,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                 'setStoreId',
                 'setCustomerGroupId',
                 'setIsActive',
-                'getId',
                 'assignCustomer',
                 'setIgnoreOldQty',
                 'setIsSuperMode',
@@ -281,9 +296,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $quoteMock->expects($this->once())
-            ->method('setStoreId')
-            ->with($storeId);
+        $this->quoteRepositoryMock->expects($this->once())->method('get')->willReturn($quoteMock);
         $quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
             ->with($customerGroupId)
@@ -293,9 +306,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->with(false)
             ->will($this->returnSelf());
         $quoteMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($quoteId));
-        $quoteMock->expects($this->once())
             ->method('assignCustomer')
             ->with($dataCustomerMock);
         $quoteMock->expects($this->once())
@@ -304,13 +314,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())
             ->method('setIsSuperMode')
             ->with(true);
-
-        $this->quoteFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($quoteMock));
-        $this->quoteRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($quoteMock);
 
         $this->assertEquals($quoteMock, $this->quote->getQuote());
     }
@@ -380,9 +383,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerId')
             ->will($this->returnValue($quoteCustomerId));
 
-        $this->quoteFactoryMock->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($quoteMock));
         $this->quoteRepositoryMock->expects($this->once())
             ->method('get')
             ->with($quoteId)
@@ -400,5 +400,20 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             'customer ids different' => [66, null, 'once'],
             'customer ids same' => [66, 66, 'never'],
         ];
+    }
+
+    /**
+     * @param array $map
+     * @deprecated
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }
