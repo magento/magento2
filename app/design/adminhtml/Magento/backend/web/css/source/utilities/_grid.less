@@ -13,18 +13,18 @@
 
 //  Centered container element
 .container-fixed(@gutter: @grid-gutter-width) {
-    margin-right: auto;
+    .lib-clearer();
     margin-left: auto;
+    margin-right: auto;
     padding-left: (@gutter / 2);
     padding-right: (@gutter / 2);
-    .lib-clearer();
 }
 
 //  Creates a wrapper for a series of columns
 .make-row(@gutter: @grid-gutter-width) {
+    .lib-clearer();
     margin-left: (@gutter / -2);
     margin-right: (@gutter / -2);
-    .lib-clearer();
 }
 
 //

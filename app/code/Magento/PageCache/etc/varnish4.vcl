@@ -134,7 +134,6 @@ sub vcl_backend_response {
             set beresp.grace = 1m;
         }
     }
-    return (deliver);
 }
 
 sub vcl_deliver {

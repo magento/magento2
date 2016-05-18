@@ -164,10 +164,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasLinks($product)
     {
-        if ($product->hasData('links_exist')) {
-            return $product->getData('links_exist');
+        $hasLinks = $product->getData('links_exist');
+        if (null === $hasLinks) {
+            $hasLinks = (count($this->getLinks($product)) > 0);
         }
-        return count($this->getLinks($product)) > 0;
+        return $hasLinks;
     }
 
     /**

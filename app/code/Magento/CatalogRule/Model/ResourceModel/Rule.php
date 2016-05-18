@@ -227,7 +227,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        $this->getEntityManager()->load($object, $value, \Magento\CatalogRule\Api\Data\RuleInterface::class);
+        $this->getEntityManager()->load($object, $value);
         return $this;
     }
 
@@ -238,10 +238,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->getEntityManager()->save(
-            $object,
-            \Magento\CatalogRule\Api\Data\RuleInterface::class
-        );
+        $this->getEntityManager()->save($object);
         return $this;
     }
 
@@ -254,7 +251,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function delete(AbstractModel $object)
     {
-        $this->getEntityManager()->delete($object, \Magento\CatalogRule\Api\Data\RuleInterface::class);
+        $this->getEntityManager()->delete($object);
         return $this;
     }
 

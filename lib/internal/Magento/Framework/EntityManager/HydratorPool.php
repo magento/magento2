@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\EntityManager;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -14,7 +13,7 @@ use Magento\Framework\ObjectManagerInterface;
 class HydratorPool
 {
     /**
-     * @var array|\string[]
+     * @var HydratorInterface[]
      */
     private $hydrators;
 
@@ -24,7 +23,6 @@ class HydratorPool
     protected $objectManager;
 
     /**
-     * HydratorPool constructor.
      * @param ObjectManagerInterface $objectManager
      * @param string[] $hydrators
      */
@@ -38,14 +36,14 @@ class HydratorPool
 
     /**
      * @param string $entityType
-     * @return EntityHydratorInterface
+     * @return HydratorInterface
      */
     public function getHydrator($entityType)
     {
         if (isset($this->hydrators[$entityType])) {
             return $this->objectManager->get($this->hydrators[$entityType]);
         } else {
-            return $this->objectManager->get(EntityHydratorInterface::class);
+            return $this->objectManager->get(HydratorInterface::class);
         }
     }
 }
