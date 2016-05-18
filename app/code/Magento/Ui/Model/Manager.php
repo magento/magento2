@@ -155,10 +155,7 @@ class Manager implements ManagerInterface
     {
         if ($name === null || $this->hasData($name)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase(
-                    'Initialization error component, check the '
-                    . 'spelling of the name or the correctness of the call.'
-                )
+                new \Magento\Framework\Phrase("Invalid UI Component element name: '%1'", [$name])
             );
         }
         $this->componentsPool = $this->arrayObjectFactory->create();

@@ -137,7 +137,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      */
     public function getFormattedIp()
     {
-        return long2ip($this->getIp());
+        return $this->getIp();
     }
 
     /**

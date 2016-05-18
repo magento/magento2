@@ -40,7 +40,8 @@ class Identifier
     public function getValue()
     {
         $data = [
-            $this->request->getUriString(),
+            $this->request->isSecure(),
+            $this->request->getRequestUri(),
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];

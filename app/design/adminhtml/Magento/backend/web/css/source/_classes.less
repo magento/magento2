@@ -20,12 +20,12 @@
     text-align: center;
 }
 
-// No select
+//  No select
 ._no-select {
+    -moz-user-select: none;
+    -ms-user-select: none;
     -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+    user-select: none;
 }
 
 //  Hidden content
@@ -41,7 +41,6 @@ input.no-display,
 }
 
 //  Code samples
-
 .code-sample {
     font-family: monospace, serif;
 }
