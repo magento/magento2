@@ -15,11 +15,11 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider setCacheDataProvider
      * @param string $commandClass
-     * @param string $commandName
+     * @param string $arrayInput
      * @param string $jobName
      * @param array $params
      */
-    public function testSetCache($commandClass, $commandName, $jobName, $params)
+    public function testSetCache($commandClass, $arrayInput, $jobName, $params)
     {
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
@@ -32,12 +32,14 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
         ];
         $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
+        
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $command = $this->getMock($commandClass, [], [], '', false);
+
         $command->expects($this->once())
             ->method('run')
-            ->with(new ArrayInput(['command' => $commandName, 'types' => $params]), $output);
+            ->with($arrayInput, $output);
 
         $definition = new InputDefinition([
             new InputArgument('types', InputArgument::REQUIRED),
@@ -54,9 +56,11 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function setCacheDataProvider()
     {
+        $cacheEnable = new ArrayInput(['command' => 'cache:enable', 'types' => ['cache1']]);
+        $cacheDisable = new ArrayInput(['command' => 'cache:disable']);
         return [
-            ['Magento\Backend\Console\Command\CacheEnableCommand', 'cache:enable', 'setup:cache:enable', ['cache1']],
-            ['Magento\Backend\Console\Command\CacheDisableCommand', 'cache:disable', 'setup:cache:disable', []],
+            ['Magento\Backend\Console\Command\CacheEnableCommand', $cacheEnable, 'setup:cache:enable', ['cache1']],
+            ['Magento\Backend\Console\Command\CacheDisableCommand', $cacheDisable, 'setup:cache:disable', []],
         ];
     }
 }
