@@ -14,6 +14,16 @@
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
         <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable" />
     </type>
+    <virtualType name="context_for_downloadable" type="Magento\Framework\View\Element\Template\Context">
+        <arguments>
+            <argument name="urlBuilder" xsi:type="object">Magento\Framework\Url</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Downloadable\Block\Sales\Order\Email\Items\Order\Downloadable">
+        <arguments>
+            <argument name="context" xsi:type="object">context_for_downloadable</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product\TypeTransitionManager">
         <plugin name="downloadable_product_transition" type="Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable" />
         <arguments>
