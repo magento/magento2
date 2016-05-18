@@ -91,10 +91,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'pageAssets' => $this->pageAssets,
                     'scopeConfig' => $this->scopeConfig,
                     'favicon' => $this->favicon,
-                    'localeResolver' => $locale,
-                    'includesAreas' => [
-                        'frontend'
-                    ]
+                    'localeResolver' => $locale
                 ]
             );
 
