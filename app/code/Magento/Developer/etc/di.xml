@@ -92,7 +92,7 @@
     </type>
     <!-- End configuration for \Magento\Developer\Console\Command\SourceThemeDeployCommand -->
 
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="dev_tests_run" xsi:type="object">Magento\Developer\Console\Command\DevTestsRunCommand</item>

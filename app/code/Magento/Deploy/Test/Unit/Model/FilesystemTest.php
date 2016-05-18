@@ -121,7 +121,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $userCollection->setAccessible(true);
         $userCollection->setValue($this->filesystem, $this->userCollectionMock);
 
-        $this->cmdPrefix = 'php -f '. BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
+        $this->cmdPrefix = PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
     public function testRegenerateStatic()

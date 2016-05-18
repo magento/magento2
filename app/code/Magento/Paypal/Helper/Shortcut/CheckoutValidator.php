@@ -54,7 +54,7 @@ class CheckoutValidator implements ValidatorInterface
     }
 
     /**
-     * Сhecks payment method and quote availability
+     * Checks payment method and quote availability
      *
      * @param string $paymentCode
      * @param bool $isInCatalog

@@ -133,7 +133,7 @@ class Rule extends AbstractResource
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
-        $this->getEntityManager()->load($object, $value, RuleInterface::class);
+        $this->getEntityManager()->load($object, $value);
         return $this;
     }
 
@@ -363,7 +363,7 @@ class Rule extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->getEntityManager()->save($object, RuleInterface::class);
+        $this->getEntityManager()->save($object);
         return $this;
     }
 
@@ -376,7 +376,7 @@ class Rule extends AbstractResource
      */
     public function delete(AbstractModel $object)
     {
-        $this->getEntityManager()->delete($object, RuleInterface::class);
+        $this->getEntityManager()->delete($object);
         return $this;
     }
 
