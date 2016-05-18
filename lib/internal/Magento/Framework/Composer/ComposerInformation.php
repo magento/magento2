@@ -3,13 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Composer;
 
-use Composer\IO\BufferIO;
 use Composer\Package\Link;
 use Composer\Package\CompletePackageInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -92,15 +89,12 @@ class ComposerInformation
     private $composerFactory;
 
     /**
-     * @param MagentoComposerApplicationFactory $applicationFactory
      * @param ComposerFactory $composerFactory
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(
-        MagentoComposerApplicationFactory $applicationFactory = null,
-        \Magento\Framework\Composer\ComposerFactory $composerFactory = null
-    ) {
+    public function __construct(ComposerFactory $composerFactory)
+    {
         $this->composerFactory = $composerFactory;
     }
 

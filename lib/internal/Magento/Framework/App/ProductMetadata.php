@@ -121,7 +121,7 @@ class ProductMetadata implements ProductMetadataInterface
         if (!$this->composerInformation) {
             $directoryList              = new DirectoryList(BP);
             $composerFactory            = new ComposerFactory($directoryList, $this->composerJsonFinder);
-            $this->composerInformation  = new ComposerInformation(null, $composerFactory);
+            $this->composerInformation  = new ComposerInformation($composerFactory);
         }
         return $this->composerInformation;
     }

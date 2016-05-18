@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\Composer\ComposerFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
@@ -66,9 +67,9 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
         $this->composerInformation = $this->objectManager->create(
             'Magento\Framework\Composer\ComposerInformation',
             [
-                'applicationFactory' => new MagentoComposerApplicationFactory(
-                    $this->composerJsonFinder,
-                    $this->directoryList
+                'composerFactory' => new ComposerFactory(
+                    $this->directoryList,
+                    $this->composerJsonFinder
                 )
             ]
         );
