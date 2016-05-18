@@ -6,8 +6,11 @@
 
 namespace Magento\Framework\Composer;
 
+use Composer\IO\BufferIO;
 use Composer\Package\Link;
 use Composer\Package\CompletePackageInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class ComposerInformation uses Composer to determine dependency information.
@@ -64,11 +67,6 @@ class ComposerInformation
     /**#@-*/
 
     /**
-     * @var \Magento\Composer\MagentoComposerApplication
-     */
-    private $application;
-
-    /**
      * @var \Composer\Composer
      */
     private $composer;
@@ -89,17 +87,21 @@ class ComposerInformation
     ];
 
     /**
-     * Constructor
-     *
+     * @var ComposerFactory
+     */
+    private $composerFactory;
+
+    /**
      * @param MagentoComposerApplicationFactory $applicationFactory
-     * @throws \Exception
+     * @param ComposerFactory $composerFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        MagentoComposerApplicationFactory $applicationFactory
+        MagentoComposerApplicationFactory $applicationFactory = null,
+        \Magento\Framework\Composer\ComposerFactory $composerFactory = null
     ) {
-        $this->application = $applicationFactory->create();
-        $this->composer = $this->application->createComposer();
-        $this->locker = $this->composer->getLocker();
+        $this->composerFactory = $composerFactory;
     }
 
     /**
@@ -111,10 +113,10 @@ class ComposerInformation
     public function getRequiredPhpVersion()
     {
         if ($this->isMagentoRoot()) {
-            $allPlatformReqs = $this->locker->getPlatformRequirements(true);
+            $allPlatformReqs = $this->getLocker()->getPlatformRequirements(true);
             $requiredPhpVersion = $allPlatformReqs['php']->getPrettyConstraint();
         } else {
-            $packages = $this->locker->getLockedRepository()->getPackages();
+            $packages = $this->getLocker()->getLockedRepository()->getPackages();
             /** @var CompletePackageInterface $package */
             foreach ($packages as $package) {
                 if ($package instanceof CompletePackageInterface) {
@@ -146,11 +148,11 @@ class ComposerInformation
     public function getRequiredExtensions()
     {
         $requiredExtensions = [];
-        $allPlatformReqs = array_keys($this->locker->getPlatformRequirements(true));
+        $allPlatformReqs = array_keys($this->getLocker()->getPlatformRequirements(true));
 
         if (!$this->isMagentoRoot()) {
             /** @var CompletePackageInterface $package */
-            foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+            foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
                 $requires = array_merge($requires, array_keys($package->getDevRequires()));
                 $allPlatformReqs = array_merge($allPlatformReqs, $requires);
@@ -175,7 +177,7 @@ class ComposerInformation
     {
         $suggests = [];
         /** @var \Composer\Package\CompletePackage $package */
-        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+        foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
             $suggests += $package->getSuggests();
         }
 
@@ -191,7 +193,7 @@ class ComposerInformation
     {
         $packages = [];
         /** @var CompletePackageInterface $package */
-        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+        foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
             $packages[] = $package->getName();
         }
         return $packages;
@@ -206,7 +208,7 @@ class ComposerInformation
     {
         $packages = [];
         /** @var CompletePackageInterface $package */
-        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+        foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
             $packages[$package->getName()] = $package->getType();
         }
         return $packages;
@@ -221,9 +223,30 @@ class ComposerInformation
     {
         $packages = [];
         /** @var CompletePackageInterface $package */
-        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+        foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
             if ((in_array($package->getType(), self::$packageTypes))
                 && (!$this->isSystemPackage($package->getPrettyName()))) {
+                $packages[$package->getName()] = [
+                    'name' => $package->getName(),
+                    'type' => $package->getType(),
+                    'version' => $package->getPrettyVersion()
+                ];
+            }
+        }
+        return $packages;
+    }
+
+    /**
+     * Collect all system packages from composer.lock
+     *
+     * @return array
+     */
+    public function getSystemPackages()
+    {
+        $packages = [];
+        /** @var CompletePackageInterface $package */
+        foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
+            if ($this->isSystemPackage($package->getName())) {
                 $packages[$package->getName()] = [
                     'name' => $package->getName(),
                     'type' => $package->getType(),
@@ -251,13 +274,23 @@ class ComposerInformation
     /**
      * Determines if Magento is the root package or it is included as a requirement.
      *
-     * @return bool
+     * @return boolean
      */
-    private function isMagentoRoot()
+    public function isMagentoRoot()
     {
-        $rootPackage = $this->composer->getPackage();
+        $rootPackage = $this->getComposer()->getPackage();
 
-        return preg_match('/magento\/magento2...?/', $rootPackage->getName());
+        return (boolean)preg_match('/magento\/magento2...?/', $rootPackage->getName());
+    }
+
+    /**
+     * Get root package
+     *
+     * @return \Composer\Package\RootPackageInterface
+     */
+    public function getRootPackage()
+    {
+        return $this->getComposer()->getPackage();
     }
 
     /**
@@ -268,8 +301,8 @@ class ComposerInformation
      */
     public function isPackageInComposerJson($packageName)
     {
-        return (in_array($packageName, array_keys($this->composer->getPackage()->getRequires()))
-            || in_array($packageName, array_keys($this->composer->getPackage()->getDevRequires()))
+        return (in_array($packageName, array_keys($this->getComposer()->getPackage()->getRequires()))
+            || in_array($packageName, array_keys($this->getComposer()->getPackage()->getDevRequires()))
         );
     }
 
@@ -288,7 +321,7 @@ class ComposerInformation
      */
     public function getPackageRequirements($name, $version)
     {
-        $package = $this->composer->getRepositoryManager()->findPackage($name, $version);
+        $package = $this->getComposer()->getRepositoryManager()->findPackage($name, $version);
         return $package->getRequires();
     }
 
@@ -301,12 +334,52 @@ class ComposerInformation
     {
         $repositoryUrls = [];
 
-        foreach ($this->composer->getConfig()->getRepositories() as $key => $repository) {
+        foreach ($this->getComposer()->getConfig()->getRepositories() as $key => $repository) {
             if ($key !== self::COMPOSER_DEFAULT_REPO_KEY) {
                 $repositoryUrls[] = $repository['url'];
             }
         }
 
         return $repositoryUrls;
+    }
+
+    /**
+     * Load composerFactory
+     *
+     * @return ComposerFactory
+     * @deprecated
+     */
+    private function getComposerFactory()
+    {
+        if (!$this->composerFactory) {
+            $this->composerFactory = ObjectManager::getInstance()->get(ComposerFactory::class);
+        }
+        return $this->composerFactory;
+    }
+
+    /**
+     * Load composer
+     *
+     * @return \Composer\Composer
+     */
+    private function getComposer()
+    {
+        if (!$this->composer) {
+            $this->composer = $this->getComposerFactory()->create();
+        }
+        return $this->composer;
+    }
+
+    /**
+     * Load locker
+     *
+     * @return \Composer\Package\Locker
+     */
+    private function getLocker()
+    {
+        if (!$this->locker) {
+            $this->locker = $this->getComposer()->getLocker();
+        }
+        return $this->locker;
     }
 }
