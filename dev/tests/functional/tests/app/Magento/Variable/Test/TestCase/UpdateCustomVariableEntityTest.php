@@ -65,55 +65,46 @@ class UpdateCustomVariableEntityTest extends Injectable
      *
      * @param SystemVariableIndex $systemVariableIndex
      * @param SystemVariableNew $systemVariableNew
-     * @param SystemVariable $customVariableOrigin
-     * @param FixtureFactory $factory
-     * @return array
+     * @return void
      */
     public function __inject(
         SystemVariableIndex $systemVariableIndex,
-        SystemVariableNew $systemVariableNew,
-        SystemVariable $customVariableOrigin,
-        FixtureFactory $factory
+        SystemVariableNew $systemVariableNew
     ) {
         $this->systemVariableIndexPage = $systemVariableIndex;
         $this->systemVariableNewPage = $systemVariableNew;
-
-        $customVariableOrigin->persist();
-
-        // TODO: Move store creation to "__prepare" method after fix bug MAGETWO-29331
-        $storeOrigin = $factory->createByCode('store', ['dataset' => 'custom']);
-        $storeOrigin->persist();
-        $this->store = $storeOrigin;
-
-        return [
-            'customVariableOrigin' => $customVariableOrigin,
-            'storeOrigin' => $storeOrigin
-        ];
     }
 
     /**
      * Update Custom System Variable Entity test.
      *
+     * @param FixtureFactory $fixtureFactory
      * @param SystemVariable $customVariable
      * @param SystemVariable $customVariableOrigin
-     * @param Store $storeOrigin
      * @param string $saveAction
-     * @return void
+     * @return array
      */
     public function test(
+        FixtureFactory $fixtureFactory,
         SystemVariable $customVariable,
         SystemVariable $customVariableOrigin,
-        Store $storeOrigin,
         $saveAction
     ) {
+        $this->store = $fixtureFactory->createByCode('store', ['dataset' => 'custom']);
+        $this->store->persist();
+        $customVariableOrigin->persist();
         $filter = ['code' => $customVariableOrigin->getCode()];
 
         // Steps
         $this->systemVariableIndexPage->open();
         $this->systemVariableIndexPage->getSystemVariableGrid()->searchAndOpen($filter);
-        $this->systemVariableNewPage->getFormPageActions()->selectStoreView($storeOrigin->getData('name'));
+        $this->systemVariableNewPage->getFormPageActions()->selectStoreView($this->store->getData('name'));
         $this->systemVariableNewPage->getSystemVariableForm()->fill($customVariable);
         $this->systemVariableNewPage->getFormPageActions()->$saveAction();
+        return [
+            'storeOrigin' => $this->store,
+            'customVariableOrigin' => $customVariableOrigin
+        ];
     }
 
     /**
@@ -123,7 +114,6 @@ class UpdateCustomVariableEntityTest extends Injectable
      */
     public function tearDown()
     {
-        // TODO: Move store clean up to "tearDownAfterClass" method after fix bug MAGETWO-29331
         if ($this->store !== null) {
             $storeIndex = $this->objectManager->create('Magento\Backend\Test\Page\Adminhtml\StoreIndex');
             $storeIndex->open();

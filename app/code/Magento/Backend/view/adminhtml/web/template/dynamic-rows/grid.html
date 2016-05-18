@@ -5,12 +5,12 @@
  */
 -->
 
-<div class="admin_field-complex" if="element.addButton">
-    <div class="admin_field-complex-title">
+<div class="admin__field-complex" if="element.addButton">
+    <div class="admin__field-complex-title">
         <span class="label" translate="'User Agent Rules'"></span>
     </div>
 
-    <div class="admin_field-complex-elements">
+    <div class="admin__field-complex-elements">
         <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
         <button attr="{disabled: disabled}"
                 class="action-secondary"
@@ -20,7 +20,7 @@
         </button>
     </div>
 
-    <div class="admin_field-complex-content"
+    <div class="admin__field-complex-content"
          translate="'User agent exceptions override product and CMS pages rules.'"></div>
 </div>
 

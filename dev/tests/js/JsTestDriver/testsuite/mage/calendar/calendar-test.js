@@ -68,7 +68,7 @@ CalendarTest.prototype.testWithoutServerTimezoneOffset = function() {
 CalendarTest.prototype.testInitDateTimePicker = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar();
-    assertEquals(true, calendar.hasClass('hasDatepicker'));
+    assertEquals(true, calendar.hasClass('_has-datepicker'));
     calendar.calendar('destroy');
 };
 CalendarTest.prototype.testDateTimeMapping = function() {

@@ -5,12 +5,17 @@
  */
 namespace Magento\Customer\Controller;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    /** @var \Magento\Customer\Api\AccountManagementInterface */
+    /** @var AccountManagementInterface */
     private $accountManagement;
+
+    /** @var FormKey */
+    private $formKey;
 
     protected function setUp()
     {
@@ -20,9 +25,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             'Magento\Customer\Model\Session',
             [$logger]
         );
-        $this->accountManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Api\AccountManagementInterface'
-        );
+        $this->accountManagement = Bootstrap::getObjectManager()->create(AccountManagementInterface::class);
+        $this->formKey = Bootstrap::getObjectManager()->create(FormKey::class);
         $customer = $this->accountManagement->authenticate('customer@example.com', 'password');
         $session->setCustomerDataAsLoggedIn($customer);
     }
@@ -152,6 +156,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testDeleteAction()
     {
         $this->getRequest()->setParam('id', 1);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 
@@ -169,6 +174,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testWrongAddressDeleteAction()
     {
         $this->getRequest()->setParam('id', 555);
+        $this->getRequest()->setParam('form_key', $this->formKey->getFormKey());
         // we are overwriting the address coming from the fixture
         $this->dispatch('customer/address/delete');
 

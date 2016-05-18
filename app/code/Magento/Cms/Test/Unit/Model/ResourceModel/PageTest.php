@@ -102,7 +102,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManagerMock->expects($this->once())
             ->method('save')
-            ->with($this->pageMock, PageInterface::class, [])
+            ->with($this->pageMock, [])
             ->willReturn(true);
 
         $this->assertInstanceOf(PageResourceModel::class, $this->model->save($this->pageMock));
