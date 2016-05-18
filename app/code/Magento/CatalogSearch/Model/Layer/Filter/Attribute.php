@@ -84,6 +84,12 @@ class Attribute extends AbstractFilter
             ->getProductCollection();
         $optionsFacetedData = $productCollection->getFacetedData($attribute->getAttributeCode());
 
+        if (count($optionsFacetedData) === 0
+            && $this->getAttributeIsFilterable($attribute) !== static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+        ) {
+            return $this->itemDataBuilder->build();
+        }
+
         $productSize = $productCollection->getSize();
 
         $options = $attribute->getFrontend()
@@ -100,9 +106,8 @@ class Attribute extends AbstractFilter
                 : 0;
             // Check filter type
             if (
-                $count === 0
-                && $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
-                && !$this->isOptionReducesResults($count, $productSize)
+                $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+                && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)
             ) {
                 continue;
             }

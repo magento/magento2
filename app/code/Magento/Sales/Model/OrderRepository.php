@@ -10,7 +10,7 @@ use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
-use Magento\Sales\Api\Data\OrderExtension;
+use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -34,9 +34,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     protected $searchResultFactory = null;
 
     /**
-     * @var OrderExtension
+     * @var OrderExtensionFactory
      */
-    private $orderExtension;
+    private $orderExtensionFactory;
 
     /**
      * @var ShippingAssignmentBuilder
@@ -173,7 +173,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderExtensionDependency();
+            $extensionAttributes = $this->getOrderExtensionFactory()->create();
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
@@ -185,18 +185,19 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
-     * Get the new OrderExtension dependency for application code
-     * @return OrderExtension
+     * Get the new OrderExtensionFactory for application code
+     * 
+     * @return OrderExtensionFactory
      * @deprecated
      */
-    private function getOrderExtensionDependency()
+    private function getOrderExtensionFactory()
     {
-        if (!$this->orderExtension instanceof OrderExtension) {
-            $this->orderExtension = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                '\Magento\Sales\Api\Data\OrderExtension'
+        if (!$this->orderExtensionFactory instanceof OrderExtensionFactory) {
+            $this->orderExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                '\Magento\Sales\Api\Data\OrderExtensionFactory'
             );
         }
-        return $this->orderExtension;
+        return $this->orderExtensionFactory;
     }
 
     /**

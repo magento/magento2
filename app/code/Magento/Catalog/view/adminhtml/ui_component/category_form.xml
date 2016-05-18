@@ -552,11 +552,11 @@
             <field name="custom_design_from">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Schedule Update From</item>
                         <item name="additionalClasses" xsi:type="string">admin__field-date</item>
                         <item name="sortOrder" xsi:type="number">230</item>
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
-                        <item name="scopeLabel" xsi:type="string"/>
                         <item name="imports" xsi:type="array">
                             <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>

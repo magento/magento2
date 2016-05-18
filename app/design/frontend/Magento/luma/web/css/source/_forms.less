@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @legend-border-bottom: 1px solid @color-gray-light6;
 @form-field__vertical-indent__desktop: 29px;
 @form-calendar-icon__color: @primary__color;
@@ -12,7 +16,6 @@
 //  _____________________________________________
 
 & when (@media-common = true) {
-
     .fieldset {
         .lib-form-fieldset();
 
@@ -59,7 +62,7 @@
     }
 
     .legend {
-        span {
+        > span {
             margin-right: @indent__xs;
         }
     }
@@ -88,16 +91,16 @@
     .select-styling() {
         .lib-css(appearance, none, 1);
         appearance: none;
-        background-size: 30px 60px;
         background: @select__background url('../images/select-bg.svg') no-repeat 100% 45%;
+        background-size: 30px 60px;
         border: 1px solid @border-color__base;
         height: 32px;
         padding-right: 25px;
         text-indent: .01em;
         text-overflow: '';
 
-        &::-ms-expand{
-            display:none;
+        &::-ms-expand {
+            display: none;
         }
 
         .lt-ie10 & {
@@ -129,8 +132,8 @@
         display: block;
     }
 
-    .hasDatepicker {
-        + .ui-datepicker-trigger {
+    ._has-datepicker {
+        ~ .ui-datepicker-trigger {
             .lib-button-reset();
             .lib-icon-font(
             @_icon-font-content: @icon-calendar,
@@ -141,6 +144,7 @@
             @_icon-font-text-hide: true
             );
             display: inline-block;
+            margin-top: -4px;
             vertical-align: middle;
 
             &:focus {
@@ -150,8 +154,9 @@
         }
     }
 
+    .field.date,
     .field-dob {
-        .hasDatepicker {
+        ._has-datepicker {
             &:extend(.abs-field-date-input all);
         }
     }
@@ -186,7 +191,7 @@
 }
 
 //
-//    Desktop
+//  Desktop
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {

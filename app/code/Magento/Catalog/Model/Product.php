@@ -143,11 +143,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $optionInstance;
 
     /**
-     * @var bool
-     */
-    protected $optionsInitialized = false;
-
-    /**
      * @var array
      */
     protected $_links = null;
@@ -1901,6 +1896,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $options = (array)$this->getData('options');
         $options[] = $option;
+        $option->setProduct($this);
         $this->setData('options', $options);
         return $this;
     }

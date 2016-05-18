@@ -216,7 +216,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = $content;
+        $this->metadata[$name] = htmlentities($content);
     }
 
     /**

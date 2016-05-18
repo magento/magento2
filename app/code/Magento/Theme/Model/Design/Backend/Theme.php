@@ -87,7 +87,7 @@ class Theme extends Value
      */
     public function getValue()
     {
-        return $this->getData('value') != '' ? $this->getData('value') : null;
+        return $this->getData('value') !== null ? $this->getData('value') : '';
     }
 
     /**

@@ -22,6 +22,9 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $categoriesUrlRewriteGenerator;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $anchorUrlRewriteGenerator;
+
     /** @var \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator */
     protected $productUrlRewriteGenerator;
 
@@ -63,6 +66,9 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoriesUrlRewriteGenerator = $this->getMockBuilder(
             'Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator'
         )->disableOriginalConstructor()->getMock();
+        $this->anchorUrlRewriteGenerator = $this->getMockBuilder(
+            'Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator'
+        )->disableOriginalConstructor()->getMock();
         $this->objectRegistryFactory = $this->getMockBuilder('Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory')
             ->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder('Magento\CatalogUrlRewrite\Service\V1\StoreViewService')
@@ -79,6 +85,11 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManager,
             ]
         );
+
+        $reflection = new \ReflectionClass(get_class($this->productUrlRewriteGenerator));
+        $reflectionProperty = $reflection->getProperty('anchorUrlRewriteGenerator');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->productUrlRewriteGenerator, $this->anchorUrlRewriteGenerator);
     }
 
     /**
@@ -108,9 +119,19 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->setStoreId(3);
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([$current]));
+        $anchorCategories = new \Magento\UrlRewrite\Service\V1\Data\UrlRewrite();
+        $anchorCategories->setTargetPath('category-4')
+            ->setStoreId(4);
+        $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
+            ->will($this->returnValue([$anchorCategories]));
 
         $this->assertEquals(
-            ['category-1-1' => $canonical, 'category-2-2' => $categories, 'category-3-3' => $current],
+            [
+                'category-1-1' => $canonical,
+                'category-2-2' => $categories,
+                'category-3-3' => $current,
+                'category-4-4' => $anchorCategories
+            ],
             $this->productUrlRewriteGenerator->generate($this->product)
         );
     }
@@ -143,6 +164,8 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
+        $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
+            ->will($this->returnValue([]));
 
         $this->assertEquals(['category-1-1' => $canonical], $this->productUrlRewriteGenerator->generate($this->product));
     }
@@ -172,6 +195,8 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
+        $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
+            ->will($this->returnValue([]));
 
         $this->assertEquals(['category-1-1' => $canonical], $this->productUrlRewriteGenerator->generate($this->product));
     }
@@ -200,6 +225,8 @@ class ProductUrlRewriteGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->categoriesUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
         $this->currentUrlRewritesRegenerator->expects($this->any())->method('generate')
+            ->will($this->returnValue([]));
+        $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->will($this->returnValue([]));
 
         $this->assertEquals(['category-1-1' => $canonical], $this->productUrlRewriteGenerator->generate($this->product));
