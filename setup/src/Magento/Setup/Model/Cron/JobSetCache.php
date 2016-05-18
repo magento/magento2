@@ -7,6 +7,8 @@ namespace Magento\Setup\Model\Cron;
 
 use Magento\Backend\Console\Command\AbstractCacheManageCommand;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputArgument;
 
 class JobSetCache extends AbstractJob
 {
@@ -55,10 +57,21 @@ class JobSetCache extends AbstractJob
     public function execute()
     {
         try {
-            if (!empty($this->params)) {
-                $arguments[AbstractCacheManageCommand::INPUT_KEY_TYPES] = explode(' ', $this->params[0]);
+            $arguments = [];
+            if ($this->getName() === 'setup:cache:enable') {
+                if (!empty($this->params)) {
+                    $arguments[AbstractCacheManageCommand::INPUT_KEY_TYPES] = explode(' ', $this->params[0]);
+                }
+                $arguments['command'] = 'cache:enable';
+                $definition = new InputDefinition([
+                    new InputArgument(AbstractCacheManageCommand::INPUT_KEY_TYPES, InputArgument::REQUIRED),
+                    new InputArgument('command', InputArgument::REQUIRED),
+                ]);
+
+                $this->command->setDefinition($definition);
+            } else {
+                $arguments['command'] = 'cache:disable';
             }
-            $arguments['command'] = $this->command->getName();
             $this->command->run(new ArrayInput($arguments), $this->output);
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
