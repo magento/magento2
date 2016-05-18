@@ -8,6 +8,7 @@ namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
 use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Cms\Api\Data\PageInterface;
 
 class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +84,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with('Magento\Cms\Model\Page')
+            ->with(PageInterface::class)
             ->willReturn($entityMetadata);
 
         $this->resourcePage->expects($this->once())
@@ -117,7 +118,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($linkField)
             ->willReturn($linkId);
 
-        $result = $this->model->execute('Magento\Cms\Model\Page', $page);
-        $this->assertInstanceOf('Magento\Cms\Model\Page', $result);
+        $result = $this->model->execute($page);
+        $this->assertInstanceOf(PageInterface::class, $result);
     }
 }

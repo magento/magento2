@@ -61,10 +61,12 @@ define([
                 actions: {
                     confirm: function() {
                         if (typeof $(e.target).parent().data('address') !== 'undefined') {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address');
+                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address')
+                                + '/form_key/' + $.mage.cookies.get('form_key');
                         }
                         else {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address');
+                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address')
+                                + '/form_key/' + $.mage.cookies.get('form_key');
                         }
                     }
                 }

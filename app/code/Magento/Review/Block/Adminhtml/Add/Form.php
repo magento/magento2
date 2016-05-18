@@ -63,7 +63,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField('product_name', 'note', ['label' => __('Product'), 'text' => 'product_name']);
 
         $fieldset->addField(
-            'detailed_rating',
+            'detailed-rating',
             'note',
             [
                 'label' => __('Product Rating'),
