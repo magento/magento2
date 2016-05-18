@@ -79,7 +79,8 @@ class ImagesResizeCommand extends Command
         $productIds = $productCollection->getAllIds();
         if (!count($productIds)) {
             $output->writeln("<info>No product images to resize</info>");
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         try {
@@ -99,10 +100,12 @@ class ImagesResizeCommand extends Command
             }
         } catch (\Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         $output->write("\n");
         $output->writeln("<info>Product images resized successfully</info>");
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

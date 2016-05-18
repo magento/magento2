@@ -112,7 +112,7 @@ class Deployer
      *
      * @param ObjectManagerFactory $omFactory
      * @param array $locales
-     * @return void
+     * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -213,6 +213,12 @@ class Deployer
         if (!$this->isDryRun) {
             $this->versionStorage->save($version);
         }
+        if ($this->errorCount > 0) {
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
