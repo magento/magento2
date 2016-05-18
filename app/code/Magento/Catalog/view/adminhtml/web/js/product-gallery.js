@@ -7,9 +7,10 @@ define([
     'jquery',
     'underscore',
     'mage/template',
+    'uiRegistry',
     'jquery/ui',
     'baseImage'
-], function ($, _, mageTemplate) {
+], function ($, _, mageTemplate, registry) {
     'use strict';
 
     /**
@@ -53,6 +54,7 @@ define([
         _create: function () {
             this.options.types = this.options.types || this.element.data('types');
             this.options.images = this.options.images || this.element.data('images');
+            this.options.parentComponent = this.options.parentComponent || this.element.data('parent-component');
 
             this.imgTmpl = mageTemplate(this.element.find(this.options.template).html().trim());
 
@@ -154,6 +156,19 @@ define([
         },
 
         /**
+         * Mark parent fieldset that content was updated
+         */
+        _contentUpdated: function () {
+            if (this.options.initialized && this.options.parentComponent) {
+                registry.async(this.options.parentComponent)(
+                    function (parentComponent) {
+                        parentComponent.bubble('update', true);
+                    }
+                );
+            }
+        },
+
+        /**
          * Add image
          * @param event
          * @param imageData
@@ -205,6 +220,7 @@ define([
             }, this));
 
             this._updateImagesRoles();
+            this._contentUpdated();
         },
 
         /**
@@ -284,6 +300,8 @@ define([
                 imageData.label;
 
             $title.text(value);
+
+            this._contentUpdated();
         },
 
         /**
@@ -297,6 +315,8 @@ define([
 
             imageData.isRemoved = true;
             $imageContainer.addClass('removed').hide().find('.is-removed').val(1);
+
+            this._contentUpdated();
         },
 
         /**
@@ -321,6 +341,7 @@ define([
             }
             this.element.find('.image-' + data.type).val(this.options.types[data.type].value || 'no_selection');
             this._updateImagesRoles();
+            this._contentUpdated();
         },
 
         /**
@@ -339,6 +360,8 @@ define([
                     $(element).val(index);
                 }
             }, this));
+
+            this._contentUpdated();
         },
 
         /**
@@ -362,6 +385,8 @@ define([
                 }
                 this.element.trigger('resort');
             }
+
+            this._contentUpdated();
         }
     });
 
@@ -572,6 +597,8 @@ define([
 
             $imageContainer.find('[name*="disabled"]').val(disabled);
             imageData.disabled = disabled;
+
+            this._contentUpdated();
         },
 
         /**
