@@ -92,6 +92,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'scopeConfig' => $this->scopeConfig,
                     'favicon' => $this->favicon,
                     'localeResolver' => $locale,
+                    'includesAreas' => [
+                        'frontend'
+                    ]
                 ]
             );
 

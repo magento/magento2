@@ -123,6 +123,11 @@ class Config
     private $areaResolver;
 
     /**
+     * @var bool
+     */
+    private $isIncludesAvailable;
+
+    /**
      * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
      *
      * @return \Magento\Framework\App\State
@@ -145,6 +150,7 @@ class Config
      * @param \Magento\Framework\View\Page\FaviconInterface $favicon
      * @param Title $title
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param bool $isIncludesAvailable
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
@@ -152,7 +158,8 @@ class Config
         App\Config\ScopeConfigInterface $scopeConfig,
         View\Page\FaviconInterface $favicon,
         Title $title,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $isIncludesAvailable = true
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
@@ -160,6 +167,7 @@ class Config
         $this->favicon = $favicon;
         $this->title = $title;
         $this->localeResolver = $localeResolver;
+        $this->isIncludesAvailable = $isIncludesAvailable;
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
@@ -555,7 +563,7 @@ class Config
      */
     public function getIncludes()
     {
-        if (empty($this->includes)) {
+        if (empty($this->includes) && $this->isIncludesAvailable) {
             $this->includes = $this->scopeConfig->getValue(
                 'design/head/includes',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
