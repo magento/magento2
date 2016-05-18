@@ -115,23 +115,41 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
         $expected = [
             [
-                'package' => 'magento/product-community-edition',
-                'versions' =>
-                    [
-                        ['id' => '1.2.0', 'name' => 'Version 1.2.0 CE (latest)'],
-                        ['id' => '1.1.0', 'name' => 'Version 1.1.0 CE'],
-                        ['id' => '1.0.0', 'name' => 'Version 1.0.0 CE (current)']
-                    ]
+                'id' => '1.2.0',
+                'name' => 'Version 1.2.0 EE (latest)',
+                'package' => 'magento/product-enterprise-edition',
+                'stable' => true
             ],
             [
+                'id' => '1.2.0',
+                'name' => 'Version 1.2.0 CE (latest)',
+                'package' => 'magento/product-community-edition',
+                'stable' => true
+            ],
+            [
+                'id' => '1.1.0',
+                'name' => 'Version 1.1.0 EE',
                 'package' => 'magento/product-enterprise-edition',
-                'versions' =>
-                    [
-                        ['id' => '1.2.0', 'name' => 'Version 1.2.0 EE (latest)'],
-                        ['id' => '1.1.0', 'name' => 'Version 1.1.0 EE'],
-                        ['id' => '1.0.0', 'name' => 'Version 1.0.0 EE (current)']
-                    ]
-            ]
+                'stable' => true
+            ],
+            [
+                'id' => '1.1.0',
+                'name' => 'Version 1.1.0 CE',
+                'package' => 'magento/product-community-edition',
+                'stable' => true
+            ],
+            [
+                'id' => '1.0.0',
+                'name' => 'Version 1.0.0 EE (current)',
+                'package' => 'magento/product-enterprise-edition',
+                'stable' => true
+            ],
+            [
+                'id' => '1.0.0',
+                'name' => 'Version 1.0.0 CE (current)',
+                'package' => 'magento/product-community-edition',
+                'stable' => true
+            ],
         ];
 
         $this->infoCommand->expects($this->at(0))
