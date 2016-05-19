@@ -25,9 +25,18 @@ define(
                     return true;
                 }
 
-                var form = $('.payment-method._active form[data-role=checkout-agreements]');
-                form.validation();
-                return form.validation('isValid');
+                return $('#co-payment-form').validate({
+                    errorClass: 'mage-error',
+                    errorElement: 'div',
+                    meta: 'validate',
+                    errorPlacement: function (error, element) {
+                        var errorPlacement = element;
+                        if (element.is(':checkbox') || element.is(':radio')) {
+                            errorPlacement = element.siblings('label').last();
+                        }
+                        errorPlacement.after(error);
+                    }
+                }).element('.payment-method._active div.checkout-agreements input');
             }
         }
     }
