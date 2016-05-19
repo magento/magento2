@@ -18,9 +18,13 @@ class WorkflowType extends \Magento\Config\Block\System\Config\Form\Field
     {
         if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
             $element->setReadonly(true, true);
-            $element->setCanUseWebsiteValue(false);
-            $element->setCanUseDefaultValue(false);
-            $element->setCanRestoreToDefault(false);
+            $element->addData(
+                [
+                    'can_use_website_value' => false,
+                    'can_use_default_value' => false,
+                    'can_restore_to_default' => false
+                ]
+            );
         }
         return parent::render($element);
     }

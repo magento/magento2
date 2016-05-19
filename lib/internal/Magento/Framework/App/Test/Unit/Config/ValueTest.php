@@ -8,11 +8,6 @@ namespace Magento\Framework\App\Test\Unit\Config;
 class ValueTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
-     */
-    protected $class = 'Magento\Framework\App\Config\Value';
-
-    /**
      * @var \Magento\Framework\App\Config\Value
      */
     protected $model;
@@ -33,11 +28,6 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     protected $cacheTypeListMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManagerHelper;
-
-    /**
      * @return void
      */
     protected function setUp()
@@ -48,10 +38,14 @@ class ValueTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $this->objectManagerHelper->getObject(
-            $this->class,
-            $this->getArguments()
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            'Magento\Framework\App\Config\Value',
+            [
+                'config' => $this->configMock,
+                'eventDispatcher' => $this->eventManagerMock,
+                'cacheTypeList' => $this->cacheTypeListMock,
+            ]
         );
     }
 
@@ -205,17 +199,5 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     {
         $this->cacheTypeListMock->expects($this->once())->method('invalidate');
         $this->assertInstanceOf(get_class($this->model), $this->model->afterDelete());
-    }
-
-    /**
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            'config' => $this->configMock,
-            'eventDispatcher' => $this->eventManagerMock,
-            'cacheTypeList' => $this->cacheTypeListMock,
-        ];
     }
 }
