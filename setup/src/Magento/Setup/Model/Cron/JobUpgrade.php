@@ -76,7 +76,7 @@ class JobUpgrade extends AbstractJob
             /**
              * @var \Magento\Framework\Filesystem\Directory\WriteFactory $writeFactory
              */
-            $writeFactory = $this->objectManager->get('\\Magento\Framework\Filesystem\Directory\WriteFactory');
+            $writeFactory = $this->objectManager->get('\Magento\Framework\Filesystem\Directory\WriteFactory');
             $write = $writeFactory->create(BP);
             $dirList = $this->objectManager->get('\Magento\Framework\App\Filesystem\DirectoryList');
             $pathToCacheStatus = $write->getRelativePath(
