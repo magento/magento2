@@ -7,9 +7,25 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\Composer\ComposerFactory;
+use \Magento\Framework\Composer\ComposerJsonFinder;
+use \Magento\Framework\App\Filesystem\DirectoryList;
+use \Magento\Framework\Composer\ComposerInformation;
+
+/**
+ * Class ProductMetadata
+ * @package Magento\Framework\App
+ */
 class ProductMetadata implements ProductMetadataInterface
 {
+    /**
+     * Magento product edition
+     */
     const EDITION_NAME  = 'Community';
+
+    /**
+     * Magento product name
+     */
     const PRODUCT_NAME  = 'Magento';
 
     /**
@@ -21,13 +37,19 @@ class ProductMetadata implements ProductMetadataInterface
 
     /**
      * @var \Magento\Framework\Composer\ComposerJsonFinder
+     * @deprecated
      */
     protected $composerJsonFinder;
 
     /**
-     * @param \Magento\Framework\Composer\ComposerJsonFinder $composerJsonFinder
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
-    public function __construct(\Magento\Framework\Composer\ComposerJsonFinder $composerJsonFinder)
+    private $composerInformation;
+
+    /**
+     * @param ComposerJsonFinder $composerJsonFinder
+     */
+    public function __construct(ComposerJsonFinder $composerJsonFinder)
     {
         $this->composerJsonFinder = $composerJsonFinder;
     }
@@ -36,25 +58,17 @@ class ProductMetadata implements ProductMetadataInterface
      * Get Product version
      *
      * @return string
-     * @throws \Exception
      */
     public function getVersion()
     {
         if (!$this->version) {
-            $composerJsonFile = $this->composerJsonFinder->findComposerJson();
-
-            $composerContent = file_get_contents($composerJsonFile);
-            if ($composerContent === false) {
-                throw new \Exception('Composer file content is empty');
+            if (!($this->version = $this->getSystemPackageVersion())) {
+                if ($this->getComposerInformation()->isMagentoRoot()) {
+                    $this->version = $this->getComposerInformation()->getRootPackage()->getPrettyVersion();
+                } else {
+                    $this->version = 'UNKNOWN';
+                }
             }
-            $composerContent = json_decode($composerContent, true);
-            if (!$composerContent
-                || !is_array($composerContent)
-                || !array_key_exists('version', $composerContent)
-            ) {
-                throw new \Exception('Unable to decode Composer file');
-            }
-            $this->version = $composerContent['version'];
         }
         return $this->version;
     }
@@ -77,5 +91,38 @@ class ProductMetadata implements ProductMetadataInterface
     public function getName()
     {
         return self::PRODUCT_NAME;
+    }
+
+    /**
+     * Get version from system package
+     *
+     * @return string
+     * @deprecated
+     */
+    private function getSystemPackageVersion()
+    {
+        $packages = $this->getComposerInformation()->getSystemPackages();
+        foreach ($packages as $package) {
+            if (isset($package['name']) && isset($package['version'])) {
+                return $package['version'];
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Load composerInformation
+     *
+     * @return ComposerInformation
+     * @deprecated
+     */
+    private function getComposerInformation()
+    {
+        if (!$this->composerInformation) {
+            $directoryList              = new DirectoryList(BP);
+            $composerFactory            = new ComposerFactory($directoryList, $this->composerJsonFinder);
+            $this->composerInformation  = new ComposerInformation($composerFactory);
+        }
+        return $this->composerInformation;
     }
 }
