@@ -5,9 +5,12 @@
  */
 namespace Magento\Framework\Code;
 
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 
 /**
  * Regenerates generated code and DI configuration
@@ -49,6 +52,43 @@ class GeneratedFiles
     public function regenerate()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
+            //clean cache
+            $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
+            $configPool = new ConfigFilePool();
+            $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
+            if ($this->write->isExist($this->write->getRelativePath($envPath))) {
+                $cacheData = include $envPath;
+
+                if (isset($cacheData['cache_types'])) {
+                    $enabledCacheTypes = $cacheData['cache_types'];
+                    $enabledCacheTypes = array_filter($enabledCacheTypes, function ($value) {
+                            return $value;
+                        }
+                    );
+                    if (!empty($enabledCacheTypes)) {
+                        $this->write->writeFile($this->write->getRelativePath(
+                                $this->directoryList->getPath(DirectoryList::VAR_DIR)) . '/.cachestates.json',
+                            json_encode($enabledCacheTypes)
+                        );
+                        $cacheTypes = array_keys($cacheData['cache_types']);
+
+                        foreach ($cacheTypes as $cacheType) {
+                            $cacheData['cache_types'][$cacheType] = 0;
+                        }
+
+                        $formatter = new PhpFormatter();
+                        $contents = $formatter->format($cacheData);
+
+                        $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
+                        if (function_exists('opcache_invalidate')) {
+                            opcache_invalidate(
+                                $this->write->getAbsolutePath($envPath)
+                            );
+                        }
+                    }
+                }
+            }
+            $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
             $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
             $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
 
@@ -58,6 +98,11 @@ class GeneratedFiles
             if ($this->write->isDirectory($diPath)) {
                 $this->write->delete($diPath);
             }
+            if ($this->write->isDirectory($cachePath)) {
+                $this->write->delete($cachePath);
+            }
+            //add to queue
+
             $this->write->delete(self::REGENERATE_FLAG);
         }
     }
