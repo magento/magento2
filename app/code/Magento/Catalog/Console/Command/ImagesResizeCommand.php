@@ -79,7 +79,7 @@ class ImagesResizeCommand extends Command
         if (!count($productIds)) {
             $output->writeln("<info>No product images to resize</info>");
             // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         }
 
         try {
