@@ -35,7 +35,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     /**
      * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
      */
-    private $attributeLoader;
+    protected $attributeLoader;
 
     /**
      * Connection name
@@ -1859,7 +1859,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @deprecated
      */
-    private function getAttributeLoader()
+    protected function getAttributeLoader()
     {
         if ($this->attributeLoader === null) {
             $this->attributeLoader= ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
