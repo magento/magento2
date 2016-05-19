@@ -7,6 +7,8 @@
 namespace Magento\Customer\Model\Metadata;
 
 use Magento\Customer\Api\MetadataInterface;
+use Magento\Eav\Model\Entity\AttributeCache;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Cached attribute metadata service
@@ -16,29 +18,19 @@ class CachedMetadata implements MetadataInterface
     const CACHE_SEPARATOR = ';';
 
     /**
+     * @var string
+     */
+    protected $entityType = 'none';
+
+    /**
+     * @var AttributeCache
+     */
+    private $cache;
+
+    /**
      * @var MetadataInterface
      */
     protected $metadata;
-
-    /**
-     * @var array
-     */
-    protected $attributeMetadataCache = [];
-
-    /**
-     * @var array
-     */
-    protected $attributesCache = [];
-
-    /**
-     * @var \Magento\Customer\Api\Data\AttributeMetadataInterface[]
-     */
-    protected $allAttributeMetadataCache = null;
-
-    /**
-     * @var \Magento\Customer\Api\Data\AttributeMetadataInterface[]
-     */
-    protected $customAttributesMetadataCache = null;
 
     /**
      * Initialize dependencies.
@@ -55,15 +47,13 @@ class CachedMetadata implements MetadataInterface
      */
     public function getAttributes($formCode)
     {
-        $key = $formCode;
-        if (isset($this->attributesCache[$key])) {
-            return $this->attributesCache[$key];
+        $attributes = $this->getCache()->getAttributes($this->entityType, $formCode);
+        if ($attributes !== false) {
+            return $attributes;
         }
-
-        $value = $this->metadata->getAttributes($formCode);
-        $this->attributesCache[$key] = $value;
-
-        return $value;
+        $attributes = $this->metadata->getAttributes($formCode);
+        $this->getCache()->saveAttributes($this->entityType, $attributes, $formCode);
+        return $attributes;
     }
 
     /**
@@ -71,15 +61,13 @@ class CachedMetadata implements MetadataInterface
      */
     public function getAttributeMetadata($attributeCode)
     {
-        $key = $attributeCode;
-        if (isset($this->attributeMetadataCache[$key])) {
-            return $this->attributeMetadataCache[$key];
+        $metadata = $this->getCache()->getAttributes($this->entityType, $attributeCode);
+        if ($metadata) {
+            return $metadata;
         }
-
-        $value = $this->metadata->getAttributeMetadata($attributeCode);
-        $this->attributeMetadataCache[$key] = $value;
-
-        return $value;
+        $metadata = $this->metadata->getAttributeMetadata($attributeCode);
+        $this->getCache()->saveAttributes($this->entityType, $metadata, $attributeCode);
+        return $metadata;
     }
 
     /**
@@ -87,12 +75,13 @@ class CachedMetadata implements MetadataInterface
      */
     public function getAllAttributesMetadata()
     {
-        if ($this->allAttributeMetadataCache !== null) {
-            return $this->allAttributeMetadataCache;
+        $attributes = $this->getCache()->getAttributes($this->entityType, 'all');
+        if ($attributes !== false) {
+            return $attributes;
         }
-
-        $this->allAttributeMetadataCache = $this->metadata->getAllAttributesMetadata();
-        return $this->allAttributeMetadataCache;
+        $attributes = $this->metadata->getAllAttributesMetadata();
+        $this->getCache()->saveAttributes($this->entityType, $attributes, 'all');
+        return $attributes;
     }
 
     /**
@@ -100,11 +89,25 @@ class CachedMetadata implements MetadataInterface
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
-        if ($this->customAttributesMetadataCache !== null) {
-            return $this->customAttributesMetadataCache;
+        $attributes = $this->getCache()->getAttributes($this->entityType, 'custom');
+        if ($attributes !== false) {
+            return $attributes;
         }
+        $attributes = $this->metadata->getCustomAttributesMetadata();
+        $this->getCache()->saveAttributes($this->entityType, $attributes, 'custom');
+        return $attributes;
+    }
 
-        $this->customAttributesMetadataCache = $this->metadata->getCustomAttributesMetadata();
-        return $this->customAttributesMetadataCache;
+    /**
+     * @return AttributeCache
+     * @deprecated
+     */
+    private function getCache()
+    {
+        if (!$this->cache) {
+            $this->cache = ObjectManager::getInstance()->get(AttributeCache::class);
+        }
+        
+        return $this->cache;
     }
 }
