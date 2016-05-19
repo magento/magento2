@@ -165,7 +165,7 @@ location ~ (index|get|static|report|404|503)\.php$ {
 }
 
 gzip on;
-gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+gzip_disable "msie6";
 
 gzip_comp_level 6;
 gzip_min_length 1100;
