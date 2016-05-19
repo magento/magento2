@@ -7,29 +7,53 @@ namespace Magento\Developer\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\App\State;
 use Magento\Framework\Model\Context;
+use Magento\Developer\Model\Config\Backend\WorkflowType;
+use Magento\Framework\App\State\CleanupFiles;
+use Magento\Developer\Model\Config\Source\WorkflowType as SourceWorkflowType;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class WorkflowTypeTest extends \Magento\Framework\App\Test\Unit\Config\ValueTest
+class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var string
+     * @var WorkflowType
      */
-    protected $class = 'Magento\Developer\Model\Config\Backend\WorkflowType';
+    private $model;
 
     /**
      * @var State|\PHPUnit_Framework_MockObject_MockObject
      */
     private $appStateMock;
 
-    protected function getArguments()
+    /**
+     * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cleanerMock;
+
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManagerHelper;
+
+    public function setUp()
     {
         $this->appStateMock = $this->getMock(State::class, [], [], '', false);
-
-        $arguments = parent::getArguments();
+        $this->objectManagerHelper = new ObjectManager($this);
         $contextArgs = $this->objectManagerHelper->getConstructArguments(
-            Context::class, ['appState' => $this->appStateMock]
+            Context::class,
+            ['appState' => $this->appStateMock]
         );
-        $arguments['context'] = $this->objectManagerHelper->getObject(Context::class, $contextArgs);;
-        return $arguments;
+
+        $this->cleanerMock = $this->getMock(CleanupFiles::class, [], [], '', false);
+
+        $this->model = $this->objectManagerHelper->getObject(
+            WorkflowType::class,
+            [
+                'context' => $this->objectManagerHelper->getObject(Context::class, $contextArgs),
+                'cleaner' => $this->cleanerMock
+            ]
+        );
+
+        parent::setUp();
     }
 
     /**
@@ -42,18 +66,14 @@ class WorkflowTypeTest extends \Magento\Framework\App\Test\Unit\Config\ValueTest
             ->method('getMode')
             ->willReturn(State::MODE_PRODUCTION);
 
-        $this->model->setValue(\Magento\Developer\Model\Config\Source\WorkflowType::CLIENT_SIDE_COMPILATION);
+        $this->model->setValue(SourceWorkflowType::CLIENT_SIDE_COMPILATION);
         $this->model->beforeSave();
     }
 
-    /**
-     * @param int $callNumber
-     * @param string $oldValue
-     * @dataProvider afterSaveDataProvider
-     */
-    public function testAfterSave($callNumber, $oldValue)
+    public function testAfterSaveValueIsChangedShouldCleanViewFiles()
     {
-        $this->model->setValue(\Magento\Developer\Model\Config\Source\WorkflowType::CLIENT_SIDE_COMPILATION);
-        parent::testAfterSave($callNumber, $oldValue);
+        $this->model->setValue(SourceWorkflowType::SERVER_SIDE_COMPILATION);
+        $this->cleanerMock->expects($this->once())->method('clearMaterializedViewFiles');
+        $this->model->afterSave();
     }
 }
