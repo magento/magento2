@@ -60,6 +60,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifyMeta()
     {
+        $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load(1);
