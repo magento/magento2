@@ -185,8 +185,9 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex
             $sharingCode = $wishlist->getSharingCode();
 
             try {
+                $storeId = $this->storeManager->getStore()->getStoreId();
+                
                 foreach ($emails as $email) {
-                    $storeId = $this->storeManager->getStore()->getStoreId();
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
                         $this->scopeConfig->getValue(
                             'wishlist/email/email_template',
