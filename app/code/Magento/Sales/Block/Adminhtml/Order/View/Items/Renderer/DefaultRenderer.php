@@ -281,9 +281,6 @@ class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\Defa
             case 'price-original':
                 $html = $this->displayPriceAttribute('original_price');
                 break;
-            case 'price':
-                $html = $this->displayPriceAttribute('price');
-                break;
             case 'tax-amount':
                 $html = $this->displayPriceAttribute('tax_amount');
                 break;

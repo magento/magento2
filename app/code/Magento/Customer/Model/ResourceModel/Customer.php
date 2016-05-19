@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Model\Customer\NotificationStorage;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AlreadyExistsException;
 
@@ -35,6 +37,11 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
+
+    /**
+     * @var NotificationStorage
+     */
+    private $notificationStorage;
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -166,6 +173,19 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
+     * Retrieve notification storage
+     *
+     * @return NotificationStorage
+     */
+    private function getNotificationStorage()
+    {
+        if ($this->notificationStorage === null) {
+            $this->notificationStorage = ObjectManager::getInstance()->get(NotificationStorage::class);
+        }
+        return $this->notificationStorage;
+    }
+
+    /**
      * Save customer addresses and set default addresses in attributes backend
      *
      * @param \Magento\Framework\DataObject $customer
@@ -173,6 +193,10 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      */
     protected function _afterSave(\Magento\Framework\DataObject $customer)
     {
+        $this->getNotificationStorage()->add(
+            NotificationStorage::UPDATE_CUSTOMER_SESSION,
+            $customer->getId()
+        );
         return parent::_afterSave($customer);
     }
 
