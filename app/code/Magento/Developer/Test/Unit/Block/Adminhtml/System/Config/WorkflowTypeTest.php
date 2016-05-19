@@ -38,7 +38,6 @@ class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
      */
     private $appStateMock;
 
-
     public function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
@@ -62,7 +61,6 @@ class WorkflowTypeTest extends \PHPUnit_Framework_TestCase
         $this->model = $this->objectManagerHelper->getObject(WorkflowType::class, ['context' => $this->context]);
         parent::setUp();
     }
-
 
     /**
      * @param string $mode
