@@ -135,7 +135,7 @@
         "magento/module-offline-payments": "100.1.0-rc1",
         "magento/module-offline-shipping": "100.1.0-rc1",
         "magento/module-page-cache": "100.1.0-rc1",
-        "magento/module-payment": "101.0.0-rc1",
+        "magento/module-payment": "100.1.0-rc1",
         "magento/module-paypal": "100.1.0-rc1",
         "magento/module-persistent": "100.1.0-rc1",
         "magento/module-product-alert": "100.1.0-rc1",
