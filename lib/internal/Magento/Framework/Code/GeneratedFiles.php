@@ -57,36 +57,7 @@ class GeneratedFiles
             $configPool = new ConfigFilePool();
             $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
             if ($this->write->isExist($this->write->getRelativePath($envPath))) {
-                $cacheData = include $envPath;
-
-                if (isset($cacheData['cache_types'])) {
-                    $enabledCacheTypes = $cacheData['cache_types'];
-                    $enabledCacheTypes = array_filter($enabledCacheTypes, function ($value) {
-                            return $value;
-                        }
-                    );
-                    if (!empty($enabledCacheTypes)) {
-                        $this->write->writeFile($this->write->getRelativePath(
-                                $this->directoryList->getPath(DirectoryList::VAR_DIR)) . '/.cachestates.json',
-                            json_encode($enabledCacheTypes)
-                        );
-                        $cacheTypes = array_keys($cacheData['cache_types']);
-
-                        foreach ($cacheTypes as $cacheType) {
-                            $cacheData['cache_types'][$cacheType] = 0;
-                        }
-
-                        $formatter = new PhpFormatter();
-                        $contents = $formatter->format($cacheData);
-
-                        $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
-                        if (function_exists('opcache_invalidate')) {
-                            opcache_invalidate(
-                                $this->write->getAbsolutePath($envPath)
-                            );
-                        }
-                    }
-                }
+                $this->saveCacheStatus($envPath);
             }
             $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
             $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
@@ -107,6 +78,44 @@ class GeneratedFiles
         }
     }
 
+    /**
+     * Read Cache types from env.php and write to a json file.
+     *
+     * @param $envPath
+     */
+    private function saveCacheStatus($envPath)
+    {
+        $cacheData = include $envPath;
+
+        if (isset($cacheData['cache_types'])) {
+            $enabledCacheTypes = $cacheData['cache_types'];
+            $enabledCacheTypes = array_filter($enabledCacheTypes, function ($value) {
+                return $value;
+            });
+            if (!empty($enabledCacheTypes)) {
+                $this->write->writeFile($this->write->getRelativePath(
+                        $this->directoryList->getPath(DirectoryList::VAR_DIR)
+                    ) . '/.cachestates.json',
+                    json_encode($enabledCacheTypes)
+                );
+                $cacheTypes = array_keys($cacheData['cache_types']);
+
+                foreach ($cacheTypes as $cacheType) {
+                    $cacheData['cache_types'][$cacheType] = 0;
+                }
+
+                $formatter = new PhpFormatter();
+                $contents = $formatter->format($cacheData);
+
+                $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate(
+                        $this->write->getAbsolutePath($envPath)
+                    );
+                }
+            }
+        }
+    }
     /**
      * Create flag for regeneration of code and di
      *

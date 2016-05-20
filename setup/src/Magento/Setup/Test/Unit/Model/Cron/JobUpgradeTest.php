@@ -36,7 +36,7 @@ class JobUpgradeTest extends \PHPUnit_Framework_TestCase
 
         $writeFactory->expects($this->once())->method('create')->willReturn($write);
         $directoryList = $this->getMock('\Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $directoryList->expects($this->once())->method('getPath')->willReturn( '/some/full/path' . $pathToCacheStatus);
+        $directoryList->expects($this->once())->method('getPath')->willReturn('/some/full/path' . $pathToCacheStatus);
 
         $objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
             ['\Magento\Framework\Filesystem\Directory\WriteFactory', $writeFactory],
