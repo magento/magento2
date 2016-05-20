@@ -45,6 +45,10 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
             new InputArgument('types', InputArgument::REQUIRED),
             new InputArgument('command', InputArgument::REQUIRED),
         ]);
+
+        $inputDef = $this->getMock('\Symfony\Component\Console\Input\InputDefinition', [], [], '', false);
+        $inputDef->expects($this->any())->method('hasArgument')->willReturn(true);
+        $command->expects($this->any())->method('getDefinition')->willReturn($inputDef);
         $command->expects($this->any())->method('setDefinition')->with($definition);
 
         $model = new JobSetCache($command, $objectManagerProvider, $output, $status, $jobName, $params);
