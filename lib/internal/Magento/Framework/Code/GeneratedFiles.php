@@ -81,7 +81,8 @@ class GeneratedFiles
     /**
      * Read Cache types from env.php and write to a json file.
      *
-     * @param $envPath
+     * @param string $envPath
+     * @return void
      */
     private function saveCacheStatus($envPath)
     {
@@ -93,9 +94,9 @@ class GeneratedFiles
                 return $value;
             });
             if (!empty($enabledCacheTypes)) {
-                $this->write->writeFile($this->write->getRelativePath(
-                        $this->directoryList->getPath(DirectoryList::VAR_DIR)
-                    ) . '/.cachestates.json',
+                $varDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
+                $this->write->writeFile(
+                    $this->write->getRelativePath($varDir) . '/.cachestates.json',
                     json_encode($enabledCacheTypes)
                 );
                 $cacheTypes = array_keys($cacheData['cache_types']);
@@ -116,6 +117,7 @@ class GeneratedFiles
             }
         }
     }
+
     /**
      * Create flag for regeneration of code and di
      *
