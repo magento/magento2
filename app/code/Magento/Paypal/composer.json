@@ -9,7 +9,7 @@
         "magento/module-sales": "100.1.*",
         "magento/module-quote": "100.1.*",
         "magento/module-customer": "100.1.*",
-        "magento/module-payment": "101.0.*",
+        "magento/module-payment": "100.1.*",
         "magento/module-backend": "100.1.*",
         "magento/module-tax": "100.1.*",
         "magento/module-directory": "100.1.*",
