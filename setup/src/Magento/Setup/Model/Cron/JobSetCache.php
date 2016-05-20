@@ -63,12 +63,20 @@ class JobSetCache extends AbstractJob
                     $arguments[AbstractCacheManageCommand::INPUT_KEY_TYPES] = explode(' ', $this->params[0]);
                 }
                 $arguments['command'] = 'cache:enable';
-                $definition = new InputDefinition([
-                    new InputArgument(AbstractCacheManageCommand::INPUT_KEY_TYPES, InputArgument::REQUIRED),
-                    new InputArgument('command', InputArgument::REQUIRED),
-                ]);
-
-                $this->command->setDefinition($definition);
+                $inputDefinition = [];
+                if ($this->command->getDefinition()->hasArgument('command')) {
+                    $inputDefinition[] = new InputArgument('command', InputArgument::REQUIRED);
+                }
+                if ($this->command->getDefinition()->hasArgument(AbstractCacheManageCommand::INPUT_KEY_TYPES)) {
+                    $inputDefinition[] = new InputArgument(
+                        AbstractCacheManageCommand::INPUT_KEY_TYPES,
+                        InputArgument::REQUIRED
+                    );
+                }
+                if (!empty($inputDefinition)) {
+                    $definition = new InputDefinition($inputDefinition);
+                    $this->command->setDefinition($definition);
+                }
             } else {
                 $arguments['command'] = 'cache:disable';
             }
