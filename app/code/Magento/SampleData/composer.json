@@ -6,7 +6,7 @@
         "magento/framework": "100.1.*"
     },
     "suggest": {
-        "magento/sample-data-media": "Sample Data version:100.0.*"
+        "magento/sample-data-media": "Sample Data version:100.1.*"
     },
     "type": "magento2-module",
     "version": "100.1.0-rc1",
