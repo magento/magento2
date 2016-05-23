@@ -99,7 +99,7 @@ define([
             expect($(navSelector + ':eq(1)').attr('data-active') === 'true').toBeTruthy();
         });
 
-        it('show previos', function () {
+        it('show previous', function () {
             galleryAPI.prev();
             expect($(navSelector + ':eq(0)').attr('data-active') === 'true').toBeTruthy();
         });
