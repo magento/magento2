@@ -181,6 +181,7 @@ define([
                 return false;
             }
 
+            /*eslint-disable max-depth, eqeqeq */
             for (index; index < length; index++) {
                 if (_.isArray(origin[index]) && _.isArray(current[index])) {
                     if (!this._compareArrays(origin[index], current[index])) {
@@ -190,10 +191,10 @@ define([
                     if (!this._compareObject(origin[index], current[index])) {
                         return false;
                     }
-                } else if (this._castValue(origin[index]) != this._castValue(current[index])){
-                    return false
+                } else if (this._castValue(origin[index]) != this._castValue(current[index])) {
+                    return false;
                 }
-            }
+            }/*eslint-enable max-depth, eqeqeq */
 
             return true;
         },
@@ -210,6 +211,7 @@ define([
         _compareObject: function (origin, current) {
             var prop;
 
+            /*eslint-disable max-depth, eqeqeq*/
             for (prop in origin) {
                 if (_.isArray(origin[prop]) && _.isArray(current[prop])) {
                     if (!this._compareArrays(origin[prop], current[prop])) {
@@ -219,10 +221,10 @@ define([
                     if (!this._compareObject(origin[prop], current[prop])) {
                         return false;
                     }
-                } else if (this._castValue(origin[prop]) != this._castValue(current[prop])){
-                    return false
+                } else if (this._castValue(origin[prop]) != this._castValue(current[prop])) {
+                    return false;
                 }
-            }
+            }/*eslint-enable max-depth, eqeqeq */
 
             return true;
         },
@@ -237,9 +239,9 @@ define([
         _castValue: function (value) {
             if (_.isUndefined(value) || value === '' || _.isNull(value)) {
                 return false;
-            } else {
-                return value;
             }
+
+            return value;
         },
 
         /**
@@ -251,7 +253,7 @@ define([
          */
         initDefaultState: function (data) {
             var defaultState = data || utils.copy(this.recordData());
-            
+
             this.defaultState = defaultState;
 
             return this;
@@ -270,7 +272,7 @@ define([
          * Returns component state
          */
         hasChanged: function () {
-          return !this.isDefaultState();
+            return !this.isDefaultState();
         },
 
         /**
