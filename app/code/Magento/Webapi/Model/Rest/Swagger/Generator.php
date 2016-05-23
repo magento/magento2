@@ -541,8 +541,45 @@ class Generator extends AbstractSchemaGenerator
                     ],
                 ],
             ],
-            $this->definitions
+            $this->snakeCaseDefinitions($this->definitions)
         );
+    }
+
+    /**
+     * Converts definition's properties array into snake_case
+     *
+     * @param array $definitions
+     * @return array
+     */
+    private function snakeCaseDefinitions($definitions)
+    {
+        foreach ($definitions as $name => $vals) {
+            if (!empty($vals['properties'])) {
+                $definitions[$name]['properties'] = $this->convertArrayToSnakeCase($vals['properties']);
+            }
+        }
+        return $definitions;
+    }
+
+    /**
+     * Converts associative array's key names from camelCase into snake_case
+     *
+     * @param array $properties
+     * @return array
+     */
+    private function convertArrayToSnakeCase($properties)
+    {
+        foreach ($properties as $name => $value) {
+            $snakeCaseName = preg_replace_callback(
+                "/([A-Z])/",
+                function ($matches) { return '_' . strtolower($matches[1]);},
+                $name
+            );
+
+            $properties[$snakeCaseName] = $value;
+            unset($properties[$name]);
+        }
+        return $properties;
     }
 
     /**
