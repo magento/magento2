@@ -153,27 +153,49 @@ define([
         checkDefaultState: function () {
             var result = true,
                 recordsData = utils.copy(this.recordData()),
-                i = 0,
-                length = this.defaultState.length,
                 currentData = this.deleteProperty ?
                     _.filter(recordsData, function (elem) {
                         return elem[this.deleteProperty] !== this.deleteValue;
                     }, this) : recordsData;
 
-            if (length !== currentData.length) {
-                this.isDefaultState(false);
-
-                return;
-            }
-
-            for (i; i < length; i++) {
-                if (!this._compareObject(this.defaultState[i], currentData[i])) {
-                    result = false;
-                    break;
-                }
+            if (_.isArray(this.defaultState)) {
+                result = this._compareArrays(this.defaultState, currentData);
             }
 
             this.isDefaultState(result);
+        },
+
+        /**
+         * Compares arrays.
+         *
+         * @param {Object} origin - first array
+         * @param {Object} current - second array
+         *
+         * @returns {Boolean} result - is equal this arrays or not
+         */
+        _compareArrays: function (origin, current) {
+            var index = 0,
+                length = origin.length;
+
+            if (origin.length !== current.length) {
+                return false;
+            }
+
+            for (index; index < length; index++) {
+                if (_.isArray(origin[index]) && _.isArray(current[index])) {
+                    if (!this._compareArrays(origin[index], current[index])) {
+                        return false;
+                    }
+                } else if (typeof origin[index] === 'object' && typeof current[index] === 'object') {
+                    if (!this._compareObject(origin[index], current[index])) {
+                        return false;
+                    }
+                } else if (this._castValue(origin[index]) != this._castValue(current[index])){
+                    return false
+                }
+            }
+
+            return true;
         },
 
         /**
@@ -189,12 +211,16 @@ define([
             var prop;
 
             for (prop in origin) {
-                if (_.isObject(origin[prop]) && _.isObject(current[prop])) {
+                if (_.isArray(origin[prop]) && _.isArray(current[prop])) {
+                    if (!this._compareArrays(origin[prop], current[prop])) {
+                        return false;
+                    }
+                } else if (typeof origin[prop] === 'object' && typeof current[prop] === 'object') {
                     if (!this._compareObject(origin[prop], current[prop])) {
                         return false;
                     }
-                } else if (this._castValue(origin[prop]) != this._castValue(current[prop])) {
-                    return false;
+                } else if (this._castValue(origin[prop]) != this._castValue(current[prop])){
+                    return false
                 }
             }
 
