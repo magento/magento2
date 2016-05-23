@@ -32,6 +32,7 @@ define([], function() {
             vatId: addressData.vat_id,
             sameAsBilling: addressData.same_as_billing,
             saveInAddressBook: addressData.save_in_address_book,
+            customAttributes: addressData.custom_attributes,
             isDefaultShipping: function() {
                 return addressData.default_shipping;
             },

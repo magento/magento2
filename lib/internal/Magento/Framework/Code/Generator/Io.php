@@ -169,7 +169,7 @@ class Io
         }
         try {
             if (!$this->filesystemDriver->isDirectory($directory)) {
-                $this->filesystemDriver->createDirectory($directory, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+                $this->filesystemDriver->createDirectory($directory);
             }
             return true;
         } catch (FileSystemException $e) {
