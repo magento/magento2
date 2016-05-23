@@ -9,7 +9,6 @@ addons:
     - postfix
 language: php
 php:
-  - 5.5
   - 5.6
   - 7.0
 env:
@@ -26,8 +25,6 @@ cache:
   directories: $HOME/.composer/cache
 matrix:
   exclude:
-    - php: 5.6
-      env: TEST_SUITE=static
     - php: 7.0
       env: TEST_SUITE=static
 before_install: ./dev/travis/before_install.sh
