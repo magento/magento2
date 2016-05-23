@@ -71,7 +71,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['size', 'color', 'swatch1']);
 
         $this->eavConfig->expects($this->exactly(3))->method('getAttribute')->willReturn($attribute);
-
+        $attribute->expects($this->any())
+            ->method('getData')
+            ->with('additional_data')
+            ->willReturn(true);
         $this->swatchHelper->expects($this->exactly(3))->method('isVisualSwatch')->with($attribute)->willReturn(true);
 
         $result->expects($this->once())->method('addAttributeToSelect')

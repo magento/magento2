@@ -51,13 +51,16 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
     {
 
         $this->writeInterface
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('isExist')
-            ->with(GeneratedFiles::REGENERATE_FLAG)
-            ->willReturn(true);
-        $this->directoryList->expects($this->exactly(2))->method('getPath')->willReturnMap($getPathMap);
-        $this->writeInterface->expects($this->exactly(2))->method('getRelativePath')->willReturnMap($getPathMap);
-        $this->writeInterface->expects($this->exactly(2))->method('isDirectory')->willReturnMap($isDirectoryMap);
+            ->with()
+            ->willReturnMap([
+                [GeneratedFiles::REGENERATE_FLAG, true],
+                ['path/to/di', false]
+            ]);
+        $this->directoryList->expects($this->any())->method('getPath')->willReturnMap($getPathMap);
+        $this->writeInterface->expects($this->any())->method('getRelativePath')->willReturnMap($getPathMap);
+        $this->writeInterface->expects($this->any())->method('isDirectory')->willReturnMap($isDirectoryMap);
         $this->writeInterface->expects($this->exactly(1))->method('delete')->willReturnMap($deleteMap);
         $this->model->regenerate();
     }
@@ -69,9 +72,15 @@ class GeneratedFilesTest extends \PHPUnit_Framework_TestCase
     {
         $pathToGeneration = 'path/to/generation';
         $pathToDi = 'path/to/di';
+        $pathToCache = 'path/to/di';
+        $pathToConfig = 'path/to/config';
 
         $getPathMap =     [[DirectoryList::GENERATION, $pathToGeneration],
-            [DirectoryList::DI, $pathToDi]];
+            [DirectoryList::DI, $pathToDi],
+            [DirectoryList::CACHE, $pathToCache],
+            [DirectoryList::CONFIG, $pathToConfig],
+        ];
+
         $deleteMap = [[BP . '/' . $pathToGeneration, true],
             [BP . '/' . $pathToDi, true],
             [BP . GeneratedFiles::REGENERATE_FLAG, true],

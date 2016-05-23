@@ -11,7 +11,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 /**
  * Provider of Timezone instance
  */
-class TimezoneProvider
+class TimeZoneProvider
 {
     /**
      * Object Manager provider

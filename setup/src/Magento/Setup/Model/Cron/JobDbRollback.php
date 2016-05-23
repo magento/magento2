@@ -59,7 +59,8 @@ class JobDbRollback extends AbstractJob
             } else {
                 $this->status->add(
                     'No available DB backup file found. Please refer to documentation specified '
-                    . 'in <a href=""> doc link </a> to rollback database to a previous version to '
+                    . 'in <a href=""> doc link </a> to rollback database to a previous version to ',
+                    \Psr\Log\LogLevel::INFO
                 );
             }
         } catch (\Exception $e) {
