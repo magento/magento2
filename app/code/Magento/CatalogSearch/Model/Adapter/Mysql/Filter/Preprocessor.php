@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Search\TableMapper;
@@ -12,6 +13,7 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Request\FilterInterface;
@@ -51,6 +53,11 @@ class Preprocessor implements PreprocessorInterface
      * @var AdapterInterface
      */
     private $connection;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
 
     /**
      * @var TableMapper
@@ -100,6 +107,7 @@ class Preprocessor implements PreprocessorInterface
     {
         /** @var Attribute $attribute */
         $attribute = $this->config->getAttribute(Product::ENTITY, $filter->getField());
+        $linkIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         if ($filter->getField() === 'price') {
             $resultQuery = str_replace(
                 $this->connection->quoteIdentifier('price'),
@@ -107,7 +115,7 @@ class Preprocessor implements PreprocessorInterface
                 $query
             );
         } elseif ($filter->getField() === 'category_ids') {
-            return 'category_ids_index.category_id = ' . $filter->getValue();
+            return 'category_ids_index.category_id = ' . (int) $filter->getValue();
         } elseif ($attribute->isStatic()) {
             $alias = $this->tableMapper->getMappingAlias($filter);
             $resultQuery = str_replace(
@@ -132,7 +140,12 @@ class Preprocessor implements PreprocessorInterface
 
             $currentStoreId = $this->scopeResolver->getScope()->getId();
 
-            $select->from(['main_table' => $table], 'entity_id')
+            $select->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['entity_id'])
+                ->join(
+                    ['main_table' => $table],
+                    "main_table.{$linkIdField} = e.{$linkIdField}",
+                    []
+                )
                 ->joinLeft(
                     ['current_store' => $table],
                     'current_store.attribute_id = main_table.attribute_id AND current_store.store_id = '
@@ -166,10 +179,16 @@ class Preprocessor implements PreprocessorInterface
         $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
+        $linkIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
-        $select->from(['main_table' => $table], 'entity_id')
+        $select->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['entity_id'])
+            ->join(
+                ['main_table' => $table],
+                "main_table.{$linkIdField} = e.{$linkIdField}",
+                []
+            )
             ->columns([$filter->getField() => 'main_table.value'])
             ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
             ->where('main_table.store_id = ?', $currentStoreId)
@@ -194,10 +213,10 @@ class Preprocessor implements PreprocessorInterface
             $value = sprintf(
                 '%s IN (%s)',
                 ($isNegation ? 'NOT' : ''),
-                implode(',', $filter->getValue())
+                implode(',', array_map([$this->connection, 'quote'], $filter->getValue()))
             );
         } else {
-            $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
+            $value = ($isNegation ? '!' : '') . '= ' . $this->connection->quote($filter->getValue());
         }
         $resultQuery = sprintf(
             '%1$s.value %2$s',
@@ -206,5 +225,19 @@ class Preprocessor implements PreprocessorInterface
         );
 
         return $resultQuery;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

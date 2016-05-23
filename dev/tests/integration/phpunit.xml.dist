@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,8 +18,6 @@
         </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
-            <directory suffix="Test.php">../../../update/dev/tests/integration/testsuite</directory>
-            <exclude>testsuite/Magento/Test/Integrity</exclude>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
         </testsuite>
     </testsuites>
@@ -28,13 +26,11 @@
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
             <directory suffix=".php">../../../lib/internal/Magento</directory>
-            <directory suffix=".php">../../../update/app/code</directory>
             <exclude>
                 <directory>../../../app/code/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/Test</directory>
                 <directory>../../../lib/internal/*/*/*/Test</directory>
                 <directory>../../../setup/src/*/*/Test</directory>
-                <directory>../../../update/app/code/*/*/Test</directory>
             </exclude>
         </whitelist>
     </filter>

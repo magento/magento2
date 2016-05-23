@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -116,6 +116,26 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                     ['first_container', Container::CONTAINER_OPT_HTML_ID, 'dd_id'],
                 ],
                 'setAttributeCalls' => 4,
+            ],
+            'sample_data2' => [
+                'structureElements' => [
+                    'first_container' => [
+                        'container',
+                        [
+                            'attributes' => [
+                                Container::CONTAINER_OPT_HTML_TAG   => 'dd',
+                                Container::CONTAINER_OPT_HTML_CLASS => 'dd_class',
+                                Container::CONTAINER_OPT_HTML_ID    => 'dd_id',
+                            ]
+                        ],
+                    ],
+                ],
+                'setAttributeData' => [
+                    ['first_container', Container::CONTAINER_OPT_HTML_TAG, 'dd'],
+                    ['first_container', Container::CONTAINER_OPT_HTML_CLASS, 'dd_class'],
+                    ['first_container', Container::CONTAINER_OPT_HTML_ID, 'dd_id'],
+                ],
+                'setAttributeCalls' => 3,
             ]
         ];
     }
@@ -132,7 +152,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             ->method('getElements')
             ->willReturn($structureElements);
 
-        $this->structureMock->expects($this->once())
+        $this->structureMock->expects($this->never())
             ->method('setAttribute')
             ->willReturnSelf();
 

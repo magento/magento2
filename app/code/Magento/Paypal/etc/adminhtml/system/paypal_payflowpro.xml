@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -12,7 +12,7 @@
         <fieldset_css>pp-method-payflow</fieldset_css>
         <comment>Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.</comment>
         <attribute type="activity_path">payment/payflowpro/active</attribute>
-        <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payflow-pro?partner_id=NB9WWHYEMVUMS</more_url>
+        <more_url>https://www.paypal.com/webapps/mpp/payflow-payment-gateway?partner_id=NB9WWHYEMVUMS</more_url>
         <attribute type="paypal_ec_separate">1</attribute>
         <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
             <label>Required PayPal Settings</label>

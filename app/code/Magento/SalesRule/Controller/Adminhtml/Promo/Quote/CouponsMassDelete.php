@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
@@ -16,7 +16,7 @@ class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Qu
     public function execute()
     {
         $this->_initRule();
-        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         if (!$rule->getId()) {
             $this->_forward('noroute');

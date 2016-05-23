@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Helper;
@@ -28,8 +28,10 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
 
     /** @var DownloadableFile|\PHPUnit_Framework_MockObject_MockObject */
     protected $_downloadableFileMock;
+
     /** @var  \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $sessionManager;
+
     /** @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $fileReadFactory;
 
@@ -47,7 +49,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
 
     const URL = 'http://example.com';
 
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/../_files/download_mock.php';
 

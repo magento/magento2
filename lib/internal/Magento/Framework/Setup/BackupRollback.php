@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -121,7 +121,7 @@ class BackupRollback
             throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
         }
         if (!$this->file->isExists($this->backupsDir)) {
-            $this->file->createDirectory($this->backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            $this->file->createDirectory($this->backupsDir);
         }
         $fsBackup->setBackupsDir($this->backupsDir);
         $fsBackup->setBackupExtension('tgz');
@@ -201,17 +201,14 @@ class BackupRollback
         $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbBackup->setRootDir($this->directoryList->getRoot());
         if (!$this->file->isExists($this->backupsDir)) {
-            $this->file->createDirectory($this->backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            $this->file->createDirectory($this->backupsDir);
         }
         $dbBackup->setBackupsDir($this->backupsDir);
-        $dbBackup->setBackupExtension('gz');
+        $dbBackup->setBackupExtension('sql');
         $dbBackup->setTime($time);
         $this->log->log('DB backup is starting...');
         $dbBackup->create();
-        $this->log->log(
-            'DB backup filename: ' . $dbBackup->getBackupFilename()
-            . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
-        );
+        $this->log->log('DB backup filename: ' . $dbBackup->getBackupFilename());
         $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
         $this->log->logSuccess('DB backup completed successfully.');
         return $dbBackup->getBackupPath();
@@ -226,7 +223,7 @@ class BackupRollback
      */
     public function dbRollback($rollbackFile)
     {
-        if (preg_match('/[0-9]_(db)(.*?).(gz)$/', $rollbackFile) !== 1) {
+        if (preg_match('/[0-9]_(db)(.*?).(sql)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
         if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
@@ -236,7 +233,7 @@ class BackupRollback
         $dbRollback = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbRollback->setRootDir($this->directoryList->getRoot());
         $dbRollback->setBackupsDir($this->backupsDir);
-        $dbRollback->setBackupExtension('gz');
+        $dbRollback->setBackupExtension('sql');
         $time = explode('_', $rollbackFile);
         if (count($time) === 3) {
             $thirdPart = explode('.', $time[2]);

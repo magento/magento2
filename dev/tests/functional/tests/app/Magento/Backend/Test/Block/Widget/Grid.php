@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,6 +54,13 @@ abstract class Grid extends Block
      * @var string
      */
     protected $rowItem = 'tbody tr';
+
+    /**
+     * The last row in the grid.
+     *
+     * @var string
+     */
+    protected $lastRowItem = 'tbody tr:last-child';
 
     /**
      * Locator value for link in action column
@@ -269,13 +276,7 @@ abstract class Grid extends Block
      */
     protected function waitLoader()
     {
-        $this->browser->waitUntil(
-            function () {
-                $element = $this->browser->find($this->loader);
-                return $element->isVisible() == false ? true : null;
-            }
-        );
-
+        $this->waitForElementNotVisible($this->loader);
         $this->getTemplateBlock()->waitLoader();
     }
 

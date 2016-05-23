@@ -1,0 +1,94 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="admin__field-complex" if="element.addButton">
+    <div class="admin__field-complex-title">
+        <span class="label" translate="'User Agent Rules'"></span>
+    </div>
+
+    <div class="admin__field-complex-elements">
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+        <button attr="{disabled: disabled}"
+                class="action-secondary"
+                type="button"
+                click="processingAddChild.bind($data, false, false, false)">
+            <span text="addButtonLabel"/>
+        </button>
+    </div>
+
+    <div class="admin__field-complex-content"
+         translate="'User agent exceptions override product and CMS pages rules.'"></div>
+</div>
+
+<div class="admin__field admin__field-wide"
+     visible="visible"
+     disabled="disabled"
+     css="element.setClasses(element)"
+     attr="'data-index': index">
+    <label if="element.label" class="admin__field-label" attr="for: element.uid">
+        <span text="element.label"/>
+    </label>
+
+    <div class="admin__field-control" data-role="grid-wrapper">
+        <div class="admin__control-table-pagination" visible="!!$data.recordData().length">
+            <div class="admin__data-grid-pager">
+                <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
+                <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
+                <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
+                <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
+            </div>
+        </div>
+        <div class="admin__control-table-wrapper">
+            <table class="admin__dynamic-rows data-grid" data-role="grid">
+                <thead if="element.columnsHeader">
+                    <tr>
+                        <th if="$data.dndConfig.enabled"
+                            class="data-grid-draggable-row-cell"/>
+
+                        <th repeat="foreach: labels, item: '$label'"
+                            class="data-grid-th"
+                            text="$label().label"
+                            visible="$label().visible"
+                            disable="$label().disabled"
+                            css="setClasses($label())">
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr repeat="foreach: elems, item: '$record'"
+                        class="data-row"
+                        css="'_odd-row': $index % 2">
+                        <td if="dndConfig.enabled"
+                            class="data-grid-draggable-row-cell"
+                            template="name: dndConfig.template, data: dnd"/>
+
+                        <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
+                        <td if="elem.template"
+                            visible="elem.visible"
+                            disable="elem.disabled"
+                            css="$parent.setClasses(elem)"
+                            template="elem.template"
+                            attr="'data-index': index"/>
+                        <!-- /ko -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="messages">
+    <div class="message message-notice notice">
+        <span
+            translate="'Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered.'"></span>
+        <br>
+        <span
+            translate="'Examples'"></span>:
+        <span class="code-sample">Firefox: /^mozilla/i</span>
+    </div>
+</div>

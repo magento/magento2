@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class MaintenanceTest extends \PHPUnit_Framework_TestCase
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\CompleteBackup
+     * @var \Magento\Setup\Controller\Maintenance
      */
     private $controller;
 
@@ -28,6 +28,21 @@ class MaintenanceTest extends \PHPUnit_Framework_TestCase
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $this->controller = new Maintenance($this->maintenanceMode);
+
+        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
+        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
+        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+
+        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $mvcEvent->expects($this->any())->method('setRequest')->with($request)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $contentArray = '{"disable":false}';
+        $request->expects($this->any())->method('getContent')->willReturn($contentArray);
+
+        $this->controller->setEvent($mvcEvent);
+        $this->controller->dispatch($request, $response);
     }
 
     public function testIndexAction()

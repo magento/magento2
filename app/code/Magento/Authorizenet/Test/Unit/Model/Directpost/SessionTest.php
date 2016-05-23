@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Model\Directpost;
@@ -26,7 +26,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     protected $storageMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storageMock = $this
             ->getMockBuilder('Magento\Framework\Session\StorageInterface')

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -115,8 +115,10 @@ class BackupCommand extends AbstractSetupCommand
         if (!$this->deploymentConfig->isAvailable()
             && ($input->getOption(self::INPUT_KEY_MEDIA) || $input->getOption(self::INPUT_KEY_DB))) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
-            return;
+            // We need exit code higher than 0 here as an indication
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
             $inputOptionProvided = false;
             $output->writeln('<info>Enabling maintenance mode</info>');
@@ -143,10 +145,12 @@ class BackupCommand extends AbstractSetupCommand
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            $returnValue =  \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
+        return $returnValue;
     }
 
     /**

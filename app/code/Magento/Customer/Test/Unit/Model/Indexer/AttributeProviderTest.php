@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Indexer;
@@ -21,7 +21,7 @@ class AttributeProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eavConfig = $this->getMockBuilder('Magento\Eav\Model\Config')
             ->disableOriginalConstructor()

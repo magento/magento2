@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Model\Cron;
@@ -53,7 +53,6 @@ abstract class AbstractJob
      * @var ObjectManagerInterface
      */
     protected $objectManager;
-
 
     /**
      * Constructor
@@ -108,12 +107,12 @@ abstract class AbstractJob
      */
     protected function performCleanup()
     {
-        $this->status->add('Cleaning generated files...');
+        $this->status->add('Cleaning generated files...', \Psr\Log\LogLevel::INFO);
         $this->cleanupFiles->clearCodeGeneratedFiles();
-        $this->status->add('Complete!');
-        $this->status->add('Clearing cache...');
+        $this->status->add('Complete!', \Psr\Log\LogLevel::INFO);
+        $this->status->add('Clearing cache...', \Psr\Log\LogLevel::INFO);
         $this->cache->clean();
-        $this->status->add('Complete!');
+        $this->status->add('Complete!', \Psr\Log\LogLevel::INFO);
     }
 
     /**

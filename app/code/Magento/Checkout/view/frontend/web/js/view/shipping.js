@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -67,7 +67,7 @@ define(
             isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
-            saveInAddressBook: true,
+            saveInAddressBook: 1,
             quoteIsVirtual: quote.isVirtual(),
 
             /**
@@ -75,15 +75,17 @@ define(
              */
             initialize: function () {
                 var self = this,
-                    hasNewAddress;
+                    hasNewAddress,
+                    fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
 
                 this._super();
+                shippingRatesValidator.initFields(fieldsetName);
 
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep(
                         'shipping',
                         '',
-                        'Shipping',
+                        $t('Shipping'),
                         this.visible, _.bind(this.navigate, this),
                         10
                     );
@@ -128,15 +130,6 @@ define(
              */
             navigate: function () {
                 //load data from server for shipping step
-            },
-
-            /**
-             * @param {Object} element
-             */
-            initElement: function (element) {
-                if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
-                }
             },
 
             /**
@@ -248,7 +241,7 @@ define(
                     emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
-                    this.errorValidationMessage('Please specify a shipping method');
+                    this.errorValidationMessage('Please specify a shipping method.');
 
                     return false;
                 }
@@ -284,14 +277,19 @@ define(
 
                         if (addressData.hasOwnProperty(field) &&
                             shippingAddress.hasOwnProperty(field) &&
-                            typeof addressData[field] != 'function'
+                            typeof addressData[field] != 'function' &&
+                            _.isEqual(shippingAddress[field], addressData[field])
                         ) {
                             shippingAddress[field] = addressData[field];
+                        } else if (typeof addressData[field] != 'function' &&
+                            !_.isEqual(shippingAddress[field], addressData[field])) {
+                            shippingAddress = addressData;
+                            break;
                         }
                     }
 
                     if (customer.isLoggedIn()) {
-                        shippingAddress.save_in_address_book = true;
+                        shippingAddress.save_in_address_book = 1;
                     }
                     selectShippingAddress(shippingAddress);
                 }

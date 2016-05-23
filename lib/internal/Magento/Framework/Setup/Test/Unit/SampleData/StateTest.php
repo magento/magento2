@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit\SampleData;
@@ -30,7 +30,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected $absolutePath;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->setMethods(['getDirectoryWrite'])
@@ -61,7 +61,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers setError()
+     * @covers \Magento\Framework\Setup\SampleData\State::setError
      */
     public function testHasError()
     {

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
+
+use Magento\Framework\View\Element\AbstractBlock;
 
 /**
  * @magentoAppIsolation enabled
@@ -556,7 +558,7 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals($name, $key);
 
         $block->setCacheKey('key');
-        $this->assertEquals('key', $block->getCacheKey());
+        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . 'key', $block->getCacheKey());
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,6 +31,7 @@ class ExpressCheckoutFromShoppingCartTest extends Scenario
     const MVP = 'yes';
     const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

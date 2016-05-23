@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="base_fieldset">
+        <field name="update_product_preview_image">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Update Product Preview Image</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">update_product_preview_image</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="notice" xsi:type="string">Filtering by this attribute will update the product image on catalog page</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_text" xsi:type="string">swatch_text</item>
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="use_product_image_for_swatch">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Use Product Image for Swatch if Possible</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">use_product_image_for_swatch</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="notice" xsi:type="string">Allows use fallback logic for replacing swatch image with product swatch or base image</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_required">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_text" xsi:type="string">swatch_text</item>
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+    <fieldset name="text_swatch_container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
+                <item name="label" xsi:type="string" translate="true">Manage Swatch (Values of Your Attribute)</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">15</item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="swatch_text" xsi:type="string">swatch_text</item>
+                </item>
+            </item>
+        </argument>
+        <dynamicRows name="text_swatch">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="dataScope" xsi:type="string">text_swatch</item>
+                    <item name="addButtonLabel" xsi:type="string" translate="true">Add Swatch</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="admin__field-wide" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                        <item name="positionProvider" xsi:type="string">text_swatch.position</item>
+                        <item name="dataScope" xsi:type="string"/>
+                    </item>
+                </argument>
+                <field name="defaulttext">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">boolean</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputCheckBoxName" xsi:type="string">defaulttext.</item>
+                            <item name="label" xsi:type="string" translate="true">Is Default</item>
+                            <item name="prefer" xsi:type="string">radio</item>
+                            <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
+                            <item name="additionalClasses" xsi:type="string">control-table-options-cell</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="swatchtext_1">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">swatchtext.value</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">1</item>
+                            <item name="label" xsi:type="string" translate="true">Swatch</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="optiontext_1">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optiontext.value</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">1</item>
+                            <item name="label" xsi:type="string" translate="true">Default Store View</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="swatchtext_0">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">swatchtext.value</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">0</item>
+                            <item name="label" xsi:type="string" translate="true">Swatch</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="optiontext_0">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optiontext.value</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">0</item>
+                            <item name="label" xsi:type="string" translate="true">Admin</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optiontext.order</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="_hidden" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <actionDelete name="action_delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/action-delete</item>
+                            <item name="elementTmpl" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="prefixName" xsi:type="string">optiontext.delete</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="fit" xsi:type="boolean">true</item>
+                        </item>
+                    </argument>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+
+    <fieldset name="visual_swatch_container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
+                <item name="label" xsi:type="string" translate="true">Manage Swatch (Values of Your Attribute)</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">15</item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                </item>
+            </item>
+        </argument>
+
+        <dynamicRows name="visual_swatch">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="dataScope" xsi:type="string">visual_swatch</item>
+                    <item name="addButtonLabel" xsi:type="string" translate="true">Add Swatch</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="admin__field-wide" xsi:type="boolean">true</item>
+                        <item name="swatch-visual-options-container" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                        <item name="positionProvider" xsi:type="string">text_swatch.position</item>
+                        <item name="dataScope" xsi:type="string"/>
+                    </item>
+                </argument>
+                <field name="defaultvisual">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">boolean</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputCheckBoxName" xsi:type="string">defaultvisual.</item>
+                            <item name="label" xsi:type="string" translate="true">Is Default</item>
+                            <item name="prefer" xsi:type="string">radio</item>
+                            <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
+                            <item name="additionalClasses" xsi:type="string">control-table-options-cell</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="swatchvisual">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/swatch-visual</item>
+                            <item name="template" xsi:type="string">Magento_Swatches/swatch-visual</item>
+                            <item name="label" xsi:type="string" translate="true">Swatch</item>
+                            <item name="dataScope" xsi:type="string">swatchvisual</item>
+                            <item name="uploadUrl" xsi:type="url" path="swatches/iframe/show"/>
+                            <item name="prefixName" xsi:type="string">swatchvisual.value</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="swatches-visual-col" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="optionvisual_default_store_view">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optionvisual.value</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">1</item>
+                            <item name="dataScope" xsi:type="string">optionvisual_default_store_view</item>
+                            <item name="label" xsi:type="string" translate="true">Default Store View</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="optionvisual_admin">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optionvisual.value</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">0</item>
+                            <item name="dataScope" xsi:type="string">optionvisual_admin</item>
+                            <item name="label" xsi:type="string" translate="true">Admin</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optionvisual.order</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="_hidden" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <actionDelete name="action_delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/action-delete</item>
+                            <item name="elementTmpl" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="prefixName" xsi:type="string">optionvisual.delete</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="fit" xsi:type="boolean">true</item>
+                        </item>
+                    </argument>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+    <fieldset name="advanced_fieldset">
+        <field name="frontend_class">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Eav\Model\Adminhtml\Attribute\Validation\Rules\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_text" xsi:type="string">swatch_text</item>
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_global">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Attribute\Source\Scopes</item>
+                <item name="config" xsi:type="array">
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_text" xsi:type="string">swatch_text</item>
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>

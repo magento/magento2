@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -129,7 +129,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<<expected
 (function(require){
-require.config({"baseUrl":""});
 (function() {
 file_one.js content
 require.config(config);

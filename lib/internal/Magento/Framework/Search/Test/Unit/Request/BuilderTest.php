@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Request;
@@ -94,7 +94,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Magento\Framework\Search\Request\NonExistingRequestNameException
      * @expectedExceptionMessage Request name 'rn' doesn't exist.
      */
     public function testCreateInvalidArgumentException()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
 class CreateCurrencyRateTest extends Injectable
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const DOMAIN = 'PS';
     /* end tags */
 

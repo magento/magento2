@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Address;
@@ -126,12 +126,10 @@ class Edit extends \Magento\Directory\Block\Data
         $this->pageConfig->getTitle()->set($this->getTitle());
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
-            if (!empty($postedData['region_id']) || !empty($postedData['region'])) {
-                $postedData['region'] = [
-                    'region_id' => $postedData['region_id'],
-                    'region' => $postedData['region'],
-                ];
-            }
+            $postedData['region'] = [
+                'region_id' => $postedData['region_id'],
+                'region' => $postedData['region'],
+            ];
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,
                 $postedData,

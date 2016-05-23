@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Model;
@@ -10,6 +10,7 @@ namespace Magento\Persistent\Model;
  *
  * @method int getCustomerId()
  * @method Session setCustomerId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {
@@ -93,6 +94,13 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\Framework\Session\Config\ConfigInterface
      */
     protected $sessionConfig;
+
+    /**
+     * Request
+     *
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
 
     /**
      * Constructor
@@ -289,7 +297,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     public function removePersistentCookie()
     {
-        $cookieMetadata = $this->_cookieMetadataFactory->createCookieMetadata()
+        $cookieMetadata = $this->_cookieMetadataFactory->createSensitiveCookieMetadata()
             ->setPath($this->sessionConfig->getCookiePath());
         $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
         return $this;
@@ -379,11 +387,27 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
             ->setDuration($duration)
             ->setPath($path)
+            ->setSecure($this->getRequest()->isSecure())
             ->setHttpOnly(true);
         $this->_cookieManager->setPublicCookie(
             self::COOKIE_NAME,
             $value,
             $publicCookieMetadata
         );
+    }
+
+    /**
+     * Get request object
+     *
+     * @return \Magento\Framework\App\Request\Http
+     * @deprecated
+     */
+    private function getRequest()
+    {
+        if ($this->request == null) {
+            $this->request = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\App\Request\Http');
+        }
+        return $this->request;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Code\Generator;
@@ -325,6 +325,8 @@ abstract class EntityAbstract
             $parameterInfo['type'] = 'array';
         } elseif ($parameter->getClass()) {
             $parameterInfo['type'] = $this->_getFullyQualifiedClassName($parameter->getClass()->getName());
+        } elseif ($parameter->isCallable()) {
+            $parameterInfo['type'] = 'callable';
         }
 
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {

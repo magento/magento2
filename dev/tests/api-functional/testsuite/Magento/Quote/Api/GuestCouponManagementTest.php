@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -147,7 +147,9 @@ class GuestCouponManagementTest extends WebapiAbstract
         $quote->load('test01', 'reserved_order_id');
         $cartId = $this->getQuoteMaskedId($quote->getId());
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
-        $salesRule->load('Test Coupon', 'name');
+        $salesRuleId = $this->objectManager->get('Magento\Framework\Registry')
+            ->registry('Magento/Checkout/_file/discount_10percent');
+        $salesRule->load($salesRuleId);
         $couponCode = $salesRule->getPrimaryCoupon()->getCode();
         $serviceInfo = [
             'rest' => [

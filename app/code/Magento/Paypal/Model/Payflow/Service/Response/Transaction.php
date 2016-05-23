@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response;
@@ -80,7 +80,7 @@ class Transaction
      * Returns gateway response data object
      *
      * @param array $gatewayTransactionResponse
-     * @return Object
+     * @return DataObject
      */
     public function getResponseObject($gatewayTransactionResponse)
     {
@@ -106,7 +106,7 @@ class Transaction
 
         /** @var InfoInterface $payment */
         $payment = $this->paymentManagement->get($quote->getId());
-        $payment->setAdditionalInformation('pnref', $response->getPnref());
+        $payment->setAdditionalInformation(Transparent::PNREF, $response->getPnref());
 
         $this->errorHandler->handle($payment, $response);
 

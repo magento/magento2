@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -96,5 +96,14 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($attributeMetadata->getValidationRules(), 'Validation rules are not set');
         $this->assertEquals('static', $attributeMetadata->getBackendType(), 'Backend type is invalid');
         $this->assertEquals('Company', $attributeMetadata->getFrontendLabel(), 'Frontend label is invalid');
+    }
+
+    protected function tearDown()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /* @var \Magento\Framework\Config\CacheInterface $cache */
+        $cache = $objectManager->create('Magento\Framework\Config\CacheInterface');
+        $cache->remove('extension_attributes_config');
     }
 }

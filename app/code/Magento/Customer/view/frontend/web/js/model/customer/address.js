@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -32,6 +32,7 @@ define([], function() {
             vatId: addressData.vat_id,
             sameAsBilling: addressData.same_as_billing,
             saveInAddressBook: addressData.save_in_address_book,
+            customAttributes: addressData.custom_attributes,
             isDefaultShipping: function() {
                 return addressData.default_shipping;
             },

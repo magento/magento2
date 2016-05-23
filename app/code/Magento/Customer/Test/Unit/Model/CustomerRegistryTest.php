@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,7 +36,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     const CUSTOMER_EMAIL = 'customer@example.com';
     const WEBSITE_ID = 1;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerFactory = $this->getMockBuilder('Magento\Customer\Model\CustomerFactory')
             ->setMethods(['create'])

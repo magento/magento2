@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -97,7 +97,7 @@ class GalleryManagementTest extends \PHPUnit_Framework_TestCase
         $productSku = 'mediaProduct';
         $entryContentMock = $this->getMockBuilder('\Magento\Framework\Api\Data\ImageContentInterface')
             ->disableOriginalConstructor()
-            ->getMock();;
+            ->getMock();
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
         $this->productRepositoryMock->expects($this->once())
             ->method('get')

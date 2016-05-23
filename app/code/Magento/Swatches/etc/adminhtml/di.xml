@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -23,5 +23,8 @@
         <arguments>
             <argument name="attributesList" xsi:type="object">Magento\Swatches\Model\AttributesList</argument>
         </arguments>
+    </type>
+    <type name="\Magento\Catalog\Model\ResourceModel\Eav\Attribute">
+        <plugin name="invalidate_caches_after_attribute_save" type="Magento\Swatches\Plugin\Catalog\CacheInvalidate" />
     </type>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Block\Billing;
@@ -59,7 +59,7 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
      */
     private $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -56,6 +56,7 @@ class ConfigOptionsListConstants
      */
     const SESSION_SAVE_FILES = 'files';
     const SESSION_SAVE_DB = 'db';
+    const SESSION_SAVE_REDIS = 'redis';
     /**#@-*/
 
     /**

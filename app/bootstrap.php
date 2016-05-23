@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,17 +9,16 @@
  */
 error_reporting(E_ALL);
 #ini_set('display_errors', 1);
-umask(0);
 
 /* PHP version validation */
-if (version_compare(phpversion(), '5.5.0', '<') === true) {
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50522) {
     if (PHP_SAPI == 'cli') {
-        echo 'Magento supports PHP 5.5.0 or later. ' .
+        echo 'Magento supports PHP 5.5.22 or later. ' .
             'Please read http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 5.5.0 or later. Please read
+    <p>Magento supports PHP 5.5.22 or later. Please read
     <a target="_blank" href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html">
     Magento System Requirements</a>.
 </div>
@@ -30,6 +29,11 @@ HTML;
 
 require_once __DIR__ . '/autoload.php';
 require_once BP . '/app/functions.php';
+
+/* Custom umask value may be provided in optional mage_umask file in root */
+$umaskFile = BP . '/magento_umask';
+$mask = file_exists($umaskFile) ? octdec(file_get_contents($umaskFile)) : 002;
+umask($mask);
 
 if (!empty($_SERVER['MAGE_PROFILER'])
     && isset($_SERVER['HTTP_ACCEPT'])

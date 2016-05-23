@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,6 +34,10 @@ $createDateStore = $block->getStoreCreateDate();
             <td><?php /* @escapeNotVerified */ echo $lastLoginDateStore ?> (<?php /* @escapeNotVerified */ echo $block->getCurrentStatus() ?>)</td>
         </tr>
         <?php endif; ?>
+        <tr>
+            <th><?php /* @escapeNotVerified */ echo __('Account Lock:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $block->getAccountLock() ?></td>
+        </tr>
         <tr>
             <th><?php /* @escapeNotVerified */ echo __('Confirmed email:') ?></th>
             <td><?php /* @escapeNotVerified */ echo $block->getIsConfirmedStatus() ?></td>

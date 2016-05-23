@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,8 +31,6 @@ $attribute->setAttributeCode(
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(
     'simple'
-)->setId(
-    101
 )->setAttributeSetId(
     $attributeSetId
 )->setStoreId(
@@ -42,7 +40,7 @@ $product->setTypeId(
 )->setName(
     'Simple Product FPT'
 )->setSku(
-    'simple'
+    'simple-with-ftp'
 )->setPrice(
     100
 )->setFptForAll(

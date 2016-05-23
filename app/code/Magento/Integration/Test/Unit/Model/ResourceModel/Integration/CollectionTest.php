@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Integration;
@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $collection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()

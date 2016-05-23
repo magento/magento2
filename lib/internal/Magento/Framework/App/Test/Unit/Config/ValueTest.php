@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\Config;
@@ -190,5 +190,14 @@ class ValueTest extends \PHPUnit_Framework_TestCase
             [0, 'some_value'],
             [1, 'other_value'],
         ];
+    }
+
+    /**
+     * @return void;
+     */
+    public function testAfterDelete()
+    {
+        $this->cacheTypeListMock->expects($this->once())->method('invalidate');
+        $this->assertInstanceOf(get_class($this->model), $this->model->afterDelete());
     }
 }

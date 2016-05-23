@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Ui\Component\Listing\Column;
@@ -71,15 +71,6 @@ class BlockActions extends Column
                                 ]
                             ),
                             'label' => __('Edit')
-                        ],
-                        'details' => [
-                            'href' => $this->urlBuilder->getUrl(
-                                static::URL_PATH_DETAILS,
-                                [
-                                    'block_id' => $item['block_id']
-                                ]
-                            ),
-                            'label' => __('Details')
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="One page check out with Braintree payment method.">
+        <variation name="OnePageCheckoutBraintree3dSecureNotTriggeredThresholdTestVariation1" summary="Registered Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to Threshold Amount" ticketId="MAGETWO-46763">
+            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
+            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">145.98</item>
+            </data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
+            <data name="configData" xsi:type="string">braintree, braintree_3d_secure_not_triggered_due_threshold</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+        </variation>
+        <variation name="OnePageCheckoutBraintree3dSecureNotTriggeredSpecificCountryTestVariation2" summary="Guest Checkout with Braintree Credit Card from Storefront with 3D Secure verification not triggered due to selected Specific Country" ticketId="MAGETWO-46488">
+            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">145.98</item>
+            </data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree_3dsecure</data>
+            <data name="configData" xsi:type="string">braintree, braintree_3d_secure_uk</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+        </variation>
+        <variation name="OnePageCheckoutBraintreeTestVariation3" summary="Checkout with Braintree Credit Card from Storefront (Payment Action = Authorize)" ticketId="MAGETWO-38313">
+            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">145.98</item>
+            </data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="configData" xsi:type="string">braintree</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
+        </variation>
+        <variation name="OnePageCheckoutBraintreeTestVariation4" summary="Checkout with Braintree for payment action Authorize and Capture" ticketId="MAGETWO-38420">
+            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, configurableProduct::with_one_option, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
+            <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
+            <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
+            <data name="prices" xsi:type="array">
+                <item name="grandTotal" xsi:type="string">145.98</item>
+            </data>
+            <data name="capturedPrices" xsi:type="array">
+                <item name="0" xsi:type="string">145.98</item>
+            </data>
+            <data name="payment/method" xsi:type="string">braintree</data>
+            <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
+            <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
+            <data name="configData" xsi:type="string">braintree_sale</data>
+            <data name="status" xsi:type="string">Processing</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderStatusIsCorrect" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory" />
+        </variation>
+    </testCase>
+</config>

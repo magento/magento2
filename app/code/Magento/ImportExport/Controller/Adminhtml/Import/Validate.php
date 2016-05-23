@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
@@ -55,7 +55,7 @@ class Validate extends ImportResultController
                 $errorAggregator = $import->getErrorAggregator();
                 if (!$validationResult) {
                     $resultBlock->addError(
-                        __('Data validation is failed. Please fix errors and re-upload the file..')
+                        __('Data validation failed. Please fix the following errors and upload the file again.')
                     );
                     $this->addErrorMessages($resultBlock, $errorAggregator);
                 } else {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Dhl\Test\Unit\Model;
@@ -49,7 +49,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

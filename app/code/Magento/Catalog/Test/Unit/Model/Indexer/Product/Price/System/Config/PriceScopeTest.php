@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\System\Config;
@@ -27,7 +27,7 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexerRegistryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -50,7 +50,6 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
         $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-
 
         $this->_model = $this->_objectManager->getObject(
             'Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope',

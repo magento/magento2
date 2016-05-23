@@ -1,42 +1,49 @@
-"--Please Select--","--Please Select--"
-Enabled,Enabled
-label,label
 State/Province,State/Province
-Continue,Continue
-"We can't initialize the import model.","We can't initialize the import model."
-Currency,Currency
+"--Please Select--","--Please Select--"
+lbs,lbs
+kgs,kgs
+"Requested country is not available.","Requested country is not available."
 "Please correct the target currency.","Please correct the target currency."
 "Undefined rate from ""%1-%2"".","Undefined rate from ""%1-%2""."
-"We can't retrieve a rate from %1.","We can't retrieve a rate from %1."
+label,label
+"We can\'t retrieve a rate from %1 for %2.","We can\'t retrieve a rate from %1 for %2."
+"We can\'t retrieve a rate from %1.","We can\'t retrieve a rate from %1."
 "FATAL ERROR:","FATAL ERROR:"
+"We can\'t initialize the import model.","We can\'t initialize the import model."
 "Please specify the correct Import Service.","Please specify the correct Import Service."
 WARNING:,WARNING:
 "Please correct the country code: %1.","Please correct the country code: %1."
 "Country and Format Type combination should be unique","Country and Format Type combination should be unique"
 "Please correct the rates received","Please correct the rates received"
-"--Please select--","--Please select--"
+"Please select a region, state or province.","Please select a region, state or province."
+Currency,Currency
 "Your current currency is: %1.","Your current currency is: %1."
-"Start Time","Start Time"
-Frequency,Frequency
+Continue,Continue
+"Currency Update Warnings","Currency Update Warnings"
 "Currency Setup","Currency Setup"
 "Currency Options","Currency Options"
 "Base Currency","Base Currency"
 "
-                        Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").
+                        Base currency is used for all online payment transactions. The base currency scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").
                     ","
-                        Base currency is used for all online payment transactions. If you have more than one store view, the base currency scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").
+                        Base currency is used for all online payment transactions. The base currency scope is defined by the catalog price scope (""Catalog"" > ""Price"" > ""Catalog Price Scope"").
                     "
 "Default Display Currency","Default Display Currency"
 "Allowed Currencies","Allowed Currencies"
 Webservicex,Webservicex
 "Connection Timeout in Seconds","Connection Timeout in Seconds"
 "Scheduled Import Settings","Scheduled Import Settings"
+Enabled,Enabled
 "Error Email Recipient","Error Email Recipient"
 "Error Email Sender","Error Email Sender"
 "Error Email Template","Error Email Template"
+"Email template chosen based on theme fallback when ""Default"" option is selected.","Email template chosen based on theme fallback when ""Default"" option is selected."
+Frequency,Frequency
 Service,Service
+"Start Time","Start Time"
 "Installed Currencies","Installed Currencies"
 "Zip/Postal Code is Optional for","Zip/Postal Code is Optional for"
 "State Options","State Options"
 "State is Required for","State is Required for"
 "Allow to Choose State if It is Optional for Country","Allow to Choose State if It is Optional for Country"
+"Weight Unit","Weight Unit"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Layout;
@@ -411,7 +411,9 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         // Testing error message is logged with logger
         $this->_logger->expects($this->once())->method('info')
-            ->with('Cache file with merged layout: ' . $cacheId . ': ' . array_shift($messages));
+            ->with(
+                'Cache file with merged layout: ' . $cacheId . ' and handles default' . ': ' . array_shift($messages)
+            );
 
         $this->_model->load();
     }

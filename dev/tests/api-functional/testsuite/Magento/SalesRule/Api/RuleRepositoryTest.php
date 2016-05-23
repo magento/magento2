@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Api;
@@ -32,8 +32,6 @@ class RuleRepositoryTest extends WebapiAbstract
             'description' => 'Test sales rule',
             'website_ids' => [1],
             'customer_group_ids' => [0, 1, 3],
-            'from_date' => '2015-06-09',
-            'to_date' => '2018-06-09',
             'uses_per_customer' => 2,
             'is_active' => 1,
             'condition' => [

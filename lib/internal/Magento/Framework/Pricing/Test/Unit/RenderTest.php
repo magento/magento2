@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit;
@@ -42,7 +42,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $renderPool;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceLayout = $this->getMockBuilder('Magento\Framework\Pricing\Render\Layout')
             ->disableOriginalConstructor()

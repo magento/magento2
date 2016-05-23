@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Report;
@@ -42,7 +42,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
      */
     protected $csvModel;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -74,7 +74,6 @@ class CsvTest extends \PHPUnit_Framework_TestCase
         $this->sourceCsvFactoryMock->expects($this->any())->method('create')->willReturn($this->sourceCsvMock);
 
         $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-
 
         $this->csvModel = $objectManager->getObject(
             '\Magento\ImportExport\Model\Report\Csv',

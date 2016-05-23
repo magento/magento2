@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Address;
@@ -33,7 +33,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock order address model
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->addressMock = $this->getMock(
             'Magento\Sales\Model\Order\Address',

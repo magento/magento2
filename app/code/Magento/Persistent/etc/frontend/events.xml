@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,9 +11,6 @@
     </event>
     <event name="customer_logout">
         <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentOnLogoutObserver" />
-    </event>
-    <event name="controller_front_send_response_after">
-        <observer name="persistent" instance="Magento\Persistent\Observer\SynchronizePersistentInfoObserver" />
     </event>
     <event name="controller_action_predispatch_customer_account_loginPost">
         <observer name="persistent" instance="Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver" />

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation;
@@ -73,7 +73,7 @@ class DataProvider implements DataProviderInterface
         array $dimensions,
         Table $entityIdsTable
     ) {
-        $currentScope = $dimensions['scope']->getValue();
+        $currentScope = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
 
         $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $bucket->getField());
 

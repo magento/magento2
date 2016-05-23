@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Model\Cache;
@@ -16,7 +16,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Cache\Type\FrontendPool */
     protected $cacheFrontendPoolMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->disableOriginalConstructor()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model\Type;
@@ -445,7 +445,9 @@ class Onepage
                 if (!isset($data[$attributeCode])) {
                     $address->setData($attributeCode, null);
                 } else {
-                    $address->setDataUsingMethod($attributeCode, $compactedData[$attributeCode]);
+                    if (isset($compactedData[$attributeCode])) {
+                        $address->setDataUsingMethod($attributeCode, $compactedData[$attributeCode]);
+                    }
                 }
             }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model;
@@ -61,17 +61,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultWebsiteId()
     {
-        $id = 1;
-        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $websiteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($id);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($websiteMock);
-        $this->assertEquals($id, $this->model->getDefaultScopeId());
+        $this->assertEquals(0, $this->model->getDefaultScopeId());
     }
 
     public function testGetIsQtyTypeIds()

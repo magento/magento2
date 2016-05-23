@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Model\Fs;
@@ -91,7 +91,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         $filename = '.htaccess';
         if (!$this->_varDirectory->isFile($filename)) {
             $this->_varDirectory->writeFile($filename, 'deny from all');
-            $this->_varDirectory->changePermissions($filename, 0640);
         }
     }
 

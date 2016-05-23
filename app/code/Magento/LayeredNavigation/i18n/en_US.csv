@@ -1,19 +1,22 @@
-No,No
-Previous,Previous
-Position,Position
-"Shop By","Shop By"
-"Shopping Options","Shopping Options"
-"Remove This Item","Remove This Item"
-"Clear All","Clear All"
-"Use In Layered Navigation","Use In Layered Navigation"
-"Can be used only with catalog input type Dropdown, Multiple Select and Price","Can be used only with catalog input type Dropdown, Multiple Select and Price"
 "Filterable (with results)","Filterable (with results)"
 "Filterable (no results)","Filterable (no results)"
-"Use In Search Results Layered Navigation","Use In Search Results Layered Navigation"
-"Position in Layered Navigation","Position in Layered Navigation"
-"Position of attribute in layered navigation block","Position of attribute in layered navigation block"
+No,No
 "Use in Layered Navigation","Use in Layered Navigation"
-"Currently Shopping by:","Currently Shopping by:"
+"Can be used only with catalog input type Dropdown, Multiple Select and Price","Can be used only with catalog input type Dropdown, Multiple Select and Price"
+"Can be used only with catalog input type Dropdown, Multiple Select and Price.","Can be used only with catalog input type Dropdown, Multiple Select and Price."
+"Use in Search Results Layered Navigation","Use in Search Results Layered Navigation"
+Position,Position
+"Position in Layered Navigation","Position in Layered Navigation"
+"Position of attribute in layered navigation block.","Position of attribute in layered navigation block."
+item,item
+items,items
+"Now Shopping by","Now Shopping by"
+Previous,Previous
+Remove,Remove
+"Remove This Item","Remove This Item"
+"Shop By","Shop By"
+"Clear All","Clear All"
+"Shopping Options","Shopping Options"
 "Layered Navigation","Layered Navigation"
 "Display Product Count","Display Product Count"
 "Price Navigation Step Calculation","Price Navigation Step Calculation"

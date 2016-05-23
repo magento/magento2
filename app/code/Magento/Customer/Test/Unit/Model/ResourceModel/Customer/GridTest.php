@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Customer;
@@ -33,7 +33,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /** @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject */
     protected $queryResult;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);

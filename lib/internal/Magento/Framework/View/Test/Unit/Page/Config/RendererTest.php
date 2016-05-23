@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -147,13 +147,15 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             'content_type' => 'content_type_value',
             'x_ua_compatible' => 'x_ua_compatible_value',
             'media_type' => 'media_type_value',
+            'og:video:secure_url' => 'secure_url'
         ];
         $metadataValueCharset = 'newCharsetValue';
 
         $expected = '<meta charset="newCharsetValue"/>' . "\n"
             . '<meta name="metadataName" content="metadataValue"/>' . "\n"
             . '<meta http-equiv="Content-Type" content="content_type_value"/>' . "\n"
-            . '<meta http-equiv="X-UA-Compatible" content="x_ua_compatible_value"/>' . "\n";
+            . '<meta http-equiv="X-UA-Compatible" content="x_ua_compatible_value"/>' . "\n"
+            . '<meta property="og:video:secure_url" content="secure_url"/>' . "\n";
 
         $this->stringMock->expects($this->at(0))
             ->method('upperCaseWords')
@@ -179,11 +181,15 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($this->titleMock));
+            ->willReturn($this->titleMock);
 
         $this->titleMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($title));
+            ->willReturn($title);
+
+        $this->escaperMock->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->assertEquals($expected, $this->renderer->renderTitle());
     }

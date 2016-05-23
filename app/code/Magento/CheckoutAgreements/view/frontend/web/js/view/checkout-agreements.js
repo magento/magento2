@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -11,8 +11,9 @@ define(
     ],
     function (ko, $, Component, agreementsModal) {
         'use strict';
-        var agreementsConfig = window.checkoutConfig.checkoutAgreements,
-            agreementManualMode = 1;
+        var checkoutConfig = window.checkoutConfig,
+            agreementManualMode = 1,
+            agreementsConfig = checkoutConfig ? checkoutConfig.checkoutAgreements : {};
 
         return Component.extend({
             defaults: {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model;
@@ -247,7 +247,9 @@ class Config
      */
     protected function _getAttributeKey($entityTypeCode, $attributeCode)
     {
-        return 'ATTRIBUTE/' . $entityTypeCode . '/' . $attributeCode;
+        $codeSegments = explode('.', $attributeCode);
+
+        return 'ATTRIBUTE/' . $entityTypeCode . '/' . array_pop($codeSegments);
     }
 
     /**

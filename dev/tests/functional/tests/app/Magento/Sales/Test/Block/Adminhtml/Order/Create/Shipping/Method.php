@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -36,7 +36,9 @@ class Method extends Block
      */
     public function selectShippingMethod(array $shippingMethod)
     {
-        $this->_rootElement->find($this->shippingMethodsLink)->click();
+        if ($this->_rootElement->find($this->shippingMethodsLink)->isVisible()) {
+            $this->_rootElement->find($this->shippingMethodsLink)->click();
+        }
         $selector = sprintf(
             $this->shippingMethod,
             $shippingMethod['shipping_service'],
