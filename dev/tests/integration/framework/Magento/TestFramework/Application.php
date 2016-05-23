@@ -573,7 +573,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            mkdir($dir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            mkdir($dir);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));

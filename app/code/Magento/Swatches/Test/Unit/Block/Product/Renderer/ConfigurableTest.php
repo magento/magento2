@@ -311,7 +311,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaCallback()
     {
-        $this->urlBuilder->expects($this->once())->method('getBaseUrl')->willReturn('http://magento.com/');
-        $this->assertContains(Configurable::MEDIA_CALLBACK_ACTION, $this->configurable->getMediaCallback());
+        $url = 'http://localhost/' . Configurable::MEDIA_CALLBACK_ACTION;
+
+        $this->urlBuilder->expects($this->once())
+            ->method('getUrl')
+            ->with(Configurable::MEDIA_CALLBACK_ACTION)
+            ->willReturn($url);
+
+        $this->assertEquals($url, $this->configurable->getMediaCallback());
     }
 }
