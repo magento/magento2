@@ -12,7 +12,7 @@ use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\Customer;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Framework\Indexer\IndexerInterface;
-
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -125,6 +125,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     private $dateTimeFormatter;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $attributeCacheMock;
+
+    /**
      * Test method
      */
     protected function setUp()
@@ -193,26 +198,33 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->indexerRegistryMock = $this->getMockBuilder('Magento\Framework\Indexer\IndexerRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->attribute = new Attribute(
-            $this->contextMock,
-            $this->registryMock,
-            $this->extensionAttributesFactory,
-            $this->attributeValueFactoryMock,
-            $this->configMock,
-            $this->typeFactoryMock,
-            $this->storeManagerMock,
-            $this->helperMock,
-            $this->universalFactoryMock,
-            $this->attributeOptionFactoryMock,
-            $this->dataObjectProcessorMock,
-            $this->dataObjectHelperMock,
-            $this->timezoneMock,
-            $this->reservedAttributeListMock,
-            $this->resolverMock,
-            $this->dateTimeFormatter,
-            $this->indexerRegistryMock,
-            $this->resourceMock
+        $this->attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->attribute = $objectManagerHelper->getObject(
+            Attribute::class,
+            [
+                'context' => $this->contextMock,
+                'registry' => $this->registryMock,
+                'extensionFactory' => $this->extensionAttributesFactory,
+                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'eavConfig' => $this->configMock,
+                'typeFactory' => $this->typeFactoryMock,
+                'storeManager' => $this->storeManagerMock,
+                'helper' => $this->helperMock,
+                'universalFactory' => $this->universalFactoryMock,
+                'attributeOptionFactory' => $this->attributeOptionFactoryMock,
+                'dataObjectProcessor' => $this->dataObjectProcessorMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'timezone' => $this->timezoneMock,
+                'reservedAttributeList' => $this->reservedAttributeListMock,
+                'resolver' => $this->resolverMock,
+                'dateTimeFormatter' => $this->dateTimeFormatter,
+                'indexerRegistry' => $this->indexerRegistryMock,
+                'resource' => $this->resourceMock,
+                'attributeCache' => $this->attributeCacheMock,
+            ]
         );
     }
 

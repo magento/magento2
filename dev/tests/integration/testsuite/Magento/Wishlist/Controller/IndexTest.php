@@ -5,8 +5,6 @@
  */
 namespace Magento\Wishlist\Controller;
 
-use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
-
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
@@ -96,28 +94,16 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $productRepository->get('product-with-xss');
 
         $this->dispatch('wishlist/index/add/product/' . $product->getId() . '?nocookie=1');
-        $messages = $this->_messages->getMessages()->getItems();
-        $isProductNamePresent = false;
 
-        /** @var InterpretationStrategyInterface $interpretationStrategy */
-        $interpretationStrategy = $this->_objectManager->create(
-            'Magento\Framework\View\Element\Message\InterpretationStrategyInterface'
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    "\n&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt; has been added to your Wish List. "
+                    . 'Click <a href="http://localhost/index.php/">here</a> to continue shopping.',
+                ]
+            ),
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
         );
-        foreach ($messages as $message) {
-            if (
-                strpos(
-                    $interpretationStrategy->interpret($message),
-                    '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;'
-                ) !== false
-            ) {
-                $isProductNamePresent = true;
-            }
-            $this->assertNotContains(
-                '<script>alert("xss");</script>',
-                $interpretationStrategy->interpret($message)
-            );
-        }
-        $this->assertTrue($isProductNamePresent, 'Product name was not found in session messages');
     }
 
     /**
