@@ -20,6 +20,11 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     const STORE_ID = 2514;
 
     /**
+     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeCollection;
@@ -127,12 +132,19 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $attributeCollectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->attributeCollection);
+        $this->attributeCollection->expects($this->never())
+            ->method('getItemByColumnValue');
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->setMethods(['getAttribute'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->target = $objectManager->getObject(
             \Magento\CatalogSearch\Model\Search\TableMapper::class,
             [
                 'resource' => $this->resource,
                 'storeManager' => $this->storeManager,
-                'attributeCollectionFactory' => $attributeCollectionFactory
+                'attributeCollectionFactory' => $attributeCollectionFactory,
+                'eavConfig' => $this->eavConfig,
             ]
         );
 
@@ -152,7 +164,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->willReturn($query);
         $this->select->expects($this->once())
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['price_index' => 'prefix_catalog_product_index_price'],
                 'search_index.entity_id = price_index.entity_id AND price_index.website_id = ' . self::WEBSITE_ID,
@@ -172,7 +184,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->willReturn($query);
         $this->select->expects($this->once())
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['static_filter' => 'backend_table'],
                 'search_index.entity_id = static_filter.entity_id',
@@ -191,7 +203,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getQuery')
             ->willReturn($query);
         $this->select->expects($this->once())
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['category_ids_index' => 'prefix_catalog_category_product_index'],
                 'search_index.entity_id = category_ids_index.product_id',
@@ -309,7 +321,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturnSelf();
         $this->select->expects($this->at(1))
-            ->method('joinLeft')
+            ->method('joinInner')
             ->with(
                 ['price_index' => 'prefix_catalog_product_index_price'],
                 'search_index.entity_id = price_index.entity_id AND price_index.website_id = ' . self::WEBSITE_ID,
@@ -586,9 +598,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($backendTable);
         $attribute->method('getFrontendInput')
             ->willReturn($frontendInput);
-        $this->attributeCollection->expects($this->at($positionInCollection))
-            ->method('getItemByColumnValue')
-            ->with('attribute_code', $code)
+        $this->eavConfig->expects($this->at($positionInCollection))
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, $code)
             ->willReturn($attribute);
     }
 }
