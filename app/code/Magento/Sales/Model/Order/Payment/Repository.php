@@ -60,7 +60,6 @@ class Repository implements OrderPaymentRepositoryInterface
                 $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-        $collection->setSearchCriteria($searchCriteria);
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
         return $collection;

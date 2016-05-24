@@ -63,5 +63,7 @@ class ShipmentListTest extends WebapiAbstract
         // TODO Test fails, due to the inability of the framework API to handle data collection
         $this->assertArrayHasKey('items', $result);
         $this->assertCount(1, $result['items']);
+        $this->assertArrayHasKey('search_criteria', $result);
+        $this->assertEquals($searchData, $result['search_criteria']);
     }
 }
