@@ -212,10 +212,6 @@ define([
             return this;
         },
 
-        compareArrays: function (o, r) {
-            return compareArrays(o,r);
-        },
-
         /**
          * Checks columnsHeaderAfterRender property,
          * and set listener on elems if needed
