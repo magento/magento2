@@ -8,6 +8,7 @@ namespace Magento\Paypal\Model;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Paypal\Model\Express\Checkout as ExpressCheckout;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
@@ -666,14 +667,24 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
-        $result = parent::assignData($data);
-        $key = ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT;
-        if (is_array($data)) {
-            $this->getInfoInstance()->setAdditionalInformation($key, isset($data[$key]) ? $data[$key] : null);
-        } elseif ($data instanceof \Magento\Framework\DataObject) {
-            $this->getInfoInstance()->setAdditionalInformation($key, $data->getData($key));
+        parent::assignData($data);
+        
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+
+        if (
+            !is_array($additionalData)
+            || !isset($additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT])
+        ) {
+            return $this;
         }
-        return $result;
+
+        $this->getInfoInstance()
+            ->setAdditionalInformation(
+                ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT,
+                $additionalData[ExpressCheckout::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT]
+            );
+        
+        return $this;
     }
 
     /**

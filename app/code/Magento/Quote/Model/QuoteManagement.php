@@ -21,6 +21,8 @@ use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Class QuoteManagement
@@ -129,6 +131,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @var QuoteFactory
      */
     protected $quoteFactory;
+
+    /**
+     * @var QuoteIdMaskFactory
+     */
+    private $quoteIdMaskFactory;
 
     /**
      * @param EventManager $eventManager
@@ -262,6 +269,12 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
+        $quoteIdMaskFactory = $this->getQuoteIdMaskFactory();
+        /** @var  \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+        $quoteIdMask = $quoteIdMaskFactory->create()->load($cartId, 'quote_id');
+        if ($quoteIdMask->getId()) {
+            $quoteIdMask->delete();
+        }
         $this->quoteRepository->save($quote);
         return true;
 
@@ -546,5 +559,17 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);
         }
+    }
+
+    /**
+     * @return QuoteIdMaskFactory
+     * @deprecated
+     */
+    private function getQuoteIdMaskFactory()
+    {
+        if (!$this->quoteIdMaskFactory) {
+            $this->quoteIdMaskFactory = ObjectManager::getInstance()->get(QuoteIdMaskFactory::class);
+        }
+        return $this->quoteIdMaskFactory;
     }
 }

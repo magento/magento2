@@ -141,6 +141,8 @@
     <preference for="Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface" type="Magento\Framework\Stdlib\DateTime\DateTimeFormatter"/>
     <preference for="Magento\Framework\Api\Search\SearchInterface" type="Magento\Framework\Search\Search"/>
     <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple" />
+    <preference for="Cm\RedisSession\Handler\ConfigInterface" type="Magento\Framework\Session\SaveHandler\Redis\Config"/>
+    <preference for="Cm\RedisSession\Handler\LoggerInterface" type="Magento\Framework\Session\SaveHandler\Redis\Logger"/>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -186,7 +188,14 @@
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="db" xsi:type="string">Magento\Framework\Session\SaveHandler\DbTable</item>
+                <item name="redis" xsi:type="string">Magento\Framework\Session\SaveHandler\Redis</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SaveHandler\Redis">
+        <arguments>
+            <argument name="config" xsi:type="object">Cm\RedisSession\Handler\ConfigInterface</argument>
+            <argument name="logger" xsi:type="object">Cm\RedisSession\Handler\LoggerInterface</argument>
         </arguments>
     </type>
     <virtualType name="interceptionConfigScope" type="Magento\Framework\Config\Scope">

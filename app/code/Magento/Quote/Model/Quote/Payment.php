@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Quote\Api\Data\PaymentInterface;
+
 /**
  * Quote payment information
  *
@@ -143,6 +145,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function importData(array $data)
     {
+        $data = $this->convertPaymentData($data);
         $data = new \Magento\Framework\DataObject($data);
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_import_data_before',
@@ -172,6 +175,37 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
          */
         $method->validate();
         return $this;
+    }
+
+    /**
+     * Converts request to payment data
+     *
+     * @param array $rawData
+     * @return array
+     */
+    private function convertPaymentData(array $rawData)
+    {
+        $paymentData = [
+            PaymentInterface::KEY_METHOD => null,
+            PaymentInterface::KEY_PO_NUMBER => null,
+            PaymentInterface::KEY_ADDITIONAL_DATA => [],
+            'checks' => []
+        ];
+
+        foreach (array_keys($rawData) as $requestKey) {
+            if (!array_key_exists($requestKey, $paymentData)) {
+                $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA][$requestKey] = $rawData[$requestKey];
+            } elseif ($requestKey === PaymentInterface::KEY_ADDITIONAL_DATA) {
+                $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA] = array_merge(
+                    $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA],
+                    (array) $rawData[$requestKey]
+                );
+            } else {
+                $paymentData[$requestKey] = $rawData[$requestKey];
+            }
+        }
+
+        return $paymentData;
     }
 
     /**
@@ -223,7 +257,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function getMethodInstance()
     {
         $method = parent::getMethodInstance();
-        $method->setStore($this->getQuote()->getStore()->getStoreId());
+        $method->setStore($this->getQuote()->getStoreId());
         return $method;
     }
 
