@@ -554,16 +554,16 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.1.8",
+            "version": "0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "3dfac2f626ca36053f68853afe8847f5b290c84d"
+                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/3dfac2f626ca36053f68853afe8847f5b290c84d",
-                "reference": "3dfac2f626ca36053f68853afe8847f5b290c84d",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
+                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
                 "shasum": ""
             },
             "require": {
@@ -626,7 +626,7 @@
                 "composer-installer",
                 "magento"
             ],
-            "time": "2016-05-17 20:24:41"
+            "time": "2016-05-24 16:22:26"
         },
         {
             "name": "magento/zendframework1",
