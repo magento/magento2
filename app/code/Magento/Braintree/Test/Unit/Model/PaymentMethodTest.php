@@ -8,6 +8,8 @@ namespace Magento\Braintree\Test\Unit\Model;
 
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
@@ -62,7 +64,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     protected $registryMock;
 
     /**
-     * @var \Magento\Payment\Model\InfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $infoInstanceMock;
 
@@ -200,29 +202,25 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
                 'orderRepository' => $this->orderRepository
             ]
         );
-        $this->infoInstanceMock = $this->getMockForAbstractClass(
-            '\Magento\Payment\Model\InfoInterface',
-            [],
-            '',
-            false,
-            false,
-            false,
-            [
-                'setCcType',
-                'setCcOwner',
-                'setCcLast4',
-                'setCcNumber',
-                'setCcCid',
-                'setCcExpMonth',
-                'setCcExpYear',
-                'setCcSsIssue',
-                'setCcSsStartMonth',
-                'setCcSsStartYear',
-                'getOrder',
-                'getQuote',
-                'getCcType',
-            ]
-        );
+        $this->infoInstanceMock = $this->getMockBuilder(InfoInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setCcType',
+                    'setCcOwner',
+                    'setCcLast4',
+                    'setCcNumber',
+                    'setCcCid',
+                    'setCcExpMonth',
+                    'setCcExpYear',
+                    'setCcSsIssue',
+                    'setCcSsStartMonth',
+                    'setCcSsStartYear',
+                    'getOrder',
+                    'getQuote',
+                    'getCcType'
+                ]
+            )->getMockForAbstractClass();
         $this->productMetaDataMock->expects($this->any())
             ->method('getEdition')
             ->willReturn('Community Edition');
@@ -234,7 +232,6 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
     public function testAssignData()
     {
         $ccType = 'VI';
-        $ccOwner = 'John Doe';
         $ccExpMonth = '10';
         $ccExpYear = '2020';
 
@@ -244,15 +241,16 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
         $storeInVault = true;
         $deviceData = 'mobile';
         $data = [
-            'cc_type' => $ccType,
-            'cc_owner' => $ccOwner,
-            'cc_exp_month' => $ccExpMonth,
-            'cc_exp_year' => $ccExpYear,
-            'cc_last4' => $ccLast4,
-            'cc_token' => $ccToken,
-            'payment_method_nonce' => $paymentMethodNonce,
-            'store_in_vault' => $storeInVault,
-            'device_data' => $deviceData,
+            'additional_data' => [
+                'cc_type' => $ccType,
+                'cc_exp_month' => $ccExpMonth,
+                'cc_exp_year' => $ccExpYear,
+                'cc_last4' => $ccLast4,
+                'cc_token' => $ccToken,
+                'payment_method_nonce' => $paymentMethodNonce,
+                'store_in_vault' => $storeInVault,
+                'device_data' => $deviceData
+            ]
         ];
         $data = new \Magento\Framework\DataObject($data);
         $this->model->setInfoInstance($this->infoInstanceMock);
@@ -266,20 +264,8 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->with($ccType)
             ->willReturnSelf();
         $this->infoInstanceMock->expects($this->once())
-            ->method('setCcOwner')
-            ->with($ccOwner)
-            ->willReturnSelf();
-        $this->infoInstanceMock->expects($this->once())
             ->method('setCcLast4')
-            ->with(false)
-            ->willReturnSelf();
-        $this->infoInstanceMock->expects($this->once())
-            ->method('setCcNumber')
-            ->with(null)
-            ->willReturnSelf();
-        $this->infoInstanceMock->expects($this->once())
-            ->method('setCcCid')
-            ->with(null)
+            ->with($ccLast4)
             ->willReturnSelf();
         $this->infoInstanceMock->expects($this->once())
             ->method('setCcExpMonth')
@@ -289,34 +275,19 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
             ->method('setCcExpYear')
             ->with($ccExpYear)
             ->willReturnSelf();
-        $this->infoInstanceMock->expects($this->once())
-            ->method('setCcSsIssue')
-            ->with(null)
-            ->willReturnSelf();
-        $this->infoInstanceMock->expects($this->once())
-            ->method('setCcSsStartMonth')
-            ->with(null)
-            ->willReturnSelf();
-        $this->infoInstanceMock->expects($this->once())
-            ->method('setCcSsStartYear')
-            ->with(null)
-            ->willReturnSelf();
 
-        $this->infoInstanceMock->expects($this->at(10))
+        $this->infoInstanceMock->expects($this->atLeastOnce())
             ->method('setAdditionalInformation')
-            ->with('device_data', $deviceData);
-        $this->infoInstanceMock->expects($this->at(11))
-            ->method('setAdditionalInformation')
-            ->with('cc_last4', $ccLast4);
-        $this->infoInstanceMock->expects($this->at(12))
-            ->method('setAdditionalInformation')
-            ->with('cc_token', $ccToken);
-        $this->infoInstanceMock->expects($this->at(13))
-            ->method('setAdditionalInformation')
-            ->with('payment_method_nonce', $paymentMethodNonce);
-        $this->infoInstanceMock->expects($this->at(14))
-            ->method('setAdditionalInformation')
-            ->with('store_in_vault', $storeInVault);
+            ->willReturnMap(
+                [
+                    ['device_data', $deviceData],
+                    ['cc_last4', $ccLast4],
+                    ['cc_token', $ccToken],
+                    ['payment_method_nonce', $paymentMethodNonce],
+                    ['store_in_vault', $storeInVault]
+                ]
+            );
+
         $this->model->assignData($data);
     }
 

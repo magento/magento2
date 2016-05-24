@@ -48,6 +48,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $indexerRegistry;
 
     /**
+     * @var \Magento\Customer\Model\Address\CustomAttributeListInterface
+     */
+    private $attributeList;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -346,5 +351,28 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexRow($this->getCustomerId());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCustomAttributesCodes()
+    {
+        return array_keys($this->getAttributeList()->getAttributes());
+    }
+
+    /**
+     * Get new AttributeList dependency for application code.
+     * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
+     * @deprecated
+     */
+    private function getAttributeList()
+    {
+        if (!$this->attributeList) {
+            $this->attributeList = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Customer\Model\Address\CustomAttributeListInterface::class
+            );
+        }
+        return $this->attributeList;
     }
 }

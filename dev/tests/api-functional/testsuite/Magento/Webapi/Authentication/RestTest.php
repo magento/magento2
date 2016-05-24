@@ -90,6 +90,8 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     public function testGetRequestTokenExpiredConsumer()
     {
         $this::consumerFixture('2012-01-01 00:00:00');
+        $this::$_consumer->setUpdatedAt('2012-01-01 00:00:00');
+        $this::$_consumer->save();
         /** @var $oAuthClient \Magento\TestFramework\Authentication\Rest\OauthClient */
         $oAuthClient = $this->_getOauthClient(self::$_consumerKey, self::$_consumerSecret);
         $oAuthClient->requestRequestToken();

@@ -16,11 +16,15 @@ interface DriverInterface
 {
     /**
      * Permissions to give read/write/execute access to owner and owning group, but not to all users
+     *
+     * @deprecated
      */
     const WRITEABLE_DIRECTORY_MODE = 0770;
 
     /**
      * Permissions to give read/write access to owner and owning group, but not to all users
+     *
+     * @deprecated
      */
     const WRITEABLE_FILE_MODE = 0660;
 
@@ -104,7 +108,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function createDirectory($path, $permissions);
+    public function createDirectory($path, $permissions = 0777);
 
     /**
      * Read directory
