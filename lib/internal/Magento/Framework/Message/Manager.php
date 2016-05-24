@@ -242,7 +242,7 @@ class Manager implements ManagerInterface
         );
 
         $this->logger->critical($message);
-        $this->addMessage($this->messageFactory->create(MessageInterface::TYPE_ERROR, $alternativeText), $group);
+        $this->addError($alternativeText, $group);
         return $this;
     }
 
