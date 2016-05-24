@@ -74,6 +74,8 @@ define([
                 return false;
             }
         }/*eslint-enable max-depth, eqeqeq */
+
+        return true;
     }
 
     /**
@@ -208,6 +210,10 @@ define([
             }
 
             return this;
+        },
+
+        compareArrays: function (o, r) {
+            return compareArrays(o,r);
         },
 
         /**

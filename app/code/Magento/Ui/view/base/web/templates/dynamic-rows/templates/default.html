@@ -51,7 +51,8 @@
 
                 <tfoot>
                     <tr>
-                        <td attr="{'colspan': element.getColumnsCount()}">
+                        <td attr="{'colspan': element.getColumnsCount()}"
+                            visible="element.addButton">
                             <button if="element.addButton"
                                     attr="{disabled: disabled, 'data-action': 'add_new_row'}"
                                     type="button"
