@@ -72,6 +72,12 @@ class CartItemPersister
                     $item = $quote->updateItem($itemId, $buyRequestData);
                 } else {
                     $currentItem->setQty($qty);
+                    if (!empty($currentItem->getErrorInfos())) {
+                        $errors = $currentItem->getErrorInfos();
+                        /** @var \Magento\Framework\Message\MessageInterface $error */
+                        $errorData = array_shift($errors);
+                        throw new CouldNotSaveException($errorData['message']);
+                    }
                 }
             } else {
                 /** add new item to shopping cart */
