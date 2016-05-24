@@ -14,6 +14,83 @@ define([
 ], function (ko, utils, _, layout, uiCollection, registry, $t) {
     'use strict';
 
+    /**
+     * Compares arrays.
+     *
+     * @param {Array} base - array as method bases its decision on first argument.
+     * @param {Array} current - second array
+     *
+     * @returns {Boolean} result - is current array equal to base array
+     */
+    function compareArrays(base, current) {
+        var index = 0,
+            length = base.length;
+
+        if (base.length !== current.length) {
+            return false;
+        }
+
+        /*eslint-disable max-depth, eqeqeq */
+        for (index; index < length; index++) {
+            if (_.isArray(base[index]) && _.isArray(current[index])) {
+                if (!compareArrays(base[index], current[index])) {
+                    return false;
+                }
+            } else if (typeof base[index] === 'object' && typeof current[index] === 'object') {
+                if (!compareObjects(base[index], current[index])) {
+                    return false;
+                }
+            } else if (castValue(base[index]) != castValue(current[index])) {
+                return false;
+            }
+        }/*eslint-enable max-depth, eqeqeq */
+
+        return true;
+    }
+
+    /**
+     * Compares objects. Compares only properties from origin object,
+     * if current object has more properties - they are not considered
+     *
+     * @param {Object} base - first object
+     * @param {Object} current - second object
+     *
+     * @returns {Boolean} result - is current object equal to base object
+     */
+    function compareObjects(base, current) {
+        var prop;
+
+        /*eslint-disable max-depth, eqeqeq*/
+        for (prop in base) {
+            if (_.isArray(base[prop]) && _.isArray(current[prop])) {
+                if (!compareArrays(base[prop], current[prop])) {
+                    return false;
+                }
+            } else if (typeof base[prop] === 'object' && typeof current[prop] === 'object') {
+                if (!compareObjects(base[prop], current[prop])) {
+                    return false;
+                }
+            } else if (castValue(base[prop]) != castValue(current[prop])) {
+                return false;
+            }
+        }/*eslint-enable max-depth, eqeqeq */
+    }
+
+    /**
+     * Checks value type and cast to boolean if needed
+     *
+     * @param {*} value
+     *
+     * @returns {Boolean|*} casted or origin value
+     */
+    function castValue(value) {
+        if (_.isUndefined(value) || value === '' || _.isNull(value)) {
+            return false;
+        }
+
+        return value;
+    }
+
     return uiCollection.extend({
         defaults: {
             defaultRecord: false,
@@ -159,90 +236,12 @@ define([
                     }, this) : recordsData;
 
             if (_.isArray(this.defaultState)) {
-                result = this._compareArrays(this.defaultState, currentData);
+                result = compareArrays(this.defaultState, currentData);
             }
 
             this.isDefaultState(result);
         },
 
-        /**
-         * Compares arrays.
-         *
-         * @param {Object} origin - first array
-         * @param {Object} current - second array
-         *
-         * @returns {Boolean} result - is equal this arrays or not
-         */
-        _compareArrays: function (origin, current) {
-            var index = 0,
-                length = origin.length;
-
-            if (origin.length !== current.length) {
-                return false;
-            }
-
-            /*eslint-disable max-depth, eqeqeq */
-            for (index; index < length; index++) {
-                if (_.isArray(origin[index]) && _.isArray(current[index])) {
-                    if (!this._compareArrays(origin[index], current[index])) {
-                        return false;
-                    }
-                } else if (typeof origin[index] === 'object' && typeof current[index] === 'object') {
-                    if (!this._compareObject(origin[index], current[index])) {
-                        return false;
-                    }
-                } else if (this._castValue(origin[index]) != this._castValue(current[index])) {
-                    return false;
-                }
-            }/*eslint-enable max-depth, eqeqeq */
-
-            return true;
-        },
-
-        /**
-         * Compares objects. Compares only properties from origin object,
-         * if current object has more properties - they are not considered
-         *
-         * @param {Object} origin - first object
-         * @param {Object} current - second object
-         *
-         * @returns {Boolean} result - is equal this objects or not
-         */
-        _compareObject: function (origin, current) {
-            var prop;
-
-            /*eslint-disable max-depth, eqeqeq*/
-            for (prop in origin) {
-                if (_.isArray(origin[prop]) && _.isArray(current[prop])) {
-                    if (!this._compareArrays(origin[prop], current[prop])) {
-                        return false;
-                    }
-                } else if (typeof origin[prop] === 'object' && typeof current[prop] === 'object') {
-                    if (!this._compareObject(origin[prop], current[prop])) {
-                        return false;
-                    }
-                } else if (this._castValue(origin[prop]) != this._castValue(current[prop])) {
-                    return false;
-                }
-            }/*eslint-enable max-depth, eqeqeq */
-
-            return true;
-        },
-
-        /**
-         * Checks value type and cast to boolean if needed
-         *
-         * @param {*} value
-         *
-         * @returns {Boolean|*} casted or origin value
-         */
-        _castValue: function (value) {
-            if (_.isUndefined(value) || value === '' || _.isNull(value)) {
-                return false;
-            }
-
-            return value;
-        },
 
         /**
          * Inits default component state
