@@ -70,6 +70,11 @@ class BillingAddressManagement implements BillingAddressManagementInterface
         $quote = $this->quoteRepository->getActive($cartId);
         $quote->removeAddress($quote->getBillingAddress()->getId());
         $quote->setBillingAddress($address);
+
+        if ($useForShipping) {
+            $quote->setShippingAddress($address);
+        }
+
         try {
             $quote->setDataChanges(true);
             $this->quoteRepository->save($quote);
