@@ -43,7 +43,15 @@ class ShipmentListTest extends WebapiAbstract
             'Magento\Framework\Api\FilterBuilder'
         );
 
-        $searchCriteriaBuilder->addFilters([$filterBuilder->setField('shipment_status')->setValue(1)->create()]);
+        $searchCriteriaBuilder->addFilters(
+            [
+                $filterBuilder
+                    ->setField('shipment_status')
+                    ->setValue((string)\Magento\Sales\Model\Order\Shipment::STATUS_NEW)
+                    ->setConditionType('eq')
+                    ->create()
+            ]
+        );
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];
