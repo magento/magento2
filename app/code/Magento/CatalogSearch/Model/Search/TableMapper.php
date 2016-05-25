@@ -36,17 +36,12 @@ class TableMapper
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
-     * @deprecated
-     */
-    private $attributeCollection;
-
-    /**
      * @var EavConfig
      */
     private $eavConfig;
 
     /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param AppResource $resource
      * @param StoreManagerInterface $storeManager
      * @param CollectionFactory $attributeCollectionFactory
@@ -60,7 +55,6 @@ class TableMapper
     ) {
         $this->resource = $resource;
         $this->storeManager = $storeManager;
-        $this->attributeCollection = $attributeCollectionFactory->create();
         $this->eavConfig = $eavConfig !== null ? $eavConfig : ObjectManager::getInstance()->get(EavConfig::class);
     }
 
@@ -116,7 +110,8 @@ class TableMapper
      *  'table_alias',
      *  'table',
      *  'join_condition',
-     *  ['fields']
+     *  ['fields'],
+     *  'joinType'
      * ]
      * @param FilterInterface $filter
      * @return array
