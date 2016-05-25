@@ -6,7 +6,7 @@
 namespace Magento\Downloadable\Test\Unit\Model\Link;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Api\LinkRepositoryInterface;
 use Magento\Downloadable\Model\Link\UpdateHandler;
@@ -53,15 +53,16 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
         /** @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject $productExtensionMock */
         $productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->getMock();
+            ->setMethods(['getDownloadableProductLinks'])
+            ->getMockForAbstractClass();
         $productExtensionMock->expects($this->once())
             ->method('getDownloadableProductLinks')
             ->willReturn([$linkMock]);
 
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $entityMock */
-        $entityMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        $entityMock = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
+            ->getMockForAbstractClass();
         $entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE);
@@ -91,10 +92,10 @@ class UpdateHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteNonDownloadable()
     {
-        /** @var Product|\PHPUnit_Framework_MockObject_MockObject $entityMock */
-        $entityMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        $entityMock = $this->getMockBuilder(ProductInterface::class)
+            ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
+            ->getMockForAbstractClass();
         $entityMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_DOWNLOADABLE . 'some');
