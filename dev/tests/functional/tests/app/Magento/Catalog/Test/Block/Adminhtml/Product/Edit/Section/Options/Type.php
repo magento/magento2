@@ -49,8 +49,11 @@ class Type extends OptgroupselectElement
      */
     protected function getData(ElementInterface $element)
     {
-        $this->find($this->advancedSelect)->click();
-        return trim($element->getText());
+        $element = $this->find($this->advancedSelect);
+        $element->click();
+        $text = trim($element->getText());
+        $element->click();
+        return $text;
     }
 
     /**
