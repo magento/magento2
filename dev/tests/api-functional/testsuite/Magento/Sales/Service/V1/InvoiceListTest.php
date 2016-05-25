@@ -47,7 +47,8 @@ class InvoiceListTest extends WebapiAbstract
             [
                 $filterBuilder
                     ->setField('state')
-                    ->setValue(2)
+                    ->setValue((string)\Magento\Sales\Model\Order\Invoice::STATE_PAID)
+                    ->setConditionType('eq')
                     ->create(),
             ]
         );
