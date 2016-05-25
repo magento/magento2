@@ -49,10 +49,12 @@ class Type extends OptgroupselectElement
      */
     protected function getData(ElementInterface $element)
     {
-        $element = $this->find($this->advancedSelect);
-        $element->click();
+        //TODO: Delete after complete task MTA-3327
+        $selectedElement = $this->find($this->advancedSelect);
+        $selectedElement->click();
         $text = trim($element->getText());
-        $element->click();
+        $selectedElement->click();
+
         return $text;
     }
 
