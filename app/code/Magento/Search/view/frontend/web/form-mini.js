@@ -71,14 +71,18 @@ define([
                 }.bind(this)
             });
 
+            this.searchLabel.on('click', function (e) {
+                // allow input to lose its' focus when clicking on label
+                if (this.isExpandable && this.isActive()) {
+                    e.preventDefault();
+                }
+            }.bind(this));
+
             this.element.on('blur', $.proxy(function () {
 
                 setTimeout($.proxy(function () {
                     if (this.autoComplete.is(':hidden')) {
-                        this.searchLabel.removeClass('active');
-                        if (this.isExpandable === true) {
-                            this.element.attr('aria-expanded', 'false');
-                        }
+                        this.setActiveState(false);
                     }
                     this.autoComplete.hide();
                     this._updateAriaHasPopup(false);
@@ -87,12 +91,7 @@ define([
 
             this.element.trigger('blur');
 
-            this.element.on('focus', $.proxy(function () {
-                this.searchLabel.addClass('active');
-                if (this.isExpandable === true) {
-                    this.element.attr('aria-expanded', 'true');
-                }
-            }, this));
+            this.element.on('focus', this.setActiveState.bind(this, true));
             this.element.on('keydown', this._onKeyDown);
             this.element.on('input propertychange', this._onPropertyChange);
 
@@ -101,6 +100,29 @@ define([
                 this._updateAriaHasPopup(false);
             }, this));
         },
+
+        /**
+         * Checks if search field is active.
+         *
+         * @returns {Boolean}
+         */
+        isActive: function () {
+            return this.searchLabel.hasClass('active');
+        },
+
+        /**
+         * Sets state of the search field to provided value.
+         *
+         * @param {Boolean} isActive
+         */
+        setActiveState: function (isActive) {
+            this.searchLabel.toggleClass('active', isActive);
+
+            if (this.isExpandable) {
+                this.element.attr('aria-expanded', isActive);
+            }
+        },
+
         /**
          * @private
          * @return {Element} The first element in the suggestion list.
