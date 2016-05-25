@@ -546,7 +546,7 @@ class Generator extends AbstractSchemaGenerator
     }
 
     /**
-     * Converts definition's properties array into snake_case
+     * Converts definitions' properties array to snake_case.
      *
      * @param array $definitions
      * @return array
@@ -557,12 +557,20 @@ class Generator extends AbstractSchemaGenerator
             if (!empty($vals['properties'])) {
                 $definitions[$name]['properties'] = $this->convertArrayToSnakeCase($vals['properties']);
             }
+            if (!empty($vals['required'])) {
+                $snakeCaseRequired = [];
+                foreach ($vals['required'] as $requiredProperty) {
+                    $snakeCaseRequired[]
+                        = \Magento\Framework\Api\SimpleDataObjectConverter::camelCaseToSnakeCase($requiredProperty);
+                }
+                $definitions[$name]['required'] = $snakeCaseRequired;
+            }
         }
         return $definitions;
     }
 
     /**
-     * Converts associative array's key names from camelCase into snake_case
+     * Converts associative array's key names from camelCase to snake_case, recursively.
      *
      * @param array $properties
      * @return array
@@ -570,14 +578,12 @@ class Generator extends AbstractSchemaGenerator
     private function convertArrayToSnakeCase($properties)
     {
         foreach ($properties as $name => $value) {
-            $snakeCaseName = preg_replace_callback(
-                "/([A-Z])/",
-                function ($matches) { return '_' . strtolower($matches[1]);},
-                $name
-            );
-
-            $properties[$snakeCaseName] = $value;
+            $snakeCaseName = \Magento\Framework\Api\SimpleDataObjectConverter::camelCaseToSnakeCase($name);
+            if (is_array($value)) {
+                $value = $this->convertArrayToSnakeCase($value);
+            }
             unset($properties[$name]);
+            $properties[$snakeCaseName] = $value;
         }
         return $properties;
     }
