@@ -99,10 +99,10 @@ class UpgradeCommand extends AbstractSetupCommand
         }
 
         //TODO: to be removed in scope of MAGETWO-53476
-        $writeFactory = $objectManager->get('\Magento\Framework\Filesystem\Directory\WriteFactory');
+        $writeFactory = $objectManager->get('Magento\Framework\Filesystem\Directory\WriteFactory');
         $write = $writeFactory->create(BP);
         /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
-        $dirList = $objectManager->get('\Magento\Framework\App\Filesystem\DirectoryList');
+        $dirList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
 
         $pathToCacheStatus = $write->getRelativePath($dirList->getPath(DirectoryList::VAR_DIR) . '/.cachestates.json');
 
