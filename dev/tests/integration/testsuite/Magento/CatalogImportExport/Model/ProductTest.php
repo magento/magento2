@@ -103,8 +103,6 @@ class ProductTest extends AbstractProductExportImportTestCase
                     'simple',
                 ]
             ],
-            // @todo uncomment after resolving MAGETWO-49676
-            /*
             'simple-product-crosssell' => [
                 [
                     'Magento/Catalog/_files/products_crosssell.php'
@@ -129,7 +127,6 @@ class ProductTest extends AbstractProductExportImportTestCase
                     'simple',
                 ]
             ],
-            */
         ];
     }
 
