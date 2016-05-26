@@ -170,6 +170,48 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock->expects(self::once())
             ->method('getItemsCount')
+            ->willReturn(0);
+
+        $this->requestMock->expects(self::once())
+            ->method('getPostValue')
+            ->with('result', '{}')
+            ->willReturn($result);
+
+        $this->checkoutSessionMock->expects(self::once())
+            ->method('getQuote')
+            ->willReturn($quoteMock);
+
+        $this->quoteUpdaterMock->expects(self::never())
+            ->method('execute');
+
+        $this->messageManagerMock->expects(self::once())
+            ->method('addExceptionMessage')
+            ->with(
+                self::isInstanceOf('\InvalidArgumentException'),
+                'We can\'t initialize checkout.'
+            );
+
+        $this->resultFactoryMock->expects(self::once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($resultRedirectMock);
+
+        $resultRedirectMock->expects(self::once())
+            ->method('setPath')
+            ->with('checkout/cart')
+            ->willReturnSelf();
+
+        self::assertEquals($this->review->execute(), $resultRedirectMock);
+    }
+
+    public function testExecuteExceptionPaymentWithoutNonce()
+    {
+        $result = '{}';
+        $quoteMock = $this->getQuoteMock();
+        $resultRedirectMock = $this->getResultRedirectMock();
+
+        $quoteMock->expects(self::once())
+            ->method('getItemsCount')
             ->willReturn(1);
 
         $paymentMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Payment')
@@ -189,9 +231,6 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        $this->quoteUpdaterMock->expects(self::never())
-            ->method('execute');
-
         $this->messageManagerMock->expects(self::once())
             ->method('addExceptionMessage')
             ->with(
@@ -210,58 +249,6 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         self::assertEquals($this->review->execute(), $resultRedirectMock);
-    }
-
-    /**
-     * @param array $data
-     * @param bool $result
-     *
-     * @dataProvider dataProviderValidateRequestData
-     */
-    public function testValidateRequestData(array $data, $result)
-    {
-        $this->assertEquals(
-            $result,
-            $this->invokeMethod($this->review,  'validateRequestData', [$data])
-        );
-    }
-
-    /**
-     * Invoke any method of an object.
-     *
-     * @param $object
-     * @param $methodName
-     * @param array $parameters
-     * @return mixed
-     */
-    protected function invokeMethod(&$object, $methodName, array $parameters = [])
-    {
-        $reflection = new \ReflectionClass(get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderValidateRequestData()
-    {
-        return [
-            [
-                [
-                ],
-                false
-            ],
-            [
-                [
-                    'nonce' => 'nonceValue',
-                    'details' => 'detailsValue'
-                ],
-                true
-            ]
-        ];
     }
 
     /**
