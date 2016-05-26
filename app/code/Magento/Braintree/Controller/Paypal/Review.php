@@ -23,6 +23,11 @@ class Review extends AbstractAction
     private $quoteUpdater;
 
     /**
+     * @var string
+     */
+    private static $paymentMethodNonce = 'payment_method_nonce';
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -60,7 +65,7 @@ class Review extends AbstractAction
                     $requestData['details'],
                     $quote
                 );
-            } elseif (!$quote->getPayment()->getAdditionalInformation('payment_method_nonce')) {
+            } elseif (!$quote->getPayment()->getAdditionalInformation(self::$paymentMethodNonce)) {
                 throw new LocalizedException(__('We can\'t initialize checkout.'));
             }
 
