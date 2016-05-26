@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\App\ProductMetadataInterface;
+use \Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * REST Swagger schema generator.
@@ -560,8 +561,7 @@ class Generator extends AbstractSchemaGenerator
             if (!empty($vals['required'])) {
                 $snakeCaseRequired = [];
                 foreach ($vals['required'] as $requiredProperty) {
-                    $snakeCaseRequired[]
-                        = \Magento\Framework\Api\SimpleDataObjectConverter::camelCaseToSnakeCase($requiredProperty);
+                    $snakeCaseRequired[] = SimpleDataObjectConverter::camelCaseToSnakeCase($requiredProperty);
                 }
                 $definitions[$name]['required'] = $snakeCaseRequired;
             }
@@ -578,7 +578,7 @@ class Generator extends AbstractSchemaGenerator
     private function convertArrayToSnakeCase($properties)
     {
         foreach ($properties as $name => $value) {
-            $snakeCaseName = \Magento\Framework\Api\SimpleDataObjectConverter::camelCaseToSnakeCase($name);
+            $snakeCaseName = SimpleDataObjectConverter::camelCaseToSnakeCase($name);
             if (is_array($value)) {
                 $value = $this->convertArrayToSnakeCase($value);
             }
