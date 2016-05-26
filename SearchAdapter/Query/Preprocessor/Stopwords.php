@@ -11,6 +11,8 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
+use Magento\Framework\Module\Dir\Reader as ModuleDirReader;
+use Magento\Framework\Module\Dir;
 
 class Stopwords implements PreprocessorInterface
 {
@@ -50,9 +52,14 @@ class Stopwords implements PreprocessorInterface
     protected $esConfig;
 
     /**
+     * @var ModuleDirReader
+     */
+    protected $moduleDirReader;
+
+    /**
      * @var string
      */
-    protected $fileDir;
+    protected $stopwordsModule;
 
     /**
      * @param StoreManagerInterface $storeManager
@@ -60,7 +67,8 @@ class Stopwords implements PreprocessorInterface
      * @param ReadFactory $readFactory
      * @param ConfigCache $configCache
      * @param EsConfigInterface $esConfig
-     * @param string $fileDir
+     * @param ModuleDirReader $moduleDirReader
+     * @param string $stopwordsModule
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -68,15 +76,16 @@ class Stopwords implements PreprocessorInterface
         ReadFactory $readFactory,
         ConfigCache $configCache,
         EsConfigInterface $esConfig,
-        $fileDir = ''
+        ModuleDirReader $moduleDirReader,
+        $stopwordsModule = ''
     ) {
         $this->storeManager = $storeManager;
         $this->localeResolver = $localeResolver;
         $this->readFactory = $readFactory;
         $this->configCache = $configCache;
         $this->esConfig = $esConfig;
-        $rootDir = preg_replace('/app\/code.*/i', '', dirname(__DIR__));
-        $this->fileDir = $rootDir . $fileDir;
+        $this->moduleDirReader = $moduleDirReader;
+        $this->stopwordsModule = $stopwordsModule;
     }
 
     /**
@@ -98,7 +107,8 @@ class Stopwords implements PreprocessorInterface
     protected function getStopwordsList()
     {
         $filename = $this->getStopwordsFile();
-        $source = $this->readFactory->create($this->fileDir);
+        $fileDir = $this->moduleDirReader->getModuleDir(Dir::MODULE_ETC_DIR, $this->stopwordsModule) . '/stopwords';
+        $source = $this->readFactory->create($fileDir);
         $fileStats = $source->stat($filename);
         if (((time() - $fileStats['mtime']) > self::STOPWORDS_FILE_MODIFICATION_TIME_GAP)
             && ($cachedValue = $this->configCache->load(self::CACHE_ID))) {
