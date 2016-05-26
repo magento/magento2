@@ -145,11 +145,35 @@ define([
         },
 
         /**
+         * Update quote billing address
+         * @param {Object}customer
+         * @param {Object}address
+         */
+        setBillingAddress: function (customer, address) {
+            var billingAddress = {
+                street: [address.streetAddress],
+                city: address.locality,
+                regionCode: address.region,
+                postcode: address.postalCode,
+                countryId: address.countryCodeAlpha2,
+                firstname: customer.firstName,
+                lastname: customer.lastName,
+                telephone: customer.phone
+            };
+
+            quote.billingAddress(billingAddress);
+        },
+
+        /**
          * Prepare data to place order
          * @param {Object} data
          */
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
+
+            if (quote.billingAddress() === null && typeof data.details.billingAddress !== 'undefined') {
+                this.setBillingAddress(data.details, data.details.billingAddress);
+            }
             this.placeOrder();
         },
 
@@ -200,8 +224,7 @@ define([
          * @returns {Object}
          */
         getPayPalConfig: function () {
-            var address = quote.shippingAddress(),
-                totals = quote.totals(),
+            var totals = quote.totals(),
                 config = {};
 
             config.paypal = {
@@ -212,16 +235,6 @@ define([
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
                 enableShippingAddress: true,
-                shippingAddressOverride: {
-                    recipientName: address.firstname + ' ' + address.lastname,
-                    streetAddress: address.street[0],
-                    locality: address.city,
-                    countryCodeAlpha2: address.countryId,
-                    postalCode: address.postcode,
-                    region: address.regionCode,
-                    phone: address.telephone,
-                    editable: this.isAllowOverrideShippingAddress()
-                },
 
                 /**
                  * Triggers on any Braintree error
@@ -238,11 +251,37 @@ define([
                 }
             };
 
+            config.paypal.shippingAddressOverride = this.getShippingAddress();
+
             if (this.getMerchantName()) {
                 config.paypal.displayName = this.getMerchantName();
             }
 
             return config;
+        },
+
+        /**
+         * Get shipping address
+         * @returns {Object}
+         */
+        getShippingAddress: function () {
+            var address = quote.shippingAddress();
+
+            if (address.postcode === null) {
+
+                return {};
+            }
+
+            return {
+                recipientName: address.firstname + ' ' + address.lastname,
+                streetAddress: address.street[0],
+                locality: address.city,
+                countryCodeAlpha2: address.countryId,
+                postalCode: address.postcode,
+                region: address.regionCode,
+                phone: address.telephone,
+                editable: this.isAllowOverrideShippingAddress()
+            };
         },
 
         /**
