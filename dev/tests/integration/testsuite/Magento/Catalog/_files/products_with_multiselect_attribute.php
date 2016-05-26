@@ -59,7 +59,7 @@ $product->setTypeId(
 )->setVisibility(
     \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
 )->setMultiselectAttribute(
-    [$optionIds[1], $optionIds[2]]
+    [$optionIds[1], $optionIds[2], $optionIds[3]]
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setStockData(
