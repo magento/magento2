@@ -89,7 +89,7 @@ class Download
     protected function _isCanProcessed($relativePath)
     {
         $filePath = $this->_rootDir->getAbsolutePath($relativePath);
-        return (strpos($this->_rootDir->getDriver()->getRealPath($filePath), $relativePath) !== false
+        return (strpos(str_replace('\\', '/', $this->_rootDir->getDriver()->getRealPath($filePath)), $relativePath) !== false
             && $this->_rootDir->isFile($relativePath) && $this->_rootDir->isReadable($relativePath))
             || $this->_processDatabaseFile($filePath, $relativePath);
     }

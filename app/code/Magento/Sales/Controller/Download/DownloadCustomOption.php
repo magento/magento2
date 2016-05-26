@@ -77,10 +77,15 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         if ($optionId) {
             /** @var $productOption \Magento\Catalog\Model\Product\Option */
             $productOption = $this->_objectManager->create('Magento\Catalog\Model\Product\Option')->load($optionId);
+            if ($productOption) {
+                $product = $this->_objectManager->get('\Magento\Catalog\Api\ProductRepositoryInterface')->getById($option->getProductId());
+                $productOption->setProduct($product);
+            }
         }
+
         if (!$productOption ||
             !$productOption->getId() ||
-            $productOption->getProductId() != $option->getProductId() ||
+            $productOption->getProduct()->getId() != $option->getProductId() ||
             $productOption->getType() != 'file'
         ) {
             return $resultForward->forward('noroute');
