@@ -13,11 +13,11 @@ define([
 
     return function (placeOrderAction) {
 
-        /** Override default place order action and add agreement_ids to request */
-        return wrapper.wrap(placeOrderAction, function (originalAction, paymentData, messageContainer) {
+        /** Override place-order-mixin for set-payment-information action as they differs only by method signature */
+        return wrapper.wrap(placeOrderAction, function (originalAction, messageContainer, paymentData) {
             agreementsAssigner(paymentData);
 
-            return originalAction(paymentData, messageContainer);
+            return originalAction(messageContainer, paymentData);
         });
     };
 });
