@@ -61,27 +61,4 @@ class AdvancedInventory extends Section
 
         return $data;
     }
-
-    /**
-     * Get data of specified form data.
-     *
-     * @param array $fields
-     * @param SimpleElement|null $element
-     * @return array
-     */
-    protected function _getData(array $fields, SimpleElement $element = null)
-    {
-        $data = [];
-        $context = ($element === null) ? $this->_rootElement : $element;
-        foreach ($fields as $key => $field) {
-            if (!isset($field['value'])) {
-                $data[$key] = $this->_getData($field, $context);
-            } else {
-                $element = $this->getElement($context, $field);
-                $data[$key] = $element->getValue();
-            }
-        }
-
-        return $data;
-    }
 }
