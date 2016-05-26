@@ -10,6 +10,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Review
@@ -52,13 +53,16 @@ class Review extends AbstractAction
 
         try {
             $this->validateQuote($quote);
-            $this->validateRequestData($requestData);
 
-            $this->quoteUpdater->execute(
-                $requestData['nonce'],
-                $requestData['details'],
-                $quote
-            );
+            if ($this->validateRequestData($requestData)) {
+                $this->quoteUpdater->execute(
+                    $requestData['nonce'],
+                    $requestData['details'],
+                    $quote
+                );
+            } elseif (!$quote->getPayment()->getAdditionalInformation('payment_method_nonce')) {
+                throw new LocalizedException(__('We can\'t initialize checkout.'));
+            }
 
             /** @var \Magento\Framework\View\Result\Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
@@ -82,13 +86,10 @@ class Review extends AbstractAction
 
     /**
      * @param array $requestData
-     * @return void
-     * @throws \InvalidArgumentException
+     * @return boolean
      */
     private function validateRequestData(array $requestData)
     {
-        if (empty($requestData['nonce']) || empty($requestData['details'])) {
-            throw new \InvalidArgumentException('Data of request cannot be empty.');
-        }
+        return !empty($requestData['nonce']) && !empty($requestData['details']);
     }
 }
