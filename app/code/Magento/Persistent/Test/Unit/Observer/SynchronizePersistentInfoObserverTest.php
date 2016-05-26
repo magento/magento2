@@ -89,8 +89,10 @@ class SynchronizePersistentInfoObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->will($this->returnValue($this->requestMock));
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
-        $this->requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('logout'));
-        $this->requestMock->expects($this->once())->method('getControllerName')->will($this->returnValue('account'));
+        $this->requestMock
+            ->expects($this->once())
+            ->method('getFullActionName')
+            ->will($this->returnValue('customer_account_logout'));
         $this->sessionMock->expects($this->once())->method('save');
         $this->model->execute($this->observerMock);
     }
