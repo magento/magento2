@@ -172,6 +172,14 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('getItemsCount')
             ->willReturn(1);
 
+        $paymentMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Payment')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $quoteMock->expects(self::once())
+            ->method('getPayment')
+            ->willReturn($paymentMock);
+
         $this->requestMock->expects(self::once())
             ->method('getPostValue')
             ->with('result', '{}')
@@ -187,8 +195,8 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects(self::once())
             ->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf('\InvalidArgumentException'),
-                'Data of request cannot be empty.'
+                self::isInstanceOf('\Magento\Framework\Exception\LocalizedException'),
+                'We can\'t initialize checkout.'
             );
 
         $this->resultFactoryMock->expects(self::once())
@@ -202,6 +210,58 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         self::assertEquals($this->review->execute(), $resultRedirectMock);
+    }
+
+    /**
+     * @param array $data
+     * @param bool $result
+     *
+     * @dataProvider dataProviderValidateRequestData
+     */
+    public function testValidateRequestData(array $data, $result)
+    {
+        $this->assertEquals(
+            $result,
+            $this->invokeMethod($this->review,  'validateRequestData', [$data])
+        );
+    }
+
+    /**
+     * Invoke any method of an object.
+     *
+     * @param $object
+     * @param $methodName
+     * @param array $parameters
+     * @return mixed
+     */
+    protected function invokeMethod(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderValidateRequestData()
+    {
+        return [
+            [
+                [
+                ],
+                false
+            ],
+            [
+                [
+                    'nonce' => 'nonceValue',
+                    'details' => 'detailsValue'
+                ],
+                true
+            ]
+        ];
     }
 
     /**
