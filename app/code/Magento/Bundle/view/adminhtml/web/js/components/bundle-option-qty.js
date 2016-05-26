@@ -18,6 +18,7 @@ define([
          * update event
          */
         onUpdate: function () {
+            this._super();
             this.validation['validate-number'] = true;
             this.validation['validate-digits'] = this.isInteger;
             this.validate();
