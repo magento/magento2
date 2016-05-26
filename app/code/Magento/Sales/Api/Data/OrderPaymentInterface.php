@@ -114,7 +114,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Credit card SS start year.
      * 
-     * @deprecated
+     * @deprecated unused constant
      */
     const CC_SS_START_YEAR = 'cc_ss_start_year';
     /*
@@ -161,7 +161,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Credit card SS start month.
      * 
-     * @deprecated
+     * @deprecated unused constant
      */
     const CC_SS_START_MONTH = 'cc_ss_start_month';
     /*
@@ -216,7 +216,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Credit card SS issue.
      * 
-     * @deprecated
+     * @deprecated unused constant
      */
     const CC_SS_ISSUE = 'cc_ss_issue';
     /*
@@ -472,7 +472,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS issue for the order payment.
      *
      * @return string|null Credit card SS issue.
-     * @deprecated
+     * @deprecated unused
      */
     public function getCcSsIssue();
 
@@ -480,7 +480,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS start month for the order payment.
      *
      * @return string|null Credit card SS start month.
-     * @deprecated
+     * @deprecated unused
      */
     public function getCcSsStartMonth();
 
@@ -488,7 +488,7 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Gets the credit card SS start year for the order payment.
      *
      * @return string|null Credit card SS start year.
-     * @deprecated
+     * @deprecated unused
      */
     public function getCcSsStartYear();
 

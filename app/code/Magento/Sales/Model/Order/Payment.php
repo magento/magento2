@@ -1703,7 +1703,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_issue
      *
      * @return string
-     * @deprecated
+     * @deprecated unused
      */
     public function getCcSsIssue()
     {
@@ -1714,7 +1714,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_month
      *
      * @return string
-     * @deprecated
+     * @deprecated unused
      */
     public function getCcSsStartMonth()
     {
@@ -1725,7 +1725,7 @@ class Payment extends Info implements OrderPaymentInterface
      * Returns cc_ss_start_year
      *
      * @return string
-     * @deprecated
+     * @deprecated unused
      */
     public function getCcSsStartYear()
     {
@@ -2090,8 +2090,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * 
-     * @deprecated
+     * @deprecated unused
      */
     public function setCcSsStartYear($ccSsStartYear)
     {
@@ -2180,8 +2179,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * 
-     * @deprecated
+     * @deprecated unused
      */
     public function setCcSsStartMonth($ccSsStartMonth)
     {
@@ -2286,8 +2284,7 @@ class Payment extends Info implements OrderPaymentInterface
 
     /**
      * {@inheritdoc}
-     * 
-     * @deprecated
+     * @deprecated unused
      */
     public function setCcSsIssue($ccSsIssue)
     {
