@@ -119,7 +119,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($this->store);
         $this->attributeCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection'
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -129,11 +129,8 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->attributeCollection);
-        $this->attributeCollection->expects($this->never())
-            ->method('getItemByColumnValue');
+        $attributeCollectionFactory->expects($this->never())
+            ->method('create');
         $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->setMethods(['getAttribute'])
             ->disableOriginalConstructor()
