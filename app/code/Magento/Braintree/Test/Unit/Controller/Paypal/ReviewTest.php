@@ -214,7 +214,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $paymentMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Payment')
+        $paymentMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -234,7 +234,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $this->messageManagerMock->expects(self::once())
             ->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf('\Magento\Framework\Exception\LocalizedException'),
+                self::isInstanceOf(\Magento\Framework\Exception\LocalizedException::class),
                 'We can\'t initialize checkout.'
             );
 
