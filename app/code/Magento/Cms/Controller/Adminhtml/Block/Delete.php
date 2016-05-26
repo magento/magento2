@@ -9,6 +9,20 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Delete extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
+    * Injected Dependency Description
+    * 
+    * @var \Magento\Cms\Model\BlockFactory
+    */
+    protected $modelBlockFactory;
+
+    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry,
+        \Magento\Cms\Model\BlockFactory $modelBlockFactory)
+    {
+        $this->modelBlockFactory = $modelBlockFactory;
+        return parent::__construct($context, $coreRegistry);
+    }
+    
+    /**
      * Delete action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -22,7 +36,7 @@ class Delete extends \Magento\Cms\Controller\Adminhtml\Block
         if ($id) {
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('Magento\Cms\Model\Block');
+                $model = $this->modelBlockFactory->create();
                 $model->load($id);
                 $model->delete();
                 // display success message
