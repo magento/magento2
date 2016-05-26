@@ -108,7 +108,7 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Whether switch/solo card type available
      *
-     * @deprecated
+     * @deprecated unused
      * @return bool
      */
     public function hasSsCardType()
@@ -124,7 +124,7 @@ class Cc extends \Magento\Payment\Block\Form
     /**
      * Solo/switch card start year
      *
-     * @deprecated
+     * @deprecated unused
      * @return array
      */
     public function getSsStartYears()

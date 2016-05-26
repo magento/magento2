@@ -64,7 +64,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      * Solo/switch card start years
      *
      * @return array
-     * @deprecated
+     * @deprecated unused
      */
     protected function getSsStartYears()
     {
@@ -143,7 +143,7 @@ class CcGenericConfigProvider implements ConfigProviderInterface
      *
      * @param string $methodCode
      * @return bool
-     * @deprecated
+     * @deprecated unused
      */
     protected function hasSsCardType($methodCode)
     {
