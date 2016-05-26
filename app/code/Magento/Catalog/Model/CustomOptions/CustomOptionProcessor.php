@@ -66,7 +66,6 @@ class CustomOptionProcessor implements CartItemProcessorInterface
         return null;
     }
 
-
     /**
      * @inheritDoc
      */
