@@ -931,6 +931,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->quoteRepository->save($this->getCustomerCart());
         }
 
+        $this->recollectCart();
+
         return $this;
     }
 
@@ -951,8 +953,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $cart = $this->getCustomerCart();
                 if ($cart) {
                     $cart->removeItem($itemId);
-                    $cart->collectTotals();
-                    $this->quoteRepository->save($cart);
+                    $this->_needCollectCart = true;
                 }
                 break;
             case 'wishlist':
