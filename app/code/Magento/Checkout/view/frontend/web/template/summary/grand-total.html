@@ -7,9 +7,9 @@
 <!-- ko if: isDisplayed() -->
 <tr class="grand totals">
     <td class="mark" scope="row">
-        <strong data-bind="text: title"></strong>
+        <strong data-bind="i18n: title"></strong>
     </td>
-    <td class="amount" data-bind="attr: {'data-th': title}">
+    <td class="amount" data-bind="attr: {'data-th': $t(title)}">
         <strong><span class="price" data-bind="text: getValue()"></span></strong>
         <!-- ko foreach: elems() -->
             <!-- ko template: getTemplate() --><!-- /ko -->
