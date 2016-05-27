@@ -3,27 +3,27 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.22|~5.6.0|~7.0.0",
-        "magento/framework": "*",
+        "magento/framework": "100.1.*",
         "magento/magento-composer-installer": "*",
-        "magento/module-config": "*",
-        "magento/module-directory": "*",
-        "magento/module-payment": "*",
-        "magento/module-checkout": "*",
-        "magento/module-sales": "*",
-        "magento/module-backend": "*",
-        "magento/module-vault": "*",
-        "magento/module-customer": "*",
-        "magento/module-catalog": "*",
-        "magento/module-quote": "*",
-        "magento/module-paypal": "*",
-        "magento/module-theme": "*",
+        "magento/module-config": "100.1.*",
+        "magento/module-directory": "100.1.*",
+        "magento/module-payment": "100.1.*",
+        "magento/module-checkout": "100.1.*",
+        "magento/module-sales": "100.1.*",
+        "magento/module-backend": "100.1.*",
+        "magento/module-vault": "100.1.*",
+        "magento/module-customer": "100.1.*",
+        "magento/module-catalog": "101.0.*",
+        "magento/module-quote": "100.1.*",
+        "magento/module-paypal": "100.1.*",
+        "magento/module-theme": "100.1.*",
         "braintree/braintree_php": "3.7.0"
     },
     "suggest": {
-        "magento/module-checkout-agreements": "100.0.*"
+        "magento/module-checkout-agreements": "100.1.*"
     },
     "type": "magento2-module",
-    "version": "100.0.2",
+    "version": "100.1.0-rc1",
     "license": [
         "proprietary"
     ],
