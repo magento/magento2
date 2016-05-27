@@ -9,12 +9,17 @@ namespace Magento\Cms\Controller\Adminhtml\Block;
 class Delete extends \Magento\Cms\Controller\Adminhtml\Block
 {
     /**
-    * Factory to access block delete methods
-    * 
-    * @var \Magento\Cms\Model\BlockFactory
-    */
+     * Factory to access block delete methods
+     * 
+     * @var \Magento\Cms\Model\BlockFactory
+     */
     protected $cmsBlockFactory;
 
+    /**
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Cms\Model\BlockFactory $cmsBlockFactory
+     */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry,
         \Magento\Cms\Model\BlockFactory $cmsBlockFactory)
     {
