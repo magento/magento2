@@ -14,8 +14,11 @@ use Magento\Elasticsearch\Model\Config;
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
  *
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
- * achieve this, use @magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
- * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest'
+ * achieve this, use @ magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
+ * method. E.g. '@ magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest'
+ *
+ * In ElasticSearch, a reindex is required if the test includes a new data fixture with new items to search, see
+ * testAdvancedSearchDateField().
  *
  */
 class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
@@ -245,6 +248,8 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     public function testCustomFilterableAttribute()
     {
+        // Reindex Elastic Search since filterable_attribute data fixture added new fields to be indexed
+        $this->reindexAll();
         parent::testCustomFilterableAttribute();
     }
 
@@ -260,6 +265,22 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
     {
+        // Reindex Elastic Search since date_attribute data fixture added new fields to be indexed
+        $this->reindexAll();
         parent::testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount);
+    }
+
+    /**
+     * Perform full reindex
+     *
+     * @return void
+     */
+    private function reindexAll()
+    {
+        $indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Indexer\Model\Indexer'
+        );
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
     }
 }
