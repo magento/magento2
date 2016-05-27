@@ -29,10 +29,10 @@ define([
             agreementIds.push(item.value);
         });
 
-        if (paymentData['extension_attributes'] == undefined) {
+        if (paymentData['extension_attributes'] === undefined) {
             paymentData['extension_attributes'] = {}
         }
-        
+
         paymentData['extension_attributes']['agreement_ids'] = agreementIds;
     }
 });
