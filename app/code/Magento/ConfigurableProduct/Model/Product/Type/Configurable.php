@@ -534,7 +534,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             foreach ($collection as $item) {
                 /** @var \Magento\Catalog\Model\Product $item */
-                $this->getGalleryReadHandler()->execute('', $item);
+                $this->getGalleryReadHandler()->execute($item);
                 $usedProducts[] = $item;
             }
 

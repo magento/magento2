@@ -470,7 +470,7 @@ class SessionManager implements SessionManagerInterface
             return $this;
         }
         if ($this->isSessionExists()) {
-            session_regenerate_id(true);
+            session_regenerate_id(false);
         } else {
             session_start();
         }

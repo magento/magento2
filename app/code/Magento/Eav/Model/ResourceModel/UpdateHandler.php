@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Framework\EntityManager\MetadataPool;
@@ -114,7 +113,6 @@ class UpdateHandler implements AttributeInterface
                 }
             }
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
-            $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
                     continue;
@@ -148,7 +146,6 @@ class UpdateHandler implements AttributeInterface
                         $attribute->getAttributeCode(),
                         $entityData[$attribute->getAttributeCode()]
                     );
-                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
                 if (array_key_exists($attribute->getAttributeCode(), $snapshot)
                     && $snapshot[$attribute->getAttributeCode()] !== false
@@ -162,7 +159,6 @@ class UpdateHandler implements AttributeInterface
                         $attribute->getAttributeCode(),
                         $entityData[$attribute->getAttributeCode()]
                     );
-                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
             }
             $this->attributePersistor->flush($entityType, $context);

@@ -15,7 +15,7 @@
         <plugin name="updateRoleUsersAcl" type="Magento\User\Model\Plugin\AuthorizationRole" sortOrder="20"/>
     </type>
     <preference for="Magento\User\Api\Data\UserInterface" type="Magento\User\Model\User" />
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="UnlockAdminAccountCommand" xsi:type="object">Magento\User\Console\UnlockAdminAccountCommand</item>

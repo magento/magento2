@@ -22,6 +22,11 @@ class Configurable
     private $swatchHelper;
 
     /**
+     * @var array
+     */
+    private $swatchAttributes;
+
+    /**
      * @param \Magento\Swatches\Model\SwatchFactory $eavConfig
      * @param \Magento\Swatches\Helper\Data $swatchHelper
      */
@@ -46,16 +51,22 @@ class Configurable
         ConfigurableProductType $subject,
         Collection $result
     ) {
-        $attributeCodes = ['image'];
-        $entityType = $result->getEntity()->getType();
-
-        foreach ($this->eavConfig->getEntityAttributeCodes($entityType) as $code) {
-            $attribute = $this->eavConfig->getAttribute($entityType, $code);
-            if ($this->swatchHelper->isVisualSwatch($attribute) || $this->swatchHelper->isTextSwatch($attribute)) {
-                $attributeCodes[] = $code;
+        if (!$this->swatchAttributes) {
+            $this->swatchAttributes = ['image'];
+            $entityType = $result->getEntity()->getType();
+            foreach ($this->eavConfig->getEntityAttributeCodes($entityType) as $code) {
+                $attribute = $this->eavConfig->getAttribute($entityType, $code);
+                if (
+                    $attribute->getData('additional_data')
+                    && (
+                        $this->swatchHelper->isVisualSwatch($attribute) || $this->swatchHelper->isTextSwatch($attribute)
+                    )
+                ) {
+                    $this->swatchAttributes[] = $code;
+                }
             }
         }
-        $result->addAttributeToSelect($attributeCodes);
+        $result->addAttributeToSelect($this->swatchAttributes);
         return $result;
     }
 }
