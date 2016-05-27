@@ -49,6 +49,18 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * Add escapeJsQuote on $label
+     */
+    public function addOption($value, $label, $params = [])
+    {
+        $label = $this->escapeJsQuote($label);
+
+        return parent::addOption($value, $label, $params);
+    }
+
+    /**
      * Add necessary options
      *
      * @return \Magento\Framework\View\Element\AbstractBlock
