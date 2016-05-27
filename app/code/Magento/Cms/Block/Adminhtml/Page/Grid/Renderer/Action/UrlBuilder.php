@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
+
 use Magento\Store\Api\StoreResolverInterface;
 
 class UrlBuilder
