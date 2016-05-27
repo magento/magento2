@@ -80,8 +80,11 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
         $url = str_replace('{{CURRENCY_TO}}', $currenciesStr, $url);
 
         set_time_limit(0);
-        $response = $this->getServiceResponse($url);
-        ini_restore('max_execution_time');
+        try {
+            $response = $this->getServiceResponse($url);
+        } finally {
+            ini_restore('max_execution_time');
+        }
 
         foreach ($currenciesTo as $currencyTo) {
             if ($currencyFrom == $currencyTo) {
