@@ -15,8 +15,6 @@ define([
 ], function ($, _, Component, Braintree, quote, fullScreenLoader, additionalValidators) {
     'use strict';
 
-    var checkout;
-
     return Component.extend({
         defaults: {
             template: 'Magento_Braintree/payment/paypal',
@@ -33,10 +31,10 @@ define([
 
                 /**
                  * Triggers when widget is loaded
-                 * @param {Object} integration
+                 * @param {Object} checkout
                  */
-                onReady: function (integration) {
-                    checkout = integration;
+                onReady: function (checkout) {
+                    Braintree.checkout = checkout;
                     this.enableButton();
                 },
 
@@ -157,12 +155,12 @@ define([
          * Re-init PayPal Auth Flow
          */
         reInitPayPal: function () {
-            if (!checkout) {
-                return;
+            if (Braintree.checkout) {
+                Braintree.checkout.teardown(function () {
+                    Braintree.checkout = null;
+                });
             }
-            checkout.teardown(function () {
-                checkout = null;
-            });
+
             this.disableButton();
             this.clientConfig.paypal.amount = this.grandTotalAmount;
 
@@ -175,7 +173,7 @@ define([
          */
         payWithPayPal: function () {
             if (additionalValidators.validate()) {
-                checkout.paypal.initAuthFlow();
+                Braintree.checkout.paypal.initAuthFlow();
             }
         },
 
@@ -279,6 +277,8 @@ define([
          * Disable submit button
          */
         disableButton: function () {
+            // stop any previous shown loaders
+            fullScreenLoader.stopLoader();
             fullScreenLoader.startLoader();
             $('[data-button="place"]').attr('disabled', 'disabled');
         },
