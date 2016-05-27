@@ -98,7 +98,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $output->writeln('<info>Please re-run Magento compile command</info>');
         }
 
-        return $this->doSomething($objectManager);
+        return $this->enableCaches($objectManager, $output);
     }
 
     /**
@@ -106,9 +106,10 @@ class UpgradeCommand extends AbstractSetupCommand
      * TODO: to be removed in scope of MAGETWO-53476
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return int
      */
-    private function doSomething($objectManager)
+    private function enableCaches($objectManager, $output)
     {
         $writeFactory = $objectManager->get('Magento\Framework\Filesystem\Directory\WriteFactory');
         $write = $writeFactory->create(BP);
