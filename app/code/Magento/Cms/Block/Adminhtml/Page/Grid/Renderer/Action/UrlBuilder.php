@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action;
+use Magento\Store\Api\StoreResolverInterface;
 
 class UrlBuilder
 {
@@ -33,8 +34,12 @@ class UrlBuilder
         $this->frontendUrlBuilder->setScope($scope);
         $href = $this->frontendUrlBuilder->getUrl(
             $routePath,
-            ['_current' => false, '_query' => '___store=' . $store]
+            [
+                '_current' => false,
+                '_query' => [StoreResolverInterface::PARAM_NAME => $store]
+            ]
         );
+
         return $href;
     }
 }
