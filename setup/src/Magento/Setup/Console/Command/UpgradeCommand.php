@@ -130,7 +130,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 $output->writeln('<error> Error occured during upgrade</error>');
                 return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
-            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
