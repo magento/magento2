@@ -2,6 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 /*jshint browser:true jquery:true*/
 /*global alert*/
 define([
@@ -34,5 +35,5 @@ define([
         }
 
         paymentData['extension_attributes']['agreement_ids'] = agreementIds;
-    }
+    };
 });
