@@ -170,7 +170,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      */
     public function setQty($qty)
     {
-        $orderItem = $this->getOrderItemWithoutCaching();
+        $orderItem = $this->getOrderItem();
         if ($orderItem->getIsQtyDecimal()) {
             $qty = (double)$qty;
         } else {
