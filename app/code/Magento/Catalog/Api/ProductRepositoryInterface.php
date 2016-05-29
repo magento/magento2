@@ -52,18 +52,20 @@ interface ProductRepositoryInterface
      * Delete product
      *
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @return bool Will returned True if deleted
+     * @return bool Will return True if deleted
      * @throws \Magento\Framework\Exception\StateException
      */
     public function delete(\Magento\Catalog\Api\Data\ProductInterface $product);
 
     /**
+     * Delete product by SKU
+     *
      * @param string $sku
-     * @return bool Will returned True if deleted
+     * @return bool Will return True if deleted
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function deleteById($sku);
+    public function deleteBySku($sku);
 
     /**
      * Get product list
