@@ -59,11 +59,22 @@ interface ProductRepositoryInterface
 
     /**
      * @param string $sku
-     * @return bool Will returned True if deleted
+     * @return bool Will return True if deleted
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\StateException
+     * @deprecated
+     */
+    public function deleteById($sku);
+
+    /**
+     * Delete product by SKU
+     *
+     * @param string $sku
+     * @return bool Will return True if deleted
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
      */
-    public function deleteById($sku);
+    public function deleteBySku($sku);
 
     /**
      * Get product list

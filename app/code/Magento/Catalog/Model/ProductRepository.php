@@ -589,6 +589,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * {@inheritdoc}
      */
+    public function deleteBySku($sku)
+    {
+        $product = $this->get($sku);
+        return $this->delete($product);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */

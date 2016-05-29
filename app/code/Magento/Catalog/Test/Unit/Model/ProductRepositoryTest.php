@@ -609,6 +609,17 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->deleteById($sku));
     }
 
+    public function testDeleteBySku()
+    {
+        $sku = 'product-42';
+        $this->productFactoryMock->expects($this->once())->method('create')
+            ->will($this->returnValue($this->productMock));
+        $this->resourceModelMock->expects($this->once())->method('getIdBySku')->with($sku)
+            ->will($this->returnValue('42'));
+        $this->productMock->expects($this->once())->method('load')->with('42');
+        $this->assertTrue($this->model->deleteBySku($sku));
+    }
+
     /**
      * @dataProvider fieldName
      */
