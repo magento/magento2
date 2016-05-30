@@ -196,10 +196,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
             if (!array_key_exists($requestKey, $paymentData)) {
                 $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA][$requestKey] = $rawData[$requestKey];
             } elseif ($requestKey === PaymentInterface::KEY_ADDITIONAL_DATA) {
-                $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA] = array_merge(
-                    $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA],
-                    (array) $rawData[$requestKey]
-                );
+                $paymentData = array_merge($paymentData, (array) $rawData[$requestKey]);
             } else {
                 $paymentData[$requestKey] = $rawData[$requestKey];
             }
