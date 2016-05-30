@@ -11,13 +11,23 @@ define([
     return Abstract.extend({
         defaults: {
             valueUpdate: 'input',
-            isInteger: true
+            isInteger: true,
+            links: {
+                isParent: '${ $.parentName }'
+            }
         },
 
         /**
          * update event
          */
         onUpdate: function () {
+            if (this.initialValue === this.value()) {
+                this.bubble('update', false);
+                this.validate();
+
+                return;
+            }
+
             this.bubble('update', this.hasChanged());
             this.validation['validate-number'] = true;
             this.validation['validate-digits'] = this.isInteger;
