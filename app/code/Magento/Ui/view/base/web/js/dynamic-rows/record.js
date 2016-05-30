@@ -71,7 +71,7 @@ define([
          * @param {Number} position - element position
          */
         initPosition: function (position) {
-            var pos = parseInt(position, 10);
+            var pos = ~~position;
 
             this.parentComponent().setMaxPosition(pos, this);
 
@@ -89,11 +89,15 @@ define([
             });
 
             if (!elem) {
-                return false;
+                return;
             }
 
             this.childVisibleListener(elem);
-            !elem.visibleListener ? elem.on('visible', this.childVisibleListener.bind(this, elem)) : false;
+
+            if (!elem.visibleListener) {
+                elem.on('visible', this.childVisibleListener.bind(this, elem));
+            }
+
             elem.visibleListener = true;
         },
 
@@ -225,7 +229,7 @@ define([
          * @param {Boolean} state
          */
         setDisabledColumn: function (index, state) {
-            index = parseInt(index, 10);
+            index = ~~index;
             this.elems()[index].disabled(state);
         }
     });

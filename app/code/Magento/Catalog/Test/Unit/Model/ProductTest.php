@@ -818,21 +818,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->afterSave();
     }
 
-    public function testGetIsSalableConfigurable()
-    {
-        $typeInstanceMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable', ['getIsSalable'], [], '', false);
-
-        $typeInstanceMock
-            ->expects($this->atLeastOnce())
-            ->method('getIsSalable')
-            ->willReturn(true);
-
-        $this->model->setTypeInstance($typeInstanceMock);
-
-        self::assertTrue($this->model->getIsSalable());
-    }
-
     public function testGetIsSalableSimple()
     {
         $typeInstanceMock =

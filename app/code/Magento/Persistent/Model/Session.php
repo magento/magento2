@@ -10,6 +10,7 @@ namespace Magento\Persistent\Model;
  *
  * @method int getCustomerId()
  * @method Session setCustomerId()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Session extends \Magento\Framework\Model\AbstractModel
 {
@@ -93,6 +94,13 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\Framework\Session\Config\ConfigInterface
      */
     protected $sessionConfig;
+
+    /**
+     * Request
+     *
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
 
     /**
      * Constructor
@@ -379,11 +387,27 @@ class Session extends \Magento\Framework\Model\AbstractModel
         $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
             ->setDuration($duration)
             ->setPath($path)
+            ->setSecure($this->getRequest()->isSecure())
             ->setHttpOnly(true);
         $this->_cookieManager->setPublicCookie(
             self::COOKIE_NAME,
             $value,
             $publicCookieMetadata
         );
+    }
+
+    /**
+     * Get request object
+     *
+     * @return \Magento\Framework\App\Request\Http
+     * @deprecated
+     */
+    private function getRequest()
+    {
+        if ($this->request == null) {
+            $this->request = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\App\Request\Http');
+        }
+        return $this->request;
     }
 }

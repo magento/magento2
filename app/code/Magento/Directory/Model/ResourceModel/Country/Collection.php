@@ -143,7 +143,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Loads Item By Id
      *
      * @param string $countryId
-     * @return \Magento\Directory\Model\ResourceModel\Country
+     * @return \Magento\Directory\Model\ResourceModel\Country|null
      */
     public function getItemById($countryId)
     {
@@ -152,7 +152,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 return $country;
             }
         }
-        return $this->_countryFactory->create();
+        return null;
     }
 
     /**

@@ -49,8 +49,9 @@ class Translate implements RendererInterface
     public function render(array $source, array $arguments)
     {
         $text = end($source);
-        /* If phrase contains escaped double quote then use translation for phrase with non-escaped quote */
+        /* If phrase contains escaped quotes then use translation for phrase with non-escaped quote */
         $text = str_replace('\"', '"', $text);
+        $text = str_replace("\\'", "'", $text);
 
         try {
             $data = $this->translator->getData();

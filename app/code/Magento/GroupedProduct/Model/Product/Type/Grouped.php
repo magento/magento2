@@ -220,6 +220,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function flushAssociatedProductsCache($product)
+    {
+        return $product->unsData($this->_keyAssociatedProducts);
+    }
+
+    /**
      * Add status filter to collection
      *
      * @param  int $status
@@ -299,9 +308,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         $links = $product->getLinkInstance();
         $links->setLinkTypeId(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
         $collection = $links->getProductCollection()->setFlag(
-            'require_stock_items',
-            true
-        )->setFlag(
             'product_children',
             true
         )->setIsStrongMode();

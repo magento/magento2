@@ -50,7 +50,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
         }
         if ($price === null) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Configurable product "%1" does not have sub-products', $product->getName())
+                __('Configurable product "%1" does not have sub-products', $product->getSku())
             );
         }
         return (float)$price;

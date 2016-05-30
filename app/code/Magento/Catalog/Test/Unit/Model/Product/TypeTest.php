@@ -143,14 +143,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function testPriceFactory()
     {
         $this->assertInstanceOf(
-            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price',
-            $this->_model->priceFactory('type_id_3')
-        );
-        $this->assertInstanceOf(
-            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price',
-            $this->_model->priceFactory('type_id_3')
-        );
-        $this->assertInstanceOf(
             '\Magento\Catalog\Model\Product\Type\Price',
             $this->_model->priceFactory('type_id_1')
         );
@@ -318,7 +310,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     [
-                        ['some_model', [], $this->getMockedProductTypeConfigurablePrice()],
+                        ['some_model', [], $this->getMockedProductTypePrice()],
                         ['Magento\Catalog\Model\Product\Type\Price', [], $this->getMockedProductTypePrice()],
                     ]
                 )
@@ -333,18 +325,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     private function getMockedProductTypePrice()
     {
         $mockBuild = $this->getMockBuilder('\Magento\Catalog\Model\Product\Type\Price')
-            ->disableOriginalConstructor();
-        $mock = $mockBuild->getMock();
-
-        return $mock;
-    }
-
-    /**
-     * @return \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price
-     */
-    private function getMockedProductTypeConfigurablePrice()
-    {
-        $mockBuild = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price')
             ->disableOriginalConstructor();
         $mock = $mockBuild->getMock();
 

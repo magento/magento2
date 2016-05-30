@@ -337,7 +337,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             return false;
         }
 
-        return $this->getWebsite()->getDefaultGroupId() != $this->getId();
+        return $this->getWebsite()->getGroupsCount() > 1;
     }
 
     /**
@@ -398,6 +398,27 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->getStoreIds()
         );
         return parent::beforeDelete();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterDelete()
+    {
+        $result = parent::afterDelete();
+
+        if ($this->getId() === $this->getWebsite()->getDefaultGroupId()) {
+            $ids = $this->getWebsite()->getGroupIds();
+            if (!empty($ids) && count($ids) > 1) {
+                unset($ids[$this->getId()]);
+                $defaultId = current($ids);
+            } else {
+                $defaultId = null;
+            }
+            $this->getWebsite()->setDefaultGroupId($defaultId);
+            $this->getWebsite()->save();
+        }
+        return $result;
     }
 
     /**

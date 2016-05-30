@@ -184,6 +184,9 @@ define([
             // Callback url for media
             mediaCallback: '',
 
+            // Local media cache
+            mediaCache: {},
+
             // Cache for BaseProduct images. Needed when option unset
             mediaGalleryInitial: [{}],
 
@@ -205,10 +208,20 @@ define([
          */
         _init: function () {
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
+                this._sortAttributes();
                 this._RenderControls();
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
+        },
+
+        /**
+         * @private
+         */
+        _sortAttributes: function () {
+            this.options.jsonConfig.attributes = _.sortBy(this.options.jsonConfig.attributes, function (attribute) {
+                return attribute.position;
+            });
         },
 
         /**
@@ -708,7 +721,22 @@ define([
                 $this = $widget.element,
                 attributes = {},
                 productId = 0,
-                additional;
+                mediaCallData,
+                mediaCacheKey,
+
+                /**
+                 * Processes product media data
+                 *
+                 * @param {Object} data
+                 * @returns void
+                 */
+                mediaSuccessCallback = function (data) {
+                    if (!(mediaCacheKey in $widget.options.mediaCache)) {
+                        $widget.options.mediaCache[mediaCacheKey] = data;
+                    }
+                    $widget._ProductMediaCallback($this, data);
+                    $widget._DisableProductMediaLoader($this);
+                };
 
             if (!$widget.options.mediaCallback) {
                 return;
@@ -729,24 +757,28 @@ define([
                     .find('.price-box.price-final_price').attr('data-product-id');
             }
 
-            additional = $.parseQuery();
+            mediaCallData = {
+                'product_id': productId,
+                'attributes': attributes,
+                'additional': $.parseQuery()
+            };
+            mediaCacheKey = JSON.stringify(mediaCallData);
 
-            $widget._XhrKiller();
-            $widget._EnableProductMediaLoader($this);
-            $widget.xhr = $.post(
-                $widget.options.mediaCallback, {
-                    'product_id': productId,
-                    attributes: attributes,
-                    isAjax: true,
-                    additional: additional
-                }, function (data) {
-                    $widget._ProductMediaCallback($this, data);
-                    $widget._DisableProductMediaLoader($this);
-                },
-                'json'
-            ).done(function () {
+            if (mediaCacheKey in $widget.options.mediaCache) {
+                mediaSuccessCallback($widget.options.mediaCache[mediaCacheKey]);
+            } else {
+                mediaCallData.isAjax = true;
+                $widget._XhrKiller();
+                $widget._EnableProductMediaLoader($this);
+                $widget.xhr = $.post(
+                    $widget.options.mediaCallback,
+                    mediaCallData,
+                    mediaSuccessCallback,
+                    'json'
+                ).done(function () {
                     $widget._XhrKiller();
                 });
+            }
         },
 
         /**
@@ -810,32 +842,30 @@ define([
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if (_.size($widget) < 1) {
+            if (_.size($widget) < 1 || !support(response)) {
                 this.updateBaseImage(this.options.mediaGalleryInitial, $main, isProductViewExist);
 
                 return;
             }
 
-            if (support(response)) {
-                images.push({
-                    full: response.large,
-                    img: response.medium,
-                    thumb: response.small,
-                    isMain: true
-                });
+            images.push({
+                full: response.large,
+                img: response.medium,
+                thumb: response.small,
+                isMain: true
+            });
 
-                if (response.hasOwnProperty('gallery')) {
-                    $.each(response.gallery, function () {
-                        if (!support(this) || response.large === this.large) {
-                            return;
-                        }
-                        images.push({
-                            full: this.large,
-                            img: this.medium,
-                            thumb: this.small
-                        });
+            if (response.hasOwnProperty('gallery')) {
+                $.each(response.gallery, function () {
+                    if (!support(this) || response.large === this.large) {
+                        return;
+                    }
+                    images.push({
+                        full: this.large,
+                        img: this.medium,
+                        thumb: this.small
                     });
-                }
+                });
             }
 
             this.updateBaseImage(images, $main, isProductViewExist);
@@ -872,11 +902,9 @@ define([
                 gallery = context.find(this.options.mediaGallerySelector).data('gallery'),
                 item;
 
-            if (images) {
-                imagesToUpdate = this._setImageType($.extend(true, [], images));
-            }
-
             if (isProductViewExist) {
+                imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
+
                 if (this.options.onlyMainImg) {
                     updateImg = imagesToUpdate.filter(function (img) {
                         return img.isMain;

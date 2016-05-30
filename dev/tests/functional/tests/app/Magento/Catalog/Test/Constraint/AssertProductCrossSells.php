@@ -51,7 +51,8 @@ class AssertProductCrossSells extends AbstractConstraint
         $checkoutCart->open();
         foreach ($promotedProducts as $promotedProduct) {
             if (!$checkoutCart->getCrosssellBlock()->getProductItem($promotedProduct)->isVisible()) {
-                $errors[] = 'Product \'' . $promotedProduct->getName() . '\' is absent in cross-sell section.';
+                $errors[] = 'Product \'' . $promotedProduct->getName()
+                    . '\' is absent in cross-sell section of a product \'' . $product->getName() . '\'.';
             }
         }
 

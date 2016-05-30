@@ -260,7 +260,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->model->load(1);
         $this->assertFalse($this->model->isCanDelete());
         $this->model->setId(100);
-        $this->assertTrue($this->model->isCanDelete());
+        $this->assertFalse($this->model->isCanDelete());
     }
 
     public function testGetCurrentUrl()

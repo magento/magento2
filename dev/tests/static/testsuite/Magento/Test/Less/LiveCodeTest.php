@@ -43,7 +43,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public function testCodeStyle()
     {
-        $reportFile = self::$reportDir . '/less_report.xml';
+        $reportFile = self::$reportDir . '/less_report.txt';
         $wrapper = new LessWrapper();
         $codeSniffer = new CodeSniffer(realpath(__DIR__ . '/_files/lesscs'), $reportFile, $wrapper);
 
@@ -53,7 +53,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $codeSniffer->setExtensions([LessWrapper::LESS_FILE_EXTENSION]);
 
-        $fileList = PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__);
+        $fileList = PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__, __DIR__);
 
         $result = $codeSniffer->run($this->filterFiles($fileList));
 
