@@ -202,7 +202,8 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
                     (array) $rawData[$requestKey]
                 );
             } else {
-                $paymentData[$requestKey] = $rawData[$requestKey];
+                // $paymentData[$requestKey] = $rawData[$requestKey];
+		$paymentData = array_merge($paymentData, (array) $rawData[$requestKey]);
             }
         }
 
