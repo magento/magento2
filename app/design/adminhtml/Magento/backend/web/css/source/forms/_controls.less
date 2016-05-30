@@ -13,14 +13,12 @@
 //  Basic controls
 //  _____________________________________________
 
-//
 //  Common
-//  ---------------------------------------------
-
 .__form-control-pattern() {
+    -webkit-appearance: none;
     background-color: @field-control__background-color;
-    border-radius: @field-control__border-radius;
     border: @field-control__border-width solid @field-control__border-color;
+    border-radius: @field-control__border-radius;
     box-shadow: @field-control__box-shadow;
     color: @field-control__color;
     font-size: @field-control__font-size;
@@ -31,7 +29,6 @@
     transition: @smooth__border-color;
     vertical-align: baseline;
     width: auto;
-    -webkit-appearance: none;
 }
 
 .__form-control-pattern__hover() {
@@ -62,8 +59,6 @@
 .admin__control-select {
     &:extend(.abs-form-control-pattern all);
     .lib-css(appearance, none, 1);
-
-    background-repeat: no-repeat;
     background-image+: url('../images/arrows-bg.svg');
     background-position+: ~'calc(100% - 12px)' -34px;
     background-size+: auto;
@@ -75,6 +70,8 @@
     background-image+: linear-gradient(@field-control__border-color,@field-control__border-color);
     background-position+: ~'calc(100% - @{field-control__height})' 0;
     background-size+: 1px 100%;
+
+    background-repeat: no-repeat;
 
     max-width: 100%;
     min-width: 8.5rem;
@@ -110,10 +107,18 @@
     }
 }
 
-// ToDo UI: add month and date styles
-//.admin__control-select-month {width:140px;}
-//.admin__control-select-year {width:103px;}
-//.admin__control-cvn {width:3em;}
+//  ToDo UI: add month and date styles
+//  .admin__control-select-month {
+//      width: 140px;
+//  }
+
+//  .admin__control-select-year {
+//      width: 103px;
+//  }
+
+//  .admin__control-cvn {
+//      width: 3em;
+//  }
 
 option:empty {
     display: none;
@@ -144,8 +149,9 @@ option:empty {
 }
 
 .admin__control-file-label {
-    :before {
+    &:before {
         &:extend(.abs-form-control-pattern);
+
         content:'';
         left: 0;
         position: absolute;
@@ -197,7 +203,7 @@ option:empty {
 }
 
 //
-//  Service text or control. Can be used to add text or "Use Default Value" checkbox
+//  Service text or control. Can be used to add text or 'Use Default Value' checkbox
 //  ---------------------------------------------
 
 .admin__control-service {
@@ -306,31 +312,29 @@ option:empty {
     }
 }
 
-.admin__addon {
-    &-suffix,
-    &-prefix {
-        border: 0;
-        box-sizing: border-box;
-        color: @field-control-addon__color;
-        display: inline-block;
-        font-size: @field-control__font-size;
-        font-weight: @font-weight__regular;
-        height: @field-control__height;
-        line-height: @field-control__height;
-        padding: 0;
-    }
+.admin__addon-suffix,
+.admin__addon-prefix {
+    border: 0;
+    box-sizing: border-box;
+    color: @field-control-addon__color;
+    display: inline-block;
+    font-size: @field-control__font-size;
+    font-weight: @font-weight__regular;
+    height: @field-control__height;
+    line-height: @field-control__height;
+    padding: 0;
+}
 
-    &-suffix {
-        .lib-vendor-prefix-order(3);
+.admin__addon-suffix {
+    .lib-vendor-prefix-order(3);
 
-        &:last-child {
-            padding-right: 1rem;
-        }
+    &:last-child {
+        padding-right: 1rem;
     }
+}
 
-    &-prefix {
-        .lib-vendor-prefix-order(0);
-    }
+.admin__addon-prefix {
+    .lib-vendor-prefix-order(0);
 }
 
 .ie9 {

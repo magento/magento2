@@ -1105,7 +1105,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         );
         $items = [];
         foreach ($productTypes as $type) {
-            $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);;
+            $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
             $productMock->expects($this->any())->method('getIsVirtual')->willReturn($type);
 
             $itemMock = $this->getMock(

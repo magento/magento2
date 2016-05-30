@@ -201,9 +201,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $category = $this->getCurrentCategory();
-        if (!$category->getId()) {
-            return [];
-        } else {
+        if ($category) {
             $categoryData = $category->getData();
             $categoryData = $this->addUseDefaultSettings($category, $categoryData);
             $categoryData = $this->addUseConfigSettings($categoryData);

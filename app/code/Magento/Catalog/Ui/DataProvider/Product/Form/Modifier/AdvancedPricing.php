@@ -419,6 +419,7 @@ class AdvancedPricing extends AbstractModifier
                         'dndConfig' => [
                             'enabled' => false,
                         ],
+                        'disabled' => false,
                         'sortOrder' =>
                             $this->arrayManager->get($tierPricePath . '/arguments/data/config/sortOrder', $this->meta),
                     ],
@@ -493,6 +494,9 @@ class AdvancedPricing extends AbstractModifier
                                         'label' => __('Price'),
                                         'enableLabel' => true,
                                         'dataScope' => 'price',
+                                        'addbefore' => $this->locator->getStore()
+                                                                     ->getBaseCurrency()
+                                                                     ->getCurrencySymbol(),
                                     ],
                                 ],
                             ],

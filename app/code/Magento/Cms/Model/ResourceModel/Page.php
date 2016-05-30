@@ -111,8 +111,8 @@ class Page extends AbstractDb
          * type NULL so in DB they will be empty and not some default value
          */
         foreach (['custom_theme_from', 'custom_theme_to'] as $field) {
-            $value = !$object->getData($field) ? null : $object->getData($field);
-            $object->setData($field, $this->dateTime->formatDate($value));
+            $value = !$object->getData($field) ? null : $this->dateTime->formatDate($object->getData($field));
+            $object->setData($field, $value);
         }
 
         if (!$this->isValidPageIdentifier($object)) {
@@ -171,7 +171,7 @@ class Page extends AbstractDb
     {
         $pageId = $this->getPageId($object, $value, $field);
         if ($pageId) {
-            $this->entityManager->load($object, $pageId, PageInterface::class, []);
+            $this->entityManager->load($object, $pageId);
         }
         return $this;
     }
@@ -394,7 +394,7 @@ class Page extends AbstractDb
      */
     public function save(AbstractModel $object)
     {
-        $this->entityManager->save($object, PageInterface::class, []);
+        $this->entityManager->save($object);
         return $this;
     }
 
@@ -403,7 +403,7 @@ class Page extends AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->entityManager->delete($object, PageInterface::class, []);
+        $this->entityManager->delete($object);
         return $this;
     }
 }

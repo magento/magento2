@@ -15,6 +15,10 @@ define([
 
             timeOffset: 0,
 
+            validationParams: {
+                dateFormat: '${ $.outputDateFormat }'
+            },
+
             /**
              * Format of date that comes from the
              * server (ICU Date Format).
@@ -113,10 +117,12 @@ define([
                 }
 
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
+            } else {
+                shiftedValue = '';
+            }
 
-                if (shiftedValue !== this.shiftedValue()) {
-                    this.shiftedValue(shiftedValue);
-                }
+            if (shiftedValue !== this.shiftedValue()) {
+                this.shiftedValue(shiftedValue);
             }
         },
 
@@ -137,10 +143,12 @@ define([
                     value = moment(shiftedValue, this.pickerDateTimeFormat);
                     value = value.format(this.outputDateFormat);
                 }
+            } else {
+                value = '';
+            }
 
-                if (value !== this.value()) {
-                    this.value(value);
-                }
+            if (value !== this.value()) {
+                this.value(value);
             }
         },
 
@@ -162,8 +170,9 @@ define([
             }
 
             this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
-
             this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+
+            this.validationParams.dateFormat = this.outputDateFormat;
         }
     });
 });

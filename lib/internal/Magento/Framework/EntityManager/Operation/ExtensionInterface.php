@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\EntityManager\Operation;
 
 /**
@@ -12,10 +11,11 @@ namespace Magento\Framework\EntityManager\Operation;
 interface ExtensionInterface
 {
     /**
-     * @param string $entityType
+     * Perform action on relation/extension attribute
+     *
      * @param object $entity
      * @param array $arguments
      * @return object|bool
      */
-    public function execute($entityType, $entity, $arguments = []);
+    public function execute($entity, $arguments = []);
 }

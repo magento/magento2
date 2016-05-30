@@ -16,7 +16,7 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -164,11 +164,13 @@ class ValidatorInfoTest extends \PHPUnit_Framework_TestCase
      */
     protected function getOptionValue()
     {
-        $file     = 'var/tmp/magento_small_image.jpg';
+        /** @var \Magento\Catalog\Model\Product\Media\Config $config */
+        $config = $this->objectManager->get('Magento\Catalog\Model\Product\Media\Config');
+        $file = $config->getBaseTmpMediaPath() . '/magento_small_image.jpg';
 
-        /** @var \Magento\Framework\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
-        $tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::ROOT);
+        $tmpDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $filePath = $tmpDirectory->getAbsolutePath($file);
 
         return [

@@ -22,7 +22,6 @@ use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\App\ObjectManager;
-use Magento\Quote\Model\QuoteIdMaskFactory;
 
 /**
  * Class QuoteManagement
@@ -133,7 +132,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $quoteFactory;
 
     /**
-     * @var QuoteIdMaskFactory
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
 
@@ -335,10 +334,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->getPayment()->setQuote($quote);
 
             $data = $paymentMethod->getData();
-            if (isset($data['additional_data'])) {
-                $data = array_merge($data, (array)$data['additional_data']);
-                unset($data['additional_data']);
-            }
             $quote->getPayment()->importData($data);
         }
 
@@ -562,13 +557,14 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
-     * @return QuoteIdMaskFactory
+     * @return \Magento\Quote\Model\QuoteIdMaskFactory
      * @deprecated
      */
     private function getQuoteIdMaskFactory()
     {
         if (!$this->quoteIdMaskFactory) {
-            $this->quoteIdMaskFactory = ObjectManager::getInstance()->get(QuoteIdMaskFactory::class);
+            $this->quoteIdMaskFactory = ObjectManager::getInstance()
+                ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
         }
         return $this->quoteIdMaskFactory;
     }

@@ -119,11 +119,13 @@ define([
         /**
          * Is being invoked on children validation error.
          * Sets error property to one incoming.
+         *
+         * @param {String} message - error message.
          */
-        onChildrenError: function () {
+        onChildrenError: function (message) {
             var hasErrors = this.elems.some('error');
 
-            this.error(hasErrors);
+            this.error(hasErrors || message);
         },
 
         /**

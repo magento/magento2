@@ -177,7 +177,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following paths: '/a/ro/dir', '/media'
+     * @expectedExceptionMessage Missing write permissions to the following paths:
      */
     public function testWritePermissionErrors()
     {

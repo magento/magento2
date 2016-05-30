@@ -5,26 +5,40 @@
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         define([
-            "jquery",
-            "jquery/ui",
-            "mage/validation/validation"
+            'jquery',
+            'jquery/ui',
+            'mage/validation/validation'
         ], factory);
     } else {
         factory(jQuery);
     }
 }(function ($) {
-    "use strict";
+    'use strict';
     
-    $.widget("mage.validation", $.mage.validation, {
+    $.widget('mage.validation', $.mage.validation, {
         options: {
             radioCheckboxClosest: 'ul, ol',
             errorPlacement: function (error, element) {
+                var messageBox,
+                    dataValidate;
+
+                if ($(element).hasClass('datetime-picker')) {
+                    element = $(element).parent();
+
+                    if (element.parent().find('[generated=true].mage-error').length) {
+                        return;
+                    }
+                }
+
                 if (element.attr('data-errors-message-box')) {
-                    var messageBox = $(element.attr('data-errors-message-box'));
+                    messageBox = $(element.attr('data-errors-message-box'));
                     messageBox.html(error);
+
                     return;
                 }
-                var dataValidate = element.attr('data-validate');
+
+                dataValidate = element.attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-one-checkbox-required-by-name') > 0) {
                     error.appendTo('#links-advice-container');
                 } else if (element.is(':radio, :checkbox')) {
@@ -35,6 +49,7 @@
             },
             highlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').each(function() {
                         $(this).removeClass(errorClass);
@@ -50,6 +65,7 @@
             },
             unhighlight: function (element, errorClass) {
                 var dataValidate = $(element).attr('data-validate');
+
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
                 } else if ($(element).is(':radio, :checkbox')) {

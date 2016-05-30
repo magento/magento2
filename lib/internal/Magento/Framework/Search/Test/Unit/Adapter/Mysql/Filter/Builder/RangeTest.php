@@ -116,7 +116,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
                 'from' => '0',
                 'to' => '10',
                 'isNegation' => true,
-                'expectedResult' => 'testField <= \'0\' OR testField >= \'10\'',
+                'expectedResult' => 'testField < \'0\' OR testField > \'10\'',
             ],
             'rangeWithoutFromValue' => [
                 'field' => 'testField',
@@ -130,7 +130,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
                 'from' => null,
                 'to' => 50,
                 'isNegation' => true,
-                'expectedResult' => 'testField >= \'50\'',
+                'expectedResult' => 'testField > \'50\'',
             ],
             'rangeWithoutToValue' => [
                 'field' => 'testField',
@@ -144,7 +144,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
                 'from' => 50,
                 'to' => null,
                 'isNegation' => true,
-                'expectedResult' => 'testField <= \'50\'',
+                'expectedResult' => 'testField < \'50\'',
             ],
             'rangeWithEmptyValues' => [
                 'field' => 'testField',

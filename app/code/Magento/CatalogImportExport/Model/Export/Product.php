@@ -762,12 +762,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $memoryUsagePercent = 0.8;
             // Minimum Products limit
             $minProductsLimit = 500;
+            // Maximal Products limit
+            $maxProductsLimit = 5000;
 
             $this->_itemsPerPage = intval(
                 ($memoryLimit * $memoryUsagePercent - memory_get_usage(true)) / $memoryPerProduct
             );
             if ($this->_itemsPerPage < $minProductsLimit) {
                 $this->_itemsPerPage = $minProductsLimit;
+            }
+            if ($this->_itemsPerPage > $maxProductsLimit) {
+                $this->_itemsPerPage = $maxProductsLimit;
             }
         }
         return $this->_itemsPerPage;
@@ -850,8 +855,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     if ($storeId == Store::DEFAULT_STORE_ID && isset($stockItemRows[$productId])) {
                         $dataRow = array_merge($dataRow, $stockItemRows[$productId]);
                     }
-
-                    $exportData = array_merge($exportData, $this->addMultirowData($dataRow, $multirawData));
+                    $this->appendMultirowData($dataRow, $multirawData);
+                    if ($dataRow) {
+                        $exportData[] = $dataRow;
+                    }
                 }
             }
         } catch (\Exception $e) {
@@ -912,7 +919,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                 $additionalAttributes[$fieldName] = $fieldName .
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
                             }
-                            $data[$itemId][$storeId][$fieldName] = $attrValue;
+                            $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
@@ -927,6 +934,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
 
                 if (!empty($additionalAttributes)) {
+                    $additionalAttributes = array_map('htmlspecialchars_decode', $additionalAttributes);
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
                 } else {
@@ -1053,9 +1061,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function addMultirowData($dataRow, $multiRawData)
+    private function appendMultirowData(&$dataRow, &$multiRawData)
     {
-        $result = [];
         $productId = $dataRow['product_id'];
         $productLinkId = $dataRow['product_link_id'];
         $storeId = $dataRow['store_id'];
@@ -1121,7 +1128,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
             }
             $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
-
         }
 
         if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
@@ -1144,7 +1150,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         }
 
         if (empty($dataRow)) {
-            return $result;
+            return null;
         } elseif ($storeId != Store::DEFAULT_STORE_ID) {
             $dataRow[self::COL_STORE] = $this->_storeIdToCode[$storeId];
             if (isset($productData[Store::DEFAULT_STORE_ID][self::COL_VISIBILITY])) {
@@ -1152,9 +1158,19 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
         $dataRow[self::COL_SKU] = $sku;
-        $result[] = $dataRow;
+        return $dataRow;
+    }
 
-        return $result;
+    /**
+     * @deprecated
+     * @param array $dataRow
+     * @param array $multiRawData
+     * @return array
+     */
+    protected function addMultirowData($dataRow, $multiRawData)
+    {
+        $data = $this->appendMultirowData($dataRow, $multiRawData);
+        return $data ? [$data] : [];
     }
 
     /**

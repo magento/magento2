@@ -40,7 +40,7 @@
                             <?php
                                 echo $block->getProductPriceHtml(
                                     $product,
-                                    \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+                                    'wishlist_configured_price',
                                     \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
                                     ['item' => $item]
                                 );

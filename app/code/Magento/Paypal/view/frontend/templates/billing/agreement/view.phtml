@@ -17,10 +17,12 @@ $relatedOrders = $block->getRelatedOrders();
             <?php echo $block->escapeHtml($block->getReferenceId()); ?>
         </strong>
         <?php if ($block->getCanCancel()): ?>
-            <button type="button" title="<?php echo $block->escapeHtml(__('Cancel')); ?>"
-                    class="secondary action cancel" onclick="if( confirm('<?php
-            echo $block->escapeHtml(__('Are you sure you want to do this?')); ?>') ) { window.location.href = '<?php
-            echo $block->escapeUrl($block->getCancelUrl()) ?>'; } return false;">
+            <button data-mage-init='{"Magento_Paypal/js/in-context/billing-agreement": {
+                        "cancelMessage" : "<?php echo $block->escapeHtml(__('Are you sure you want to do this?')); ?>",
+                        "cancelUrl" : "<?php echo $block->escapeUrl($block->getCancelUrl()) ?>"
+                    }}'
+                    type="button" title="<?php echo $block->escapeHtml(__('Cancel')); ?>"
+                    class="secondary action cancel" />
                 <span><?php echo $block->escapeHtml(__('Cancel')); ?></span>
             </button>
         <?php endif; ?>
