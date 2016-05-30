@@ -111,15 +111,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getQtyToRefund')
             ->willReturn($orderItemQty);
-        $orderItemMock->expects($this->atLeastOnce())
-            ->method('load')
-            ->willReturnSelf();
-        $this->orderItemFactoryMock->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($orderItemMock);
         $this->item->setData(CreditmemoItemInterface::NAME, $name);
         $this->item->setOrderItem($orderItemMock);
         $this->item->setQty($qty);
+        $this->item->getQty();
     }
 
     /**
@@ -141,15 +136,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getQtyToRefund')
             ->willReturn($orderItemQty);
-        $orderItemMock->expects($this->atLeastOnce())
-            ->method('load')
-            ->willReturnSelf();
-        $this->orderItemFactoryMock->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($orderItemMock);
         $this->item->setData(CreditmemoItemInterface::NAME, $name);
         $this->item->setOrderItem($orderItemMock);
         $this->item->setQty($qty);
+        $this->item->getQty();
     }
 
     public function testSetQty()
@@ -166,12 +156,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getQtyToRefund')
             ->willReturn($orderItemQty);
-        $orderItemMock->expects($this->atLeastOnce())
-            ->method('load')
-            ->willReturnSelf();
-        $this->orderItemFactoryMock->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($orderItemMock);
         $this->item->setOrderItem($orderItemMock);
         $this->item->setQty($qty);
         $this->assertEquals($qty, $this->item->getQty());
@@ -209,19 +193,19 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getBaseDiscountRefunded')
             ->willReturn(1);
-        $data = [
-            'qty' => 1,
-            'tax_amount' => 1,
-            'base_tax_amount' => 1,
-            'discount_tax_compensation_amount' => 1,
-            'base_discount_tax_compensation_amount' => 1,
-            'row_total' => 1,
-            'base_row_total' => 1,
-            'discount_amount' => 1,
-            'base_discount_amount' => 1
-        ];
+        $orderItemMock->expects($this->once())
+            ->method('getQtyToRefund')
+            ->willReturn(1);
+        $this->item->setQty(1);
+        $this->item->setTaxAmount(1);
+        $this->item->setBaseTaxAmount(1);
+        $this->item->setDiscountTaxCompensationAmount(1);
+        $this->item->setBaseDiscountTaxCompensationAmount(1);
+        $this->item->setRowTotal(1);
+        $this->item->setBaseRowTotal(1);
+        $this->item->setDiscountAmount(1);
+        $this->item->setBaseDiscountAmount(1);
         $this->item->setOrderItem($orderItemMock);
-        $this->item->setData($data);
         $result = $this->item->register();
         $this->assertInstanceOf('Magento\Sales\Model\Order\Creditmemo\Item', $result);
     }
@@ -230,19 +214,6 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setQtyRefunded',
-                    'getQtyRefunded',
-                    'getTaxRefunded',
-                    'getBaseTaxAmount',
-                    'getQtyOrdered',
-                    'setTaxRefunded',
-                    'setDiscountTaxCompensationRefunded',
-                    'getDiscountTaxCompensationRefunded',
-                    'getDiscountTaxCompensationAmount'
-                ]
-            )
             ->getMock();
         $orderItemMock->expects($this->once())
             ->method('getQtyRefunded')
@@ -272,8 +243,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getDiscountTaxCompensationAmount')
             ->willReturn(10);
+        $orderItemMock->expects($this->once())
+            ->method('getQtyToRefund')
+            ->willReturn(1);
 
-        $this->item->setData('qty', 1);
+        $this->item->setQty(1);
         $this->item->setOrderItem($orderItemMock);
         $result = $this->item->cancel();
         $this->assertInstanceOf('Magento\Sales\Model\Order\Creditmemo\Item', $result);
@@ -342,7 +316,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->method('getQtyToRefund')
             ->willReturn($qtyAvailable);
 
-        $this->item->setData('qty', $qty);
+        $this->item->setQty($qty);
         $this->item->setCreditmemo($creditmemoMock);
         $this->item->setOrderItem($orderItemMock);
         $result = $this->item->calcRowTotal();
@@ -361,5 +335,39 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             'qty 1' => [1],
             'qty 0' => [0],
         ];
+    }
+
+    public function testSetQtyWithProcess()
+    {
+        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+            ->disableOriginalConstructor()
+            ->setMethods(['getQtyToRefund'])
+            ->getMock();
+        $orderItemMock->expects($this->once())
+            ->method('getQtyToRefund')
+            ->willReturn(2);
+
+        $this->item->setOrderItem($orderItemMock);
+
+        $this->item->setQty(2);
+        $this->assertEquals(2, $this->item->getQty());
+    }
+
+    public function testSetQtyWithProcessDecimal()
+    {
+        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+            ->disableOriginalConstructor()
+            ->setMethods(['getQtyToRefund', 'getIsQtyDecimal'])
+            ->getMock();
+        $orderItemMock->expects($this->once())
+            ->method('getQtyToRefund')
+            ->willReturn(3.3);
+        $orderItemMock->expects($this->once())
+            ->method('getIsQtyDecimal')
+            ->willReturn(true);
+        $this->item->setOrderItem($orderItemMock);
+
+        $this->item->setQty(3.3);
+        $this->assertEquals(3.3, $this->item->getQty());
     }
 }
