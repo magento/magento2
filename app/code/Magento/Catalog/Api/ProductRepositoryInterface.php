@@ -62,7 +62,7 @@ interface ProductRepositoryInterface
      * @return bool Will return True if deleted
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\StateException
-     * @deprecated
+     * @deprecated Use deleteBySky() to delete a product by SKU
      */
     public function deleteById($sku);
 
