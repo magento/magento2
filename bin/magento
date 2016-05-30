@@ -4,9 +4,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-use \Magento\Framework\App\ProductMetadata;
-use \Magento\Framework\Composer\ComposerJsonFinder;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 if (PHP_SAPI !== 'cli') {
     echo 'bin/magento must be run as a CLI application';
@@ -22,8 +19,7 @@ try {
 try {
     $handler = new \Magento\Framework\App\ErrorHandler();
     set_error_handler([$handler, 'handler']);
-    $productMetadata = new ProductMetadata(new ComposerJsonFinder(new DirectoryList(BP)));
-    $application = new Magento\Framework\Console\Cli('Magento CLI', $productMetadata->getVersion());
+    $application = new Magento\Framework\Console\Cli('Magento CLI');
     $application->run();
 } catch (\Exception $e) {
     while ($e) {
@@ -32,4 +28,5 @@ try {
         echo "\n\n";
         $e = $e->getPrevious();
     }
+    exit(Cli::RETURN_FAILURE);
 }

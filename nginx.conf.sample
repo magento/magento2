@@ -25,7 +25,8 @@ root $MAGE_ROOT/pub;
 
 index index.php;
 autoindex off;
-charset off;
+charset UTF-8;
+#add_header "X-UA-Compatible" "IE=Edge";
 
 location ~* ^/setup($|/) {
     root $MAGE_ROOT;
@@ -83,12 +84,12 @@ location /static/ {
     if ($MAGE_MODE = "production") {
         expires max;
     }
-    
+
     # Remove signature of the static files that is used to overcome the browser cache
     location ~ ^/static/version {
         rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
     }
-    
+
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
@@ -168,6 +169,7 @@ gzip_disable "msie6";
 
 gzip_comp_level 6;
 gzip_min_length 1100;
+gzip_buffers 16 8k;
 gzip_proxied any;
 gzip_types
     text/plain
@@ -179,7 +181,9 @@ gzip_types
     application/x-javascript
     application/json
     application/xml
-    application/xml+rss;
+    application/xml+rss
+    image/svg+xml;
+gzip_vary on;
 
 location ~ \.php$ {
     deny all;

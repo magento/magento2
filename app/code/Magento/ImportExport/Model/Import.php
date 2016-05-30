@@ -280,11 +280,11 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         $messages = [];
         if ($this->getProcessedRowsCount()) {
             if ($validationResult->getErrorsCount()) {
-                $messages[] = __('Data validation is failed. Please fix errors and re-upload the file.');
+                $messages[] = __('Data validation failed. Please fix the following errors and upload the file again.');
 
                 // errors info
                 foreach ($validationResult->getRowsGroupedByErrorCode() as $errorMessage => $rows) {
-                    $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
+                    $error = $errorMessage . ' ' . __('in row(s)') . ': ' . implode(', ', $rows);
                     $messages[] = $error;
                 }
             } else {
