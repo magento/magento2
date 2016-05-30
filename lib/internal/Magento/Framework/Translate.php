@@ -177,8 +177,8 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->_data = [];
 
         $this->_loadModuleTranslation();
-        $this->_loadThemeTranslation();
         $this->_loadPackTranslation();
+        $this->_loadThemeTranslation();
         $this->_loadDbTranslation();
 
         $this->_saveCache();
