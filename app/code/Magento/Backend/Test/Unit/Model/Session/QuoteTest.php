@@ -296,7 +296,12 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->quoteRepositoryMock->expects($this->once())->method('get')->willReturn($quoteMock);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($quoteMock);
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($quoteMock);
         $quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
             ->with($customerGroupId)
