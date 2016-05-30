@@ -43,6 +43,11 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     protected $_orderItemFactory;
 
     /**
+     * @var bool
+     */
+    private $qtyProcessed = false;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -127,26 +132,14 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     public function getOrderItem()
     {
         if ($this->_orderItem === null) {
-            $this->_orderItem = $this->getOrderItemWithoutCaching();
+            if ($this->getCreditmemo()) {
+                $orderItem = $this->getCreditmemo()->getOrder()->getItemById($this->getOrderItemId());
+            } else {
+                $orderItem = $this->_orderItemFactory->create()->load($this->getOrderItemId());
+            }
+            $this->_orderItem = $orderItem;
         }
         return $this->_orderItem;
-    }
-
-    /**
-     * Retrieve order item instance without set it to property.
-     * It is need for ability to process setQty on api when credit memo and order has not built yet.
-     *
-     * @return \Magento\Sales\Model\Order\Item
-     */
-    private function getOrderItemWithoutCaching()
-    {
-        if ($this->getCreditmemo()) {
-            $orderItem = $this->getCreditmemo()->getOrder()->getItemById($this->getOrderItemId());
-        } else {
-            $orderItem = $this->_orderItemFactory->create()->load($this->getOrderItemId());
-        }
-
-        return $orderItem;
     }
 
     /**
@@ -164,26 +157,13 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     /**
      * Declare qty
      *
-     * @param   float $qty
+     * @param float $qty
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setQty($qty)
     {
-        $orderItem = $this->getOrderItem();
-        if ($orderItem->getIsQtyDecimal()) {
-            $qty = (double)$qty;
-        } else {
-            $qty = (int)$qty;
-        }
-        $qty = $qty > 0 ? $qty : 0;
-        if ($this->isQtyAvailable($qty, $orderItem)) {
-            $this->setData('qty', $qty);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('We found an invalid quantity to refund item "%1".', $this->getName())
-            );
-        }
+        $this->setData('qty', $qty);
+        $this->qtyProcessed = false;
         return $this;
     }
 
@@ -211,6 +191,29 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $orderItem->setBaseDiscountRefunded($orderItem->getBaseDiscountRefunded() + $this->getBaseDiscountAmount());
 
         return $this;
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function processQty()
+    {
+        $orderItem = $this->getOrderItem();
+        $qty = $this->getData(CreditmemoItemInterface::QTY);
+        if ($orderItem->getIsQtyDecimal()) {
+            $qty = (double)$qty;
+        } else {
+            $qty = (int)$qty;
+        }
+        $qty = $qty > 0 ? $qty : 0;
+        if ($this->isQtyAvailable($qty, $orderItem)) {
+            $this->setData('qty', $qty);
+        } else {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We found an invalid quantity to refund item "%1".', $this->getName())
+            );
+        }
     }
 
     /**
@@ -511,6 +514,10 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      */
     public function getQty()
     {
+        if (!$this->qtyProcessed) {
+            $this->processQty();
+            $this->qtyProcessed = true;
+        }
         return $this->getData(CreditmemoItemInterface::QTY);
     }
 
