@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,6 +41,7 @@ angular.module('system-config', ['ngStorage'])
                 $http.post('index.php/marketplace/save-auth-json', $scope.user)
                     .success(function (data) {
                         $scope.saveAuthJson.result = data;
+                        $scope.logout = false;
                         if ($scope.saveAuthJson.result.success) {
                             $scope.logout = false;
                             $localStorage.isMarketplaceAuthorized = true;

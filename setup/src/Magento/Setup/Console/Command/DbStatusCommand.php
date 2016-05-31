@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -93,6 +93,8 @@ class DbStatusCommand extends AbstractSetupCommand
                     '<info>Some modules use code versions newer or older than the database. ' .
                     "First update the module code, then run 'setup:upgrade'.</info>"
                 );
+                // we must have an exit code higher than zero to indicate something was wrong
+                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             } else {
                 $output->writeln("<info>Run 'setup:upgrade' to update your DB schema and data.</info>");
             }

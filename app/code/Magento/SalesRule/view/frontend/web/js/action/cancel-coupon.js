@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ define(
         return function (isApplied, isLoading) {
             var quoteId = quote.getQuoteId(),
                 url = urlManager.getCancelCouponUrl(quoteId),
-                message = $t('Your coupon was successfully removed');
+                message = $t('Your coupon was successfully removed.');
             messageContainer.clear();
 
             return storage.delete(

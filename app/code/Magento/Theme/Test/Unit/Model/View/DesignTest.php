@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,7 +8,7 @@
 
 namespace Magento\Theme\Test\Unit\Model\View;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\View\Design;
 
 class DesignTest extends \PHPUnit_Framework_TestCase
@@ -108,8 +108,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     public function designThemeDataProvider()
     {
         return [
-            'single' => [true, ScopeConfigInterface::SCOPE_TYPE_DEFAULT],
-            'multi'  => [false, \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
+            'single' => [true, ScopeInterface::SCOPE_WEBSITES],
+            'multi'  => [false, ScopeInterface::SCOPE_STORE],
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
@@ -40,6 +40,10 @@ interface GroupRepositoryInterface
      *
      * The list of groups can be filtered to exclude the NOT_LOGGED_IN group using the first parameter and/or it can
      * be filtered by tax class.
+     *
+     * This call returns an array of objects, but detailed information about each object’s attributes might not be
+     * included. See http://devdocs.magento.com/codelinks/attributes.html#GroupRepositoryInterface to determine
+     * which call to use to get detailed information about all attributes for an object.
      *
      * @api
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

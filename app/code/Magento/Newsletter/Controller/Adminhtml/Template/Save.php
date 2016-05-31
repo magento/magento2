@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Template;
@@ -63,7 +63,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template
 
             $this->messageManager->addSuccess(__('The newsletter template has been saved.'));
             $this->_getSession()->setFormData(false);
-
+            $this->_getSession()->unsPreviewData();
             $this->_redirect('*/template');
             return;
         } catch (LocalizedException $e) {

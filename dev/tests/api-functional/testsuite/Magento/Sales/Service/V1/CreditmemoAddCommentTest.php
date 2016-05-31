@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Service\V1;
@@ -60,8 +60,8 @@ class CreditmemoAddCommentTest extends WebapiAbstract
             Comment::ENTITY_ID => null,
             Comment::CREATED_AT => null,
             Comment::PARENT_ID => $creditmemo->getId(),
-            Comment::IS_VISIBLE_ON_FRONT => true,
-            Comment::IS_CUSTOMER_NOTIFIED => true,
+            Comment::IS_VISIBLE_ON_FRONT => 1,
+            Comment::IS_CUSTOMER_NOTIFIED => 1,
         ];
 
         $requestData = ['entity' => $commentData];

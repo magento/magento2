@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,7 +12,7 @@ define([
         defaults: {
             cols: 15,
             rows: 2,
-            template: 'ui/form/element/textarea'
+            elementTmpl: 'ui/form/element/textarea'
         }
     });
 });

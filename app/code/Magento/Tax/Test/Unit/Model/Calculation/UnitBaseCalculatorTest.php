@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,7 +50,7 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $appliedTaxRate;
 
-    public function setUp()
+    protected function setUp()
     {
         /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  $objectManager */
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

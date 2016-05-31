@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class PageRepository
@@ -58,6 +59,11 @@ class PageRepository implements PageRepositoryInterface
     protected $dataPageFactory;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param ResourcePage $resource
      * @param PageFactory $pageFactory
      * @param Data\PageInterfaceFactory $dataPageFactory
@@ -65,6 +71,7 @@ class PageRepository implements PageRepositoryInterface
      * @param Data\PageSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ResourcePage $resource,
@@ -73,7 +80,8 @@ class PageRepository implements PageRepositoryInterface
         PageCollectionFactory $pageCollectionFactory,
         Data\PageSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
-        DataObjectProcessor $dataObjectProcessor
+        DataObjectProcessor $dataObjectProcessor,
+        StoreManagerInterface $storeManager
     ) {
         $this->resource = $resource;
         $this->pageFactory = $pageFactory;
@@ -82,6 +90,7 @@ class PageRepository implements PageRepositoryInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataPageFactory = $dataPageFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -93,10 +102,17 @@ class PageRepository implements PageRepositoryInterface
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
+        if (empty($page->getStoreId())) {
+            $storeId = $this->storeManager->getStore()->getId();
+            $page->setStoreId($storeId);
+        }
         try {
             $this->resource->save($page);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
+            throw new CouldNotSaveException(__(
+                'Could not save the page: %1',
+                $exception->getMessage()
+            ));
         }
         return $page;
     }
@@ -185,7 +201,10 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->delete($page);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(__(
+                'Could not delete the page: %1',
+                $exception->getMessage()
+            ));
         }
         return true;
     }

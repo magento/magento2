@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Vault\Model\VaultPaymentInterface" type="Magento\Vault\Model\Method\Vault"/>
+    <preference for="Magento\Vault\Api\Data\PaymentTokenInterface" type="Magento\Vault\Model\PaymentToken"/>
+    <preference for="Magento\Vault\Api\PaymentTokenRepositoryInterface" type="Magento\Vault\Model\PaymentTokenRepositoryProxy" />
+    <preference for="Magento\Vault\Api\PaymentTokenManagementInterface" type="Magento\Vault\Model\PaymentTokenManagement" />
+    <preference for="Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+    <preference for="Magento\Vault\Model\Ui\TokenUiComponentInterface" type="Magento\Vault\Model\Ui\TokenUiComponent" />
+
+    <type name="Magento\Sales\Api\Data\OrderPaymentInterface">
+        <plugin name="PaymentVaultExtensionAttributeOperations" type="\Magento\Vault\Plugin\PaymentVaultAttributesLoad"/>
+    </type>
+
+    <!-- Configuration vault -->
+    <virtualType name="VaultPaymentConfig" type="Magento\Payment\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\Vault\Model\VaultPaymentInterface::CODE</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Payment Method configuration -->
+    <type name="Magento\Vault\Model\Method\Vault">
+        <arguments>
+            <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
+            <argument name="valueHandlerPool" xsi:type="object">VaultPaymentValueHandlerPool</argument>
+            <argument name="vaultProvider" xsi:type="object">Magento\Vault\Model\Method\NullPaymentProvider</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Vault\Model\PaymentTokenRepositoryProxy">
+        <arguments>
+            <argument name="defaultRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenRepository</argument>
+            <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
+            <argument name="repositories" xsi:type="array"/>
+        </arguments>
+    </type>
+
+    <virtualType name="VaultPaymentDefaultValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">VaultPaymentConfig</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Vault\Gateway\Config\ActiveHandler">
+        <arguments>
+            <argument name="config" xsi:type="object">VaultPaymentConfig</argument>
+        </arguments>
+    </type>
+    <virtualType name="VaultPaymentValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">VaultPaymentDefaultValueHandler</item>
+                <item name="active" xsi:type="string">Magento\Vault\Gateway\Config\ActiveHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+</config>

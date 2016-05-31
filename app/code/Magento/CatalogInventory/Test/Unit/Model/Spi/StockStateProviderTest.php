@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Spi;
@@ -381,6 +381,33 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
                     'checkQty' => false,
                     'suggestQty' => 50.5,
                     'getStockQty' => $stockQty,
+                    'checkQtyIncrements' => false,
+                    'checkQuoteItemQty' => true,
+                ]
+            ],
+            [
+                'values' => [
+                    'getIsInStock' => true,
+                    'getQty' => null,
+                    'getMinQty' => 60,
+                    'getMinSaleQty' => 1,
+                    'getMaxSaleQty' => 99,
+                    'getNotifyStockQty' => 101,
+                    'getManageStock' => true,
+                    'getBackorders' => 0,
+                    'getQtyIncrements' => 1,
+                    '_stock_qty_' => null,
+                    '_suppress_check_qty_increments_' => false,
+                    '_is_saleable_' => true,
+                    '_ordered_items_' => 0,
+                    '_product_' => 'Test product Name',
+                ],
+                'results' => [
+                    'verifyStock' => false,
+                    'verifyNotification' => true,
+                    'checkQty' => false,
+                    'suggestQty' => 50.5,
+                    'getStockQty' => null,
                     'checkQtyIncrements' => false,
                     'checkQuoteItemQty' => true,
                 ]

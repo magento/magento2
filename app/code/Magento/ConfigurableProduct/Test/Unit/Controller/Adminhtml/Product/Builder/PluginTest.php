@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Builder;
@@ -101,7 +101,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             '__wakeup',
             'load',
             'setTypeId',
-            'getEditableAttributes',
+            'getSetAttributes',
         ];
         $this->configurableMock = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
@@ -158,15 +158,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnSelf()
         );
-        $this->configurableTypeMock->expects(
-            $this->once()
-        )->method(
-            'setUsedProductAttributeIds'
-        )->with(
-            ['attributes']
-        )->will(
-            $this->returnSelf()
-        );
         $this->productMock->expects(
             $this->once()
         )->method(
@@ -198,7 +189,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->configurableMock->expects(
             $this->once()
         )->method(
-            'getEditableAttributes'
+            'getSetAttributes'
         )->with(
             $this->configurableMock
         )->will(

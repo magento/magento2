@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
@@ -15,6 +15,7 @@ use Magento\Framework\App\ResourceConnection;
  *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -126,7 +127,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * @var array
      */
-    protected $_oldSkus;
+    protected $_oldSkus = null;
 
     /**
      * Permanent entity columns.
@@ -143,9 +144,16 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_catalogProductEntity;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $_localeDate;
+    protected $dateTime;
+
+    /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
 
     /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -157,7 +165,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
      * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -177,7 +185,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
         ProcessingErrorAggregatorInterface $errorAggregator,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory,
         \Magento\Catalog\Model\Product $productModel,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -187,7 +195,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         AdvancedPricing\Validator\Website $websiteValidator,
         AdvancedPricing\Validator\TierPrice $tierPriceValidator
     ) {
-        $this->_localeDate = $localeDate;
+        $this->dateTime = $dateTime;
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
         $this->_resourceHelper = $resourceHelper;
@@ -199,11 +207,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_storeResolver = $storeResolver;
         $this->_importProduct = $importProduct;
         $this->_validators[self::VALIDATOR_MAIN] = $validator->init($this);
+        $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->_validators[self::VALIDATOR_WEBSITE] = $websiteValidator;
         $this->_validators[self::VALIDATOR_TEAR_PRICE] = $tierPriceValidator;
         $this->errorAggregator = $errorAggregator;
-        $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
         foreach (array_merge($this->errorMessageTemplates, $this->_messageTemplates) as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
@@ -409,11 +417,12 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $tableName = $this->_resourceFactory->create()->getTable($table);
             $priceIn = [];
             $entityIds = [];
+            $oldSkus = $this->retrieveOldSkus();
             foreach ($priceData as $sku => $priceRows) {
-                if (isset($this->_oldSkus[$sku])) {
-                    $productId = $this->_oldSkus[$sku];
+                if (isset($oldSkus[$sku])) {
+                    $productId = $oldSkus[$sku];
                     foreach ($priceRows as $row) {
-                        $row['entity_id'] = $productId;
+                        $row[$this->getProductEntityLinkField()] = $productId;
                         $priceIn[] = $row;
                         $entityIds[] = $productId;
                     }
@@ -430,16 +439,18 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes tier prices prices.
      *
      * @param array $listSku
-     * @param string $tableName
-     * @return bool
+     * @param string $table
+     * @return boolean
      */
-    protected function deleteProductTierPrices(array $listSku, $tableName)
+    protected function deleteProductTierPrices(array $listSku, $table)
     {
+        $tableName = $this->_resourceFactory->create()->getTable($table);
+        $productEntityLinkField = $this->getProductEntityLinkField();
         if ($tableName && $listSku) {
             if (!$this->_cachedSkuToDelete) {
                 $this->_cachedSkuToDelete = $this->_connection->fetchCol(
                     $this->_connection->select()
-                        ->from($this->_catalogProductEntity, 'entity_id')
+                        ->from($this->_catalogProductEntity, $productEntityLinkField)
                         ->where('sku IN (?)', $listSku)
                 );
             }
@@ -447,7 +458,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 try {
                     $this->countItemsDeleted += $this->_connection->delete(
                         $tableName,
-                        $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
+                        $this->_connection->quoteInto($productEntityLinkField . ' IN (?)', $this->_cachedSkuToDelete)
                     );
                     return true;
                 } catch (\Exception $e) {
@@ -470,11 +481,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function setUpdatedAt(array $listSku)
     {
-        $updatedAt = $this->_localeDate->date(null, null, false)->format('Y-m-d H:i:s');
+        $updatedAt = $this->dateTime->gmtDate('Y-m-d H:i:s');
         $this->_connection->update(
             $this->_catalogProductEntity,
             [\Magento\Catalog\Model\Category::KEY_UPDATED_AT => $updatedAt],
-            $this->_connection->quoteInto('sku IN (?)', $listSku)
+            $this->_connection->quoteInto('sku IN (?)', array_unique($listSku))
         );
         return $this;
     }
@@ -511,13 +522,15 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function retrieveOldSkus()
     {
-        $oldSkus = $this->_connection->fetchPairs(
-            $this->_connection->select()->from(
-                $this->_connection->getTableName('catalog_product_entity'),
-                ['sku', 'entity_id']
-            )
-        );
-        return $oldSkus;
+        if ($this->_oldSkus === null) {
+            $this->_oldSkus = $this->_connection->fetchPairs(
+                $this->_connection->select()->from(
+                    $this->_catalogProductEntity,
+                    ['sku', $this->getProductEntityLinkField()]
+                )
+            );
+        }
+        return $this->_oldSkus;
     }
 
     /**
@@ -529,15 +542,18 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function processCountExistingPrices($prices, $table)
     {
+        $tableName = $this->_resourceFactory->create()->getTable($table);
+        $productEntityLinkField = $this->getProductEntityLinkField();
         $existingPrices = $this->_connection->fetchAssoc(
             $this->_connection->select()->from(
-                $this->_connection->getTableName($table),
-                ['value_id', 'entity_id', 'all_groups', 'customer_group_id']
+                $tableName,
+                ['value_id', $productEntityLinkField, 'all_groups', 'customer_group_id']
             )
         );
+        $oldSkus = $this->retrieveOldSkus();
         foreach ($existingPrices as $existingPrice) {
-            foreach ($this->_oldSkus as $sku => $productId) {
-                if ($existingPrice['entity_id'] == $productId && isset($prices[$sku])) {
+            foreach ($oldSkus as $sku => $productId) {
+                if ($existingPrice[$productEntityLinkField] == $productId && isset($prices[$sku])) {
                     $this->incrementCounterUpdated($prices[$sku], $existingPrice);
                 }
             }
@@ -578,5 +594,20 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->countItemsCreated -= $this->countItemsUpdated;
 
         return $this;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }

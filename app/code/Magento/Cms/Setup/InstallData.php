@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -210,7 +210,7 @@ class InstallData implements InstallDataInterface
     </p>
     <h2><a name="list"></a>List of cookies we collect</h2>
     <p>The table below lists the cookies we collect and what information they store.</p>
-    <table class="data-table">
+    <table class="data-table data-table-definition-list">
         <thead>
             <tr>
                 <th>COOKIE name</th>
@@ -336,7 +336,7 @@ EOD;
                 $content = preg_replace('/<li class="last">/ims', '<li>', $content);
                 $replacment = '<li class="last privacy">' .
                     "<a href=\"{{store direct_url=\"privacy-policy-cookie-restriction-mode\"}}\">" .
-                    "Privacy and Cookie Policy</a></li>\r\n</ul>";
+                    __('Privacy and Cookie Policy') . "</a></li>\r\n</ul>";
                 $content = preg_replace('/<\\/ul>/ims', $replacment, $content);
                 $footerLinksBlock->setContent($content)->save();
             }

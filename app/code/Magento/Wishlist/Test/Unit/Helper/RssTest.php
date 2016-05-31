@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Helper;
@@ -52,7 +52,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfigMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->wishlistFactoryMock = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
             ->disableOriginalConstructor()

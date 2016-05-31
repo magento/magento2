@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options;
@@ -50,6 +50,28 @@ class Visual extends AbstractSwatch
         }
 
         return $value;
+    }
+
+    /**
+     * Return json config for visual option JS initialization
+     *
+     * @return array
+     */
+    public function getJsonConfig()
+    {
+        $values = [];
+        foreach ($this->getOptionValues() as $value) {
+            $values[] = $value->getData();
+        }
+
+        $data = [
+            'attributesData' => $values,
+            'uploadActionUrl' => $this->getUrl('swatches/iframe/show'),
+            'isSortable' => (int)(!$this->getReadOnly() && !$this->canManageOptionDefaultOnly()),
+            'isReadOnly' => (int)$this->getReadOnly()
+        ];
+
+        return json_encode($data);
     }
 
     /**

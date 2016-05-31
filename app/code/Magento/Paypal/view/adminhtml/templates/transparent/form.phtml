@@ -1,0 +1,155 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Paypal\Block\Adminhtml\Payflowpro\CcForm $block */
+$code = $block->escapeHtml($block->getMethodCode());
+$ccType = $block->getInfoData('cc_type');
+$ccExpYear = $block->getInfoData('cc_exp_year');
+$ccExpMonth = $block->getInfoData('cc_exp_month');
+?>
+
+<!-- IFRAME for request to Payment Gateway -->
+<iframe id="<?php /* @noEscape */ echo $code; ?>-transparent-iframe"
+        data-container="<?php /* @noEscape */ echo $code; ?>-transparent-iframe"
+        allowtransparency="true"
+        frameborder="0"
+        name="iframeTransparent"
+        style="display: none; width: 100%; background-color: transparent;"
+        src="<?php echo $block->escapeUrl($block->getViewFileUrl('blank.html')); ?>"></iframe>
+<fieldset
+    id="payment_form_<?php /* @noEscape */ echo $code; ?>"
+    class="admin__fieldset"
+    data-mage-init='{
+     "transparent":{
+        "controller":"<?php echo $block->escapeHtml($block->getRequest()->getControllerName()); ?>",
+        "gateway":"<?php /* @noEscape */ echo $code; ?>",
+        "dateDelim":"<?php echo $block->escapeHtml($block->getDateDelim()); ?>",
+        "cardFieldsMap":<?php echo $block->escapeHtml($block->getCardFieldsMap()); ?>,
+        "orderSaveUrl":"<?php echo $block->escapeUrl($block->getOrderUrl()); ?>",
+        "cgiUrl":"<?php echo $block->escapeUrl($block->getCgiUrl()); ?>",
+        "expireYearLength":"<?php echo $block->escapeHtml($block->getMethodConfigData('cc_year_length')); ?>",
+        "nativeAction":"<?php echo $block->escapeUrl($block->getUrl('*/*/save', ['_secure' => $block->getRequest()->isSecure()])); ?>"
+      }, "validation":[]}'
+    style="display: none;">
+    <div class="admin__field _required">
+        <label for="<?php /* @noEscape */ echo $code; ?>_cc_type" class="admin__field-label">
+            <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
+        </label>
+
+        <div class="admin__field-control">
+            <select id="<?php /* @noEscape */ echo $code; ?>_cc_type"
+                    data-container="<?php /* @noEscape */ echo $code; ?>-cc-type"
+                    name="payment[cc_type]"
+                    data-validate='{required:true, "validate-cc-type-select":"#<?php /* @noEscape */ echo $code; ?>_cc_number"}'
+                    class="admin__control-select">
+                <option value=""><?php echo $block->escapeHtml(__('Please Select')); ?></option>
+                <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
+                    <option
+                        value="<?php echo $block->escapeHtml($typeCode); ?>"<?php if ($typeCode == $ccType): ?> selected="selected"<?php endif ?>>
+                        <?php echo $block->escapeHtml($typeName); ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="admin__field _required field-number">
+        <label for="<?php /* @noEscape */ echo $code; ?>_cc_number" class="admin__field-label">
+            <span><?php echo $block->escapeHtml(__('Credit Card Number')); ?></span>
+        </label>
+
+        <div class="admin__field-control">
+            <input type="text" id="<?php /* @noEscape */ echo $code; ?>_cc_number"
+                   data-container="<?php /* @noEscape */ echo $code; ?>-cc-number"
+                   name="payment[cc_number]" title="<?php echo $block->escapeHtml(__('Credit Card Number')); ?>"
+                   class="admin__control-text"
+                   value=""
+                   data-validate='{
+                       "required-number":true,
+                       "validate-cc-number":"#<?php /* @noEscape */ echo $code; ?>_cc_type",
+                       "validate-cc-type":"#<?php /* @noEscape */ echo $code; ?>_cc_type"
+                   }'
+                   autocomplete="off"/>
+        </div>
+    </div>
+
+    <div class="admin__field _required field-date" id="<?php /* @noEscape */ echo $code; ?>_cc_type_exp_div">
+        <label for="<?php /* @noEscape */ echo $code; ?>_expiration" class="admin__field-label">
+            <span><?php echo $block->escapeHtml(__('Expiration Date')); ?></span>
+        </label>
+
+        <div class="admin__field-control">
+            <select id="<?php /* @noEscape */ echo $code; ?>_expiration" name="payment[cc_exp_month]"
+                    data-container="<?php /* @noEscape */ echo $code; ?>-cc-month"
+                    class="admin__control-select admin__control-select-month"
+                    data-validate='{required:true, "validate-cc-exp":"#<?php /* @noEscape */ echo $code; ?>_expiration_yr"}'>
+                <?php foreach ($block->getCcMonths() as $k => $v): ?>
+                    <option
+                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : ''; ?>"
+                        <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
+                        <?php echo $block->escapeHtml($v); ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+
+            <select id="<?php /* @noEscape */ echo $code; ?>_expiration_yr" name="payment[cc_exp_year]"
+                    class="admin__control-select admin__control-select-year"
+                    data-container="<?php /* @noEscape */ echo $code; ?>-cc-year" data-validate='{required:true}'>
+                <?php foreach ($block->getCcYears() as $k => $v): ?>
+                    <option
+                        value="<?php /* @noEscape */ echo $k ? $block->escapeHtml($k) : '' ?>"
+                        <?php if ($k == $ccExpYear): ?> selected="selected"<?php endif ?>>
+                        <?php echo $block->escapeHtml($v); ?>
+                    </option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+    <?php if ($block->hasVerification()): ?>
+        <div class="admin__field _required field-cvv" id="<?php /* @noEscape */ echo $code; ?>_cc_type_cvv_div">
+            <label for="<?php /* @noEscape */ echo $code; ?>_cc_cid" class="admin__field-label">
+                <span><?php echo $block->escapeHtml(__('Card Verification Number')); ?></span>
+            </label>
+
+            <div class="admin__field-control">
+                <input type="text" title="<?php echo $block->escapeHtml(__('Card Verification Number')); ?>"
+                       data-container="<?php /* @noEscape */ echo $code; ?>-cc-cvv"
+                       class="admin__control-text cvv"
+                       id="<?php /* @noEscape */ echo $code; ?>_cc_cid" name="payment[cc_cid]"
+                       value=""
+                       data-validate='{"required-number":true, "validate-cc-cvn":"#<?php /* @noEscape */ echo $code; ?>_cc_type"}'
+                       autocomplete="off"/>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if($block->isVaultEnabled()): ?>
+        <div class="field-tooltip-content">
+            <input type="checkbox"
+                   id="<?php /* @noEscape */ echo $code; ?>_vault"
+                   name="payment[is_active_payment_token_enabler]"
+                   class="admin__control-checkbox"/>
+            <label class="label" for="<?php /* @noEscape */ echo $code; ?>_vault">
+                <span><?php echo $block->escapeHtml('Save for later use.'); ?></span>
+            </label>
+        </div>
+    <?php endif; ?>
+    <input type="hidden" id="<?php /* @noEscape */ echo $code; ?>_cc_last_4"
+           name="payment[cc_last_4]"/>
+
+    <?php echo $block->getChildHtml() ?>
+</fieldset>
+
+<script>
+    /**
+     * Disable card server validation in admin
+     */
+    require(["Magento_Sales/order/create/form"], function () {
+        order.addExcludedPaymentMethod('<?php /* @noEscape */ echo $code; ?>');
+    });
+</script>

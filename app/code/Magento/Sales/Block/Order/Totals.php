@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Order;
@@ -164,7 +164,7 @@ class Totals extends \Magento\Framework\View\Element\Template
             $this->_totals['base_grandtotal'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'base_grandtotal',
-                    'value' => $this->getOrder()->formatPrice($source->getGrandTotal()),
+                    'value' => $this->getOrder()->formatBasePrice($source->getBaseGrandTotal()),
                     'label' => __('Grand Total to be Charged'),
                     'is_formated' => true,
                 ]

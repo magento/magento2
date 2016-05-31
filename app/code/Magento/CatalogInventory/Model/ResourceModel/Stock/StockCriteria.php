@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
@@ -25,9 +25,9 @@ class StockCriteria extends AbstractCriteria implements \Magento\CatalogInventor
     /**
      * @inheritdoc
      */
-    public function setWebsiteFilter($website)
+    public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $website;
+        $this->data['website_filter'] = $scope;
         return true;
     }
 

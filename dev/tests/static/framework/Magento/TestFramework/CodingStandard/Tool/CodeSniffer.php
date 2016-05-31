@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -88,9 +88,8 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
         $settings['files'] = $whiteList;
         $settings['standard'] = [$this->rulesetDir];
         $settings['extensions'] = $this->extensions;
-        $settings['reportFile'] = $this->reportFile;
         $settings['warningSeverity'] = 0;
-        $settings['reports']['checkstyle'] = null;
+        $settings['reports']['full'] = $this->reportFile;
 
         $this->wrapper->setValues($settings);
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget;
@@ -112,7 +112,7 @@ class Tabs extends \Magento\Backend\Block\Widget
     public function addTab($tabId, $tab)
     {
         if (empty($tabId)) {
-            throw new \Exception(__('Please correct the tab configuration and try again. Tab Id should be not empry'));
+            throw new \Exception(__('Please correct the tab configuration and try again. Tab Id should be not empty'));
         }
         if (is_array($tab)) {
             $this->_tabs[$tabId] = new \Magento\Framework\DataObject($tab);

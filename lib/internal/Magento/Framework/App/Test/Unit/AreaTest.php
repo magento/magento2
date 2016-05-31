@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -73,7 +73,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Phrase\RendererInterface */
     private $defaultRenderer;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

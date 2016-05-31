@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Config\Structure\Reader;
@@ -116,10 +116,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getActualContent()
     {
-        $files = $this->fileUtility->getFiles(
-            [$this->fileUtility->getPathToSource() . static::ACTUAL],
-            'config.xml'
-        );
+        $files = $this->fileUtility->getFiles([BP . static::ACTUAL], 'config.xml');
 
         return file_get_contents(reset($files));
     }
@@ -129,10 +126,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getExpectedContent()
     {
-        $files = $this->fileUtility->getFiles(
-            [$this->fileUtility->getPathToSource() . static::EXPECTED],
-            'config.xml'
-        );
+        $files = $this->fileUtility->getFiles([BP . static::EXPECTED], 'config.xml');
 
         return file_get_contents(reset($files));
     }

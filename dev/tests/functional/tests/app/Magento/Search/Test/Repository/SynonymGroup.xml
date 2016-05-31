@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Search\Test\Repository\SynonymGroup">
+        <dataset name="prepareMerge">
+            <field name="scope_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_store_view</item>
+            </field>
+            <field name="synonyms" xsi:type="string">test_synonym_%isolation%,test_synonym_2_test_synonym_%isolation%</field>
+            <field name="mergeOnConflict" xsi:type="string">Yes</field>
+        </dataset>
+    </repository>
+</config>

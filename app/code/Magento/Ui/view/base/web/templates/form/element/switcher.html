@@ -1,0 +1,19 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__actions-switch" data-role="switcher">
+    <input class="admin__actions-switch-checkbox"
+           type="checkbox"
+           data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
+    <label class="admin__actions-switch-label"
+           data-bind="attr: { for: uid }">
+        <span data-bind="attr: {
+                   'data-text-on': $t('Yes'),
+                   'data-text-off': $t('No')
+              }"
+              class="admin__actions-switch-text"></span>
+    </label>
+</div>

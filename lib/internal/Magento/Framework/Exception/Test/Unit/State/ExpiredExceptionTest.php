@@ -2,7 +2,7 @@
 /**
  * Expired exception
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Exception\Test\Unit\State;
@@ -12,8 +12,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class ExpiredException
- *
- * @package Magento\Framework\Exception\State
  */
 class ExpiredExceptionTest extends \PHPUnit_Framework_TestCase
 {

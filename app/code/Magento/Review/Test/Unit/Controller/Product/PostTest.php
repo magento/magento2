@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Controller\Product;
@@ -101,7 +101,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->redirect = $this->getMock('\Magento\Framework\App\Response\RedirectInterface');
         $this->request = $this->getMock('\Magento\Framework\App\Request\Http', ['getParam'], [], '', false);
@@ -127,7 +127,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             '\Magento\Review\Model\Review',
             [
                 'setData', 'validate', 'setEntityId', 'getEntityIdByCode', 'setEntityPkValue', 'setStatusId',
-                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate'
+                'setCustomerId', 'setStoreId', 'setStores', 'save', 'getId', 'aggregate', 'unsetData'
             ],
             [],
             '',
@@ -219,7 +219,10 @@ class PostTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $ratingsData = ['ratings' => [1 => 1]];
+        $reviewData = [
+            'ratings' => [1 => 1],
+            'review_id' => 2
+        ];
         $productId = 1;
         $customerId = 1;
         $storeId = 1;
@@ -230,7 +233,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->reviewSession->expects($this->any())->method('getFormData')
             ->with(true)
-            ->willReturn($ratingsData);
+            ->willReturn($reviewData);
         $this->request->expects($this->at(0))->method('getParam')
             ->with('category', false)
             ->willReturn(false);
@@ -260,7 +263,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
             ->with('product', $product)
             ->willReturnSelf();
         $this->review->expects($this->once())->method('setData')
-            ->with($ratingsData)
+            ->with($reviewData)
             ->willReturnSelf();
         $this->review->expects($this->once())->method('validate')
             ->willReturn(true);
@@ -270,6 +273,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
         $this->review->expects($this->once())->method('setEntityId')
             ->with(1)
             ->willReturnSelf();
+        $this->review->expects($this->once())->method('unsetData')->with('review_id');
         $product->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($productId);

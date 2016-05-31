@@ -6,22 +6,22 @@
  *
  * Format: array(<class_name>, <replacement>[, array(<whitelist>)]])
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
     'Zend_Db_Select' => [
         'replacement' => '\Magento\Framework\DB\Select',
         'exclude' => [
-            '/lib/internal/Magento/Framework/DB/Select.php',
-            '/lib/internal/Magento/Framework/DB/Adapter/Pdo/Mysql.php',
-            '/lib/internal/Magento/Framework/Model/Resource/Iterator.php',
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'DB/Select.php'],
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'DB/Adapter/Pdo/Mysql.php'],
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'Model/ResourceModel/Iterator.php'],
         ]
     ],
     'Zend_Db_Adapter_Pdo_Mysql' => [
         'replacement' => '\Magento\Framework\DB\Adapter\Pdo\Mysql',
         'exclude' => [
-            '/lib/internal/Magento/Framework/DB/Adapter/Pdo/Mysql.php',
+            ['type' => 'library', 'name' => 'magento/framework', 'path' => 'DB/Adapter/Pdo/Mysql.php'],
         ]
     ],
 ];

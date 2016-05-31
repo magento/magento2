@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**************************** CONFIGURABLE PRODUCT **************************/
@@ -214,7 +214,7 @@ Product.Config.prototype = {
             }
         }
 
-        var roundedPrice = (Math.round(price*100)/100).toString();
+        var roundedPrice = Number(Math.round(price + "e+2") + "e-2").toString();
 
         if (this.prices && this.prices[roundedPrice]) {
             str+= this.prices[roundedPrice];

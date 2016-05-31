@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,11 @@ use Magento\Customer\Api\AddressMetadataInterface;
  */
 class AddressCachedMetadata extends CachedMetadata implements AddressMetadataInterface
 {
+    /**
+     * @var string
+     */
+    protected $entityType = 'customer_address';
+
     /**
      * Initialize dependencies.
      *

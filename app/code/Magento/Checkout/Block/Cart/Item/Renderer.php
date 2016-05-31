@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart\Item;
@@ -336,7 +336,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
                 ];
             }
         }
-        $this->messageManager->getMessages('quote_item' . $quoteItem->getId())->clear();
+        $this->messageManager->getMessages(true, 'quote_item' . $quoteItem->getId())->clear();
 
         return $messages;
     }

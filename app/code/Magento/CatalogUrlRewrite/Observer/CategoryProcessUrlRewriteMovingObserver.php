@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -61,7 +61,7 @@ class CategoryProcessUrlRewriteMovingObserver implements ObserverInterface
             );
             $category->setData('save_rewrites_history', $saveRewritesHistory);
             $urlRewrites = array_merge(
-                $this->categoryUrlRewriteGenerator->generate($category),
+                $this->categoryUrlRewriteGenerator->generate($category, true),
                 $this->urlRewriteHandler->generateProductUrlRewrites($category)
             );
             $this->urlRewriteHandler->deleteCategoryRewritesForChildren($category);

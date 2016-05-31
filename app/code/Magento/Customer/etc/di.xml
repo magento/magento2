@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,6 +43,14 @@
                 type="Magento\Customer\Model\Metadata\AddressMetadataManagement" />
     <preference for="Magento\Customer\Api\CustomerManagementInterface"
                 type="Magento\Customer\Model\CustomerManagement" />
+    <preference for="Magento\Customer\Model\AuthenticationInterface"
+                type="Magento\Customer\Model\Authentication" />
+    <preference for="Magento\Customer\Model\EmailNotificationInterface"
+                type="Magento\Customer\Model\EmailNotification" />
+    <preference for="Magento\Customer\Api\CustomerNameGenerationInterface"
+                type="Magento\Customer\Helper\View" />
+    <preference for="Magento\Customer\Model\Address\CustomAttributeListInterface"
+                type="Magento\Customer\Model\Address\CustomAttributeList" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -79,7 +87,7 @@
     <type name="Magento\Customer\Model\ResourceModel\Address">
         <arguments>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
-            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entitySnapshot" xsi:type="object">CustomerAddressSnapshot</argument>
             <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
         </arguments>
     </type>
@@ -144,6 +152,11 @@
             <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
         </arguments>
     </virtualType>
+    <virtualType name="CustomerAddressSnapshot" type="Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="CustomerRelationsComposite" type="Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite">
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
@@ -174,12 +187,6 @@
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Customer\Model\ResourceModel\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Customer</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
@@ -201,26 +208,6 @@
     <virtualType name="BillingAddressHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
         <arguments>
             <argument name="concatExpression" xsi:type="object">BillingAddressExpression</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="LastVisitAtHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
-        <arguments>
-            <argument name="concatExpression" xsi:type="object">LastVisitAtSubSelect</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="LastVisitAtSubSelect" type="Magento\Framework\DB\Sql\LookupExpression">
-        <arguments>
-            <argument name="targetTable" xsi:type="string">customer_visitor</argument>
-            <argument name="targetColumn" xsi:type="string">last_visit_at</argument>
-            <argument name="referenceColumns" xsi:type="array">
-                <item name="customer_id" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">e</item>
-                    <item name="columnName" xsi:type="string">entity_id</item>
-                </item>
-            </argument>
-            <argument name="sortOrder" xsi:type="array">
-                <item name="DESC" xsi:type="string">last_visit_at</item>
-            </argument>
         </arguments>
     </virtualType>
     <virtualType name="CustomerNameExpression" type="Magento\Framework\DB\Sql\ConcatExpression">
@@ -310,11 +297,22 @@
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Visitor</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="upgradeHashAlgorithmCommand" xsi:type="object">Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
+    </type>
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
+    </type>
+    <type name="Magento\Customer\Model\Customer\NotificationStorage">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
         </arguments>
     </type>
 </config>

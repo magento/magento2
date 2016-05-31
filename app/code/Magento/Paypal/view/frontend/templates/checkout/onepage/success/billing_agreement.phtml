@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@
  * @var \Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement $block
  */
 ?>
-<p>
+<p data-mage-init='{"Magento_Paypal/js/in-context/billing-agreement": {"invalidateOnLoad" : true}}'>
     <?php echo $block->escapeHtml(__('Your billing agreement # is: ')); ?>
     <a href="<?php echo $block->escapeUrl($block->getAgreementUrl()); ?>">
         <?php echo $block->escapeHtml($block->getAgreementRefId()); ?>

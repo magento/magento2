@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
@@ -14,7 +14,7 @@ class CheckboxTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->block = (new ObjectManager($this))
             ->getObject('Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox');

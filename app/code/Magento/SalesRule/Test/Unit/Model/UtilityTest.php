@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Test\Unit\Model;
@@ -72,7 +72,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrency;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->usageFactory = $this->getMock(
             'Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory',

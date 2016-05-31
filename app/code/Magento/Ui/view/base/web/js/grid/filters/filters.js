@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -39,6 +39,7 @@ define([
             template: 'ui/grid/filters/filters',
             stickyTmpl: 'ui/grid/sticky/filters',
             _processed: [],
+            columnsProvider: 'ns = ${ $.ns }, componentType = columns',
             applied: {
                 placeholder: true
             },
@@ -59,11 +60,11 @@ define([
                     },
                     text: {
                         component: 'Magento_Ui/js/form/element/abstract',
-                        template: 'ui/grid/filters/elements/input'
+                        template: 'ui/grid/filters/field'
                     },
                     select: {
                         component: 'Magento_Ui/js/form/element/select',
-                        template: 'ui/grid/filters/elements/select',
+                        template: 'ui/grid/filters/field',
                         options: '${ JSON.stringify($.$data.column.options) }',
                         caption: ' '
                     },

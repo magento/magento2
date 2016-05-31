@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\Product;
@@ -75,6 +75,7 @@ class OptionList
             );
             $optionDataObject->setOptionId($option->getOptionId())
                 ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())
+                ->setDefaultTitle($option->getDefaultTitle())
                 ->setSku($product->getSku())
                 ->setProductLinks($productLinks);
             $optionList[] = $optionDataObject;

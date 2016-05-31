@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -79,11 +79,30 @@ class ShipmentCreateTest extends WebapiAbstract
             'increment_id' => null,
             'created_at' => null,
             'updated_at' => null,
-//            'packages' => null,
             'shipping_label' => null,
-            'tracks' => [],
+            'tracks' => [
+                [
+                    'carrier_code' => 'UPS',
+                    'order_id' => $order->getId(),
+                    'title' => 'ground',
+                    'description' => null,
+                    'track_number' => '12345678',
+                    'parent_id' => null,
+                    'created_at' => null,
+                    'updated_at' => null,
+                    'qty' => null,
+                    'weight' => null
+                ]
+            ],
             'items' => $items,
-            'comments' => [],
+            'comments' => [
+                [
+                    'comment' => 'Shipment-related comment.',
+                    'is_customer_notified' => null,
+                    'is_visible_on_front' => null,
+                    'parent_id' => null
+                ]
+            ],
         ];
         $result = $this->_webApiCall($serviceInfo, ['entity' => $data]);
         $this->assertNotEmpty($result);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -107,8 +107,9 @@ define(
              */
             objectToArray: function (object) {
                 var convertedArray = [];
+
                 $.each(object, function (key) {
-                    return object[key].length ? convertedArray.push(object[key]) : false;
+                    return typeof object[key] === 'string' ? convertedArray.push(object[key]) : false;
                 });
 
                 return convertedArray.slice(0);

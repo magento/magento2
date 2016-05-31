@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Queue;
@@ -42,7 +42,7 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
      */
     protected $preview;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
@@ -61,6 +61,12 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())->method('getStoreManager')->will($this->returnValue($this->storeManager));
         $appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $context->expects($this->once())->method('getAppState')->will($this->returnValue($appState));
+
+        $backendSession = $this->getMockBuilder('Magento\Backend\Model\Session')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $context->expects($this->once())->method('getBackendSession')->willReturn($backendSession);
 
         $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', ['create'], [], '', false);
         $this->template = $this->getMock('Magento\Newsletter\Model\Template', [], [], '', false);

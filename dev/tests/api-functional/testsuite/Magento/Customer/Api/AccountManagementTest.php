@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Security\Model\Config;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -67,6 +68,16 @@ class AccountManagementTest extends WebapiAbstract
     private $dataObjectProcessor;
 
     /**
+     * @var \Magento\Config\Model\Config
+     */
+    private $config;
+
+    /**
+     * @var int
+     */
+    private $configValue;
+
+    /**
      * Execute per test initialization.
      */
     public function setUp()
@@ -88,6 +99,25 @@ class AccountManagementTest extends WebapiAbstract
         $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Reflection\DataObjectProcessor'
         );
+        $this->config = Bootstrap::getObjectManager()->create(
+            'Magento\Config\Model\Config'
+        );
+
+        if ($this->config->getConfigDataValue(
+            Config::XML_PATH_FRONTED_AREA .
+            Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
+        ) != 0) {
+            $this->configValue = $this->config
+                ->getConfigDataValue(
+                    Config::XML_PATH_FRONTED_AREA .
+                    Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
+                );
+            $this->config->setDataByPath(
+                Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
+                0
+            );
+            $this->config->save();
+        }
     }
 
     public function tearDown()
@@ -111,6 +141,11 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertTrue($response);
             }
         }
+        $this->config->setDataByPath(
+            Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
+            $this->configValue
+        );
+        $this->config->save();
         unset($this->accountManagement);
     }
 
@@ -146,12 +181,7 @@ class AccountManagementTest extends WebapiAbstract
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
-                $expectedException->addError(
-                    __(
-                        InputException::INVALID_FIELD_VALUE,
-                        ['fieldName' => 'email', 'value' => $invalidEmail]
-                    )
-                );
+                $expectedException->addError(__('"Email" is not a valid email address.'));
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
@@ -163,11 +193,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => InputException::INVALID_FIELD_VALUE,
-                    'parameters' => [
-                        'fieldName' => 'email',
-                        'value' => $invalidEmail,
-                    ],
+                    'message' => '"Email" is not a valid email address.',
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }
@@ -246,7 +272,7 @@ class AccountManagementTest extends WebapiAbstract
         $customerModel->load($customerData[Customer::ID]);
         $rpToken = 'lsdj579slkj5987slkj595lkj';
         $customerModel->setRpToken('lsdj579slkj5987slkj595lkj');
-        $customerModel->setRpTokenCreatedAt(date('Y-m-d'));
+        $customerModel->setRpTokenCreatedAt(date('Y-m-d H:i:s'));
         $customerModel->save();
         $path = self::RESOURCE_PATH . '/' . $customerData[Customer::ID] . '/password/resetLinkToken/' . $rpToken;
         $serviceInfo = [
@@ -325,16 +351,16 @@ class AccountManagementTest extends WebapiAbstract
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => InputException::DEFAULT_MESSAGE,
+                'message' => 'One or more input exceptions have occurred.',
                 'errors' => [
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'email',
                         ],
                     ],
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'template',
                         ]
@@ -399,10 +425,11 @@ class AccountManagementTest extends WebapiAbstract
                     'field2Name' => 'websiteId',
                     'field2Value' => 0,
                 ];
+
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -411,7 +438,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
@@ -495,7 +522,7 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -504,7 +531,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
@@ -535,8 +562,9 @@ class AccountManagementTest extends WebapiAbstract
         $requestData = ['customer' => $customerData];
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
-        $this->assertEquals('Please enter a first name.', $validationResponse['messages'][0]);
-        $this->assertEquals('Please enter a last name.', $validationResponse['messages'][1]);
+
+        $this->assertEquals('The value of attribute "firstname" must be set', $validationResponse['messages'][0]);
+        $this->assertEquals('The value of attribute "lastname" must be set', $validationResponse['messages'][1]);
     }
 
     public function testIsReadonly()

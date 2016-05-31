@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -70,8 +70,8 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage Invalid login or password.
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
+     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testCreateCustomerAccessTokenInvalidCustomer()
     {
@@ -100,7 +100,7 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function assertInputExceptionMessages($e)
     {
-        $this->assertEquals(InputException::DEFAULT_MESSAGE, $e->getMessage());
+        $this->assertEquals('One or more input exceptions have occurred.', $e->getMessage());
         $errors = $e->getErrors();
         $this->assertCount(2, $errors);
         $this->assertEquals('username is a required field.', $errors[0]->getLogMessage());

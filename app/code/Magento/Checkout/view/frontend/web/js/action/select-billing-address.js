@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -16,7 +16,7 @@ define(
 
             if (quote.shippingAddress() && billingAddress.getCacheKey() == quote.shippingAddress().getCacheKey()) {
                 address = $.extend({}, billingAddress);
-                address.saveInAddressBook = false;
+                address.saveInAddressBook = null;
             } else {
                 address = billingAddress;
             }

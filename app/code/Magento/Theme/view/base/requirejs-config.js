@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7,9 +7,10 @@ var config = {
     "waitSeconds": 0,
     "map": {
         "*": {
-            "mageUtils": "mage/utils/main",
             "ko": "knockoutjs/knockout",
-            "knockout": "knockoutjs/knockout"
+            "knockout": "knockoutjs/knockout",
+            "mageUtils": "mage/utils/main",
+            "rjsResolver": "mage/requirejs/resolver"
         }
     },
     "shim": {
@@ -50,7 +51,14 @@ var config = {
     },
     "deps": [
         "jquery/jquery-migrate"
-    ]
+    ],
+    "config": {
+        "mixins": {
+            "jquery/jstree/jquery.jstree": {
+                "mage/backend/jstree-mixin": true
+            }
+        }
+    }
 };
 
 require(['jquery'], function ($) {

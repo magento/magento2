@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
@@ -38,16 +38,11 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
     protected $jsonEncoder;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTime;
-
-    /**
      * Setup
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->config = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
             ->disableOriginalConstructor()
@@ -62,10 +57,6 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->jsonEncoder = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
             ->getMock();
-        $this->dateTime = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->setMethods(['formatDate'])
-            ->getMock();
         $this->systemFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->systemModel);
@@ -73,8 +64,7 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
         $this->model = new ReportSystemCacheFlush(
             $this->config,
             $this->systemFactory,
-            $this->jsonEncoder,
-            $this->dateTime
+            $this->jsonEncoder
         );
     }
 
@@ -106,7 +96,6 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
     {
         $testType = 'systemCacheFlush';
         $testAction = 'JSON string';
-        $testUpdated = '1970-01-01 00:00:00';
 
         /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $eventObserver */
         $eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
@@ -116,15 +105,12 @@ class ReportSystemCacheFlushTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $this->dateTime->expects($this->once())
-            ->method('formatDate')
-            ->willReturn($testUpdated);
         $this->jsonEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($testAction);
         $this->systemModel->expects($this->once())
             ->method('setData')
-            ->with(['type' => $testType, 'action' => $testAction, 'updated_at' => $testUpdated])
+            ->with(['type' => $testType, 'action' => $testAction])
             ->willReturnSelf();
         $this->systemModel->expects($this->once())
             ->method('save');

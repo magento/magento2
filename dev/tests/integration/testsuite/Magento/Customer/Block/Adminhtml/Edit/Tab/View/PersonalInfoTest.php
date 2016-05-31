@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -144,11 +144,17 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testGetStoreCreateDate()
     {
         $customer = $this->_loadCustomer();
-        $date = $this->_context->getLocaleDate()->scopeDate($customer->getStoreId(), $customer->getCreatedAt(), true);
+        $localeDate = $this->_context->getLocaleDate();
+        $timezone = $localeDate->getConfigTimezone(
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $customer->getStoreId()
+        );
         $storeCreateDate = $this->_block->formatDate(
-            $date,
+            $customer->getCreatedAt(),
             \IntlDateFormatter::MEDIUM,
-            true
+            true,
+            null,
+            $timezone
         );
         $this->assertEquals($storeCreateDate, $this->_block->getStoreCreateDate());
     }
@@ -177,7 +183,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testIsConfirmedStatusConfirmed()
     {
         $this->_loadCustomer();
-        $this->assertEquals('Confirmed', $this->_block->getIsConfirmedStatus());
+        $this->assertEquals(__('Confirmation Not Required'), $this->_block->getIsConfirmedStatus());
     }
 
     /**

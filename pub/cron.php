@@ -2,7 +2,7 @@
 /**
  * Scheduled jobs entry point
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,9 +20,6 @@ if (php_sapi_name() === 'cli'){
 }
 
 try {
-    if (empty($opt['group'])) {
-        $opt['group'] = 'default';
-    }
     foreach ($opt as $key => $value) {
         $opt[$key] = escapeshellarg($value);
     }

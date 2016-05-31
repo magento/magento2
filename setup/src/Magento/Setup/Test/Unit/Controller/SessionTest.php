@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,20 +20,28 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManagerProvider;
 
+    /**
+     * @var \Zend\ServiceManager\ServiceManager
+     */
+    private $serviceManager;
+
     public function setUp()
     {
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', ['get'], [], '', false);
-        $objectManagerProvider->expects($this->once())->method('get')->will($this->returnValue($objectManager));
         $this->objectManager = $objectManager;
         $this->objectManagerProvider = $objectManagerProvider;
+        $this->serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager', ['get'], [], '', false);
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Session::testUnloginAction
+     * @covers \Magento\Setup\Controller\Session::unloginAction
      */
     public function testUnloginAction()
     {
+        $this->objectManagerProvider->expects($this->once())->method('get')->will(
+            $this->returnValue($this->objectManager)
+        );
         $deployConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', ['isAvailable'], [], '', false);
         $deployConfigMock->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
 
@@ -43,12 +51,15 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $sessionConfigMock =
             $this->getMock('Magento\Backend\Model\Session\AdminConfig', ['setCookiePath'], [], '', false);
         $sessionConfigMock->expects($this->once())->method('setCookiePath');
+        $urlMock = $this->getMock('\Magento\Backend\Model\Url', [], [], '', false);
 
         $returnValueMap = [
-            ['Magento\Framework\App\DeploymentConfig', $deployConfigMock],
             ['Magento\Framework\App\State', $stateMock],
-            ['Magento\Backend\Model\Session\AdminConfig', $sessionConfigMock]
+            ['Magento\Backend\Model\Session\AdminConfig', $sessionConfigMock],
+            ['Magento\Backend\Model\Url', $urlMock]
         ];
+
+        $this->serviceManager->expects($this->once())->method('get')->will($this->returnValue($deployConfigMock));
 
         $this->objectManager->expects($this->atLeastOnce())
             ->method('get')
@@ -58,7 +69,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->objectManager->expects($this->once())
             ->method('create')
             ->will($this->returnValue($sessionMock));
-        $controller = new Session($this->objectManagerProvider);
+        $controller = new Session($this->serviceManager, $this->objectManagerProvider);
+        $urlMock->expects($this->once())->method('getBaseUrl');
         $controller->prolongAction();
     }
 
@@ -68,7 +80,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         /** @var $controller Session */
-        $controller = new Session($this->objectManagerProvider);
+        $controller = new Session($this->serviceManager, $this->objectManagerProvider);
         $viewModel = $controller->unloginAction();
         $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
     }

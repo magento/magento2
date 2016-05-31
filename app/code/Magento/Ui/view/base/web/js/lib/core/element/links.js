@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -51,10 +51,10 @@ define([
         }
 
         if (owner.component !== target.component) {
-            value = utils.copy(value);
+            value = data.inversionValue ? !utils.copy(value) : utils.copy(value);
         }
 
-        component.set(property, value);
+        component.set(property, value, owner);
 
         if (linked) {
             linked.mute = false;
@@ -148,6 +148,11 @@ define([
 
     function transfer(owner, data) {
         var args = _.toArray(arguments);
+
+        if (data.target.substr(0,1) === '!') {
+            data.target = data.target.substr(1);
+            data.inversionValue = true;
+        }
 
         if (owner.name === data.target) {
             args.unshift(owner);

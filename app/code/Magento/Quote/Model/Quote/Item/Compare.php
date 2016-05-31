@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Model\Quote\Item;
@@ -23,6 +23,9 @@ class Compare
         if (is_string($value) && is_array(@unserialize($value))) {
             $value = @unserialize($value);
             unset($value['qty'], $value['uenc']);
+            $value = array_filter($value, function ($optionValue) {
+                return !empty($optionValue);
+            });
         }
         return $value;
     }

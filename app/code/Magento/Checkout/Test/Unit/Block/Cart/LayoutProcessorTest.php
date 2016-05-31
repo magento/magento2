@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Block\Cart;
@@ -66,7 +66,7 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
         $layoutPointer = &$layout['components']['block-summary']['children']['block-shipping']
         ['children']['address-fieldsets']['children'];
 
-        $this->countryCollection->expects($this->once())->method('load')->willReturnSelf();
+        $this->countryCollection->expects($this->once())->method('loadByStore')->willReturnSelf();
         $this->countryCollection->expects($this->once())->method('toOptionArray')->willReturn($countries);
 
         $this->regionCollection->expects($this->once())->method('load')->willReturnSelf();

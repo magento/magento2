@@ -1,0 +1,17 @@
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field-service">
+    <input type="checkbox"
+           class="admin__control-checkbox"
+           attr="
+                id: $data.uid + '_default',
+                name: 'options_use_default[' + $data.optionId + '][' + $data.index + ']',
+                'data-form-part': $data.ns
+           "
+           ko-checked="isUseDefault">
+    <label translate="'Use Default Value'" attr="for: $data.uid + '_default'" class="admin__field-label"></label>
+</div>

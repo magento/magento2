@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Shell\Test\Unit;
@@ -21,7 +21,7 @@ class CommandRendererBackgroundTest extends \PHPUnit_Framework_TestCase
      */
     protected $osInfo;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->osInfo = $this->getMockBuilder('Magento\Framework\OsInfo')->getMock();
     }
@@ -53,7 +53,7 @@ class CommandRendererBackgroundTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'windows' => [true, 'start /B "magento background task" ' . $this->testCommand . ' 2>&1'],
-            'unix'    => [false, $this->testCommand . ' 2>&1 > /dev/null &'],
+            'unix'    => [false, $this->testCommand . ' > /dev/null &'],
         ];
     }
 }

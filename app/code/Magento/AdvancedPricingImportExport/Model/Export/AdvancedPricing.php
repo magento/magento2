@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
@@ -345,13 +345,14 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             if (isset($exportFilter) && !empty($exportFilter)) {
                 $date = $exportFilter[\Magento\Catalog\Model\Category::KEY_UPDATED_AT];
                 if (isset($date[0]) && !empty($date[0])) {
-                    $updatedAtFrom = date('Y-m-d H:i:s', strtotime($date[0]));
+                    $updatedAtFrom = $this->_localeDate->date($date[0], null, false)->format('Y-m-d H:i:s');
                 }
                 if (isset($date[1]) && !empty($date[1])) {
-                    $updatedAtTo = date('Y-m-d H:i:s', strtotime($date[1]));
+                    $updatedAtTo = $this->_localeDate->date($date[1], null, false)->format('Y-m-d H:i:s');
                 }
             }
             try {
+                $productEntityLinkField = $this->getProductEntityLinkField();
                 $select = $this->_connection->select()
                     ->from(
                         ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
@@ -359,7 +360,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     )
                     ->joinInner(
                         ['ap' => $this->_resource->getTableName($table)],
-                        'ap.entity_id = cpe.entity_id',
+                        'ap.' . $productEntityLinkField . ' = cpe.' . $productEntityLinkField,
                         []
                     )
                     ->where('cpe.entity_id IN (?)', $listSku);

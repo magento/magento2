@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+//use Magento\Catalog\Api\ProductRepositoryInterface;
 
 require 'product_configurable.php';
 /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
@@ -18,7 +20,14 @@ $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
 $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
 
 $requestInfo = new \Magento\Framework\DataObject(
-    ['qty' => 1, 'super_attribute' => [$attribute->getId() => $option->getId()]]
+    [
+        'product' => 1,
+        'selected_configurable_option' => 1,
+        'qty' => 1,
+        'super_attribute' => [
+            $attribute->getId() => $option->getId()
+        ]
+    ]
 );
 
 /** @var $cart \Magento\Checkout\Model\Cart */
