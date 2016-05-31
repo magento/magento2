@@ -11,10 +11,7 @@ define([
     return Abstract.extend({
         defaults: {
             valueUpdate: 'input',
-            isInteger: true,
-            links: {
-                isParent: '${ $.parentName }'
-            }
+            isInteger: true
         },
 
         /**
