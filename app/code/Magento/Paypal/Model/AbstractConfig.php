@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Model;
 
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -48,6 +49,11 @@ abstract class AbstractConfig implements ConfigInterface
      * @var string
      */
     protected $pathPattern;
+
+    /**
+     * @var ProductMetadataInterface
+     */
+    private $productMetadata;
 
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -323,10 +329,25 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function getBuildNotationCode()
     {
-        return $this->_scopeConfig->getValue(
+        $bnCode = $this->_scopeConfig->getValue(
             'paypal/bncode',
             ScopeInterface::SCOPE_STORE,
             $this->_storeId
         );
+        return sprintf($bnCode, $this->getProductMetadata()->getEdition());
+    }
+
+    /**
+     * The getter function to get the ProductMetadata
+     *
+     * @return ProductMetadataInterface
+     * @deprecated
+     */
+    protected function getProductMetadata()
+    {
+        if (!is_object($this->productMetadata)) {
+            $this->productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
+        }
+        return $this->productMetadata;
     }
 }
