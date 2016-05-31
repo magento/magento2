@@ -18,7 +18,7 @@ define([
         },
 
         /**
-         * update event
+         * @inheritdoc
          */
         onUpdate: function () {
             this.validation['validate-digits'] = this.isInteger;
@@ -26,9 +26,7 @@ define([
         },
 
         /**
-         * Defines if value has changed.
-         *
-         * @returns {Boolean}
+         * @inheritdoc
          */
         hasChanged: function () {
             var notEqual = this.value() !== this.initialValue.toString();
