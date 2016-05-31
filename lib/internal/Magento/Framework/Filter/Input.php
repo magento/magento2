@@ -342,16 +342,13 @@ class Input implements \Zend_Filter_Interface
     {
         $filter = $filterData['zend'];
         if (is_string($filter)) {
-            $class = new \ReflectionClass('Zend_Filter_' . $filter);
-            if ($class->implementsInterface('Zend_Filter_Interface')) {
-                if (isset($filterData['args']) && $class->hasMethod('__construct')) {
-                    $filter = $class->newInstanceArgs($filterData['args']);
-                } else {
-                    $filter = $class->newInstance();
-                }
-            } else {
-                throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
-            }
+            $filterClassName = 'Zend_Filter_' . ucfirst($filter);
+            $filterClassOptions = isset($filterData['args']) ? $filterData['args'] : [];
+            $filter = new $filterClassName(...$filterClassOptions);
+        }
+        
+        if (!$filter instanceof \Zend_Filter_Interface) {
+            throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
         }
         return $filter;
     }

@@ -86,8 +86,6 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      * @param array $args
      *
      * @return object
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
      */
     protected function createObject($type, $args)
