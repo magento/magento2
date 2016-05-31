@@ -43,11 +43,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     protected $_orderItemFactory;
 
     /**
-     * @var bool
-     */
-    private $qtyProcessed = false;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -163,7 +158,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     public function setQty($qty)
     {
         $this->setData('qty', $qty);
-        $this->qtyProcessed = false;
         return $this;
     }
 
@@ -176,7 +170,8 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     {
         $orderItem = $this->getOrderItem();
 
-        $orderItem->setQtyRefunded($orderItem->getQtyRefunded() + $this->getQty());
+        $qty = $this->processQty();
+        $orderItem->setQtyRefunded($orderItem->getQtyRefunded() + $qty);
         $orderItem->setTaxRefunded($orderItem->getTaxRefunded() + $this->getTaxAmount());
         $orderItem->setBaseTaxRefunded($orderItem->getBaseTaxRefunded() + $this->getBaseTaxAmount());
         $orderItem->setDiscountTaxCompensationRefunded(
@@ -194,7 +189,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     }
 
     /**
-     * @return void
+     * @return int|float
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function processQty()
@@ -208,7 +203,7 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         }
         $qty = $qty > 0 ? $qty : 0;
         if ($this->isQtyAvailable($qty, $orderItem)) {
-            $this->setData('qty', $qty);
+            return $qty;
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid quantity to refund item "%1".', $this->getName())
@@ -221,17 +216,18 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      */
     public function cancel()
     {
-        $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $this->getQty());
+        $qty = $this->processQty();
+        $this->getOrderItem()->setQtyRefunded($this->getOrderItem()->getQtyRefunded() - $qty);
         $this->getOrderItem()->setTaxRefunded(
             $this->getOrderItem()->getTaxRefunded() -
             $this->getOrderItem()->getBaseTaxAmount() *
-            $this->getQty() /
+            $qty /
             $this->getOrderItem()->getQtyOrdered()
         );
         $this->getOrderItem()->setDiscountTaxCompensationRefunded(
             $this->getOrderItem()->getDiscountTaxCompensationRefunded() -
             $this->getOrderItem()->getDiscountTaxCompensationAmount() *
-            $this->getQty() /
+            $qty /
             $this->getOrderItem()->getQtyOrdered()
         );
         return $this;
@@ -253,10 +249,11 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         $rowTotalInclTax = $orderItem->getRowTotalInclTax();
         $baseRowTotalInclTax = $orderItem->getBaseRowTotalInclTax();
 
-        if (!$this->isLast() && $orderItemQtyInvoiced > 0 && $this->getQty() >= 0) {
+        $qty = $this->processQty();
+        if (!$this->isLast() && $orderItemQtyInvoiced > 0 && $qty >= 0) {
             $availableQty = $orderItemQtyInvoiced - $orderItem->getQtyRefunded();
-            $rowTotal = $creditmemo->roundPrice($rowTotal / $availableQty * $this->getQty());
-            $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $this->getQty(), 'base');
+            $rowTotal = $creditmemo->roundPrice($rowTotal / $availableQty * $qty);
+            $baseRowTotal = $creditmemo->roundPrice($baseRowTotal / $availableQty * $qty, 'base');
         }
         $this->setRowTotal($rowTotal);
         $this->setBaseRowTotal($baseRowTotal);
@@ -264,10 +261,10 @@ class Item extends AbstractModel implements CreditmemoItemInterface
         if ($rowTotalInclTax && $baseRowTotalInclTax) {
             $orderItemQty = $orderItem->getQtyOrdered();
             $this->setRowTotalInclTax(
-                $creditmemo->roundPrice($rowTotalInclTax / $orderItemQty * $this->getQty(), 'including')
+                $creditmemo->roundPrice($rowTotalInclTax / $orderItemQty * $qty, 'including')
             );
             $this->setBaseRowTotalInclTax(
-                $creditmemo->roundPrice($baseRowTotalInclTax / $orderItemQty * $this->getQty(), 'including_base')
+                $creditmemo->roundPrice($baseRowTotalInclTax / $orderItemQty * $qty, 'including_base')
             );
         }
         return $this;
@@ -281,7 +278,8 @@ class Item extends AbstractModel implements CreditmemoItemInterface
     public function isLast()
     {
         $orderItem = $this->getOrderItem();
-        if ((string)(double)$this->getQty() == (string)(double)$orderItem->getQtyToRefund()) {
+        $qty = $this->processQty();
+        if ((string)(double)$qty == (string)(double)$orderItem->getQtyToRefund()) {
             return true;
         }
         return false;
@@ -514,10 +512,6 @@ class Item extends AbstractModel implements CreditmemoItemInterface
      */
     public function getQty()
     {
-        if (!$this->qtyProcessed) {
-            $this->processQty();
-            $this->qtyProcessed = true;
-        }
         return $this->getData(CreditmemoItemInterface::QTY);
     }
 
