@@ -92,71 +92,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Sales\Model\Order\Item', $result);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We found an invalid quantity to refund item "test_item_name".
-     */
-    public function testSetQtyDecimalException()
-    {
-        $qty = 100;
-        $orderItemQty = 10;
-        $name = 'test_item_name';
-
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderItemMock->expects($this->once())
-            ->method('getIsQtyDecimal')
-            ->willReturn(true);
-        $orderItemMock->expects($this->once())
-            ->method('getQtyToRefund')
-            ->willReturn($orderItemQty);
-        $this->item->setData(CreditmemoItemInterface::NAME, $name);
-        $this->item->setOrderItem($orderItemMock);
-        $this->item->setQty($qty);
-        $this->item->getQty();
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We found an invalid quantity to refund item "test_item_name2".
-     */
-    public function testSetQtyNumericException()
-    {
-        $qty = 100;
-        $orderItemQty = 10;
-        $name = 'test_item_name2';
-
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderItemMock->expects($this->once())
-            ->method('getIsQtyDecimal')
-            ->willReturn(false);
-        $orderItemMock->expects($this->once())
-            ->method('getQtyToRefund')
-            ->willReturn($orderItemQty);
-        $this->item->setData(CreditmemoItemInterface::NAME, $name);
-        $this->item->setOrderItem($orderItemMock);
-        $this->item->setQty($qty);
-        $this->item->getQty();
-    }
-
     public function testSetQty()
     {
         $qty = 10;
-        $orderItemQty = 100;
-
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderItemMock->expects($this->once())
-            ->method('getIsQtyDecimal')
-            ->willReturn(false);
-        $orderItemMock->expects($this->once())
-            ->method('getQtyToRefund')
-            ->willReturn($orderItemQty);
-        $this->item->setOrderItem($orderItemMock);
         $this->item->setQty($qty);
         $this->assertEquals($qty, $this->item->getQty());
     }
@@ -206,6 +144,26 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->item->setDiscountAmount(1);
         $this->item->setBaseDiscountAmount(1);
         $this->item->setOrderItem($orderItemMock);
+        $result = $this->item->register();
+        $this->assertInstanceOf('Magento\Sales\Model\Order\Creditmemo\Item', $result);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage We found an invalid quantity to refund item "test".
+     */
+    public function testRegisterWithException()
+    {
+        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
+            ->disableOriginalConstructor()
+            ->setMethods(['getQtyRefunded'])
+            ->getMock();
+        $orderItemMock->expects($this->once())
+            ->method('getQtyRefunded')
+            ->willReturn(1);
+        $this->item->setQty(2);
+        $this->item->setOrderItem($orderItemMock);
+        $this->item->setName('test');
         $result = $this->item->register();
         $this->assertInstanceOf('Magento\Sales\Model\Order\Creditmemo\Item', $result);
     }
@@ -335,39 +293,5 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             'qty 1' => [1],
             'qty 0' => [0],
         ];
-    }
-
-    public function testSetQtyWithProcess()
-    {
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQtyToRefund'])
-            ->getMock();
-        $orderItemMock->expects($this->once())
-            ->method('getQtyToRefund')
-            ->willReturn(2);
-
-        $this->item->setOrderItem($orderItemMock);
-
-        $this->item->setQty(2);
-        $this->assertEquals(2, $this->item->getQty());
-    }
-
-    public function testSetQtyWithProcessDecimal()
-    {
-        $orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQtyToRefund', 'getIsQtyDecimal'])
-            ->getMock();
-        $orderItemMock->expects($this->once())
-            ->method('getQtyToRefund')
-            ->willReturn(3.3);
-        $orderItemMock->expects($this->once())
-            ->method('getIsQtyDecimal')
-            ->willReturn(true);
-        $this->item->setOrderItem($orderItemMock);
-
-        $this->item->setQty(3.3);
-        $this->assertEquals(3.3, $this->item->getQty());
     }
 }
