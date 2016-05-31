@@ -10,7 +10,17 @@ define([
 ], function (DynamicRows, _, utils) {
     'use strict';
 
-    var maxId = 0;
+    var maxId = 0,
+
+    /**
+     * Stores max option_id value of the options from recordData once on initialization
+     *
+     */
+    initMaxId = function (data) {
+        maxId = data && data.length ? ~~_.max(data, function (record) {
+            return ~~record['option_id'];
+        })['option_id'] : 0;
+    };
 
     return DynamicRows.extend({
         defaults: {
@@ -19,18 +29,17 @@ define([
                 distinct: false
             },
             update: true,
-            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             map: {
-                option_id: 'option_id'
+                'option_id': 'option_id'
             },
-            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
             identificationProperty: 'option_id',
             identificationDRProperty: 'option_id'
         },
 
         /** @inheritdoc */
         initialize: function () {
-            this._super().initMaxId();
+            this._super();
+            initMaxId(this.recordData());
 
             return this;
         },
@@ -58,7 +67,7 @@ define([
                 });
             });
 
-            if (!options || !options.length) {
+            if (!options.length) {
                 return;
             }
             this.cacheGridData = options;
@@ -89,18 +98,6 @@ define([
          */
         updateInsertData: function () {
             return false;
-        },
-
-        /**
-         * Stores max option_id value of the options from recordData once on initialization
-         *
-         */
-        initMaxId: function () {
-            var data = this.recordData();
-
-            maxId = data && data.length ? ~~_.max(data, function (record) {
-                return ~~record['option_id'];
-            })['option_id'] : 0;
         }
     });
 });
