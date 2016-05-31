@@ -11,24 +11,29 @@ define([
     return Abstract.extend({
         defaults: {
             valueUpdate: 'input',
-            isInteger: true
+            isInteger: true,
+            validation: {
+                'validate-number': true
+            }
         },
 
         /**
          * update event
          */
         onUpdate: function () {
-            if (this.initialValue === this.value()) {
-                this.bubble('update', false);
-                this.validate();
-
-                return;
-            }
-
-            this.bubble('update', this.hasChanged());
-            this.validation['validate-number'] = true;
             this.validation['validate-digits'] = this.isInteger;
-            this.validate();
+            this._super();
+        },
+
+        /**
+         *
+         * @returns {boolean}
+         */
+        hasChanged: function () {
+            var notEqual = this.value() !== this.initialValue.toString();
+
+            return !this.visible() ? false : notEqual;
         }
+
     });
 });

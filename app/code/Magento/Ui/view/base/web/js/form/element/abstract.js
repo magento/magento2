@@ -316,13 +316,7 @@ define([
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual;
-
-            if (_.isObject(this.initialValue)) {
-                notEqual = false;
-            } else {
-                notEqual = this.value() !== this.initialValue;
-            }
+            var notEqual = this.value() !== this.initialValue;
 
             return !this.visible() ? false : notEqual;
         },
