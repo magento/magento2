@@ -7,7 +7,7 @@ namespace Magento\Quote\Model\QuoteRepository;
 
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\CouldNotSaveMultiMessageException;
 
 class SaveHandler
 {
@@ -73,10 +73,7 @@ class SaveHandler
         }
         $errors = $quote->getErrors();
         if (!empty($errors)) {
-            $renderedErrors = $this->renderErrors($errors);
-            throw new CouldNotSaveException(
-                __('Following errors occurred on save: %1', implode('; ', $renderedErrors))
-            );
+            throw new CouldNotSaveMultiMessageException('Following errors occurred on save: %1', $errors);
         }
 
         // Billing Address processing
@@ -90,21 +87,6 @@ class SaveHandler
         $this->quoteResourceModel->save($quote->collectTotals());
         return $quote;
     }
-
-    /**
-     * @param array $errors
-     * @return array
-     */
-    private function renderErrors($errors)
-    {
-        $renderedErrors = [];
-        /** @var \Magento\Framework\Message\Error $error */
-        foreach ($errors as $error) {
-            $renderedErrors[] = $error->getText();
-        }
-        return $renderedErrors;
-    }
-
 
     /**
      * @param \Magento\Quote\Model\Quote $quote
