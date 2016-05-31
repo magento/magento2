@@ -294,16 +294,16 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.1.8",
+            "version": "0.1.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "3dfac2f626ca36053f68853afe8847f5b290c84d"
+                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/3dfac2f626ca36053f68853afe8847f5b290c84d",
-                "reference": "3dfac2f626ca36053f68853afe8847f5b290c84d",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
+                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
                 "shasum": ""
             },
             "require": {
@@ -366,7 +366,7 @@
                 "composer-installer",
                 "magento"
             ],
-            "time": "2016-05-17 20:24:41"
+            "time": "2016-05-24 16:22:26"
         },
         {
             "name": "magento/zendframework1",
@@ -2651,16 +2651,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.11.2",
+            "version": "v1.11.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "41f70154642ec0f9ea9ea9c290943f3b5dfa76fc"
+                "reference": "b0a383d856d884d6b16e15892f507ecf89f8dbd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/41f70154642ec0f9ea9ea9c290943f3b5dfa76fc",
-                "reference": "41f70154642ec0f9ea9ea9c290943f3b5dfa76fc",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/b0a383d856d884d6b16e15892f507ecf89f8dbd2",
+                "reference": "b0a383d856d884d6b16e15892f507ecf89f8dbd2",
                 "shasum": ""
             },
             "require": {
@@ -2701,7 +2701,8 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2016-02-26 07:37:29"
+            "abandoned": "friendsofphp/php-cs-fixer",
+            "time": "2016-05-26 23:49:24"
         },
         {
             "name": "league/climate",
@@ -3910,16 +3911,16 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.0.6",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
-                "reference": "6015187088421e9499d8f8316bdb396f8b806c06"
+                "reference": "4670f122fa32a4900003a6802f6b8575f3f0b17e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/6015187088421e9499d8f8316bdb396f8b806c06",
-                "reference": "6015187088421e9499d8f8316bdb396f8b806c06",
+                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/4670f122fa32a4900003a6802f6b8575f3f0b17e",
+                "reference": "4670f122fa32a4900003a6802f6b8575f3f0b17e",
                 "shasum": ""
             },
             "require": {
@@ -3928,7 +3929,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -3955,7 +3956,7 @@
             ],
             "description": "Symfony Stopwatch Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:55:57"
+            "time": "2016-03-04 07:56:56"
         },
         {
             "name": "symfony/yaml",
