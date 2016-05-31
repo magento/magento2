@@ -152,7 +152,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
             $currentQuote = $this->get($quote->getId(), [$quote->getStoreId()]);
 
             foreach ($currentQuote->getData() as $key => $value) {
-                if ($quote->getData($key) === null) {
+                if (!$quote->hasData($key)) {
                     $quote->setData($key, $value);
                 }
             }
