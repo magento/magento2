@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <paypal>
-            <bncode>Magento_Cart_%s</bncode>
+            <bncode>Magento_Cart_Community</bncode>
             <style>
                 <logo></logo>
             </style>
