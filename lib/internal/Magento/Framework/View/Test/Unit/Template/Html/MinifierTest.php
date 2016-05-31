@@ -124,6 +124,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     <head>
         <title>Test title</title>
     </head>
+    <link rel="stylesheet" href='https://www.example.com/2' type="text/css" />
+    <link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" />
     <body>
         <a href="http://somelink.com/text.html">Text Link</a>
         <img src="test.png" alt="some text" />
@@ -158,7 +160,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 TEXT;
 
         $expectedContent = <<<TEXT
-<?php /** * Copyright © 2016 Magento. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+<?php /** * Copyright © 2016 Magento. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><link rel="stylesheet" href='https://www.example.com/2' type="text/css" /><link rel="stylesheet" type="text/css" media="all" href="https://www.example.com/1" type="text/css" /><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
             var i = 1;
             var j = 1;
 
