@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Directpost;
@@ -21,14 +21,6 @@ class PaymentTest extends \Magento\TestFramework\TestCase\AbstractController
             // @codingStandardsIgnoreEnd
             $this->getResponse()->getBody()
         );
-    }
-
-    public function testRedirectActionErrorMessage()
-    {
-        $this->getRequest()->setParam('success', '0');
-        $this->getRequest()->setParam('error_msg', 'Error message');
-        $this->dispatch('authorizenet/directpost_payment/redirect');
-        $this->assertContains('alert("Error message");', $this->getResponse()->getBody());
     }
 
     public function testBackendResponseActionOrderSuccess()

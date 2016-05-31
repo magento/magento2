@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Cron;
@@ -49,7 +49,7 @@ class DeleteExpiredImagesTest extends \PHPUnit_Framework_TestCase
     /**
      * Create mocks and model
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
         $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', [], [], '', false);

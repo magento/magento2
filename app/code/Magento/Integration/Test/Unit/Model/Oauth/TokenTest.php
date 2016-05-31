@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,11 +48,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTimeMock;
-
-    /**
      * @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $consumerFactoryMock;
@@ -98,10 +93,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->validatorMock = $this->getMockBuilder('Magento\Framework\Url\Validator')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -155,7 +146,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             $this->registryMock,
             $this->keyLengthFactoryMock,
             $this->validatorMock,
-            $this->dateTimeMock,
             $this->consumerFactoryMock,
             $this->oauthDataMock,
             $this->oauthHelperMock,

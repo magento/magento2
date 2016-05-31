@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -126,9 +126,21 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->httpContext->expects($this->once())->method('getValue')->willReturn('context_group');
         $this->productsList->setData('conditions', 'some_serialized_conditions');
 
-        $this->request->expects($this->once())->method('getParam')->with('np')->willReturn(1);
+        $this->productsList->setData('page_var_name', 'page_number');
+        $this->request->expects($this->once())->method('getParam')->with('page_number')->willReturn(1);
 
-        $cacheKey = ['CATALOG_PRODUCTS_LIST_WIDGET', 1, 'blank', 'context_group', 1, 5, 'some_serialized_conditions'];
+        $this->request->expects($this->once())->method('getParams')->willReturn('request_params');
+
+        $cacheKey = [
+            'CATALOG_PRODUCTS_LIST_WIDGET',
+            1,
+            'blank',
+            'context_group',
+            1,
+            5,
+            'some_serialized_conditions',
+            serialize('request_params')
+        ];
         $this->assertEquals($cacheKey, $this->productsList->getCacheKeyInfo());
     }
 
@@ -263,7 +275,6 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
         $this->rule->expects($this->once())->method('loadPost')->willReturnSelf();
         $this->rule->expects($this->once())->method('getConditions')->willReturn($conditions);
-
 
         if ($productsPerPage) {
             $this->productsList->setData('products_per_page', $productsPerPage);

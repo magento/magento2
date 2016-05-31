@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Test\Unit\Controller\Directpost\Payment;
@@ -33,6 +33,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManager
      */
     protected $objectManager;
+
     /**
      * @var Place
      */
@@ -98,7 +99,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      */
     protected $checkoutSessionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directpostSessionMock = $this
             ->getMockBuilder('Magento\Authorizenet\Model\Directpost\Session')
@@ -279,7 +280,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
     {
         $objectFailed = new \Magento\Framework\DataObject();
         $objectFailed->setData('error', true);
-        $objectFailed->setData('error_messages', __('Cannot place order.'));
+        $objectFailed->setData('error_messages', __('Unable to place order. Please try again later.'));
 
         return [
             [

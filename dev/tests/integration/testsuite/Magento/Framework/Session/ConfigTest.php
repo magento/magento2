@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
@@ -36,15 +36,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $sessionManager->writeClose();
         }
         $this->deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+
         $this->deploymentConfigMock->expects($this->at(0))
-            ->method('get')
-            ->with($this->equalTo(Config::PARAM_SESSION_SAVE_METHOD), $this->anything())
-            ->will($this->returnValue('files'));
-        $this->deploymentConfigMock->expects($this->at(1))
             ->method('get')
             ->with(Config::PARAM_SESSION_SAVE_PATH)
             ->will($this->returnValue(null));
-        $this->deploymentConfigMock->expects($this->at(2))
+        $this->deploymentConfigMock->expects($this->at(1))
             ->method('get')
             ->with(Config::PARAM_SESSION_CACHE_LIMITER)
             ->will($this->returnValue($this->_cacheLimiter));
@@ -57,7 +54,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Framework\Filesystem\DirectoryList')
             ->getPath(DirectoryList::SESSION);
     }
-    
+
     /**
      * @magentoAppIsolation enabled
      */
@@ -84,11 +81,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->_model->getCookieSecure());
         $this->assertEquals(true, $this->_model->getCookieHttpOnly());
         $this->assertEquals($this->_model->getSavePath(), $this->_model->getOption('save_path'));
-    }
-
-    public function testGetSessionSaveMethod()
-    {
-        $this->assertEquals('files', $this->_model->getSaveHandler());
     }
 
     /**
@@ -122,7 +114,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         return [
             ['save_path', 'getSavePath', __DIR__],
             ['name', 'getName', 'FOOBAR'],
-            ['save_handler', 'getSaveHandler', 'user'],
             ['gc_probability', 'getGcProbability', 42],
             ['gc_divisor', 'getGcDivisor', 3],
             ['gc_maxlifetime', 'getGcMaxlifetime', 180],
@@ -150,12 +141,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setName('FOOBAR');
         $this->assertEquals('FOOBAR', $this->_model->getName());
-    }
-
-    public function testSaveHandlerIsMutable()
-    {
-        $this->_model->setSaveHandler('user');
-        $this->assertEquals('user', $this->_model->getSaveHandler());
     }
 
     public function testCookieLifetimeIsMutable()
@@ -295,7 +280,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Cannot set session.save_path with ini_set');
         }
 
-        $this->deploymentConfigMock->expects($this->at(1))
+        $this->deploymentConfigMock->expects($this->at(0))
             ->method('get')
             ->with(Config::PARAM_SESSION_SAVE_PATH)
             ->will($this->returnValue($given));

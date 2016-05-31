@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Product;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
 
 /**
@@ -38,16 +39,6 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Reports\Model\FlagFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $flagFactoryMock;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTimeMock;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime\Timezone\Validator|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $validatorMock;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
@@ -148,14 +139,10 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->contextMock->expects($this->any())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
-
         $dateTime = $this->getMockBuilder('DateTime')->getMock();
 
         $this->timezoneMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')->getMock();
         $this->timezoneMock->expects($this->any())->method('scopeDate')->willReturn($dateTime);
-
-        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')->getMock();
 
         $this->flagMock = $this->getMockBuilder('Magento\Reports\Model\Flag')
             ->disableOriginalConstructor()
@@ -167,10 +154,6 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->flagFactoryMock->expects($this->any())->method('create')->willReturn($this->flagMock);
-
-        $this->validatorMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\Timezone\Validator')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->backendMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend')
             ->disableOriginalConstructor()
@@ -190,15 +173,15 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->viewed = new Viewed(
-            $this->contextMock,
-            $this->loggerMock,
-            $this->timezoneMock,
-            $this->flagFactoryMock,
-            $this->dateTimeMock,
-            $this->validatorMock,
-            $this->productMock,
-            $this->helperMock
+        $this->viewed = (new ObjectManager($this))->getObject(
+            'Magento\Reports\Model\ResourceModel\Report\Product\Viewed',
+            [
+                'context' => $this->contextMock,
+                'localeDate' => $this->timezoneMock,
+                'reportsFlagFactory' => $this->flagFactoryMock,
+                'productResource' => $this->productMock,
+                'resourceHelper' => $this->helperMock,
+            ]
         );
     }
 
@@ -252,7 +235,6 @@ class ViewedTest extends \PHPUnit_Framework_TestCase
         $this->flagMock->expects($this->once())->method('unsetData')->willReturnSelf();
         $this->flagMock->expects($this->once())->method('loadSelf')->willReturnSelf();
         $this->flagMock->expects($this->never())->method('setFlagData')->willReturnSelf();
-        $this->flagMock->expects($this->once())->method('setLastUpdate')->willReturnSelf();
         $this->flagMock->expects($this->once())->method('save')->willReturnSelf();
         $this->flagMock
             ->expects($this->once())

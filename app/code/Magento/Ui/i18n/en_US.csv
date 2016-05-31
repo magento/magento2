@@ -1,4 +1,111 @@
+"Condition type ""%1"" is not allowed","Condition type ""%1"" is not allowed"
+"The configuration parameter ""formElement"" is a required for ""%1"" field.","The configuration parameter ""formElement"" is a required for ""%1"" field."
+"Remove %1","Remove %1"
+"Add New %1","Add New %1"
+"New %1","New %1"
+"Please select item(s).","Please select item(s)."
+"Unsupported bookmark action.","Unsupported bookmark action."
+"Parameter ""class"" must be present.","Parameter ""class"" must be present."
+"Parameter ""sortOrder"" must be present.","Parameter ""sortOrder"" must be present."
+"Initialization error component, check the spelling of the name or the correctness of the call.","Initialization error component, check the spelling of the name or the correctness of the call."
+"Bookmark with id ""%1"" does not exist.","Bookmark with id ""%1"" does not exist."
+Cancel,Cancel
+Back,Back
+Next,Next
+"Changes have been made to this section that have not been saved.","Changes have been made to this section that have not been saved."
+Assign,Assign
+Options,Options
+"records found","records found"
+selected,selected
+Filters,Filters
+Add,Add
+"Something went wrong.","Something went wrong."
+Yes,Yes
+No,No
+Done,Done
+options,options
+Select...,Select...
+Selected,Selected
+"Select All","Select All"
+"Deselect All","Deselect All"
+"Select All on This Page","Select All on This Page"
+"Deselect All on This Page","Deselect All on This Page"
+On,On
+Off,Off
+"Go to Details Page","Go to Details Page"
+"New View","New View"
+"Default View","Default View"
+"${ $.visible } out of ${ $.total } visible","${ $.visible } out of ${ $.total } visible"
+"You have successfully saved your edits.","You have successfully saved your edits."
+"You haven\'t selected any items!","You haven\'t selected any items!"
+"Search by keyword","Search by keyword"
+Keyword,Keyword
+"Please enter more or equal than {0} symbols.","Please enter more or equal than {0} symbols."
+"Please enter less or equal than {0} symbols.","Please enter less or equal than {0} symbols."
+"Please enter {0} words or less.","Please enter {0} words or less."
+"Please enter at least {0} words.","Please enter at least {0} words."
+"Please enter between {0} and {1} words.","Please enter between {0} and {1} words."
+"Letters or punctuation only please","Letters or punctuation only please"
+"Letters, numbers, spaces or underscores only please","Letters, numbers, spaces or underscores only please"
+"Letters only please","Letters only please"
+"No white space please","No white space please"
+"Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx","Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx"
+"A positive or negative non-decimal number please","A positive or negative non-decimal number please"
+"The specified vehicle identification number (VIN) is invalid.","The specified vehicle identification number (VIN) is invalid."
+"Please enter a correct date","Please enter a correct date"
+"Vul hier een geldige datum in.","Vul hier een geldige datum in."
+"Please enter a valid time, between 00:00 and 23:59","Please enter a valid time, between 00:00 and 23:59"
+"Please enter a valid time, between 00:00 am and 12:00 pm","Please enter a valid time, between 00:00 am and 12:00 pm"
+"Please specify a valid phone number","Please specify a valid phone number"
+"Please specify a valid mobile number","Please specify a valid mobile number"
+"Please enter at least {0} characters","Please enter at least {0} characters"
+"Please enter a valid credit card number.","Please enter a valid credit card number."
+"Please enter a valid IP v4 address.","Please enter a valid IP v4 address."
+"Please enter a valid IP v6 address.","Please enter a valid IP v6 address."
+"Invalid format.","Invalid format."
+"HTML tags are not allowed.","HTML tags are not allowed."
+"Please select an option.","Please select an option."
+"Empty Value.","Empty Value."
+"Please use only letters (a-z or A-Z), numbers (0-9) or spaces only in this field.","Please use only letters (a-z or A-Z), numbers (0-9) or spaces only in this field."
+"Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.","Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter."
+"Please use only letters (a-z or A-Z), numbers (0-9), spaces and ""#"" in this field.","Please use only letters (a-z or A-Z), numbers (0-9), spaces and ""#"" in this field."
+"Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890.","Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890."
+"Please enter a valid fax number (Ex: 123-456-7890).","Please enter a valid fax number (Ex: 123-456-7890)."
+"Please enter a valid email address (Ex: johndoe@domain.com).","Please enter a valid email address (Ex: johndoe@domain.com)."
+"Please enter 6 or more characters. Leading and trailing spaces will be ignored.","Please enter 6 or more characters. Leading and trailing spaces will be ignored."
+"Please enter 7 or more characters, using both numeric and alphabetic.","Please enter 7 or more characters, using both numeric and alphabetic."
+"Please enter a valid URL. Protocol is required (http://, https:// or ftp://).","Please enter a valid URL. Protocol is required (http://, https:// or ftp://)."
+"Please enter a valid URL. For example http://www.example.com or www.example.com.","Please enter a valid URL. For example http://www.example.com or www.example.com."
+"Please enter a valid XML-identifier (Ex: something_1, block5, id-4).","Please enter a valid XML-identifier (Ex: something_1, block5, id-4)."
+"Please enter a valid social security number (Ex: 123-45-6789).","Please enter a valid social security number (Ex: 123-45-6789)."
+"Please enter a valid zip code (Ex: 90602 or 90602-1234).","Please enter a valid zip code (Ex: 90602 or 90602-1234)."
+"Please use this date format: dd/mm/yyyy. For example 17/03/2006 for the 17th of March, 2006.","Please use this date format: dd/mm/yyyy. For example 17/03/2006 for the 17th of March, 2006."
+"Please enter a valid $ amount. For example $100.00.","Please enter a valid $ amount. For example $100.00."
+"Please enter a number 0 or greater in this field.","Please enter a number 0 or greater in this field."
+"Please enter a number greater than 0 in this field.","Please enter a number greater than 0 in this field."
+"Please input a valid CSS-length (Ex: 100px, 77pt, 20em, .5ex or 50%).","Please input a valid CSS-length (Ex: 100px, 77pt, 20em, .5ex or 50%)."
+"Please enter a valid number in this field.","Please enter a valid number in this field."
+"The value is not within the specified range.","The value is not within the specified range."
+"Please use letters only (a-z or A-Z) in this field.","Please use letters only (a-z or A-Z) in this field."
+"Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter.","Please use only letters (a-z), numbers (0-9) or underscore (_) in this field, and the first character should be a letter."
+"Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.","Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed."
+"Please enter a valid date.","Please enter a valid date."
+"Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"").","Please enter a valid URL Key (Ex: ""example-page"", ""example-page.html"" or ""anotherlevel/example-page"")."
+"Please enter a valid zip code.","Please enter a valid zip code."
+"Please select State/Province.","Please select State/Province."
+"Please enter issue number or start date for switch/solo card type.","Please enter issue number or start date for switch/solo card type."
+"This is a required field.","This is a required field."
+"Please enter positive number in this field.","Please enter positive number in this field."
+"Please enter a valid value, ex: 10,20,30","Please enter a valid value, ex: 10,20,30"
+"We don\'t recognize or support this file extension type.","We don\'t recognize or support this file extension type."
+"File you are trying to upload exceeds maximum file size limit.","File you are trying to upload exceeds maximum file size limit."
+"Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document.","Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document."
+Attention,Attention
+OK,OK
+Close,Close
+Ok,Ok
 "Log JS Errors to Session Storage","Log JS Errors to Session Storage"
-"If enabled, can be used by functional tests for extended reporting","If enabled, can be used by functional tests for extended reporting"
 "Log JS Errors to Session Storage Key","Log JS Errors to Session Storage Key"
-"Use this key to retrieve collected js errors","Use this key to retrieve collected js errors"
+Action,Action
+CSV,CSV
+"Excel XML","Excel XML"

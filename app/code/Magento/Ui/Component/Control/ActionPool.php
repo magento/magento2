@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Control;
@@ -114,6 +114,23 @@ class ActionPool implements ActionPoolInterface
     {
         if (isset($this->items[$key])) {
             $this->items[$key]->setData($data);
+        }
+    }
+
+    /**
+     * Add html block
+     *
+     * @param  string $type
+     * @param  string $name
+     * @param  array $arguments
+     * @return void
+     */
+    public function addHtmlBlock($type, $name = '', array $arguments = [])
+    {
+        $toolbar = $this->getToolbar();
+        $container = $this->context->getPageLayout()->createBlock($type, $name, $arguments);
+        if ($toolbar) {
+            $toolbar->setChild($name, $container);
         }
     }
 

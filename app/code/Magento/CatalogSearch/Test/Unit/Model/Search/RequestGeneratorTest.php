@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
@@ -18,7 +18,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var  CollectionFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $productAttributeCollectionFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productAttributeCollectionFactory =
             $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory')

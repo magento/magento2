@@ -2,7 +2,7 @@
 /**
  * Catalog entity setup
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Setup;
@@ -14,7 +14,6 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Catalog\Model\Product\Type;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class CategorySetup extends EavSetup
 {
@@ -598,7 +597,7 @@ class CategorySetup extends EavSetup
                         'filterable' => true,
                         'comparable' => true,
                         'visible_in_advanced_search' => true,
-                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL, Configurable::TYPE_CODE]),
+                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL]),
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => true,
@@ -798,15 +797,13 @@ class CategorySetup extends EavSetup
                     ],
                     'created_at' => [
                         'type' => 'static',
-                        'input' => 'text',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Created',
+                        'input' => 'date',
                         'sort_order' => 19,
                         'visible' => false,
                     ],
                     'updated_at' => [
                         'type' => 'static',
-                        'input' => 'text',
-                        'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Time\Updated',
+                        'input' => 'date',
                         'sort_order' => 20,
                         'visible' => false,
                     ],

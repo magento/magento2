@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -52,6 +52,10 @@ interface TaxRuleRepositoryInterface
 
     /**
      * Search TaxRules
+     *
+     * This call returns an array of objects, but detailed information about each object’s attributes might not be
+     * included. See http://devdocs.magento.com/codelinks/attributes.html#TaxRuleRepositoryInterface to
+     * determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteria $searchCriteria
      * @return \Magento\Tax\Api\Data\TaxRuleSearchResultsInterface containing TaxRuleInterface objects

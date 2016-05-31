@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="admin">
+            <group id="security">
+                <field id="admin_account_sharing" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Admin Account Sharing</label>
+                    <comment>If set to Yes, you can log in from multiple computers into same account. Default setting No improves security.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="password_reset_protection_type" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Password Reset Protection Type</label>
+                    <source_model>Magento\Security\Model\Config\Source\ResetMethod</source_model>
+                </field>
+                <field id="max_number_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Max Number of Password Reset Requests</label>
+                    <comment>Limit the number of password reset request per hour. Use 0 to disable.</comment>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
+                </field>
+                <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Min Time Between Password Reset Requests</label>
+                    <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+        <section id="customer">
+            <group id="password">
+                <field id="password_reset_protection_type" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Password Reset Protection Type</label>
+                    <source_model>Magento\Security\Model\Config\Source\ResetMethod</source_model>
+                </field>
+                <field id="max_number_password_reset_requests" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Max Number of Password Reset Requests</label>
+                    <comment>Limit the number of password reset request per hour. Use 0 to disable.</comment>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
+                </field>
+                <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Min Time Between Password Reset Requests</label>
+                    <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
+                    <validate>required-entry validate-zero-or-greater validate-digits</validate>
+                    <depends>
+                        <field id="password_reset_protection_type" separator="," negative="1">0</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
@@ -33,6 +33,8 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
      * @var string
      */
     protected $eventPrefix = 'cataloginventory_stock_item';
+
+    const WEBSITE_ID = 'website_id';
 
     /**
      * Parameter name in event
@@ -161,7 +163,7 @@ class Item extends AbstractExtensibleModel implements StockItemInterface
     {
         $websiteId = $this->getData(static::WEBSITE_ID);
         if ($websiteId === null) {
-            $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
+            $websiteId = $this->stockConfiguration->getDefaultScopeId();
         }
         return (int) $websiteId;
     }

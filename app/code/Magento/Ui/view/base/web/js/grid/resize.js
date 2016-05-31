@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,7 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    'Magento_Ui/js/lib/ko/extender/bound-nodes',
+    'Magento_Ui/js/lib/knockout/extender/bound-nodes',
     'uiElement'
 ], function ($, ko, _, utils, registry, boundedNodes, Element) {
     'use strict';

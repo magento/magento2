@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -22,6 +22,7 @@ define(
         return Component.extend({
             registerUrl: window.authenticationPopup.customerRegisterUrl,
             forgotPasswordUrl: window.authenticationPopup.customerForgotPasswordUrl,
+            autocomplete: window.checkout.autocomplete,
             modalWindow: null,
             isLoading: ko.observable(false),
 

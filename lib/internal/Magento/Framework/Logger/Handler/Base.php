@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,7 +54,7 @@ class Base extends StreamHandler
     {
         $logDir = $this->filesystem->getParentDirectory($this->url);
         if (!$this->filesystem->isDirectory($logDir)) {
-            $this->filesystem->createDirectory($logDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            $this->filesystem->createDirectory($logDir);
         }
 
         parent::write($record);

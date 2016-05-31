@@ -1,13 +1,21 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
 class MassMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
+
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_AdminNotification::mark_as_read';
+
     /**
      * @return void
      */
@@ -37,13 +45,5 @@ class MassMarkAsRead extends \Magento\AdminNotification\Controller\Adminhtml\Not
             }
         }
         $this->_redirect('adminhtml/*/');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_AdminNotification::mark_as_read');
     }
 }

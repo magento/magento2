@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CacheInvalidate\Observer;
@@ -48,10 +48,11 @@ class InvalidateVarnishObserver implements ObserverInterface
                 $tags = [];
                 $pattern = "((^|,)%s(,|$))";
                 foreach ($object->getIdentities() as $tag) {
-                    $tags[] = sprintf($pattern, preg_replace("~_\\d+$~", '', $tag));
                     $tags[] = sprintf($pattern, $tag);
                 }
-                $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
+                if (!empty($tags)) {
+                    $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
+                }
             }
         }
     }

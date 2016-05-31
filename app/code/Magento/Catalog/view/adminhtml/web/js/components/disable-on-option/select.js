@@ -1,0 +1,12 @@
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+define([
+    'Magento_Ui/js/form/element/select',
+    'Magento_Catalog/js/components/disable-on-option/strategy'
+], function (Element, strategy) {
+    'use strict';
+
+    return Element.extend(strategy);
+});

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -193,9 +193,12 @@ class Info extends AbstractModel implements InfoInterface
         if ($key && isset($this->additionalInformation[$key])) {
             unset($this->additionalInformation[$key]);
             return $this->setData('additional_information', $this->additionalInformation);
+        } elseif (null === $key) {
+            $this->additionalInformation = [];
+            return $this->unsetData('additional_information');
         }
-        $this->additionalInformation = [];
-        return $this->unsetData('additional_information');
+
+        return $this;
     }
 
     /**
@@ -223,9 +226,6 @@ class Info extends AbstractModel implements InfoInterface
     {
         $additionalInfo = $this->getData('additional_information');
         if (empty($this->additionalInformation) && $additionalInfo) {
-            if (!is_array($additionalInfo)) {
-                $additionalInfo = unserialize($additionalInfo);
-            }
             $this->additionalInformation = $additionalInfo;
         }
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -79,12 +79,12 @@ class CustomerMetadata implements CustomerMetadataInterface
         } else {
             throw new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     [
                         'fieldName' => 'entityType',
                         'fieldValue' => self::ENTITY_TYPE_CUSTOMER,
                         'field2Name' => 'attributeCode',
-                        'field2Value' => $attributeCode,
+                        'field2Value' => $attributeCode
                     ]
                 )
             );

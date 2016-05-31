@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,19 +69,20 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $dateTime;
 
     /**
      * @var StoreManagerInterface
+     * @deprecated
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param StockConfigurationInterface $stockConfiguration
      * @param StoreManagerInterface $storeManager
      * @param string $connectionName
@@ -89,7 +90,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         StockConfigurationInterface $stockConfiguration,
         StoreManagerInterface $storeManager,
         $connectionName = null
@@ -189,11 +190,12 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Set items out of stock basing on their quantities and config settings
      *
      * @param string|int $website
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
     public function updateSetOutOfStock($website = null)
     {
-        $websiteId = $this->storeManager->getWebsite($website)->getId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $this->_initConfig();
         $connection = $this->getConnection();
         $values = ['is_in_stock' => 0, 'stock_status_changed_auto' => 1];
@@ -223,11 +225,12 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Set items in stock basing on their quantities and config settings
      *
      * @param int|string $website
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
     public function updateSetInStock($website)
     {
-        $websiteId = $this->storeManager->getWebsite($website)->getId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $this->_initConfig();
         $connection = $this->getConnection();
         $values = ['is_in_stock' => 1];
@@ -255,11 +258,12 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Update items low stock date basing on their quantities and config settings
      *
      * @param int|string $website
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
     public function updateLowStockDate($website)
     {
-        $websiteId = $this->storeManager->getWebsite($website)->getId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $this->_initConfig();
 
         $connection = $this->getConnection();
@@ -267,7 +271,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
             '(use_config_notify_stock_qty = 1 AND qty < ?)',
             $this->_configNotifyStockQty
         ) . ' OR (use_config_notify_stock_qty = 0 AND qty < notify_stock_qty)';
-        $currentDbTime = $connection->quoteInto('?', $this->dateTime->formatDate(true));
+        $currentDbTime = $connection->quoteInto('?', $this->dateTime->gmtDate());
         $conditionalDate = $connection->getCheckSql($condition, $currentDbTime, 'NULL');
 
         $value = ['low_stock_date' => new \Zend_Db_Expr($conditionalDate)];

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -22,7 +22,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
      */
     protected $data;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->registry = new Registry();
         $this->data = [

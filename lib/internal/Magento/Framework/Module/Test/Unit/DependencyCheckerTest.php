@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
@@ -34,7 +34,7 @@ class DependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     private $loaderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->packageInfoMock = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
         $requireMap = [

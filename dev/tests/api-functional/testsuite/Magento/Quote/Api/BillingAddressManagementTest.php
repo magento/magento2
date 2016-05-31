@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -104,7 +104,7 @@ class BillingAddressManagementTest extends WebapiAbstract
             'firstname' => 'John',
             'lastname' => 'Smith',
             'email' => '',
-            'company' => 'eBay Inc',
+            'company' => 'Magento Commerce Inc.',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
             'region_id' => 12,
@@ -227,7 +227,7 @@ class BillingAddressManagementTest extends WebapiAbstract
         $addressData = [
             'firstname' => 'John',
             'lastname' => 'Smith',
-            'company' => 'eBay Inc',
+            'company' => 'Magento Commerce Inc.',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
             'region_id' => 12,

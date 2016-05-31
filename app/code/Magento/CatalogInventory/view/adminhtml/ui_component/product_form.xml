@@ -1,0 +1,657 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <modal name="advanced_inventory_modal">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="dataScope" xsi:type="string">data.product</item>
+                <item name="provider" xsi:type="string">product_form.product_form_data_source</item>
+                <item name="onCancel" xsi:type="string">actionDone</item>
+                <item name="options" xsi:type="array">
+                    <item name="title" xsi:type="string">Advanced Inventory</item>
+                    <item name="buttons" xsi:type="array">
+                        <item name="0" xsi:type="array">
+                            <item name="text" xsi:type="string">Done</item>
+                            <item name="class" xsi:type="string">action-primary</item>
+                            <item name="actions" xsi:type="array">
+                                <item name="0" xsi:type="array">
+                                    <item name="targetName" xsi:type="string">${ $.name }</item>
+                                    <item name="actionName" xsi:type="string">actionDone</item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+        <fieldset name="stock_data">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string"/>
+                    <item name="dataScope" xsi:type="string"/>
+                </item>
+            </argument>
+            <container name="container_manage_stock">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Manage Stock</item>
+                        <item name="sortOrder" xsi:type="number">100</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                    </item>
+                </argument>
+                <field name="manage_stock">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Manage Stock</item>
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
+                            <item name="dataScope" xsi:type="string">manage_stock</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                        </item>
+                        <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                    </argument>
+                </field>
+                <field name="use_config_manage_stock">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_manage_stock</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">manage_stock</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                            </item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.manage_stock:disabled</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <field name="qty">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
+                        <item name="label" xsi:type="string" translate="true">Qty</item>
+                        <item name="formElement" xsi:type="string">input</item>
+                        <item name="dataScope" xsi:type="string">quantity_and_stock_status.qty</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
+                            <item name="less-than-equals-to" xsi:type="number">99999999</item>
+                        </item>
+                        <item name="sortOrder" xsi:type="number">200</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                            <item name="handleChanges" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
+                        </item>
+                    </item>
+                </argument>
+            </field>
+
+            <container name="container_min_qty">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Out-of-Stock Threshold</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">300</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                        </item>
+                    </item>
+                </argument>
+                <field name="min_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Out-of-Stock Threshold</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">min_qty</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-number" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="use_config_min_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_min_qty</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.min_qty:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">min_qty</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.min_qty</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <fieldset name="container_min_sale_qty">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true"/>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">400</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                    </item>
+                </argument>
+                <field name="min_sale_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Minimum Qty Allowed in Shopping Cart</item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">min_sale_qty</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-number" xsi:type="boolean">true</item>
+                                <item name="validate-digits" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="imports" xsi:type="array">
+                                <item name="handleChanges" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
+                            </item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="use_config_min_sale_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_min_sale_qty</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="inputField" xsi:type="string">ns = ${ $.ns }, index=min_sale_qty</item>
+                            <item name="dynamicRowsField" xsi:type="string">ns = ${ $.ns }, index=min_qty_allowed_in_shopping_cart</item>
+                            <item name="sortOrder" xsi:type="string">2</item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-min-sale-qty</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">min_sale_qty</item>
+                            <item name="unserialized" xsi:type="boolean">true</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="admin__field-no-label" xsi:type="boolean">true</item>
+                                <item name="admin__field-use-config" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <dynamicRows name="min_qty_allowed_in_shopping_cart">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">dynamicRows</item>
+                            <item name="sortOrder" xsi:type="string">1</item>
+                            <item name="addButton" xsi:type="boolean">false</item>
+                            <item name="label" xsi:type="string" translate="true">Minimum Qty Allowed in Shopping Cart</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="dndConfig" xsi:type="array">
+                                <item name="enabled" xsi:type="boolean">false</item>
+                            </item>
+                        </item>
+                    </argument>
+                    <container name="record">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="isTemplate" xsi:type="boolean">true</item>
+                                <item name="is_collection" xsi:type="boolean">true</item>
+                                <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                                <item name="componentType" xsi:type="string">container</item>
+                            </item>
+                        </argument>
+                        <field name="customer_group_id">
+                            <argument name="data" xsi:type="array">
+                                <item name="options" xsi:type="object">Magento\Customer\Model\Customer\Source\Group</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="dataType" xsi:type="string">text</item>
+                                    <item name="formElement" xsi:type="string">select</item>
+                                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                    <item name="label" xsi:type="string" translate="true">Customer Group</item>
+                                    <item name="dataScope" xsi:type="string">customer_group_id</item>
+                                    <item name="disabled" xsi:type="boolean">true</item>
+                                </item>
+                            </argument>
+                        </field>
+                        <field name="min_sale_qty">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="dataType" xsi:type="string">number</item>
+                                    <item name="formElement" xsi:type="string">input</item>
+                                    <item name="visible" xsi:type="boolean">true</item>
+                                    <item name="label" xsi:type="string" translate="true">Minimum Qty</item>
+                                    <item name="dataScope" xsi:type="string">min_sale_qty</item>
+                                    <item name="disabled" xsi:type="boolean">true</item>
+                                </item>
+                            </argument>
+                        </field>
+                    </container>
+                </dynamicRows>
+            </fieldset>
+
+            <container name="container_max_sale_qty">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Maximum Qty Allowed in Shopping Cart</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">500</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                    </item>
+                </argument>
+                <field name="max_sale_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Maximum Qty Allowed in Shopping Cart</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">max_sale_qty</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-number" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="use_config_max_sale_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_max_sale_qty</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.max_sale_qty:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">max_sale_qty</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.max_sale_qty</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <field name="is_qty_decimal">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Qty Uses Decimals</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="rawOptions" xsi:type="boolean">true</item>
+                        <item name="dataScope" xsi:type="string">stock_data.is_qty_decimal</item>
+                        <item name="value" xsi:type="number">0</item>
+                        <item name="sortOrder" xsi:type="number">600</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                        </item>
+                    </item>
+                    <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                </argument>
+            </field>
+
+            <field name="is_decimal_divided">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Allow Multiple Boxes for Shipping</item>
+                        <item name="formElement" xsi:type="string">select</item>
+                        <item name="dataScope" xsi:type="string">stock_data.is_decimal_divided</item>
+                        <item name="value" xsi:type="number">0</item>
+                        <item name="sortOrder" xsi:type="number">700</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                        </item>
+                    </item>
+                    <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                </argument>
+            </field>
+
+            <container name="container_backorders">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Backorders</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">800</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                        </item>
+                        <item name="exports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.name}.backorders:visible</item>
+                        </item>
+                    </item>
+                </argument>
+                <field name="backorders">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Backorders</item>
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
+                            <item name="dataScope" xsi:type="string">backorders</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                        </item>
+                        <item name="options" xsi:type="object">Magento\CatalogInventory\Model\Source\Backorders</item>
+                    </argument>
+                </field>
+                <field name="use_config_backorders">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_backorders</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.backorders:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">backorders</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.backorders</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <container name="container_deferred_stock_update">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Use Deferred Stock Update</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">850</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                    </item>
+                </argument>
+                <field name="deferred_stock_update">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Use Deferred Stock Update</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
+                            <item name="dataScope" xsi:type="string">deferred_stock_update</item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                        </item>
+                        <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                    </argument>
+                </field>
+                <field name="use_config_deferred_stock_update">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_deferred_stock_update</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.deferred_stock_update:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">deferred_stock_update</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.deferred_stock_update</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <container name="container_notify_stock_qty">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Notify for Quantity Below</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">900</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                        </item>
+                    </item>
+                </argument>
+                <field name="notify_stock_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Notify for Quantity Below</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="dataScope" xsi:type="string">notify_stock_qty</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-number" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="use_config_notify_stock_qty">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_notify_stock_qty</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.notify_stock_qty:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">notify_stock_qty</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.notify_stock_qty</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <container name="container_enable_qty_increments">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Enable Qty Increments</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">1000</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                    </item>
+                </argument>
+                <field name="enable_qty_increments">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Enable Qty Increments</item>
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="dataScope" xsi:type="string">enable_qty_increments</item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                        </item>
+                        <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                    </argument>
+                </field>
+                <field name="use_config_enable_qty_increments">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_enable_qty_inc</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.enable_qty_increments:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">enable_qty_increments</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.enable_qty_increments</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <container name="container_qty_increments">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Qty Increments</item>
+                        <item name="dataScope" xsi:type="string">stock_data</item>
+                        <item name="sortOrder" xsi:type="number">1100</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.enable_qty_increments</item>
+                        </item>
+                    </item>
+                </argument>
+                <field name="qty_increments">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Qty Increments</item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">qty_increments</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="validate-number" xsi:type="boolean">true</item>
+                                <item name="validate-digits" xsi:type="boolean">true</item>
+                            </item>
+                            <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="imports" xsi:type="array">
+                                <item name="handleChanges" xsi:type="string">${$.provider}:data.product.stock_data.is_qty_decimal</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="use_config_qty_increments">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="dataScope" xsi:type="string">use_config_qty_increments</item>
+                            <item name="valueMap" xsi:type="array">
+                                <item name="true" xsi:type="string">1</item>
+                                <item name="false" xsi:type="string">0</item>
+                            </item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="exports" xsi:type="array">
+                                <item name="checked" xsi:type="string">${$.parentName}.qty_increments:disabled</item>
+                            </item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings</item>
+                            <item name="valueFromConfig" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
+                            <item name="keyInConfiguration" xsi:type="string">qty_increments</item>
+                            <item name="links" xsi:type="array">
+                                <item name="linkedValue" xsi:type="string">${$.provider}:data.product.stock_data.qty_increments</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+
+            <container name="container_is_in_stock">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+                        <item name="label" xsi:type="string" translate="true">Stock Status</item>
+                        <item name="dataScope" xsi:type="string">quantity_and_stock_status</item>
+                        <item name="sortOrder" xsi:type="number">1200</item>
+                        <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">${$.provider}:data.product.stock_data.manage_stock</item>
+                        </item>
+                    </item>
+                </argument>
+                <field name="is_in_stock">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Stock Status</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
+                            <item name="formElement" xsi:type="string">select</item>
+                            <item name="dataScope" xsi:type="string">is_in_stock</item>
+                            <item name="value" xsi:type="number">1</item>
+                        </item>
+                        <item name="options" xsi:type="object">Magento\CatalogInventory\Model\Source\Stock</item>
+                    </argument>
+                </field>
+            </container>
+        </fieldset>
+    </modal>
+</form>

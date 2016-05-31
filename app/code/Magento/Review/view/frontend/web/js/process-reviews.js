@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -10,6 +10,7 @@ define([
     function processReviews(url, fromPages) {
         $.ajax({
             url: url,
+            cache: true,
             dataType: 'html'
         }).done(function (data) {
             $('#product-review-container').html(data);

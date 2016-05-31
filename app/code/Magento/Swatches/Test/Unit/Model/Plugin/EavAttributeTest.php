@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,7 +54,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     private $dependencyArray = [];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->swatchFactory = $this->getMock('\Magento\Swatches\Model\SwatchFactory', ['create'], [], '', false);
@@ -98,16 +98,23 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveVisualSwatch()
     {
-        $this->attribute->expects($this->exactly(4))->method('getData')->withConsecutive(
+        $option = [
+            'value' => [
+                0 => 'option value',
+            ]
+        ];
+        $this->attribute->expects($this->exactly(6))->method('getData')->withConsecutive(
             ['defaultvisual'],
             ['optionvisual'],
             ['swatchvisual'],
-            [Swatch::SWATCH_INPUT_TYPE_KEY]
+            ['optionvisual'],
+            ['option/delete/0']
         )->will($this->onConsecutiveCalls(
             self::ATTRIBUTE_DEFAULT_VALUE,
             self::ATTRIBUTE_OPTION_VALUE,
             self::ATTRIBUTE_SWATCH_VALUE,
-            Swatch::SWATCH_INPUT_TYPE_VISUAL
+            $option,
+            false
         ));
 
         $this->attribute->expects($this->exactly(3))->method('setData')
@@ -119,7 +126,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
         $this->swatchHelper->expects($this->once())->method('assembleAdditionalDataEavAttribute')
             ->with($this->attribute);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
+        $this->swatchHelper->expects($this->atLeastOnce())->method('isVisualSwatch')
             ->with($this->attribute)
             ->willReturn(true);
         $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
@@ -132,17 +139,24 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSaveTextSwatch()
     {
-        $this->attribute->expects($this->exactly(4))->method('getData')->withConsecutive(
+        $option = [
+            'value' => [
+                0 => 'option value',
+            ]
+        ];
+        $this->attribute->expects($this->exactly(6))->method('getData')->withConsecutive(
             ['defaulttext'],
             ['optiontext'],
             ['swatchtext'],
-            [Swatch::SWATCH_INPUT_TYPE_KEY]
+            ['optiontext'],
+            ['option/delete/0']
         )->will(
             $this->onConsecutiveCalls(
                 self::ATTRIBUTE_DEFAULT_VALUE,
                 self::ATTRIBUTE_OPTION_VALUE,
                 self::ATTRIBUTE_SWATCH_VALUE,
-                Swatch::SWATCH_INPUT_TYPE_TEXT
+                $option,
+                false
             )
         );
 
@@ -155,10 +169,10 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
         $this->swatchHelper->expects($this->once())->method('assembleAdditionalDataEavAttribute')
             ->with($this->attribute);
-        $this->swatchHelper->expects($this->once())->method('isVisualSwatch')
+        $this->swatchHelper->expects($this->atLeastOnce())->method('isVisualSwatch')
             ->with($this->attribute)
             ->willReturn(false);
-        $this->swatchHelper->expects($this->once())->method('isTextSwatch')
+        $this->swatchHelper->expects($this->atLeastOnce())->method('isTextSwatch')
             ->with($this->attribute)
             ->willReturn(true);
         $this->swatchHelper->expects($this->once())->method('isSwatchAttribute')
@@ -166,6 +180,89 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->eavAttribute->beforeSave($this->attribute);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Admin is a required field in the each row
+     */
+    public function testBeforeSaveWithFailedValidation()
+    {
+        $optionText = [
+            'value' => [
+                0 => '',
+            ]
+        ];
+        $this->swatchHelper->expects($this->once())
+            ->method('isSwatchAttribute')
+            ->with($this->attribute)
+            ->willReturn(true);
+
+        $this->swatchHelper->expects($this->atLeastOnce())
+            ->method('isVisualSwatch')
+            ->willReturn(true);
+        $this->attribute->expects($this->exactly(5))
+            ->method('getData')
+            ->withConsecutive(
+                ['defaultvisual'],
+                ['optionvisual'],
+                ['swatchvisual'],
+                ['optionvisual'],
+                ['option/delete/0']
+            )
+            ->will(
+                $this->onConsecutiveCalls(
+                    self::ATTRIBUTE_DEFAULT_VALUE,
+                    self::ATTRIBUTE_OPTION_VALUE,
+                    self::ATTRIBUTE_SWATCH_VALUE,
+                    $optionText,
+                    false
+                )
+            );
+
+        $this->eavAttribute->beforeSave($this->attribute);
+    }
+
+    /**
+     * @covers \Magento\Swatches\Model\Plugin\EavAttribute::beforeSave()
+     */
+    public function testBeforeSaveWithDeletedOption()
+    {
+        $optionText = [
+            'value' => [
+                0 => '',
+            ]
+        ];
+
+        $this->swatchHelper->expects($this->once())
+            ->method('isSwatchAttribute')
+            ->with($this->attribute)
+            ->willReturn(true);
+
+        $this->swatchHelper->expects($this->atLeastOnce())
+            ->method('isVisualSwatch')
+            ->willReturn(true);
+        $this->attribute->expects($this->exactly(6))
+            ->method('getData')
+            ->withConsecutive(
+                ['defaultvisual'],
+                ['optionvisual'],
+                ['swatchvisual'],
+                ['optionvisual'],
+                ['option/delete/0'],
+                ['swatch_input_type']
+            )
+            ->will(
+                $this->onConsecutiveCalls(
+                    self::ATTRIBUTE_DEFAULT_VALUE,
+                    self::ATTRIBUTE_OPTION_VALUE,
+                    self::ATTRIBUTE_SWATCH_VALUE,
+                    $optionText,
+                    true,
+                    false
+                )
+            );
+         $this->eavAttribute->beforeSave($this->attribute);
     }
 
     public function testBeforeSaveNotSwatch()

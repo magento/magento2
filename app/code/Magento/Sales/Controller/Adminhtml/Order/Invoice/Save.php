@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -20,6 +20,13 @@ use Magento\Sales\Model\Service\InvoiceService;
  */
 class Save extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
     /**
      * @var InvoiceSender
      */
@@ -67,14 +74,6 @@ class Save extends \Magento\Backend\App\Action
         $this->shipmentFactory = $shipmentFactory;
         $this->invoiceService = $invoiceService;
         parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**

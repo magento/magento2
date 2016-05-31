@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
@@ -20,7 +20,7 @@ class RateTest extends \PHPUnit_Framework_TestCase
     /**
      *  Init data
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resourceMock = $this->getMock(

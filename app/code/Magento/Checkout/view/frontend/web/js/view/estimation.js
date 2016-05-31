@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -12,21 +12,24 @@ define(
     ],
     function (Component, quote, priceUtils, totals, sidebarModel) {
         'use strict';
+
         return Component.extend({
             isLoading: totals.isLoading,
-            getQuantity: function() {
+            getQuantity: function () {
                 if (totals.totals()) {
-                    return parseFloat(totals.totals().items_qty);
+                    return parseFloat(totals.totals()['items_qty']);
                 }
+
                 return 0;
             },
-            getPureValue: function() {
+            getPureValue: function () {
                 if (totals.totals()) {
                     return parseFloat(totals.getSegment('grand_total').value);
                 }
+
                 return 0;
             },
-            showSidebar: function() {
+            showSidebar: function () {
                 sidebarModel.show();
             },
             getFormattedPrice: function (price) {

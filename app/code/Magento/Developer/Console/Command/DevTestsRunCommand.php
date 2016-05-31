@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Console\Command;
@@ -101,10 +101,12 @@ class DevTestsRunCommand extends Command
             foreach ($failures as $message) {
                 $output->writeln(' - ' . $message);
             }
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } else {
             $output->writeln('PASSED (' . count($runCommands) . ')');
         }
-        return 0;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

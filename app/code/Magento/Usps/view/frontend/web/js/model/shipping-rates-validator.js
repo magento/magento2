@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -11,16 +11,16 @@ define(
         'mage/translate'
     ],
     function ($, utils, validationRules, $t) {
-        "use strict";
+        'use strict';
         var checkoutConfig = window.checkoutConfig;
 
         return {
             validationErrors: [],
-            validate: function(address) {
+            validate: function (address) {
                 var rules = validationRules.getRules(),
                     self = this;
 
-                $.each(rules, function(field, rule) {
+                $.each(rules, function (field, rule) {
                     if (rule.required && utils.isEmpty(address[field])) {
                         var message = $t('Field ') + field + $t(' is required.');
                         self.validationErrors.push(message);

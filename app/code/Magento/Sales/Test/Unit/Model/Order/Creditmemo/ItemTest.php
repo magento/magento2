@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo;
@@ -17,7 +17,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Order\Creditmemo\Item */
     protected $item;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->orderItemFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\ItemFactory')
@@ -111,7 +111,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getQtyToRefund')
             ->willReturn($orderItemQty);
-
+        $orderItemMock->expects($this->atLeastOnce())
+            ->method('load')
+            ->willReturnSelf();
+        $this->orderItemFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($orderItemMock);
         $this->item->setData(CreditmemoItemInterface::NAME, $name);
         $this->item->setOrderItem($orderItemMock);
         $this->item->setQty($qty);
@@ -136,7 +141,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getQtyToRefund')
             ->willReturn($orderItemQty);
-
+        $orderItemMock->expects($this->atLeastOnce())
+            ->method('load')
+            ->willReturnSelf();
+        $this->orderItemFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($orderItemMock);
         $this->item->setData(CreditmemoItemInterface::NAME, $name);
         $this->item->setOrderItem($orderItemMock);
         $this->item->setQty($qty);
@@ -156,7 +166,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $orderItemMock->expects($this->once())
             ->method('getQtyToRefund')
             ->willReturn($orderItemQty);
-
+        $orderItemMock->expects($this->atLeastOnce())
+            ->method('load')
+            ->willReturnSelf();
+        $this->orderItemFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($orderItemMock);
         $this->item->setOrderItem($orderItemMock);
         $this->item->setQty($qty);
         $this->assertEquals($qty, $this->item->getQty());

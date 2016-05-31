@@ -6,6 +6,7 @@
 atlassian*
 /nbproject
 /sitemap
+/sitemap.xml
 /.idea
 /.gitattributes
 /app/config_sandbox
@@ -46,5 +47,5 @@ atlassian*
 
 /var/*
 !/var/.htaccess
-/vendor
+/vendor/*
 !/vendor/.htaccess

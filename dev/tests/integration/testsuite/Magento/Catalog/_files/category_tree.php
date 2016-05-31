@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -55,5 +55,6 @@ foreach ($categories as $data) {
         ->setDefaultSortBy($data['default_sort_by'])
         ->setIsActive($data['is_active'])
         ->setPosition($data['position'])
+        ->setStoreId(0)
         ->save();
 }

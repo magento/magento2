@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
@@ -58,9 +58,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $productTaxClass = $objectManager->create('Magento\Tax\Model\ClassModel');
         $fixtureProductTaxClass = 'ProductTaxClass1';
         $productTaxClass->load($fixtureProductTaxClass, 'class_name');
-        $fixtureProductId = 1;
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->create('Magento\Catalog\Model\Product')->load($fixtureProductId);
+        $product = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface')->get('simple');
         $product->setTaxClassId($productTaxClass->getId())->save();
 
         $fixtureCustomerAddressId = 1;

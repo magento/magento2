@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -166,5 +166,49 @@ class TotalTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseTotalAmountAbsent()
     {
         $this->assertEquals(0, $this->model->getBaseTotalAmount('great'));
+    }
+
+    /**
+     * Verify handling of serialized, non-serialized input into and out of getFullInfo()
+     *
+     * @param $input
+     * @param $expected
+     * @dataProvider getFullInfoDataProvider
+     */
+    public function testGetFullInfo($input, $expected)
+    {
+        $this->model->setFullInfo($input);
+        $this->assertEquals($expected, $this->model->getFullInfo());
+    }
+
+    /**
+     * @return array
+     */
+    public function getFullInfoDataProvider()
+    {
+        $myArray = ['team' => 'kiwis'];
+        $serializedInput = serialize($myArray);
+
+        return [
+            'simple array' => [
+                $myArray,
+                $myArray,
+            ],
+
+            'serialized array' => [
+                $serializedInput,
+                $myArray,
+            ],
+
+            'null input/output' => [
+                null,
+                null,
+            ],
+
+            'float input' => [
+                1.23,
+                1.23,
+            ],
+        ];
     }
 }

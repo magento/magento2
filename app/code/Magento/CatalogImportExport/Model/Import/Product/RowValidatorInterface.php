@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
@@ -74,6 +74,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
     const ERROR_MEDIA_URL_NOT_ACCESSIBLE = 'mediaUrlNotAvailable';
 
     const ERROR_MEDIA_PATH_NOT_ACCESSIBLE = 'mediaPathNotAvailable';
+
+    const ERROR_DUPLICATE_URL_KEY = 'duplicatedUrlKey';
 
     /**
      * Value that means all entities (e.g. websites, groups etc.)

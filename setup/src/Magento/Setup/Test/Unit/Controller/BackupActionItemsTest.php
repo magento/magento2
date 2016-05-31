@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -122,5 +122,11 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('files', $variables);
         $this->assertEquals(['backup/path/'], $variables['files']);
+    }
+
+    public function testIndexAction()
+    {
+        $model = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $model);
     }
 }

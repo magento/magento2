@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,5 +16,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL)
     ->setTaxClassId(0)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['is_in_stock' => 1])
+    ->setStockData(['is_in_stock' => 1, 'qty' => 10])
     ->save();

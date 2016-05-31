@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var \Magento\Payment\Block\Transparent\Iframe $block
+ */
+$params = $block->getParams();
+
+?>
+<html>
+<head>
+<script>
+<?php if (isset($params['redirect'])): ?>
+    window.location="<?php echo $block->escapeUrl($params['redirect']); ?>";
+<?php elseif (isset($params['redirect_parent'])): ?>
+    window.top.location="<?php echo $block->escapeUrl($params['redirect_parent']); ?>";
+<?php elseif (isset($params['error_msg'])): ?>
+    window.top.alert(<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']); ?>);
+<?php elseif (isset($params['order_success'])): ?>
+    window.top.location = "<?php echo $block->escapeUrl($params['order_success']); ?>";
+<?php else: ?>
+    var require = window.top.require;
+    require(['jquery'], function($) {
+        var cc_number = $("input[name='payment[cc_number]']").val();
+        $('#edit_form').trigger('processStop');
+
+        $("input[name='payment[cc_number]']").prop('disabled', true);
+        $("input[name='payment[cc_cid]']").prop('disabled', true);
+        $("input[name='payment[cc_last_4]']").val(cc_number.substr(-4));
+
+        $('#edit_form').trigger('realOrder');
+    });
+<?php endif; ?>
+</script>
+</head>
+<body>
+</body>
+</html>

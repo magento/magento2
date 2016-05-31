@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -44,7 +44,7 @@ define(
                 return totals;
             },
             setTotals: function(totalsData) {
-                if (_.isObject(totalsData.extension_attributes)) {
+                if (_.isObject(totalsData) && _.isObject(totalsData.extension_attributes)) {
                     _.each(totalsData.extension_attributes, function(element, index) {
                         totalsData[index] = element;
                     });

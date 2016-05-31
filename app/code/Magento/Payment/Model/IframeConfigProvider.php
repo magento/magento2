@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model;
@@ -21,6 +21,11 @@ use Psr\Log\LoggerInterface;
  */
 class IframeConfigProvider implements ConfigProviderInterface
 {
+    /**
+     * 30 sec
+     */
+    const TIMEOUT_TIME = 30000;
+
     /**
      * Default length of Cc year field
      */
@@ -95,6 +100,7 @@ class IframeConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'iframe' => [
+                    'timeoutTime' => [$this->methodCode => self::TIMEOUT_TIME],
                     'dateDelim' => [$this->methodCode => $this->getDateDelim()],
                     'cardFieldsMap' => [$this->methodCode => $this->getCardFieldsMap()],
                     'source' =>  [$this->methodCode => $this->getViewFileUrl('blank.html')],

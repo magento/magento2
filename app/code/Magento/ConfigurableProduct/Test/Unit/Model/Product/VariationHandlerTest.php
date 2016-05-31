@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,27 +18,27 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var VariationHandler
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\SetFactory
      */
-    protected $_attributeSetFactory;
+    protected $attributeSetFactory;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\EntityFactory
      */
-    protected $_entityFactoryMock;
+    protected $entityFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ProductFactory
      */
-    protected $_productFactoryMock;
+    protected $productFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
      */
-    protected $_stockConfiguration;
+    protected $stockConfiguration;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable
@@ -48,41 +48,41 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $_objectHelper;
+    protected $objectHelper;
 
     /**
      * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $_product;
+    private $product;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
     {
-        $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_productFactoryMock = $this->getMock(
+        $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->productFactoryMock = $this->getMock(
             'Magento\Catalog\Model\ProductFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->_entityFactoryMock = $this->getMock(
+        $this->entityFactoryMock = $this->getMock(
             'Magento\Eav\Model\EntityFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->_attributeSetFactory = $this->getMock(
+        $this->attributeSetFactory = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\SetFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->_stockConfiguration = $this->getMock(
+        $this->stockConfiguration = $this->getMock(
             'Magento\CatalogInventory\Api\StockConfigurationInterface',
             [],
             [],
@@ -97,18 +97,66 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_product = $this->getMock('Magento\Catalog\Model\Product', ['getMediaGallery'], [], '', false);
+        $this->product = $this->getMock('Magento\Catalog\Model\Product', ['getMediaGallery'], [], '', false);
 
-        $this->_model = $this->_objectHelper->getObject(
+        $this->model = $this->objectHelper->getObject(
             'Magento\ConfigurableProduct\Model\Product\VariationHandler',
             [
-                'productFactory' => $this->_productFactoryMock,
-                'entityFactory' => $this->_entityFactoryMock,
-                'attributeSetFactory' => $this->_attributeSetFactory,
-                'stockConfiguration' => $this->_stockConfiguration,
+                'productFactory' => $this->productFactoryMock,
+                'entityFactory' => $this->entityFactoryMock,
+                'attributeSetFactory' => $this->attributeSetFactory,
+                'stockConfiguration' => $this->stockConfiguration,
                 'configurableProduct' => $this->configurableProduct
             ]
         );
+    }
+
+    public function testPrepareAttributeSet()
+    {
+
+        $productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['getNewVariationsAttributeSetId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute')
+            ->setMethods(['isInSet', 'setAttributeSetId', 'setAttributeGroupId', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attributeSetMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Set')
+            ->setMethods(['load', 'addSetInfo', 'getDefaultGroupId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $eavEntityMock = $this->getMockBuilder('\Magento\Eav\Model\Entity')
+            ->setMethods(['setType', 'getTypeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->once())
+            ->method('getNewVariationsAttributeSetId')
+            ->willReturn('new_attr_set_id');
+        $this->configurableProduct->expects($this->once())
+            ->method('getUsedProductAttributes')
+            ->with($productMock)
+            ->willReturn([$attributeMock]);
+        $this->attributeSetFactory->expects($this->once())->method('create')->willReturn($attributeSetMock);
+        $attributeSetMock->expects($this->once())->method('load')->with('new_attr_set_id')->willReturnSelf();
+        $this->entityFactoryMock->expects($this->once())->method('create')->willReturn($eavEntityMock);
+        $eavEntityMock->expects($this->once())->method('setType')->with('catalog_product')->willReturnSelf();
+        $eavEntityMock->expects($this->once())->method('getTypeId')->willReturn('type_id');
+        $attributeSetMock->expects($this->once())->method('addSetInfo')->with('type_id', [$attributeMock]);
+        $attributeMock->expects($this->once())->method('isInSet')->with('new_attr_set_id')->willReturn(false);
+        $attributeMock->expects($this->once())->method('setAttributeSetId')->with('new_attr_set_id')->willReturnSelf();
+        $attributeSetMock->expects($this->once())
+            ->method('getDefaultGroupId')
+            ->with('new_attr_set_id')
+            ->willReturn('default_group_id');
+        $attributeMock->expects($this->once())
+            ->method('setAttributeGroupId')
+            ->with('default_group_id')
+            ->willReturnSelf();
+        $attributeMock->expects($this->once())->method('save')->willReturnSelf();
+
+        $this->model->prepareAttributeSet($productMock);
     }
 
     /**
@@ -169,20 +217,8 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute')
-            ->setMethods(['isInSet', 'setAttributeSetId', 'setAttributeGroupId', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeSetMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Set')
-            ->setMethods(['load', 'addSetInfo', 'getDefaultGroupId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eavEntityMock = $this->getMockBuilder('\Magento\Eav\Model\Entity')
-            ->setMethods(['setType', 'getTypeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $productTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $editableAttributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
@@ -194,29 +230,10 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->configurableProduct->expects($this->once())->method('getUsedProductAttributes')
-            ->willReturn([$attributeMock]);
-        $parentProductMock->expects($this->any())
+        $parentProductMock->expects($this->once())
             ->method('getNewVariationsAttributeSetId')
             ->willReturn('new_attr_set_id');
-        $this->_attributeSetFactory->expects($this->once())->method('create')->willReturn($attributeSetMock);
-        $attributeSetMock->expects($this->once())->method('load')->with('new_attr_set_id')->willReturnSelf();
-        $this->_entityFactoryMock->expects($this->once())->method('create')->willReturn($eavEntityMock);
-        $eavEntityMock->expects($this->once())->method('setType')->with('catalog_product')->willReturnSelf();
-        $eavEntityMock->expects($this->once())->method('getTypeId')->willReturn('type_id');
-        $attributeSetMock->expects($this->once())->method('addSetInfo')->with('type_id', [$attributeMock]);
-        $attributeMock->expects($this->once())->method('isInSet')->with('new_attr_set_id')->willReturn(false);
-        $attributeMock->expects($this->once())->method('setAttributeSetId')->with('new_attr_set_id')->willReturnSelf();
-        $attributeSetMock->expects($this->once())
-            ->method('getDefaultGroupId')
-            ->with('new_attr_set_id')
-            ->willReturn('default_group_id');
-        $attributeMock->expects($this->once())
-            ->method('setAttributeGroupId')
-            ->with('default_group_id')
-            ->willReturnSelf();
-        $attributeMock->expects($this->once())->method('save')->willReturnSelf();
-        $this->_productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
         $newSimpleProductMock->expects($this->once())->method('setStoreId')->with(0)->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('setTypeId')->with('simple')->willReturnSelf();
         $newSimpleProductMock->expects($this->once())
@@ -225,7 +242,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('getTypeInstance')->willReturn($productTypeMock);
         $productTypeMock->expects($this->once())
-            ->method('getEditableAttributes')
+            ->method('getSetAttributes')
             ->with($newSimpleProductMock)
             ->willReturn([$editableAttributeMock]);
         $editableAttributeMock->expects($this->once())->method('getIsUnique')->willReturn(false);
@@ -238,7 +255,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getQuantityAndStockStatus')
             ->willReturn(['is_in_stock' => 1]);
         $newSimpleProductMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $this->_stockConfiguration->expects($this->once())
+        $this->stockConfiguration->expects($this->once())
             ->method('getManageStock')
             ->with('store_id')
             ->willReturn(1);
@@ -249,41 +266,41 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $newSimpleProductMock->expects($this->once())->method('save')->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('getId')->willReturn('product_id');
 
-        $this->assertEquals(['product_id'], $this->_model->generateSimpleProducts($parentProductMock, $productsData));
+        $this->assertEquals(['product_id'], $this->model->generateSimpleProducts($parentProductMock, $productsData));
     }
 
     public function testProcessMediaGalleryWithImagesAndGallery()
     {
-        $this->_product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
+        $this->product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
         $productData['image'] = 'test';
         $productData['media_gallery']['images'] = [
             [
                 'file' => 'test',
             ],
         ];
-        $result = $this->_model->processMediaGallery($this->_product, $productData);
+        $result = $this->model->processMediaGallery($this->product, $productData);
         $this->assertEquals($productData, $result);
     }
 
     public function testProcessMediaGalleryIfImageIsEmptyButProductMediaGalleryIsNotEmpty()
     {
-        $this->_product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
+        $this->product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
         $productData['image'] = false;
         $productData['media_gallery']['images'] = [
             [
                 'name' => 'test',
             ],
         ];
-        $result = $this->_model->processMediaGallery($this->_product, $productData);
+        $result = $this->model->processMediaGallery($this->product, $productData);
         $this->assertEquals($productData, $result);
     }
 
     public function testProcessMediaGalleryIfProductDataHasNoImagesAndGallery()
     {
-        $this->_product->expects($this->once())->method('getMediaGallery')->with('images')->willReturn([]);
+        $this->product->expects($this->once())->method('getMediaGallery')->with('images')->willReturn([]);
         $productData['image'] = false;
         $productData['media_gallery']['images'] = false;
-        $result = $this->_model->processMediaGallery($this->_product, $productData);
+        $result = $this->model->processMediaGallery($this->product, $productData);
         $this->assertEquals($productData, $result);
     }
 
@@ -294,7 +311,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessMediaGalleryForFillingGallery($productData, $expected)
     {
-        $this->assertEquals($expected, $this->_model->processMediaGallery($this->_product, $productData));
+        $this->assertEquals($expected, $this->model->processMediaGallery($this->product, $productData));
     }
 
     /**

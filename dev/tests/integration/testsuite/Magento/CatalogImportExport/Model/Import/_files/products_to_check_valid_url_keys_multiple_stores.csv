@@ -1,0 +1,7 @@
+sku,product_type,store_view_code,name,price,attribute_set_code,url_key
+simple1,simple,,"simple",25,Default,key1
+simple1,simple,default,"simple",34,Default,key1
+simple1,simple,fixturestore,"simple",58,Default,key1
+simple2,simple,,"simple",25,Default,key2
+simple2,simple,default,"simple",34,Default,
+simple2,simple,fixturestore,"simple",58,Default,

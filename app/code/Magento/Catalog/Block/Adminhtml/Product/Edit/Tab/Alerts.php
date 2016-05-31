@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -35,7 +35,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
             $accordion->addItem(
                 'price',
                 [
-                    'title' => __('We saved the price alert subscription.'),
+                    'title' => __('Price Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
                         'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price'
                     )->toHtml() . '<br />',
@@ -47,7 +47,7 @@ class Alerts extends \Magento\Backend\Block\Widget\Tab
             $accordion->addItem(
                 'stock',
                 [
-                    'title' => __('We saved the stock notification.'),
+                    'title' => __('Stock Alert Subscriptions'),
                     'content' => $this->getLayout()->createBlock(
                         'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock'
                     ),

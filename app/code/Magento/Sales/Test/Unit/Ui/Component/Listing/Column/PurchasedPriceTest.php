@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
@@ -24,7 +24,7 @@ class PurchasedPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceFormatterMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')

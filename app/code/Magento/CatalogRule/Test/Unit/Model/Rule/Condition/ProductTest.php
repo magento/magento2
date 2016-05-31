@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -98,6 +98,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testValidateMeetsCategory()
     {
         $this->product->setData('attribute', 'category_ids');
@@ -117,6 +120,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @param string $newValue
      * @param string $operator
      * @param array $input
+     * @return void
      */
     public function testValidateWithDatetimeValue($attributeValue, $parsedValue, $newValue, $operator, $input)
     {
@@ -152,6 +156,25 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->product->validate($this->productModel));
     }
 
+    /**
+     * @return void
+     */
+    public function testValidateWithNoValue()
+    {
+        $this->product->setData('attribute', 'color');
+        $this->product->setData('value_parsed', '1');
+        $this->product->setData('operator', '!=');
+
+        $this->productModel->expects($this->once())
+            ->method('getData')
+            ->with('color')
+            ->willReturn(null);
+        $this->assertFalse($this->product->validate($this->productModel));
+    }
+
+    /**
+     * @return array
+     */
     public function validateDataProvider()
     {
         return [

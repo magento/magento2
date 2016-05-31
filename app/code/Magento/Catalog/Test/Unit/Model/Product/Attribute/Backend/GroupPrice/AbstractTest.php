@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\GroupPrice;
@@ -30,7 +30,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $localeFormatMock = $this->getMock('\Magento\Framework\Locale\FormatInterface', [], [], '', false);
         $groupManagement = $this->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
-
+        $metadataPool = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice',
             [
@@ -40,7 +40,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 'config' => $configMock,
                 'localeFormat' => $localeFormatMock,
                 'catalogProductType' => $productTypeMock,
-                'groupManagement' => $groupManagement
+                'groupManagement' => $groupManagement,
+                'metadataPool' => $metadataPool
             ]
         );
         $resource = $this->getMock('StdClass', ['getMainTable']);

@@ -1,0 +1,29 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
+
+$productMatrix = $block->getProductMatrix();
+$attributes = $block->getProductAttributes();
+
+/* @noEscape */ echo $block->getVariationWizard([
+    'attributes' => $attributes,
+    'configurations' => $productMatrix,
+    'configurableModal' => $block->getForm() . '.' . $block->getModal()
+]);
+?>
+<script>
+    require(['jquery', 'uiRegistry', 'underscore'], function ($, registry, _) {
+        $('body').trigger('contentUpdated');
+        $('.<?= /* @noEscape */ $block->getData('config/dataScope')?>[data-role=steps-wizard-main]').applyBindings();
+
+        registry.async('<?= /* @noEscape */ $block->getData('config/nameStepWizard')?>')(function (component) {
+            _.delay(component.open.bind(component), 500); // TODO: MAGETWO-50246
+        })
+    });
+</script>

@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Test\Unit\Observer;
@@ -44,7 +44,7 @@ class RegisterFormKeyFromCookieTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up all mocks and data for test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->cookieFormKey = $this->getMockBuilder(
             'Magento\Framework\App\PageCache\FormKey'

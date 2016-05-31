@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -82,6 +82,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Queue
 
             $this->messageManager->addSuccess(__('You saved the newsletter queue.'));
             $this->_getSession()->setFormData(false);
+            $this->_getSession()->unsPreviewData();
 
             $this->_redirect('*/*');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

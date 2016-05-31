@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -124,6 +124,13 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
+        $configLoader = $this->getMockForAbstractClass(
+            'Magento\Framework\ObjectManager\ConfigLoaderInterface',
+            [],
+            '',
+            false
+        );
+        $configLoader->expects($this->any())->method('load')->willReturn([]);
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
@@ -133,6 +140,7 @@ class ModuleUninstallCommandTest extends \PHPUnit_Framework_TestCase
                 ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
                 ['Magento\Framework\App\State', $this->getMock('Magento\Framework\App\State', [], [], '', false)],
                 ['Magento\Framework\Setup\BackupRollbackFactory', $this->backupRollbackFactory],
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
             ]));
         $composer = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
         $composer->expects($this->any())

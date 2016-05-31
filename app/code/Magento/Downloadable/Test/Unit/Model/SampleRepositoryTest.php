@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model;
@@ -55,11 +54,26 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $sampleDataObjectFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sampleHandlerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityMetadataMock;
+
     protected function setUp()
     {
         $this->productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            ['__wakeup', 'getTypeId', 'setDownloadableData', 'save', 'getId', 'getStoreId'],
+            ['__wakeup', 'getTypeId', 'setDownloadableData', 'save', 'getId', 'getStoreId', 'getData'],
             [],
             '',
             false
@@ -98,7 +112,6 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->service = new \Magento\Downloadable\Model\SampleRepository(
             $this->repositoryMock,
             $this->productTypeMock,
@@ -108,6 +121,31 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->jsonEncoderMock,
             $this->sampleFactoryMock
         );
+
+        $this->entityMetadataMock = $this->getMockBuilder(
+            \Magento\Framework\EntityManager\EntityMetadataInterface::class
+        )->getMockForAbstractClass();
+        $linkRepository = new \ReflectionClass(get_class($this->service));
+        $metadataPoolProperty = $linkRepository->getProperty('metadataPool');
+        $this->metadataPoolMock = $this->getMockBuilder(
+            \Magento\Framework\EntityManager\MetadataPool::class
+        )->disableOriginalConstructor()->getMock();
+        $metadataPoolProperty->setAccessible(true);
+        $metadataPoolProperty->setValue(
+            $this->service,
+            $this->metadataPoolMock
+        );
+        $saveHandlerProperty = $linkRepository->getProperty('sampleTypeHandler');
+        $this->sampleHandlerMock = $this->getMockBuilder(
+            \Magento\Downloadable\Model\Product\TypeHandler\Sample::class
+        )->disableOriginalConstructor()->getMock();
+        $saveHandlerProperty->setAccessible(true);
+        $saveHandlerProperty->setValue(
+            $this->service,
+            $this->sampleHandlerMock
+        );
+
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->entityMetadataMock);
     }
 
     /**
@@ -160,19 +198,21 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
             ->will($this->returnValue(true));
 
-        $this->productMock->expects($this->once())->method('setDownloadableData')->with([
-            'sample' => [
-                [
-                    'sample_id' => 0,
-                    'is_delete' => 0,
-                    'type' => $sampleData['sample_type'],
-                    'sort_order' => $sampleData['sort_order'],
-                    'title' => $sampleData['title'],
-                    'sample_url' => $sampleData['sample_url'],
+        $this->sampleHandlerMock->expects($this->once())->method('save')->with(
+            $this->productMock,
+            [
+                'sample' => [
+                    [
+                        'sample_id' => 0,
+                        'is_delete' => 0,
+                        'type' => $sampleData['sample_type'],
+                        'sort_order' => $sampleData['sort_order'],
+                        'title' => $sampleData['title'],
+                        'sample_url' => $sampleData['sample_url'],
+                    ],
                 ],
-            ],
-        ]);
-        $this->productTypeMock->expects($this->once())->method('save')->with($this->productMock);
+            ]
+        );
         $this->service->save($productSku, $sampleMock);
     }
 
@@ -197,7 +237,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
             ->will($this->returnValue(true));
 
-        $this->productTypeMock->expects($this->never())->method('save');
+        $this->sampleHandlerMock->expects($this->never())->method('save');
 
         $this->service->save($productSku, $sampleMock);
     }
@@ -216,7 +256,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
             ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
         $existingSampleMock = $this->getMock(
             '\Magento\Downloadable\Model\Sample',
             ['__wakeup', 'getId', 'load', 'getProductId'],
@@ -234,19 +274,21 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $existingSampleMock->expects($this->any())->method('getProductId')->will($this->returnValue($productId));
         $existingSampleMock->expects($this->once())->method('load')->with($sampleId)->will($this->returnSelf());
 
-        $this->productMock->expects($this->once())->method('setDownloadableData')->with([
-            'sample' => [
-                [
-                    'sample_id' => $sampleId,
-                    'is_delete' => 0,
-                    'type' => $sampleData['sample_type'],
-                    'sort_order' => $sampleData['sort_order'],
-                    'title' => $sampleData['title'],
-                    'sample_url' => $sampleData['sample_url'],
+        $this->sampleHandlerMock->expects($this->once())->method('save')->with(
+            $this->productMock,
+            [
+                'sample' => [
+                    [
+                        'sample_id' => $sampleId,
+                        'is_delete' => 0,
+                        'type' => $sampleData['sample_type'],
+                        'sort_order' => $sampleData['sort_order'],
+                        'title' => $sampleData['title'],
+                        'sample_url' => $sampleData['sample_url'],
+                    ],
                 ],
-            ],
-        ]);
-        $this->productTypeMock->expects($this->once())->method('save')->with($this->productMock);
+            ]
+        );
 
         $this->assertEquals($sampleId, $this->service->save($productSku, $sampleMock));
     }
@@ -267,7 +309,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
             ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
         $existingSampleMock = $this->getMock(
             '\Magento\Downloadable\Model\Sample',
             ['__wakeup', 'getId', 'load', 'getProductId'],
@@ -295,19 +337,22 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             )->willReturn($encodedFile);
-        $this->productMock->expects($this->once())->method('setDownloadableData')->with([
-            'sample' => [
-                [
-                    'sample_id' => $sampleId,
-                    'is_delete' => 0,
-                    'type' => $sampleData['sample_type'],
-                    'sort_order' => $sampleData['sort_order'],
-                    'title' => $sampleData['title'],
-                    'file' => $encodedFile,
+
+        $this->sampleHandlerMock->expects($this->once())->method('save')->with(
+            $this->productMock,
+            [
+                'sample' => [
+                    [
+                        'sample_id' => $sampleId,
+                        'is_delete' => 0,
+                        'type' => $sampleData['sample_type'],
+                        'sort_order' => $sampleData['sort_order'],
+                        'title' => $sampleData['title'],
+                        'file' => $encodedFile,
+                    ],
                 ],
-            ],
-        ]);
-        $this->productTypeMock->expects($this->once())->method('save')->with($this->productMock);
+            ]
+        );
 
         $this->assertEquals($sampleId, $this->service->save($productSku, $sampleMock));
     }
@@ -328,7 +373,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         ];
         $this->repositoryMock->expects($this->any())->method('get')->with($productSku, true)
             ->will($this->returnValue($this->productMock));
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $this->productMock->expects($this->any())->method('getData')->will($this->returnValue($productId));
         $existingSampleMock = $this->getMock(
             '\Magento\Downloadable\Model\Sample',
             ['__wakeup', 'getId', 'load', 'save', 'getProductId'],
@@ -345,7 +390,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->contentValidatorMock->expects($this->any())->method('isValid')->with($sampleMock)
             ->will($this->returnValue(true));
 
-        $this->productTypeMock->expects($this->never())->method('save');
+        $this->sampleHandlerMock->expects($this->never())->method('save');
 
         $this->service->save($productSku, $sampleMock, true);
     }
@@ -389,7 +434,6 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->service->delete($sampleId);
     }
-
 
     public function testGetList()
     {

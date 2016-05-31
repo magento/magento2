@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
@@ -179,16 +179,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->blockMock->expects($this->any())
             ->method('getTitle')
             ->willReturn('Test title');
-
-        $sessionManagerMock = $this->getMock('Magento\Backend\Model\Session', ['getFormData'], [], '', false);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Backend\Model\Session')
-            ->willReturn($sessionManagerMock);
-
-        $sessionManagerMock->expects($this->once())
-            ->method('getFormData')
-            ->with(true);
 
         $this->coreRegistryMock->expects($this->once())
             ->method('register')

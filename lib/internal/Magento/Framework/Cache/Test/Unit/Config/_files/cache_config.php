@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
@@ -17,7 +17,7 @@ return [
             'translate' => 'label,description',
             'instance' => 'Magento\Framework\App\Cache\Type\Layout',
             'label' => 'Layouts',
-            'description' => 'Layout building instructions.',
+            'description' => 'Layout building instructions',
         ],
     ]
 ];

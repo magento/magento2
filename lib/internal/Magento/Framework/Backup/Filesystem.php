@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -279,7 +279,7 @@ class Filesystem extends AbstractBackup
             }
 
             mkdir($backupsDir);
-            chmod($backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
+            chmod($backupsDir);
         }
 
         if (!is_writable($backupsDir)) {

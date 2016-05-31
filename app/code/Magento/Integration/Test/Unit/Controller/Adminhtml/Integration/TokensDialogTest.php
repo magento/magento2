@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -84,6 +84,9 @@ class TokensDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminht
 
         $this->_oauthSvcMock->expects($this->once())->method('deleteIntegrationToken');
         $this->_oauthSvcMock->expects($this->once())->method('postToConsumer');
+        $consumerMock = $this->getMock(\Magento\Integration\Model\Oauth\Consumer::class, [], [], '' , false);
+        $consumerMock->expects($this->once())->method('getId')->willReturn(1);
+        $this->_oauthSvcMock->expects($this->once())->method('loadConsumer')->willReturn($consumerMock);
 
         $this->_messageManager->expects($this->once())->method('addNotice');
         $this->_messageManager->expects($this->never())->method('addError');

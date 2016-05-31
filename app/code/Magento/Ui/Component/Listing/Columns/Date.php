@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Listing\Columns;
@@ -47,6 +47,9 @@ class Date extends Column
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$this->getData('name')])) {
                     $date = $this->timezone->date(new \DateTime($item[$this->getData('name')]));
+                    if (isset($this->getConfiguration()['timezone']) && !$this->getConfiguration()['timezone']) {
+                        $date = new \DateTime($item[$this->getData('name')]);
+                    }
                     $item[$this->getData('name')] = $date->format('Y-m-d H:i:s');
                 }
             }
