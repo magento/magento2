@@ -61,7 +61,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
             'base_subtotal' => __('Subtotal'),
             'total_qty' => __('Total Items Quantity'),
             'weight' => __('Total Weight'),
-            'payment_method' => __('Payment Method'),
             'shipping_method' => __('Shipping Method'),
             'postcode' => __('Shipping Postcode'),
             'region' => __('Shipping Region'),
@@ -100,7 +99,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                 return 'numeric';
 
             case 'shipping_method':
-            case 'payment_method':
             case 'country_id':
             case 'region_id':
                 return 'select';
@@ -117,7 +115,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     {
         switch ($this->getAttribute()) {
             case 'shipping_method':
-            case 'payment_method':
             case 'country_id':
             case 'region_id':
                 return 'select';
@@ -146,10 +143,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                     $options = $this->_shippingAllmethods->toOptionArray();
                     break;
 
-                case 'payment_method':
-                    $options = $this->_paymentAllmethods->toOptionArray();
-                    break;
-
                 default:
                     $options = [];
             }
@@ -173,10 +166,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
             } else {
                 $address = $model->getQuote()->getShippingAddress();
             }
-        }
-
-        if ('payment_method' == $this->getAttribute() && !$address->hasPaymentMethod()) {
-            $address->setPaymentMethod($model->getQuote()->getPayment()->getMethod());
         }
 
         return parent::validate($address);
