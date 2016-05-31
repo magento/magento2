@@ -14,12 +14,14 @@ define([
 
     /**
      * Stores max option_id value of the options from recordData once on initialization
-     *
+     * @param {Array} data - array with records data
      */
     initMaxId = function (data) {
-        maxId = data && data.length ? ~~_.max(data, function (record) {
-            return ~~record['option_id'];
-        })['option_id'] : 0;
+        if (data && data.length) {
+            maxId = ~~_.max(data, function (record) {
+                return ~~record['option_id'];
+            })['option_id'];
+        }
     };
 
     return DynamicRows.extend({
