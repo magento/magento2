@@ -14,7 +14,7 @@ php:
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
-    - INTEGRATION_SETS=2
+    - INTEGRATION_SETS=3
   matrix:
     - TEST_SUITE=unit
     - TEST_SUITE=integration INTEGRATION_INDEX=1
