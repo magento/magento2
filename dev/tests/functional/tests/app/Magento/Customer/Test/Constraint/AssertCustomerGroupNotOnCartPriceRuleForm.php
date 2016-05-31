@@ -9,29 +9,25 @@ namespace Magento\Customer\Test\Constraint;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\SalesRule\Test\Block\Adminhtml\Promo\Quote\Edit\Section\RuleInformation;
-use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteNew;
 
 /**
- * Class AssertCustomerGroupNotOnCartPriceRuleForm.
+ * Assert that customer group is not on cart price rule page.
  */
 class AssertCustomerGroupNotOnCartPriceRuleForm extends AbstractConstraint
 {
     /**
      * Assert that customer group is not on cart price rule page.
      *
-     * @param PromoQuoteIndex $promoQuoteIndex
      * @param PromoQuoteNew $promoQuoteNew
      * @param CustomerGroup $customerGroup
      * @return void
      */
     public function processAssert(
-        PromoQuoteIndex $promoQuoteIndex,
         PromoQuoteNew $promoQuoteNew,
         CustomerGroup $customerGroup
     ) {
-        $promoQuoteIndex->open();
-        $promoQuoteIndex->getGridPageActions()->addNew();
+        $promoQuoteNew->open();
         $promoQuoteNew->getSalesRuleForm()->openSection('rule_information');
 
         /** @var RuleInformation $ruleInformationTab */

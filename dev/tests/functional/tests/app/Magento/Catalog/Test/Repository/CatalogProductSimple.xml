@@ -651,7 +651,7 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="tier_price" xsi:type="array">
-                <item name="dataset" xsi:type="string">general</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="category_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_subcategory</item>

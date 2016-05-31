@@ -13,7 +13,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCustomerGroupNotOnProductForm.
+ * Assert that customer group is not on product form.
  */
 class AssertCustomerGroupNotOnProductForm extends AbstractConstraint
 {

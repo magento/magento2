@@ -453,9 +453,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         foreach ($fields as $priceKey => &$field) {
             foreach ($this->priceData as $key => $data) {
                 if ($data['name'] == 'cust_group') {
-                    $field[$data['name']] =
-                        $this->fixture->getDataFieldConfig('tier_price')['source']->
-                        getCustomerGroups()[$priceKey]->getCustomerGroupId();
+                    $field[$data['name']] = $this->fixture->getDataFieldConfig('tier_price')['source']
+                        ->getCustomerGroups()[$priceKey]->getCustomerGroupId();
                 } else {
                     $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
                 }

@@ -12,7 +12,10 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Repository\RepositoryFactory;
 
 /**
+ * TierPrice data source.
  *
+ * Data keys:
+ *  - dataset
  */
 class TierPrice extends DataSource
 {
