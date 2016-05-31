@@ -85,6 +85,13 @@ define([
         },
 
         /**
+         * Mutes parent method
+         */
+        updateInsertData: function () {
+            return false;
+        },
+
+        /**
          * Stores max option_id value of the options from recordData once on initialization
          *
          */

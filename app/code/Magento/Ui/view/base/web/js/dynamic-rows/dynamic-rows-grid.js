@@ -104,19 +104,23 @@ define([
          * @param {String|Number} recordId
          */
         deleteRecord: function (index, recordId) {
-            var data,
-                prop;
-
             this._super();
 
-            if (this.links.insertData || this.exports.insertData) {
-                data = this.getElementData(this.insertData(), recordId);
-                prop = this.map[this.identificationDRProperty];
+            this.updateInsertData(recordId);
+        },
 
-                this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
-                    return ~~recordData[prop] === ~~data[prop];
-                }, this));
-            }
+        /**
+         * Updates insertData when record is deleted
+         *
+         * @param {String|Number} recordId
+         */
+        updateInsertData: function (recordId) {
+            var data = this.getElementData(this.insertData(), recordId),
+            prop = this.map[this.identificationDRProperty];
+
+            this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
+                return ~~recordData[prop] === ~~data[prop];
+            }, this));
         },
 
         /**
