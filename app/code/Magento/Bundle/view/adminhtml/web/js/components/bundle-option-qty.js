@@ -26,8 +26,9 @@ define([
         },
 
         /**
+         * Defines if value has changed.
          *
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         hasChanged: function () {
             var notEqual = this.value() !== this.initialValue.toString();
