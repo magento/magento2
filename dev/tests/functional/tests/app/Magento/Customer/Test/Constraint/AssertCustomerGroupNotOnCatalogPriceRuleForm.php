@@ -6,32 +6,28 @@
 
 namespace Magento\Customer\Test\Constraint;
 
-use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleIndex;
 use Magento\CatalogRule\Test\Page\Adminhtml\CatalogRuleNew;
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Section\RuleInformation;
 
 /**
- * Class AssertCustomerGroupNotOnCatalogPriceRuleForm.
+ * Assert that customer group is not on catalog price rule page.
  */
 class AssertCustomerGroupNotOnCatalogPriceRuleForm extends AbstractConstraint
 {
     /**
      * Assert that customer group is not on catalog price rule page.
      *
-     * @param CatalogRuleIndex $catalogRuleIndex
      * @param CatalogRuleNew $catalogRuleNew
      * @param CustomerGroup $customerGroup
      * @return void
      */
     public function processAssert(
-        CatalogRuleIndex $catalogRuleIndex,
         CatalogRuleNew $catalogRuleNew,
         CustomerGroup $customerGroup
     ) {
-        $catalogRuleIndex->open();
-        $catalogRuleIndex->getGridPageActions()->addNew();
+        $catalogRuleNew->open();
         $catalogRuleNew->getEditForm()->openSection('rule_information');
 
         /** @var RuleInformation $ruleInformationSection */

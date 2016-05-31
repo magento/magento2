@@ -8,47 +8,44 @@ namespace Magento\Customer\Test\Constraint;
 
 use Magento\Customer\Test\Fixture\CustomerGroup;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertCustomerGroupChangedToDefaultOnCustomerForm.
+ * Assert that customer group is set to default on customer form.
  */
 class AssertCustomerGroupChangedToDefaultOnCustomerForm extends AbstractConstraint
 {
     /**
-     * Assert that customer group is General on account information page.
+     * Assert that customer group is set to default on customer form.
      *
      * @param Customer $customer
-     * @param CustomerGroup $customerGroup
+     * @param CustomerGroup $defaultCustomerGroup
      * @param CustomerIndexNew $customerIndexNew
-     * @param CustomerIndex $customerIndex
+     * @param CustomerIndexNew $customerIndexEdit
      * @return void
      */
     public function processAssert(
         Customer $customer,
-        CustomerGroup $customerGroup,
+        CustomerGroup $defaultCustomerGroup,
         CustomerIndexNew $customerIndexNew,
-        CustomerIndex $customerIndex
+        CustomerIndexNew $customerIndexEdit
     ) {
-        $filter = ['email' => $customer->getEmail()];
-        $customerIndex->open();
-        $customerIndex->getCustomerGridBlock()->searchAndOpen($filter);
+        $customerIndexEdit->open(['id' => $customer->getId()]);
         $customerFormData = $customerIndexNew->getCustomerForm()->getData();
         \PHPUnit_Framework_Assert::assertTrue(
-            $customerFormData['group_id'] == "General",
-            "Customer group {$customerGroup->getCustomerGroupCode()} not set to General after group was deleted."
+            $customerFormData['group_id'] == $defaultCustomerGroup->getCustomerGroupCode(),
+            "Customer group not set to default after group was deleted."
         );
     }
 
     /**
-     * Success assert of customer group set to default on account information page.
+     * Success assert of customer group set to default on customer form.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Customer group is set to default on account information page.';
+        return 'Customer group is set to default on customer form.';
     }
 }

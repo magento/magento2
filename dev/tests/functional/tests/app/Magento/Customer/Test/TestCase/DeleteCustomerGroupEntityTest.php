@@ -11,12 +11,8 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupNew;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
- * Test Creation for DeleteCustomerGroupEntity.
- *
- * Test Flow:
  * Preconditions:
  *  1. Customer Group is created.
  *  2. Customer is created and assigned to this group.
@@ -70,26 +66,19 @@ class DeleteCustomerGroupEntityTest extends Injectable
     /**
      * Delete Customer Group.
      *
-     * @param FixtureFactory $fixtureFactory
      * @param CustomerGroup $customerGroup
+     * @param Customer $customer [optional]
      * @return array
      */
-    public function test(
-        FixtureFactory $fixtureFactory,
-        CustomerGroup $customerGroup
-    ) {
+    public function test(CustomerGroup $customerGroup, Customer $customer = null)
+    {
         // Precondition
-        $customerGroup->persist();
-
-        /** @var Customer $customer */
-        $customer = $fixtureFactory->createByCode(
-            'customer',
-            [
-                'dataset' => 'default',
-                'data' => ['group_id' => ['customerGroup' => $customerGroup]]
-            ]
-        );
-        $customer->persist();
+        if ($customer !== null) {
+            $customer->persist();
+            $customerGroup = $customer->getDataFieldConfig('group_id')['source']->getCustomerGroup();
+        } else {
+            $customerGroup->persist();
+        }
 
         // Steps
         $filter = ['code' => $customerGroup->getCustomerGroupCode()];
@@ -98,6 +87,9 @@ class DeleteCustomerGroupEntityTest extends Injectable
         $this->customerGroupNew->getPageMainActions()->delete();
         $this->customerGroupNew->getModalBlock()->acceptAlert();
 
-        return ['customer' => $customer];
+        return [
+            'customer' => $customer,
+            'customerGroup' => $customerGroup
+        ];
     }
 }
