@@ -37,7 +37,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
     private $configData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\FilePermissions
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\FilePermissions
      */
     private $filePermissions;
 
@@ -53,7 +53,7 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->configOptionsList = $this->getMock('Magento\Backend\Setup\ConfigOptionsList', [], [], '', false);
         $this->configData = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
-        $this->filePermissions = $this->getMock('\Magento\Setup\Model\FilePermissions', [], [], '', false);
+        $this->filePermissions = $this->getMock('\Magento\Framework\Setup\FilePermissions', [], [], '', false);
 
         $this->deploymentConfig->expects($this->any())->method('get');
 
@@ -177,11 +177,11 @@ class ConfigModelTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following directories: '/a/ro/dir', '/media'
+     * @expectedExceptionMessage Missing write permissions to the following paths:
      */
     public function testWritePermissionErrors()
     {
-        $this->filePermissions->expects($this->once())->method('getMissingWritableDirectoriesForInstallation')
+        $this->filePermissions->expects($this->once())->method('getMissingWritablePathsForInstallation')
             ->willReturn(['/a/ro/dir', '/media']);
         $this->configModel->process([]);
     }

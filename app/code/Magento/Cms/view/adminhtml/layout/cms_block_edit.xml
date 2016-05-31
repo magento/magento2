@@ -6,13 +6,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <head>
-        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
-    </head>
+    <update handle="styles"/>
     <update handle="editor"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Cms\Block\Adminhtml\Block\Edit" name="cms_block_edit"/>
+            <uiComponent name="cms_block_form"/>
         </referenceContainer>
     </body>
 </page>

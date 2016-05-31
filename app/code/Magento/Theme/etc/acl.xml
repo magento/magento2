@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::content">
                     <resource id="Magento_Backend::design">
-                        <resource id="Magento_Theme::theme" title="Themes" sortOrder="20" />
+                        <resource id="Magento_Theme::theme" title="Themes" translate="title" sortOrder="20" />
                     </resource>
                 </resource>
             </resource>

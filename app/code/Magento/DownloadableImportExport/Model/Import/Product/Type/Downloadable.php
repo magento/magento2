@@ -12,6 +12,8 @@ use \Magento\Store\Model\Store;
 
 /**
  * Class Downloadable
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -285,7 +287,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($this->_type != $productData['type_id']) {
                     continue;
                 }
-                $this->parseOptions($rowData, $productData['entity_id']);
+                $this->parseOptions($rowData, $productData[$this->getProductEntityLinkField()]);
             }
             if (!empty($this->cachedOptions['sample']) || !empty($this->cachedOptions['link'])) {
                 $this->saveOptions();
@@ -303,6 +305,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param bool $isNewProduct Optional
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {

@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\View\Asset;
 
 /**
@@ -25,15 +26,23 @@ class Publisher
     private $materializationStrategyFactory;
 
     /**
+     * @var WriteFactory
+     */
+    private $writeFactory;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param MaterializationStrategy\Factory $materializationStrategyFactory
+     * @param WriteFactory $writeFactory
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        MaterializationStrategy\Factory $materializationStrategyFactory
+        MaterializationStrategy\Factory $materializationStrategyFactory,
+        WriteFactory $writeFactory
     ) {
         $this->filesystem = $filesystem;
         $this->materializationStrategyFactory = $materializationStrategyFactory;
+        $this->writeFactory = $writeFactory;
     }
 
     /**
@@ -59,10 +68,11 @@ class Publisher
     private function publishAsset(Asset\LocalInterface $asset)
     {
         $targetDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        $rootDir = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
-        $source = $rootDir->getRelativePath($asset->getSourceFile());
+        $fullSource = $asset->getSourceFile();
+        $source = basename($fullSource);
+        $sourceDir = $this->writeFactory->create(dirname($fullSource));
         $destination = $asset->getPath();
         $strategy = $this->materializationStrategyFactory->create($asset);
-        return $strategy->publishFile($rootDir, $targetDir, $source, $destination);
+        return $strategy->publishFile($sourceDir, $targetDir, $source, $destination);
     }
 }

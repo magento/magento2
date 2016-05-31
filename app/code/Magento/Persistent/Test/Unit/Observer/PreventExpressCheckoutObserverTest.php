@@ -54,7 +54,7 @@ class PreventExpressCheckoutObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $_expressRedirectHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

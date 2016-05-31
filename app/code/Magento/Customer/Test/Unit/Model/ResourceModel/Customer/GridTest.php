@@ -33,7 +33,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /** @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject */
     protected $queryResult;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);

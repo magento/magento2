@@ -21,7 +21,7 @@ abstract class AbstractCollectorPositionsTest extends \PHPUnit_Framework_TestCas
      */
     public function testCollectorPosition($collectorCode, $configType, array $before, array $after)
     {
-        $allCollectors = $this->_getConfigCollectors($configType);
+        $allCollectors = self::_getConfigCollectors($configType);
         $collectorCodes = array_keys($allCollectors);
         $collectorPos = array_search($collectorCode, $collectorCodes);
         $this->assertNotSame(false, $collectorPos, "'{$collectorCode}' total collector is not found");

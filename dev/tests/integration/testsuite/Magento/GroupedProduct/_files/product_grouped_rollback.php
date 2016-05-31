@@ -3,32 +3,42 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
 
+/**
+ * @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+ */
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    'Magento\Catalog\Api\ProductRepositoryInterface'
+);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
-
-/** @var $simpleProduct \Magento\Catalog\Model\Product */
-$simpleProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$simpleProduct->load(2);
-if ($simpleProduct->getId()) {
+try {
+    /** @var $simpleProduct \Magento\Catalog\Model\Product */
+    $simpleProduct = $productRepository->get('simple', false, null, true);
     $simpleProduct->delete();
+} catch (NoSuchEntityException $e) {
+    //already deleted
 }
 
 /** @var $virtualProduct \Magento\Catalog\Model\Product */
-$virtualProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$virtualProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Catalog\Model\Product'
+);
 $virtualProduct->load(21);
 if ($virtualProduct->getId()) {
     $virtualProduct->delete();
 }
 
-/** @var $groupedProduct \Magento\Catalog\Model\Product */
-$groupedProduct = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$groupedProduct->load(9);
-if ($groupedProduct->getId()) {
+try {
+    /** @var $groupedProduct \Magento\Catalog\Model\Product */
+    $groupedProduct = $productRepository->get('grouped-product', false, null, true);
     $groupedProduct->delete();
+} catch (NoSuchEntityException $e) {
+    //already deleted
 }
 
 $registry->unregister('isSecureArea');

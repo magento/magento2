@@ -75,6 +75,7 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
 
     /**
      * @var StoreManagerInterface
+     * @deprecated
      */
     protected $storeManager;
 
@@ -189,11 +190,12 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Set items out of stock basing on their quantities and config settings
      *
      * @param string|int $website
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
     public function updateSetOutOfStock($website = null)
     {
-        $websiteId = $this->storeManager->getWebsite($website)->getId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $this->_initConfig();
         $connection = $this->getConnection();
         $values = ['is_in_stock' => 0, 'stock_status_changed_auto' => 1];
@@ -223,11 +225,12 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Set items in stock basing on their quantities and config settings
      *
      * @param int|string $website
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
     public function updateSetInStock($website)
     {
-        $websiteId = $this->storeManager->getWebsite($website)->getId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $this->_initConfig();
         $connection = $this->getConnection();
         $values = ['is_in_stock' => 1];
@@ -255,11 +258,12 @@ class Stock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impleme
      * Update items low stock date basing on their quantities and config settings
      *
      * @param int|string $website
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return void
      */
     public function updateLowStockDate($website)
     {
-        $websiteId = $this->storeManager->getWebsite($website)->getId();
+        $websiteId = $this->stockConfiguration->getDefaultScopeId();
         $this->_initConfig();
 
         $connection = $this->getConnection();

@@ -32,7 +32,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected $form;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockBuilder('\Magento\Backend\Block\Template\Context')
             ->disableOriginalConstructor()

@@ -14,7 +14,7 @@
             <field name="name" xsi:type="string">Simple Product with msrp %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_with_msrp_%isolation%</field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">25</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -42,7 +42,7 @@
             <field name="url_key" xsi:type="string">simple-product-with-msrp-%isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_with_msrp_%isolation%</field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
+            <field name="product_has_weight" xsi:type="string">This item has weight</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">1000</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>

@@ -8,19 +8,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface" ticketId="MAGETWO-31431">
         <variation name="InstallTestVariation1">
-            <data name="description" xsi:type="string">Install with default values.</data>
-            <data name="user/dataset" xsi:type="string">default</data>
-            <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
-            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
-        </variation>
-        <variation name="InstallTestVariation2">
             <data name="description" xsi:type="string">Install with custom admin path.</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/admin" xsi:type="string">custom</data>
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
-        <variation name="InstallTestVariation3">
+        <variation name="InstallTestVariation2">
             <data name="description" xsi:type="string">Install with custom encryption key and changed currency and locale.</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/keyOwn" xsi:type="string">Yes</data>
@@ -34,7 +28,7 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertCurrencySelected" />
         </variation>
-        <variation name="InstallTestVariation4">
+        <variation name="InstallTestVariation3">
             <data name="description" xsi:type="string">Install with table prefix.</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/dbTablePrefix" xsi:type="string">pref_</data>
@@ -42,7 +36,7 @@
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
-        <variation name="InstallTestVariation5">
+        <variation name="InstallTestVariation4">
             <data name="description" xsi:type="string">Install with enabled url rewrites.</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/apacheRewrites" xsi:type="string">Yes</data>
@@ -50,7 +44,7 @@
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertRewritesEnabled" />
         </variation>
-        <variation name="InstallTestVariation6">
+        <variation name="InstallTestVariation5">
             <data name="description" xsi:type="string">Install with enabled secure urls.</data>
             <data name="user/dataset" xsi:type="string">default</data>
             <data name="install/httpsFront" xsi:type="string">Yes</data>
@@ -58,6 +52,12 @@
             <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
             <constraint name="Magento\Install\Test\Constraint\AssertSecureUrlEnabled" />
+        </variation>
+        <variation name="InstallTestVariation6">
+            <data name="description" xsi:type="string">Install with default values.</data>
+            <data name="user/dataset" xsi:type="string">default</data>
+            <constraint name="Magento\Install\Test\Constraint\AssertSuccessInstall" />
+            <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogin" />
         </variation>
     </testCase>
 </config>

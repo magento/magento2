@@ -15,6 +15,13 @@ use Magento\Framework\Controller\ResultFactory;
 class Popup extends AbstractAction
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
+
+    /**
      * @var \Magento\Framework\Registry
      */
     protected $registry;
@@ -45,16 +52,6 @@ class Popup extends AbstractAction
         $this->factory = $factory;
         $this->logger = $logger;
         parent::__construct($context);
-    }
-
-    /**
-     * Check for is allowed
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::products');
     }
 
     /**

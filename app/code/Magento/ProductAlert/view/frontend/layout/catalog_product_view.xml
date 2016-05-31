@@ -13,7 +13,7 @@
                     <argument name="value" xsi:type="string">price</argument>
                 </action>
                 <action method="setSignupLabel">
-                    <argument translate="true" name="value" xsi:type="string">Sign up for price alert</argument>
+                    <argument translate="true" name="value" xsi:type="string">Notify me when the price drops</argument>
                 </action>
             </block>
             <block class="Magento\ProductAlert\Block\Product\View\Stock" name="productalert.stock" as="productalert_stock" template="product/view.phtml">
@@ -21,7 +21,7 @@
                     <argument name="value" xsi:type="string">stock</argument>
                 </action>
                 <action method="setSignupLabel">
-                    <argument translate="true" name="value" xsi:type="string">Sign up to be notified when this product is back in stock.</argument>
+                    <argument translate="true" name="value" xsi:type="string">Notify me when this product is in stock</argument>
                 </action>
             </block>
         </referenceContainer>

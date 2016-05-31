@@ -5,6 +5,7 @@
  */
 
 // @codingStandardsIgnoreFile
+use Magento\Framework\Json\Helper\Data;
 
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
 $params = $block->getParams();
@@ -15,25 +16,55 @@ $params = $block->getParams();
         <?php if (isset($params['redirect'])): ?>
             window.location="<?php echo $block->escapeXssInUrl($params['redirect']); ?>";
         <?php elseif (isset($params['redirect_parent'])): ?>
-            window.top.location="<?php echo $block->escapeXssInUrl($params['redirect_parent']); ?>";
-        <?php elseif (isset($params['error_msg'])): ?>
-            window.top.alert(<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']); ?>);
             var require = window.top.require;
-            require(['Magento_Checkout/js/model/full-screen-loader', 'jquery'], function(fullScreenLoader, $) {
-                fullScreenLoader.stopLoader();
-                $('[data-role="review-save"]').removeClass('disabled');
-            });
+            require(
+                [
+                    'jquery'
+                ],
+                function($) {
+                    var parent = window.top;
+                    $(parent).trigger('clearTimeout');
+                    parent.location="<?php echo $block->escapeXssInUrl($params['redirect_parent']); ?>";
+                }
+            );
+        <?php elseif (isset($params['error_msg'])): ?>
+            var require = window.top.require;
+            require(
+                [
+                    'jquery',
+                    'Magento_Ui/js/model/messageList',
+                    'mage/translate'
+                ],
+                function($, globalMessageList, $t) {
+                    var parent = window.top;
+                    $(parent).trigger('clearTimeout');
+                    globalMessageList.addErrorMessage({
+                        message: $t('Unable to place order. Please try again later.')
+                    });
+                }
+            );
         <?php elseif (isset($params['order_success'])): ?>
             window.top.location = "<?php echo $block->escapeXssInUrl($params['order_success']); ?>";
         <?php else: ?>
             var require = window.top.require;
             require(
                 [
+                    'jquery',
                     'Magento_Checkout/js/model/quote',
-                    'Magento_Checkout/js/action/place-order'
+                    'Magento_Checkout/js/action/place-order',
+                    'Magento_Checkout/js/action/redirect-on-success'
                 ],
-                function(quote, placeOrderAction) {
-                    placeOrderAction({"method": quote.paymentMethod().method}, true);
+                function($, quote, placeOrderAction, redirectOnSuccessAction) {
+                    var parent = window.top;
+
+                    $(parent).trigger('clearTimeout');
+                    $.when(
+                        placeOrderAction({'method': quote.paymentMethod().method})
+                    ).done(
+                        function () {
+                            redirectOnSuccessAction.execute();
+                        }
+                    );
                 }
             );
         <?php endif; ?>

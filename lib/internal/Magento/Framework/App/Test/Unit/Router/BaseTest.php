@@ -49,7 +49,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
      */
     private $defaultPathMock;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         // Create mocks

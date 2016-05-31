@@ -7,6 +7,7 @@
 namespace Magento\Checkout\Model;
 
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
 {
@@ -76,7 +77,12 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
-        return $this->cartManagement->placeOrder($cartId);
+        try {
+            $orderId = $this->cartManagement->placeOrder($cartId);
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Unable to place order. Please try again later.'), $e);
+        }
+        return $orderId;
     }
 
     /**

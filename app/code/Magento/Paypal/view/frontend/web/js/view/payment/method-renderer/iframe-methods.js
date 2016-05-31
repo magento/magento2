@@ -19,15 +19,24 @@ define(
             },
             redirectAfterPlaceOrder: false,
             isInAction: iframe.isInAction,
+
+            /**
+             * @return {exports}
+             */
             initObservable: function () {
                 this._super()
                     .observe('paymentReady');
 
                 return this;
             },
+
+            /**
+             * @return {*}
+             */
             isPaymentReady: function () {
                 return this.paymentReady();
             },
+
             /**
              * Get action url for payment method iframe.
              * @returns {String}
@@ -35,25 +44,50 @@ define(
             getActionUrl: function () {
                 return this.isInAction() ? window.checkoutConfig.payment.paypalIframe.actionUrl[this.getCode()] : '';
             },
+
             /**
              * Places order in pending payment status.
              */
             placePendingPaymentOrder: function () {
-                var self = this;
-                this.afterPlaceOrder = function () {
-                    self.paymentReady(true);
-                };
                 if (this.placeOrder()) {
+                    fullScreenLoader.startLoader();
                     this.isInAction(true);
                     // capture all click events
                     document.addEventListener('click', iframe.stopEventPropagation, true);
                 }
             },
+
+            getPlaceOrderDeferredObject: function () {
+                var self = this;
+                return this._super()
+                    .fail(
+                        function () {
+                            fullScreenLoader.stopLoader();
+                            self.isInAction(false);
+                            document.removeEventListener('click', iframe.stopEventPropagation, true);
+                        }
+                    );
+            },
+
+            /**
+             * After place order callback
+             */
+            afterPlaceOrder: function () {
+                if (this.iframeIsLoaded) {
+                    document.getElementById(this.getCode() + '-iframe')
+                        .contentWindow.location.reload();
+                }
+
+                this.paymentReady(true);
+                this.iframeIsLoaded = true;
+                this.isPlaceOrderActionAllowed(true);
+                fullScreenLoader.stopLoader();
+            },
+
             /**
              * Hide loader when iframe is fully loaded.
-             * @returns {void}
              */
-            iframeLoaded: function() {
+            iframeLoaded: function () {
                 fullScreenLoader.stopLoader();
             }
         });

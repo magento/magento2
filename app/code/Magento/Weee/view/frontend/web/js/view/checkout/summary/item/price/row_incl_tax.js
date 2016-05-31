@@ -15,29 +15,32 @@ define(
                 template: 'Magento_Weee/checkout/summary/item/price/row_incl_tax',
                 displayArea: 'row_incl_tax'
             },
+
             getFinalRowDisplayPriceInclTax: function(item) {
                 var rowTotalInclTax = parseFloat(item.row_total_incl_tax);
-                if(!window.checkoutConfig.getIncludeWeeeFlag) {
-
-                    return rowTotalInclTax + this.getRowWeeeTaxInclTax(item);
+                if (!window.checkoutConfig.getIncludeWeeeFlag) {
+                    rowTotalInclTax += this.getRowWeeeTaxInclTax(item);
                 }
                 return rowTotalInclTax;
             },
 
             getRowDisplayPriceInclTax: function(item) {
                 var rowTotalInclTax = parseFloat(item.row_total_incl_tax);
-                return rowTotalInclTax + this.getRowWeeeTaxInclTax(item);
+                if (window.checkoutConfig.getIncludeWeeeFlag) {
+                    rowTotalInclTax += this.getRowWeeeTaxInclTax(item);
+                }
+                return rowTotalInclTax;
             },
 
             getRowWeeeTaxInclTax: function(item) {
-                var totalWeeeTaxIncTaxApplied = 0;
+                var totalWeeeTaxInclTaxApplied = 0;
                 if (item.weee_tax_applied) {
                     var weeeTaxAppliedAmounts = JSON.parse(item.weee_tax_applied);
                     weeeTaxAppliedAmounts.forEach(function (weeeTaxAppliedAmount) {
-                        totalWeeeTaxIncTaxApplied += parseFloat(Math.max(weeeTaxAppliedAmount.row_amount_incl_tax, 0));
+                        totalWeeeTaxInclTaxApplied += parseFloat(Math.max(weeeTaxAppliedAmount.row_amount_incl_tax, 0));
                     });
                 }
-                return totalWeeeTaxIncTaxApplied;
+                return totalWeeeTaxInclTaxApplied;
             }
 
         });

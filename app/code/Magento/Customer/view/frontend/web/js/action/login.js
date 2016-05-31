@@ -32,6 +32,8 @@ define(
                         customerData.invalidate(['customer']);
                         if (redirectUrl) {
                             window.location.href = redirectUrl;
+                        } else if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
                         } else {
                             location.reload();
                         }

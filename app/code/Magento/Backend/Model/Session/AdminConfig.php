@@ -105,4 +105,14 @@ class AdminConfig extends Config
         $cookiePath = $baseUrl . $backendApp->getCookiePath();
         return $cookiePath;
     }
+
+    /**
+     * Set session cookie lifetime to session duration
+     *
+     * @return $this
+     */
+    protected function configureCookieLifetime()
+    {
+        return $this->setCookieLifetime(0);
+    }
 }

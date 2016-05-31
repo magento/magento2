@@ -38,7 +38,7 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerSessionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -96,6 +96,7 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateInvalidAddress()
     {
+        $this->markTestSkipped('MAGETWO-48531');
         $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
         $this->customerRepositoryMock->expects($this->never())->method('getById');
         $address->expects($this->atLeastOnce())->method('getId')->willReturn(101);
@@ -123,6 +124,7 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateWithAddressOfOtherCustomer()
     {
+        $this->markTestSkipped('MAGETWO-48531');
         $addressCustomer = 100;
         $addressId = 100;
         $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
@@ -145,6 +147,7 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateWithInvalidCustomerAddressId()
     {
+        $this->markTestSkipped('MAGETWO-48531');
         $customerAddressId = 42;
         $address = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
         $customerAddress = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
@@ -160,6 +163,7 @@ class QuoteAddressValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateWithValidAddress()
     {
+        $this->markTestSkipped('MAGETWO-48531');
         $addressCustomer = 100;
         $addressId = 100;
         $customerAddressId = 42;

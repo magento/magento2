@@ -48,9 +48,8 @@ class CodeSnifferTest extends \PHPUnit_Framework_TestCase
             'files' => $whiteList,
             'standard' => [self::RULE_SET],
             'extensions' => $extensions,
-            'reportFile' => self::REPORT_FILE,
             'warningSeverity' => 0,
-            'reports' => ['checkstyle' => null],
+            'reports' => ['full' => self::REPORT_FILE],
         ];
 
         $this->_tool->setExtensions($extensions);

@@ -16,12 +16,13 @@ class StateTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\ResourceModel\Order\Handler\State
      */
     protected $state;
+
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderMock = $this->getMock(
             'Magento\Sales\Model\Order',

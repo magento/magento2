@@ -9,6 +9,7 @@ namespace Magento\CurrencySymbol\Test\TestCase;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Config\Test\Page\Adminhtml\ConfigCurrencySetup;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencyIndex;
 use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
 
@@ -17,6 +18,13 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
  */
 abstract class AbstractCurrencySymbolEntityTest extends Injectable
 {
+    /**
+     * Store config Currency Setup page.
+     *
+     * @var ConfigCurrencySetup
+     */
+    protected $configCurrencySetup;
+
     /**
      * System Currency Symbol grid page.
      *
@@ -41,16 +49,19 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
     /**
      * Create simple product and inject pages.
      *
+     * @param configCurrencySetup $configCurrencySetup
      * @param SystemCurrencySymbolIndex $currencySymbolIndex
      * @param SystemCurrencyIndex $currencyIndex
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __inject(
+        configCurrencySetup $configCurrencySetup,
         SystemCurrencySymbolIndex $currencySymbolIndex,
         SystemCurrencyIndex $currencyIndex,
         FixtureFactory $fixtureFactory
     ) {
+        $this->configCurrencySetup = $configCurrencySetup;
         $this->currencySymbolIndex = $currencySymbolIndex;
         $this->currencyIndex = $currencyIndex;
         $this->fixtureFactory = $fixtureFactory;
@@ -77,9 +88,14 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
             ['configData' => $configData]
         )->run();
 
+        //Click 'Save Config' on 'Config>>Currency Setup' page.
+        $this->configCurrencySetup->open();
+        $this->configCurrencySetup->getFormPageActions()->save();
+
         // Import Exchange Rates for currencies
         $this->currencyIndex->open();
         $this->currencyIndex->getCurrencyRateForm()->clickImportButton();
+        $this->currencyIndex->getCurrencyRateForm()->fillCurrencyUSDUAHRate();
         if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
             throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
         }

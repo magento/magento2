@@ -24,7 +24,7 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
      */
     private $packageInfo;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
         $this->reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);

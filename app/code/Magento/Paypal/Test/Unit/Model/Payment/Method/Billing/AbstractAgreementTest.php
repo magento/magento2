@@ -6,7 +6,13 @@
 namespace Magento\Paypal\Test\Unit\Model\Payment\Method\Billing;
 
 use Magento\Framework\DataObject;
+<<<<<<< HEAD
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+=======
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
+>>>>>>> develop
 use Magento\Paypal\Model\Billing\Agreement;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -16,6 +22,14 @@ use Magento\Quote\Model\Quote\Payment;
 class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
 {
     /**
+<<<<<<< HEAD
+=======
+     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventManagerMock;
+
+    /**
+>>>>>>> develop
      * @var \Magento\Paypal\Model\Billing\AgreementFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $agreementFactory;
@@ -29,17 +43,36 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
+<<<<<<< HEAD
+=======
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->setMethods(['dispatch'])
+            ->getMockForAbstractClass();
+
+>>>>>>> develop
         $this->agreementFactory = $this->getMockBuilder('Magento\Paypal\Model\Billing\AgreementFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+<<<<<<< HEAD
         $this->payment = $helper->getObject(
             AbstractAgreementStub::class,
             [
+=======
+
+        $this->payment = $helper->getObject(
+            AbstractAgreementStub::class,
+            [
+                'eventDispatcher' => $this->eventManagerMock,
+>>>>>>> develop
                 'agreementFactory' => $this->agreementFactory
             ]
         );
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
     public function testAssignData()
     {
         $baId = '1678235';
@@ -53,7 +86,10 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
+<<<<<<< HEAD
 
+=======
+>>>>>>> develop
         $paymentInfo = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -63,6 +99,10 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->payment->setInfoInstance($paymentInfo);
+<<<<<<< HEAD
+=======
+        $this->parentAssignDataExpectation($data);
+>>>>>>> develop
 
         $agreementModel = $this->getMockBuilder(Agreement::class)
             ->disableOriginalConstructor()
@@ -102,6 +142,40 @@ class AbstractAgreementTest extends \PHPUnit_Framework_TestCase
                     AbstractAgreement::PAYMENT_INFO_REFERENCE_ID, $referenceId
                 ]
             );
+<<<<<<< HEAD
         $this->payment->assignData($data);
     }
+=======
+
+        $this->payment->assignData($data);
+    }
+
+    /**
+     * @param DataObject $data
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function parentAssignDataExpectation(DataObject $data)
+    {
+        $eventData = [
+            AbstractDataAssignObserver::METHOD_CODE => $this,
+            AbstractDataAssignObserver::MODEL_CODE => $this->payment->getInfoInstance(),
+            AbstractDataAssignObserver::DATA_CODE => $data
+        ];
+
+        $this->eventManagerMock->expects(static::exactly(2))
+            ->method('dispatch')
+            ->willReturnMap(
+                [
+                    [
+                        'payment_method_assign_data_' . AbstractAgreementStub::STUB_CODE,
+                        $eventData
+                    ],
+                    [
+                        'payment_method_assign_data',
+                        $eventData
+                    ]
+                ]
+            );
+    }
+>>>>>>> develop
 }

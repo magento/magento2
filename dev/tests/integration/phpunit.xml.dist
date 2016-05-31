@@ -18,7 +18,10 @@
         </testsuite>
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
+<<<<<<< HEAD
             <exclude>testsuite/Magento/Test/Integrity</exclude>
+=======
+>>>>>>> develop
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
         </testsuite>
     </testsuites>

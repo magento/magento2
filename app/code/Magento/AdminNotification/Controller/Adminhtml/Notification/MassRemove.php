@@ -8,6 +8,14 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
 class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
+
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_AdminNotification::adminnotification_remove';
+
     /**
      * @return void
      */
@@ -32,13 +40,5 @@ class MassRemove extends \Magento\AdminNotification\Controller\Adminhtml\Notific
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_AdminNotification::adminnotification_remove');
     }
 }

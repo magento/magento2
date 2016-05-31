@@ -6,7 +6,7 @@
 define([
     'ko',
     'jquery',
-    'Magento_Ui/js/lib/ko/bind/i18n',
+    'Magento_Ui/js/lib/knockout/bindings/i18n',
     'mage/translate'
 ], function (ko, $) {
     'use strict';
@@ -26,7 +26,7 @@ define([
             context = require.s.contexts._,
             manageInlineTranslation = function (state) {
                 context.config.config = {
-                    'Magento_Ui/js/lib/ko/bind/i18n': {
+                    'Magento_Ui/js/lib/knockout/bindings/i18n': {
                         inlineTranslation: !!state
                     }
                 };
@@ -92,7 +92,7 @@ define([
             spyOn($.mage.translate, 'parsedTranslate').and.callThrough();
 
             context.config.config = {
-                'Magento_Ui/js/lib/ko/bind/i18n': {
+                'Magento_Ui/js/lib/knockout/bindings/i18n': {
                     inlineTranslation: true
                 }
             };

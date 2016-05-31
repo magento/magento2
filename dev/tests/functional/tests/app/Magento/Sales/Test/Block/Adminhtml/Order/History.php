@@ -10,35 +10,40 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Totals
- * Order totals block
- *
+ * Order comments block.
  */
 class History extends Block
 {
     /**
-     * Comment history Id
+     * Comment history Id.
      *
      * @var string
      */
     protected $commentHistory = '.note-list-comment';
 
     /**
-     * Captured Amount from IPN
+     * Captured Amount from IPN.
      *
      * @var string
      */
-    protected $capturedAmount = '//div[@class="note-list-comment"][contains(text(), "captured amount of")]';
+    protected $capturedAmount = '//div[@class="note-list-comment"][contains(text(), "Captured amount of")]';
 
     /**
-     * Note list locator
+     * Refunded Amount.
+     *
+     * @var string
+     */
+    protected $refundedAmount = '//div[@class="note-list-comment"][contains(text(), "We refunded")]';
+
+    /**
+     * Note list locator.
      *
      * @var string
      */
     protected $noteList = '.note-list';
 
     /**
-     * Get comments history
+     * Get comments history.
      *
      * @return string
      */
@@ -49,18 +54,39 @@ class History extends Block
     }
 
     /**
-     * Get the captured amount from the comments history
+     * Get the captured amount from the comments history.
      *
-     * @return string
+     * @return array
      */
     public function getCapturedAmount()
     {
+        $result = [];
         $this->waitCommentsHistory();
-        return $this->_rootElement->find($this->capturedAmount, Locator::SELECTOR_XPATH)->getText();
+        $captureComments = $this->_rootElement->getElements($this->capturedAmount, Locator::SELECTOR_XPATH);
+        foreach ($captureComments as $captureComment) {
+            $result[] = $captureComment->getText();
+        }
+        return $result;
     }
 
     /**
-     * Wait for comments history is visible
+     * Get the refunded amount from the comments history.
+     *
+     * @return array
+     */
+    public function getRefundedAmount()
+    {
+        $result = [];
+        $this->waitCommentsHistory();
+        $refundedComments = $this->_rootElement->getElements($this->refundedAmount, Locator::SELECTOR_XPATH);
+        foreach ($refundedComments as $refundedComment) {
+            $result[] = $refundedComment->getText();
+        }
+        return $result;
+    }
+
+    /**
+     * Wait for comments history is visible.
      *
      * @return void
      */

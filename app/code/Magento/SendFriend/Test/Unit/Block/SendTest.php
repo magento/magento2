@@ -30,7 +30,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
      */
     protected $requestMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 

@@ -261,7 +261,7 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Attribute 42 does not contain option with Id option
+     * @expectedExceptionMessage Attribute atrCode does not contain option with Id option
      */
     public function testDeleteWithWrongOption()
     {
@@ -275,14 +275,15 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
             false,
             false,
             true,
-            ['usesSource', 'getSource', 'getId', 'getOptionText', 'addData']
+            ['usesSource', 'getSource', 'getAttributeCode']
         );
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
+        $sourceMock = $this->getMockForAbstractClass('\Magento\Eav\Model\Entity\Attribute\Source\SourceInterface');
+        $sourceMock->expects($this->once())->method('getOptionText')->willReturn(false);
         $attributeMock->expects($this->once())->method('usesSource')->willReturn(true);
-        $attributeMock->expects($this->once())->method('getSource')->willReturnSelf();
-        $attributeMock->expects($this->once())->method('getOptionText')->willReturn(false);
-        $attributeMock->expects($this->once())->method('getId')->willReturn(42);
+        $attributeMock->expects($this->once())->method('getSource')->willReturn($sourceMock);
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $this->resourceModelMock->expects($this->never())->method('save');
         $this->model->delete($entityType, $attributeCode, $optionId);
     }

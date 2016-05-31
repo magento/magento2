@@ -278,7 +278,11 @@ class Type extends \Magento\Framework\Model\AbstractModel
      */
     public function getEntityTable()
     {
-        return isset($this->_data['entity_table']) ? $this->_data['entity_table'] : null;
+        if (isset($this->_data['entity_table'])) {
+            return $this->getResource()->getTable($this->_data['entity_table']);
+        }
+
+        return null;
     }
 
     /**

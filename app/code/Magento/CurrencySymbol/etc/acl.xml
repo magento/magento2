@@ -10,9 +10,9 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Backend::stores">
-                    <resource id="Magento_CurrencySymbol::system_currency" title="Currency" sortOrder="30">
-                        <resource id="Magento_CurrencySymbol::currency_rates" title="Currency Rates" sortOrder="10" />
-                        <resource id="Magento_CurrencySymbol::symbols" title="Currency Symbols" sortOrder="20" />
+                    <resource id="Magento_CurrencySymbol::system_currency" title="Currency" translate="title" sortOrder="30">
+                        <resource id="Magento_CurrencySymbol::currency_rates" title="Currency Rates" translate="title" sortOrder="10" />
+                        <resource id="Magento_CurrencySymbol::symbols" title="Currency Symbols" translate="title" sortOrder="20" />
                     </resource>
                 </resource>
             </resource>

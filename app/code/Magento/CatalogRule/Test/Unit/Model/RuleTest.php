@@ -129,6 +129,18 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+
+        $this->prepareObjectManager([
+            [
+                'Magento\Framework\Api\ExtensionAttributesFactory',
+                $this->getMock('Magento\Framework\Api\ExtensionAttributesFactory', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\Api\AttributeValueFactory',
+                $this->getMock('Magento\Framework\Api\AttributeValueFactory', [], [], '', false)
+            ],
+        ]);
+
         $this->rule = $this->objectManagerHelper->getObject(
             'Magento\CatalogRule\Model\Rule',
             [
@@ -163,7 +175,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             'created_at' => '2014-06-25 13:14:30',
             'updated_at' => '2014-06-25 14:37:15'
         ];
-        $this->storeManager->expects($this->any())->method('getWebsites')->with(true)
+        $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
             ->will($this->returnValue([$this->websiteModel, $this->websiteModel]));
         $this->websiteModel->expects($this->at(0))->method('getId')
             ->will($this->returnValue('1'));
@@ -232,9 +244,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'by_fixed',
                     'discount_amount' => '123',
-                    'sub_is_enable' => '0',
-                    'sub_simple_action' => 'by_percent',
-                    'sub_discount_amount' => '123',
                 ],
                 true
             ],
@@ -242,32 +251,15 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'by_percent',
                     'discount_amount' => '9,99',
-                    'sub_is_enable' => '0',
                 ],
                 true
             ],
             [
                 [
-                    'simple_action' => 'by_fixed',
-                    'discount_amount' => '123',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'by_percent',
-                    'sub_discount_amount' => '123',
-                ],
-                [
-                    'Percentage discount should be between 0 and 100.',
-                ]
-            ],
-            [
-                [
                     'simple_action' => 'by_percent',
                     'discount_amount' => '123.12',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'to_percent',
-                    'sub_discount_amount' => '123.001',
                 ],
                 [
-                    'Percentage discount should be between 0 and 100.',
                     'Percentage discount should be between 0 and 100.',
                 ]
             ],
@@ -275,9 +267,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'to_percent',
                     'discount_amount' => '-12',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'to_fixed',
-                    'sub_discount_amount' => '567.8901',
                 ],
                 [
                     'Percentage discount should be between 0 and 100.',
@@ -287,12 +276,8 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'to_fixed',
                     'discount_amount' => '-1234567890',
-                    'sub_is_enable' => '1',
-                    'sub_simple_action' => 'by_fixed',
-                    'sub_discount_amount' => '-5',
                 ],
                 [
-                    'Discount value should be 0 or greater.',
                     'Discount value should be 0 or greater.',
                 ]
             ],
@@ -300,7 +285,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 [
                     'simple_action' => 'invalid action',
                     'discount_amount' => '12',
-                    'sub_is_enable' => '0',
                 ],
                 [
                     'Unknown action.',
@@ -382,5 +366,29 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [['name', 'description'], ['name', 'description'], true, true],
             [['name', 'description'], ['name', 'important_data'], true, true],
         ];
+    }
+
+    public function testGetConditionsFieldSetId()
+    {
+        $formName = 'form_name';
+        $this->rule->setId(100);
+        $expectedResult = 'form_namerule_conditions_fieldset_100';
+        $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

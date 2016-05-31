@@ -32,7 +32,6 @@ class AssertSearchTermNotInGrid extends AbstractConstraint
             'store_id' => $searchTerm->getStoreId(),
             'results_from' => $searchTerm->getNumResults(),
             'popularity_from' => $searchTerm->getPopularity(),
-            'synonym_for' => $searchTerm->getSynonymFor(),
             'redirect' => $searchTerm->getRedirect(),
             'display_in_terms' => strtolower($searchTerm->getDisplayInTerms()),
         ];

@@ -17,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\State;
 
 /**
- * Command for change the Magento mode
+ * Command to set application mode
  */
 class SetModeCommand extends Command
 {
@@ -109,7 +109,8 @@ class SetModeCommand extends Command
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 }

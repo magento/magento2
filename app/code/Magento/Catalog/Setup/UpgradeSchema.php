@@ -9,7 +9,7 @@ namespace Magento\Catalog\Setup;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 
 /**
@@ -29,7 +29,28 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->removeGroupPrice($setup);
         }
 
+        if (version_compare($context->getVersion(), '2.0.6', '<')) {
+            $this->addUniqueKeyToCategoryProductTable($setup);
+        }
         $setup->endSetup();
+    }
+
+    /**
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    protected function addUniqueKeyToCategoryProductTable(SchemaSetupInterface $setup)
+    {
+        $setup->getConnection()->addIndex(
+            $setup->getTable('catalog_category_product'),
+            $setup->getIdxName(
+                'catalog_category_product',
+                ['category_id', 'product_id'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            ),
+            ['category_id', 'product_id'],
+            \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+        );
     }
 
     /**
@@ -43,7 +64,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
          * Create table 'catalog_product_entity_media_gallery_value_to_entity'
          */
         $table = $setup->getConnection()
-            ->newTable($setup->getTable(Media::GALLERY_VALUE_TO_ENTITY_TABLE))
+            ->newTable($setup->getTable(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -60,7 +81,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             )
             ->addIndex(
                 $setup->getIdxName(
-                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    Gallery::GALLERY_VALUE_TO_ENTITY_TABLE,
                     ['value_id', 'entity_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -69,19 +90,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
             )
             ->addForeignKey(
                 $setup->getFkName(
-                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    Gallery::GALLERY_VALUE_TO_ENTITY_TABLE,
                     'value_id',
-                    Media::GALLERY_TABLE,
+                    Gallery::GALLERY_TABLE,
                     'value_id'
                 ),
                 'value_id',
-                $setup->getTable(Media::GALLERY_TABLE),
+                $setup->getTable(Gallery::GALLERY_TABLE),
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
                 $setup->getFkName(
-                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    Gallery::GALLERY_VALUE_TO_ENTITY_TABLE,
                     'entity_id',
                     'catalog_product_entity',
                     'entity_id'
@@ -107,26 +128,26 @@ class UpgradeSchema implements UpgradeSchemaInterface
          */
         $setup->getConnection()->addForeignKey(
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'value_id',
-                Media::GALLERY_TABLE,
+                Gallery::GALLERY_TABLE,
                 'value_id'
             ),
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             'value_id',
-            $setup->getTable(Media::GALLERY_TABLE),
+            $setup->getTable(Gallery::GALLERY_TABLE),
             'value_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         );
 
         $setup->getConnection()->addForeignKey(
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'store_id',
                 $setup->getTable('store'),
                 'store_id'
             ),
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             'store_id',
             $setup->getTable('store'),
             'store_id',
@@ -140,7 +161,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addSupportVideoMediaAttributes(SchemaSetupInterface $setup)
     {
-        if ($setup->tableExists(Media::GALLERY_VALUE_TO_ENTITY_TABLE)) {
+        if ($setup->tableExists(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE)) {
             return;
         };
 
@@ -150,7 +171,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
          * Add media type property to the Gallery entry table
          */
         $setup->getConnection()->addColumn(
-            $setup->getTable(Media::GALLERY_TABLE),
+            $setup->getTable(Gallery::GALLERY_TABLE),
             'media_type',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -161,7 +182,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ]
         );
         $setup->getConnection()->addColumn(
-            $setup->getTable(Media::GALLERY_TABLE),
+            $setup->getTable(Gallery::GALLERY_TABLE),
             'disabled',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
@@ -175,32 +196,32 @@ class UpgradeSchema implements UpgradeSchemaInterface
         /**
          * Drop entity Id columns
          */
-        $setup->getConnection()->dropColumn($setup->getTable(Media::GALLERY_TABLE), 'entity_id');
+        $setup->getConnection()->dropColumn($setup->getTable(Gallery::GALLERY_TABLE), 'entity_id');
 
         /**
          * Drop primary index
          */
         $setup->getConnection()->dropForeignKey(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'value_id',
-                Media::GALLERY_TABLE,
+                Gallery::GALLERY_TABLE,
                 'value_id'
             )
         );
         $setup->getConnection()->dropForeignKey(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             $setup->getFkName(
-                Media::GALLERY_VALUE_TABLE,
+                Gallery::GALLERY_VALUE_TABLE,
                 'store_id',
                 'store',
                 'store_id'
             )
         );
-        $setup->getConnection()->dropIndex($setup->getTable(Media::GALLERY_VALUE_TABLE), 'primary');
+        $setup->getConnection()->dropIndex($setup->getTable(Gallery::GALLERY_VALUE_TABLE), 'primary');
         $setup->getConnection()->addColumn(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             'record_id',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -216,9 +237,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
          * Add index 'value_id'
          */
         $setup->getConnection()->addIndex(
-            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
             $setup->getConnection()->getIndexName(
-                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                $setup->getTable(Gallery::GALLERY_VALUE_TABLE),
                 'value_id',
                 'index'
             ),

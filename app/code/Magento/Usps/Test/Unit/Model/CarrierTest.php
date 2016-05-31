@@ -6,7 +6,7 @@
 namespace Magento\Usps\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Store\Model\StoreManager;
+use Magento\Usps\Model\Carrier;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +43,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -179,12 +179,31 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_rates.xml'))
         );
         // for setRequest
+        $data = require __DIR__ . '/_files/rates_request_data.php';
         $request = $this->helper->getObject(
             'Magento\Quote\Model\Quote\Address\RateRequest',
-            require __DIR__ . '/_files/rates_request_data.php'
+            ['data' => $data[0]]
         );
 
         $this->assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
+    }
+
+    public function testCollectRatesWithUnavailableService()
+    {
+        $expectedCount = 5;
+
+        $this->scope->expects(static::once())
+            ->method('isSetFlag')
+            ->willReturn(true);
+
+        $this->httpResponse->expects(static::once())
+            ->method('getBody')
+            ->willReturn(file_get_contents(__DIR__ . '/_files/response_rates.xml'));
+
+        $data = require __DIR__ . '/_files/rates_request_data.php';
+        $request = $this->helper->getObject(RateRequest::class, ['data' => $data[1]]);
+        $rates = $this->carrier->collectRates($request)->getAllRates();
+        static::assertEquals($expectedCount, count($rates));
     }
 
     public function testReturnOfShipment()
@@ -256,5 +275,50 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $request->setPackageWeight(1);
 
         $this->assertNotEmpty($this->carrier->collectRates($request));
+    }
+
+    /**
+     * @param string $data
+     * @param array $maskFields
+     * @param string $expected
+     * @dataProvider logDataProvider
+     */
+    public function testFilterDebugData($data, array $maskFields, $expected)
+    {
+        $refClass = new \ReflectionClass(Carrier::class);
+        $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
+        $property->setAccessible(true);
+        $property->setValue($this->carrier, $maskFields);
+
+        $refMethod = $refClass->getMethod('filterDebugData');
+        $refMethod->setAccessible(true);
+        $result = $refMethod->invoke($this->carrier, $data);
+        $expectedXml = new \SimpleXMLElement($expected);
+        $resultXml = new \SimpleXMLElement($result);
+        static::assertEquals($expectedXml->asXML(), $resultXml->asXML());
+    }
+
+    /**
+     * Get list of variations
+     */
+    public function logDataProvider()
+    {
+        return [
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest USERID="12312">
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+                ['USERID'],
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest USERID="****">
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+            ],
+        ];
     }
 }

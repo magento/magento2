@@ -84,6 +84,12 @@ class Attribute extends AbstractFilter
             ->getProductCollection();
         $optionsFacetedData = $productCollection->getFacetedData($attribute->getAttributeCode());
 
+        if (count($optionsFacetedData) === 0
+            && $this->getAttributeIsFilterable($attribute) !== static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+        ) {
+            return $this->itemDataBuilder->build();
+        }
+
         $productSize = $productCollection->getSize();
 
         $options = $attribute->getFrontend()
@@ -92,17 +98,23 @@ class Attribute extends AbstractFilter
             if (empty($option['value'])) {
                 continue;
             }
+
+            $value = $option['value'];
+
+            $count = isset($optionsFacetedData[$value]['count'])
+                ? (int)$optionsFacetedData[$value]['count']
+                : 0;
             // Check filter type
-            if (empty($optionsFacetedData[$option['value']]['count'])
-                || ($this->getAttributeIsFilterable($attribute) == static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
-                    && !$this->isOptionReducesResults($optionsFacetedData[$option['value']]['count'], $productSize))
+            if (
+                $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+                && (!$this->isOptionReducesResults($count, $productSize) || $count === 0)
             ) {
                 continue;
             }
             $this->itemDataBuilder->addItemData(
                 $this->tagFilter->filter($option['label']),
-                $option['value'],
-                $optionsFacetedData[$option['value']]['count']
+                $value,
+                $count
             );
         }
 

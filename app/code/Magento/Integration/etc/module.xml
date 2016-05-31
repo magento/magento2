@@ -10,6 +10,7 @@
         <sequence>
             <module name="Magento_Store"/>
             <module name="Magento_User"/>
+            <module name="Magento_Security"/>
         </sequence>
     </module>
 </config>

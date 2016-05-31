@@ -25,6 +25,7 @@ class CreateProductAttributeEntityTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
+    const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**

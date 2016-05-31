@@ -71,8 +71,9 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->product = $this->getMock(
             '\Magento\Catalog\Model\Product',
             [
-                'getId',
+                'getEntityId',
                 'getPriceType',
+                'getShipmentType',
                 'getSkuType',
                 'getPriceView',
                 'getWeightType',
@@ -84,8 +85,9 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->product->expects($this->any())->method('getId')->willReturn(1);
+        $this->product->expects($this->any())->method('getEntityId')->willReturn(1);
         $this->product->expects($this->any())->method('getPriceType')->willReturn(1);
+        $this->product->expects($this->any())->method('getShipmentType')->willReturn(1);
         $this->product->expects($this->any())->method('getSkuType')->willReturn(1);
         $this->product->expects($this->any())->method('getPriceView')->willReturn(1);
         $this->product->expects($this->any())->method('getWeightType')->willReturn(1);
@@ -159,12 +161,13 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     {
         $productData = [0 => 'sku'];
         $expectedData = [
-            0 => 'sku',
-            1 => 'bundle_price_type',
-            2 => 'bundle_sku_type',
-            3 => 'bundle_price_view',
-            4 => 'bundle_weight_type',
-            5 => 'bundle_values'
+            'sku',
+            'bundle_price_type',
+            'bundle_sku_type',
+            'bundle_price_view',
+            'bundle_weight_type',
+            'bundle_values',
+            'bundle_shipment_type'
         ];
         $this->assertEquals($expectedData, $this->rowCustomizerMock->addHeaderColumns($productData));
     }
@@ -175,15 +178,17 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     public function testAddData()
     {
         $preparedData = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
+        $attributes = 'attribute=1,sku_type=1,price_type=1,price_view=1,weight_type=1,values=values,shipment_type=1';
         $dataRow = [
             'sku' => 'sku1',
-            'additional_attributes' => 'attribute=1,sku_type=1,price_type=1,price_view=1,weight_type=1,values=values'
+            'additional_attributes' => $attributes
         ];
         $preparedRow = $preparedData->addData($dataRow, 1);
         $expected = [
             'sku' => 'sku1',
             'additional_attributes' => 'attribute=1',
             'bundle_price_type' => 'fixed',
+            'bundle_shipment_type' => 'separately',
             'bundle_sku_type' => 'fixed',
             'bundle_price_view' => 'As low as',
             'bundle_weight_type' => 'fixed',

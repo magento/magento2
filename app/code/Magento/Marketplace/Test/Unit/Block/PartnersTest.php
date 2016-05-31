@@ -13,7 +13,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
      */
     private $partnersBlockMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->partnersBlockMock = $this->getPartnersBlockMock(
             [

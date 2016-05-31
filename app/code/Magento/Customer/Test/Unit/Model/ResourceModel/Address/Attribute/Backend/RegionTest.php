@@ -22,7 +22,7 @@ class RegionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Directory\Model\Region|\PHPUnit_Framework_MockObject_MockObject */
     protected $region;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->regionFactory = $this->getMock('Magento\Directory\Model\RegionFactory', ['create'], [], '', false);
         $this->region = $this->getMock(

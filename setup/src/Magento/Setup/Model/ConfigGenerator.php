@@ -62,6 +62,7 @@ class ConfigGenerator
     }
 
     /**
+<<<<<<< HEAD
      * Creates install segment config data
      *
      * @deprecated
@@ -79,6 +80,8 @@ class ConfigGenerator
     }
 
     /**
+=======
+>>>>>>> develop
      * Creates encryption key config data
      * @param array $data
      * @return ConfigData
@@ -237,7 +240,9 @@ class ConfigGenerator
     public function createModeConfig()
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
-        $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
+        if ($this->deploymentConfig->get(State::PARAM_MODE) === null) {
+            $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
+        }
         return $configData;
     }
 

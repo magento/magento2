@@ -11,6 +11,8 @@ namespace Magento\Catalog\Model;
  *
  * @see \Magento\Catalog\Model\CategoryTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class CategoryTreeTest extends \PHPUnit_Framework_TestCase
 {
@@ -123,7 +125,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren()
     {
         $this->_model->load(3);
-        $this->assertEquals('4', $this->_model->getChildren());
+        $this->assertEquals('4,13', $this->_model->getChildren());
     }
 
     public function testGetPathInStore()
@@ -184,7 +186,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->load(3);
         $children = $this->_model->getChildrenCategories();
-        $this->assertEquals(1, count($children));
+        $this->assertEquals(2, count($children));
     }
 
     public function testGetChildrenCategoriesEmpty()

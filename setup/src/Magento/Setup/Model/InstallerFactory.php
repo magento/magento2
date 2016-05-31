@@ -50,7 +50,7 @@ class InstallerFactory
     public function create(LoggerInterface $log)
     {
         return new Installer(
-            $this->serviceLocator->get('Magento\Setup\Model\FilePermissions'),
+            $this->serviceLocator->get('Magento\Framework\Setup\FilePermissions'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Writer'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig'),
@@ -73,7 +73,8 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Setup\Module\SetupFactory'),
             $this->serviceLocator->get('Magento\Setup\Module\DataSetupFactory'),
             $this->serviceLocator->get('Magento\Framework\Setup\SampleData\State'),
-            new \Magento\Framework\Component\ComponentRegistrar()
+            new \Magento\Framework\Component\ComponentRegistrar(),
+            $this->serviceLocator->get('Magento\Setup\Model\PhpReadinessCheck')
         );
     }
 

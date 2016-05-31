@@ -89,6 +89,13 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
     protected $productForSalesRule2;
 
     /**
+     * Cart prices to compare.
+     *
+     * @array cartPrice
+     */
+    protected $cartPrice;
+
+    /**
      * Implementation assert.
      *
      * @return void
@@ -120,15 +127,16 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
      * @param CustomerAccountLogout $customerAccountLogout
      * @param CatalogCategoryView $catalogCategoryView
      * @param CatalogProductView $catalogProductView
-     * @param Customer $customer
      * @param SalesRule $salesRule
      * @param SalesRule $salesRuleOrigin
      * @param array $productQuantity
      * @param CatalogProductSimple $productForSalesRule1
      * @param CatalogProductSimple $productForSalesRule2
+     * @param Customer $customer
      * @param Address $address
      * @param int|null $isLoggedIn
      * @param array $shipping
+     * @param array $cartPrice
      * @return void
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -140,15 +148,16 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
         CustomerAccountLogout $customerAccountLogout,
         CatalogCategoryView $catalogCategoryView,
         CatalogProductView $catalogProductView,
-        Customer $customer,
         SalesRule $salesRule,
         SalesRule $salesRuleOrigin,
         array $productQuantity,
         CatalogProductSimple $productForSalesRule1,
         CatalogProductSimple $productForSalesRule2 = null,
+        Customer $customer = null,
         Address $address = null,
         $isLoggedIn = null,
-        array $shipping = []
+        array $shipping = [],
+        array $cartPrice = []
     ) {
         $this->checkoutCart = $checkoutCart;
         $this->cmsIndex = $cmsIndex;
@@ -156,9 +165,12 @@ abstract class AssertCartPriceRuleApplying extends AbstractConstraint
         $this->customerAccountLogout = $customerAccountLogout;
         $this->catalogCategoryView = $catalogCategoryView;
         $this->catalogProductView = $catalogProductView;
-        $this->customer = $customer;
         $this->productForSalesRule1 = $productForSalesRule1;
         $this->productForSalesRule2 = $productForSalesRule2;
+        $this->cartPrice = $cartPrice;
+        if ($customer !== null) {
+            $this->customer = $customer;
+        }
         $isLoggedIn ? $this->login() : $this->customerAccountLogout->open();
         $this->checkoutCart->open()->getCartBlock()->clearShoppingCart();
         $this->addProductsToCart($productQuantity);

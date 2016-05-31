@@ -50,6 +50,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->accountManagement = $this->objectManager->create('Magento\Customer\Api\AccountManagementInterface');
         $this->converter = $this->objectManager->create('Magento\Framework\Api\ExtensibleDataObjectConverter');
         $this->dataObjectHelper = $this->objectManager->create('Magento\Framework\Api\DataObjectHelper');
+        /** @var \Magento\Framework\Config\CacheInterface $cache */
+        $cache = $this->objectManager->create('Magento\Framework\Config\CacheInterface');
+        $cache->remove('extension_attributes_config');
     }
 
     protected function tearDown()

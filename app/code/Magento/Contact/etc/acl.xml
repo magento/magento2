@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Contact::contact" title="Contacts Section" />
+                            <resource id="Magento_Contact::contact" title="Contacts Section" translate="title" />
                         </resource>
                     </resource>
                 </resource>

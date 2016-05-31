@@ -46,4 +46,14 @@ interface ActionPoolInterface
      * @return bool|BlockInterface
      */
     public function getToolbar();
+
+    /**
+     * Add html block
+     *
+     * @param  string $type
+     * @param  string $name
+     * @param  array $arguments
+     * @return void
+     */
+    public function addHtmlBlock($type, $name = '', array $arguments = []);
 }

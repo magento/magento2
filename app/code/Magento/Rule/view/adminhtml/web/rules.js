@@ -234,7 +234,7 @@ define([
                     label.innerHTML = str.escapeHTML();
                 }
             } else {
-                elem = Element.down(container, '.element-value-changer');
+                elem = container.down('.element-value-changer');
                 if (elem.value) {
                     this.addRuleNewChild(elem);
                 }
@@ -251,7 +251,8 @@ define([
 
         addRuleNewChild: function (elem) {
             var parent_id = elem.id.replace(/^.*__(.*)__.*$/, '$1');
-            var children_ul = $(elem.id.replace(/__/g, ':').replace(/[^:]*$/, 'children').replace(/:/g, '__'));
+            var children_ul_id = elem.id.replace(/__/g, ':').replace(/[^:]*$/, 'children').replace(/:/g, '__');
+            var children_ul = $(this.parent).select('#' + children_ul_id)[0];
             var max_id = 0, i;
             var children_inputs = Selector.findChildElements(children_ul, $A(['input.hidden']));
             if (children_inputs.length) {

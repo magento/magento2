@@ -22,7 +22,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     protected $localeCurrencyMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->localeCurrencyMock = $this->getMock('\Magento\Framework\Locale\CurrencyInterface');
 
@@ -51,5 +51,50 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
             ->with($this->currencyCode)
             ->willReturn($currencyMock);
         $this->assertEquals($currencySymbol, $this->currency->getCurrencySymbol());
+    }
+
+    /**
+     * @dataProvider getOutputFormatDataProvider
+     * @param $withCurrency
+     * @param $noCurrency
+     * @param $expected
+     */
+    public function testGetOutputFormat($withCurrency, $noCurrency, $expected)
+    {
+        $currencyMock = $this->getMockBuilder('\Magento\Framework\Currency')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMock->expects($this->at(0))
+            ->method('toCurrency')
+            ->willReturn($withCurrency);
+        $currencyMock->expects($this->at(1))
+            ->method('toCurrency')
+            ->willReturn($noCurrency);
+        $this->localeCurrencyMock->expects($this->atLeastOnce())
+            ->method('getCurrency')
+            ->with($this->currencyCode)
+            ->willReturn($currencyMock);
+        $this->assertEquals($expected, $this->currency->getOutputFormat());
+    }
+
+    /**
+     * Return data sets for testGetCurrencySymbol()
+     *
+     * @return array
+     */
+    public function getOutputFormatDataProvider()
+    {
+        return [
+            'no_unicode' => [
+                'withCurrency' => '$0.00',
+                'noCurrency' => '0.00',
+                'expected' => '$%s',
+            ],
+            'arabic_unicode' => [
+                'withCurrency' => json_decode('"\u200E"') . '$0.00',
+                'noCurrency' => json_decode('"\u200E"') . '0.00',
+                'expected' => json_decode('"\u200E"') . '$%s',
+            ]
+        ];
     }
 }

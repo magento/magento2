@@ -63,6 +63,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $searchResultMock;
 
+    /**
+     * @var \Magento\Eav\Api\AttributeOptionManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $optionManagementMock;
+
     protected function setUp()
     {
         $this->attributeResourceMock =
@@ -99,6 +104,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 [],
                 '',
                 false);
+        $this->optionManagementMock =
+            $this->getMock('\Magento\Catalog\Api\ProductAttributeOptionManagementInterface', [], [], '', false);
 
         $this->model = new Repository(
             $this->attributeResourceMock,
@@ -107,7 +114,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->eavAttributeRepositoryMock,
             $this->eavConfigMock,
             $this->validatorFactoryMock,
-            $this->searchCriteriaBuilderMock
+            $this->searchCriteriaBuilderMock,
+            $this->optionManagementMock
         );
     }
 

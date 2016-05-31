@@ -9,6 +9,9 @@ use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -40,6 +43,14 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     private $deploymentConfigMock;
+<<<<<<< HEAD
+=======
+
+    /**
+     * @var \Magento\Framework\Code\GeneratedFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $generatedFiles;
+>>>>>>> develop
 
     protected function setUp()
     {
@@ -59,6 +70,10 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->cleanupFilesMock = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+<<<<<<< HEAD
+=======
+        $this->generatedFiles = $this->getMock('\Magento\Framework\Code\GeneratedFiles', [], [], '', false);
+>>>>>>> develop
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
@@ -318,6 +333,12 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $deploymentConfigProperty = new \ReflectionProperty($class, 'deploymentConfig');
         $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->deploymentConfigMock);
+<<<<<<< HEAD
+=======
+        $deploymentConfigProperty = new \ReflectionProperty($class, 'generatedFiles');
+        $deploymentConfigProperty->setAccessible(true);
+        $deploymentConfigProperty->setValue($command, $this->generatedFiles);
+>>>>>>> develop
         return new CommandTester($command);
     }
 }

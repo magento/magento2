@@ -13,6 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product;
  * Import entity abstract product type model
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractType
 {
@@ -125,6 +126,20 @@ abstract class AbstractType
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $connection;
+
+    /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
@@ -522,5 +537,34 @@ abstract class AbstractType
     public function saveData()
     {
         return $this;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    protected function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }

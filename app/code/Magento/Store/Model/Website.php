@@ -658,6 +658,22 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * {@inheritdoc}
      */
+    public function getScopeType()
+    {
+        return \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopeTypeName()
+    {
+        return 'Website';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getExtensionAttributes()
     {
         return $this->_getExtensionAttributes();

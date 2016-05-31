@@ -88,16 +88,62 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="PageGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Magento\Cms\Model\ResourceModel\Page\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">CmsGirdFilterPool</argument>
+            <argument name="entities" xsi:type="array">
+                <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="string">Magento\Cms\Api\PageRepositoryInterface</item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="string">Magento\Cms\Api\BlockRepositoryInterface</item>
+            </argument>
         </arguments>
-    </virtualType>
-    <virtualType name="BlockGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+    </type>
+    <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Magento\Cms\Model\ResourceModel\Block\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">CmsGirdFilterPool</argument>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">cms_page</item>
+                    <item name="identifierField" xsi:type="string">page_id</item>
+                </item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">cms_block</item>
+                    <item name="identifierField" xsi:type="string">block_id</item>
+                </item>
+            </argument>
         </arguments>
-    </virtualType>
+    </type>
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler</item>
+                    </item>
+                </item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="storeReader" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="storeCreator" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="storeUpdater" xsi:type="string">Magento\Cms\Model\ResourceModel\Block\Relation\Store\SaveHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

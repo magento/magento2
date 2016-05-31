@@ -12,6 +12,6 @@
     </type>
     <type name="layout" translate="label,description" instance="Magento\Framework\App\Cache\Type\Layout">
         <label>Layouts</label>
-        <description>Layout building instructions.</description>
+        <description>Layout building instructions</description>
     </type>
 </config>

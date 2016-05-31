@@ -123,9 +123,5 @@ class InstallData implements InstallDataInterface
                 60
             );
         }
-
-        if (!$catalogSetup->getAttributesNumberInGroup($entityTypeId, $attributeSetId, 'Gift Options')) {
-            $catalogSetup->removeAttributeGroup($entityTypeId, $attributeSetId, 'Gift Options');
-        }
     }
 }

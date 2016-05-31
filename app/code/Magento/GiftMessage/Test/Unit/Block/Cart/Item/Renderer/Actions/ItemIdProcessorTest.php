@@ -13,7 +13,7 @@ class ItemIdProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var ItemIdProcessor */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->model = new ItemIdProcessor();
     }

@@ -73,6 +73,14 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
         $childBlockMock->expects($this->at(1))
             ->method('addChild')
             ->with(
+                'options_button',
+                'Magento\Backend\Block\Widget\Button',
+                ['label' => __('Options'), 'onclick' => 'setLocation(\'\')']
+            );
+
+        $childBlockMock->expects($this->at(2))
+            ->method('addChild')
+            ->with(
                 'reset_button',
                 'Magento\Backend\Block\Widget\Button',
                 ['label' => __('Reset'), 'onclick' => 'document.location.reload()', 'class' => 'reset']

@@ -31,14 +31,21 @@
             </block>
         </referenceContainer>
         <referenceContainer name="header.container">
-            <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
-                <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
-                    <arguments>
-                        <argument name="target" xsi:type="string">contentarea</argument>
-                        <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
-                    </arguments>
-                </block>
-                <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
+            <container name="header.panel.wrapper" htmlClass="panel wrapper" htmlTag="div" before="-">
+                <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
+                    <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
+                        <arguments>
+                            <argument name="target" xsi:type="string">contentarea</argument>
+                            <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Store\Block\Switcher" name="store_language" as="store_language" template="switch/languages.phtml"/>
+                    <block class="Magento\Framework\View\Element\Html\Links" name="top.links">
+                        <arguments>
+                            <argument name="css_class" xsi:type="string">header links</argument>
+                        </arguments>
+                    </block>
+                </container>
             </container>
             <container name="header-wrapper" label="Page Header" as="header-wrapper" htmlTag="div" htmlClass="header content">
                 <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
@@ -47,15 +54,43 @@
                         <argument name="logo_img_height" xsi:type="number">64</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Framework\View\Element\Html\Links" name="top.links">
-                    <arguments>
-                        <argument name="css_class" xsi:type="string">header links</argument>
-                    </arguments>
-                </block>
             </container>
         </referenceContainer>
         <referenceContainer name="page.top">
-            <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="html/topmenu.phtml" ttl="3600"/>
+            <block class="Magento\Framework\View\Element\Template" name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
+                <arguments>
+                    <argument name="group_name" xsi:type="string">navigation-sections</argument>
+                    <argument name="group_css" xsi:type="string">nav-sections</argument>
+                </arguments>
+                <block class="Magento\Framework\View\Element\Template" name="store.menu" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                    <arguments>
+                        <argument name="title" translate="true" xsi:type="string">Menu</argument>
+                    </arguments>
+                    <block class="Magento\Theme\Block\Html\Topmenu" name="catalog.topnav" template="html/topmenu.phtml" ttl="3600" before="-"/>
+                </block>
+                <block class="Magento\Framework\View\Element\Text" name="store.links" group="navigation-sections">
+                    <arguments>
+                        <argument name="title" translate="true" xsi:type="string">Account</argument>
+                        <argument name="use_force" xsi:type="boolean">true</argument>
+                        <argument name="text" xsi:type="string"><![CDATA[<!-- Account links -->]]></argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Framework\View\Element\Template" name="store.settings" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                    <arguments>
+                        <argument name="title" translate="true" xsi:type="string">Settings</argument>
+                    </arguments>
+                    <block class="Magento\Store\Block\Switcher" name="store.settings.language" template="switch/languages.phtml">
+                        <arguments>
+                            <argument name="id_modifier" xsi:type="string">nav</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Directory\Block\Currency" name="store.settings.currency" template="currency.phtml">
+                        <arguments>
+                            <argument name="id_modifier" xsi:type="string">nav</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
             <container name="top.container" as="topContainer" label="After Page Header Top" htmlTag="div" htmlClass="top-container"/>
             <block class="Magento\Theme\Block\Html\Breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
         </referenceContainer>
@@ -86,6 +121,9 @@
                 <block class="Magento\Theme\Block\Html\Footer" name="copyright" template="html/copyright.phtml"/>
                 <block class="Magento\Framework\View\Element\Template" name="report.bugs" template="Magento_Theme::html/bugreport.phtml" />
             </container>
+        </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Theme\Block\Html\Footer" name="absolute_footer" template="html/absolute_footer.phtml" />
         </referenceContainer>
         <referenceContainer name="content">
             <block class="Magento\Framework\View\Element\FormKey" name="formkey"/>

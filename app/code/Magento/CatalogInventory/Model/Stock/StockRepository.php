@@ -10,6 +10,7 @@ use Magento\CatalogInventory\Api\Data\StockInterface;
 use Magento\CatalogInventory\Api\StockRepositoryInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock as StockResource;
 use Magento\CatalogInventory\Model\StockFactory;
+use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\QueryBuilderFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -48,6 +49,11 @@ class StockRepository implements StockRepositoryInterface
     protected $mapperFactory;
 
     /**
+     * @var StockRegistryStorage
+     */
+    protected $stockRegistryStorage;
+
+    /**
      * @param StockResource $resource
      * @param StockFactory $stockFactory
      * @param StockCollectionInterfaceFactory $collectionFactory
@@ -78,7 +84,7 @@ class StockRepository implements StockRepositoryInterface
         try {
             $this->resource->save($stock);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
+            throw new CouldNotSaveException(__('Unable to save Stock'), $exception);
         }
         return $stock;
     }
@@ -121,8 +127,12 @@ class StockRepository implements StockRepositoryInterface
     {
         try {
             $this->resource->delete($stock);
+            $this->getStockRegistryStorage()->removeStock();
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(
+                __('Unable to remove Stock with id "%1"', $stock->getStockId()),
+                $exception
+            );
         }
         return true;
     }
@@ -138,8 +148,23 @@ class StockRepository implements StockRepositoryInterface
             $stock = $this->get($id);
             $this->delete($stock);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(
+                __('Unable to remove Stock with id "%1"', $id),
+                $exception
+            );
         }
         return true;
+    }
+
+    /**
+     * @return StockRegistryStorage
+     */
+    private function getStockRegistryStorage()
+    {
+        if (null === $this->stockRegistryStorage) {
+            $this->stockRegistryStorage = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Model\StockRegistryStorage');
+        }
+        return $this->stockRegistryStorage;
     }
 }

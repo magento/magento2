@@ -101,6 +101,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $timezone;
 
     /**
+     * @var \Symfony\Component\Process\PhpExecutableFinder
+     */
+    protected $phpExecutableFinder;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -109,6 +114,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\App\Console\Request $request
      * @param \Magento\Framework\ShellInterface $shell
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+     * @param \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -118,7 +124,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Console\Request $request,
         \Magento\Framework\ShellInterface $shell,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
+        \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -128,6 +135,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->_request = $request;
         $this->_shell = $shell;
         $this->timezone = $timezone;
+        $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
     }
 
     /**
@@ -147,6 +155,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         $currentTime = $this->timezone->scopeTimeStamp();
         $jobGroupsRoot = $this->_config->getJobs();
 
+        $phpPath = $this->phpExecutableFinder->find() ?: 'php';
+
         foreach ($jobGroupsRoot as $groupId => $jobsRoot) {
             if ($this->_request->getParam('group') !== null
                 && $this->_request->getParam('group') !== '\'' . ($groupId) . '\''
@@ -160,7 +170,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                     ) == 1
                 )) {
                 $this->_shell->execute(
-                    'php %s cron:run --group=' . $groupId . ' --' . CLI::INPUT_KEY_BOOTSTRAP . '='
+                    $phpPath . ' %s cron:run --group=' . $groupId . ' --' . CLI::INPUT_KEY_BOOTSTRAP . '='
                     . self::STANDALONE_PROCESS_STARTED . '=1',
                     [
                         BP . '/bin/magento'

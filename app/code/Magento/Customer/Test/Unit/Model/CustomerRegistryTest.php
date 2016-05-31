@@ -36,7 +36,7 @@ class CustomerRegistryTest extends \PHPUnit_Framework_TestCase
     const CUSTOMER_EMAIL = 'customer@example.com';
     const WEBSITE_ID = 1;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerFactory = $this->getMockBuilder('Magento\Customer\Model\CustomerFactory')
             ->setMethods(['create'])

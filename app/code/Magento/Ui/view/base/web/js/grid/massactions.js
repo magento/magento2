@@ -18,7 +18,7 @@ define([
         defaults: {
             template: 'ui/grid/actions',
             stickyTmpl: 'ui/grid/sticky/actions',
-            selectProvider: '',
+            selectProvider: 'ns = ${ $.ns }, index = ids',
             actions: [],
             noItemsMsg: $t('You haven\'t selected any items!'),
             modules: {
@@ -147,7 +147,7 @@ define([
          * @param {Object} data - Selections data.
          */
         defaultCallback: function (action, data) {
-            var itemsType = data.excludeMode ? 'excluded' : 'selected',
+            var itemsType = data.excludeMode && data.excluded.length !== 0 ? 'excluded' : 'selected',
                 selections = {};
 
             selections[itemsType] = data[itemsType];

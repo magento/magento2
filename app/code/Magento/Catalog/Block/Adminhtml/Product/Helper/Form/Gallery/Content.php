@@ -15,6 +15,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Backend\Block\Media\Uploader;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -121,16 +122,38 @@ class Content extends \Magento\Backend\Block\Widget
      */
     public function getImagesJson()
     {
-        if (is_array($this->getElement()->getValue())) {
-            $value = $this->getElement()->getValue();
-            if (is_array($value['images']) && count($value['images']) > 0) {
-                foreach ($value['images'] as &$image) {
-                    $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
-                }
-                return $this->_jsonEncoder->encode($value['images']);
+        $value = $this->getElement()->getImages();
+        if (is_array($value) &&
+            array_key_exists('images', $value) &&
+            is_array($value['images']) &&
+            count($value['images'])
+        ) {
+            $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
+            $images = $this->sortImagesByPosition($value['images']);
+            foreach ($images as &$image) {
+                $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+                $fileHandler = $directory->stat($this->_mediaConfig->getMediaPath($image['file']));
+                $image['size'] = $fileHandler['size'];
             }
+            return $this->_jsonEncoder->encode($images);
         }
         return '[]';
+    }
+
+    /**
+     * Sort images array by position key
+     *
+     * @param array $images
+     * @return array
+     */
+    private function sortImagesByPosition($images)
+    {
+        if (is_array($images)) {
+            usort($images, function ($imageA, $imageB) {
+                return ($imageA['position'] < $imageB['position']) ? -1 : 1;
+            });
+        }
+        return $images;
     }
 
     /**
@@ -170,6 +193,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve default state allowance
+     *
      * @return bool
      */
     public function hasUseDefault()
@@ -184,7 +209,7 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Enter description here...
+     * Retrieve media attributes
      *
      * @return array
      */
@@ -194,6 +219,8 @@ class Content extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve JSON data
+     *
      * @return string
      */
     public function getImageTypesJson()

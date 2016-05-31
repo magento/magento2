@@ -5,8 +5,10 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+use Magento\Framework\App\ObjectManager;
+
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+    \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
     /**
      * Core registry
@@ -22,10 +24,23 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * @var \Magento\Config\Model\Config\Source\Yesno
+     * @deprecated
      */
     protected $_sourceYesno;
 
     /**
+     * @var string
+     */
+    protected $_nameInLayout = 'actions_apply_to';
+
+    /**
+     * @var \Magento\SalesRule\Model\RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -50,7 +65,50 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
+     * The getter function to get the new RuleFactory dependency
+     *
+     * @return \Magento\SalesRule\Model\RuleFactory
+     *
+     * @deprecated
+     */
+    private function getRuleFactory()
+    {
+        if ($this->ruleFactory === null) {
+            $this->ruleFactory = ObjectManager::getInstance()->get('Magento\SalesRule\Model\RuleFactory');
+        }
+        return $this->ruleFactory;
+    }
+
+    /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabClass()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function getTabUrl()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -59,6 +117,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -67,6 +126,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -75,6 +135,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -85,90 +146,53 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * Prepare form before rendering HTML
      *
      * @return $this
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
-        $model = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $model = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
+        $form = $this->addTabToForm($model);
+        $this->setForm($form);
+
+        return parent::_prepareForm();
+    }
+
+    /**
+     * Handles addition of actions tab to supplied form.
+     *
+     * @param \Magento\SalesRule\Model\Rule $model
+     * @param string $fieldsetId
+     * @param string $formName
+     * @return \Magento\Framework\Data\Form
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function addTabToForm($model, $fieldsetId = 'actions_fieldset', $formName = 'sales_rule_form')
+    {
+        if (!$model) {
+            $id = $this->getRequest()->getParam('id');
+            $model = $this->getRuleFactory()->create();
+            $model->load($id);
+        }
+
+        $actionsFieldSetId = $model->getActionsFieldSetId($formName);
+
+        $newChildUrl = $this->getUrl(
+            'sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset_' . $actionsFieldSetId,
+            ['form_namespace' => $formName]
+        );
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('rule_');
-
-        $fieldset = $form->addFieldset(
-            'action_fieldset',
-            ['legend' => __('Pricing Structure Rules')]
-        );
-
-        $fieldset->addField(
-            'simple_action',
-            'select',
-            [
-                'label' => __('Apply'),
-                'name' => 'simple_action',
-                'options' => [
-                    \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION => __('Percent of product price discount'),
-                    \Magento\SalesRule\Model\Rule::BY_FIXED_ACTION => __('Fixed amount discount'),
-                    \Magento\SalesRule\Model\Rule::CART_FIXED_ACTION => __('Fixed amount discount for whole cart'),
-                    \Magento\SalesRule\Model\Rule::BUY_X_GET_Y_ACTION => __('Buy X get Y free (discount amount is Y)'),
-                ]
-            ]
-        );
-        $fieldset->addField(
-            'discount_amount',
-            'text',
-            [
-                'name' => 'discount_amount',
-                'required' => true,
-                'class' => 'validate-not-negative-number',
-                'label' => __('Discount Amount')
-            ]
-        );
-        $model->setDiscountAmount($model->getDiscountAmount() * 1);
-
-        $fieldset->addField(
-            'discount_qty',
-            'text',
-            ['name' => 'discount_qty', 'label' => __('Maximum Qty Discount is Applied To')]
-        );
-        $model->setDiscountQty($model->getDiscountQty() * 1);
-
-        $fieldset->addField(
-            'discount_step',
-            'text',
-            ['name' => 'discount_step', 'label' => __('Discount Qty Step (Buy X)')]
-        );
-
-        $fieldset->addField(
-            'apply_to_shipping',
-            'select',
-            [
-                'label' => __('Apply to Shipping Amount'),
-                'title' => __('Apply to Shipping Amount'),
-                'name' => 'apply_to_shipping',
-                'values' => $this->_sourceYesno->toOptionArray()
-            ]
-        );
-
-        $fieldset->addField(
-            'stop_rules_processing',
-            'select',
-            [
-                'label' => __('Discard subsequent rules'),
-                'title' => __('Discard subsequent rules'),
-                'name' => 'stop_rules_processing',
-                'options' => ['1' => __('Yes'), '0' => __('No')]
-            ]
-        );
-
         $renderer = $this->_rendererFieldset->setTemplate(
             'Magento_CatalogRule::promo/fieldset.phtml'
         )->setNewChildUrl(
-            $this->getUrl('sales_rule/promo_quote/newActionHtml/form/rule_actions_fieldset')
+            $newChildUrl
+        )->setFieldSetId(
+            $actionsFieldSetId
         );
 
         $fieldset = $form->addFieldset(
-            'actions_fieldset',
+            $fieldsetId,
             [
                 'legend' => __(
                     'Apply the rule only to cart items matching the following conditions ' .
@@ -182,7 +206,13 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $fieldset->addField(
             'actions',
             'text',
-            ['name' => 'actions', 'label' => __('Apply To'), 'title' => __('Apply To'), 'required' => true]
+            [
+                'name' => 'apply_to',
+                'label' => __('Apply To'),
+                'title' => __('Apply To'),
+                'required' => true,
+                'data-form-part' => $formName
+            ]
         )->setRule(
             $model
         )->setRenderer(
@@ -192,6 +222,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         $this->_eventManager->dispatch('adminhtml_block_salesrule_actions_prepareform', ['form' => $form]);
 
         $form->setValues($model->getData());
+        $this->setActionFormName($model->getActions(), $formName);
 
         if ($model->isReadonly()) {
             foreach ($fieldset->getElements() as $element) {
@@ -199,7 +230,23 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
             }
         }
 
-        $this->setForm($form);
-        return parent::_prepareForm();
+        return $form;
+    }
+
+    /**
+     * Handles addition of form name to action and its actions.
+     *
+     * @param \Magento\Rule\Model\Condition\AbstractCondition $actions
+     * @param string $formName
+     * @return void
+     */
+    private function setActionFormName(\Magento\Rule\Model\Condition\AbstractCondition $actions, $formName)
+    {
+        $actions->setFormName($formName);
+        if ($actions->getActions() && is_array($actions->getActions())) {
+            foreach ($actions->getActions() as $condition) {
+                $this->setActionFormName($condition, $formName);
+            }
+        }
     }
 }

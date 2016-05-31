@@ -9,7 +9,7 @@
 /**
  * Product view template
  *
- * @see \Magento\Catalog\Block\Product\View
+ * @see \Magento\Catalog\Block\Product\View\Description
  */
 ?>
 <?php
@@ -33,7 +33,7 @@ if ($_attributeType && $_attributeType == 'text') {
 ?>
 
 <?php if ($_attributeValue): ?>
-<div class="product attibute <?php /* @escapeNotVerified */ echo $_className?>">
+<div class="product attribute <?php /* @escapeNotVerified */ echo $_className?>">
     <?php if ($_attributeLabel != 'none'): ?><strong class="type"><?php /* @escapeNotVerified */ echo $_attributeLabel?></strong><?php endif; ?>
     <div class="value" <?php /* @escapeNotVerified */ echo $_attributeAddAttribute;?>><?php /* @escapeNotVerified */ echo $_attributeValue; ?></div>
 </div>

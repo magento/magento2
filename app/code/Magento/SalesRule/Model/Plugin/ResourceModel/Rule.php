@@ -5,6 +5,11 @@
  */
 namespace Magento\SalesRule\Model\Plugin\ResourceModel;
 
+/**
+ * Class Rule
+ * @package Magento\SalesRule\Model\Plugin\ResourceModel
+ * @deprecated
+ */
 class Rule
 {
     /**

@@ -251,7 +251,7 @@ SELECT `e`.*,
 EXPECTED_SQL;
         $resultSql = $collection->getSelectSql(true);
         $formattedResultSql = str_replace(',', ",\n    ", $resultSql);
-        $this->assertEquals($expectedSql, $formattedResultSql);
+        $this->assertContains($expectedSql, $formattedResultSql);
     }
 
     /**
@@ -259,14 +259,15 @@ EXPECTED_SQL;
      */
     public function testGetListWithExtensionAttributesAbstractModel()
     {
-        $firstProductId = 1;
-        $firstProductQty = 11;
-        $secondProductId = 2;
-        $secondProductQty = 22;
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+        $firstProductId = (int)$productRepository->get('simple')->getId();
+        $firstProductQty = 11;
+        $secondProductId = (int)$productRepository->get('custom-design-simple-product')->getId();
+        $secondProductQty = 22;
         /** @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface $stockItemRepository */
         $stockItemRepository = $objectManager->get('Magento\CatalogInventory\Api\StockItemRepositoryInterface');
 

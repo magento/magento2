@@ -7,7 +7,6 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Framework\Api\ArrayObjectSearch;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Class Dob
@@ -36,10 +35,16 @@ class Dob extends AbstractWidget
     protected $dateElement;
 
     /**
+     * @var \Magento\Framework\Data\Form\FilterFactory
+     */
+    protected $filterFactory;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
      * @param \Magento\Framework\View\Element\Html\Date $dateElement
+     * @param \Magento\Framework\Data\Form\FilterFactory $filterFactory
      * @param array $data
      */
     public function __construct(
@@ -47,9 +52,11 @@ class Dob extends AbstractWidget
         \Magento\Customer\Helper\Address $addressHelper,
         CustomerMetadataInterface $customerMetadata,
         \Magento\Framework\View\Element\Html\Date $dateElement,
+        \Magento\Framework\Data\Form\FilterFactory $filterFactory,
         array $data = []
     ) {
         $this->dateElement = $dateElement;
+        $this->filterFactory = $filterFactory;
         parent::__construct($context, $addressHelper, $customerMetadata, $data);
     }
 
@@ -87,8 +94,43 @@ class Dob extends AbstractWidget
     public function setDate($date)
     {
         $this->setTime($date ? strtotime($date) : false);
-        $this->setData('date', $date);
+        $this->setValue($this->applyOutputFilter($date));
         return $this;
+    }
+
+    /**
+     * Return Data Form Filter or false
+     *
+     * @return \Magento\Framework\Data\Form\Filter\FilterInterface|false
+     */
+    protected function getFormFilter()
+    {
+        $attributeMetadata = $this->_getAttribute('dob');
+        $filterCode = $attributeMetadata->getInputFilter();
+        if ($filterCode) {
+            $data = [];
+            if ($filterCode == 'date') {
+                $data['format'] = $this->getDateFormat();
+            }
+            $filter = $this->filterFactory->create($filterCode, $data);
+            return $filter;
+        }
+        return false;
+    }
+
+    /**
+     * Apply output filter to value
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function applyOutputFilter($value)
+    {
+        $filter = $this->getFormFilter();
+        if ($filter) {
+            $value = $filter->outputFilter($value);
+        }
+        return $value;
     }
 
     /**
@@ -133,12 +175,18 @@ class Dob extends AbstractWidget
     public function getFieldHtml()
     {
         $this->dateElement->setData([
+            'extra_params' => $this->isRequired() ? 'data-validate="{required:true}"' : '',
             'name' => $this->getHtmlId(),
             'id' => $this->getHtmlId(),
             'class' => $this->getHtmlClass(),
             'value' => $this->getValue(),
             'date_format' => $this->getDateFormat(),
             'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
+            'years_range' => '-120y:c+nn',
+            'max_date' => '-1d',
+            'change_month' => 'true',
+            'change_year' => 'true',
+            'show_on' => 'both'
         ]);
         return $this->dateElement->getHtml();
     }

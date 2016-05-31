@@ -20,7 +20,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrencyMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceCurrencyMock = $this->getMock('Magento\Framework\Pricing\PriceCurrencyInterface');
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

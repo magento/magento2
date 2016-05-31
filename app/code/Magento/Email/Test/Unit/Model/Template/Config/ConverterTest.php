@@ -12,7 +12,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_model = new \Magento\Email\Model\Template\Config\Converter();
     }

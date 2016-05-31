@@ -42,8 +42,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceInfo;
 
-
-    public function setUp()
+    protected function setUp()
     {
         $this->price = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
             ->getMock();
@@ -202,7 +201,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
     {
         $resultPrice = rand(1, 9);
 
-        $this->price->expects($this->once())
+        $this->price->expects($this->exactly(4))
             ->method('getValue')
             ->willReturn($resultPrice);
 

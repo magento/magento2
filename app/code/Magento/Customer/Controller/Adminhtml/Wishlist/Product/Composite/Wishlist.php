@@ -13,6 +13,13 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 abstract class Wishlist extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * Wishlist we're working with.
      *
      * @var \Magento\Wishlist\Model\Wishlist
@@ -52,15 +59,5 @@ abstract class Wishlist extends \Magento\Backend\App\Action
         $this->_wishlistItem = $wishlistItem;
 
         return $this;
-    }
-
-    /**
-     * Check the permission to Manage Customers
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }

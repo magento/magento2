@@ -12,18 +12,25 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
 {
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Save */
     protected $action;
+
     /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultPage;
+
     /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultForward;
+
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
     protected $productBuilder;
+
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $product;
+
     /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirectFactory;
+
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirect;
+
     /** @var Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $initializationHelper;
 
@@ -91,6 +98,21 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         );
 
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
+
+        $storeManagerInterfaceMock = $this->getMockForAbstractClass(
+            'Magento\Store\Model\StoreManagerInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getStore', 'getCode']
+        );
+
+        $storeManagerInterfaceMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnSelf());
+
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Save',
             [
@@ -99,6 +121,7 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
                 'initializationHelper' => $this->initializationHelper,
+                'storeManager' => $storeManagerInterfaceMock,
             ]
         );
     }
@@ -117,7 +140,6 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
             ->willReturn($this->product);
         $this->product->expects($this->any())->method('getSku')->willThrowException(new $exceptionType(__('message')));
 
-        $this->session->expects($this->once())->method('setProductData')->with($productData);
         $this->resultRedirect->expects($this->once())->method('setPath')->with('catalog/*/new');
 
         $this->action->execute();

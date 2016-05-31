@@ -24,7 +24,7 @@ class PaymentMethodTest extends \PHPUnit_Framework_TestCase
      */
     protected $paymentHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')

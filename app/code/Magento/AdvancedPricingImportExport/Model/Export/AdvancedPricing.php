@@ -352,6 +352,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 }
             }
             try {
+                $productEntityLinkField = $this->getProductEntityLinkField();
                 $select = $this->_connection->select()
                     ->from(
                         ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
@@ -359,7 +360,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     )
                     ->joinInner(
                         ['ap' => $this->_resource->getTableName($table)],
-                        'ap.entity_id = cpe.entity_id',
+                        'ap.' . $productEntityLinkField . ' = cpe.' . $productEntityLinkField,
                         []
                     )
                     ->where('cpe.entity_id IN (?)', $listSku);

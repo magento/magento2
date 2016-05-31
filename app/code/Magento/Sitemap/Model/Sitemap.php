@@ -630,7 +630,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
      */
     protected function _getDocumentRoot()
     {
-        return $this->_request->getServer('DOCUMENT_ROOT');
+        return realpath($this->_request->getServer('DOCUMENT_ROOT'));
     }
 
     /**

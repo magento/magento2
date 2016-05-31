@@ -9,7 +9,6 @@ namespace Magento\Setup\Test\Unit\Console;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\DiCompileCommand;
-use Magento\Setup\Console\Command\DiCompileMultiTenantCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -64,10 +63,10 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
                 $this->logicalOr('--help', '-h')
             )->willReturn($isHelpOption);
         if ($isCompileCommand && !$isHelpOption) {
-            $this->filesystemDriverMock->expects($this->once())
+            $this->filesystemDriverMock->expects($this->exactly(2))
                 ->method('isExists')
                 ->willReturn($dirExists);
-            $this->filesystemDriverMock->expects($this->exactly((int)$dirExists))->method('deleteDirectory');
+            $this->filesystemDriverMock->expects($this->exactly(((int)$dirExists) * 2))->method('deleteDirectory');
         } else {
             $this->filesystemDriverMock->expects($this->never())->method('isExists');
             $this->filesystemDriverMock->expects($this->never())->method('deleteDirectory');
@@ -96,24 +95,6 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
                 'isHelpOption' => true,
                 'dirExists' => false
             ],
-            'MT compiler, directory exists' => [
-                'commandName' => DiCompileMultiTenantCommand::NAME,
-                'isCompileCommand' => true,
-                'isHelpOption' => false,
-                'dirExists' => true
-            ],
-            'MT compiler, directory does not exist' => [
-                'commandName' => DiCompileMultiTenantCommand::NAME,
-                'isCompileCommand' => true,
-                'isHelpOption' => false,
-                'dirExists' => false
-            ],
-            'MT compiler, help option' => [
-                'commandName' => DiCompileMultiTenantCommand::NAME,
-                'isCompileCommand' => true,
-                'isHelpOption' => true,
-                'dirExists' => true
-            ],
             'Other command' => [
                 'commandName' => 'not:a:compiler',
                 'isCompileCommand' => false,
@@ -125,17 +106,27 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
     public function testGenerationDirectoryFromInitParams()
     {
         $customGenerationDirectory = '/custom/generated/code/directory';
+        $defaultDiDirectory = '/custom/di/directory';
         $mageInitParams = ['MAGE_DIRS' => ['generation' => ['path' => $customGenerationDirectory]]];
 
         $this->inputMock->expects($this->once())
             ->method('getFirstArgument')
-            ->willReturn(DiCompileMultiTenantCommand::NAME);
-
+            ->willReturn(DiCompileCommand::NAME);
+        $dirValueMap = [
+            [
+                $customGenerationDirectory,
+                $defaultDiDirectory
+            ],
+            [
+                true,
+                true
+            ]
+        ];
         // Filesystem mock
-        $this->filesystemDriverMock->expects($this->once())->method('isExists')->willReturn(true);
-        $this->filesystemDriverMock->expects($this->once())
+        $this->filesystemDriverMock->expects($this->exactly(2))->method('isExists')->willReturn(true);
+        $this->filesystemDriverMock->expects($this->exactly(2))
             ->method('deleteDirectory')
-            ->with($customGenerationDirectory);
+            ->will($this->returnValueMap($dirValueMap));
 
         $this->serviceManagerMock->expects($this->once())
             ->method('get')
@@ -144,38 +135,30 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
         $this->model->handleCompilerEnvironment();
     }
 
-    /**
-     * @dataProvider compilerCommandDataProvider
-     */
-    public function testGenerationDirectoryFromCliOption($commandName)
+    public function testGenerationDirectoryFromCliOption()
     {
         $customGenerationDirectory = '/custom/generated/code/directory';
-        $useCliOption = $commandName === DiCompileMultiTenantCommand::NAME;
-
+        $customDiDirectory = '/custom/di/directory';
+        
         $this->inputMock->expects($this->once())
             ->method('getFirstArgument')
-            ->willReturn($commandName);
-        $this->inputMock->expects($this->exactly((int)$useCliOption))
-            ->method('getParameterOption')
-            ->with(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
-            ->willReturn($customGenerationDirectory);
-        // Filesystem mock
-        $directoryArgConstraint = $useCliOption
-            ? $this->equalTo($customGenerationDirectory)
-            : $this->logicalNot($this->equalTo($customGenerationDirectory));
-        $this->filesystemDriverMock->expects($this->once())->method('isExists')->willReturn(true);
-        $this->filesystemDriverMock->expects($this->once())
+            ->willReturn(DiCompileCommand::NAME);
+        $dirResultMap = [
+            [
+                $this->logicalNot($this->equalTo($customGenerationDirectory)),
+                $this->logicalNot($this->equalTo($customDiDirectory))
+            ],
+            [
+                true,
+                true
+            ]
+        ];
+
+        $this->filesystemDriverMock->expects($this->exactly(2))->method('isExists')->willReturn(true);
+        $this->filesystemDriverMock->expects($this->exactly(2))
             ->method('deleteDirectory')
-            ->with($directoryArgConstraint);
+            ->will($this->returnValueMap($dirResultMap));
 
         $this->model->handleCompilerEnvironment();
-    }
-
-    public function compilerCommandDataProvider()
-    {
-        return [
-            [DiCompileCommand::NAME],
-            [DiCompileMultiTenantCommand::NAME]
-        ];
     }
 }

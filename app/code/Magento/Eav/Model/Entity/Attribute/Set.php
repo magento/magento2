@@ -173,6 +173,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param array $data
      * @return $this
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -220,10 +221,17 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
         if ($data['not_attributes']) {
             $modelAttributeArray = [];
-            foreach ($data['not_attributes'] as $attributeId) {
-                $modelAttribute = $this->_attributeFactory->create();
-
-                $modelAttribute->setEntityAttributeId($attributeId);
+            $data['not_attributes'] = array_filter($data['not_attributes']);
+            foreach ($data['not_attributes'] as $entityAttributeId) {
+                $entityAttribute = $this->_resourceAttribute->getEntityAttribute($entityAttributeId);
+                if (!$entityAttribute) {
+                    throw new LocalizedException(__('Entity attribute with id "%1" not found', $entityAttributeId));
+                }
+                $modelAttribute = $this->_eavConfig->getAttribute(
+                    $this->getEntityTypeId(),
+                    $entityAttribute['attribute_id']
+                );
+                $modelAttribute->setEntityAttributeId($entityAttributeId);
                 $modelAttributeArray[] = $modelAttribute;
             }
             $this->setRemoveAttributes($modelAttributeArray);

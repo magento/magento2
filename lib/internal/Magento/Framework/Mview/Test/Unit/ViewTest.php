@@ -222,17 +222,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getMode')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
         $this->stateMock->expects($this->once())
-            ->method('setVersionId')
-            ->with(null)
-            ->will($this->returnSelf());
-        $this->stateMock->expects($this->once())
             ->method('setMode')
             ->with(\Magento\Framework\Mview\View\StateInterface::MODE_DISABLED)
             ->will($this->returnSelf());
-        $this->changelogMock->expects($this->once())
+        $this->changelogMock->expects($this->never())
             ->method('drop');
         $subscriptionMock = $this->getMock(
-            'Magento\Framework\Mview\View\Subscription',
+            \Magento\Framework\Mview\View\Subscription::class,
             ['remove'],
             [],
             '',
@@ -312,9 +308,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->stateMock->expects($this->once())
             ->method('setVersionId')
             ->will($this->returnSelf());
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
         $this->stateMock->expects($this->exactly(2))
             ->method('getStatus')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::STATUS_IDLE));
@@ -376,9 +369,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($lastVersionId));
         $this->stateMock->expects($this->never())
             ->method('setVersionId');
-        $this->stateMock->expects($this->once())
-            ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::MODE_ENABLED));
         $this->stateMock->expects($this->exactly(2))
             ->method('getStatus')
             ->will($this->returnValue(\Magento\Framework\Mview\View\StateInterface::STATUS_IDLE));

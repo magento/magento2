@@ -36,7 +36,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $inlineTranslation;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 

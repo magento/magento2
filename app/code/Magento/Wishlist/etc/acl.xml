@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Wishlist::config_wishlist" title="Wish List Section" sortOrder="80" />
+                            <resource id="Magento_Wishlist::config_wishlist" title="Wish List Section" translate="title" sortOrder="80" />
                         </resource>
                     </resource>
                 </resource>

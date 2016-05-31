@@ -37,8 +37,8 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     {
         if (null === $this->_options) {
             $this->_options = [
-                ['label' => __('As Low as'), 'value' => 1],
                 ['label' => __('Price Range'), 'value' => 0],
+                ['label' => __('As Low as'), 'value' => 1],
             ];
         }
         return $this->_options;

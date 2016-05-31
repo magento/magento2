@@ -9,6 +9,8 @@
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 use \Magento\Bundle\Model\Product\Price as BundlePrice;
+use \Magento\BundleImportExport\Model\Export\RowCustomizer;
+use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class Bundle
@@ -113,6 +115,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected $_customFieldsMapping = [
         'price_type' => 'bundle_price_type',
+        'shipment_type' => 'bundle_shipment_type',
         'price_view' => 'bundle_price_view',
         'weight_type' => 'bundle_weight_type',
         'sku_type' => 'bundle_sku_type',
@@ -344,7 +347,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             while ($bunch = $this->_entityModel->getNextBunch()) {
                 foreach ($bunch as $rowNum => $rowData) {
                     $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
-                    $productIds[] = $productData['entity_id'];
+                    $productIds[] = $productData[$this->getProductEntityLinkField()];
                 }
                 $this->deleteOptionsAndSelections($productIds);
             }
@@ -359,7 +362,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
-                    $this->parseSelections($rowData, $productData['entity_id']);
+                    $this->parseSelections($rowData, $productData[$this->getProductEntityLinkField()]);
                 }
                 if (!empty($this->_cachedOptions)) {
                     $this->retrieveProducsByCachedSkus();
@@ -383,10 +386,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
-        $rowData = array_merge($rowData, $this->transformBundleCustomAttributes($rowData));
         if (isset($rowData['bundle_price_type']) && $rowData['bundle_price_type'] == 'dynamic') {
             $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
         }
+
         return parent::isRowValid($rowData, $rowNum, $isNewProduct);
     }
 
@@ -413,15 +416,24 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function transformBundleCustomAttributes($rowData)
     {
         $resultAttrs = [];
-        foreach (array_keys($this->_customFieldsMapping) as $oldKey) {
+        foreach ($this->_customFieldsMapping as $oldKey => $newKey) {
             if (isset($rowData[$oldKey])) {
-                if ($oldKey != self::NOT_FIXED_DYNAMIC_ATTRIBUTE) {
-                    $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
-                        BundlePrice::PRICE_TYPE_FIXED :
-                        BundlePrice::PRICE_TYPE_DYNAMIC);
+                switch ($newKey) {
+                    case $this->_customFieldsMapping['price_view']:
+                        break;
+                    case $this->_customFieldsMapping['shipment_type']:
+                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == 'separately') ?
+                            AbstractType::SHIPMENT_SEPARATELY :
+                            AbstractType::SHIPMENT_TOGETHER);
+                        break;
+                    default:
+                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
+                            BundlePrice::PRICE_TYPE_FIXED :
+                            BundlePrice::PRICE_TYPE_DYNAMIC);
                 }
             }
         }
+
         return $resultAttrs;
     }
 
@@ -619,12 +631,24 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function _initAttributes()
     {
         parent::_initAttributes();
-        if (isset(self::$attributeCodeToId['price_type']) && $id = self::$attributeCodeToId['price_type']) {
-            self::$commonAttributesCache[$id]['type'] = 'select';
-            self::$commonAttributesCache[$id]['options'] = [
-                self::VALUE_DYNAMIC => BundlePrice::PRICE_TYPE_DYNAMIC,
-                self::VALUE_FIXED => BundlePrice::PRICE_TYPE_FIXED,
-            ];
+
+        $options = [
+            self::VALUE_DYNAMIC => BundlePrice::PRICE_TYPE_DYNAMIC,
+            self::VALUE_FIXED => BundlePrice::PRICE_TYPE_FIXED,
+        ];
+
+        foreach ($this->_specialAttributes as $attributeCode) {
+            if (isset(self::$attributeCodeToId[$attributeCode]) && $id = self::$attributeCodeToId[$attributeCode]) {
+                self::$commonAttributesCache[$id]['type'] = 'select';
+                self::$commonAttributesCache[$id]['options'] = $options;
+
+                foreach ($this->_attributes as $attrSetName => $attrSetValue) {
+                    if (isset($attrSetValue[$attributeCode])) {
+                        $this->_attributes[$attrSetName][$attributeCode]['type'] = 'select';
+                        $this->_attributes[$attrSetName][$attributeCode]['options'] = $options;
+                    }
+                }
+            }
         }
     }
 

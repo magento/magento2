@@ -23,7 +23,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
         $this->_initRule();
 
         /** @var $rule \Magento\SalesRule\Model\Rule */
-        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         if (!$rule->getId()) {
             $result['error'] = __('Rule is not defined');

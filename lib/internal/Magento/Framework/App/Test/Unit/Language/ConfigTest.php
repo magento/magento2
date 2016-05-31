@@ -22,7 +22,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var Config */
     protected $config;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
@@ -57,8 +57,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testConfiguration()
     {
         $this->assertEquals('en_GB', $this->config->getCode());
-        $this->assertEquals('magento', $this->config->getVendor());
-        $this->assertEquals('en_gb', $this->config->getPackage());
+        $this->assertEquals('Magento', $this->config->getVendor());
+        $this->assertEquals('en_GB', $this->config->getPackage());
         $this->assertEquals('100', $this->config->getSortOrder());
         $this->assertEquals(
             [

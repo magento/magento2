@@ -1,0 +1,149 @@
+// /**
+//  * Copyright © 2016 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@data-tooltip__background-color: @color-white;
+@data-tooltip__border-color: #007dbd;
+@data-tooltip__border-width: 1px;
+@data-tooltip__box-shadow: 2px 2px 8px 0 rgba(0, 0, 0, .3);
+@data-tooltip__z-index: @overlay__z-index - 1;
+
+@data-tooltip-tail__height: 22px;
+@data-tooltip-tail__width: @data-tooltip-tail__height;
+@data-tooltip-tail__z-index: @z-index-1;
+
+//
+//  Tooltip
+//  _____________________________________________
+
+.data-tooltip-trigger {
+    cursor: pointer;
+}
+
+.data-tooltip-wrapper {
+    max-width: 75%;
+    position: absolute;
+    top: 0;
+    z-index: @data-tooltip__z-index;
+
+    &._top {
+        .data-tooltip-tail {
+            display: block;
+            left: 50%;
+            margin-left: -@data-tooltip-tail__width / 2;
+            top: -(@data-tooltip-tail__height / 2 - @data-tooltip__border-width);
+        }
+    }
+
+    &._right {
+        .data-tooltip-tail {
+            display: block;
+            margin-top: -@data-tooltip-tail__width / 2;
+            right: @data-tooltip-tail__height / 2 + @data-tooltip__border-width;
+            top: 50%;
+        }
+    }
+
+    &._bottom {
+        .data-tooltip-tail {
+            bottom: @data-tooltip-tail__height / 2 + @data-tooltip__border-width;
+            display: block;
+            left: 50%;
+            margin-left: -@data-tooltip-tail__width / 2;
+        }
+    }
+
+    &._left {
+        .data-tooltip-tail {
+            display: block;
+            left: -(@data-tooltip-tail__height / 2 - @data-tooltip__border-width);
+            margin-top: -@data-tooltip-tail__width / 2;
+            top: 50%;
+        }
+    }
+
+    &._show {
+        height: auto;
+        opacity: 1;
+        transition: opacity .2s linear;
+    }
+
+    &._hide {
+        height: 0;
+        opacity: 0;
+        overflow: hidden;
+    }
+}
+
+.data-tooltip {
+    background-color: @data-tooltip__background-color;
+    border: @data-tooltip__border-width solid @data-tooltip__border-color;
+    box-shadow: @data-tooltip__box-shadow;
+    padding: @indent__base;
+    position: relative;
+    z-index: @data-tooltip-tail__z-index;
+
+    .action-close {
+        position: absolute;
+        right: @indent__base;
+        top: @indent__base;
+
+        &:focus {
+            background: none;
+        }
+    }
+}
+
+.data-tooltip-title {
+    font-size: 1.7rem;
+    font-weight: @font-weight__semibold;
+    margin: 0 @indent__base @indent__base 0;
+}
+
+.data-tooltip-content {
+    .items {
+        &:extend(.abs-list-reset-styles all);
+        .item {
+            margin: 0 0 1rem;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+.data-tooltip-tail {
+    display: none;
+    position: absolute;
+
+    &:before {
+        background-color: @data-tooltip__background-color;
+        border: @data-tooltip__border-width solid @data-tooltip__border-color;
+        box-shadow: @data-tooltip__box-shadow;
+        content: '';
+        height: @data-tooltip-tail__height;
+        left: 0;
+        position: absolute;
+        top: 0;
+        transform: rotate(45deg);
+        width: @data-tooltip-tail__width;
+        z-index: @data-tooltip-tail__z-index - 1;
+    }
+
+    &:after {
+        background-color: @data-tooltip__background-color;
+        content: '';
+        height: @data-tooltip-tail__height - @data-tooltip__border-width * 2;
+        left: @data-tooltip__border-width;
+        position: absolute;
+        top: @data-tooltip__border-width;
+        transform: rotate(45deg);
+        width: @data-tooltip-tail__width - @data-tooltip__border-width * 2;
+        z-index: @data-tooltip-tail__z-index + 1;
+    }
+}

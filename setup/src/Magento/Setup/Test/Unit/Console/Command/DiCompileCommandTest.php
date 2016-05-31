@@ -95,7 +95,10 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteModulesNotEnabled()
     {
+<<<<<<< HEAD
         $this->directoryListMock->expects($this->atLeastOnce())->method('getPath')->willReturn(null);
+=======
+>>>>>>> develop
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES)

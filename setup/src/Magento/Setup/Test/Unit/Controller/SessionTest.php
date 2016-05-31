@@ -31,12 +31,11 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', ['get'], [], '', false);
         $this->objectManager = $objectManager;
         $this->objectManagerProvider = $objectManagerProvider;
-
         $this->serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager', ['get'], [], '', false);
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Session::testUnloginAction
+     * @covers \Magento\Setup\Controller\Session::unloginAction
      */
     public function testUnloginAction()
     {
@@ -52,10 +51,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $sessionConfigMock =
             $this->getMock('Magento\Backend\Model\Session\AdminConfig', ['setCookiePath'], [], '', false);
         $sessionConfigMock->expects($this->once())->method('setCookiePath');
+        $urlMock = $this->getMock('\Magento\Backend\Model\Url', [], [], '', false);
 
         $returnValueMap = [
             ['Magento\Framework\App\State', $stateMock],
-            ['Magento\Backend\Model\Session\AdminConfig', $sessionConfigMock]
+            ['Magento\Backend\Model\Session\AdminConfig', $sessionConfigMock],
+            ['Magento\Backend\Model\Url', $urlMock]
         ];
 
         $this->serviceManager->expects($this->once())->method('get')->will($this->returnValue($deployConfigMock));
@@ -69,6 +70,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($sessionMock));
         $controller = new Session($this->serviceManager, $this->objectManagerProvider);
+        $urlMock->expects($this->once())->method('getBaseUrl');
         $controller->prolongAction();
     }
 

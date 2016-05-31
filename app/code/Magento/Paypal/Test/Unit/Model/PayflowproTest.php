@@ -9,12 +9,17 @@
  */
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Store\Model\ScopeInterface;
 
 /**
  * Class PayflowproTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PayflowproTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +35,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -455,5 +460,42 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ->method('getIncrementId')
             ->willReturn($orderData['increment_id']);
         return $orderMock;
+    }
+
+    public function testPostRequest()
+    {
+        $expectedResult = new DataObject();
+
+        $request = new DataObject();
+
+        /** @var ConfigInterface $config */
+        $config = $this->getMock(ConfigInterface::class);
+
+        $this->gatewayMock->expects(static::once())
+            ->method('postRequest')
+            ->with($request, $config)
+            ->willReturn($expectedResult);
+
+        static::assertSame($expectedResult, $this->payflowpro->postRequest($request, $config));
+    }
+
+    public function testPostRequestException()
+    {
+        $this->setExpectedException(
+            LocalizedException::class,
+            __('Payment Gateway is unreachable at the moment. Please use another payment option.')
+        );
+
+        $request = new DataObject();
+
+        /** @var ConfigInterface $config */
+        $config = $this->getMock(ConfigInterface::class);
+
+        $this->gatewayMock->expects(static::once())
+            ->method('postRequest')
+            ->with($request, $config)
+            ->willThrowException(new \Zend_Http_Client_Exception());
+
+        $this->payflowpro->postRequest($request, $config);
     }
 }

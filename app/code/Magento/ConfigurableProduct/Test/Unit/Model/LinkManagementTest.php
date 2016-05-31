@@ -40,7 +40,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataObjectHelperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -273,7 +273,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
-
 
         $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($product));
 

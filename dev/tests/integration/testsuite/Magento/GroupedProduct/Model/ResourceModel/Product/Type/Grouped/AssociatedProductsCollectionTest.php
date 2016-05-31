@@ -14,11 +14,11 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetColumnValues()
     {
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('\Magento\Catalog\Api\ProductRepositoryInterface');
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(9);
+        $product = $productRepository->get('grouped-product');
+
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')->register('current_product', $product);
@@ -27,6 +27,12 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
             'Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped\AssociatedProductsCollection'
         );
 
-        $this->assertEquals(['simple-1', 'virtual-product'], $collection->getColumnValues('sku'));
+        $resultData = $collection->getColumnValues('sku');
+        $this->assertNotEmpty($resultData);
+
+        $expected = ['virtual-product', 'simple'];
+        sort($expected);
+        sort($resultData);
+        $this->assertEquals($expected, $resultData);
     }
 }

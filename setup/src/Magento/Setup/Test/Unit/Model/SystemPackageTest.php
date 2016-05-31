@@ -177,7 +177,11 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+<<<<<<< HEAD
      * @expectedExceptionMessage System packages not found
+=======
+     * @expectedExceptionMessage no components are available because you cloned the Magento 2 GitHub repository
+>>>>>>> develop
      */
     public function testGetPackageVersionGitCloned()
     {
@@ -206,7 +210,11 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+<<<<<<< HEAD
      * @expectedExceptionMessage System package not found
+=======
+     * @expectedExceptionMessage We cannot retrieve information on magento/product-community-edition.
+>>>>>>> develop
      */
     public function testGetPackageVersionsFailed()
     {
@@ -227,10 +235,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
         $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
         $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
-
-        $this->composerAppFactory->expects($this->once())
-            ->method('createInfoCommand')
-            ->willReturn($this->infoCommand);
 
         $this->composerAppFactory->expects($this->once())
             ->method('create')
@@ -267,7 +271,7 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
             ->with('magento/product-enterprise-edition')
             ->willReturn(['available_versions' => ['1.0.0', '1.0.1', '1.0.2']]);
         $require = $this->getMock('\Composer\Package\Link', [], [], '', false);
-        $constraintMock = $this->getMock('\Composer\Package\LinkConstraint\VersionConstraint', [], [], '', false);
+        $constraintMock = $this->getMock('\Composer\Semver\Constraint\Constraint', [], [], '', false);
         $constraintMock->expects($this->any())->method('getPrettyString')
             ->willReturn('1.0.1');
         $require->expects($this->any())

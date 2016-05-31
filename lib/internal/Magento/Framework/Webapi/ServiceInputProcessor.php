@@ -17,7 +17,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
-use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 use Magento\Framework\Reflection\MethodsMap;
 
 /**
@@ -45,6 +44,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     protected $methodsMap;
 
     /**
+     * @var \Magento\Framework\Reflection\NameFinder
+     */
+    private $nameFinder;
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -65,6 +69,22 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         $this->attributeValueFactory = $attributeValueFactory;
         $this->customAttributeTypeLocator = $customAttributeTypeLocator;
         $this->methodsMap = $methodsMap;
+    }
+
+    /**
+     * The getter function to get the new NameFinder dependency
+     *
+     * @return \Magento\Framework\Reflection\NameFinder
+     *
+     * @deprecated
+     */
+    private function getNameFinder()
+    {
+        if ($this->nameFinder === null) {
+            $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\Reflection\NameFinder');
+        }
+        return $this->nameFinder;
     }
 
     /**
@@ -135,12 +155,12 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = $this->typeProcessor->findGetterMethodName($class, $camelCaseProperty);
+            $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 try {
-                    $setterName = $this->typeProcessor->findSetterMethodName($class, $camelCaseProperty);
+                    $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
                 } catch (\Exception $e) {
                     if (empty($value)) {
                         continue;
@@ -148,10 +168,19 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                         throw $e;
                     }
                 }
-                if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $className);
-                } else {
-                    $setterValue = $this->convertValue($value, $returnType);
+                try {
+                    if ($camelCaseProperty === 'CustomAttributes') {
+                        $setterValue = $this->convertCustomAttributeValue($value, $className);
+                    } else {
+                        $setterValue = $this->convertValue($value, $returnType);
+                    }
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        new Phrase(
+                            'Error occurred during "%field_name" processing. %details',
+                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
                 $object->{$setterName}($setterValue);
             }
@@ -165,41 +194,39 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $customAttributesValueArray
      * @param string $dataObjectClassName
      * @return AttributeValue[]
+     * @throws SerializationException
      */
     protected function convertCustomAttributeValue($customAttributesValueArray, $dataObjectClassName)
     {
         $result = [];
         $dataObjectClassName = ltrim($dataObjectClassName, '\\');
 
-        $camelCaseAttributeCodeKey = lcfirst(
-            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
-        );
         foreach ($customAttributesValueArray as $key => $customAttribute) {
             if (!is_array($customAttribute)) {
                 $customAttribute = [AttributeValue::ATTRIBUTE_CODE => $key, AttributeValue::VALUE => $customAttribute];
             }
-            if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
-                $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
-            } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
-                $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
-            } else {
-                $customAttributeCode = null;
-            }
 
-            //Check if type is defined, else default to string
+            list($customAttributeCode, $customAttributeValue) = $this->processCustomAttribute($customAttribute);
+
             $type = $this->customAttributeTypeLocator->getType($customAttributeCode, $dataObjectClassName);
-            $type = $type ? $type : TypeProcessor::ANY_TYPE;
-            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
-            if (is_array($customAttributeValue)) {
-                //If type for AttributeValue's value as array is mixed, further processing is not possible
-                if ($type === TypeProcessor::ANY_TYPE) {
-                    $attributeValue = $customAttributeValue;
-                } else {
-                    $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
+
+            if ($this->typeProcessor->isTypeAny($type) || $this->typeProcessor->isTypeSimple($type)
+                || !is_array($customAttributeValue)
+            ) {
+                try {
+                    $attributeValue = $this->convertValue($customAttributeValue, $type);
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        new Phrase(
+                            'Attribute "%attribute_code" has invalid value. %details',
+                            ['attribute_code' => $customAttributeCode, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
             } else {
-                $attributeValue = $this->convertValue($customAttributeValue, $type);
+                $attributeValue = $this->_createDataObjectForTypeAndArrayValue($type, $customAttributeValue);
             }
+
             //Populate the attribute value data object once the value for custom attribute is derived based on type
             $result[$customAttributeCode] = $this->attributeValueFactory->create()
                 ->setAttributeCode($customAttributeCode)
@@ -207,6 +234,39 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Derive the custom attribute code and value.
+     *
+     * @param string[] $customAttribute
+     * @return string[]
+     */
+    private function processCustomAttribute($customAttribute)
+    {
+        $camelCaseAttributeCodeKey = lcfirst(
+            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
+        );
+        // attribute code key could be snake or camel case, depending on whether SOAP or REST is used.
+        if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
+            $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
+        } elseif (isset($customAttribute[$camelCaseAttributeCodeKey])) {
+            $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
+        } else {
+            $customAttributeCode = null;
+        }
+
+        if (!$customAttributeCode && !isset($customAttribute[AttributeValue::VALUE])) {
+            throw new SerializationException(new Phrase('There is an empty custom attribute specified.'));
+        } else if (!$customAttributeCode) {
+            throw new SerializationException(new Phrase('A custom attribute is specified without an attribute code.'));
+        } else if (!isset($customAttribute[AttributeValue::VALUE])) {
+            throw new SerializationException(
+                new Phrase('Value is not set for attribute code "' . $customAttributeCode . '"')
+            );
+        }
+
+        return [$customAttributeCode, $customAttribute[AttributeValue::VALUE]];
     }
 
     /**
@@ -304,7 +364,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         if (!empty($inputError)) {
             $exception = new InputException();
             foreach ($inputError as $errorParamField) {
-                $exception->addError(new Phrase(InputException::REQUIRED_FIELD, ['fieldName' => $errorParamField]));
+                $exception->addError(new Phrase('%fieldName is a required field.', ['fieldName' => $errorParamField]));
             }
             if ($exception->wasErrorAdded()) {
                 throw $exception;

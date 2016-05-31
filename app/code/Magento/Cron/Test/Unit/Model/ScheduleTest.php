@@ -17,7 +17,7 @@ class ScheduleTest extends \PHPUnit_Framework_TestCase
 
     protected $resourceJobMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

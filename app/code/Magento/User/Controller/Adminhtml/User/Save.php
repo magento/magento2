@@ -6,9 +6,31 @@
 namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Security\Model\SecurityCookie;
 
 class Save extends \Magento\User\Controller\Adminhtml\User
 {
+    /**
+     * @var SecurityCookie
+     */
+    private $securityCookie;
+
+    /**
+     * Get security cookie
+     *
+     * @return SecurityCookie
+     * @deprecated
+     */
+    private function getSecurityCookie()
+    {
+        if (!($this->securityCookie instanceof SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
+        } else {
+            return $this->securityCookie;
+        }
+    }
+
     /**
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -55,13 +77,26 @@ class Save extends \Magento\User\Controller\Adminhtml\User
         $isCurrentUserPasswordValid = isset($data[$currentUserPasswordField])
             && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
-            if (!($isCurrentUserPasswordValid && $currentUser->verifyIdentity($data[$currentUserPasswordField]))) {
+            if (!($isCurrentUserPasswordValid)) {
                 throw new AuthenticationException(__('You have entered an invalid password for current user.'));
             }
+            $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
+
+            $model->sendNotificationEmailsIfRequired();
+
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
+        } catch (UserLockedException $e) {
+            $this->_auth->logout();
+            $this->getSecurityCookie()->setLogoutReasonCookie(
+                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            );
+            $this->_redirect('adminhtml/*/');
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $this->messageManager->addError(__('You have entered an invalid password for current user.'));
+            $this->redirectToEdit($model, $data);
         } catch (\Magento\Framework\Validator\Exception $e) {
             $messages = $e->getMessages();
             $this->messageManager->addMessages($messages);

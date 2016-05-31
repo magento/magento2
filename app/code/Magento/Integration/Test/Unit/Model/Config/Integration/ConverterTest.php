@@ -7,7 +7,6 @@ namespace Magento\Integration\Test\Unit\Model\Config\Integration;
 
 use \Magento\Integration\Model\Config\Integration\Converter;
 
-
 /**
  * Test for conversion of integration API XML config into array representation.
  */
@@ -16,11 +15,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Converter
      */
-    protected $_model;
+    protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->_model = new Converter();
+        $this->model = new Converter();
     }
 
     public function testConvert()
@@ -28,6 +27,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $inputData = new \DOMDocument();
         $inputData->load(__DIR__ . '/_files/api.xml');
         $expectedResult = require __DIR__ . '/_files/api.php';
-        $this->assertEquals($expectedResult, $this->_model->convert($inputData));
+        $this->assertEquals($expectedResult, $this->model->convert($inputData));
     }
 }

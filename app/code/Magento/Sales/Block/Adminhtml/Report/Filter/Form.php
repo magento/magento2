@@ -75,7 +75,12 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
             $fieldset->addField(
                 'order_statuses',
                 'multiselect',
-                ['name' => 'order_statuses', 'values' => $values, 'display' => 'none'],
+                [
+                    'name' => 'order_statuses',
+                    'label' => '',
+                    'values' => $values,
+                    'display' => 'none'
+                ],
                 'show_order_statuses'
             );
 

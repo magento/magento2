@@ -6,7 +6,11 @@
 namespace Magento\Setup\Test\Unit\Model\DateTime;
 
 use Magento\Setup\Model\DateTime\DateTimeProvider;
+<<<<<<< HEAD
 use Magento\Setup\Model\DateTime\TimezoneProvider;
+=======
+use Magento\Setup\Model\DateTime\TimeZoneProvider;
+>>>>>>> develop
 use Magento\Setup\Model\ObjectManagerProvider;
 
 class DateTimeProviderTest extends \PHPUnit_Framework_TestCase
@@ -14,8 +18,13 @@ class DateTimeProviderTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $dateTime = $this->getMock('\Magento\Framework\Stdlib\DateTime\DateTime', [], [], '', false);
+<<<<<<< HEAD
         /** @var TimezoneProvider|\PHPUnit_Framework_MockObject_MockObject $timeZoneProvider */
         $timeZoneProvider = $this->getMock('\Magento\Setup\Model\DateTime\TimezoneProvider', [], [], '', false);
+=======
+        /** @var TimeZoneProvider|\PHPUnit_Framework_MockObject_MockObject $timeZoneProvider */
+        $timeZoneProvider = $this->getMock('\Magento\Setup\Model\DateTime\TimeZoneProvider', [], [], '', false);
+>>>>>>> develop
         $timeZone = $this->getMock('\Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false);
         $timeZoneProvider->expects($this->any())
             ->method('get')

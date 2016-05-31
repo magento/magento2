@@ -15,7 +15,7 @@ class CredentialsValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $credentialsValidator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->credentialsValidator = new \Magento\Integration\Model\CredentialsValidator();
     }

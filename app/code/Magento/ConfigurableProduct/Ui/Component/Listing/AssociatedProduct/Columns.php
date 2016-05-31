@@ -36,8 +36,8 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         foreach ($this->attributeRepository->getList() as $attribute) {
             $column = $this->columnFactory->create($attribute, $this->getContext());
-                $column->prepare();
-                $this->addComponent($attribute->getAttributeCode(), $column);
+            $column->prepare();
+            $this->addComponent($attribute->getAttributeCode(), $column);
         }
         parent::prepare();
     }

@@ -67,4 +67,33 @@ class SelectVersionTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
     }
+
+    public function testInstalledSystemPackageAction()
+    {
+        $this->systemPackage->expects($this->once())
+            ->method('getInstalledSystemPackages')
+            ->willReturn([
+                'package' => 'magento/product-community-edition',
+                'versions' => [
+                    'id' => 'magento/product-community-edition',
+                    'name' => 'Version 1.0.0'
+                ]
+            ]);
+        $jsonModel = $this->controller->installedSystemPackageAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('responseType', $variables);
+        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
+    }
+
+    public function testInstalledSystemPackageActionWithError()
+    {
+        $this->systemPackage->expects($this->once())
+            ->method('getInstalledSystemPackages')
+            ->will($this->throwException(new \Exception("Test error message")));
+        $jsonModel = $this->controller->installedSystemPackageAction();
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('responseType', $variables);
+        $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
+    }
 }

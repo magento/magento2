@@ -51,7 +51,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($this->_object->calcProductPriceRule($product, 100), 45);
         $product->setParentId(true);
-        $this->assertEquals($this->_object->calcProductPriceRule($product, 50), 5);
+        $this->assertEquals($this->_object->calcProductPriceRule($product, 50), 50);
     }
 
     /**
@@ -64,16 +64,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'action_operator' => 'by_percent',
-                'action_amount' => '10.0000',
-                'sub_simple_action' => 'by_percent',
-                'sub_discount_amount' => '90.0000',
-                'action_stop' => '0',
+                'action_amount' => '50.0000',
+                'action_stop' => '0'
             ],
             [
                 'action_operator' => 'by_percent',
-                'action_amount' => '50.0000',
-                'sub_simple_action' => '',
-                'sub_discount_amount' => '0.0000',
+                'action_amount' => '10.0000',
                 'action_stop' => '0'
             ]
         ];

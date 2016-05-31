@@ -338,6 +338,7 @@ class Form extends FormInterface
      */
     public function isTaxRateAvailable($value)
     {
+        $this->waitForTaxRates();
         /** @var \Magento\Mtf\Client\Element\MultiselectlistElement $taxRate */
         $taxRate = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
         return $taxRate->isValueVisible($value);

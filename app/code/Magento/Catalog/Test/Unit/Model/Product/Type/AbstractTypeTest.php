@@ -80,6 +80,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getAttributeById(0, $this->product));
     }
 
+<<<<<<< HEAD
     /**
      * @deprecated
      */
@@ -95,6 +96,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getEditableAttributes($this->product));
     }
 
+=======
+>>>>>>> develop
     /**
      * @dataProvider attributeCompareProvider
      */

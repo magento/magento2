@@ -9,14 +9,37 @@ namespace Magento\Store\Setup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+<<<<<<< HEAD
 use \Magento\Framework\DB\Ddl\Table;
 use \Magento\Catalog\Setup\InstallData;
+=======
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Catalog\Helper\DefaultCategory;
+>>>>>>> develop
 
 /**
  * @codeCoverageIgnore
  */
 class InstallSchema implements InstallSchemaInterface
 {
+    /**
+     * @var DefaultCategory
+     */
+    private $defaultCategory;
+
+    /**
+     * @deprecated
+     * @return DefaultCategory
+     */
+    private function getDefaultCategory()
+    {
+        if ($this->defaultCategory === null) {
+            $this->defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(DefaultCategory::class);
+        }
+        return $this->defaultCategory;
+    }
+
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -260,7 +283,7 @@ class InstallSchema implements InstallSchemaInterface
                 'group_id' => 1,
                 'website_id' => 1,
                 'name' => 'Main Website Store',
-                'root_category_id' => 2,
+                'root_category_id' => $this->getDefaultCategory()->getId(),
                 'default_store_id' => 1
             ]
         );

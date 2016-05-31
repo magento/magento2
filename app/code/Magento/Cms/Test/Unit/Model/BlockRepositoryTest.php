@@ -61,7 +61,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Initialize repository
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->blockResource = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block')
             ->disableOriginalConstructor()

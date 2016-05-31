@@ -136,7 +136,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Za-z0-9_\-]{3,}" />
+            <xs:pattern value="[A-Za-z0-9_\-]{1,}" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

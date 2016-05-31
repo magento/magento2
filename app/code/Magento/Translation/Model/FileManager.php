@@ -89,4 +89,19 @@ class FileManager
     {
         return $this->assetRepo->getStaticViewFileContext()->getPath();
     }
+
+    /**
+     * @param string $content
+     * @return void
+     */
+    public function updateTranslationFileContent($content)
+    {
+        $translationDir = $this->directoryList->getPath(DirectoryList::STATIC_VIEW) .
+            \DIRECTORY_SEPARATOR .
+            $this->assetRepo->getStaticViewFileContext()->getPath();
+        if (!$this->driverFile->isExists($this->getTranslationFileFullPath())) {
+            $this->driverFile->createDirectory($translationDir);
+        }
+        $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
+    }
 }

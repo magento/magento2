@@ -23,12 +23,6 @@
         <input type="hidden" name="success_url" value="<?php /* @escapeNotVerified */ echo $block->getSuccessUrl() ?>">
         <input type="hidden" name="error_url" value="<?php /* @escapeNotVerified */ echo $block->getErrorUrl() ?>">
         <?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')->setObject($block->getFormData())->setForceUseCustomerAttributes(true)->toHtml() ?>
-        <div class="field required">
-            <label for="email_address" class="label"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
-            <div class="control">
-                <input type="email" name="email" id="email_address" value="<?php echo $block->escapeHtml($block->getFormData()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
-            </div>
-        </div>
         <?php if ($block->isNewsletterEnabled()): ?>
             <div class="field choice newsletter">
                 <input type="checkbox" name="is_subscribed" title="<?php /* @escapeNotVerified */ echo __('Sign Up for Newsletter') ?>" value="1" id="is_subscribed"<?php if ($block->getFormData()->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
@@ -136,12 +130,32 @@
     <?php endif; ?>
     <fieldset class="fieldset create account" data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>">
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Sign-in Information') ?></span></legend><br>
-
-        <div class="field password required">
+        <div class="field required">
+            <label for="email_address" class="label"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+            <div class="control">
+                <input type="email" name="email" autocomplete="email" id="email_address" value="<?php echo $block->escapeHtml($block->getFormData()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
+            </div>
+        </div>
+        <div class="field password required" data-mage-init='{"passwordStrengthIndicator": {}}'>
             <label for="password" class="label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
             <div class="control">
-                <input type="password" name="password" id="password" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" class="input-text" data-validate="{required:true, 'validate-password':true}" autocomplete="off">
+                <input type="password" name="password" id="password"
+                       title="<?php /* @escapeNotVerified */ echo __('Password') ?>"
+                       class="input-text"
+                       data-password-min-length="<?php echo $block->escapeHtml($block->getMinimumPasswordLength()) ?>"
+                       data-password-min-character-sets="<?php echo $block->escapeHtml($block->getRequiredCharacterClassesNumber()) ?>"
+                       data-validate="{required:true, 'validate-customer-password':true}"
+                       autocomplete="off">
+                <div id="password-strength-meter-container" data-role="password-strength-meter" >
+                    <div id="password-strength-meter" class="password-strength-meter">
+                        <?php /* @escapeNotVerified */ echo __('Password Strength'); ?>:
+                        <span id="password-strength-meter-label" data-role="password-strength-meter-label" >
+                            <?php /* @escapeNotVerified */ echo __('No Password'); ?>
+                        </span>
+                    </div>
+                </div>
             </div>
+
         </div>
         <div class="field confirmation required">
             <label for="password-confirmation" class="label"><span><?php /* @escapeNotVerified */ echo __('Confirm Password') ?></span></label>

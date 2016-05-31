@@ -33,7 +33,7 @@ class CouponTest extends \PHPUnit_Framework_TestCase
      */
     protected $separator = '|';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->couponParameters = [
             'separator' => $this->separator,

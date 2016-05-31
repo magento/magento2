@@ -157,7 +157,8 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         $categoryId = 333;
         $categoryData = [
-            'name' => "Update Category Test",
+            'name' => 'Update Category Test',
+            'is_active' => false,
             'custom_attributes' => [
                 [
                     'attribute_code' => 'description',
@@ -170,6 +171,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         /** @var \Magento\Catalog\Model\Category $model */
         $model = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Category');
         $category = $model->load($categoryId);
+        $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
         $this->assertEquals("Update Category Description Test", $category->getDescription());
         // delete category to clean up auto-generated url rewrites
@@ -179,12 +181,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     protected function getSimpleCategoryData($categoryData = [])
     {
         return [
-            'path' => '2',
             'parent_id' => '2',
             'name' => isset($categoryData['name'])
                 ? $categoryData['name'] : uniqid('Category-', true),
             'is_active' => '1',
-            'include_in_menu' => "1",
+            'include_in_menu' => '1',
             'available_sort_by' => ['position', 'name'],
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],

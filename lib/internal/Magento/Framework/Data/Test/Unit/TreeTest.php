@@ -19,7 +19,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
      */
     protected $_tree;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_tree = new Tree();
     }

@@ -3,12 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Checkout\Model;
+
+use Magento\Framework\Exception\CouldNotSaveException;
 
 class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInformationManagementInterface
 {
-
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
      */
@@ -24,12 +24,10 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      */
     protected $cartManagement;
 
-
     /**
      * @var PaymentDetailsFactory
      */
     protected $paymentDetailsFactory;
-
 
     /**
      * @var \Magento\Quote\Api\CartTotalRepositoryInterface
@@ -67,7 +65,12 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         $this->savePaymentInformation($cartId, $paymentMethod, $billingAddress);
-        return $this->cartManagement->placeOrder($cartId);
+        try {
+            $orderId = $this->cartManagement->placeOrder($cartId);
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(__('Unable to place order. Please try again later.'), $e);
+        }
+        return $orderId;
     }
 
     /**

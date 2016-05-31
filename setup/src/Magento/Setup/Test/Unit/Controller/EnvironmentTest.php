@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
 class EnvironmentTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Setup\Model\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
      */
     private $permissions;
 
@@ -41,7 +41,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->permissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
+        $this->permissions = $this->getMock('Magento\Framework\Setup\FilePermissions', [], [], '', false);
         $this->cronScriptReadinessCheck = $this->getMock(
             'Magento\Setup\Model\CronScriptReadinessCheck',
             [],
@@ -56,6 +56,23 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             $this->cronScriptReadinessCheck,
             $this->phpReadinessCheck
         );
+    }
+
+    public function testFilePermissionsInstaller()
+    {
+        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
+        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
+        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+
+        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $this->permissions->expects($this->once())->method('getMissingWritablePathsForInstallation');
+        $this->environment->setEvent($mvcEvent);
+        $this->environment->dispatch($request, $response);
+        $this->environment->filePermissionsAction();
     }
 
     public function testPhpVersionActionInstaller()
@@ -288,5 +305,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertEquals($expected, $this->environment->cronScriptAction());
+    }
+
+    public function testIndexAction()
+    {
+        $model = $this->environment->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\JsonModel', $model);
     }
 }

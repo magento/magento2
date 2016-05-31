@@ -10,6 +10,12 @@
     "require": {
         "magento/product-community-edition": "0.74.0-beta9"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        }
+    ],
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
         "squizlabs/php_codesniffer": "1.5.3",

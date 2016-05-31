@@ -238,7 +238,7 @@ class Edit extends Widget
      */
     public function getPreviewUrl()
     {
-        return $this->getUrl('*/*/preview');
+        return $this->getUrl('*/*/preview', ['id' => $this->getRequest()->getParam('id')]);
     }
 
     /**

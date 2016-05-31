@@ -7,6 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CatalogCategoryView" area="Category" mca="catalog/category/view" module="Magento_Catalog">
+        <block name="topmenu" class="Magento\Theme\Test\Block\Html\Topmenu" locator=".navigation" strategy="css selector" />
         <block name="titleBlock" class="Magento\Theme\Test\Block\Html\Title" locator=".page-title-wrapper h1.page-title .base" strategy="css selector"/>
         <block name="breadcrumbs" class="Magento\Theme\Test\Block\Html\Breadcrumbs" locator=".breadcrumbs" strategy="css selector"/>
         <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector"/>

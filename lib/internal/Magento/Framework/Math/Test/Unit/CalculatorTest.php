@@ -17,7 +17,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrency;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $this->priceCurrency->expects($this->any())

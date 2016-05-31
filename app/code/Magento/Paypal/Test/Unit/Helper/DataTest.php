@@ -22,7 +22,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $_helper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_paymentDataMock = $this->getMockBuilder(
             'Magento\Payment\Helper\Data'

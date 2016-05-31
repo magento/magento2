@@ -50,7 +50,7 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -104,7 +104,6 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
             ]
         );
     }
-
 
     /**
      * @param bool $isLoggedIn

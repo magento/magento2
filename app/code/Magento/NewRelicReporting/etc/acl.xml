@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_NewRelicReporting::config_newrelicreporting" title="New Relic Reporting Section" sortOrder="1100"/>
+                            <resource id="Magento_NewRelicReporting::config_newrelicreporting" title="New Relic Reporting Section" translate="title" sortOrder="1100"/>
                         </resource>
                     </resource>
                 </resource>

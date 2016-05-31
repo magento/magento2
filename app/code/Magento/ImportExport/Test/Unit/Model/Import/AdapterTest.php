@@ -14,7 +14,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     protected $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->adapter = $this->getMock(
             '\Magento\ImportExport\Model\Import\Adapter',

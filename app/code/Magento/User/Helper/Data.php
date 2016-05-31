@@ -15,7 +15,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Configuration path to expiration period of reset password link
      */
-    const XML_PATH_ADMIN_RESET_PASSWORD_LINK_EXPIRATION_PERIOD = 'admin/emails/password_reset_link_expiration_period';
+    const XML_PATH_ADMIN_RESET_PASSWORD_LINK_EXPIRATION_PERIOD = 'admin/security/password_reset_link_expiration_period';
 
     /**
      * @var \Magento\Backend\App\ConfigInterface

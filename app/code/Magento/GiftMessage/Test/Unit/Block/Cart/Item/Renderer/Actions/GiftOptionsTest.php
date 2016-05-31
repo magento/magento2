@@ -28,7 +28,7 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
     /** @var array  */
     protected $jsLayout = ['root' => 'node'];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
             ->disableOriginalConstructor()

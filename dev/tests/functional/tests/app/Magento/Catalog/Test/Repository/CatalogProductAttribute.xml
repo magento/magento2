@@ -35,8 +35,8 @@
 
         <dataset name="tax_class_id">
             <field name="attribute_id" xsi:type="number">172</field>
-            <field name="frontend_label" xsi:type="string">Tax Class</field>
-            <field name="attribute_code" xsi:type="string">tax_class_id</field>
+            <field name="frontend_label" xsi:type="string">Tax Class%isolation%</field>
+            <field name="attribute_code" xsi:type="string">tax_class_id%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
             <field name="is_required" xsi:type="string">No</field>
             <field name="options" xsi:type="array">
@@ -189,7 +189,7 @@
             <field name="frontend_label" xsi:type="string">attribute_dropdown%isolation%</field>
             <field name="attribute_code" xsi:type="string">attribute_dropdown%isolation%</field>
             <field name="frontend_input" xsi:type="string">Dropdown</field>
-            <field name="is_required" xsi:type="string">Yes</field>
+            <field name="is_required" xsi:type="string">No</field>
             <field name="is_filterable" xsi:type="string">Filterable (with results)</field>
             <field name="options" xsi:type="array">
                 <item name="0" xsi:type="array">

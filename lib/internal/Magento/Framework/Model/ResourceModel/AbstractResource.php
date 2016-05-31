@@ -6,6 +6,10 @@
 namespace Magento\Framework\Model\ResourceModel;
 
 use Magento\Framework\DataObject;
+<<<<<<< HEAD
+=======
+use Magento\Framework\Model\CallbackPool;
+>>>>>>> develop
 
 /**
  * Abstract resource model
@@ -22,13 +26,6 @@ abstract class AbstractResource
          */
         $this->_construct();
     }
-
-    /**
-     * Array of callbacks subscribed to commit transaction commit
-     *
-     * @var array
-     */
-    protected static $_commitCallbacks = [];
 
     /**
      * Resource initialization
@@ -59,14 +56,13 @@ abstract class AbstractResource
     /**
      * Subscribe some callback to transaction commit
      *
-     * @param array $callback
+     * @param callable|array $callback
      * @return $this
      * @api
      */
     public function addCommitCallback($callback)
     {
-        $connectionKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$connectionKey][] = $callback;
+        CallbackPool::attach(spl_object_hash($this->getConnection()), $callback);
         return $this;
     }
 
@@ -83,18 +79,14 @@ abstract class AbstractResource
          * Process after commit callbacks
          */
         if ($this->getConnection()->getTransactionLevel() === 0) {
-            $connectionKey = spl_object_hash($this->getConnection());
-            if (isset(self::$_commitCallbacks[$connectionKey])) {
-                $callbacks = self::$_commitCallbacks[$connectionKey];
-                self::$_commitCallbacks[$connectionKey] = [];
-                try {
-                    foreach ($callbacks as $callback) {
-                        call_user_func($callback);
-                    }
-                } catch (\Exception $e) {
-                    echo $e;
-                    throw $e;
+            $callbacks = CallbackPool::get(spl_object_hash($this->getConnection()));
+            try {
+                foreach ($callbacks as $callback) {
+                    call_user_func($callback);
                 }
+            } catch (\Exception $e) {
+                echo $e;
+                throw $e;
             }
         }
         return $this;
@@ -109,8 +101,7 @@ abstract class AbstractResource
     public function rollBack()
     {
         $this->getConnection()->rollBack();
-        $connectionKey = spl_object_hash($this->getConnection());
-        self::$_commitCallbacks[$connectionKey] = [];
+        CallbackPool::clear(spl_object_hash($this->getConnection()));
         return $this;
     }
 

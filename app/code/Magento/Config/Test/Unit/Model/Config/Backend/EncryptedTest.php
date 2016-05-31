@@ -92,8 +92,6 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave($value, $expectedValue, $encryptMethodCall)
     {
-        $this->_resourceMock->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
-        $this->_resourceMock->expects($this->any())->method('commit')->will($this->returnSelf());
         $this->_encryptorMock->expects($this->exactly($encryptMethodCall))
             ->method('encrypt')
             ->with($value)
@@ -112,5 +110,16 @@ class EncryptedTest extends \PHPUnit_Framework_TestCase
     public function beforeSaveDataProvider()
     {
         return [['someValue', 'encrypted', 1], ['****', '****', 0]];
+    }
+
+    /**
+     * @covers \Magento\Config\Model\Config\Backend\Encrypted::beforeSave
+     */
+    public function testAllowEmptySave()
+    {
+        $this->_model->setValue('');
+        $this->_model->setPath('some/path');
+        $this->_model->beforeSave();
+        $this->assertTrue($this->_model->isSaveAllowed());
     }
 }

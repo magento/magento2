@@ -38,11 +38,8 @@ class InterceptorSubstitution implements ModificationInterface
         }
 
         $config['preferences'] = $this->resolvePreferences($config['preferences'], $interceptors);
-
-        $config['preferences'] = array_merge($config['preferences'], $interceptors);
+        $config['preferences'] = array_merge($interceptors, $config['preferences']);
         $config['instanceTypes'] = $this->resolvePreferences($config['instanceTypes'], $interceptors);
-
-
 
         return $config;
     }

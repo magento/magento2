@@ -11,8 +11,8 @@
             <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
-            <field name="sku_type" xsi:type="string">Dynamic</field>
-            <field name="price_type" xsi:type="string">Dynamic</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
             <field name="price" xsi:type="array">
                 <item name="dataset" xsi:type="string">bundle_dynamic_with_category</item>
             </field>
@@ -30,16 +30,15 @@
         <dataset name="bundle_dynamic_product">
             <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
-            <field name="sku_type" xsi:type="string">Dynamic</field>
-            <field name="price_type" xsi:type="string">Dynamic</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
             <field name="price" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_dynamic</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
-            <field name="weight_type" xsi:type="string">Dynamic</field>
+            <field name="weight_type" xsi:type="string">Yes</field>
             <field name="shipment_type" xsi:type="string">Separately</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
@@ -67,8 +66,8 @@
         <dataset name="bundle_fixed_product">
             <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
-            <field name="sku_type" xsi:type="string">Fixed</field>
-            <field name="price_type" xsi:type="string">Fixed</field>
+            <field name="sku_type" xsi:type="string">No</field>
+            <field name="price_type" xsi:type="string">No</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">750</item>
                 <item name="dataset" xsi:type="string">default_fixed</item>
@@ -77,13 +76,11 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="weight_type" xsi:type="string">Fixed</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="weight_type" xsi:type="string">No</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="shipment_type" xsi:type="string">Together</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -109,8 +106,8 @@
             <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
-            <field name="sku_type" xsi:type="string">Fixed</field>
-            <field name="price_type" xsi:type="string">Fixed</field>
+            <field name="sku_type" xsi:type="string">No</field>
+            <field name="price_type" xsi:type="string">No</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
             </field>
@@ -118,8 +115,7 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="weight_type" xsi:type="string">Fixed</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
+            <field name="weight_type" xsi:type="string">No</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -135,8 +131,8 @@
             <field name="name" xsi:type="string">Bundle dynamic product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-dynamic-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_dynamic_product_%isolation%</field>
-            <field name="sku_type" xsi:type="string">Dynamic</field>
-            <field name="price_type" xsi:type="string">Dynamic</field>
+            <field name="sku_type" xsi:type="string">Yes</field>
+            <field name="price_type" xsi:type="string">Yes</field>
             <field name="price" xsi:type="array">
                 <item name="dataset" xsi:type="string">bundle_dynamic_with_category</item>
             </field>
@@ -155,8 +151,8 @@
             <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
             <field name="url_key" xsi:type="string">bundle-fixed-product-%isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
-            <field name="sku_type" xsi:type="string">Fixed</field>
-            <field name="price_type" xsi:type="string">Fixed</field>
+            <field name="sku_type" xsi:type="string">No</field>
+            <field name="price_type" xsi:type="string">No</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
             </field>
@@ -164,8 +160,7 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="weight_type" xsi:type="string">Fixed</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
+            <field name="weight_type" xsi:type="string">No</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -181,8 +176,8 @@
         <dataset name="bundle_fixed_100_dollar_product">
             <field name="name" xsi:type="string">Bundle fixed product %isolation%</field>
             <field name="sku" xsi:type="string">sku_bundle_fixed_product_%isolation%</field>
-            <field name="sku_type" xsi:type="string">Fixed</field>
-            <field name="price_type" xsi:type="string">Fixed</field>
+            <field name="sku_type" xsi:type="string">No</field>
+            <field name="price_type" xsi:type="string">No</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
                 <item name="dataset" xsi:type="string">fixed_100_dollar</item>
@@ -191,13 +186,11 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="weight_type" xsi:type="string">Fixed</field>
-            <field name="product_has_weight" xsi:type="string">Yes</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="weight_type" xsi:type="string">No</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="shipment_type" xsi:type="string">Together</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>

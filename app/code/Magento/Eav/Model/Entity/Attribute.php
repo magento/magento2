@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Entity;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * EAV Entity attribute model
@@ -35,6 +36,11 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @var string
      */
     protected $_eventPrefix = 'eav_entity_attribute';
+
+    /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
 
     /**
      * Parameter name in event
@@ -298,7 +304,30 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function afterSave()
     {
         $this->_getResource()->saveInSetIncluding($this);
+        $this->getAttributeCache()->clear();
         return parent::afterSave();
+    }
+
+    /**
+     * @return $this
+     */
+    public function afterDelete()
+    {
+        $this->getAttributeCache()->clear();
+        return parent::afterDelete();
+    }
+
+    /**
+     * Attribute cache
+     *
+     * @return AttributeCache
+     */
+    private function getAttributeCache()
+    {
+        if (!$this->attributeCache) {
+            $this->attributeCache = ObjectManager::getInstance()->get(AttributeCache::class);
+        }
+        return $this->attributeCache;
     }
 
     /**
@@ -462,5 +491,29 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_localeDate', '_localeResolver', 'reservedAttributeList', 'dateTimeFormatter']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->_localeResolver = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->reservedAttributeList = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+        $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
     }
 }

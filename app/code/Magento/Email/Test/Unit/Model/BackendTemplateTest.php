@@ -12,6 +12,7 @@
 namespace Magento\Email\Test\Unit\Model;
 
 use Magento\Email\Model\BackendTemplate;
+use Magento\Framework\ObjectManagerInterface;
 
 class BackendTemplateTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,18 +55,13 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceModelMock = $this->getMock('Magento\Email\Model\ResourceModel\Template', [], [], '', false);
         $this->resourceModelMock->expects($this->any())->method('getSystemConfigByPathsAndTemplateId')->willReturn(['test_config' => 2015]);
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->with('Magento\Email\Model\ResourceModel\Template')
             ->will($this->returnValue($this->resourceModelMock));
 
-        try {
-            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
-        } catch (\RuntimeException $e) {
-            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
-                ->create($_SERVER);
-        }
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->model = $helper->getObject(
@@ -77,7 +73,9 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testGetSystemConfigPathsWhereCurrentlyUsedNoId()

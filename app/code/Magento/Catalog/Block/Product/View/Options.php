@@ -210,10 +210,8 @@ class Options extends \Magento\Framework\View\Element\Template
             /* @var $option \Magento\Catalog\Model\Product\Option */
             if ($option->getGroupByType() == \Magento\Catalog\Model\Product\Option::OPTION_GROUP_SELECT) {
                 $tmpPriceValues = [];
-                foreach ($option->getValues() as $value) {
-                    /* @var $value \Magento\Catalog\Model\Product\Option\Value */
-                    $id = $value->getId();
-                    $tmpPriceValues[$id] = $this->_getPriceConfiguration($value);
+                foreach ($option->getValues() as $valueId => $value) {
+                    $tmpPriceValues[$valueId] = $this->_getPriceConfiguration($value);
                 }
                 $priceValue = $tmpPriceValues;
             } else {

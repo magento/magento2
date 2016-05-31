@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog Product Indexer Abstract Resource Model
  *
@@ -18,6 +20,11 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * Class constructor
@@ -68,12 +75,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         $attributeTable = $attribute->getBackend()->getTable();
         $connection = $this->getConnection();
         $joinType = $condition !== null || $required ? 'join' : 'joinLeft';
+        $productIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         if ($attribute->isScopeGlobal()) {
             $alias = 'ta_' . $attrCode;
             $select->{$joinType}(
                 [$alias => $attributeTable],
-                "{$alias}.entity_id = {$entity} AND {$alias}.attribute_id = {$attributeId}" .
+                "{$alias}.{$productIdField} = {$entity} AND {$alias}.attribute_id = {$attributeId}" .
                 " AND {$alias}.store_id = 0",
                 []
             );
@@ -84,13 +92,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
             $select->{$joinType}(
                 [$dAlias => $attributeTable],
-                "{$dAlias}.entity_id = {$entity} AND {$dAlias}.attribute_id = {$attributeId}" .
+                "{$dAlias}.{$productIdField} = {$entity} AND {$dAlias}.attribute_id = {$attributeId}" .
                 " AND {$dAlias}.store_id = 0",
                 []
             );
             $select->joinLeft(
                 [$sAlias => $attributeTable],
-                "{$sAlias}.entity_id = {$entity} AND {$sAlias}.attribute_id = {$attributeId}" .
+                "{$sAlias}.{$productIdField} = {$entity} AND {$sAlias}.attribute_id = {$attributeId}" .
                 " AND {$sAlias}.store_id = {$store}",
                 []
             );
@@ -173,11 +181,16 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     public function getRelationsByChild($childIds)
     {
         $connection = $this->getConnection();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
-            $this->getTable('catalog_product_relation'),
-            'parent_id'
+            ['relation' => $this->getTable('catalog_product_relation')],
+            []
+        )->join(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'e.' . $linkField . ' = relation.parent_id',
+            ['e.entity_id']
         )->where(
-            'child_id IN(?)',
+            'relation.child_id IN(?)',
             $childIds
         );
 
@@ -199,16 +212,32 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
         $result = [];
         if (!empty($parentIds)) {
             $connection = $this->getConnection();
+            $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
             $select = $connection->select()->from(
-                $this->getTable('catalog_product_relation'),
+                ['cpr' => $this->getTable('catalog_product_relation')],
                 'child_id'
+            )->join(
+                ['e' => $this->getTable('catalog_product_entity')],
+                'e.' . $linkField . ' = cpr.parent_id'
             )->where(
-                'parent_id IN(?)',
+                'e.entity_id IN(?)',
                 $parentIds
             );
             $result = $connection->fetchCol($select);
         }
 
         return $result;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

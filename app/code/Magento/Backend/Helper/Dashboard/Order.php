@@ -31,9 +31,22 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
         \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
     ) {
         $this->_orderCollection = $orderCollection;
-        parent::__construct(
-            $context
-        );
+        parent::__construct($context);
+    }
+
+    /**
+     * The getter function to get the new StoreManager dependency
+     *
+     * @return \Magento\Store\Model\StoreManagerInterface
+     *
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if ($this->_storeManager === null) {
+            $this->_storeManager = ObjectManager::getInstance()->get('Magento\Store\Model\StoreManagerInterface');
+        }
+        return $this->_storeManager;
     }
 
     /**

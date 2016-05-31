@@ -77,6 +77,13 @@ class MultiselectgrouplistElement extends MultiselectElement
     protected $childOptionByNumber = './/optgroup[%d]/option[%d]';
 
     /**
+     * Locator search for option by data-text attribute
+     *
+     * @var string
+     */
+    protected $uiOptionText = './/option[@data-title="%s"]';
+
+    /**
      * Locator for search parent option
      *
      * @var string
@@ -121,6 +128,14 @@ class MultiselectgrouplistElement extends MultiselectElement
      */
     protected function selectOption($option)
     {
+        $optionElement = $this->find(sprintf($this->uiOptionText, $option), Locator::SELECTOR_XPATH);
+        if ($optionElement->isVisible()) {
+            if (!$optionElement->isSelected()) {
+                $optionElement->click();
+            }
+            return;
+        }
+
         $isOptgroup = false;
         $optgroupIndent = '';
         $values = explode('/', $option);

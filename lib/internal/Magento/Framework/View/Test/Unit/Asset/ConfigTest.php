@@ -33,7 +33,7 @@ class ConfigTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->getMockForAbstractClass();

@@ -34,7 +34,11 @@ class Form extends AbstractComponent
         array $data = []
     ) {
         $this->filterBuilder = $filterBuilder;
-        parent::__construct($context, $components, $data);
+        parent::__construct(
+            $context,
+            $components,
+            $data
+        );
     }
 
     /**
@@ -54,6 +58,7 @@ class Form extends AbstractComponent
     {
         $dataSource = [];
 
+<<<<<<< HEAD
         $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName());
         if ($id) {
             $filter = $this->filterBuilder->setField($this->getContext()->getDataProvider()->getPrimaryFieldName())
@@ -68,9 +73,28 @@ class Form extends AbstractComponent
                 $dataSource = [
                     'data' => $data[$id]
                 ];
+=======
+        $id = $this->getContext()->getRequestParam($this->getContext()->getDataProvider()->getRequestFieldName(), null);
+        $filter = $this->filterBuilder->setField($this->getContext()->getDataProvider()->getPrimaryFieldName())
+            ->setValue($id)
+            ->create();
+        $this->getContext()->getDataProvider()
+            ->addFilter($filter);
+
+        $data = $this->getContext()->getDataProvider()->getData();
+
+        if (isset($data[$id])) {
+            $dataSource = [
+                'data' => $data[$id]
+            ];
+        } elseif (isset($data['items'])) {
+            foreach ($data['items'] as $item) {
+                if ($item[$item['id_field_name']] == $id) {
+                    $dataSource = ['data' => ['general' => $item]];
+                }
+>>>>>>> develop
             }
         }
-
         return $dataSource;
     }
 }

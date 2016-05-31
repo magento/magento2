@@ -138,7 +138,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         if ($product->getDownloadableLinks() === null) {
             /** @var \Magento\Downloadable\Model\ResourceModel\Link\Collection $linkCollection */
             $linkCollection = $this->_linksFactory->create()->addProductToFilter(
-                $product->getId()
+                $product->getEntityId()
             )->addTitleToResult(
                 $product->getStoreId()
             )->addPriceToResult(
@@ -164,10 +164,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasLinks($product)
     {
-        if ($product->hasData('links_exist')) {
-            return $product->getData('links_exist');
+        $hasLinks = $product->getData('links_exist');
+        if (null === $hasLinks) {
+            $hasLinks = (count($this->getLinks($product)) > 0);
         }
-        return count($this->getLinks($product)) > 0;
+        return $hasLinks;
     }
 
     /**
@@ -178,7 +179,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasOptions($product)
     {
-        return $product->getLinksPurchasedSeparately() || parent::hasOptions($product);
+        return parent::hasOptions($product) || $this->hasLinks($product);
     }
 
     /**
@@ -214,7 +215,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         if ($product->getDownloadableSamples() === null) {
             $sampleCollection = $this->_samplesFactory->create()->addProductToFilter(
-                $product->getId()
+                $product->getEntityId()
             )->addTitleToResult(
                 $product->getStoreId()
             );
@@ -237,26 +238,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     }
 
     /**
-     * Save Product downloadable information (links and samples)
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function save($product)
-    {
-        parent::save($product);
-
-        if ($data = $product->getDownloadableData()) {
-            $this->typeHandler->save($product, $data);
-        }
-
-        return $this;
-    }
-
-    /**
      * Check if product can be bought
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -271,7 +252,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             $buyRequest = new \Magento\Framework\DataObject(unserialize($option->getValue()));
             if (!$buyRequest->hasLinks()) {
                 if (!$product->getLinksPurchasedSeparately()) {
-                    $allLinksIds = $this->_linksFactory->create()->addProductToFilter($product->getId())->getAllIds();
+                    $allLinksIds = $this->_linksFactory->create()->addProductToFilter(
+                        $product->getEntityId()
+                    )->getAllIds();
                     $buyRequest->setLinks($allLinksIds);
                     $product->addCustomOption('info_buyRequest', serialize($buyRequest->getData()));
                 } else {
@@ -310,39 +293,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     }
 
     /**
-     * Setting flag if dowenloadable product can be or not in complex product
-     * based on link can be purchased separately or not
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return void
-     */
-    public function beforeSave($product)
-    {
-        parent::beforeSave($product);
-        if ($this->getLinkSelectionRequired($product)) {
-            $product->setTypeHasRequiredOptions(true)->setRequiredOptions(true);
-        } else {
-            $product->setTypeHasRequiredOptions(false)->setRequiredOptions(false);
-        }
-
-        // Update links_exist attribute value
-        $linksExist = false;
-        if ($data = $product->getDownloadableData()) {
-            if (isset($data['link'])) {
-                foreach ($data['link'] as $linkItem) {
-                    if (!isset($linkItem['is_delete']) || !$linkItem['is_delete']) {
-                        $linksExist = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        $product->setTypeHasOptions($linksExist);
-        $product->setLinksExist($linksExist);
-    }
-
-    /**
      * Retrieve additional searchable data from type instance
      * Using based on product id and store_id data
      *
@@ -353,12 +303,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         $searchData = parent::getSearchableData($product);
 
-        $linkSearchData = $this->_createLink()->getSearchableData($product->getId(), $product->getStoreId());
+        $linkSearchData = $this->_createLink()->getSearchableData($product->getEntityId(), $product->getStoreId());
         if ($linkSearchData) {
             $searchData = array_merge($searchData, $linkSearchData);
         }
 
-        $sampleSearchData = $this->_createSample()->getSearchableData($product->getId(), $product->getStoreId());
+        $sampleSearchData = $this->_createSample()->getSearchableData($product->getEntityId(), $product->getStoreId());
         if ($sampleSearchData) {
             $searchData = array_merge($searchData, $sampleSearchData);
         }

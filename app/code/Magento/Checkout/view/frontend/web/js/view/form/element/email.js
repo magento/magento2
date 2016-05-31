@@ -125,7 +125,7 @@ define([
 
             loginForm.validation();
 
-            if (focused === false) {
+            if (focused === false && !!this.email()) {
                 return !!$(usernameSelector).valid();
             }
 

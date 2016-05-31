@@ -129,17 +129,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         $fieldset->addField(
-            'synonym_for',
-            'text',
-            [
-                'name' => 'synonym_for',
-                'label' => __('Synonym For'),
-                'title' => __('Synonym For'),
-                'note' => __('Will make search for the query above return results for this search')
-            ]
-        );
-
-        $fieldset->addField(
             'redirect',
             'text',
             [

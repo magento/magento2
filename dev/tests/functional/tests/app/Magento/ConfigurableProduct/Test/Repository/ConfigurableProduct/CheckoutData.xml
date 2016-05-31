@@ -148,24 +148,9 @@
                 </item>
             </field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">10</item>
-            </field>
-        </dataset>
-
-        <dataset name="configurable_with_special_price">
-            <field name="options" xsi:type="array">
-                <item name="configurable_options" xsi:type="array">
-                    <item name="0" xsi:type="array">
-                        <item name="title" xsi:type="string">attribute_key_0</item>
-                        <item name="value" xsi:type="string">option_key_0</item>
-                    </item>
-                </item>
-            </field>
-            <field name="qty" xsi:type="string">1</field>
-            <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">1</item>
+                <item name="price" xsi:type="string">9</item>
                 <item name="qty" xsi:type="string">1</item>
-                <item name="subtotal" xsi:type="string">1</item>
+                <item name="subtotal" xsi:type="string">9</item>
             </field>
         </dataset>
 
@@ -179,7 +164,7 @@
                 </item>
             </field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">100</item>
+                <item name="price" xsi:type="string">560</item>
             </field>
         </dataset>
 

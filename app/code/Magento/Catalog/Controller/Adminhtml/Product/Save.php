@@ -8,7 +8,13 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
+/**
+ * Class Save
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -27,11 +33,28 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productTypeManager;
 
     /**
+     * @var \Magento\Catalog\Api\CategoryLinkManagementInterface
+     */
+    protected $categoryLinkManagement;
+
+    /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Save constructor.
+     *
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
@@ -63,17 +86,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $storeId = $this->getRequest()->getParam('store');
+        $storeId = $this->getRequest()->getParam('store', 0);
+        $store = $this->getStoreManager()->getStore($storeId);
+        $this->getStoreManager()->setCurrentStore($store->getCode());
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
-
         $data = $this->getRequest()->getPostValue();
         $productAttributeSetId = $this->getRequest()->getParam('set');
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
-                $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
+                $product = $this->initializationHelper->initialize(
+                    $this->productBuilder->build($this->getRequest())
+                );
                 $this->productTypeManager->processProduct($product);
 
                 if (isset($data['product'][$product->getIdFieldName()])) {
@@ -83,24 +109,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $originalSku = $product->getSku();
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
-                $productId = $product->getId();
+                $this->getCategoryLinkManagement()->assignProductToCategories(
+                    $product->getSku(),
+                    $product->getCategoryIds()
+                );
+                $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
 
-                /**
-                 * Do copying data to stores
-                 */
-                if (isset($data['copy_to_stores'])) {
-                    foreach ($data['copy_to_stores'] as $storeTo => $storeFrom) {
-                        $this->_objectManager->create('Magento\Catalog\Model\Product')
-                            ->setStoreId($storeFrom)
-                            ->load($productId)
-                            ->setStoreId($storeTo)
-                            ->save();
-                    }
-                }
+                $this->copyToStores($data, $productId);
 
                 $this->messageManager->addSuccess(__('You saved the product.'));
+                $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
                         __(
@@ -110,10 +130,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                         )
                     );
                 }
-
                 $this->_eventManager->dispatch(
                     'controller_action_catalog_product_save_entity_after',
-                    ['controller' => $this]
+                    ['controller' => $this, 'product' => $product]
                 );
 
                 if ($redirectBack === 'duplicate') {
@@ -122,12 +141,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_session->setProductData($data);
+                $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError($e->getMessage());
-                $this->_session->setProductData($data);
+                $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
         } else {
@@ -144,7 +163,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         } elseif ($redirectBack === 'duplicate' && isset($newProduct)) {
             $resultRedirect->setPath(
                 'catalog/*/edit',
-                ['id' => $newProduct->getId(), 'back' => null, '_current' => true]
+                ['id' => $newProduct->getEntityId(), 'back' => null, '_current' => true]
             );
         } elseif ($redirectBack) {
             $resultRedirect->setPath(
@@ -184,5 +203,75 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
             }
         }
+    }
+
+    /**
+     * Do copying data to stores
+     *
+     * @param array $data
+     * @param int $productId
+     * @return void
+     */
+    protected function copyToStores($data, $productId)
+    {
+        if (!empty($data['product']['copy_to_stores'])) {
+            foreach ($data['product']['copy_to_stores'] as $websiteId => $group) {
+                if (isset($data['product']['website_ids'][$websiteId])
+                    && (bool)$data['product']['website_ids'][$websiteId]) {
+                    foreach ($group as $store) {
+                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
+                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                        if ($copyTo) {
+                            $this->_objectManager->create('Magento\Catalog\Model\Product')
+                                ->setStoreId($copyFrom)
+                                ->load($productId)
+                                ->setStoreId($copyTo)
+                                ->setCopyFromView(true)
+                                ->save();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
+     */
+    private function getCategoryLinkManagement()
+    {
+        if (null === $this->categoryLinkManagement) {
+            $this->categoryLinkManagement = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\CategoryLinkManagementInterface');
+        }
+        return $this->categoryLinkManagement;
+    }
+
+    /**
+     * @return StoreManagerInterface
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if (null === $this->storeManager) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreManagerInterface');
+        }
+        return $this->storeManager;
+    }
+
+    /**
+     * Retrieve data persistor
+     *
+     * @return DataPersistorInterface|mixed
+     * @deprecated
+     */
+    protected function getDataPersistor()
+    {
+        if (null === $this->dataPersistor) {
+            $this->dataPersistor = $this->_objectManager->get(DataPersistorInterface::class);
+        }
+
+        return $this->dataPersistor;
     }
 }

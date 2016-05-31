@@ -172,11 +172,11 @@
                     </item>
                     <item name="9" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_10</item>
-                        <item name="value" xsi:type="string">12/12/2015</item>
+                        <item name="value" xsi:type="string">12/12/2016</item>
                     </item>
                     <item name="10" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_11</item>
-                        <item name="value" xsi:type="string">12/12/2015/12/30/AM</item>
+                        <item name="value" xsi:type="string">12/12/2016/12/30/AM</item>
                     </item>
                     <item name="11" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_12</item>
@@ -265,11 +265,11 @@
                     </item>
                     <item name="7" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_7</item>
-                        <item name="value" xsi:type="string">12/12/2015</item>
+                        <item name="value" xsi:type="string">12/12/2016</item>
                     </item>
                     <item name="8" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_8</item>
-                        <item name="value" xsi:type="string">12/12/2015/12/30/AM</item>
+                        <item name="value" xsi:type="string">12/12/2016/12/30/AM</item>
                     </item>
                     <item name="9" xsi:type="array">
                         <item name="title" xsi:type="string">attribute_key_9</item>

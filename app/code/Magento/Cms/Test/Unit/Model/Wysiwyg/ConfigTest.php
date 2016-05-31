@@ -7,6 +7,7 @@ namespace Magento\Cms\Test\Unit\Model\Wysiwyg;
 
 /**
  * @covers \Magento\Cms\Model\Wysiwyg\Config
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,12 +62,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $assetFileMock;
 
     /**
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystemMock;
+
+    /**
      * @var array
      */
     protected $windowSize = [];
 
     protected function setUp()
     {
+        $this->filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $this->backendUrlMock = $this->getMockBuilder('Magento\Backend\Model\UrlInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -110,7 +117,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'widgetConfig' => $this->widgetConfigMock,
                 'scopeConfig' => $this->scopeConfigMock,
                 'windowSize' => $this->windowSize,
-                'storeManager' => $this->storeManagerMock
+                'storeManager' => $this->storeManagerMock,
+                'filesystem' => $this->filesystemMock,
             ]
         );
     }
@@ -139,12 +147,26 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 ['cms/wysiwyg/directive'],
                 ['cms/wysiwyg_images/index']
             );
+        $this->backendUrlMock->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('localhost/index.php/');
         $this->assetRepoMock->expects($this->atLeastOnce())
             ->method('getUrl')
             ->withConsecutive(
                 ['mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'],
                 ['mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css']
             );
+        $this->filesystemMock->expects($this->once())
+            ->method('getUri')
+            ->willReturn('pub/static');
+        /** @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        $contextMock = $this->getMock(\Magento\Framework\View\Asset\ContextInterface::class);
+        $contextMock->expects($this->once())
+            ->method('getBaseUrl')
+            ->willReturn('localhost/pub/static/');
+        $this->assetRepoMock->expects($this->once())
+            ->method('getStaticViewFileContext')
+            ->willReturn($contextMock);
         $this->authorizationMock->expects($this->atLeastOnce())
             ->method('isAllowed')
             ->with('Magento_Cms::media_gallery')
@@ -161,6 +183,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResults[0], $config->getData('someData'));
         $this->assertEquals($expectedResults[1], $config->getData('wysiwygPluginSettings'));
         $this->assertEquals($expectedResults[2], $config->getData('pluginSettings'));
+        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticUrl'));
+        $this->assertEquals('localhost/pub/static/', $config->getData('baseStaticDefaultUrl'));
     }
 
     public function getConfigDataProvider()

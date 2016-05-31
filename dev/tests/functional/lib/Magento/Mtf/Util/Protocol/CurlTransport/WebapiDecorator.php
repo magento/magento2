@@ -162,7 +162,7 @@ class WebapiDecorator implements CurlInterface
         $this->write($_ENV['app_frontend_url'] . 'rest/V1/modules', [], CurlInterface::GET);
         $response = json_decode($this->read(), true);
 
-        return !isset($response['message']);
+        return (null !== $response) && !isset($response['message']);
     }
 
     /**

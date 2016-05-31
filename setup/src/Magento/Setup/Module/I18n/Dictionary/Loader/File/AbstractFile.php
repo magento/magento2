@@ -128,7 +128,7 @@ abstract class AbstractFile implements FileInterface
             throw new \RuntimeException(
                 sprintf('Invalid row #%d: "%s".', $this->_position, $e->getMessage())
                 . "\n"
-                . 'Each row has to consist of 3 columns: original phrase, translation, context'
+                . 'Each row has to consist of 4 columns: original phrase, translation, context type, context value'
             );
         }
     }

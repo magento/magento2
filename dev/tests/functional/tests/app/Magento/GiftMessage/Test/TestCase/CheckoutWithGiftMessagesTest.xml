@@ -22,6 +22,7 @@
             <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder" />
         </variation>
         <variation name="CheckoutWithGiftMessagesTestVariation2">
@@ -40,6 +41,7 @@
             <data name="giftMessage/data/items/datasets" xsi:type="string">default</data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems" />
         </variation>
     </testCase>

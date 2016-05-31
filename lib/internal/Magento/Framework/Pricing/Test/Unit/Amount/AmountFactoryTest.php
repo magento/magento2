@@ -29,7 +29,7 @@ class AmountFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $this->amountMock = $this->getMock('Magento\Framework\Pricing\Amount\Base', [], [], '', false);

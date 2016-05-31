@@ -22,9 +22,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param Rule\Condition\CombineFactory $conditionsFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -37,7 +38,15 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         array $data = []
     ) {
         $this->conditionsFactory = $conditionsFactory;
-        parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $formFactory,
+            $localeDate,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**

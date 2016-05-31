@@ -94,7 +94,7 @@ class DiCompileCommand extends Command
     {
         $this->setName(self::NAME)
             ->setDescription(
-                'Generates DI configuration and all non-existing interceptors and factories'
+                'Generates DI configuration and all missing classes that can be auto-generated'
             );
         parent::configure();
     }
@@ -111,6 +111,7 @@ class DiCompileCommand extends Command
         if (!$config) {
             $messages[] = 'You cannot run this command because modules are not enabled. You can enable modules by'
              . ' running the \'module:enable --all\' command.';
+<<<<<<< HEAD
         }
 
         /**
@@ -123,6 +124,8 @@ class DiCompileCommand extends Command
         $path = $this->directoryList->getPath(DirectoryList::DI);
         if ($this->fileDriver->isExists($path)) {
             $messages[] = "DI configuration must be cleared before running compiler. Please delete '$path'.";
+=======
+>>>>>>> develop
         }
 
         return $messages;
@@ -138,7 +141,8 @@ class DiCompileCommand extends Command
             foreach ($errors as $line) {
                 $output->writeln($line);
             }
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
@@ -211,6 +215,8 @@ class DiCompileCommand extends Command
             $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 

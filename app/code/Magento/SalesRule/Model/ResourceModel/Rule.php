@@ -5,30 +5,24 @@
  */
 namespace Magento\SalesRule\Model\ResourceModel;
 
+use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\DB\Select;
+use Magento\Rule\Model\ResourceModel\AbstractResource;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
  * Sales Rule resource model
  */
-class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
+class Rule extends AbstractResource
 {
     /**
      * Store associated with rule entities information map
      *
      * @var array
      */
-    protected $_associatedEntitiesMap = [
-        'website' => [
-            'associations_table' => 'salesrule_website',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'website_id',
-        ],
-        'customer_group' => [
-            'associations_table' => 'salesrule_customer_group',
-            'rule_id_field' => 'rule_id',
-            'entity_id_field' => 'customer_group_id',
-        ],
-    ];
+    protected $_associatedEntitiesMap = [];
 
     /**
      * @var array
@@ -53,6 +47,11 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $_resourceCoupon;
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\ResourceModel\Coupon $resourceCoupon
@@ -66,6 +65,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     ) {
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
         parent::__construct($context, $connectionName);
     }
 
@@ -80,23 +80,9 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Add customer group ids and website ids to rule data after load
-     *
-     * @param AbstractModel $object
-     * @return $this
-     */
-    protected function _afterLoad(AbstractModel $object)
-    {
-        $this->loadCustomerGroupIds($object);
-        $this->loadWebsiteIds($object);
-
-        parent::_afterLoad($object);
-        return $this;
-    }
-
-    /**
      * @param AbstractModel $object
      * @return void
+     * @deprecated
      */
     public function loadCustomerGroupIds(AbstractModel $object)
     {
@@ -109,6 +95,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     /**
      * @param AbstractModel $object
      * @return void
+     * @deprecated
      */
     public function loadWebsiteIds(AbstractModel $object)
     {
@@ -136,6 +123,21 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Load an object
+     *
+     * @param SalesRule|AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function load(AbstractModel $object, $value, $field = null)
+    {
+        $this->getEntityManager()->load($object, $value);
+        return $this;
+    }
+
+    /**
      * Bind sales rule to customer group(s) and website(s).
      * Save rule's associated store labels.
      * Save product attributes used in rule.
@@ -147,22 +149,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     {
         if ($object->hasStoreLabels()) {
             $this->saveStoreLabels($object->getId(), $object->getStoreLabels());
-        }
-
-        if ($object->hasWebsiteIds()) {
-            $websiteIds = $object->getWebsiteIds();
-            if (!is_array($websiteIds)) {
-                $websiteIds = explode(',', (string)$websiteIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $websiteIds, 'website');
-        }
-
-        if ($object->hasCustomerGroupIds()) {
-            $customerGroupIds = $object->getCustomerGroupIds();
-            if (!is_array($customerGroupIds)) {
-                $customerGroupIds = explode(',', (string)$customerGroupIds);
-            }
-            $this->bindRuleToEntity($object->getId(), $customerGroupIds, 'customer_group');
         }
 
         // Save product attributes used in rule
@@ -368,5 +354,56 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         }
 
         return $result;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getEntityManager()->save($object);
+        return $this;
+    }
+
+    /**
+     * Delete the object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->getEntityManager()->delete($object);
+        return $this;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    private function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\EntityManager
+     * @deprecated
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+        }
+        return $this->entityManager;
     }
 }

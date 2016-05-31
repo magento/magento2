@@ -20,6 +20,7 @@ use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\SampleData;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Install controller
@@ -60,17 +61,20 @@ class Install extends AbstractActionController
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
      */
     public function __construct(
         WebLogger $logger,
         InstallerFactory $installerFactory,
         ProgressFactory $progressFactory,
-        \Magento\Framework\Setup\SampleData\State $sampleDataState
+        \Magento\Framework\Setup\SampleData\State $sampleDataState,
+        DeploymentConfig $deploymentConfig
     ) {
         $this->log = $logger;
         $this->installer = $installerFactory->create($logger);
         $this->progressFactory = $progressFactory;
         $this->sampleDataState = $sampleDataState;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -160,7 +164,11 @@ class Install extends AbstractActionController
      */
     private function checkForPriorInstall()
     {
+<<<<<<< HEAD
         if ($this->getDeploymentConfig()->isAvailable()) {
+=======
+        if ($this->deploymentConfig->isAvailable()) {
+>>>>>>> develop
             throw new \Magento\Setup\Exception('Magento application is already installed.');
         }
     }

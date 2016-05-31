@@ -37,6 +37,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_userRolesFactory;
 
     /**
+     * @var bool|array
+     */
+    protected $restoredUsersFormData;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -164,24 +169,6 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-        /*
-        $this->addColumn('grid_actions',
-            array(
-                'header'=>__('Actions'),
-                'width'=>5,
-                'sortable'=>false,
-                'filter'    =>false,
-                'type' => 'action',
-                'actions'   => array(
-                                    array(
-                                        'caption' => __('Remove'),
-                                        'onClick' => 'role.deleteFromRole($role_id);'
-                                    )
-                                )
-            )
-        );
-        */
-
         return parent::_prepareColumns();
     }
 
@@ -210,7 +197,11 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         ) : $this->_coreRegistry->registry(
             'RID'
         );
-        $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+
+        $users = $this->getUsersFormData();
+        if (false === $users) {
+            $users = $this->_roleFactory->create()->setId($roleId)->getRoleUsers();
+        }
         if (sizeof($users) > 0) {
             if ($json) {
                 $jsonUsers = [];
@@ -228,5 +219,37 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
                 return [];
             }
         }
+    }
+
+    /**
+     * Get Form Data if exist
+     *
+     * @return array|bool
+     */
+    protected function getUsersFormData()
+    {
+        if (false !== $this->restoredUsersFormData && null === $this->restoredUsersFormData) {
+            $this->restoredUsersFormData = $this->restoreUsersFormData();
+        }
+
+        return $this->restoredUsersFormData;
+    }
+
+    /**
+     * Restore Users Form Data from the registry
+     *
+     * @return array|bool
+     */
+    protected function restoreUsersFormData()
+    {
+        $sessionData = $this->_coreRegistry->registry(
+            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
+        );
+        if (null !== $sessionData) {
+            parse_str($sessionData, $sessionData);
+            return array_keys($sessionData);
+        }
+
+        return false;
     }
 }

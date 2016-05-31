@@ -117,6 +117,37 @@ class AbstractMethodTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($result, $this->payment->isAvailable($this->quoteMock));
     }
 
+    public function testAssignData()
+    {
+        $data = new DataObject();
+        $paymentInfo = $this->getMock(InfoInterface::class);
+
+        $this->payment->setInfoInstance($paymentInfo);
+
+        $eventData = [
+            AbstractDataAssignObserver::METHOD_CODE => $this,
+            AbstractDataAssignObserver::MODEL_CODE => $paymentInfo,
+            AbstractDataAssignObserver::DATA_CODE => $data
+        ];
+
+        $this->eventManagerMock->expects(static::exactly(2))
+            ->method('dispatch')
+            ->willReturnMap(
+                [
+                    [
+                        'payment_method_assign_data_' . Stub::STUB_CODE,
+                        $eventData
+                    ],
+                    [
+                        'payment_method_assign_data',
+                        $eventData
+                    ]
+                ]
+            );
+
+        $this->payment->assignData($data);
+    }
+
     /**
      * @return array
      */

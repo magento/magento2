@@ -1,8 +1,4 @@
-None,None
-"Sort Order","Sort Order"
-Title,Title
-Password,Password
-"This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges.","This allows breaking total order weight into smaller pieces if it exceeds %1 %2 to ensure accurate calculation of shipping charges."
+"Select this to allow DHL to optimize shipping charges by splitting the order if it exceeds %1 %2.","Select this to allow DHL to optimize shipping charges by splitting the order if it exceeds %1 %2."
 "Wrong Content Type","Wrong Content Type"
 Pounds,Pounds
 Kilograms,Kilograms
@@ -41,13 +37,13 @@ Jetline,Jetline
 "DHL service is not available at %s date","DHL service is not available at %s date"
 "The response is in wrong format.","The response is in wrong format."
 "Error #%1 : %2","Error #%1 : %2"
-"We had to skip DHL method %1 because we couldn't find exchange rate %2 (Base Currency).","We had to skip DHL method %1 because we couldn't find exchange rate %2 (Base Currency)."
+"We had to skip DHL method %1 because we couldn\'t find exchange rate %2 (Base Currency).","We had to skip DHL method %1 because we couldn\'t find exchange rate %2 (Base Currency)."
 "Zero shipping charge for '%1'","Zero shipping charge for '%1'"
 DHL,DHL
 "Cannot identify measure unit for %1","Cannot identify measure unit for %1"
 "Cannot identify weight unit for %1","Cannot identify weight unit for %1"
 "There is no items in this order","There is no items in this order"
-"Please, specify origin country","Please, specify origin country"
+"Please specify origin country.","Please specify origin country."
 Documents,Documents
 "Non Documents","Non Documents"
 "Height, width and length should be equal or greater than %1","Height, width and length should be equal or greater than %1"
@@ -55,12 +51,16 @@ Documents,Documents
 "Unable to retrieve tracking","Unable to retrieve tracking"
 "Response is in the wrong format","Response is in the wrong format"
 "No packages for request","No packages for request"
+"Unable to retrieve shipping label","Unable to retrieve shipping label"
 "Non documents","Non documents"
-Size,Size
-Debug,Debug
-"Gateway URL","Gateway URL"
+None,None
+"Field ","Field "
+" is required."," is required."
 "Enabled for Checkout","Enabled for Checkout"
+"Gateway URL","Gateway URL"
+Title,Title
 "Access ID","Access ID"
+Password,Password
 "Account Number","Account Number"
 "Content Type","Content Type"
 "Calculate Handling Fee","Calculate Handling Fee"
@@ -68,12 +68,16 @@ Debug,Debug
 """Per Order"" allows a single handling fee for the entire order. ""Per Package"" allows an individual handling fee for each package.","""Per Order"" allows a single handling fee for the entire order. ""Per Package"" allows an individual handling fee for each package."
 "Handling Fee","Handling Fee"
 "Divide Order Weight","Divide Order Weight"
-"This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges.","This allows breaking total order weight into smaller pieces if it exeeds 70 kg to ensure accurate calculation of shipping charges."
+"Select this to allow DHL to optimize shipping charges by splitting the order if it exceeds 70 kg.","Select this to allow DHL to optimize shipping charges by splitting the order if it exceeds 70 kg."
 "Weight Unit","Weight Unit"
+Size,Size
 "Allowed Methods","Allowed Methods"
 "Displayed Error Message","Displayed Error Message"
 "Free Method","Free Method"
+"Enable Free Shipping Threshold","Enable Free Shipping Threshold"
 "Free Shipping Amount Threshold","Free Shipping Amount Threshold"
 "Ship to Applicable Countries","Ship to Applicable Countries"
 "Ship to Specific Countries","Ship to Specific Countries"
 "Show Method if Not Applicable","Show Method if Not Applicable"
+"Sort Order","Sort Order"
+Debug,Debug

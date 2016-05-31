@@ -188,9 +188,12 @@ class Info extends AbstractExtensibleModel implements InfoInterface
         if ($key && isset($this->_additionalInformation[$key])) {
             unset($this->_additionalInformation[$key]);
             return $this->setData('additional_information', $this->_additionalInformation);
+        } elseif (null === $key) {
+            $this->_additionalInformation = [];
+            return $this->unsetData('additional_information');
         }
-        $this->_additionalInformation = [];
-        return $this->unsetData('additional_information');
+
+        return $this;
     }
 
     /**

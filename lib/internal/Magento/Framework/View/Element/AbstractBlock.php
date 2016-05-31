@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Element;
 
+use Magento\Framework\DataObject\IdentityInterface;
+
 /**
  * Base Content Block class
  *
@@ -965,16 +967,21 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         if ($this->hasData('cache_key')) {
             return static::CACHE_KEY_PREFIX . $this->getData('cache_key');
         }
+
         /**
          * don't prevent recalculation by saving generated cache key
          * because of ability to render single block instance with different data
          */
         $key = $this->getCacheKeyInfo();
-        //ksort($key);  // ignore order
-        $key = array_values($key);
-        // ignore array keys
+
+        $key = array_values($key);  // ignore array keys
+
         $key = implode('|', $key);
+<<<<<<< HEAD
         $key = sha1($key);
+=======
+        $key = sha1($key); // use hashing to hide potentially private data
+>>>>>>> develop
         return static::CACHE_KEY_PREFIX . $key;
     }
 
@@ -991,6 +998,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $tags = $this->getData('cache_tags');
         }
         $tags[] = self::CACHE_GROUP;
+
+        if ($this instanceof IdentityInterface) {
+            $tags = array_merge($tags, $this->getIdentities());
+        }
         return $tags;
     }
 
@@ -1037,7 +1048,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     protected function _saveCache($data)
     {
-        if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
+        if (!$this->getCacheLifetime() || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
             return false;
         }
         $cacheKey = $this->getCacheKey();
@@ -1047,7 +1058,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             $data
         );
 
-        $this->_cache->save($data, $cacheKey, $this->getCacheTags(), $this->getCacheLifetime());
+        $this->_cache->save($data, $cacheKey, array_unique($this->getCacheTags()), $this->getCacheLifetime());
         return $this;
     }
 

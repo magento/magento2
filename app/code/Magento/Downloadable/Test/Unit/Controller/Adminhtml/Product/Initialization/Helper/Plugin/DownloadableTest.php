@@ -5,6 +5,8 @@
  */
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
+
 class DownloadableTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,7 +15,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     protected $downloadablePlugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
      */
     protected $requestMock;
 
@@ -27,12 +29,33 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      */
     protected $subjectMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\Data\ProductExtensionInterface
+     */
+    protected $extensionAttributesMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\SampleFactory
+     */
+    protected $sampleFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\Data
+     */
+    protected $jsonHelperMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\linkFactory
+     */
+    protected $linkFactory;
+
     protected function setUp()
     {
+        $this->jsonHelperMock = $this->getMock(\Magento\Framework\Json\Helper\Data::class, [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['setDownloadableData', '__wakeup'],
+            ['setDownloadableData', 'getExtensionAttributes', '__wakeup'],
             [],
             '',
             false
@@ -44,39 +67,98 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setDownloadableProductSamples', 'setDownloadableProductLinks'])
+            ->getMockForAbstractClass();
+        $this->sampleFactoryMock = $this->getMockBuilder('\Magento\Downloadable\Api\Data\SampleInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->linkFactoryMock = $this->getMockBuilder('\Magento\Downloadable\Api\Data\LinkInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->downloadablePlugin =
             new \Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable(
-                $this->requestMock
+                $this->requestMock,
+                $this->sampleFactoryMock,
+                $this->linkFactoryMock,
+                $this->jsonHelperMock
             );
     }
 
-    public function testAfterInitializeIfDownloadableExist()
+    /**
+     * @dataProvider afterInitializeWithEmptyDataDataProvider
+     * @param array $downloadable
+     */
+    public function testAfterInitializeWithNoDataToSave($downloadable)
     {
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getPost'
-        )->with(
-            'downloadable'
-        )->will(
-            $this->returnValue('downloadable')
-        );
-        $this->productMock->expects($this->once())->method('setDownloadableData')->with('downloadable');
+        $this->requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('downloadable')
+            ->willReturn($downloadable);
+        $this->productMock->expects($this->once())->method('setDownloadableData')->with($downloadable);
+        $this->productMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->extensionAttributesMock);
+        $this->extensionAttributesMock->expects($this->once())
+            ->method('setDownloadableProductLinks')
+            ->with([]);
+        $this->extensionAttributesMock->expects($this->once())
+            ->method('setDownloadableProductSamples')
+            ->with([]);
+        $this->productMock->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($this->extensionAttributesMock);
+
         $this->downloadablePlugin->afterInitialize($this->subjectMock, $this->productMock);
     }
 
-    public function testAfterInitializeIfDownloadableNotExist()
+    public function afterInitializeWithEmptyDataDataProvider()
     {
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getPost'
-        )->with(
-            'downloadable'
-        )->will(
-            $this->returnValue(false)
-        );
+        return [
+            [['link' => [], 'sample' => []]],
+            [
+                [
+                    'link' => [
+                        ['is_delete' => 1, 'link_type' => 'url'],
+                        ['is_delete' => 1, 'link_type' => 'file'],
+                        []
+                     ],
+                    'sample' => [
+                        ['is_delete' => 1, 'sample_type' => 'url'],
+                        ['is_delete' => 1, 'sample_type' => 'file'],
+                        []
+                    ]
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider afterInitializeIfDownloadableNotExistDataProvider
+     * @param mixed $downloadable
+     */
+    public function testAfterInitializeIfDownloadableNotExist($downloadable)
+    {
+        $this->requestMock->expects($this->once())
+            ->method('getPost')
+            ->with('downloadable')
+            ->willReturn($downloadable);
         $this->productMock->expects($this->never())->method('setDownloadableData');
         $this->downloadablePlugin->afterInitialize($this->subjectMock, $this->productMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function afterInitializeIfDownloadableNotExistDataProvider()
+    {
+        return [
+            [false],
+            [[]],
+            [null],
+        ];
     }
 }

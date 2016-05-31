@@ -5,8 +5,10 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
-use \Magento\CatalogInventory\Model\Stock\StockStatusRepository;
-use \Magento\CatalogInventory\Api\Data as InventoryApiData;
+use Magento\CatalogInventory\Model\Stock\StockStatusRepository;
+use Magento\CatalogInventory\Api\Data as InventoryApiData;
+use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class StockStatusRepositoryTest
@@ -48,6 +50,11 @@ class StockStatusRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $mapperMock;
 
+    /**
+     * @var StockRegistryStorage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockRegistryStorage;
+
     protected function setUp()
     {
         $this->stockStatusMock = $this->getMockBuilder('\Magento\CatalogInventory\Model\Stock\Status')
@@ -76,13 +83,20 @@ class StockStatusRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->mapperMock = $this->getMockBuilder('Magento\Framework\DB\MapperFactory')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->stockRegistryStorage = $this->getMockBuilder(StockRegistryStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->model = new StockStatusRepository(
-            $this->stockStatusResourceMock,
-            $this->stockStatusFactoryMock,
-            $this->stockStatusCollectionMock,
-            $this->queryBuilderFactoryMock,
-            $this->mapperMock
+        $this->model = (new ObjectManager($this))->getObject(
+            StockStatusRepository::class,
+            [
+                'resource' => $this->stockStatusResourceMock,
+                'stockStatusFactory' => $this->stockStatusFactoryMock,
+                'collectionFactory' => $this->stockStatusCollectionMock,
+                'queryBuilderFactory' => $this->queryBuilderFactoryMock,
+                'mapperFactory' => $this->mapperMock,
+                'stockRegistryStorage' => $this->stockRegistryStorage,
+            ]
         );
     }
 
@@ -136,6 +150,10 @@ class StockStatusRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
+        $productId = 1;
+        $this->stockStatusMock->expects($this->atLeastOnce())->method('getProductId')->willReturn($productId);
+        $this->stockRegistryStorage->expects($this->once())->method('removeStockStatus')->with($productId);
+
         $this->stockStatusResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->stockStatusMock)

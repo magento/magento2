@@ -36,11 +36,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $converterMock;
-
     protected function setUp()
     {
         $this->productRepositoryMock = $this->getMock('Magento\Catalog\Model\ProductRepository', [], [], '', false);
@@ -51,13 +46,44 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->converterMock = $this->getMock('\Magento\Catalog\Model\Product\Option\Converter', [], [], '', false);
         $this->optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', [], [], '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->converterMock = $this->getMock('\Magento\Catalog\Model\Product\Option\Converter', [], [], '', false);
+        $optionFactory = $this->getMock(
+            'Magento\Catalog\Model\Product\OptionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $optionCollectionFactory = $this->getMock(
+            'Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
+
         $this->optionRepository = new Repository(
             $this->productRepositoryMock,
             $this->optionResourceMock,
             $this->converterMock
+        );
+
+        $this->setProperties(
+            $this->optionRepository,
+            [
+                'optionFactory' => $optionFactory,
+                'optionCollectionFactory' => $optionCollectionFactory,
+                'metadataPool' => $metadataPool
+            ]
         );
     }
 
@@ -95,7 +121,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock
             ->expects($this->once())
             ->method('getOptionById')
-            ->with($optionId);
+            ->with($optionId)
+            ->willReturn(null);
         $this->optionRepository->get($productSku, $optionId);
     }
 
@@ -184,38 +211,18 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @param $object
+     * @param array $properties
      */
-    public function testUpdateNonExistingOption()
+    private function setProperties($object, $properties = [])
     {
-        $convertedOption = [
-            'title' => 'test_option_code_1',
-            'type' => 'field',
-            'sort_order' => 1,
-            'is_require' => 1,
-            'price' => 10,
-            'price_type' => 'fixed',
-            'sku' => 'sku1',
-            'max_characters' => 10,
-            'values' => [],
-        ];
-        $optionId = 10;
-        $productSku = 'productSku';
-        $this->optionMock->expects($this->once())->method('getProductSku')->willReturn($productSku);
-        $this->productRepositoryMock
-            ->expects($this->once())
-            ->method('get')
-            ->with($productSku, true)->willReturn($this->productMock);
-        $this->converterMock
-            ->expects($this->once())
-            ->method('toArray')
-            ->with($this->optionMock)
-            ->will($this->returnValue($convertedOption));
-        $this->optionMock
-            ->expects($this->any())
-            ->method('getOptionId')
-            ->willReturn($optionId);
-        $this->productMock->expects($this->once())->method('getOptionById')->with($optionId);
-        $this->optionRepository->save($this->optionMock);
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

@@ -77,12 +77,25 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="bundleSaveOptions" type="\Magento\Bundle\Model\Plugin\BundleSaveOptions" sortOrder="100"/>
-    </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="bundleLoadOptions" type="\Magento\Bundle\Model\Plugin\BundleLoadOptions"/>
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
+    </type>
+    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="create" xsi:type="array">
+                        <item name="create_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="update_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\SaveHandler</item>
+                    </item>
+                    <item name="read" xsi:type="array">
+                        <item name="read_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\ReadHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Bundle\Model\Product\Type">
         <arguments>

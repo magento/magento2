@@ -9,8 +9,8 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Cart::cart" title="Carts" sortOrder="40">
-                    <resource id="Magento_Cart::manage" title="Manage carts" sortOrder="10" />
+                <resource id="Magento_Cart::cart" title="Carts" translate="title" sortOrder="40">
+                    <resource id="Magento_Cart::manage" title="Manage carts" translate="title" sortOrder="10" />
                 </resource>
             </resource>
         </resources>

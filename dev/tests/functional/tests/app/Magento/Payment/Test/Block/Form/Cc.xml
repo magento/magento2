@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<mapping strict="1">
+<mapping strict="0">
     <wrapper>payment</wrapper>
     <fields>
         <cc_type>

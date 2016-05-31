@@ -36,7 +36,7 @@ use Magento\Quote\Api\Data\PaymentInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\Data\PaymentInterface
+class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
 {
     /**
      * @var string
@@ -170,6 +170,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
         }
 
         $method->assignData($data);
+
         /*
          * validating the payment data
          */
@@ -196,7 +197,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
             if (!array_key_exists($requestKey, $paymentData)) {
                 $paymentData[PaymentInterface::KEY_ADDITIONAL_DATA][$requestKey] = $rawData[$requestKey];
             } elseif ($requestKey === PaymentInterface::KEY_ADDITIONAL_DATA) {
-                $paymentData = array_merge($paymentData, (array) $rawData[$requestKey]);
+                //$paymentData[PaymentInterface::KEY_ADDITIONAL_DATA] = array_merge($paymentData[PaymentInterface::KEY_ADDITIONAL_DATA],(array) $rawData[$requestKey]);
+		$paymentData = array_merge($paymentData, (array) $rawData[$requestKey]);
             } else {
                 $paymentData[$requestKey] = $rawData[$requestKey];
             }

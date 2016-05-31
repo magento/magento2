@@ -12,7 +12,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
      */
     protected $validationStateMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->validationStateMock = $this->getMock(
             '\Magento\Framework\Config\ValidationStateInterface',

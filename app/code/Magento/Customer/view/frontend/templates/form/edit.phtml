@@ -13,12 +13,7 @@
         <?php echo $block->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Account Information') ?></span></legend><br>
         <?php echo $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Name')->setObject($block->getCustomer())->toHtml() ?>
-        <div class="field email required">
-            <label class="label" for="email"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
-            <div class="control">
-                <input type="email" name="email" id="email" value="<?php echo $block->escapeHtml($block->getCustomer()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}">
-            </div>
-        </div>
+
         <?php $_dob = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob') ?>
         <?php $_taxvat = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Taxvat') ?>
         <?php $_gender = $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Gender') ?>
@@ -32,31 +27,57 @@
             <?php echo $_gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
         <?php endif ?>
         <div class="field choice">
-            <input type="checkbox" name="change_password" id="change-password" value="1" title="<?php /* @escapeNotVerified */ echo __('Change Password') ?>"<?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox"/>
+            <input type="checkbox" name="change_email" id="change-email" data-role="change-email" value="1" title="<?php /* @escapeNotVerified */ echo __('Change Email') ?>" class="checkbox" />
+            <label class="label" for="change-email"><span><?php /* @escapeNotVerified */ echo __('Change Email') ?></span></label>
+        </div>
+        <div class="field choice">
+            <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1" title="<?php /* @escapeNotVerified */ echo __('Change Password') ?>"<?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox" />
             <label class="label" for="change-password"><span><?php /* @escapeNotVerified */ echo __('Change Password') ?></span></label>
         </div>
     </fieldset>
 
-    <fieldset class="fieldset password">
-        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Change Password') ?></span></legend><br>
+    <fieldset class="fieldset password" data-container="change-email-password">
+        <legend class="legend"><span data-title="change-email-password"><?php /* @escapeNotVerified */ echo __('Change Email and Password') ?></span></legend><br>
+        <div class="field email required" data-container="change-email">
+            <label class="label" for="email"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></label>
+            <div class="control">
+                <input type="email" name="email" id="email" autocomplete="email" data-input="change-email" value="<?php echo $block->escapeHtml($block->getCustomer()->getEmail()) ?>" title="<?php /* @escapeNotVerified */ echo __('Email') ?>" class="input-text" data-validate="{required:true, 'validate-email':true}" />
+            </div>
+        </div>
         <div class="field password current required">
             <label class="label" for="current-password"><span><?php /* @escapeNotVerified */ echo __('Current Password') ?></span></label>
             <div class="control">
-                <input type="password" class="input-text" name="current_password" id="current-password" autocomplete="off">
+                <input type="password" class="input-text" name="current_password" id="current-password" data-input="current-password" autocomplete="off" />
             </div>
         </div>
-        <div class="field new password required">
+        <div class="field new password required" data-container="new-password" data-mage-init='{"passwordStrengthIndicator": {}}'>
             <label class="label" for="password"><span><?php /* @escapeNotVerified */ echo __('New Password') ?></span></label>
             <div class="control">
-                <input type="password" class="input-text" name="password" id="password" autocomplete="off">
+                <input type="password" class="input-text" name="password" id="password"
+                    data-password-min-length="<?php echo $block->escapeHtml($block->getMinimumPasswordLength()) ?>"
+                    data-password-min-character-sets="<?php echo $block->escapeHtml($block->getRequiredCharacterClassesNumber()) ?>"
+                    data-input="new-password"
+                    data-validate="{required:true, 'validate-customer-password':true}"
+                    autocomplete="off" />
+                <div id="password-strength-meter-container" data-role="password-strength-meter" >
+                    <div id="password-strength-meter" class="password-strength-meter">
+                        <?php /* @escapeNotVerified */ echo __('Password Strength'); ?>:
+                        <span id="password-strength-meter-label" data-role="password-strength-meter-label" >
+                            <?php /* @escapeNotVerified */ echo __('No Password'); ?>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="field confirm password required">
+        <div class="field confirm password required" data-container="confirm-password">
             <label class="label" for="password-confirmation"><span><?php /* @escapeNotVerified */ echo __('Confirm New Password') ?></span></label>
             <div class="control">
-                <input type="password" class="input-text" name="password_confirmation" id="password-confirmation" autocomplete="off">
+                <input type="password" class="input-text" name="password_confirmation" id="password-confirmation"
+                    data-input="confirm-password"
+                    autocomplete="off" />
             </div>
         </div>
+        <?php echo $block->getChildHtml('form_additional_info'); ?>
     </fieldset>
     <div class="actions-toolbar">
         <div class="primary">
@@ -99,13 +120,11 @@
 </script>
 <script type="text/x-magento-init">
     {
-        "#change-password": {
-            "setPassword": {
-                "currentPasswordId": "#current-password",
-                "passwordId": "#password",
-                "confirmationId": "#password-confirmation",
-                "passwordContainer": "fieldset.fieldset.password",
-                "showOnDefault": <?php /* @escapeNotVerified */ echo $block->getChangePassword() ? 'true' : 'false' ?>
+        "[data-role=change-email], [data-role=change-password]": {
+            "changeEmailPassword": {
+                "titleChangeEmail": "<?php /* @escapeNotVerified */ echo __('Change Email') ?>",
+                "titleChangePassword": "<?php /* @escapeNotVerified */ echo __('Change Password') ?>",
+                "titleChangeEmailAndPassword": "<?php /* @escapeNotVerified */ echo __('Change Email and Password') ?>"
             }
         }
     }

@@ -13,12 +13,12 @@ use Magento\Framework\App\TemplateTypesInterface;
 <?php if (!$block->getEditMode()): ?>
 <form action="<?php /* @escapeNotVerified */ echo $block->getLoadUrl() ?>" method="post" id="email_template_load_form">
     <?php echo $block->getBlockHtml('formkey')?>
-    <fieldset class="fieldset form-inline">
-        <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Load default template') ?></span></legend>
-        <div class="field">
-            <label class="label" for="template_select"><?php /* @escapeNotVerified */ echo __('Template') ?></label>
-            <div class="control">
-                <select id="template_select" name="code" class="select required-entry">
+    <fieldset class="admin__fieldset form-inline">
+        <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Load default template') ?></span></legend><br>
+        <div class="admin__field">
+            <label class="admin__field-label" for="template_select"><?php /* @escapeNotVerified */ echo __('Template') ?></label>
+            <div class="admin__field-control">
+                <select id="template_select" name="code" class="admin__control-select required-entry">
                     <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
                         <?php if ($group): ?>
                             <optgroup label="<?php echo $block->escapeHtml($group) ?>">
@@ -33,20 +33,23 @@ use Magento\Framework\App\TemplateTypesInterface;
                 </select>
             </div>
         </div>
-        <div class="field required">
-            <div class="control">
+        <div class="admin__field required">
+            <span class="admin__field-label"></span>
+            <div class="admin__field-control">
                 <?php echo $block->getLoadButtonHtml() ?>
             </div>
         </div>
     </fieldset>
 </form>
 <?php endif ?>
+
 <form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="email_template_edit_form">
     <?php echo $block->getBlockHtml('formkey')?>
     <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
     <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php /* @escapeNotVerified */ echo $block->getOrigTemplateCode() ?>" />
     <?php echo $block->getFormHtml() ?>
 </form>
+
 <form action="<?php /* @escapeNotVerified */ echo $block->getPreviewUrl() ?>" method="post" id="email_template_preview_form" target="_blank">
     <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">

@@ -1,3 +1,4 @@
+// jscs:disable
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -344,6 +345,11 @@ define([
         },
 
         switchPaymentMethod : function(method){
+            jQuery('#edit_form')
+                .off('submitOrder')
+                .on('submitOrder', function(){
+                    jQuery(this).trigger('realOrder');
+                });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -533,7 +539,7 @@ define([
                             if (this._isSummarizePrice()) {
                                 productPrice += this.productPriceBase[productId];
                             }
-                            productPrice = parseFloat(productPrice);
+                            productPrice = parseFloat(Math.round(productPrice + "e+2") + "e-2");
                             priceColl.innerHTML = this.currencySymbol + productPrice.toFixed(2);
                             // and set checkbox checked
                             grid.setCheckboxChecked(checkbox, true);
@@ -1398,3 +1404,4 @@ define([
     };
 
 });
+/* jshint ignore:end */

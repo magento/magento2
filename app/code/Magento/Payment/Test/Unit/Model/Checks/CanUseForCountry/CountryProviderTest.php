@@ -17,7 +17,7 @@ class CountryProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $directoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directoryMock = $this->getMock('Magento\Directory\Helper\Data', [], [], '', false, false);
         $this->model = new \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider($this->directoryMock);

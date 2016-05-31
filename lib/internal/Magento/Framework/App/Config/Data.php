@@ -30,7 +30,11 @@ class Data implements DataInterface
     public function __construct(MetadataProcessor $processor, array $data)
     {
         /** Clone the array to work around a kink in php7 that modifies the argument by reference */
+<<<<<<< HEAD
         $this->_data = $processor->process($this->_arrayClone($data));
+=======
+        $this->_data = $processor->process($this->arrayClone($data));
+>>>>>>> develop
         $this->_source = $data;
     }
 
@@ -85,7 +89,11 @@ class Data implements DataInterface
      * @param array $data
      * @return array
      */
+<<<<<<< HEAD
     private function _arrayClone(array $data)
+=======
+    private function arrayClone(array $data)
+>>>>>>> develop
     {
         $clone = [];
         foreach ($data as $key => $value) {

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg as WysiwygModel;
 use Magento\Framework\App\RequestInterface;
+use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
 
@@ -33,6 +34,11 @@ class Builder
      * @var \Magento\Cms\Model\Wysiwyg\Config
      */
     protected $wysiwygConfig;
+
+    /**
+     * @var StoreFactory
+     */
+    protected $storeFactory;
 
     /**
      * @param ProductFactory $productFactory
@@ -64,6 +70,8 @@ class Builder
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->productFactory->create();
         $product->setStoreId($request->getParam('store', 0));
+        $store = $this->getStoreFactory()->create();
+        $store->load($request->getParam('store', 0));
 
         $typeId = $request->getParam('type');
         if (!$productId && $typeId) {
@@ -87,7 +95,20 @@ class Builder
 
         $this->registry->register('product', $product);
         $this->registry->register('current_product', $product);
+        $this->registry->register('current_store', $store);
         $this->wysiwygConfig->setStoreId($request->getParam('store'));
         return $product;
+    }
+
+    /**
+     * @return StoreFactory
+     */
+    private function getStoreFactory()
+    {
+        if (null === $this->storeFactory) {
+            $this->storeFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreFactory');
+        }
+        return $this->storeFactory;
     }
 }

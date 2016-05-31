@@ -7,9 +7,13 @@
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DefaultStock extends AbstractIndexer implements StockInterface
 {
@@ -33,6 +37,16 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
+
+    /**
+     * @var QueryProcessorComposite
+     */
+    private $queryProcessorComposite;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    protected $stockConfiguration;
 
     /**
      * Class constructor
@@ -174,43 +188,23 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         );
-        $this->_addWebsiteJoinToSelect($select, true);
-        $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $select->columns('cw.website_id')->join(
+        $select->join(
             ['cis' => $this->getTable('cataloginventory_stock')],
             '',
-            ['stock_id']
-        )->joinLeft(
+            ['website_id', 'stock_id']
+        )->joinInner(
             ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
             []
-        )->columns(['qty' => $qtyExpr])
-            ->where('cw.website_id != 0')
-            ->where('e.type_id = ?', $this->getTypeId());
+        )->columns(
+            ['qty' => $qtyExpr]
+        )->where(
+            'cis.website_id = ?',
+            $this->getStockConfiguration()->getDefaultScopeId()
+        )->where('e.type_id = ?', $this->getTypeId())
+            ->group(['e.entity_id', 'cis.website_id', 'cis.stock_id']);
 
-        // add limitation of status
-        $condition = $connection->quoteInto(
-            '=?',
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-        );
-        $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
-
-        if ($this->_isManageStock()) {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1,
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                1
-            );
-        }
-
-        $select->columns(['status' => $statusExpr]);
-
+        $select->columns(['status' => $this->getStatusExpression($connection, true)]);
         if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
@@ -228,6 +222,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds);
+        $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);
 
@@ -244,6 +239,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
+        $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds, true);
         $query = $connection->query($select);
 
         $i = 0;
@@ -253,7 +249,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             $data[] = [
                 'product_id' => (int)$row['entity_id'],
                 'website_id' => (int)$row['website_id'],
-                'stock_id' => (int)$row['stock_id'],
+                'stock_id' => Stock::DEFAULT_STOCK_ID,
                 'qty' => (double)$row['qty'],
                 'stock_status' => (int)$row['status'],
             ];
@@ -295,5 +291,55 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     public function getIdxTable($table = null)
     {
         return $this->tableStrategy->getTableName('cataloginventory_stock_status');
+    }
+
+    /**
+     * @param AdapterInterface $connection
+     * @param bool $isAggregate
+     * @return mixed
+     */
+    protected function getStatusExpression(AdapterInterface $connection, $isAggregate = false)
+    {
+        $isInStockExpression = $isAggregate ? 'MAX(cisi.is_in_stock)' : 'cisi.is_in_stock';
+        if ($this->_isManageStock()) {
+            $statusExpr = $connection->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
+                1,
+                $isInStockExpression
+            );
+        } else {
+            $statusExpr = $connection->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
+                $isInStockExpression,
+                1
+            );
+        }
+        return $statusExpr;
+    }
+
+    /**
+     * @return StockConfigurationInterface
+     *
+     * @deprecated
+     */
+    protected function getStockConfiguration()
+    {
+        if ($this->stockConfiguration === null) {
+            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+        }
+        return $this->stockConfiguration;
+    }
+
+    /**
+     * @return QueryProcessorComposite
+     */
+    private function getQueryProcessorComposite()
+    {
+        if (null === $this->queryProcessorComposite) {
+            $this->queryProcessorComposite = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite');
+        }
+        return $this->queryProcessorComposite;
     }
 }

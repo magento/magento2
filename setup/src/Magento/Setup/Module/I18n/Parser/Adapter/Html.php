@@ -13,6 +13,13 @@ use Magento\Email\Model\Template\Filter;
 class Html extends AbstractAdapter
 {
     /**
+     * Covers
+     * <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
+     * <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
+     */
+    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
+
+    /**
      * {@inheritdoc}
      */
     protected function _parse()
@@ -32,6 +39,13 @@ class Html extends AbstractAdapter
                 }
                 $quote = $directive[1];
                 $this->_addPhrase($quote . $directive[2] . $quote);
+            }
+        }
+
+        preg_match_all(self::HTML_FILTER, $data, $results, PREG_SET_ORDER);
+        for ($i = 0; $i < count($results); $i++) {
+            if (!empty($results[$i]['value'])) {
+                $this->_addPhrase($results[$i]['value']);
             }
         }
     }

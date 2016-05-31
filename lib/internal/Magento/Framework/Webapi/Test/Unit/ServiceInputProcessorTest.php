@@ -42,7 +42,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $fieldNamer;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder('\Magento\Framework\ObjectManagerInterface')
@@ -58,7 +58,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
-        $cache = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Webapi')
+        $cache = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Reflection')
             ->disableOriginalConstructor()
             ->getMock();
         $cache->expects($this->any())->method('load')->willReturn(false);
@@ -104,6 +104,13 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 'methodsMap' => $this->methodsMap
             ]
         );
+
+        /** @var \Magento\Framework\Reflection\NameFinder $nameFinder */
+        $nameFinder = $objectManager->getObject('\Magento\Framework\Reflection\NameFinder');
+        $serviceInputProcessorReflection = new \ReflectionClass(get_class($this->serviceInputProcessor));
+        $typeResolverReflection = $serviceInputProcessorReflection->getProperty('nameFinder');
+        $typeResolverReflection->setAccessible(true);
+        $typeResolverReflection->setValue($this->serviceInputProcessor, $nameFinder);
     }
 
     public function testSimpleProperties()
@@ -133,7 +140,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage \Magento\Framework\Exception\InputException::DEFAULT_MESSAGE
+     * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testNonExistentPropertiesWithoutDefaultArgumentValue()
     {
@@ -435,31 +442,6 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                     ['entityId' => 15, 'name' => 'Second'],
                 ]),
             ],
-            'customAttributeNonExistentCustomAttributeCode' => [
-                'customAttributeType' => 'integer',
-                'inputData' => [
-                    'param' => [
-                        'customAttributes' => [
-                            [
-                                'non_existent_attribute_code_' => TestService::CUSTOM_ATTRIBUTE_CODE,
-                                'value' => TestService::DEFAULT_VALUE
-                            ]
-                        ]
-                    ]
-                ],
-                'expectedObject'=>   $this->getObjectWithCustomAttributes('emptyData')
-            ],
-            'customAttributeObjectNonExistentCustomAttributeCodeValue' => [
-                'customAttributeType' => 'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\SimpleArray',
-                'inputData' => [
-                    'param' => [
-                        'customAttributes' => [
-                            ['attribute_code' => 'nonExistentAttributeCode', 'value' => ['ids' => [1, 2, 3, 4]]]
-                        ]
-                    ]
-                ],
-                'expectedObject'=>   $this->getObjectWithCustomAttributes('emptyData')
-            ],
         ];
     }
 
@@ -519,5 +501,57 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 ]
             ]]
         );
+    }
+
+    /**
+     * Cover invalid custom attribute data
+     *
+     * @dataProvider invalidCustomAttributesDataProvider
+     * @expectedException \Magento\Framework\Webapi\Exception
+     */
+    public function testCustomAttributesExceptions($inputData)
+    {
+        $this->serviceInputProcessor->process(
+            'Magento\Framework\Webapi\Test\Unit\ServiceInputProcessor\TestService',
+            'ObjectWithCustomAttributesMethod',
+            $inputData
+        );
+    }
+
+    public function invalidCustomAttributesDataProvider()
+    {
+        return [
+            [
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            []
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            [
+                                'value' => TestService::DEFAULT_VALUE
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'inputData' => [
+                    'param' => [
+                        'customAttributes' => [
+                            [
+                                'attribute_code' => TestService::CUSTOM_ATTRIBUTE_CODE,
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 }

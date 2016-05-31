@@ -46,7 +46,7 @@ main.controller('navigationController',
                     .error(function (result) {
                     });
             },
-            120000
+            25000
         );
 
         $scope.moduleName = $localStorage.moduleName;

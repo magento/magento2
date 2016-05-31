@@ -52,7 +52,7 @@ class Sample_Proxy extends \Magento\Framework\ObjectManager\Code\Generator\Sampl
      */
     public function __sleep()
     {
-        return array('_subject', '_isShared');
+        return ['_subject', '_isShared', '_instanceName'];
     }
 
     /**

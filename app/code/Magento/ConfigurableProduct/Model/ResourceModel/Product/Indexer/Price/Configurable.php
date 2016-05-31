@@ -7,6 +7,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice
 {
     /**
@@ -69,23 +71,40 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      */
     private function getRelatedProducts($entityIds)
     {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $select = $this->getConnection()->select()->union(
             [
                 $this->getConnection()->select()
-                    ->from($this->getTable('catalog_product_super_link'), 'parent_id')
-                    ->where('parent_id in (?)', $entityIds),
+                    ->from(
+                        ['e' => $this->getTable('catalog_product_entity')],
+                        'e.entity_id'
+                    )->join(
+                        ['cpsl' => $this->getTable('catalog_product_super_link')],
+                        'cpsl.parent_id = e.' . $metadata->getLinkField(),
+                        []
+                    )->where(
+                        'e.entity_id IN (?)',
+                        $entityIds
+                    ),
                 $this->getConnection()->select()
-                    ->from($this->getTable('catalog_product_super_link'), 'product_id')
-                    ->where('parent_id in (?)', $entityIds),
+                    ->from(
+                        ['cpsl' => $this->getTable('catalog_product_super_link')],
+                        'cpsl.product_id'
+                    )->join(
+                        ['e' => $this->getTable('catalog_product_entity')],
+                        'cpsl.parent_id = e.' . $metadata->getLinkField(),
+                        []
+                    )->where(
+                        'e.entity_id IN (?)',
+                        $entityIds
+                    ),
                 $this->getConnection()->select()
                     ->from($this->getTable('catalog_product_super_link'), 'product_id')
                     ->where('product_id in (?)', $entityIds),
             ]
         );
-        return array_map(
-            'intval',
-            $this->getConnection()->fetchCol($select)
-        );
+
+        return array_map('intval', $this->getConnection()->fetchCol($select));
     }
 
     /**
@@ -139,6 +158,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      */
     protected function _applyConfigurableOption()
     {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $connection = $this->getConnection();
         $coaTable = $this->_getConfigurableOptionAggregateTable();
         $copTable = $this->_getConfigurableOptionPriceTable();
@@ -150,9 +170,13 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             ['i' => $this->_getDefaultFinalPriceTable()],
             []
         )->join(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'e.entity_id = i.entity_id',
+            ['parent_id' => 'e.entity_id']
+        )->join(
             ['l' => $this->getTable('catalog_product_super_link')],
-            'l.parent_id = i.entity_id',
-            ['parent_id', 'product_id']
+            'l.parent_id = e.' . $metadata->getLinkField(),
+            ['product_id']
         )->columns(
             ['customer_group_id', 'website_id'],
             'i'
@@ -163,7 +187,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
         )->where(
             'le.required_options=0'
         )->group(
-            ['l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
+            ['parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
         $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
         $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');

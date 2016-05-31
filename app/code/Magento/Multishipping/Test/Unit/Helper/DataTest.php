@@ -38,7 +38,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $checkoutSessionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
 

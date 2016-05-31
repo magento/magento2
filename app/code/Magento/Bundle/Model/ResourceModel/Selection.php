@@ -5,6 +5,10 @@
  */
 namespace Magento\Bundle\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+
 /**
  * Bundle Selection Resource Model
  *
@@ -12,6 +16,27 @@ namespace Magento\Bundle\Model\ResourceModel;
  */
 class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * Selection constructor.
+     *
+     * @param Context $context
+     * @param MetadataPool $metadataPool
+     * @param null|string $connectionName
+     */
+    public function __construct(Context $context, MetadataPool $metadataPool, $connectionName = null)
+    {
+        parent::__construct(
+            $context,
+            $connectionName
+        );
+        $this->metadataPool = $metadataPool;
+    }
+
     /**
      * Define main table and id field
      *
@@ -37,6 +62,7 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $childrenIds = [];
         $notRequired = [];
         $connection = $this->getConnection();
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['tbl_selection' => $this->getMainTable()],
             ['product_id', 'parent_product_id', 'option_id']
@@ -45,11 +71,14 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'e.entity_id = tbl_selection.product_id AND e.required_options=0',
             []
         )->join(
+            ['parent' => $this->getTable('catalog_product_entity')],
+            'tbl_selection.parent_product_id = parent.' . $linkField
+        )->join(
             ['tbl_option' => $this->getTable('catalog_product_bundle_option')],
             'tbl_option.option_id = tbl_selection.option_id',
             ['required']
         )->where(
-            'tbl_selection.parent_product_id = :parent_id'
+            'parent.entity_id = :parent_id'
         );
         foreach ($connection->fetchAll($select, ['parent_id' => $parentId]) as $row) {
             if ($row['required']) {
@@ -86,13 +115,18 @@ class Selection extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getParentIdsByChild($childId)
     {
         $connection = $this->getConnection();
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $select = $connection->select()->distinct(
             true
         )->from(
             $this->getMainTable(),
-            'parent_product_id'
+            ''
+        )->join(
+            ['e' => $this->metadataPool->getMetadata(ProductInterface::class)->getEntityTable()],
+            'e.' . $metadata->getLinkField() . ' = ' .  $this->getMainTable() . '.parent_product_id',
+            ['e.entity_id as parent_product_id']
         )->where(
-            'product_id IN(?)',
+            'e.entity_id IN(?)',
             $childId
         );
 

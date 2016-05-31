@@ -6,9 +6,10 @@
 -->
 <input class="admin__control-text" type="text" data-bind="
     hasFocus: focused,
-    datepicker: { storage: value, options: options },
+    datepicker: { storage: shiftedValue, options: options },
+    valueUpdate: valueUpdate,
     attr: {
-        value: value,
+        value: shiftedValue,
         name: inputName,
         placeholder: placeholder,
         'aria-describedby': noticeId,

@@ -48,7 +48,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
     }
 
     /**
-     * Whether the tool can be ran on the current environment
+     * Whether the tool can be run in the current environment
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
@@ -56,7 +56,8 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      */
     public function canRun()
     {
-        exec('phpcpd --version', $output, $exitCode);
+        $vendorDir = require BP . '/app/etc/vendor_path.php';
+        exec('php ' . BP . '/' . $vendorDir . '/bin/phpcpd --version', $output, $exitCode);
         return $exitCode === 0;
     }
 
@@ -79,9 +80,10 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
             $blackListStr .= '--exclude ' . $file . ' ';
         }
 
-        $command = 'phpcpd' . ' --log-pmd ' . escapeshellarg(
+        $vendorDir = require BP . '/app/etc/vendor_path.php';
+        $command = 'php ' . BP . '/' . $vendorDir . '/bin/phpcpd' . ' --log-pmd ' . escapeshellarg(
                 $this->reportFile
-            ) . ' --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
+            ) . ' --names-exclude "*Test.php" --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
 
         exec($command, $output, $exitCode);
 

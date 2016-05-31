@@ -121,6 +121,10 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         $collection->setAttributeSetFilter($attributeSetId);
         $collection->setSortOrder();
 
+        if ($attributeGroupCode = $this->retrieveAttributeGroupCodeFromSearchCriteria($searchCriteria)) {
+            $collection->addFilter('attribute_group_code', $attributeGroupCode);
+        }
+
         $searchResult = $this->searchResultsFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
@@ -182,6 +186,25 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
         foreach ($searchCriteria->getFilterGroups() as $group) {
             foreach ($group->getFilters() as $filter) {
                 if ($filter->getField() == 'attribute_set_id') {
+                    return $filter->getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Retrieve attribute group code
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return null|string
+     */
+    private function retrieveAttributeGroupCodeFromSearchCriteria(
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+    ) {
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            foreach ($group->getFilters() as $filter) {
+                if ($filter->getField() === 'attribute_group_code') {
                     return $filter->getValue();
                 }
             }

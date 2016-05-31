@@ -10,15 +10,24 @@ define([
 ], function ($, _, utils, Class) {
     'use strict';
 
-    function beforeSave(data, url) {
+    /**
+     * Before save validate request.
+     *
+     * @param {Object} data
+     * @param {String} url
+     * @param {String} selectorPrefix
+     * @param {String} messagesClass
+     * @returns {*}
+     */
+    function beforeSave(data, url, selectorPrefix, messagesClass) {
         var save = $.Deferred();
 
         data = utils.serialize(data);
 
-        data.form_key = window.FORM_KEY;
+        data['form_key'] = window.FORM_KEY;
 
-        if (!url) {
-            save.resolve();
+        if (!url || url === 'undefined') {
+            return save.resolve();
         }
 
         $('body').trigger('processStart');
@@ -26,23 +35,42 @@ define([
         $.ajax({
             url: url,
             data: data,
+
+            /**
+             * Success callback.
+             * @param {Object} resp
+             * @returns {Boolean}
+             */
             success: function (resp) {
                 if (!resp.error) {
                     save.resolve();
+
                     return true;
                 }
 
                 $('body').notification('clear');
-                $.each(resp.messages, function(key, message) {
+                $.each(resp.messages || [resp.message] || [], function (key, message) {
                     $('body').notification('add', {
                         error: resp.error,
                         message: message,
-                        insertMethod: function(message) {
-                            $('.page-main-actions').after(message);
+
+                        /**
+                         * Insert method.
+                         *
+                         * @param {String} msg
+                         */
+                        insertMethod: function (msg) {
+                            var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
+
+                            $('.page-main-actions', selectorPrefix).after($wrapper);
                         }
                     });
                 });
             },
+
+            /**
+             * Complete callback.
+             */
             complete: function () {
                 $('body').trigger('processStop');
             }
@@ -60,11 +88,19 @@ define([
             var url = this.urls.beforeSave,
                 save = this._save.bind(this, data, options);
 
-            beforeSave(data, url).then(save);
+            beforeSave(data, url, this.selectorPrefix, this.messagesClass).then(save);
 
             return this;
         },
 
+        /**
+         * Save data.
+         *
+         * @param {Object} data
+         * @param {Object} options
+         * @returns {Object}
+         * @private
+         */
         _save: function (data, options) {
             var url = this.urls.save;
 
@@ -72,6 +108,15 @@ define([
 
             if (!options.redirect) {
                 url += 'back/edit';
+            }
+
+            if (options.ajaxSave) {
+                utils.ajaxSubmit({
+                    url: url,
+                    data: data
+                }, options);
+
+                return this;
             }
 
             utils.submit({

@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <title>
+            <selector>[name$='[title]']</selector>
+            <strategy>css selector</strategy>
+        </title>
+        <sample_type>
+            <selector>[name*='[sample]'][name$='[type]']</selector>
+            <strategy>css selector</strategy>
+            <input>select</input>
+        </sample_type>
+        <sample_url>
+            <selector>[name$='[sample_url]']</selector>
+            <strategy>css selector</strategy>
+        </sample_url>
+    </fields>
+</mapping>

@@ -150,12 +150,15 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
         foreach (array_reverse($this->getAllQuoteItems()) as $item) {
             /* @var $item \Magento\Quote\Model\Quote\Item */
             if (!$item->getProduct()->isVisibleInSiteVisibility()) {
-                $productId = $item->getProduct()->getId();
-                $products = $this->catalogUrl->getRewriteByProductStore([$productId => $item->getStoreId()]);
-                if (!isset($products[$productId])) {
+                $product =  $item->getOptionByCode('product_type') !== null
+                    ? $item->getOptionByCode('product_type')->getProduct()
+                    : $item->getProduct();
+
+                $products = $this->catalogUrl->getRewriteByProductStore([$product->getId() => $item->getStoreId()]);
+                if (!isset($products[$product->getId()])) {
                     continue;
                 }
-                $urlDataObject = new \Magento\Framework\DataObject($products[$productId]);
+                $urlDataObject = new \Magento\Framework\DataObject($products[$product->getId()]);
                 $item->getProduct()->setUrlDataObject($urlDataObject);
             }
             $items[] = $this->itemPoolInterface->getItemData($item);

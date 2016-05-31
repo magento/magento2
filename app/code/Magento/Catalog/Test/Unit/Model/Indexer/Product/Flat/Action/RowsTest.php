@@ -57,7 +57,7 @@ class RowsTest extends \PHPUnit_Framework_TestCase
      */
     protected $_flatTableBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 

@@ -191,4 +191,13 @@ class ValueTest extends \PHPUnit_Framework_TestCase
             [1, 'other_value'],
         ];
     }
+
+    /**
+     * @return void;
+     */
+    public function testAfterDelete()
+    {
+        $this->cacheTypeListMock->expects($this->once())->method('invalidate');
+        $this->assertInstanceOf(get_class($this->model), $this->model->afterDelete());
+    }
 }

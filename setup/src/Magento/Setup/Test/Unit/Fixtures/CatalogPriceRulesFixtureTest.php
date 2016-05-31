@@ -73,20 +73,27 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('category_id'));
 
         $modelMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
-        $modelMock->expects($this->once())
-            ->method('getIdFieldName')
+        $metadataMock = $this->getMock('\Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
+        $metadataPoolMock = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
+        $metadataMock->expects($this->once())
+            ->method('getLinkField')
             ->will($this->returnValue('Field Id Name'));
 
         $valueMap = [
             ['Magento\CatalogRule\Model\Rule', $modelMock],
-            ['Magento\Catalog\Model\Category', $categoryMock]
+            ['Magento\Catalog\Model\Category', $categoryMock],
+            ['Magento\Framework\EntityManager\MetadataPool', $metadataPoolMock]
         ];
-
+        $metadataPoolMock
+            ->expects($this->once())
+            ->method('getMetadata')
+            ->with('Magento\CatalogRule\Api\Data\RuleInterface')
+            ->willReturn($metadataMock);
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($storeManagerMock));
-        $objectManagerMock->expects($this->exactly(2))
+        $objectManagerMock->expects($this->exactly(3))
             ->method('get')
             ->will($this->returnValueMap($valueMap));
 
@@ -95,7 +102,7 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValue(1));
         $this->fixtureModelMock
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(4))
             ->method('getObjectManager')
             ->will($this->returnValue($objectManagerMock));
 

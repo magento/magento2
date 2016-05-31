@@ -35,7 +35,7 @@ class CurrentCustomerAddressTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->currentCustomerMock = $this->getMockBuilder('Magento\Customer\Helper\Session\CurrentCustomer')
             ->disableOriginalConstructor()

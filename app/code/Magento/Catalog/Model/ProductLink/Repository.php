@@ -6,13 +6,41 @@
 
 namespace Magento\Catalog\Model\ProductLink;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductLinkExtensionFactory;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks as LinksInitializer;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Catalog\Api\Data;
+use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class Repository
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 {
+    /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
+     */
+    protected $catalogProductRelation;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link
+     */
+    protected $linkResource;
+
+    /**
+     * @var LinkTypeProvider
+     */
+    protected $linkTypeProvider;
+
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
@@ -39,13 +67,24 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     protected $dataObjectProcessor;
 
     /**
-     * Initialize dependencies.
+     * @var ProductLinkInterfaceFactory
+     */
+    protected $productLinkFactory;
+
+    /**
+     * @var ProductLinkExtensionFactory
+     */
+    protected $productLinkExtensionFactory;
+
+    /**
+     * Repository constructor.
      *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param CollectionProvider $entityCollectionProvider
      * @param LinksInitializer $linkInitializer
      * @param Management $linkManagement
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -68,7 +107,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     {
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());
-        $links = $this->entityCollectionProvider->getCollection($product, $entity->getLinkType());
+        $links = [];
         $extensions = $this->dataObjectProcessor->buildOutputDataArray(
             $entity->getExtensionAttributes(),
             'Magento\Catalog\Api\Data\ProductLinkExtensionInterface'
@@ -81,13 +120,61 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         unset($data['extension_attributes']);
         $data['product_id'] = $linkedProduct->getId();
         $links[$linkedProduct->getId()] = $data;
-        $this->linkInitializer->initializeLinks($product, [$entity->getLinkType() => $links]);
+
         try {
-            $product->save();
+            $linkTypesToId = $this->getLinkTypeProvider()->getLinkTypes();
+            $productData = $this->getMetadataPool()->getHydrator(ProductInterface::class)->extract($product);
+            $this->getLinkResource()->saveProductLinks(
+                $productData[$this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()],
+                $links,
+                $linkTypesToId[$entity->getLinkType()]
+            );
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Invalid data provided for linked products'));
         }
         return true;
+    }
+
+    /**
+     * Get product links list
+     *
+     * @param \Magento\Catalog\Api\Data\ProductInterface $product
+     * @return \Magento\Catalog\Api\Data\ProductLinkInterface[]
+     */
+    public function getList(\Magento\Catalog\Api\Data\ProductInterface $product)
+    {
+        $output = [];
+        $linkTypes = $this->getLinkTypeProvider()->getLinkTypes();
+        foreach (array_keys($linkTypes) as $linkTypeName) {
+            $collection = $this->entityCollectionProvider->getCollection($product, $linkTypeName);
+            foreach ($collection as $item) {
+                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+                $productLink = $this->getProductLinkFactory()->create();
+                $productLink->setSku($product->getSku())
+                    ->setLinkType($linkTypeName)
+                    ->setLinkedProductSku($item['sku'])
+                    ->setLinkedProductType($item['type'])
+                    ->setPosition($item['position']);
+                if (isset($item['custom_attributes'])) {
+                    $productLinkExtension = $productLink->getExtensionAttributes();
+                    if ($productLinkExtension === null) {
+                        $productLinkExtension = $this->getProductLinkExtensionFactory()->create();
+                    }
+                    foreach ($item['custom_attributes'] as $option) {
+                        $name = $option['attribute_code'];
+                        $value = $option['value'];
+                        $setterName = 'set'.ucfirst($name);
+                        // Check if setter exists
+                        if (method_exists($productLinkExtension, $setterName)) {
+                            call_user_func([$productLinkExtension, $setterName], $value);
+                        }
+                    }
+                    $productLink->setExtensionAttributes($productLinkExtension);
+                }
+                $output[] = $productLink;
+            }
+        }
+        return $output;
     }
 
     /**
@@ -97,23 +184,26 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     {
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());
-        $links = $this->entityCollectionProvider->getCollection($product, $entity->getLinkType());
+        $linkTypesToId = $this->getLinkTypeProvider()->getLinkTypes();
+        $productData = $this->getMetadataPool()->getHydrator(ProductInterface::class)->extract($product);
+        $linkId = $this->getLinkResource()->getProductLinkId(
+            $productData[$this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()],
+            $linkedProduct->getId(),
+            $linkTypesToId[$entity->getLinkType()]
+        );
 
-        if (!isset($links[$linkedProduct->getId()])) {
+        if (!$linkId) {
             throw new NoSuchEntityException(
                 __(
-                    'Product with SKU %1 is not linked to product with SKU %2',
+                    'Product with SKU \'%1\' is not linked to product with SKU \'%2\'',
                     $entity->getLinkedProductSku(),
                     $entity->getSku()
                 )
             );
         }
-        //Remove product from the linked product list
-        unset($links[$linkedProduct->getId()]);
 
-        $this->linkInitializer->initializeLinks($product, [$entity->getLinkType() => $links]);
         try {
-            $product->save();
+            $this->getLinkResource()->deleteProductLink($linkId);
         } catch (\Exception $exception) {
             throw new CouldNotSaveException(__('Invalid data provided for linked products'));
         }
@@ -142,5 +232,65 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 ]
             )
         );
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link
+     */
+    private function getLinkResource()
+    {
+        if (null === $this->linkResource) {
+            $this->linkResource = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Product\Link');
+        }
+        return $this->linkResource;
+    }
+
+    /**
+     * @return LinkTypeProvider
+     */
+    private function getLinkTypeProvider()
+    {
+        if (null === $this->linkTypeProvider) {
+            $this->linkTypeProvider = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\LinkTypeProvider');
+        }
+        return $this->linkTypeProvider;
+    }
+
+    /**
+     * @return ProductLinkInterfaceFactory
+     */
+    private function getProductLinkFactory()
+    {
+        if (null === $this->productLinkFactory) {
+            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+        }
+        return $this->productLinkFactory;
+    }
+
+    /**
+     * @return ProductLinkExtensionFactory
+     */
+    private function getProductLinkExtensionFactory()
+    {
+        if (null === $this->productLinkExtensionFactory) {
+            $this->productLinkExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductLinkExtensionFactory');
+        }
+        return $this->productLinkExtensionFactory;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

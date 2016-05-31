@@ -67,6 +67,11 @@ class Http implements \Magento\Framework\AppInterface
     protected $registry;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param Event\Manager $eventManager
      * @param AreaList $areaList
@@ -97,6 +102,21 @@ class Http implements \Magento\Framework\AppInterface
         $this->_state = $state;
         $this->_filesystem = $filesystem;
         $this->registry = $registry;
+    }
+
+    /**
+     * Add new dependency
+     *
+     * @return \Psr\Log\LoggerInterface
+     *
+     * @deprecated
+     */
+    private function getLogger()
+    {
+        if (!$this->logger instanceof \Psr\Log\LoggerInterface) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+        }
+        return $this->logger;
     }
 
     /**
@@ -161,11 +181,44 @@ class Http implements \Magento\Framework\AppInterface
             }
             $this->_response->setHttpResponseCode(500);
             $this->_response->setHeader('Content-Type', 'text/plain');
-            $this->_response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            $this->_response->setBody($this->buildContentFromException($exception));
             $this->_response->sendResponse();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Build content based on an exception
+     *
+     * @param \Exception $exception
+     * @return string
+     */
+    private function buildContentFromException(\Exception $exception)
+    {
+        /** @var \Exception[] $exceptions */
+        $exceptions = [];
+        do {
+            $exceptions[] = $exception;
+        } while ($exception = $exception->getPrevious());
+
+        $buffer = sprintf("%d exception(s):\n", count($exceptions));
+
+        foreach ($exceptions as $index => $exception) {
+            $buffer .= sprintf("Exception #%d (%s): %s\n", $index, get_class($exception), $exception->getMessage());
+        }
+
+        foreach ($exceptions as $index => $exception) {
+            $buffer .= sprintf(
+                "\nException #%d (%s): %s\n%s\n",
+                $index,
+                get_class($exception),
+                $exception->getMessage(),
+                $exception->getTraceAsString()
+            );
+        }
+
+        return $buffer;
     }
 
     /**
@@ -244,6 +297,7 @@ class Http implements \Magento\Framework\AppInterface
     private function handleInitException(\Exception $exception)
     {
         if ($exception instanceof \Magento\Framework\Exception\State\InitException) {
+            $this->getLogger()->critical($exception);
             require $this->_filesystem->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
             return true;
         }

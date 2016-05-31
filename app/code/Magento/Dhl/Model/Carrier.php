@@ -193,6 +193,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected $_httpClientFactory;
 
     /**
+     * @inheritdoc
+     */
+    protected $_debugReplacePrivateDataKeys = [
+        'SiteID', 'Password'
+    ];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -904,17 +911,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         $responseBody = '';
         try {
-            $debugData = [];
             for ($offset = 0; $offset <= self::UNAVAILABLE_DATE_LOOK_FORWARD; $offset++) {
-                $debugData['try-' . $offset] = [];
-                $debugPoint = &$debugData['try-' . $offset];
+                $debugPoint = [];
 
                 $requestXml = $this->_buildQuotesRequestXml();
                 $date = date(self::REQUEST_DATE_FORMAT, strtotime($this->_getShipDate() . " +{$offset} days"));
                 $this->_setQuotesRequestXmlDate($requestXml, $date);
 
                 $request = $requestXml->asXML();
-                $debugPoint['request'] = $request;
+                $debugPoint['request'] = $this->filterDebugData($request);
                 $responseBody = $this->_getCachedQuotes($request);
                 $debugPoint['from_cache'] = $responseBody === null;
 
@@ -922,19 +927,20 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     $responseBody = $this->_getQuotesFromServer($request);
                 }
 
-                $debugPoint['response'] = $responseBody;
+                $debugPoint['response'] = $this->filterDebugData($responseBody);
 
                 $bodyXml = $this->_xmlElFactory->create(['data' => $responseBody]);
                 $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
                 if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
                     $debugPoint['info'] = sprintf(__("DHL service is not available at %s date"), $date);
                 } else {
+                    $this->_debug($debugPoint);
                     break;
                 }
 
                 $this->_setCachedQuotes($request, $responseBody);
+                $this->_debug($debugPoint);
             }
-            $this->_debug($debugData);
         } catch (\Exception $e) {
             $this->_errors[$e->getCode()] = $e->getMessage();
         }
@@ -1117,9 +1123,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     throw new \Magento\Framework\Exception\LocalizedException($responseError);
                 }
                 $this->debugErrors($this->_errors);
-
-                return false;
             }
+            $result->append($this->getErrorMessage());
         }
 
         return $result;
@@ -1296,7 +1301,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             )
         );
         if (!$countryParams->getData()) {
-            $this->_errors[] = __('Please, specify origin country');
+            $this->_errors[] = __('Please specify origin country.');
         }
 
         if (!empty($this->_errors)) {
@@ -1307,7 +1312,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return $this;
     }
-
 
     /**
      * Return container types of carrier

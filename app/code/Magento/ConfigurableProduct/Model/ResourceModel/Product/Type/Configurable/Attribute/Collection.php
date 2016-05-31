@@ -7,7 +7,12 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -39,7 +44,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Catalog product type configurable
      *
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var Configurable
      */
     protected $_productTypeConfigurable;
 
@@ -51,14 +56,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_storeManager;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable
+     * @param Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource
+     * @param Attribute $resource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -68,9 +78,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
+        Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource,
+        Attribute $resource,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
@@ -101,14 +111,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setProductFilter($product)
     {
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $this->_product = $product;
-        return $this->addFieldToFilter('product_id', $product->getId());
+        return $this->addFieldToFilter('product_id', $product->getData($metadata->getLinkField()));
     }
 
     /**
      * Get product type
      *
-     * @return \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @return Configurable
      */
     private function getProductType()
     {
@@ -292,8 +303,50 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @return \Magento\Catalog\Model\Product
      */
-    public function getProduct()
+    private function getProduct()
     {
         return $this->_product;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            [
+                '_product',
+                '_catalogData',
+                '_productTypeConfigurable',
+                '_storeManager',
+                'metadataPool',
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = ObjectManager::getInstance();
+        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_productTypeConfigurable = $objectManager->get(Configurable::class);
+        $this->_catalogData = $objectManager->get(\Magento\Catalog\Helper\Data::class);
+        $this->metadataPool = $objectManager->get(MetadataPool::class);
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

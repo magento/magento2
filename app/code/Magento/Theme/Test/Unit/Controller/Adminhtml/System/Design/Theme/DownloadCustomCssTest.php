@@ -68,7 +68,7 @@ class DownloadCustomCssTest extends \PHPUnit_Framework_TestCase
      */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
             ->disableOriginalConstructor()

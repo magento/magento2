@@ -84,11 +84,17 @@ class Field extends AbstractComponent
         $this->wrappedComponent->setData(
             'config',
             array_replace_recursive(
+                ['dataScope' => $this->getName()],
                 (array) $this->wrappedComponent->getData('config'),
                 (array) $this->getData('config')
             )
         );
-        $this->wrappedComponent->prepare();
+
+        foreach ($this->components as $nameComponent => $component) {
+            $this->wrappedComponent->addComponent($nameComponent, $component);
+        }
+        $this->prepareChildComponent($this->wrappedComponent);
+
         $this->components = $this->wrappedComponent->getChildComponents();
         // Merge JS configuration with wrapped component configuration
         $wrappedComponentConfig = $this->getJsConfig($this->wrappedComponent);

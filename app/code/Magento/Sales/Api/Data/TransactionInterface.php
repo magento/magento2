@@ -14,6 +14,24 @@ namespace Magento\Sales\Api\Data;
 interface TransactionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
+     * Supported transaction types
+     * @var string
+     */
+    const TYPE_PAYMENT = 'payment';
+
+    const TYPE_ORDER = 'order';
+
+    const TYPE_AUTH = 'authorization';
+
+    const TYPE_CAPTURE = 'capture';
+
+    const TYPE_VOID = 'void';
+
+    const TYPE_REFUND = 'refund';
+
+    /**#@-*/
+
+    /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
      */
     /*

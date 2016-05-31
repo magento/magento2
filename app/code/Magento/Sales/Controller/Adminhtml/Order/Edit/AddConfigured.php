@@ -9,12 +9,9 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Edit;
 class AddConfigured extends \Magento\Sales\Controller\Adminhtml\Order\Create\AddConfigured
 {
     /**
-     * Acl check for admin
+     * Authorization level of a basic admin session
      *
-     * @return bool
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
-    }
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
 }

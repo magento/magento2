@@ -325,6 +325,8 @@ abstract class EntityAbstract
             $parameterInfo['type'] = 'array';
         } elseif ($parameter->getClass()) {
             $parameterInfo['type'] = $this->_getFullyQualifiedClassName($parameter->getClass()->getName());
+        } elseif ($parameter->isCallable()) {
+            $parameterInfo['type'] = 'callable';
         }
 
         if ($parameter->isOptional() && $parameter->isDefaultValueAvailable()) {

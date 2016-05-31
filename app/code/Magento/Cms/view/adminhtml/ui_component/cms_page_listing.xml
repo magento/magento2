@@ -23,81 +23,39 @@
     </argument>
     <dataSource name="cms_page_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">PageGridDataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Cms\Ui\Component\DataProvider</argument>
             <argument name="name" xsi:type="string">cms_page_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">page_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">page_id</item>
+                    </item>
                 </item>
             </argument>
-        </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
         </argument>
     </dataSource>
-    <container name="listing_top">
+    <listingToolbar name="listing_top">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/toolbar</item>
-                <item name="stickyTmpl" xsi:type="string">ui/grid/sticky/toolbar</item>
+                <item name="sticky" xsi:type="boolean">true</item>
             </item>
         </argument>
-        <bookmark name="bookmarks">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">cms_page_listing</item>
-                    </item>
-                </item>
-            </argument>
-        </bookmark>
-        <component name="columns_controls">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns</item>
-                    </item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                </item>
-            </argument>
-        </component>
-        <filterSearch name="fulltext">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters_chips</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.search</item>
-                    </item>
-                </item>
-            </argument>
-        </filterSearch>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="columnsProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
                     <item name="templates" xsi:type="array">
                         <item name="filters" xsi:type="array">
                             <item name="select" xsi:type="array">
                                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
                                 <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
                             </item>
-                        </item>
-                    </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.${ $.index }:visible</item>
                         </item>
                     </item>
                 </item>
@@ -111,6 +69,10 @@
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">${ $.parentName }</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
+                        </item>
                         <item name="dataScope" xsi:type="string">store_id</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
                         <item name="captionValue" xsi:type="string">0</item>
@@ -119,12 +81,6 @@
             </filterSelect>
         </filters>
         <massaction name="listing_massaction">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
-                    <item name="indexField" xsi:type="string">page_id</item>
-                </item>
-            </argument>
             <action name="delete">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -169,25 +125,11 @@
                 </argument>
             </action>
         </massaction>
-        <paging name="listing_paging">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.paging</item>
-                    </item>
-                    <item name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
-                </item>
-            </argument>
-        </paging>
-    </container>
+        <paging name="listing_paging"/>
+    </listingToolbar>
     <columns name="cms_page_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
                 <item name="editorConfig" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
                     <item name="enabled" xsi:type="boolean">true</item>
@@ -205,11 +147,6 @@
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
                             <item name="1" xsi:type="boolean">true</item>
                         </item>
-                    </item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
                 </item>
             </item>
@@ -320,6 +257,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="timezone" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Custom design from</item>
                     <item name="dateFormat" xsi:type="string">MMM d, y</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -333,6 +271,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="timezone" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Custom design to</item>
                     <item name="dateFormat" xsi:type="string">MMM d, y</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -361,6 +300,16 @@
                     <item name="editor" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Custom Layout</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+        <column name="meta_title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="editor" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Title</item>
                     <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
@@ -395,13 +344,4 @@
             </argument>
         </actionsColumn>
     </columns>
-    <container name="sticky">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>
-                <item name="toolbarProvider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top</item>
-                <item name="listingProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns</item>
-            </item>
-        </argument>
-    </container>
 </listing>

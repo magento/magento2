@@ -6,12 +6,15 @@
  */
 namespace Magento\PageCache\Observer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 
 class FlushCacheByTags implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\App\PageCache\Cache
+     *
+     * @deprecated
      */
     protected $_cache;
 
@@ -21,6 +24,11 @@ class FlushCacheByTags implements ObserverInterface
      * @var \Magento\PageCache\Model\Config
      */
     protected $_config;
+
+    /**
+     * @var \Magento\PageCache\Model\Cache\Type
+     */
+    private $fullPageCache;
 
     /**
      * @param \Magento\PageCache\Model\Config $config
@@ -45,13 +53,23 @@ class FlushCacheByTags implements ObserverInterface
             $object = $observer->getEvent()->getObject();
             if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
                 $tags = $object->getIdentities();
-                foreach ($tags as $tag) {
-                    $tags[] = preg_replace("~_\\d+$~", '', $tag);
-                }
                 if (!empty($tags)) {
-                    $this->_cache->clean(array_unique($tags));
+                    $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array_unique($tags));
                 }
             }
         }
+    }
+
+    /**
+     * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
+     *
+     * @return \Magento\PageCache\Model\Cache\Type
+     */
+    private function getCache()
+    {
+        if (!$this->fullPageCache) {
+            $this->fullPageCache = ObjectManager::getInstance()->get('\Magento\PageCache\Model\Cache\Type');
+        }
+        return $this->fullPageCache;
     }
 }

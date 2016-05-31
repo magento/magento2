@@ -17,7 +17,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
      */
     protected $flag;
 
-    public function setUp()
+    protected function setUp()
     {
         $data = ['flag_code' => 'synchronize'];
         $this->createInstance($data);

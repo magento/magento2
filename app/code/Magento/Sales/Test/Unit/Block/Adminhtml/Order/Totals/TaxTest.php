@@ -14,7 +14,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Adminhtml\Order\Totals\Tax */
     private $taxMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $getCalculatedTax = [
             'tax' => 'tax',

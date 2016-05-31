@@ -43,15 +43,20 @@ class DobTest extends \PHPUnit_Framework_TestCase
         '<div><label for="year"><span>yy</span></label><input type="text" id="year" name="Year" value="14"></div>';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
-    private $attribute;
+    protected $attribute;
 
     /** @var Dob */
-    private $_block;
+    protected $_block;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\CustomerMetadataInterface */
-    private $customerMetadata;
+    protected $customerMetadata;
 
-    public function setUp()
+    /**
+     * @var \Magento\Framework\Data\Form\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterFactory;
+
+    protected function setUp()
     {
         $zendCacheCore = new \Zend_Cache_Core();
         $zendCacheCore->setBackend(new \Zend_Cache_Backend_BlackHole());
@@ -89,11 +94,16 @@ class DobTest extends \PHPUnit_Framework_TestCase
 
         date_default_timezone_set('America/Los_Angeles');
 
+        $this->filterFactory = $this->getMockBuilder('Magento\Framework\Data\Form\FilterFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_block = new \Magento\Customer\Block\Widget\Dob(
             $context,
             $this->getMock('Magento\Customer\Helper\Address', [], [], '', false),
             $this->customerMetadata,
-            $this->getMock('Magento\Framework\View\Element\Html\Date', [], [], '', false)
+            $this->getMock('Magento\Framework\View\Element\Html\Date', [], [], '', false),
+            $this->filterFactory
         );
     }
 
@@ -124,7 +134,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->throwException(new NoSuchEntityException(
                     __(
-                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        'No such entity with %fieldName = %fieldValue',
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 ))
@@ -151,7 +161,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->throwException(new NoSuchEntityException(
                     __(
-                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        'No such entity with %fieldName = %fieldValue',
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 ))
@@ -178,7 +188,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame($this->_block, $this->_block->setDate($date));
         $this->assertEquals($expectedTime, $this->_block->getTime());
-        $this->assertEquals($expectedDate, $this->_block->getData('date'));
+        $this->assertEquals($expectedDate, $this->_block->getValue());
     }
 
     /**
@@ -187,6 +197,31 @@ class DobTest extends \PHPUnit_Framework_TestCase
     public function setDateDataProvider()
     {
         return [[self::DATE, strtotime(self::DATE), self::DATE], [false, false, false]];
+    }
+
+    public function testSetDateWithFilter()
+    {
+        $date = '2014-01-01';
+        $filterCode = 'date';
+
+        $this->attribute->expects($this->once())
+            ->method('getInputFilter')
+            ->willReturn($filterCode);
+
+        $filterMock = $this->getMockBuilder('Magento\Framework\Data\Form\Filter\Date')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filterMock->expects($this->once())
+            ->method('outputFilter')
+            ->with($date)
+            ->willReturn(self::DATE);
+
+        $this->filterFactory->expects($this->once())
+            ->method('create')
+            ->with($filterCode, ['format' => self::DATE_FORMAT])
+            ->willReturn($filterMock);
+
+        $this->_block->setDate($date);
     }
 
     /**
@@ -350,7 +385,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->throwException(new NoSuchEntityException(
                     __(
-                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        'No such entity with %fieldName = %fieldValue',
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 ))
@@ -419,7 +454,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->throwException(new NoSuchEntityException(
                     __(
-                        NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                        'No such entity with %fieldName = %fieldValue',
                         ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 ))

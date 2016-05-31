@@ -12,6 +12,8 @@ use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteIndex;
 use Magento\SalesRule\Test\Page\Adminhtml\PromoQuoteNew;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Customer\Test\Fixture\Customer;
 
 /**
  * Precondition:
@@ -33,6 +35,7 @@ class CreateSalesRuleEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
+    const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**
@@ -64,68 +67,100 @@ class CreateSalesRuleEntityTest extends Injectable
     protected $salesRuleName;
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
      * Inject pages.
      *
      * @param PromoQuoteNew $promoQuoteNew
      * @param PromoQuoteIndex $promoQuoteIndex
      * @param PromoQuoteEdit $promoQuoteEdit
+     * @param FixtureFactory $fixtureFactory
      * @return void
      */
     public function __inject(
         PromoQuoteNew $promoQuoteNew,
         PromoQuoteIndex $promoQuoteIndex,
-        PromoQuoteEdit $promoQuoteEdit
+        PromoQuoteEdit $promoQuoteEdit,
+        FixtureFactory $fixtureFactory
     ) {
         $this->promoQuoteNew = $promoQuoteNew;
         $this->promoQuoteIndex = $promoQuoteIndex;
         $this->promoQuoteEdit = $promoQuoteEdit;
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
-     * Create customer and 2 simple products with categories before run test.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return array
-     */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $customer = $fixtureFactory->createByCode('customer', ['dataset' => 'default']);
-        $customer->persist();
-
-        $productForSalesRule1 = $fixtureFactory->createByCode(
-            'catalogProductSimple',
-            ['dataset' => 'simple_for_salesrule_1']
-        );
-        $productForSalesRule1->persist();
-
-        $productForSalesRule2 = $fixtureFactory->createByCode(
-            'catalogProductSimple',
-            ['dataset' => 'simple_for_salesrule_2']
-        );
-        $productForSalesRule2->persist();
-
-        return [
-            'customer' => $customer,
-            'productForSalesRule1' => $productForSalesRule1,
-            'productForSalesRule2' => $productForSalesRule2
-        ];
-    }
-
-    /**
-     * Create Sales Rule Entity.
+     * Create Sales Price Rule.
      *
      * @param SalesRule $salesRule
-     * @return void
+     * @param CatalogProductSimple $productForSalesRule1
+     * @param CatalogProductSimple $productForSalesRule2
+     * @param Customer $customer
+     * @param string $conditionEntity
      */
-    public function testCreateSalesRule(SalesRule $salesRule)
-    {
-        // Preconditions
+    public function testCreateSalesRule(
+        SalesRule $salesRule,
+        CatalogProductSimple $productForSalesRule1,
+        CatalogProductSimple $productForSalesRule2 = null,
+        Customer $customer = null,
+        $conditionEntity = null
+    ) {
+        $replace = null;
         $this->salesRuleName = $salesRule->getName();
+
+        // Prepare data
+        if ($customer !== null) {
+            $customer->persist();
+        }
+        $productForSalesRule1->persist();
+        if ($productForSalesRule2 !== null) {
+            $productForSalesRule2->persist();
+            if ($conditionEntity !== null) {
+                $replace = $this->prepareCondition($productForSalesRule2, $conditionEntity);
+            }
+        }
 
         // Steps
         $this->promoQuoteNew->open();
-        $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule);
+        $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
         $this->promoQuoteNew->getFormPageActions()->save();
+    }
+
+    /**
+     * Prepare condition for Sales rule.
+     *
+     * @param CatalogProductSimple $productSimple
+     * @param string $conditionEntity
+     * @return array
+     */
+    protected function prepareCondition(CatalogProductSimple $productSimple, $conditionEntity)
+    {
+        $result = [];
+
+        switch ($conditionEntity) {
+            case 'category':
+                $result['%category_id%'] = $productSimple->getDataFieldConfig('category_ids')['source']->getIds()[0];
+                break;
+            case 'attribute':
+                /** @var \Magento\Catalog\Test\Fixture\CatalogProductAttribute[] $attrs */
+                $attributes = $productSimple->getDataFieldConfig('attribute_set_id')['source']
+                    ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']->getAttributes();
+
+                $result['%attribute_name%'] = $attributes[0]->getFrontendLabel();
+                $result['%attribute_value%'] = $attributes[0]->getOptions()[0]['view'];
+                break;
+        }
+
+        return [
+            'conditions' => [
+                'conditions_serialized' => $result,
+            ],
+        ];
     }
 
     /**

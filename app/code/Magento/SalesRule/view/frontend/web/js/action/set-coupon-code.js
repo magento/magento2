@@ -13,32 +13,30 @@ define(
         'jquery',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
-        'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/error-processor',
         'Magento_SalesRule/js/model/payment/discount-messages',
         'mage/storage',
-        'Magento_Checkout/js/action/get-totals',
         'mage/translate',
-        'Magento_Checkout/js/model/payment/method-list'
+        'Magento_Checkout/js/action/get-payment-information',
+        'Magento_Checkout/js/model/totals'
     ],
     function (
         ko,
         $,
         quote,
         urlManager,
-        paymentService,
         errorProcessor,
         messageContainer,
         storage,
-        getTotalsAction,
         $t,
-        paymentMethodList
+        getPaymentInformationAction,
+        totals
     ) {
         'use strict';
         return function (couponCode, isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
             var url = urlManager.getApplyCouponUrl(couponCode, quoteId);
-            var message = $t('Your coupon was successfully applied');
+            var message = $t('Your coupon was successfully applied.');
             return storage.put(
                 url,
                 {},
@@ -49,11 +47,10 @@ define(
                         var deferred = $.Deferred();
                         isLoading(false);
                         isApplied(true);
-                        getTotalsAction([], deferred);
-                        $.when(deferred).done(function() {
-                            paymentService.setPaymentMethods(
-                                paymentMethodList()
-                            );
+                        totals.isLoading(true);
+                        getPaymentInformationAction(deferred);
+                        $.when(deferred).done(function () {
+                            totals.isLoading(false);
                         });
                         messageContainer.addSuccessMessage({'message': message});
                     }
@@ -61,6 +58,7 @@ define(
             ).fail(
                 function (response) {
                     isLoading(false);
+                    totals.isLoading(false);
                     errorProcessor.process(response, messageContainer);
                 }
             );

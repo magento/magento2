@@ -216,7 +216,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = $content;
+        $this->metadata[$name] = htmlentities($content);
     }
 
     /**
@@ -245,7 +245,7 @@ class Config
     public function getContentType()
     {
         $this->build();
-        if (empty($this->metadata['content_type'])) {
+        if (strtolower($this->metadata['content_type']) === 'auto') {
             $this->metadata['content_type'] = $this->getMediaType() . '; charset=' . $this->getCharset();
         }
         return $this->metadata['content_type'];

@@ -392,7 +392,7 @@
         </elementProp>
         <elementProp name="Accept" elementType="Header">
           <stringProp name="Header.name">Accept</stringProp>
-          <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+          <stringProp name="Header.value">application/json,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
         </elementProp>
         <elementProp name="User-Agent" elementType="Header">
           <stringProp name="Header.name">User-Agent</stringProp>
@@ -439,7 +439,9 @@
     <hashTree>
       <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: Clear properties" enabled="true">
         <stringProp name="BeanShellSampler.query">props.remove("category_url_key");
+props.remove("category_url_keys_list");
 props.remove("category_name");
+props.remove("category_names_list");
 props.remove("simple_products_list");
 props.remove("configurable_products_list");
 props.remove("users");
@@ -611,7 +613,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
             </elementProp>
             <elementProp name="types" elementType="HTTPArgument">
               <boolProp name="HTTPArgument.always_encode">true</boolProp>
-              <stringProp name="Argument.value">config,layout,block_html,collections,db_ddl,eav,config_integration,full_page,translate,config_webservice,config_integration_api</stringProp>
+              <stringProp name="Argument.value">config,layout,block_html,collections,reflection,db_ddl,eav,config_integration,full_page,target_rule,translate,config_webservice,config_integration_api</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
               <boolProp name="HTTPArgument.use_equals">true</boolProp>
               <stringProp name="Argument.name">types</stringProp>
@@ -654,7 +656,7 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
             </elementProp>
             <elementProp name="types" elementType="HTTPArgument">
               <boolProp name="HTTPArgument.always_encode">true</boolProp>
-              <stringProp name="Argument.value">config,layout,block_html,collections,db_ddl,eav,config_integration,full_page,translate,config_webservice,config_integration_api</stringProp>
+              <stringProp name="Argument.value">config,layout,block_html,collections,reflection,db_ddl,eav,config_integration,full_page,target_rule,translate,config_webservice,config_integration_api</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
               <boolProp name="HTTPArgument.use_equals">true</boolProp>
               <stringProp name="Argument.name">types</stringProp>
@@ -678,237 +680,6 @@ if (!slash.equals(path.substring(path.length() -1)) || !slash.equals(path.substr
         <stringProp name="TestPlan.comments">Refresh all cache types</stringProp>
       </HTTPSamplerProxy>
       <hashTree/>
-      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller: Disable cache type?" enabled="true">
-        <stringProp name="IfController.condition">"${cache_indicator}" == "1" || "${cache_indicator}" == "2"</stringProp>
-        <boolProp name="IfController.evaluateAll">false</boolProp>
-      </IfController>
-      <hashTree>
-        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: resolve cache types" enabled="true">
-          <stringProp name="BeanShellSampler.query">// Default to disable all cache types
-vars.put("cache_types", "config,layout,block_html,collections,db_ddl,eav,config_integration,full_page,translate,config_webservice,config_integration_api");
-
-if ("${cache_indicator}" == "1") {
-	// Only disable Full Page Cache
-	vars.put("cache_types", "full_page");
-}
-</stringProp>
-          <stringProp name="BeanShellSampler.filename"/>
-          <stringProp name="BeanShellSampler.parameters"/>
-          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
-        </BeanShellSampler>
-        <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request: Admin - Disable Specific Cache Types" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="form_key" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">${admin_form_key}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">form_key</stringProp>
-              </elementProp>
-              <elementProp name="massaction_prepare_key" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">types</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">massaction_prepare_key</stringProp>
-              </elementProp>
-              <elementProp name="types" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">true</boolProp>
-                <stringProp name="Argument.value">${cache_types}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">types</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"/>
-          <stringProp name="HTTPSampler.port"/>
-          <stringProp name="HTTPSampler.connect_timeout"/>
-          <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
-          <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massDisable</stringProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"/>
-        </HTTPSamplerProxy>
-        <hashTree/>
-      </hashTree>
-      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller - Cache Validation - All Enabled" enabled="true">
-        <stringProp name="IfController.condition">"${cache_indicator}" == "0"</stringProp>
-        <boolProp name="IfController.evaluateAll">false</boolProp>
-      </IfController>
-      <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request - Cache Validation - All Enabled" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="form_key" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${admin_form_key}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">form_key</stringProp>
-                <stringProp name="Argument.desc">true</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"/>
-          <stringProp name="HTTPSampler.port"/>
-          <stringProp name="HTTPSampler.connect_timeout"/>
-          <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
-          <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"/>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Cache Validation - All Enabled" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="860336383">TRANSLATE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="1466502763">CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-1659688004">LAYOUT_GENERAL_CACHE_TAG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-21423984">BLOCK_HTML(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="593884002">COLLECTION_DATA(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-751452301">EAV(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="1611481748">FPC(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="846147458">DB_DDL(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-534412103">INTEGRATION(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-72935653">INTEGRATION_API_CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="330643820">WEBSERVICE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-        </hashTree>
-      </hashTree>
-      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller - Cache Validation - Only FPC Disabled" enabled="true">
-        <stringProp name="IfController.condition">"${cache_indicator}" == "1"</stringProp>
-        <boolProp name="IfController.evaluateAll">false</boolProp>
-      </IfController>
-      <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request - Cache Validation - Only FPC Disabled" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="form_key" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${admin_form_key}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">form_key</stringProp>
-                <stringProp name="Argument.desc">true</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"/>
-          <stringProp name="HTTPSampler.port"/>
-          <stringProp name="HTTPSampler.connect_timeout"/>
-          <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
-          <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"/>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Cache Validation - All Disabled" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="860336383">TRANSLATE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="1466502763">CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-1659688004">LAYOUT_GENERAL_CACHE_TAG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-21423984">BLOCK_HTML(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="593884002">COLLECTION_DATA(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-751452301">EAV(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-2075232047">FPC(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="846147458">DB_DDL(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-534412103">INTEGRATION(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="-72935653">INTEGRATION_API_CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-              <stringProp name="330643820">WEBSERVICE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-        </hashTree>
-      </hashTree>
-      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller - Cache Validation - All Disabled" enabled="true">
-        <stringProp name="IfController.condition">"${cache_indicator}" == "2"</stringProp>
-        <boolProp name="IfController.evaluateAll">false</boolProp>
-      </IfController>
-      <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request - Cache Validation - All Disabled" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="form_key" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">${admin_form_key}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-                <boolProp name="HTTPArgument.use_equals">true</boolProp>
-                <stringProp name="Argument.name">form_key</stringProp>
-                <stringProp name="Argument.desc">true</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-          <stringProp name="HTTPSampler.domain"/>
-          <stringProp name="HTTPSampler.port"/>
-          <stringProp name="HTTPSampler.connect_timeout"/>
-          <stringProp name="HTTPSampler.response_timeout"/>
-          <stringProp name="HTTPSampler.protocol"/>
-          <stringProp name="HTTPSampler.contentEncoding"/>
-          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
-          <stringProp name="HTTPSampler.method">GET</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
-          <boolProp name="HTTPSampler.monitor">false</boolProp>
-          <stringProp name="HTTPSampler.embedded_url_re"/>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Cache Validation - All Disabled" enabled="true">
-            <collectionProp name="Asserion.test_strings">
-              <stringProp name="409065414">TRANSLATE(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="2020354010">CONFIG(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="-402279255">LAYOUT_GENERAL_CACHE_TAG(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="-1155702187">BLOCK_HTML(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="738976195">COLLECTION_DATA(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="1983223762">EAV(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="-2075232047">FPC(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="-30791261">DB_DDL(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="121535308">INTEGRATION(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="1542403370">INTEGRATION_API_CONFIG(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-              <stringProp name="1168465145">WEBSERVICE(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
-            </collectionProp>
-            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-            <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-          </ResponseAssertion>
-          <hashTree/>
-        </hashTree>
-      </hashTree>
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request: Open main page (for category extract)" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
           <collectionProp name="Arguments.arguments"/>
@@ -930,47 +701,101 @@ if ("${cache_indicator}" == "1") {
         <stringProp name="TestPlan.comments">Site - Get Category 1</stringProp>
       </HTTPSamplerProxy>
       <hashTree>
+        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert categories on home page" enabled="true">
+          <collectionProp name="Asserion.test_strings">
+            <stringProp name="1711248581">&lt;span&gt;Category ([0-9]+)&lt;/span&gt;</stringProp>
+          </collectionProp>
+          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+          <boolProp name="Assertion.assume_success">false</boolProp>
+          <intProp name="Assertion.test_type">2</intProp>
+        </ResponseAssertion>
+        <hashTree/>
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract first category url key" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-          <stringProp name="RegexExtractor.refname">category_url_key</stringProp>
+          <stringProp name="RegexExtractor.refname">category_url_keys</stringProp>
           <stringProp name="RegexExtractor.regex">&lt;a href="http://${host}${base_path}(index.php/)?([^'"]+)${url_suffix}"  class="level-top" &gt;</stringProp>
           <stringProp name="RegexExtractor.template">$2$</stringProp>
           <stringProp name="RegexExtractor.default"/>
-          <stringProp name="RegexExtractor.match_number">1</stringProp>
+          <stringProp name="RegexExtractor.match_number">-1</stringProp>
           <stringProp name="Scope.variable">simple_product_1_url_key</stringProp>
         </RegexExtractor>
         <hashTree/>
         <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor: Extract first category name" enabled="true">
           <stringProp name="RegexExtractor.useHeaders">false</stringProp>
-          <stringProp name="RegexExtractor.refname">category_name</stringProp>
-          <stringProp name="RegexExtractor.regex">&lt;a href="http://${host}${base_path}(index.php/)?${category_url_key}${url_suffix}"  class="level-top" &gt;&lt;span&gt;([^'"]+)&lt;/span&gt;</stringProp>
-          <stringProp name="RegexExtractor.template">$2$</stringProp>
+          <stringProp name="RegexExtractor.refname">category_names</stringProp>
+          <stringProp name="RegexExtractor.regex">&lt;a href="http://${host}${base_path}(index.php/)?category-([0-9]+)${url_suffix}"  class="level-top" &gt;&lt;span&gt;([^'"]+)&lt;/span&gt;</stringProp>
+          <stringProp name="RegexExtractor.template">$3$</stringProp>
           <stringProp name="RegexExtractor.default"/>
-          <stringProp name="RegexExtractor.match_number">1</stringProp>
+          <stringProp name="RegexExtractor.match_number">-1</stringProp>
           <stringProp name="Scope.variable">simple_product_1_url_key</stringProp>
         </RegexExtractor>
         <hashTree/>
-        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert category url" enabled="true">
-          <collectionProp name="Asserion.test_strings">
-            <stringProp name="484395188">^[a-z0-9-]+$</stringProp>
-          </collectionProp>
-          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-          <boolProp name="Assertion.assume_success">false</boolProp>
-          <intProp name="Assertion.test_type">1</intProp>
-          <stringProp name="Assertion.scope">variable</stringProp>
-          <stringProp name="Scope.variable">category_url_key</stringProp>
-        </ResponseAssertion>
+      </hashTree>
+      <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller: category url keys loop" enabled="true">
+        <stringProp name="ForeachController.inputVal">category_url_keys</stringProp>
+        <stringProp name="ForeachController.returnVal">category_url_key</stringProp>
+        <boolProp name="ForeachController.useSeparator">true</boolProp>
+      </ForeachController>
+      <hashTree>
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+          <stringProp name="CounterConfig.start">1</stringProp>
+          <stringProp name="CounterConfig.end"/>
+          <stringProp name="CounterConfig.incr">1</stringProp>
+          <stringProp name="CounterConfig.name">category_url_key_counter</stringProp>
+          <stringProp name="CounterConfig.format"/>
+          <boolProp name="CounterConfig.per_user">false</boolProp>
+        </CounterConfig>
         <hashTree/>
-        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion: Assert category name" enabled="true">
-          <collectionProp name="Asserion.test_strings">
-            <stringProp name="2845929">^.+$</stringProp>
-          </collectionProp>
-          <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-          <boolProp name="Assertion.assume_success">false</boolProp>
-          <intProp name="Assertion.test_type">1</intProp>
-          <stringProp name="Assertion.scope">variable</stringProp>
-          <stringProp name="Scope.variable">category_name</stringProp>
-        </ResponseAssertion>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: Collect category url keys" enabled="true">
+          <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
+
+// If it is first iteration of cycle then recreate category url key list
+if (1 == Integer.parseInt(vars.get("category_url_key_counter"))) {
+    categoryUrlKeysList = new ArrayList();
+    props.put("category_url_keys_list", categoryUrlKeysList);
+    props.put("category_url_key", vars.get("category_url_key"));
+} else {
+    categoryUrlKeysList = props.get("category_url_keys_list");
+}
+categoryUrlKeysList.add(vars.get("category_url_key"));</stringProp>
+          <stringProp name="BeanShellSampler.filename"/>
+          <stringProp name="BeanShellSampler.parameters"/>
+          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+      </hashTree>
+      <ForeachController guiclass="ForeachControlPanel" testclass="ForeachController" testname="ForEach Controller: category names loop" enabled="true">
+        <stringProp name="ForeachController.inputVal">category_names</stringProp>
+        <stringProp name="ForeachController.returnVal">category_name</stringProp>
+        <boolProp name="ForeachController.useSeparator">true</boolProp>
+      </ForeachController>
+      <hashTree>
+        <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
+          <stringProp name="CounterConfig.start">1</stringProp>
+          <stringProp name="CounterConfig.end"/>
+          <stringProp name="CounterConfig.incr">1</stringProp>
+          <stringProp name="CounterConfig.name">category_name_counter</stringProp>
+          <stringProp name="CounterConfig.format"/>
+          <boolProp name="CounterConfig.per_user">false</boolProp>
+        </CounterConfig>
+        <hashTree/>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: Collect category names" enabled="true">
+          <stringProp name="BeanShellSampler.query">import java.util.ArrayList;
+
+// If it is first iteration of cycle then recreate category name list
+if (1 == Integer.parseInt(vars.get("category_name_counter"))) {
+    categoryNamesList = new ArrayList();
+    props.put("category_names_list",categoryNamesList);
+    props.put("category_name", vars.get("category_name"));
+} else {
+    categoryNamesList = props.get("category_names_list");
+}
+log.info("category name: " + vars.get("category_name"));
+categoryNamesList.add(vars.get("category_name"));</stringProp>
+          <stringProp name="BeanShellSampler.filename"/>
+          <stringProp name="BeanShellSampler.parameters"/>
+          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+        </BeanShellSampler>
         <hashTree/>
       </hashTree>
       <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: Collect category" enabled="true">
@@ -1142,7 +967,7 @@ if (1 == Integer.parseInt(vars.get("simple_products_counter"))) {
 
 // Create product map
 Map productMap = new HashMap();
-productMap.put("id", vars.get("simple_product_id")); 
+productMap.put("id", vars.get("simple_product_id"));
 productMap.put("title", vars.get("simple_product_title"));
 productMap.put("url_key", vars.get("simple_products_url_key"));
 productMap.put("uenc", vars.get("simple_product_uenc"));
@@ -1601,6 +1426,12 @@ if (props.get("configurable_products_list") == null) {
 if (props.get("customer_emails_list") == null) {
     return stopTestOnError("Cannot find customer emails. Test stopped.");
 }
+if (props.get("category_url_keys_list") == null) {
+	return stopTestOnError("Cannot find category url keys. Test stopped.");
+}
+if (props.get("category_names_list") == null) {
+	return stopTestOnError("Cannot find category names. Test stopped.");
+}
 int orders = Integer.parseInt(vars.get("orders"));
 
 
@@ -1618,6 +1449,243 @@ if (orders &gt; 0) {
         <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
       </BeanShellSampler>
       <hashTree/>
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller: Disable cache type?" enabled="true">
+        <stringProp name="IfController.condition">"${cache_indicator}" == "1" || "${cache_indicator}" == "2"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      </IfController>
+      <hashTree>
+        <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="SetUp - BeanShell Sampler: resolve cache types" enabled="true">
+          <stringProp name="BeanShellSampler.query">// Default to disable all cache types
+vars.put("cache_types", "config,layout,block_html,collections,reflection,db_ddl,eav,config_integration,full_page,target_rule,translate,config_webservice,config_integration_api");
+
+if ("${cache_indicator}" == "1") {
+	// Only disable Full Page Cache
+	vars.put("cache_types", "full_page");
+}
+</stringProp>
+          <stringProp name="BeanShellSampler.filename"/>
+          <stringProp name="BeanShellSampler.parameters"/>
+          <boolProp name="BeanShellSampler.resetInterpreter">false</boolProp>
+        </BeanShellSampler>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request: Admin - Disable Specific Cache Types" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="form_key" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">${admin_form_key}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">form_key</stringProp>
+              </elementProp>
+              <elementProp name="massaction_prepare_key" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">types</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">massaction_prepare_key</stringProp>
+              </elementProp>
+              <elementProp name="types" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">true</boolProp>
+                <stringProp name="Argument.value">${cache_types}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">types</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/massDisable</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller - Cache Validation - All Enabled" enabled="true">
+        <stringProp name="IfController.condition">"${cache_indicator}" == "0"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      </IfController>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request - Cache Validation - All Enabled" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="form_key" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${admin_form_key}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">form_key</stringProp>
+                <stringProp name="Argument.desc">true</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Cache Validation - All Enabled" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="860336383">TRANSLATE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="1466502763">CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-1659688004">LAYOUT_GENERAL_CACHE_TAG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-21423984">BLOCK_HTML(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="593884002">COLLECTION_DATA(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-751452301">EAV(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="1611481748">FPC(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="846147458">DB_DDL(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-534412103">INTEGRATION(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-72935653">INTEGRATION_API_CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="330643820">WEBSERVICE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-479894558">REFLECTION(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="1450477507">TARGET_RULE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller - Cache Validation - Only FPC Disabled" enabled="true">
+        <stringProp name="IfController.condition">"${cache_indicator}" == "1"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      </IfController>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request - Cache Validation - Only FPC Disabled" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="form_key" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${admin_form_key}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">form_key</stringProp>
+                <stringProp name="Argument.desc">true</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Cache Validation - All Disabled" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="860336383">TRANSLATE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="1466502763">CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-1659688004">LAYOUT_GENERAL_CACHE_TAG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-21423984">BLOCK_HTML(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="593884002">COLLECTION_DATA(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-751452301">EAV(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-2075232047">FPC(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="846147458">DB_DDL(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-534412103">INTEGRATION(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-72935653">INTEGRATION_API_CONFIG(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="330643820">WEBSERVICE(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="-479894558">REFLECTION(?s).+?&lt;span&gt;Enabled&lt;/span&gt;</stringProp>
+              <stringProp name="46789595">TARGET_RULE(?s).+?&lt;span&gt;Enabled&lt;/span</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <IfController guiclass="IfControllerPanel" testclass="IfController" testname="If Controller - Cache Validation - All Disabled" enabled="true">
+        <stringProp name="IfController.condition">"${cache_indicator}" == "2"</stringProp>
+        <boolProp name="IfController.evaluateAll">false</boolProp>
+      </IfController>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - HTTP Request - Cache Validation - All Disabled" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="form_key" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">${admin_form_key}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                <stringProp name="Argument.name">form_key</stringProp>
+                <stringProp name="Argument.desc">true</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain"/>
+          <stringProp name="HTTPSampler.port"/>
+          <stringProp name="HTTPSampler.connect_timeout"/>
+          <stringProp name="HTTPSampler.response_timeout"/>
+          <stringProp name="HTTPSampler.protocol"/>
+          <stringProp name="HTTPSampler.contentEncoding"/>
+          <stringProp name="HTTPSampler.path">${base_path}${admin_path}/admin/cache/</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">true</boolProp>
+          <boolProp name="HTTPSampler.monitor">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"/>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion - Cache Validation - All Disabled" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="409065414">TRANSLATE(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="2020354010">CONFIG(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="-402279255">LAYOUT_GENERAL_CACHE_TAG(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="-1155702187">BLOCK_HTML(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="738976195">COLLECTION_DATA(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="1983223762">EAV(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="-2075232047">FPC(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="-30791261">DB_DDL(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="121535308">INTEGRATION(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="1542403370">INTEGRATION_API_CONFIG(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="1168465145">WEBSERVICE(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="1811579203">REFLECTION(?s).+?&lt;span&gt;Disabled&lt;/span&gt;</stringProp>
+              <stringProp name="49147452">TARGET_RULE(?s).+?&lt;span&gt;Disabled&lt;/span</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">2</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
       <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="SetUp - Ajax Load Login Form" enabled="true">
         <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
           <collectionProp name="Arguments.arguments">
@@ -1822,8 +1890,9 @@ vars.put("configurable_product_1_url_key", configurableList.get("url_key"));
 vars.put("configurable_product_1_name", configurableList.get("title"));
 vars.put("configurable_product_1_id", configurableList.get("id"));
 
-vars.put("category_url_key", props.get("category_url_key"));
-vars.put("category_name", props.get("category_name"));
+number = (int)(Math.random() * props.get("category_url_keys_list").size());
+vars.put("category_url_key", props.get("category_url_keys_list").get(number));
+vars.put("category_name", props.get("category_names_list").get(number));
 vars.put("testLabel", "CatProdBrows");</stringProp>
       <stringProp name="BeanShellSampler.filename"/>
       <stringProp name="BeanShellSampler.parameters"/>
@@ -1861,59 +1930,6 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer All Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value"/>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="-2001627678">\"messages\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
   
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
@@ -1973,59 +1989,6 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -2058,90 +2021,6 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -2186,90 +2065,6 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_2_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -2302,90 +2097,6 @@ vars.put("testLabel", "CatProdBrows");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Configurable Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${configurable_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -2463,8 +2174,9 @@ vars.put("configurable_attribute_id", configurableList.get("attribute_id"));
 vars.put("configurable_option_id", configurableList.get("attribute_option_id"));
 vars.put("configurable_product_1_uenc", simpleList.get("uenc"));
 
-vars.put("category_url_key", props.get("category_url_key"));
-vars.put("category_name", props.get("category_name"));
+number = (int)(Math.random() * props.get("category_url_keys_list").size());
+vars.put("category_url_key", props.get("category_url_keys_list").get(number));
+vars.put("category_name", props.get("category_names_list").get(number));
 vars.put("testLabel", "BrowsAddToCart");
 vars.put("loadType", "Guest");</stringProp>
       <stringProp name="BeanShellSampler.filename"/>
@@ -2503,59 +2215,6 @@ vars.put("loadType", "Guest");</stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer All Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value"/>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="-2001627678">\"messages\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Load Login Form${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -2704,59 +2363,6 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -2789,90 +2395,6 @@ vars.put("loadType", "Guest");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -3065,90 +2587,6 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_2_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -3331,90 +2769,6 @@ vars.put("loadType", "Guest");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Configurable Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${configurable_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -3649,8 +3003,9 @@ vars.put("configurable_attribute_id", configurableList.get("attribute_id"));
 vars.put("configurable_option_id", configurableList.get("attribute_option_id"));
 vars.put("configurable_product_1_uenc", simpleList.get("uenc"));
 
-vars.put("category_url_key", props.get("category_url_key"));
-vars.put("category_name", props.get("category_name"));
+number = (int)(Math.random() * props.get("category_url_keys_list").size());
+vars.put("category_url_key", props.get("category_url_keys_list").get(number));
+vars.put("category_name", props.get("category_names_list").get(number));
 vars.put("testLabel", "GuestChkt");
 vars.put("loadType", "Guest");</stringProp>
       <stringProp name="BeanShellSampler.filename"/>
@@ -3689,59 +3044,6 @@ vars.put("loadType", "Guest");</stringProp>
         </ResponseAssertion>
         <hashTree/>
       </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer All Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value"/>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="-2001627678">\"messages\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
   
     <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Load Login Form${__property(activeAdminThread)}(${testLabel})" enabled="true">
       <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
@@ -3890,59 +3192,6 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -3975,90 +3224,6 @@ vars.put("loadType", "Guest");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -4251,90 +3416,6 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_2_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -4517,90 +3598,6 @@ vars.put("loadType", "Guest");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Configurable Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${configurable_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -4850,118 +3847,6 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods ${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">{"address":{"country_id":"US"}}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}/rest/default/V1/guest-carts/${cart_id}/estimate-shipping-methods</stringProp>
-      <stringProp name="HTTPSampler.method">POST</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-        <collectionProp name="HeaderManager.headers">
-          <elementProp name="" elementType="Header">
-            <stringProp name="Header.name">Referer</stringProp>
-            <stringProp name="Header.value">${base_path}checkout/onepage/</stringProp>
-          </elementProp>
-          <elementProp name="Content-Type" elementType="Header">
-            <stringProp name="Header.name">Content-Type</stringProp>
-            <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
-          </elementProp>
-          <elementProp name="X-Requested-With" elementType="Header">
-            <stringProp name="Header.name">X-Requested-With</stringProp>
-            <stringProp name="Header.value">XMLHttpRequest</stringProp>
-          </elementProp>
-          <elementProp name="Accept" elementType="Header">
-            <stringProp name="Header.name">Accept</stringProp>
-            <stringProp name="Header.value">application/json</stringProp>
-          </elementProp>
-        </collectionProp>
-      </HeaderManager>
-      <hashTree/>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="-1224567411">"available":true</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -5050,7 +3935,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}/rest/default/V1/guest-carts/${cart_id}/estimate-shipping-methods</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/estimate-shipping-methods</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -5157,59 +4042,6 @@ vars.put("loadType", "Guest");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">true</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -5233,7 +4065,7 @@ vars.put("loadType", "Guest");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}/rest/default/V1/guest-carts/${cart_id}/payment-information</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/guest-carts/${cart_id}/payment-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -5325,59 +4157,6 @@ vars.put("loadType", "Guest");</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
   </hashTree>
   
     <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Checkout By Customer" enabled="true">
@@ -5452,8 +4231,9 @@ vars.put("configurable_attribute_id", configurableList.get("attribute_id"));
 vars.put("configurable_option_id", configurableList.get("attribute_option_id"));
 vars.put("configurable_product_1_uenc", simpleList.get("uenc"));
 
-vars.put("category_url_key", props.get("category_url_key"));
-vars.put("category_name", props.get("category_name"));
+number = (int)(Math.random() * props.get("category_url_keys_list").size());
+vars.put("category_url_key", props.get("category_url_keys_list").get(number));
+vars.put("category_name", props.get("category_names_list").get(number));
 
 emails_index = 0;
 if (!props.containsKey("customer_emails_index")) {
@@ -5513,59 +4293,6 @@ vars.put("loadType", "Customer");</stringProp>
         <hashTree/>
       </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer All Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value"/>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="-2001627678">\"messages\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -5595,59 +4322,6 @@ vars.put("loadType", "Customer");</stringProp>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="637394530">&lt;title&gt;Customer Login&lt;/title&gt;</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -5809,57 +4483,24 @@ vars.put("loadType", "Customer");</stringProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
       <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+      <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Address" enabled="true">
+        <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+        <stringProp name="RegexExtractor.refname">addressId</stringProp>
+        <stringProp name="RegexExtractor.regex">customer/address/edit/id/([^'"]+)/</stringProp>
+        <stringProp name="RegexExtractor.template">$1$</stringProp>
+        <stringProp name="RegexExtractor.default"/>
+        <stringProp name="RegexExtractor.match_number">1</stringProp>
+      </RegexExtractor>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert addressId extracted" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
+          <stringProp name="2845929">^.+$</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
+        <intProp name="Assertion.test_type">1</intProp>
+        <stringProp name="Assertion.scope">variable</stringProp>
+        <stringProp name="Scope.variable">addressId</stringProp>
       </ResponseAssertion>
       <hashTree/>
     </hashTree>
@@ -5922,59 +4563,6 @@ vars.put("loadType", "Customer");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -6007,90 +4595,6 @@ vars.put("loadType", "Customer");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -6283,90 +4787,6 @@ vars.put("loadType", "Customer");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Simple Product 2(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${simple_product_2_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
     <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
       <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
       <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
@@ -6549,90 +4969,6 @@ vars.put("loadType", "Customer");</stringProp>
           <stringProp name="-1787050162">&lt;span&gt;In stock&lt;/span&gt;</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Ajax Review Configurable Product 1(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments"/>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}review/product/listAjax/id/${configurable_product_1_id}/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="49586">200</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
         <intProp name="Assertion.test_type">2</intProp>
       </ResponseAssertion>
@@ -6922,29 +5258,20 @@ vars.put("loadType", "Customer");</stringProp>
       <hashTree/>
     </hashTree>
   
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+    <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Random Timer" enabled="true">
+      <stringProp name="ConstantTimer.delay">${think_time_delay_offset}</stringProp>
+      <stringProp name="RandomTimer.range">${think_time_deviation}</stringProp>
+    </GaussianRandomTimer>
+    <hashTree/>
+  
+    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Checkout Estimate Shipping Methods ${__property(activeAdminThread)}(${testLabel})" enabled="true">
+      <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+      <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
         <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
+          <elementProp name="" elementType="HTTPArgument">
             <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
+            <stringProp name="Argument.value">{"addressId":"${addressId}"}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
           </elementProp>
         </collectionProp>
       </elementProp>
@@ -6954,8 +5281,8 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/estimate-shipping-methods-by-address-id</stringProp>
+      <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
       <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -6964,9 +5291,30 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.embedded_url_re"/>
     </HTTPSamplerProxy>
     <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">Referer</stringProp>
+            <stringProp name="Header.value">${base_path}checkout/onepage/</stringProp>
+          </elementProp>
+          <elementProp name="Content-Type" elementType="Header">
+            <stringProp name="Header.name">Content-Type</stringProp>
+            <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
+          </elementProp>
+          <elementProp name="X-Requested-With" elementType="Header">
+            <stringProp name="Header.name">X-Requested-With</stringProp>
+            <stringProp name="Header.value">XMLHttpRequest</stringProp>
+          </elementProp>
+          <elementProp name="Accept" elementType="Header">
+            <stringProp name="Header.name">Accept</stringProp>
+            <stringProp name="Header.value">application/json</stringProp>
+          </elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
         <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
+          <stringProp name="-1224567411">"available":true</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -6998,7 +5346,7 @@ vars.put("loadType", "Customer");</stringProp>
       <stringProp name="HTTPSampler.response_timeout"/>
       <stringProp name="HTTPSampler.protocol"/>
       <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}/rest/default/V1/carts/mine/shipping-information</stringProp>
+      <stringProp name="HTTPSampler.path">${base_path}rest/default/V1/carts/mine/shipping-information</stringProp>
       <stringProp name="HTTPSampler.method">POST</stringProp>
       <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
       <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
@@ -7032,59 +5380,6 @@ vars.put("loadType", "Customer");</stringProp>
       <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert success" enabled="true">
         <collectionProp name="Asserion.test_strings">
           <stringProp name="-740937264">{"payment_methods"</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">true</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>
@@ -7188,59 +5483,6 @@ vars.put("loadType", "Customer");</stringProp>
         <collectionProp name="Asserion.test_strings">
           <stringProp name="494863233">Thank you for your purchase!</stringProp>
           <stringProp name="-1590086334">Your order number is</stringProp>
-        </collectionProp>
-        <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
-        <boolProp name="Assertion.assume_success">false</boolProp>
-        <intProp name="Assertion.test_type">2</intProp>
-      </ResponseAssertion>
-      <hashTree/>
-    </hashTree>
-  
-    <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Customer Section Load${__property(activeAdminThread)}(${testLabel})" enabled="true">
-      <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="sections" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">customer</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">sections</stringProp>
-          </elementProp>
-          <elementProp name="update_section_id" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">true</boolProp>
-            <stringProp name="Argument.value">false</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">update_section_id</stringProp>
-          </elementProp>
-          <elementProp name="_" elementType="HTTPArgument">
-            <boolProp name="HTTPArgument.always_encode">false</boolProp>
-            <stringProp name="Argument.value">${__time(yyyy-MM-dd'T'HH:mm:ss.SSSZ)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-            <boolProp name="HTTPArgument.use_equals">true</boolProp>
-            <stringProp name="Argument.name">_</stringProp>
-          </elementProp>
-        </collectionProp>
-      </elementProp>
-      <stringProp name="HTTPSampler.domain"/>
-      <stringProp name="HTTPSampler.port"/>
-      <stringProp name="HTTPSampler.connect_timeout"/>
-      <stringProp name="HTTPSampler.response_timeout"/>
-      <stringProp name="HTTPSampler.protocol"/>
-      <stringProp name="HTTPSampler.contentEncoding"/>
-      <stringProp name="HTTPSampler.path">${base_path}customer/section/load/</stringProp>
-      <stringProp name="HTTPSampler.method">GET</stringProp>
-      <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-      <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-      <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-      <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-      <boolProp name="HTTPSampler.monitor">false</boolProp>
-      <stringProp name="HTTPSampler.embedded_url_re"/>
-    </HTTPSamplerProxy>
-    <hashTree>
-      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
-        <collectionProp name="Asserion.test_strings">
-          <stringProp name="1393473040">\"customer\":</stringProp>
         </collectionProp>
         <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
         <boolProp name="Assertion.assume_success">false</boolProp>

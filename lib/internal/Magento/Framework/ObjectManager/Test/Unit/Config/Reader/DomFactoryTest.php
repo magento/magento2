@@ -25,7 +25,7 @@ class DomFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_object = $this->getMock('Magento\Framework\ObjectManager\Config\Reader\Dom', [], [], '', false);
         $this->_objectManager = $this->getMock(

@@ -1009,13 +1009,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
                     if ($item) {
                         $item->setBaseShippingAmount($rate->getPrice());
                     } else {
-                        /**
-                         * possible bug: this should be setBaseShippingAmount(),
-                         * see \Magento\Quote\Model\Quote\Address\Total\Shipping::collect()
-                         * where this value is set again from the current specified rate price
-                         * (looks like a workaround for this bug)
-                         */
-                        $this->setShippingAmount($rate->getPrice());
+
+                        /** @var \Magento\Quote\Model\Quote $quote */
+                        $quote = $this->getQuote();
+                        $amountPrice = $quote->getStore()
+                            ->getBaseCurrency()
+                            ->convert($rate->getPrice(), $quote->getQuoteCurrencyCode());
+                        $this->setBaseShippingAmount($rate->getPrice());
+                        $this->setShippingAmount($amountPrice);
                     }
 
                     $found = true;
@@ -1027,6 +1028,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /******************************* Total Collector Interface *******************************************/
+
     /**
      * Get address totals as array
      *
@@ -1301,6 +1303,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Get all total amount values
      *

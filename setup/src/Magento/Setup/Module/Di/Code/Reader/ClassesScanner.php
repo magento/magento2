@@ -6,7 +6,7 @@
 namespace Magento\Setup\Module\Di\Code\Reader;
 
 use Magento\Framework\Exception\FileSystemException;
-use Zend\Code\Scanner\FileScanner;
+use Magento\Setup\Module\Di\Code\Reader\FileScanner;
 
 class ClassesScanner implements ClassesScannerInterface
 {
@@ -55,7 +55,7 @@ class ClassesScanner implements ClassesScannerInterface
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
-            if ($fileItem->getExtension() !== 'php') {
+            if ($fileItem->isDir() || $fileItem->getExtension() !== 'php') {
                 continue;
             }
             foreach ($this->excludePatterns as $excludePatterns) {
@@ -88,7 +88,7 @@ class ClassesScanner implements ClassesScannerInterface
             $patterns = (array)$patterns;
         }
         foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $fileItem->getRealPath())) {
+            if (preg_match($pattern, str_replace('\\', '/', $fileItem->getRealPath()))) {
                 return true;
             }
         }

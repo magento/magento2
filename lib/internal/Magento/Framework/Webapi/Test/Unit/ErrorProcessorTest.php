@@ -226,6 +226,25 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test logged exception is the same as the thrown one in production mode
+     */
+    public function testCriticalExceptionStackTrace()
+    {
+        $thrownException = new \Exception('', 0);
+
+        $this->_loggerMock->expects($this->once())
+            ->method('critical')
+            ->will(
+                $this->returnCallback(
+                    function (\Exception $loggedException) use ($thrownException) {
+                        $this->assertSame($thrownException, $loggedException->getPrevious());
+                    }
+                )
+            );
+        $this->_errorProcessor->maskException($thrownException);
+    }
+
+    /**
      * @return array
      */
     public function dataProviderForSendResponseExceptions()
@@ -234,7 +253,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             'NoSuchEntityException' => [
                 new NoSuchEntityException(
                     new Phrase(
-                        NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                        'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                         [
                             'fieldName' => 'detail1',
                             'fieldValue' => 'value1',
@@ -244,7 +263,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
                     )
                 ),
                 \Magento\Framework\Webapi\Exception::HTTP_NOT_FOUND,
-                NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                 [
                     'fieldName' => 'detail1',
                     'fieldValue' => 'value1',
@@ -261,12 +280,12 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             'AuthorizationException' => [
                 new AuthorizationException(
                     new Phrase(
-                        AuthorizationException::NOT_AUTHORIZED,
+                        'Consumer %consumer_id is not authorized to access %resources',
                         ['consumer_id' => '3', 'resources' => '4']
                     )
                 ),
                 WebapiException::HTTP_UNAUTHORIZED,
-                AuthorizationException::NOT_AUTHORIZED,
+                'Consumer %consumer_id is not authorized to access %resources',
                 ['consumer_id' => '3', 'resources' => '4'],
             ],
             'Exception' => [

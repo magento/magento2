@@ -30,7 +30,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
      */
     protected $absolutePath;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->setMethods(['getDirectoryWrite'])
@@ -61,7 +61,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers setError()
+     * @covers \Magento\Framework\Setup\SampleData\State::setError
      */
     public function testHasError()
     {

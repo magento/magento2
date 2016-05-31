@@ -17,7 +17,7 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
             [$filesystem, $backupFactory]
         );
 
-        $file = 'var/backup/2.gz';
+        $file = 'var/backup/2.sql';
         $manager->expects($this->once())->method('getBackupFilename')->will($this->returnValue($file));
 
         $model = new \Magento\Framework\Backup\Snapshot($filesystem, $backupFactory);

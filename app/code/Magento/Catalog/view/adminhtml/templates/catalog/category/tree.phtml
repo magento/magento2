@@ -35,7 +35,6 @@
             <div><?php /* @escapeNotVerified */ echo __('This operation can take a long time'); ?></div>
         </div>
     </div>
-    <script id="ie-deferred-loader" defer="defer" src=""></script>
     <script>
         var tree;
         require([
@@ -47,6 +46,18 @@
             "mage/adminhtml/form",
             "mage/translate"
         ], function (jQuery, modal) {
+
+            var registry = {
+                data: [],
+
+                set: function (key, value) {
+                    this.data[key] = value;
+                },
+
+                get: function (key) {
+                    return this.data[key];
+                }
+            };
 
             /**
              * Fix ext compatibility with prototype 1.6
@@ -100,6 +111,10 @@
                     var selectedNode = this.getNodeById(parameters['category_id']);
                     if (selectedNode) {
                         this.currentNodeId = parameters['category_id'];
+                    } else {
+                        if (parameters['parent'] > 0 && parameters['category_id'] === 0) {
+                            this.currentNodeId = parameters['parent'];
+                        }
                     }
                     this.selectCurrentNode();
 
@@ -133,8 +148,9 @@
                 },
 
                 selectCurrentNode: function () {
-                    if (this.currentNodeId) {
-                        var selectedNode = this.getNodeById(this.currentNodeId);
+                    var selectedNode = this.getNodeById(this.currentNodeId);
+
+                    if (selectedNode) {
                         if ((typeof selectedNode.attributes.path) != 'undefined') {
                             var path = selectedNode.attributes.path;
                             if (!this.storeId) {
@@ -380,13 +396,14 @@
 
                 defaultLoadTreeParams = {
                     parameters: {
-                        text: '<?php /* @escapeNotVerified */ echo htmlentities($block->getRoot()->getName()) ?>',
+                        text: <?php /* @escapeNotVerified */ echo json_encode(htmlentities($block->getRoot()->getName())) ?>,
                         draggable: false,
                         allowDrop: <?php if ($block->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
-                        id: <?php /* @escapeNotVerified */ echo (int)$block->getRoot()->getId() ?>,
-                        expanded: <?php /* @escapeNotVerified */ echo (int)$block->getIsWasExpanded() ?>,
-                        store_id: <?php /* @escapeNotVerified */ echo (int)$block->getStore()->getId() ?>,
-                        category_id: <?php /* @escapeNotVerified */ echo (int)$block->getCategoryId() ?>
+                        id: <?php echo (int)$block->getRoot()->getId() ?>,
+                        expanded: <?php echo (int)$block->getIsWasExpanded() ?>,
+                        store_id: <?php echo (int)$block->getStore()->getId() ?>,
+                        category_id: <?php echo (int)$block->getCategoryId() ?>,
+                        parent: <?php echo (int)$block->getRequest()->getParam('parent') ?>
                     },
                     data: <?php  /* @escapeNotVerified */ echo $block->getTreeJson() ?>
                 };
@@ -407,7 +424,7 @@
                 }
 
                 url += 'parent/' + tree.currentNodeId;
-                updateContent(url);
+                location.href = url;
             }
 
             function categoryMove(obj) {
@@ -448,6 +465,8 @@
                 }
                 pd.splice(pd.length - 1, 1);
 
+                registry.set('pd', pd.join(""));
+
                 jQuery('[data-id="information-dialog-category"]').modal({
                     modalClass: 'confirm',
                     title:  jQuery.mage.__('Warning message'),
@@ -466,17 +485,17 @@
                                 $.ajax({
                                     url: '<?php /* @escapeNotVerified */ echo $block->getMoveUrl() ?>',
                                     method: 'POST',
-                                    data: pd.join(""),
+                                    data: registry.get('pd'),
                                     showLoader: true
                                 }).done(function (data) {
-                                    if (data.messages && data.messages.length > 0) {
-                                        $('[name=category-edit-form] .messages').html(data.messages);
-                                    }
                                     if (data.error) {
                                         reRenderTree();
                                     } else {
                                         $(obj.tree.container.dom).trigger('categoryMove.tree');
                                     }
+                                    $('.page-main-actions').next('.messages').remove();
+                                    $('.page-main-actions').next('#messages').remove();
+                                    $('.page-main-actions').after(data.messages);
                                 }).fail(function (jqXHR, textStatus) {
                                     if (window.console) {
                                         console.log(textStatus);

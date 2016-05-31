@@ -8,6 +8,7 @@
 
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Customer\Api\GroupManagementInterface;
 
@@ -18,6 +19,11 @@ use Magento\Customer\Api\GroupManagementInterface;
  */
 abstract class AbstractGroupPrice extends Price
 {
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
+
     /**
      * Website currency codes and rates
      *
@@ -147,6 +153,8 @@ abstract class AbstractGroupPrice extends Price
     {
         $attribute = $this->getAttribute();
         $priceRows = $object->getData($attribute->getName());
+        $priceRows = array_filter((array)$priceRows);
+
         if (empty($priceRows)) {
             return true;
         }
@@ -157,7 +165,7 @@ abstract class AbstractGroupPrice extends Price
             if (!empty($priceRow['delete'])) {
                 continue;
             }
-            $compare = join(
+            $compare = implode(
                 '-',
                 array_merge(
                     [$priceRow['website_id'], $priceRow['cust_group']],
@@ -182,7 +190,7 @@ abstract class AbstractGroupPrice extends Price
             if ($origPrices) {
                 foreach ($origPrices as $price) {
                     if ($price['website_id'] == 0) {
-                        $compare = join(
+                        $compare = implode(
                             '-',
                             array_merge(
                                 [$price['website_id'], $price['cust_group']],
@@ -206,7 +214,7 @@ abstract class AbstractGroupPrice extends Price
                 continue;
             }
 
-            $globalCompare = join(
+            $globalCompare = implode(
                 '-',
                 array_merge([0, $priceRow['cust_group']], $this->_getAdditionalUniqueFields($priceRow))
             );
@@ -234,7 +242,10 @@ abstract class AbstractGroupPrice extends Price
         $data = [];
         $price = $this->_catalogProductType->priceFactory($productTypeId);
         foreach ($priceData as $v) {
-            $key = join('-', array_merge([$v['cust_group']], $this->_getAdditionalUniqueFields($v)));
+            if (!array_filter($v)) {
+                continue;
+            }
+            $key = implode('-', array_merge([$v['cust_group']], $this->_getAdditionalUniqueFields($v)));
             if ($v['website_id'] == $websiteId) {
                 $data[$key] = $v;
                 $data[$key]['website_price'] = $v['price'];
@@ -267,7 +278,10 @@ abstract class AbstractGroupPrice extends Price
             $websiteId = $this->_storeManager->getStore($storeId)->getWebsiteId();
         }
 
-        $data = $this->_getResource()->loadPriceData($object->getId(), $websiteId);
+        $data = $this->_getResource()->loadPriceData(
+            $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()),
+            $websiteId
+        );
         foreach ($data as $k => $v) {
             $data[$k]['website_price'] = $v['price'];
             if ($v['all_groups']) {
@@ -304,9 +318,11 @@ abstract class AbstractGroupPrice extends Price
         $isGlobal = $this->getAttribute()->isScopeGlobal() || $websiteId == 0;
 
         $priceRows = $object->getData($this->getAttribute()->getName());
-        if ($priceRows === null) {
+        if (null === $priceRows) {
             return $this;
         }
+
+        $priceRows = array_filter((array)$priceRows);
 
         $old = [];
         $new = [];
@@ -318,7 +334,7 @@ abstract class AbstractGroupPrice extends Price
         }
         foreach ($origPrices as $data) {
             if ($data['website_id'] > 0 || $data['website_id'] == '0' && $isGlobal) {
-                $key = join(
+                $key = implode(
                     '-',
                     array_merge(
                         [$data['website_id'], $data['cust_group']],
@@ -349,7 +365,7 @@ abstract class AbstractGroupPrice extends Price
                 continue;
             }
 
-            $key = join(
+            $key = implode(
                 '-',
                 array_merge([$data['website_id'], $data['cust_group']], $this->_getAdditionalUniqueFields($data))
             );
@@ -373,7 +389,7 @@ abstract class AbstractGroupPrice extends Price
         $update = array_intersect_key($new, $old);
 
         $isChanged = false;
-        $productId = $object->getId();
+        $productId = $object->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField());
 
         if (!empty($delete)) {
             foreach ($delete as $data) {
@@ -385,7 +401,10 @@ abstract class AbstractGroupPrice extends Price
         if (!empty($insert)) {
             foreach ($insert as $data) {
                 $price = new \Magento\Framework\DataObject($data);
-                $price->setEntityId($productId);
+                $price->setData(
+                    $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField(),
+                    $productId
+                );
                 $this->_getResource()->savePriceData($price);
 
                 $isChanged = true;
@@ -441,5 +460,17 @@ abstract class AbstractGroupPrice extends Price
     public function getResource()
     {
         return $this->_getResource();
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

@@ -69,7 +69,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $areaResolverMock;
 
+<<<<<<< HEAD
     public function setUp()
+=======
+    protected function setUp()
+>>>>>>> develop
     {
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->pageAssets = $this->getMock('Magento\Framework\View\Asset\GroupedCollection', [], [], '', false);
@@ -133,8 +137,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'keywords' => null,
             'robots' => null,
             'name' => 'test_value',
+            'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
         ];
         $this->model->setMetadata('name', 'test_value');
+        $this->model->setMetadata('html_encoded', '<title><span class="test">Test</span></title>');
         $this->assertEquals($expectedMetadata, $this->model->getMetadata());
     }
 
@@ -147,7 +153,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testContentTypeEmpty()
     {
+        $expectedData = null;
+        $this->assertEquals($expectedData, $this->model->getContentType());
+    }
+
+    public function testContentTypeAuto()
+    {
         $expectedData = 'default_media_type; charset=default_charset';
+        $this->model->setContentType('auto');
         $this->scopeConfig->expects($this->at(0))->method('getValue')->with('design/head/default_media_type', 'store')
             ->will($this->returnValue('default_media_type'));
         $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/default_charset', 'store')

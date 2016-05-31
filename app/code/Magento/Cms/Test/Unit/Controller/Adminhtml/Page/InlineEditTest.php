@@ -45,7 +45,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var InlineEdit */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -250,8 +250,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'is_active' => '1',
             'sort_order' => '1',
             'custom_theme' => '3',
-            'website_root' => '1',
-            'under_version_control' => '0',
             'store_id' => ['0']
         ];
         $pageData = [
@@ -261,7 +259,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'identifier' => 'home',
             'is_active' => '1',
             'custom_theme' => '3',
-            'under_version_control' => '0',
         ];
         $getData = [
             'page_id' => '2',
@@ -274,9 +271,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'sort_order' => '1',
             'custom_theme' => '3',
             'custom_root_template' => '1column',
-            'published_revision_id' => '0',
-            'website_root' => '1',
-            'under_version_control' => '0',
             'store_id' => ['0']
         ];
         $mergedData = [
@@ -290,9 +284,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             'sort_order' => '1',
             'custom_theme' => '3',
             'custom_root_template' => '1column',
-            'published_revision_id' => '0',
-            'website_root' => '1',
-            'under_version_control' => '0',
             'store_id' => ['0']
         ];
         $this->cmsPage->expects($this->once())->method('getData')->willReturn($getData);

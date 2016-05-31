@@ -9,41 +9,41 @@ use \Magento\Framework\App\PageCache\Kernel;
 
 class KernelTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Kernel
-     */
+    /** @var Kernel */
     protected $kernel;
 
-    /**
-     * @var \Magento\Framework\App\PageCache\Cache|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\PageCache\Cache|\PHPUnit_Framework_MockObject_MockObject */
     protected $cacheMock;
 
-    /**
-     * @var \Magento\Framework\App\PageCache\Identifier|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\PageCache\Identifier|\PHPUnit_Framework_MockObject_MockObject */
     protected $identifierMock;
 
-    /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $requestMock;
 
-    /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $responseMock;
+
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Cache\Type */
+    private $fullPageCacheMock;
 
     /**
      * Setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', [], [], '', false);
+        $this->fullPageCacheMock = $this->getMock('\Magento\PageCache\Model\Cache\Type', [], [], '', false);
         $this->identifierMock =
             $this->getMock('Magento\Framework\App\PageCache\Identifier', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->kernel = new Kernel($this->cacheMock, $this->identifierMock, $this->requestMock);
+
+        $reflection = new \ReflectionClass('\Magento\Framework\App\PageCache\Kernel');
+        $reflectionProperty = $reflection->getProperty('fullPageCache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
+
         $this->responseMock = $this->getMockBuilder(
             'Magento\Framework\App\Response\Http'
         )->setMethods(
@@ -63,7 +63,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())->method('isGet')->will($this->returnValue($isGet));
         $this->requestMock->expects($this->any())->method('isHead')->will($this->returnValue($isHead));
-        $this->cacheMock->expects(
+        $this->fullPageCacheMock->expects(
             $this->any()
         )->method(
             'load'
@@ -136,7 +136,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->responseMock->expects($this->at($at[2]))
             ->method('clearHeader')
             ->with($this->equalTo('X-Magento-Tags'));
-        $this->cacheMock->expects($this->once())
+        $this->fullPageCacheMock->expects($this->once())
             ->method('save');
         $this->kernel->process($this->responseMock);
     }
@@ -173,7 +173,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         if ($overrideHeaders) {
             $this->responseMock->expects($this->once())->method('setNoCacheHeaders');
         }
-        $this->cacheMock->expects($this->never())->method('save');
+        $this->fullPageCacheMock->expects($this->never())->method('save');
         $this->kernel->process($this->responseMock);
     }
 

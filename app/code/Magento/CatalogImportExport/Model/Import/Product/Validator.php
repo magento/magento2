@@ -35,6 +35,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected $_rowData;
 
+    /*
+     * @var string|null
+     */
+    protected $invalidAttribute;
+
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param RowValidatorInterface[] $validators
@@ -200,8 +205,30 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             }
             $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
         }
+        
+        if (!$valid) {
+            $this->setInvalidAttribute($attrCode);
+        }
+
         return (bool)$valid;
 
+    }
+
+    /**
+     * @param string|null $attribute
+     * @return void
+     */
+    protected function setInvalidAttribute($attribute)
+    {
+        $this->invalidAttribute = $attribute;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvalidAttribute()
+    {
+        return $this->invalidAttribute;
     }
 
     /**
@@ -211,6 +238,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected function isValidAttributes()
     {
         $this->_clearMessages();
+        $this->setInvalidAttribute(null);
         if (!isset($this->_rowData['product_type'])) {
             return false;
         }

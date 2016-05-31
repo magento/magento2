@@ -9,6 +9,10 @@ use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Gateway\ConfigInterface;
 
+/**
+ * Class ConfigurableInfo
+ * @api
+ */
 class ConfigurableInfo extends \Magento\Payment\Block\Info
 {
     /**

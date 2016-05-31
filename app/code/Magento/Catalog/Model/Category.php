@@ -25,6 +25,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method array getAffectedCategoryIds()
  * @method Category setUrlKey(string $urlKey)
  * @method Category setUrlPath(string $urlPath)
+ * @method Category getSkipDeleteChildren()
+ * @method Category setSkipDeleteChildren(boolean $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -440,6 +442,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if (!$productIndexer->isScheduled()) {
             $productIndexer->reindexList(array_merge($this->getPathIds(), $oldParentIds));
         }
+        $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         $this->_cacheManager->clean([self::CACHE_TAG]);
 
         return $this;
@@ -568,9 +571,9 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getStoreId()
     {
         if ($this->hasData('store_id')) {
-            return $this->_getData('store_id');
+            return (int)$this->_getData('store_id');
         }
-        return $this->_storeManager->getStore()->getId();
+        return (int)$this->_storeManager->getStore()->getId();
     }
 
     /**
@@ -658,9 +661,15 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $url = false;
         $image = $this->getImage();
         if ($image) {
-            $url = $this->_storeManager->getStore()->getBaseUrl(
-                \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-            ) . 'catalog/category/' . $image;
+            if (is_string($image)) {
+                $url = $this->_storeManager->getStore()->getBaseUrl(
+                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                ) . 'catalog/category/' . $image;
+            } else {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Something went wrong while getting the image url.')
+                );
+            }
         }
         return $url;
     }
@@ -924,11 +933,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getProductCount()
     {
-        if (!$this->hasProductCount()) {
-            $count = $this->_getResource()->getProductCount($this);
-            // load product count
-            $this->setData(self::KEY_PRODUCT_COUNT, $count);
-        }
+        $count = $this->_getResource()->getProductCount($this);
+        $this->setData(self::KEY_PRODUCT_COUNT, $count);
         return $this->getData(self::KEY_PRODUCT_COUNT);
     }
 
@@ -1054,7 +1060,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Validate attribute values
      *
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
-     * @return bool|array
+     * @return true|array
      */
     public function validate()
     {
@@ -1115,7 +1121,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $identities = [
             self::CACHE_TAG . '_' . $this->getId(),
         ];
-        if ($this->hasDataChanges() || $this->isDeleted()) {
+        if (!$this->getId() || $this->hasDataChanges()
+            || $this->isDeleted() || $this->dataHasChangedFor(self::KEY_INCLUDE_IN_MENU)
+        ) {
+            $identities[] = self::CACHE_TAG;
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $this->getId();
         }
         return $identities;
@@ -1261,6 +1270,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Set parent category ID
      *

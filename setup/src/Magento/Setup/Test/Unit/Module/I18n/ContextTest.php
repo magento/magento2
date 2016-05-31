@@ -117,12 +117,12 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'app/code/Magento/Module/i18n/',
+                BP . '/app/code/Magento/Module/i18n/',
                 [Context::CONTEXT_TYPE_MODULE, 'Magento_Module'],
                 [[ComponentRegistrar::MODULE, 'Magento_Module', BP . '/app/code/Magento/Module']]
             ],
             ['/i18n/', [Context::CONTEXT_TYPE_THEME, 'theme/test.phtml'], []],
-            ['lib/web/i18n/', [Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], []],
+            [BP . '/lib/web/i18n/', [Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], []],
         ];
     }
 

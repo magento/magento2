@@ -5,6 +5,8 @@
  */
 namespace Magento\Downloadable\Model\ResourceModel\Indexer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Downloadable products Price indexer resource model
  *
@@ -95,6 +97,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
         $this->_prepareDownloadableLinkPriceTable();
 
         $dlType = $this->_getAttribute('links_purchased_separately');
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         $ifPrice = $connection->getIfNullSql('dlpw.price_id', 'dlpd.price');
 
@@ -103,7 +106,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             ['entity_id', 'customer_group_id', 'website_id']
         )->join(
             ['dl' => $dlType->getBackend()->getTable()],
-            "dl.entity_id = i.entity_id AND dl.attribute_id = {$dlType->getAttributeId()}" . " AND dl.store_id = 0",
+            "dl.{$linkField} = i.entity_id AND dl.attribute_id = {$dlType->getAttributeId()}" . " AND dl.store_id = 0",
             []
         )->join(
             ['dll' => $this->getTable('downloadable_link')],

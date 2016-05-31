@@ -8,19 +8,25 @@ namespace Magento\Customer\Model\Account;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
-use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Controller\Result\Forward as ResultForward;
 use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Redirect
 {
+    /** URL to redirect user on successful login or registration */
+    const LOGIN_REDIRECT_URL = 'login_redirect';
+
     /**
      * @var RequestInterface
      */
@@ -52,9 +58,14 @@ class Redirect
     protected $url;
 
     /**
-     * @var RedirectFactory
+     * @var ResultFactory
      */
-    protected $resultRedirectFactory;
+    protected $resultFactory;
+
+    /**
+     * @var CookieManagerInterface
+     */
+    protected $cookieManager;
 
     /**
      * @param RequestInterface $request
@@ -64,7 +75,7 @@ class Redirect
      * @param UrlInterface $url
      * @param DecoderInterface $urlDecoder
      * @param CustomerUrl $customerUrl
-     * @param RedirectFactory $resultRedirectFactory
+     * @param ResultFactory $resultFactory
      */
     public function __construct(
         RequestInterface $request,
@@ -74,7 +85,7 @@ class Redirect
         UrlInterface $url,
         DecoderInterface $urlDecoder,
         CustomerUrl $customerUrl,
-        RedirectFactory $resultRedirectFactory
+        ResultFactory $resultFactory
     ) {
         $this->request = $request;
         $this->session = $customerSession;
@@ -83,23 +94,31 @@ class Redirect
         $this->url = $url;
         $this->urlDecoder = $urlDecoder;
         $this->customerUrl = $customerUrl;
-        $this->resultRedirectFactory = $resultRedirectFactory;
+        $this->resultFactory = $resultFactory;
     }
 
     /**
      * Retrieve redirect
      *
-     * @return ResultRedirect
+     * @return ResultRedirect|ResultForward
      */
     public function getRedirect()
     {
         $this->updateLastCustomerId();
         $this->prepareRedirectUrl();
 
-        /** @var ResultRedirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $resultRedirect->setUrl($this->session->getBeforeAuthUrl(true));
-        return $resultRedirect;
+        /** @var ResultRedirect|ResultForward $result */
+        if ($this->session->getBeforeRequestParams()) {
+            $result = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
+            $result->setParams($this->session->getBeforeRequestParams())
+                ->setModule($this->session->getBeforeModuleName())
+                ->setController($this->session->getBeforeControllerName())
+                ->forward($this->session->getBeforeAction());
+        } else {
+            $result = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+            $result->setUrl($this->session->getBeforeAuthUrl(true));
+        }
+        return $result;
     }
 
     /**
@@ -195,5 +214,62 @@ class Redirect
     private function applyRedirect($url)
     {
         $this->session->setBeforeAuthUrl($url);
+    }
+
+    /**
+     * Get Cookie manager. For release backward compatibility.
+     *
+     * @deprecated
+     * @return CookieManagerInterface
+     */
+    protected function getCookieManager()
+    {
+        if (!is_object($this->cookieManager)) {
+            $this->cookieManager = ObjectManager::getInstance()->get(CookieManagerInterface::class);
+        }
+        return $this->cookieManager;
+    }
+
+    /**
+     * Set cookie manager. For unit tests.
+     *
+     * @deprecated
+     * @param object $value
+     * @return void
+     */
+    public function setCookieManager($value)
+    {
+        $this->cookieManager = $value;
+    }
+
+    /**
+     * Get redirect route from cookie for case of successful login/registration
+     *
+     * @return null|string
+     */
+    public function getRedirectCookie()
+    {
+        return $this->getCookieManager()->getCookie(self::LOGIN_REDIRECT_URL, null);
+    }
+
+    /**
+     * Save redirect route to cookie for case of successful login/registration
+     *
+     * @param string $route
+     * @return void
+     */
+    public function setRedirectCookie($route)
+    {
+        $this->getCookieManager()->setPublicCookie(self::LOGIN_REDIRECT_URL, $route);
+    }
+
+    /**
+     * Clear cookie with requested route
+     *
+     * @return void
+     */
+    public function clearRedirectCookie()
+    {
+        $this->getCookieManager()->deleteCookie(self::LOGIN_REDIRECT_URL);
     }
 }

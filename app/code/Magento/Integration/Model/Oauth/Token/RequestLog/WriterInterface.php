@@ -16,6 +16,10 @@ interface WriterInterface
      *
      * @param string $userName
      * @param int $userType
+<<<<<<< HEAD
+=======
+     * @param return void
+>>>>>>> develop
      * @return void
      */
     public function resetFailuresCount($userName, $userType);
@@ -25,6 +29,10 @@ interface WriterInterface
      *
      * @param string $userName
      * @param int $userType
+<<<<<<< HEAD
+=======
+     * @param return void
+>>>>>>> develop
      * @return void
      */
     public function incrementFailuresCount($userName, $userType);

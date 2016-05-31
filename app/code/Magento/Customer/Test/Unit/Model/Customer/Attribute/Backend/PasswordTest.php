@@ -16,7 +16,7 @@ class PasswordTest extends \PHPUnit_Framework_TestCase
      */
     protected $testable;
 
-    public function setUp()
+    protected function setUp()
     {
         $string = new StringUtils();
         $this->testable = new \Magento\Customer\Model\Customer\Attribute\Backend\Password($string);

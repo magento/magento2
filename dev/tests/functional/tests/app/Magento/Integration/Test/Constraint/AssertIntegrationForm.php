@@ -67,6 +67,8 @@ class AssertIntegrationForm extends AbstractAssertForm
         $integrationIndexPage->open();
         $integrationIndexPage->getIntegrationGrid()->searchAndOpen($filter);
         $formData = $integrationNewPage->getIntegrationForm()->getData();
+        unset($formData['current_password']);
+        unset($data['current_password']);
         $dataDiff = $this->verifyForm($formData, $data);
         \PHPUnit_Framework_Assert::assertEmpty(
             $dataDiff,

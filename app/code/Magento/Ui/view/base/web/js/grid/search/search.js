@@ -17,8 +17,15 @@ define([
             placeholder: $t('Search by keyword'),
             label: $t('Keyword'),
             value: '',
+            previews: [],
+            chipsProvider: 'componentType = filtersChips, ns = ${ $.ns }',
             statefull: {
                 value: true
+            },
+            tracks: {
+                value: true,
+                previews: true,
+                inputValue: true
             },
             imports: {
                 inputValue: 'value',
@@ -38,23 +45,19 @@ define([
          * @returns {Search} Chainable.
          */
         initialize: function () {
+            var urlParams = window.location.href.slice(window.location.href.search('[\&\?](search=)')).split('&'),
+                searchTerm = [];
+
             this._super()
                 .initChips();
 
-            return this;
-        },
+            if (urlParams[0]) {
+                searchTerm = urlParams[0].split('=');
 
-        /**
-         * Initializes observable properties.
-         *
-         * @returns {Search} Chainable.
-         */
-        initObservable: function () {
-            this._super()
-                .track('inputValue value')
-                .track({
-                    previews: []
-                });
+                if (searchTerm[1]) {
+                    this.apply(decodeURIComponent(searchTerm[1]));
+                }
+            }
 
             return this;
         },

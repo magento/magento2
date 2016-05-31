@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Model\Product\TypeHandler;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\ComponentInterface;
 
@@ -13,6 +14,9 @@ use Magento\Downloadable\Model\ComponentInterface;
  */
 class Sample extends AbstractTypeHandler
 {
+    const DATA_KEY = 'sample';
+    const IDENTIFIER_KEY = 'sample_id';
+
     /**
      * @var \Magento\Downloadable\Model\SampleFactory
      */
@@ -45,7 +49,7 @@ class Sample extends AbstractTypeHandler
      */
     public function getDataKey()
     {
-        return 'sample';
+        return self::DATA_KEY;
     }
 
     /**
@@ -53,7 +57,7 @@ class Sample extends AbstractTypeHandler
      */
     public function getIdentifierKey()
     {
-        return 'sample_id';
+        return self::IDENTIFIER_KEY;
     }
 
     /**
@@ -87,8 +91,11 @@ class Sample extends AbstractTypeHandler
         )->setSampleType(
             $data['type']
         )->setProductId(
-            $product->getId()
-        )->setStoreId(
+            $product->getData(
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+            )
+        );
+        $model->setStoreId(
             $product->getStoreId()
         );
     }

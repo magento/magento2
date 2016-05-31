@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
 
 /**
  * Class BuilderComposite
+ * @api
  */
 class BuilderComposite implements BuilderInterface
 {
@@ -60,6 +61,6 @@ class BuilderComposite implements BuilderInterface
      */
     protected function merge(array $result, array $builder)
     {
-        return array_merge($result, $builder);
+        return array_replace_recursive($result, $builder);
     }
 }

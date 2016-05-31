@@ -36,6 +36,20 @@ class Item extends Sidebar
     protected $confirmModal = '.confirm._show[data-role=modal]';
 
     /**
+     * CSS selector for qty field.
+     *
+     * @var string
+     */
+    private $qty = 'input.cart-item-qty';
+
+    /**
+     * CSS selector for update button.
+     *
+     * @var string
+     */
+    private $updateButton = 'button.update-cart-item';
+
+    /**
      * Remove product item from mini cart
      *
      * @return void
@@ -58,5 +72,19 @@ class Item extends Sidebar
     public function clickEditItem()
     {
         $this->_rootElement->find($this->editItem)->click();
+    }
+
+    /**
+     * Edit qty.
+     *
+     * @param array $checkoutData
+     * @return void
+     */
+    public function editQty(array $checkoutData)
+    {
+        if (isset($checkoutData['qty'])) {
+            $this->_rootElement->find($this->qty)->setValue($checkoutData['qty']);
+            $this->_rootElement->find($this->updateButton)->click();
+        }
     }
 }

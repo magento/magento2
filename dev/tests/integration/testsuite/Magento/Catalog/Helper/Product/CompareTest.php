@@ -33,7 +33,13 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('/catalog/product_compare/index/', $empty->getListUrl());
 
         $this->_populateCompareList();
-        $this->assertRegExp('#/catalog/product_compare/index/items/(?:10,11|11,10)/#', $this->_helper->getListUrl());
+        $productRepository = $this->_objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $id1 = $productRepository->get('simple1')->getId();
+        $id2 = $productRepository->get('simple2')->getId();
+        $this->assertRegExp(
+            '#/catalog/product_compare/index/items/(?:' . $id1 . ',' . $id2 . '|' . $id2 . ',' . $id1. ')/#',
+            $this->_helper->getListUrl()
+        );
     }
 
     public function testGetAddUrl()
@@ -133,10 +139,9 @@ class CompareTest extends \PHPUnit_Framework_TestCase
      */
     protected function _populateCompareList()
     {
-        $productOne = $this->_objectManager->create('Magento\Catalog\Model\Product');
-        $productTwo = $this->_objectManager->create('Magento\Catalog\Model\Product');
-        $productOne->load(10);
-        $productTwo->load(11);
+        $productRepository = $this->_objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productOne = $productRepository->get('simple1');
+        $productTwo = $productRepository->get('simple2');
         /** @var $compareList \Magento\Catalog\Model\Product\Compare\ListCompare */
         $compareList = $this->_objectManager->create('Magento\Catalog\Model\Product\Compare\ListCompare');
         $compareList->addProduct($productOne)->addProduct($productTwo);

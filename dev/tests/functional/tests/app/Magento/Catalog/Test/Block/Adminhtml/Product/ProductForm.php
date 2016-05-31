@@ -6,24 +6,19 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\ProductTab;
-use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Fixture\InjectableFixture;
-use Magento\Catalog\Test\Fixture\Category;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Product form on backend product page.
  */
-class ProductForm extends FormTabs
+class ProductForm extends FormSections
 {
     /**
      * Attribute on the Product page.
@@ -33,68 +28,48 @@ class ProductForm extends FormTabs
     protected $attribute = './/*[contains(@class,"label")]/span[text()="%s"]';
 
     /**
-     * Attribute Search locator the Product page.
+     * Attributes Search modal locator.
      *
      * @var string
      */
-    protected $attributeSearch = '#product-attribute-search-container';
+    protected $attributeSearch = '.product_form_product_form_add_attribute_modal';
 
     /**
-     * Selector for trigger(show/hide) of advanced setting content.
+     * Custom Section locator.
      *
      * @var string
      */
-    protected $advancedSettingTrigger = '#product_info_tabs-advanced [data-role="trigger"]';
-
-    /**
-     * Selector for advanced setting content.
-     *
-     * @var string
-     */
-    protected $advancedSettingContent = '#product_info_tabs-advanced [data-role="content"]';
-
-    /**
-     * Custom Tab locator.
-     *
-     * @var string
-     */
-    protected $customTab = './/*/a[contains(@id,"product_info_tabs_%s")]';
-
-    /**
-     * Tabs title css selector.
-     *
-     * @var string
-     */
-    protected $tabsTitle = '#product_info_tabs-basic [data-role="title"]';
+    protected $customSection = '[data-index="%s"] .admin__collapsible-title';
 
     /**
      * Attribute block selector.
      *
      * @var string
      */
-    protected $attributeBlock = '#attribute-%s-container';
+    protected $attributeBlock = '[data-index="%s"]';
 
     /**
-     * Magento loader.
+     * Magento form loader.
      *
      * @var string
      */
-    protected $loader = '[data-role="loader"]';
+    protected $spinner = '[data-role="spinner"]';
 
     /**
-     * New attribute form selector.
+     * New Attribute modal locator.
      *
      * @var string
      */
-    protected $newAttributeForm = '#create_new_attribute';
+    protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
 
     /**
      * Fill the product form.
      *
      * @param FixtureInterface $product
-     * @param SimpleElement|null $element [optional]
-     * @param FixtureInterface|null $category [optional]
-     * @return FormTabs
+     * @param SimpleElement|null $element
+     * @param FixtureInterface|null $category
+     * @return $this
+     * @throws \Exception
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -112,80 +87,32 @@ class ProductForm extends FormTabs
             ];
             $this->callRender($typeId, 'fill', $renderArguments);
         } else {
-            $tabs = $this->getFieldsByTabs($product);
+            $sections = $this->getFixtureFieldsByContainers($product);
 
             if ($category) {
-                $tabs['product-details']['category_ids']['value'] = $category->getName();
+                $sections['product-details']['category_ids']['value'] = $category->getName();
             }
-            $this->fillTabs($tabs, $element);
-
-            if ($product->hasData('custom_attribute')) {
-                $this->createCustomAttribute($product);
-            }
+            $this->fillContainers($sections, $element);
         }
 
         return $this;
     }
 
     /**
-     * Create custom attribute.
+     * Open section or click on button to open modal window.
      *
-     * @param InjectableFixture $product
-     * @param string $tabName
-     * @return void
+     * @param string $sectionName
+     * @return $this
      */
-    protected function createCustomAttribute(InjectableFixture $product, $tabName = 'product-details')
+    public function openSection($sectionName)
     {
-        $attribute = $product->getDataFieldConfig('custom_attribute')['source']->getAttribute();
-        $this->openTab('product-details');
-        if (!$this->checkAttributeLabel($attribute)) {
-            /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\ProductDetails $tab */
-            $tab = $this->openTab($tabName);
-            $tab->addNewAttribute($tabName);
-            $this->getAttributeForm()->fill($attribute);
+        $sectionElement = $this->getContainerElement($sectionName);
+        if ($sectionElement->getAttribute('type') == 'button') {
+            $sectionElement->click();
+        } else {
+            parent::openSection($sectionName);
         }
-    }
-
-    /**
-     * Get data of the tabs.
-     *
-     * @param FixtureInterface|null $fixture
-     * @param SimpleElement|null $element
-     * @return array
-     */
-    public function getData(FixtureInterface $fixture = null, SimpleElement $element = null)
-    {
-        $this->showAdvancedSettings();
-
-        return parent::getData($fixture, $element);
-    }
-
-    /**
-     * Open tab.
-     *
-     * @param string $tabName
-     * @return Tab
-     */
-    public function openTab($tabName)
-    {
-        if (!$this->isTabVisible($tabName)) {
-            $this->showAdvancedSettings();
-        }
-        return parent::openTab($tabName);
-    }
-
-    /**
-     * Show Advanced Setting.
-     *
-     * @return void
-     */
-    protected function showAdvancedSettings()
-    {
-        if (!$this->_rootElement->find($this->advancedSettingContent)->isVisible()) {
-            $this->_rootElement->find($this->advancedSettingTrigger)->click();
-            $this->waitForElementVisible($this->advancedSettingContent);
-        }
-        $this->_rootElement->find($this->tabsTitle)->click();
+        return $this;
     }
 
     /**
@@ -195,34 +122,7 @@ class ProductForm extends FormTabs
      */
     protected function waitPageToLoad()
     {
-        $browser = $this->browser;
-        $element = $this->advancedSettingContent;
-        $advancedSettingTrigger = $this->advancedSettingTrigger;
-
-        $this->_rootElement->waitUntil(
-            function () use ($browser, $advancedSettingTrigger) {
-                return $browser->find($advancedSettingTrigger)->isVisible() == true ? true : null;
-            }
-        );
-
-        $this->_rootElement->waitUntil(
-            function () use ($browser, $element) {
-                return $browser->find($element)->isVisible() == false ? true : null;
-            }
-        );
-    }
-
-    /**
-     * Clear category field.
-     *
-     * @return void
-     */
-    public function clearCategorySelect()
-    {
-        $selectedCategory = 'li.mage-suggest-choice span.mage-suggest-choice-close';
-        if ($this->_rootElement->find($selectedCategory)->isVisible()) {
-            $this->_rootElement->find($selectedCategory)->click();
-        }
+        $this->waitForElementNotVisible($this->spinner);
     }
 
     /**
@@ -242,105 +142,42 @@ class ProductForm extends FormTabs
     }
 
     /**
-     * Call method that checking present attribute in search result.
+     * Get attributes search grid.
      *
-     * @param CatalogProductAttribute $productAttribute
+     * @return DataGrid
+     */
+    public function getAttributesSearchGrid()
+    {
+        return $this->blockFactory->create(
+            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes\Grid',
+            ['element' => $this->browser->find($this->attributeSearch)]
+        );
+    }
+
+    /**
+     * Check custom section visibility on Product form.
+     *
+     * @param string $sectionName
      * @return bool
      */
-    public function checkAttributeInSearchAttributeForm(CatalogProductAttribute $productAttribute)
+    public function isCustomSectionVisible($sectionName)
     {
-        $this->waitPageToLoad();
-        return $this->getAttributesSearchForm()->isExistAttributeInSearchResult($productAttribute);
+        $sectionName = strtolower($sectionName);
+        $selector = sprintf($this->attributeBlock, $sectionName);
+
+        return $this->_rootElement->find($selector)->isVisible();
     }
 
     /**
-     * Get attributes search form.
+     * Open custom section on Product form.
      *
-     * @return Search
-     */
-    protected function getAttributesSearchForm()
-    {
-        return $this->_rootElement->find(
-            $this->attributeSearch,
-            Locator::SELECTOR_CSS,
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
-        );
-    }
-
-    /**
-     * Check custom tab visibility on Product form.
-     *
-     * @param string $tabName
-     * @return bool
-     */
-    public function isCustomTabVisible($tabName)
-    {
-        $tabName = strtolower($tabName);
-        $selector = sprintf($this->customTab, $tabName);
-        $this->waitForElementVisible($selector, Locator::SELECTOR_XPATH);
-
-        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
-    }
-
-    /**
-     * Open custom tab on Product form.
-     *
-     * @param string $tabName
+     * @param string $sectionName
      * @return void
      */
-    public function openCustomTab($tabName)
+    public function openCustomSection($sectionName)
     {
-        $tabName = strtolower($tabName);
-        $this->_rootElement->find(sprintf($this->customTab, $tabName), Locator::SELECTOR_XPATH)->click();
-    }
-
-    /**
-     * Get Require Notice Attributes.
-     *
-     * @param InjectableFixture $product
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    public function getRequireNoticeAttributes(InjectableFixture $product)
-    {
-        $data = [];
-        $tabs = $this->getFieldsByTabs($product);
-        foreach ($tabs as $tabName => $fields) {
-            $tab = $this->getTab($tabName);
-            $this->openTab($tabName);
-            $errors = $tab->getJsErrors();
-            if (!empty($errors)) {
-                $data[$tabName] = $errors;
-            }
-        }
-
-        return $data;
-    }
-
-    /**
-     * Click "Save" button on attribute form.
-     *
-     * @return void
-     */
-    public function saveAttributeForm()
-    {
-        $this->getAttributeForm()->saveAttributeForm();
-
-        $browser = $this->browser;
-        $element = $this->newAttributeForm;
-        $loader = $this->loader;
-        $this->_rootElement->waitUntil(
-            function () use ($browser, $element) {
-                return $browser->find($element)->isVisible() == false ? true : null;
-            }
-        );
-
-        $this->_rootElement->waitUntil(
-            function () use ($browser, $loader) {
-                return $browser->find($loader)->isVisible() == false ? true : null;
-            }
-        );
+        $sectionName = strtolower($sectionName);
+        $this->_rootElement->find(sprintf($this->customSection, $sectionName))->click();
     }
 
     /**
@@ -352,7 +189,7 @@ class ProductForm extends FormTabs
     {
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
-            ['element' => $this->browser->find('body')]
+            ['element' => $this->browser->find($this->newAttributeModal)]
         );
     }
 
@@ -369,22 +206,5 @@ class ProductForm extends FormTabs
             Locator::SELECTOR_CSS,
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute'
         );
-    }
-
-    /**
-     * Click "Add Attribute" button from specific tab.
-     *
-     * @param string $tabName
-     * @throws \Exception
-     */
-    public function addNewAttribute($tabName = 'product-details')
-    {
-        $tab = $this->getTab($tabName);
-        if ($tab instanceof ProductTab) {
-            $this->openTab($tabName);
-            $tab->addNewAttribute($tabName);
-        } else {
-            throw new \Exception("$tabName hasn't 'Add attribute' button or is not instance of ProductTab class.");
-        }
     }
 }

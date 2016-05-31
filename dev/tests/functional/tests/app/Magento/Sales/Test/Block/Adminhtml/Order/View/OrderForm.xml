@@ -27,8 +27,8 @@
         <strategy>css selector</strategy>
     </returns>
     <transactions>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#sales_order_view_tabs_order_transactions</selector>
-        <strategy>css selector</strategy>
+        <class>Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Transactions</class>
+        <selector>.//*[@id='sales_order_view_tabs_order_transactions']</selector>
+        <strategy>xpath</strategy>
     </transactions>
 </tabs>

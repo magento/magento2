@@ -124,7 +124,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
         if ($storeId === null) {
             $storeId = $this->storeManager->getStore()->getId();
         }
-        $data->setStores($storeId);
+        $data->setStores([$storeId]);
         try {
             $this->resourceModel->save($data);
         } catch (\Exception $e) {

@@ -54,7 +54,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Framework\Filesystem\DirectoryList')
             ->getPath(DirectoryList::SESSION);
     }
-    
+
     /**
      * @magentoAppIsolation enabled
      */

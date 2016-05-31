@@ -143,16 +143,19 @@
 
         &._complete {
             cursor: pointer;
+
             &:hover {
                 &:before {
                     .lib-css(background, @checkout-progress-bar-item__hover__background-color);
                 }
+
                 > span {
                     &:before {
                         .lib-css(background, @checkout-progress-bar-item__hover__background-color);
                     }
                 }
             }
+
             > span {
                 .lib-css(color, @checkout-progress-bar-item__complete__color);
 
@@ -167,11 +170,14 @@
             &:before {
                 background: @checkout-progress-bar-item__active__background-color;
             }
+
             > span {
                 .lib-css(color, @checkout-progress-bar-item__color);
+
                 &:before {
                     .lib-css(background, @checkout-progress-bar-item__active__background-color);
                 }
+
                 &:after {
                     .lib-css(font-family, @icons__font-name);
                     .lib-css(content, @checkout-progress-bar-item-element-inner__active__content);

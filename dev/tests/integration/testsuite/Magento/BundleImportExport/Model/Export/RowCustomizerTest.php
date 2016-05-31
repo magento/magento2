@@ -33,16 +33,23 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
+        $select = $collection->getConnection()->select()
+            ->from(['p' => $collection->getTable('catalog_product_entity')], ['sku', 'entity_id'])
+            ->where('sku IN(?)', ['simple', 'custom-design-simple-product', 'bundle-product']);
+        $ids = $collection->getConnection()->fetchPairs($select);
         $select = (string)$collection->getSelect();
-        $this->model->prepareData($collection, [1, 2, 3, 4]);
+        $this->model->prepareData($collection, array_values($ids));
         $this->assertEquals($select, (string)$collection->getSelect());
-        $result = $this->model->addData([], 3);
+        $result = $this->model->addData([], $ids['bundle-product']);
         $this->assertArrayHasKey('bundle_price_type', $result);
+        $this->assertArrayHasKey('bundle_shipment_type', $result);
         $this->assertArrayHasKey('bundle_sku_type', $result);
         $this->assertArrayHasKey('bundle_price_view', $result);
         $this->assertArrayHasKey('bundle_weight_type', $result);
         $this->assertArrayHasKey('bundle_values', $result);
         $this->assertContains('sku=simple,', $result['bundle_values']);
+        $this->assertEquals([], $this->model->addData([], $ids['simple']));
     }
 }

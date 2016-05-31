@@ -11,6 +11,7 @@ namespace Magento\Payment\Model\Method;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Quote\Api\Data\PaymentMethodInterface;
@@ -770,6 +771,27 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function assignData(\Magento\Framework\DataObject $data)
     {
+<<<<<<< HEAD
+=======
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data_' . $this->getCode(),
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data',
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
+>>>>>>> develop
         return $this;
     }
 

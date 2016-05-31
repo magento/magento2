@@ -14,8 +14,8 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $returnValueMap = [
             [
-                'Magento\Setup\Model\FilePermissions',
-                $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false),
+                'Magento\Framework\Setup\FilePermissions',
+                $this->getMock('Magento\Framework\Setup\FilePermissions', [], [], '', false),
             ],
             [
                 'Magento\Framework\App\DeploymentConfig\Writer',
@@ -89,12 +89,13 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\Setup\SampleData\State',
                 $this->getMock('Magento\Framework\Setup\SampleData\State', [], [], '', false),
             ],
+            [
+                'Magento\Setup\Model\PhpReadinessCheck',
+                $this->getMock('Magento\Setup\Model\PhpReadinessCheck', [], [], '', false),
+            ],
         ];
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
-        $serviceLocatorMock
-            ->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($returnValueMap));
+        $serviceLocatorMock->expects($this->any())->method('get')->will($this->returnValueMap($returnValueMap));
 
         $log = $this->getMockForAbstractClass('Magento\Framework\Setup\LoggerInterface');
         $resourceFactoryMock = $this->getMock('Magento\Setup\Module\ResourceFactory', [], [], '', false);

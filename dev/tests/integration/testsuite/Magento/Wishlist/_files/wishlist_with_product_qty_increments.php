@@ -10,8 +10,10 @@ require __DIR__ . '/../../../Magento/Catalog/_files/product_special_price.php';
 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var \Magento\Catalog\Model\Product $product */
-$product->load(1);
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+$product = $productRepository->get('simple');
 $product->setStockData(['enable_qty_increments' => 1, 'qty_increments' => 5])->save();
 
 /** @var \Magento\Wishlist\Model\Wishlist $wishlist */

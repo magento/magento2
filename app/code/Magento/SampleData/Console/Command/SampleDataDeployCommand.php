@@ -35,6 +35,7 @@ class SampleDataDeployCommand extends Command
 
     /**
      * @var ArrayInputFactory
+     * @deprecated
      */
     private $arrayInputFactory;
 
@@ -77,6 +78,7 @@ class SampleDataDeployCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->updateMemoryLimit();
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
@@ -87,18 +89,56 @@ class SampleDataDeployCommand extends Command
             }
             $commonArgs = array_merge(['packages' => $packages], $commonArgs);
             $arguments = array_merge(['command' => 'require'], $commonArgs);
-            /** @var ArrayInput $commandInput */
-            $commandInput = $this->arrayInputFactory->create(['parameters' => $arguments]);
+            $commandInput = new ArrayInput($arguments);
 
             /** @var Application $application */
             $application = $this->applicationFactory->create();
             $application->setAutoExit(false);
             $result = $application->run($commandInput, $output);
             if ($result !== 0) {
-                $output->writeln('<info>' . 'There is an error during sample data deployment.' . '</info>');
+                $output->writeln(
+                    '<info>' . 'There is an error during sample data deployment. Composer file will be reverted.'
+                    . '</info>'
+                );
+                $application->resetComposer();
             }
         } else {
             $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
         }
+    }
+
+    /**
+     * @return void
+     */
+    private function updateMemoryLimit()
+    {
+        if (function_exists('ini_set')) {
+            @ini_set('display_errors', 1);
+            $memoryLimit = trim(ini_get('memory_limit'));
+            if ($memoryLimit != -1 && $this->getMemoryInBytes($memoryLimit) < 768 * 1024 * 1024) {
+                @ini_set('memory_limit', '768M');
+            }
+        }
+    }
+
+    /**
+     * @param string $value
+     * @return int
+     */
+    private function getMemoryInBytes($value)
+    {
+        $unit = strtolower(substr($value, -1, 1));
+        $value = (int) $value;
+        switch($unit) {
+            case 'g':
+                $value *= 1024 * 1024 * 1024;
+                break;
+            case 'm':
+                $value *= 1024 * 1024;
+                break;
+            case 'k':
+                $value *= 1024;
+        }
+        return $value;
     }
 }

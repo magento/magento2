@@ -75,7 +75,7 @@ class MassSubscribeTest extends \PHPUnit_Framework_TestCase
      */
     protected $subscriberMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 

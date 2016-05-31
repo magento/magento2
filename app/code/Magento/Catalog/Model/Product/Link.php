@@ -21,6 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  * @method \Magento\Catalog\Model\Product\Link setLinkTypeId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {
@@ -48,6 +49,11 @@ class Link extends \Magento\Framework\Model\AbstractModel
      * @var \Magento\Catalog\Model\ResourceModel\Product\Link\CollectionFactory
      */
     protected $_linkCollectionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Link\SaveHandler
+     */
+    protected $saveProductLinks;
 
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
@@ -136,7 +142,6 @@ class Link extends \Magento\Framework\Model\AbstractModel
     public function getProductCollection()
     {
         $collection = $this->_productCollectionFactory->create()->setLinkModel($this);
-        $this->stockHelper->addInStockFilterToCollection($collection);
         return $collection;
     }
 
@@ -175,18 +180,19 @@ class Link extends \Magento\Framework\Model\AbstractModel
      */
     public function saveProductRelations($product)
     {
-        $data = $product->getRelatedLinkData();
-        if ($data !== null) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_RELATED);
-        }
-        $data = $product->getUpSellLinkData();
-        if ($data !== null) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_UPSELL);
-        }
-        $data = $product->getCrossSellLinkData();
-        if ($data !== null) {
-            $this->_getResource()->saveProductLinks($product, $data, self::LINK_TYPE_CROSSSELL);
-        }
+        $this->getProductLinkSaveHandler()->execute(\Magento\Catalog\Api\Data\ProductInterface::class, $product);
         return $this;
+    }
+
+    /**
+     * @return Link\SaveHandler
+     */
+    private function getProductLinkSaveHandler()
+    {
+        if (null === $this->saveProductLinks) {
+            $this->saveProductLinks = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\Link\SaveHandler');
+        }
+        return $this->saveProductLinks;
     }
 }

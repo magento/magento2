@@ -6,6 +6,26 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Catalog\Api\AttributeSetRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Api\AttributeGroupRepositoryInterface;
+use Magento\Eav\Api\AttributeManagementInterface;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+
+/**
+ * Class AddAttributeToTemplate
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
@@ -14,9 +34,55 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     protected $resultJsonFactory;
 
     /**
+     * @var AttributeRepositoryInterface
+     */
+    protected $attributeRepository;
+
+    /**
+     * @var AttributeSetRepositoryInterface
+     */
+    protected $attributeSetRepository;
+
+    /**
+     * @var AttributeGroupRepositoryInterface
+     */
+    protected $attributeGroupRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
+     * @var SortOrderBuilder
+     */
+    protected $sortOrderBuilder;
+
+    /**
+     * @var AttributeGroupInterfaceFactory
+     */
+    protected $attributeGroupFactory;
+
+    /**
+     * @var AttributeManagementInterface
+     */
+    protected $attributeManagement;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var ExtensionAttributesFactory
+     */
+    protected $extensionAttributesFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
+     * @param Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -26,6 +92,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
     }
+
     /**
      * Add attribute to attribute set
      *
@@ -34,39 +101,202 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     public function execute()
     {
         $request = $this->getRequest();
-        $resultJson = $this->resultJsonFactory->create();
+        $response = new \Magento\Framework\DataObject();
+        $response->setError(false);
+
         try {
-            /** @var \Magento\Eav\Model\Entity\Attribute $attribute */
-            $attribute = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute')
-                ->load($request->getParam('attribute_id'));
+            /** @var AttributeSetInterface $attributeSet */
+            $attributeSet = $this->getAttributeSetRepository()->get($request->getParam('templateId'));
+            $groupCode = $request->getParam('groupCode');
+            $groupName = $request->getParam('groupName');
+            $groupSortOrder = $request->getParam('groupSortOrder');
 
-            $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
-                ->load($request->getParam('template_id'));
+            $attributeSearchCriteria = $this->getBasicAttributeSearchCriteriaBuilder()->create();
+            $attributeGroupSearchCriteria = $this->getSearchCriteriaBuilder()
+                ->addFilter('attribute_set_id', $attributeSet->getAttributeSetId())
+                ->addFilter('attribute_group_code', $groupCode)
+                ->addSortOrder($this->getSortOrderBuilder()->setAscendingDirection()->create())
+                ->setPageSize(1)
+                ->create();
 
-            /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection $attributeGroupCollection */
-            $attributeGroupCollection = $this->_objectManager->get(
-                'Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection'
-            );
-            $attributeGroupCollection->setAttributeSetFilter($attributeSet->getId());
-            $attributeGroupCollection->addFilter('attribute_group_code', $request->getParam('group'));
-            $attributeGroupCollection->setPageSize(1);
+            try {
+                /** @var AttributeGroupInterface[] $attributeGroupItems */
+                $attributeGroupItems = $this->getAttributeGroupRepository()->getList($attributeGroupSearchCriteria)
+                    ->getItems();
 
-            $attributeGroup = $attributeGroupCollection->getFirstItem();
+                if (!$attributeGroupItems) {
+                    throw new \Magento\Framework\Exception\NoSuchEntityException;
+                }
 
-            $attribute->setAttributeSetId($attributeSet->getId())->loadEntityAttributeIdBySet();
+                /** @var AttributeGroupInterface $attributeGroup */
+                $attributeGroup = reset($attributeGroupItems);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                /** @var AttributeGroupInterface $attributeGroup */
+                $attributeGroup = $this->getAttributeGroupFactory()->create();
+            }
 
-            $attribute->setAttributeSetId($request->getParam('template_id'))
-                ->setAttributeGroupId($attributeGroup->getId())
-                ->setSortOrder('0')
-                ->save();
+            $extensionAttributes = $attributeGroup->getExtensionAttributes()
+                ?: $this->getExtensionAttributesFactory()->create(AttributeGroupInterface::class);
 
-            $resultJson->setJsonData($attribute->toJson());
-        } catch (\Exception $e) {
-            $response = new \Magento\Framework\DataObject();
-            $response->setError(false);
+            $extensionAttributes->setAttributeGroupCode($groupCode);
+            $extensionAttributes->setSortOrder($groupSortOrder);
+            $attributeGroup->setAttributeGroupName($groupName);
+            $attributeGroup->setAttributeSetId($attributeSet->getAttributeSetId());
+            $attributeGroup->setExtensionAttributes($extensionAttributes);
+
+            $this->getAttributeGroupRepository()->save($attributeGroup);
+
+            /** @var AttributeInterface[] $attributesItems */
+            $attributesItems = $this->getAttributeRepository()->getList(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeSearchCriteria
+            )->getItems();
+
+            array_walk($attributesItems, function (AttributeInterface $attribute) use ($attributeSet, $attributeGroup) {
+                $this->getAttributeManagement()->assign(
+                    ProductAttributeInterface::ENTITY_TYPE_CODE,
+                    $attributeSet->getAttributeSetId(),
+                    $attributeGroup->getAttributeGroupId(),
+                    $attribute->getAttributeCode(),
+                    '0'
+                );
+            });
+        } catch (LocalizedException $e) {
+            $response->setError(true);
             $response->setMessage($e->getMessage());
-            $resultJson->setJsonData($response->toJson());
+        } catch (\Exception $e) {
+            $this->getLogger()->critical($e);
+            $response->setError(true);
+            $response->setMessage(__('Unable to add attribute'));
         }
-        return $resultJson;
+
+        return $this->resultJsonFactory->create()->setJsonData($response->toJson());
+    }
+
+    /**
+     * Adding basic filters
+     *
+     * @return SearchCriteriaBuilder
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getBasicAttributeSearchCriteriaBuilder()
+    {
+        $attributeIds = (array)$this->getRequest()->getParam('attributeIds', []);
+
+        if (empty($attributeIds['selected'])) {
+            throw new LocalizedException(__('Please, specify attributes'));
+        }
+
+        return $this->getSearchCriteriaBuilder()
+            ->addFilter('attribute_set_id', new \Zend_Db_Expr('null'), 'is')
+            ->addFilter('attribute_id', [$attributeIds['selected']], 'in');
+    }
+
+    /**
+     * @return AttributeRepositoryInterface
+     */
+    private function getAttributeRepository()
+    {
+        if (null === $this->attributeRepository) {
+            $this->attributeRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Eav\Api\AttributeRepositoryInterface');
+        }
+        return $this->attributeRepository;
+    }
+
+    /**
+     * @return AttributeSetRepositoryInterface
+     */
+    private function getAttributeSetRepository()
+    {
+        if (null === $this->attributeSetRepository) {
+            $this->attributeSetRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\AttributeSetRepositoryInterface');
+        }
+        return $this->attributeSetRepository;
+    }
+
+    /**
+     * @return AttributeGroupRepositoryInterface
+     */
+    private function getAttributeGroupRepository()
+    {
+        if (null === $this->attributeGroupRepository) {
+            $this->attributeGroupRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Eav\Api\AttributeGroupRepositoryInterface');
+        }
+        return $this->attributeGroupRepository;
+    }
+
+    /**
+     * @return AttributeGroupInterfaceFactory
+     */
+    private function getAttributeGroupFactory()
+    {
+        if (null === $this->attributeGroupFactory) {
+            $this->attributeGroupFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Eav\Api\Data\AttributeGroupInterfaceFactory');
+        }
+        return $this->attributeGroupFactory;
+    }
+
+    /**
+     * @return SearchCriteriaBuilder
+     */
+    private function getSearchCriteriaBuilder()
+    {
+        if (null === $this->searchCriteriaBuilder) {
+            $this->searchCriteriaBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\SearchCriteriaBuilder');
+        }
+        return $this->searchCriteriaBuilder;
+    }
+
+    /**
+     * @return SortOrderBuilder
+     */
+    private function getSortOrderBuilder()
+    {
+        if (null === $this->sortOrderBuilder) {
+            $this->sortOrderBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\SortOrderBuilder');
+        }
+        return $this->sortOrderBuilder;
+    }
+
+    /**
+     * @return AttributeManagementInterface
+     */
+    private function getAttributeManagement()
+    {
+        if (null === $this->attributeManagement) {
+            $this->attributeManagement = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Eav\Api\AttributeManagementInterface');
+        }
+        return $this->attributeManagement;
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    private function getLogger()
+    {
+        if (null === $this->logger) {
+            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Psr\Log\LoggerInterface');
+        }
+        return $this->logger;
+    }
+
+    /**
+     * @return ExtensionAttributesFactory
+     */
+    private function getExtensionAttributesFactory()
+    {
+        if (null === $this->extensionAttributesFactory) {
+            $this->extensionAttributesFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\ExtensionAttributesFactory');
+        }
+        return $this->extensionAttributesFactory;
     }
 }

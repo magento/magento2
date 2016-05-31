@@ -5,66 +5,71 @@
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
+use Magento\Customer\Model\EmailNotificationInterface;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class InlineEditTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Customer\Controller\Adminhtml\Index\InlineEdit */
-    protected $controller;
+    private $controller;
 
     /** @var \Magento\Backend\App\Action\Context */
-    protected $context;
+    private $context;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $request;
+    private $request;
 
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $messageManager;
+    private $messageManager;
 
     /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject*/
     protected $customerData;
 
     /** @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $address;
+    private $address;
 
     /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $resultJsonFactory;
+    private $resultJsonFactory;
 
     /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $resultJson;
+    private $resultJson;
 
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $customerRepository;
+    private $customerRepository;
 
     /** @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $addressMapper;
+    private $addressMapper;
 
     /** @var \Magento\Customer\Model\Customer\Mapper|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $customerMapper;
+    private $customerMapper;
 
     /** @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $dataObjectHelper;
+    private $dataObjectHelper;
 
     /** @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $addressDataFactory;
+    private $addressDataFactory;
 
     /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $addressRepository;
+    private $addressRepository;
 
     /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $messageCollection;
+    private $messageCollection;
 
     /** @var \Magento\Framework\Message\MessageInterface|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $message;
+    private $message;
 
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject*/
-    protected $logger;
+    private $logger;
+
+    /** @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $emailNotification;
 
     /** @var array */
-    protected $items;
+    private $items;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -126,6 +131,10 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         );
         $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
 
+        $this->emailNotification = $this->getMockBuilder(EmailNotificationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->context = $objectManager->getObject(
             'Magento\Backend\App\Action\Context',
             [
@@ -147,6 +156,10 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'logger' => $this->logger,
             ]
         );
+        $reflection = new \ReflectionClass(get_class($this->controller));
+        $reflectionProperty = $reflection->getProperty('emailNotification');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->controller, $this->emailNotification);
 
         $this->items = [
             14 => [
@@ -254,10 +267,16 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(23);
+
         $this->prepareMocksForUpdateDefaultBilling();
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customerData);
+
+        $this->emailNotification->expects($this->once())
+            ->method('credentialsChanged')
+            ->willReturnSelf();
+
         $this->prepareMocksForErrorMessagesProcessing();
         $this->assertSame($this->resultJson, $this->controller->execute());
     }

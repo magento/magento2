@@ -238,16 +238,16 @@ class AdminTokenServiceTest extends WebapiAbstract
         $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
         $exceptionData = $this->processRestExceptionResult($e);
         $expectedExceptionData = [
-            'message' => InputException::DEFAULT_MESSAGE,
+            'message' => 'One or more input exceptions have occurred.',
             'errors' => [
                 [
-                    'message' => InputException::REQUIRED_FIELD,
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'username',
                     ],
                 ],
                 [
-                    'message' => InputException::REQUIRED_FIELD,
+                    'message' => '%fieldName is a required field.',
                     'parameters' => [
                         'fieldName' => 'password',
                     ]

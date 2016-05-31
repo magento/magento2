@@ -25,5 +25,6 @@
         <field name="resource_access" group="role-resources" />
         <field name="roles_resources" group="role-resources" />
         <field name="in_role_users" group="in_role_users" source="Magento\User\Test\Fixture\Role\InRoleUsers" />
+        <field name="current_password" group="role-info" source="Magento\User\Test\Fixture\User\CurrentPassword" />
     </fixture>
 </config>

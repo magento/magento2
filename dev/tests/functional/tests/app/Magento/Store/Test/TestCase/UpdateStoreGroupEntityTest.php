@@ -75,6 +75,7 @@ class UpdateStoreGroupEntityTest extends Injectable
      */
     public function test(StoreGroup $storeGroupOrigin, StoreGroup $storeGroup)
     {
+
         //Preconditions
         $storeGroupOrigin->persist();
 

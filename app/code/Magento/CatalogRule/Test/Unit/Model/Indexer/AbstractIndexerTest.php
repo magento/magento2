@@ -6,6 +6,8 @@
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
+use Magento\CatalogRule\Model\Indexer\AbstractIndexer;
+
 class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,7 +16,7 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
     protected $indexBuilder;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\AbstractIndexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractIndexer|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexer;
 
@@ -34,12 +36,17 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
         $this->indexBuilder = $this->getMock('Magento\CatalogRule\Model\Indexer\IndexBuilder', [], [], '', false);
 
         $this->indexer = $this->getMockForAbstractClass(
-            'Magento\CatalogRule\Model\Indexer\AbstractIndexer',
+            AbstractIndexer::class,
             [
                 $this->indexBuilder,
                 $this->_eventManagerMock
             ]
         );
+        $cacheMock = $this->getMock(\Magento\Framework\App\CacheInterface::class);
+        $reflection = new \ReflectionClass(AbstractIndexer::class);
+        $reflectionProperty = $reflection->getProperty('cacheManager');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->indexer, $cacheMock);
     }
 
     /**

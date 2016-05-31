@@ -218,9 +218,14 @@ abstract class AbstractAction
             'ROUND(tp.value * cwd.rate, 4)',
             'tp.value'
         );
+        $linkField = $this->getProductIdFieldName();
         $select = $this->_connection->select()->from(
+            ['cpe' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            ['cpe.entity_id']
+        )->join(
             ['tp' => $this->_defaultIndexerResource->getTable(['catalog_product_entity', 'tier_price'])],
-            ['entity_id']
+            'tp.' . $linkField . ' = cpe.' . $linkField,
+            []
         )->join(
             ['cg' => $this->_defaultIndexerResource->getTable('customer_group')],
             'tp.all_groups = 1 OR (tp.all_groups = 0 AND tp.customer_group_id = cg.customer_group_id)',
@@ -238,11 +243,11 @@ abstract class AbstractAction
         )->columns(
             new \Zend_Db_Expr("MIN({$websiteExpression})")
         )->group(
-            ['tp.entity_id', 'cg.customer_group_id', 'cw.website_id']
+            ['cpe.entity_id', 'cg.customer_group_id', 'cw.website_id']
         );
 
         if (!empty($entityIds)) {
-            $select->where('tp.entity_id IN(?)', $entityIds);
+            $select->where("cpe.entity_id IN(?)", $entityIds);
         }
 
         $query = $select->insertFromSelect($table);
@@ -373,11 +378,11 @@ abstract class AbstractAction
         if (!empty($notCompositeIds)) {
             $select = $this->_connection->select()->from(
                 ['l' => $this->_defaultIndexerResource->getTable('catalog_product_relation')],
-                'parent_id'
+                ''
             )->join(
                 ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
-                'e.entity_id = l.parent_id',
-                ['type_id']
+                'e.' . $this->getProductIdFieldName() . ' = l.parent_id',
+                ['e.entity_id as parent_id', 'type_id']
             )->where(
                 'l.child_id IN(?)',
                 $notCompositeIds
@@ -385,7 +390,7 @@ abstract class AbstractAction
             $pairs = $this->_connection->fetchPairs($select);
             foreach ($pairs as $productId => $productType) {
                 if (!in_array($productId, $changedIds)) {
-                    $changedIds[] = $productId;
+                    $changedIds[] = (string) $productId;
                     $byType[$productType][$productId] = $productId;
                     $compositeIds[$productId] = $productId;
                 }
@@ -417,11 +422,15 @@ abstract class AbstractAction
      */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
+        $linkField = $this->getProductIdFieldName();
         $select = $this->_connection->select()->from(
             $this->_defaultIndexerResource->getTable('catalog_product_relation'),
             ['child_id']
+        )->join(
+            ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            'e.' . $linkField . ' = parent_id'
         )->where(
-            'parent_id IN(?)',
+            'e.entity_id IN(?)',
             $parentIds
         );
         if (!empty($excludeIds)) {
@@ -442,5 +451,15 @@ abstract class AbstractAction
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProductIdFieldName()
+    {
+        $table = $this->_defaultIndexerResource->getTable('catalog_product_entity');
+        $indexList = $this->_connection->getIndexList($table);
+        return $indexList[$this->_connection->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

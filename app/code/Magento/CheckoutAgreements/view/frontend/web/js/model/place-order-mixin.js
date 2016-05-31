@@ -9,25 +9,34 @@ define([
     'mage/utils/wrapper'
 ], function ($, wrapper) {
     'use strict';
+
     var agreementsConfig = window.checkoutConfig.checkoutAgreements;
 
     return function (placeOrderAction) {
+
         /** Override default place order action and add agreement_ids to request */
-        return wrapper.wrap(placeOrderAction, function(originalAction, paymentData, redirectOnSuccess, messageContainer) {
+        return wrapper.wrap(placeOrderAction, function (originalAction, paymentData, messageContainer) {
+            var agreementForm,
+                agreementData,
+                agreementIds;
+
             if (!agreementsConfig.isEnabled) {
-                return originalAction(paymentData, redirectOnSuccess, messageContainer);
+                return originalAction(paymentData, messageContainer);
             }
 
-            var agreementForm = $('.payment-method._active form[data-role=checkout-agreements]'),
-                agreementData = agreementForm.serializeArray(),
-                agreementIds = [];
+            agreementForm = $('.payment-method._active form[data-role=checkout-agreements]');
+            agreementData = agreementForm.serializeArray();
+            agreementIds = [];
 
-            agreementData.forEach(function(item) {
+            agreementData.forEach(function (item) {
                 agreementIds.push(item.value);
             });
 
-            paymentData.extension_attributes = {agreement_ids: agreementIds};
-            return originalAction(paymentData, redirectOnSuccess, messageContainer);
+            paymentData.extension_attributes = {
+                agreement_ids: agreementIds
+            };
+
+            return originalAction(paymentData, messageContainer);
         });
     };
 });

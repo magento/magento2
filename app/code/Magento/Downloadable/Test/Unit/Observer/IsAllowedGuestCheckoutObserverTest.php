@@ -26,7 +26,6 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit_Framework_TestCase
      */
     private $resultMock;
 
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event
      */
@@ -46,7 +45,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config')
             ->disableOriginalConstructor()

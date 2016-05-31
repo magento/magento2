@@ -26,7 +26,7 @@ class ShipmentTest extends \PHPUnit_Framework_TestCase
      */
     protected $shipment;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderRepository = $this->getMock(
             '\Magento\Sales\Api\OrderRepositoryInterface',

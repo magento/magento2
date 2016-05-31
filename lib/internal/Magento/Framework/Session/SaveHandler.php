@@ -5,10 +5,17 @@
  */
 namespace Magento\Framework\Session;
 
+<<<<<<< HEAD
 use Magento\Framework\Session\Config;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Exception\SessionException;
 use Magento\Framework\App\DeploymentConfig;
+=======
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Session\Config\ConfigInterface;
+>>>>>>> develop
 
 /**
  * Magento session save handler
@@ -24,7 +31,11 @@ class SaveHandler implements SaveHandlerInterface
 
     /**
      * Config
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> develop
      * @var ConfigInterface
      */
     private $config;
@@ -128,7 +139,11 @@ class SaveHandler implements SaveHandlerInterface
     {
         return $this->saveHandlerAdapter->gc($maxLifetime);
     }
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> develop
     /**
      * Get config
      *
@@ -137,10 +152,15 @@ class SaveHandler implements SaveHandlerInterface
      */
     private function getConfig()
     {
+<<<<<<< HEAD
         if (!($this->config instanceof ConfigInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 ConfigInterface::class
             );
+=======
+        if ($this->config === null) {
+            $this->config = ObjectManager::getInstance()->get(ConfigInterface::class);
+>>>>>>> develop
         }
         return $this->config;
     }

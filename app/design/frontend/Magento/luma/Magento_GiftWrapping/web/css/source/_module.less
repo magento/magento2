@@ -36,6 +36,7 @@
         list-style: none;
         margin: @indent__base 0 @indent__s;
         padding: 0;
+
         .no-image {
             .lib-css(background, @gift-wrapping-no-image__background);
             .lib-icon-font(
@@ -47,6 +48,7 @@
             @_icon-font-text-hide: true,
             @_icon-font-vertical-align: middle
             );
+
             &:after {
                 display: block;
             }
@@ -65,9 +67,11 @@
     .gift-wrapping-item {
         float: left;
         margin: 0 @indent__s @indent__s 0;
+
         &:last-child {
             margin-right: 0;
         }
+
         &._active {
             span {
                 &:before {
@@ -82,6 +86,7 @@
                 }
             }
         }
+
         > span {
             height: @gift-wrapping-thumbnail__height;
             width: @gift-wrapping-thumbnail__width;
@@ -90,6 +95,7 @@
 
     .gift-wrapping-title {
         margin: @indent__s 0;
+
         .action-remove {
             &:extend(.abs-action-button-as-link all);
             margin: -@indent__xs 0 0 @indent__xs;
@@ -137,9 +143,11 @@
             .title {
                 float: none;
             }
+
             .content {
                 &:extend(.abs-add-clearfix all);
                 margin: 0;
+
                 > img {
                     float: left;
                     margin: 0 @indent__s 0 0;
@@ -155,14 +163,17 @@
         .price-box {
             margin-left: 22px;
         }
+
         .regular-price {
             &:before {
-                content: attr(data-label)": ";
+                content: attr(data-label)': ';
             }
+
             .price {
                 font-weight: @font-weight__bold;
             }
         }
+
         &:extend(.abs-adjustment-incl-excl-tax all);
     }
 }
@@ -177,22 +188,27 @@
         margin-bottom: @indent__base;
         padding-bottom: @indent__s;
     }
+
     .gift-wrapping-list {
         width: 100%;
     }
+
     .gift-wrapping-summary {
         + .gift-message-summary {
             padding-right: 0;
         }
     }
+
     .gift-options-cart-item {
         float: left;
     }
+
     .gift-wrapping-preview {
         img {
             width: 100%;
         }
     }
+
     .item-actions {
         .actions-toolbar {
             .gift-options {
@@ -226,6 +242,7 @@
         float: left;
         padding-right: @indent__base;
         width: 50%;
+
         & + .gift-message {
             .lib-css(border-left, @gift-wrapping__border-width solid @gift-wrapping__border-color);
             box-sizing: border-box;

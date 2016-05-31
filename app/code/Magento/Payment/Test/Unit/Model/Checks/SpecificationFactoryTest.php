@@ -20,7 +20,7 @@ class SpecificationFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_compositeFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_compositeFactory = $this->getMockBuilder(
             'Magento\Payment\Model\Checks\CompositeFactory'

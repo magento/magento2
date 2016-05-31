@@ -130,7 +130,7 @@ class InstallSchema implements InstallSchemaInterface
             \Magento\Framework\DB\Ddl\Table::TYPE_DATE,
             null,
             [],
-            'Date Of Birth'
+            'Date of Birth'
         )->addColumn(
             'password_hash',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,

@@ -21,7 +21,7 @@ class CommandListTest extends \PHPUnit_Framework_TestCase
      */
     private $testCommand;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->testCommand = new Command('Test');
         $commands = [

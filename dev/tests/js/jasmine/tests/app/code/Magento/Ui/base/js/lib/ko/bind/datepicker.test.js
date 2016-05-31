@@ -7,7 +7,7 @@ define([
     'ko',
     'jquery',
     'moment',
-    'Magento_Ui/js/lib/ko/bind/datepicker'
+    'Magento_Ui/js/lib/knockout/bindings/datepicker'
 ], function (ko, $, moment) {
     'use strict';
 

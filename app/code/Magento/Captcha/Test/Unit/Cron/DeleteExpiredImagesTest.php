@@ -49,7 +49,7 @@ class DeleteExpiredImagesTest extends \PHPUnit_Framework_TestCase
     /**
      * Create mocks and model
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_helper = $this->getMock('Magento\Captcha\Helper\Data', [], [], '', false);
         $this->_adminHelper = $this->getMock('Magento\Captcha\Helper\Adminhtml\Data', [], [], '', false);

@@ -213,7 +213,11 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     public function postToConsumer($consumerId, $endpointUrl)
     {
         try {
+<<<<<<< HEAD
             $consumer = $this->_consumerFactory->create()->load($consumerId);
+=======
+            $consumer = $this->loadConsumer($consumerId);
+>>>>>>> develop
             $consumer->setUpdatedAt($this->getDateHelper()->gmtDate());
             $consumer->save();
             if (!$consumer->getId()) {

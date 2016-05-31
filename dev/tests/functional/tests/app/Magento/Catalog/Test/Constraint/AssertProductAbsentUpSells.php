@@ -42,7 +42,7 @@ class AssertProductAbsentUpSells extends AbstractConstraint
         foreach ($promotedProducts as $promotedProduct) {
             \PHPUnit_Framework_Assert::assertFalse(
                 $catalogProductView->getUpsellBlock()->getProductItem($promotedProduct)->isVisible(),
-                'Product \'' . $promotedProduct->getName() . '\' is exist in up-sells products.'
+                'Product \'' . $promotedProduct->getName() . '\' exists in up-sells products.'
             );
         }
     }

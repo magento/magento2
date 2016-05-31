@@ -46,12 +46,12 @@ class OrderStatusHistoryAddTest extends WebapiAbstract
         $commentData = [
             OrderStatusHistoryInterface::COMMENT => 'Hello',
             OrderStatusHistoryInterface::ENTITY_ID => null,
-            OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED => true,
+            OrderStatusHistoryInterface::IS_CUSTOMER_NOTIFIED => 1,
             OrderStatusHistoryInterface::CREATED_AT => null,
             OrderStatusHistoryInterface::PARENT_ID => $order->getId(),
             OrderStatusHistoryInterface::ENTITY_NAME => null,
             OrderStatusHistoryInterface::STATUS => null,
-            OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT => true,
+            OrderStatusHistoryInterface::IS_VISIBLE_ON_FRONT => 1,
         ];
 
         $requestData = ['id' => $order->getId(), 'statusHistory' => $commentData];

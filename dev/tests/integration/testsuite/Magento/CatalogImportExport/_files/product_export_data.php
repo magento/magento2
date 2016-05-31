@@ -4,25 +4,40 @@
  * See COPYING.txt for license details.
  */
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+
 require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
 require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
 require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
 
-$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$productModel = $objectManager->create('Magento\Catalog\Model\Product');
 
 $customOptions = [
-    1 => [
-        'id' => '1',
+    [
+        'id' => 'test_option_code_1',
         'option_id' => '0',
         'sort_order' => '0',
         'title' => 'Option 1',
         'type' => 'drop_down',
         'is_require' => 1,
         'values' => [
-            1 => ['option_type_id' => -1, 'title' => 'Option 1 Value 1', 'price' => '1.00', 'price_type' => 'fixed'],
-            2 => ['option_type_id' => -1, 'title' => 'Option 1 Value 2', 'price' => '2.00', 'price_type' => 'fixed']
+            1 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 1"', 'price' => '1.00', 'price_type' => 'fixed'],
+            2 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 2"', 'price' => '2.00', 'price_type' => 'fixed'],
+            3 => ['option_type_id' => -1, 'title' => 'Option 1 & Value 3"', 'price' => '3.00', 'price_type' => 'fixed']
         ]
-    ]
+    ],
+    [
+        'title' => 'test_option_code_2',
+        'type' => 'field',
+        'is_require' => true,
+        'sort_order' => 1,
+        'price' => 10.0,
+        'price_type' => 'fixed',
+        'sku' => 'sku1',
+        'max_characters' => 10,
+    ],
 ];
 
 $productModel->setTypeId(
@@ -51,10 +66,23 @@ $productModel->setTypeId(
     ['qty' => 100, 'is_in_stock' => 1]
 )->setCanSaveCustomOptions(
     true
-)->setProductOptions(
-    $customOptions
 )->setCategoryIds(
     [333]
 )->setUpSellLinkData(
     [$product->getId() => ['position' => 1]]
-)->save();
+);
+
+$options = [];
+
+/** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
+$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+
+foreach ($customOptions as $option) {
+    /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */
+    $option = $customOptionFactory->create(['data' => $option]);
+    $option->setProductSku($productModel->getSku());
+
+    $options[] = $option;
+}
+
+$productModel->setOptions($options)->save();

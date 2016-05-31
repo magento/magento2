@@ -31,7 +31,7 @@ class RelationCompositeTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->modelMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
             ->disableOriginalConstructor()

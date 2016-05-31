@@ -6,12 +6,14 @@
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
+use Magento\Customer\Api\Data\AddressInterface as Address;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Test class for Magento\Customer\Api\CustomerRepositoryInterface
@@ -23,6 +25,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'customerCustomerRepositoryV1';
     const RESOURCE_PATH = '/V1/customers';
+    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
     /**
      * Sample values for testing
@@ -137,6 +140,55 @@ class CustomerRepositoryTest extends WebapiAbstract
             }
         }
         unset($this->customerRepository);
+    }
+
+    /**
+     * Validate update by invalid customer.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Consumer is not authorized to access %resources
+     */
+    public function testInvalidCustomerUpdate()
+    {
+        $this->_markTestAsRestOnly();
+
+        //Create first customer and retrieve customer token.
+        $firstCustomerData = $this->_createCustomer();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        //$customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
+        $customerTokenService = Bootstrap::getObjectManager()->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken($firstCustomerData[Customer::EMAIL], 'test@123');
+
+        //Create second customer and update lastname.
+        $customerData = $this->_createCustomer();
+        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
+        $lastName = $existingCustomerDataObject->getLastname();
+        $customerData[Customer::LASTNAME] = $lastName . 'Updated';
+        $newCustomerDataObject = $this->customerDataFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/{$customerData[Customer::ID]}",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $token,
+            ]
+        ];
+
+        $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
+            $newCustomerDataObject,
+            'Magento\Customer\Api\Data\CustomerInterface'
+        );
+        $requestData = ['customer' => $newCustomerDataObject];
+        $this->_webApiCall($serviceInfo, $requestData);
     }
 
     public function testDeleteCustomer()
@@ -347,6 +399,83 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Test creating a customer with absent required address fields
+     */
+    public function testCreateCustomerWithoutAddressRequiresException()
+    {
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+
+        foreach ($customerDataArray[Customer::KEY_ADDRESSES] as & $address) {
+            $address[Address::FIRSTNAME] = null;
+        }
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = ['customer' => $customerDataArray];
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception did not occur.');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $expectedException = new InputException();
+                $expectedException->addError(
+                    __(
+                        '%fieldName is a required field.',
+                        ['fieldName' => Address::FIRSTNAME]
+                    )
+                );
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault(
+                    $e,
+                    $expectedException->getRawMessage(),
+                    'env:Sender',
+                    $expectedException->getParameters() // expected error parameters
+                );
+            } else {
+                $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+                $exceptionData = $this->processRestExceptionResult($e);
+                $expectedExceptionData = [
+                    'message' => '%fieldName is a required field.',
+                    'parameters' => ['fieldName' => Address::FIRSTNAME],
+                ];
+                $this->assertEquals($expectedExceptionData, $exceptionData);
+            }
+        }
+
+        try {
+            $this->customerRegistry->retrieveByEmail(
+                $customerDataArray[Customer::EMAIL],
+                $customerDataArray[Customer::WEBSITE_ID]
+            );
+            $this->fail('An expected NoSuchEntityException was not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $exception = NoSuchEntityException::doubleField(
+                'email',
+                $customerDataArray[Customer::EMAIL],
+                'websiteId',
+                $customerDataArray[Customer::WEBSITE_ID]
+            );
+            $this->assertEquals(
+                $exception->getMessage(),
+                $e->getMessage(),
+                'Exception message does not match expected message.'
+            );
+        }
+    }
+
+    /**
      * Test with a single filter
      */
     public function testSearchCustomers()
@@ -425,7 +554,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => InputException::REQUIRED_FIELD,
+                'message' => '%fieldName is a required field.',
                 'parameters' => [
                     'fieldName' => 'searchCriteria'
                 ],

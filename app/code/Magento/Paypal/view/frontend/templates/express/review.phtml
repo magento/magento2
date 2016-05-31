@@ -87,7 +87,7 @@
                             <?php echo $block->escapeHtml(
                                 $block->renderAddress($block->getShippingAddress()),
                                 ['br']
-                            ); ?>
+                            );?>
                         </address>
                     </div>
                     <?php if ($block->getCanEditShippingAddress()): ?>
@@ -133,7 +133,7 @@
         <?php echo $block->getChildHtml('details') ?>
 
         <form method="post" id="order-review-form" action="<?php echo $block->escapeUrl($block->getPlaceOrderUrl()); ?>"
-              class="form">
+              class="form order-review-form">
             <?php echo $block->getChildHtml('agreements'); ?>
             <div class="actions-toolbar" id="review-buttons-container">
                 <div class="primary">

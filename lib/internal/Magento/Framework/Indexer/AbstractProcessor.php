@@ -41,11 +41,12 @@ abstract class AbstractProcessor
      * Run Row reindex
      *
      * @param int $id
+     * @param bool $forceReindex
      * @return void
      */
-    public function reindexRow($id)
+    public function reindexRow($id, $forceReindex = false)
     {
-        if ($this->getIndexer()->isScheduled()) {
+        if (!$forceReindex && $this->isIndexerScheduled()) {
             return;
         }
         $this->getIndexer()->reindexRow($id);
@@ -55,11 +56,12 @@ abstract class AbstractProcessor
      * Run List reindex
      *
      * @param int[] $ids
+     * @param bool $forceReindex
      * @return void
      */
-    public function reindexList($ids)
+    public function reindexList($ids, $forceReindex = false)
     {
-        if ($this->getIndexer()->isScheduled()) {
+        if (!$forceReindex && $this->isIndexerScheduled()) {
             return;
         }
         $this->getIndexer()->reindexList($ids);

@@ -11,10 +11,11 @@ class ConcatTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
+
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat */
     protected $renderer;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(

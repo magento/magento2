@@ -42,7 +42,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     /**
      * Create cookie and request mock, version instance
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManagerInterface');
@@ -68,6 +68,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
      * Increment version on post requests.
      * In all other cases do nothing.
      */
+
     /**
      * @dataProvider processProvider
      * @param bool $isPost
@@ -87,6 +88,11 @@ class VersionTest extends \PHPUnit_Framework_TestCase
                 ->with(Version::COOKIE_PERIOD)
                 ->will($this->returnSelf());
 
+            $publicCookieMetadataMock->expects($this->once())
+                ->method('setSecure')
+                ->with(false)
+                ->will($this->returnSelf());
+                
             $publicCookieMetadataMock->expects($this->once())
                 ->method('setHttpOnly')
                 ->with(false)

@@ -42,12 +42,11 @@ class RuntimeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $entity
-     * @expectedException  \Magento\Framework\Exception\LocalizedException
      * @dataProvider nonExistentGeneratorsDataProvider
      */
     public function testHasIfNonExists($entity)
     {
-        $this->_model->has($entity);
+        $this->assertFalse($this->_model->has($entity));
     }
 
     public function nonExistentGeneratorsDataProvider()

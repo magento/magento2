@@ -73,7 +73,7 @@ class AreaTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Phrase\RendererInterface */
     private $defaultRenderer;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

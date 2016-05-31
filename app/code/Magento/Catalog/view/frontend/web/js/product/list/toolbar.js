@@ -61,6 +61,7 @@ define([
         },
 
         changeUrl: function (paramName, paramValue, defaultValue) {
+            var decode = window.decodeURIComponent;
             var urlPaths = this.options.url.split('?'),
                 baseUrl = urlPaths[0],
                 urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
@@ -68,8 +69,8 @@ define([
                 parameters;
             for (var i = 0; i < urlParams.length; i++) {
                 parameters = urlParams[i].split('=');
-                paramData[parameters[0]] = parameters[1] !== undefined
-                    ? window.decodeURIComponent(parameters[1].replace(/\+/g, '%20'))
+                paramData[decode(parameters[0])] = parameters[1] !== undefined
+                    ? decode(parameters[1].replace(/\+/g, '%20'))
                     : '';
             }
             paramData[paramName] = paramValue;

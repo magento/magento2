@@ -72,12 +72,15 @@
                         <?php if ($block->canRemoveItems()): ?>
                             <td class="col-remove">
                                 <div class="admin__field-option">
-                                    <input type="checkbox"
+                                    <input id="sidebar-remove-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>"
+                                           type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>]"
                                            value="<?php /* @escapeNotVerified */ echo $block->getDataId() ?>"
                                            title="<?php echo $block->escapeHtml(__('Remove')); ?>" />
-                                    <label class="admin__field-label"></label>
+                                    <label class="admin__field-label"
+                                           for="sidebar-remove-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>">
+                                    </label>
                                 </div>
                             </td>
                         <?php endif; ?>
@@ -99,12 +102,15 @@
                                         <span><?php /* @escapeNotVerified */ echo __('Configure and Add to Order') ?></span>
                                     </a>
                                 <?php else: ?>
-                                    <input type="checkbox"
+                                    <input id="sidebar-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getIdentifierId($_item) ?>"
+                                           type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>][<?php /* @escapeNotVerified */ echo $block->getIdentifierId($_item) ?>]"
                                            value="<?php /* @escapeNotVerified */ echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
                                            title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"/>
-                                    <label class="admin__field-label"></label>
+                                    <label class="admin__field-label"
+                                           for="sidebar-<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>-<?php /* @escapeNotVerified */ echo $block->getIdentifierId($_item) ?>">
+                                    </label>
                                 <?php endif; ?>
                             </div>
                         </td>

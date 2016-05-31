@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
+use Magento\Customer\Model\AccountManagement;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
@@ -45,7 +46,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     /** @var Register */
     private $_block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
@@ -58,7 +59,6 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
@@ -347,5 +347,39 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $block = $this->_block->restoreSessionData($form, null, false);
         $this->assertSame($this->_block, $block);
         $this->assertEquals($data, $block->getData(self::FORM_DATA));
+    }
+
+    /**
+     * Test get minimum password length
+     */
+    public function testGetMinimumPasswordLength()
+    {
+        $this->_scopeConfig->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
+        )->will(
+            $this->returnValue(6)
+        );
+        $this->assertEquals(6, $this->_block->getMinimumPasswordLength());
+    }
+
+    /**
+     * Test get required character classes number
+     */
+    public function testGetRequiredCharacterClassesNumber()
+    {
+        $this->_scopeConfig->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER
+        )->will(
+            $this->returnValue(3)
+        );
+        $this->assertEquals(3, $this->_block->getRequiredCharacterClassesNumber());
     }
 }

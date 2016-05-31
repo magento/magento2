@@ -43,7 +43,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepoMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -107,6 +107,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+<<<<<<< HEAD
     /**
      * @deprecated
      *
@@ -127,6 +128,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->swatchHelperObject->populateAdditionalDataEavAttribute($this->attributeMock);
     }
 
+=======
+>>>>>>> develop
     public function dataForAdditionalData()
     {
         $additionalData = [
@@ -208,12 +211,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataForVariationWithSwatchImage
      */
+<<<<<<< HEAD
     public function testLoadFirstVariationSwatchImage($imageTypes, $expected, $requiredAttributes)
+=======
+    public function testLoadFirstVariationWithSwatchImage($imageTypes, $expected, $requiredAttributes)
+>>>>>>> develop
     {
         $this->getSwatchAttributes($this->productMock);
         $this->getUsedProducts($imageTypes + $requiredAttributes);
 
+<<<<<<< HEAD
         $result = $this->swatchHelperObject->loadFirstVariationSwatchImage($this->productMock, $requiredAttributes);
+=======
+        $result = $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, $requiredAttributes);
+>>>>>>> develop
 
         if ($expected === false) {
             $this->assertFalse($result);
@@ -267,12 +278,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataForVariationWithImage
      */
+<<<<<<< HEAD
     public function testLoadFirstVariationImage($imageTypes, $expected, $requiredAttributes)
+=======
+    public function testLoadFirstVariationWithImage($imageTypes, $expected, $requiredAttributes)
+>>>>>>> develop
     {
         $this->getSwatchAttributes($this->productMock);
         $this->getUsedProducts($imageTypes + $requiredAttributes);
 
+<<<<<<< HEAD
         $result = $this->swatchHelperObject->loadFirstVariationImage($this->productMock, $requiredAttributes);
+=======
+        $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, $requiredAttributes);
+>>>>>>> develop
 
         if ($expected === false) {
             $this->assertFalse($result);
@@ -415,6 +434,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $product1 = $this->getMock('\Magento\Catalog\Model\Product', ['hasData'], [], '', false);
         $product1->setData($attributes);
+<<<<<<< HEAD
 
         $product2 = $this->getMock('\Magento\Catalog\Model\Product', ['hasData'], [], '', false);
         $product2->setData($attributes);
@@ -424,6 +444,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->configurableMock->expects($this->once())->method('getUsedProducts')->with($this->productMock)
             ->willReturn($simpleProducts);
 
+=======
+
+        $product2 = $this->getMock('\Magento\Catalog\Model\Product', ['hasData'], [], '', false);
+        $product2->setData($attributes);
+
+        $simpleProducts = [$product2, $product1];
+
+        $this->configurableMock->expects($this->once())->method('getUsedProducts')->with($this->productMock)
+            ->willReturn($simpleProducts);
+
+>>>>>>> develop
     }
 
     protected function getAttributesFromConfigurable()

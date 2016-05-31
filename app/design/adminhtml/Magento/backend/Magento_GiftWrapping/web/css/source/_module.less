@@ -9,9 +9,19 @@
 
 .order-create-gift-wrapping {
     float: left;
+
     #mix-grid .width(6, 12);
+
     .admin__field {
         margin: 1.5rem 0;
+    }
+
+    .gift-wrapping-design {
+        display: none;
+
+        &._active {
+            display: block;
+        }
     }
 }
 
@@ -22,33 +32,43 @@
 }
 
 .order-create-gift-wrapping,
-.gift_options-popup {
+.order-gift-options,
+.gift-options-popup {
     .gift-wrapping-design {
         &:extend(.abs-clearfix all);
-        display: none;
-        &._active {
-            display: block;
-        }
+
         .image-box {
             float: left;
             margin-right: 1.5rem;
+            max-height: 7.5rem;
+            max-width: 7.5rem;
         }
     }
 }
 
-.gift_options-popup {
+.order-gift-options {
+    .admin__field {
+        margin: 1.5rem 0;
+    }
+}
+
+.gift-options-popup {
     .admin__legend {
         &:extend(.abs-fieldset-legend all);
     }
+
     .admin__field {
         &:extend(.abs-field-rows all);
         margin-bottom: 1.5rem;
     }
+
     .price {
         font-weight: @font-weight__bold;
     }
+
     .image-box {
         display: none;
+
         &._active {
             display: block;
         }

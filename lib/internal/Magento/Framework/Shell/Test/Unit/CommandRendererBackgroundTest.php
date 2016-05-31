@@ -21,7 +21,7 @@ class CommandRendererBackgroundTest extends \PHPUnit_Framework_TestCase
      */
     protected $osInfo;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->osInfo = $this->getMockBuilder('Magento\Framework\OsInfo')->getMock();
     }
@@ -53,7 +53,7 @@ class CommandRendererBackgroundTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'windows' => [true, 'start /B "magento background task" ' . $this->testCommand . ' 2>&1'],
-            'unix'    => [false, $this->testCommand . ' 2>&1 > /dev/null &'],
+            'unix'    => [false, $this->testCommand . ' > /dev/null &'],
         ];
     }
 }

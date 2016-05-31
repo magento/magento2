@@ -26,7 +26,7 @@ class UpgradeHashAlgorithmCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $customerCollectionFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerCollectionFactory = $this->getMockBuilder(
             'Magento\Customer\Model\ResourceModel\Customer\CollectionFactory'

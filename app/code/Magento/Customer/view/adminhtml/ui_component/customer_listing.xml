@@ -29,84 +29,27 @@
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
                 </item>
             </argument>
         </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
     </dataSource>
-    <container name="listing_top">
+    <listingToolbar name="listing_top">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/toolbar</item>
+                <item name="sticky" xsi:type="boolean">true</item>
             </item>
         </argument>
-        <bookmark name="bookmarks">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">customer_listing</item>
-                    </item>
-                </item>
-            </argument>
-        </bookmark>
-        <component name="columns_controls">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_listing.customer_listing.customer_columns</item>
-                    </item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                </item>
-            </argument>
-        </component>
-        <exportButton name="export_button">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
-                </item>
-            </argument>
-        </exportButton>
-        <filterSearch name="fulltext">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">customer_listing.customer_listing_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">customer_listing.customer_listing.listing_top.listing_filters_chips</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_listing.customer_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.search</item>
-                    </item>
-                </item>
-            </argument>
-        </filterSearch>
-        <filters name="listing_filters">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsProvider" xsi:type="string">customer_listing.customer_listing.customer_columns</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_listing.customer_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_listing.customer_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">customer_listing.customer_listing.customer_columns.${ $.index }:visible</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
-        </filters>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filterSearch name="fulltext"/>
+        <filters name="listing_filters"/>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
-                    <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
             <action name="delete">
@@ -176,25 +119,11 @@
                 </argument>
             </action>
         </massaction>
-        <paging name="listing_paging">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_listing.customer_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.paging</item>
-                    </item>
-                    <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
-                </item>
-            </argument>
-        </paging>
-    </container>
+        <paging name="listing_paging"/>
+    </listingToolbar>
     <columns name="customer_columns" class="Magento\Customer\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">customer_listing.customer_listing.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
                 <item name="editorConfig" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
                     <item name="enabled" xsi:type="boolean">true</item>
@@ -212,11 +141,6 @@
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
                             <item name="1" xsi:type="boolean">true</item>
                         </item>
-                    </item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_listing.customer_listing.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root }</item>
                     </item>
                 </item>
             </item>
@@ -321,7 +245,7 @@
                 </item>
             </argument>
         </column>
-        <column name="website_id">
+        <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\Websites">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
@@ -333,21 +257,10 @@
                 </item>
             </argument>
         </column>
-        <column name="last_visit_at" class="Magento\Ui\Component\Listing\Columns\Date">
+        <column name="confirmation" class="Magento\Customer\Ui\Component\Listing\Column\Confirmation">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">Last Logged In</item>
-                    <item name="sortOrder" xsi:type="number">120</item>
-                </item>
-            </argument>
-        </column>
-        <column name="confirmation">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Confirmed email</item>
                     <item name="sortOrder" xsi:type="number">130</item>
@@ -491,6 +404,15 @@
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Billing Lastname</item>
                     <item name="sortOrder" xsi:type="number">260</item>
+                </item>
+            </argument>
+        </column>
+        <column name="lock_expires" class="Magento\Customer\Ui\Component\Listing\Column\AccountLock">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Account Lock</item>
+                    <item name="sortOrder" xsi:type="number">270</item>
                 </item>
             </argument>
         </column>

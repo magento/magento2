@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Stdlib\DateTime;
 
+use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
 /**
  * Timezone library
  */
@@ -44,6 +47,11 @@ class Timezone implements TimezoneInterface
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    protected $_localeResolver;
 
     /**
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
@@ -274,5 +282,31 @@ class Timezone implements TimezoneInterface
             $pattern
         );
         return $formatter->format($date);
+    }
+
+    /**
+     * Convert date from config timezone to Utc.
+     * If pass \DateTime object as argument be sure that timezone is the same with config timezone
+     *
+     * @param string|\DateTimeInterface $date
+     * @param string $format
+     * @throws LocalizedException
+     * @return string
+     */
+    public function convertConfigTimeToUtc($date, $format = 'Y-m-d H:i:s')
+    {
+        if (!($date instanceof \DateTime)) {
+            $date = new \DateTime($date, new \DateTimeZone($this->getConfigTimezone()));
+        } else {
+            if ($date->getTimezone()->getName() !== $this->getConfigTimezone()) {
+                throw new LocalizedException(
+                    new Phrase('DateTime object timezone must be the same as config - %1', $this->getConfigTimezone())
+                );
+            }
+        }
+
+        $date->setTimezone(new \DateTimeZone('UTC'));
+
+        return $date->format($format);
     }
 }

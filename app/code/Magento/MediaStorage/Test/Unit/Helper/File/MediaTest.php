@@ -23,7 +23,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /** @var  Media */
     protected $helper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->dirMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')

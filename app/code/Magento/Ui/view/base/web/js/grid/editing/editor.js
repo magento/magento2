@@ -18,8 +18,12 @@ define([
             headerButtonsTmpl: 'ui/grid/editing/header-buttons',
             successMsg: $t('You have successfully saved your edits.'),
             errorsCount: 0,
+            bulkEnabled: true,
+            multiEditingButtons: true,
+            singleEditingButtons: true,
             isMultiEditing: false,
             isSingleEditing: false,
+            permanentlyActive: false,
             rowsData: [],
             fields: {},
 
@@ -93,7 +97,9 @@ define([
                 .track([
                     'errorsCount',
                     'isMultiEditing',
-                    'isSingleEditing'
+                    'isSingleEditing',
+                    'isSingleColumnEditing',
+                    'changed'
                 ])
                 .observe({
                     canSave: true,
@@ -110,7 +116,9 @@ define([
          * @returns {Editor} Chainable.
          */
         initBulk: function () {
-            layout([this.bulkConfig]);
+            if (this.bulkEnabled) {
+                layout([this.bulkConfig]);
+            }
 
             return this;
         },
@@ -465,7 +473,7 @@ define([
          * @returns {Boolean}
          */
         hasActive: function () {
-            return !!this.activeRecords().length;
+            return !!this.activeRecords().length || this.permanentlyActive;
         },
 
         /**
@@ -611,7 +619,9 @@ define([
             };
 
             this.addMessage(msg)
-                .source('reload');
+                .source('reload', {
+                    refresh: true
+                });
         },
 
         /**

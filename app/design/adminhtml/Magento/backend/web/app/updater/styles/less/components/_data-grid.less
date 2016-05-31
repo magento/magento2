@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Variables
+//  _____________________________________________
+
 @component-indicator__size: 20px;
 
 //
@@ -26,9 +30,10 @@
         transition: opacity .2s linear .1s;
         visibility: hidden;
     }
+
     &::before {
-        border-radius: 1px;
         border: 1px solid @color-gray68;
+        border-radius: 1px;
         box-shadow: 0 0 2px rgba(0,0,0,.4);
         content: attr(data-label);
         font-size: @font-size__s;
@@ -36,8 +41,10 @@
         min-width: 50px;
         padding: 4px 5px;
     }
+
     &::after {
-        border: 1px solid darken(@color-gray68, 8);
+        border-color: darken(@color-gray68, 8);
+        border-style: solid;
         border-width: 1px 0 0 1px;
         box-shadow: -1px -1px 1px rgba(0,0,0,.1);
         content: '';
@@ -46,6 +53,7 @@
         transform: rotate(45deg);
         width: 10px;
     }
+
     &:hover {
         &::before,
         &::after {
@@ -54,11 +62,13 @@
             visibility: visible;
         }
     }
+
     span {
         display: block;
         height: @component-indicator__size;
         overflow: hidden;
         width: @component-indicator__size;
+
         &:before {
             content: '';
             display: block;
@@ -69,11 +79,14 @@
             width: 100%;
         }
     }
+
     &._on {
         background: @color-success;
     }
+
     &._off {
         background: @color-failed;
+
         span {
             &:before {
                 background: @color-white;
@@ -83,10 +96,13 @@
             }
         }
     }
+
     &._info {
         background: transparent;
+
         span {
             width: 21px;
+
             &:before {
                 color: @color-info;
                 content: @icon-notice-messages__content;

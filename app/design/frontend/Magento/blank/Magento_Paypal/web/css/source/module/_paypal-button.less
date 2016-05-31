@@ -19,6 +19,7 @@
                 text-transform: uppercase;
             }
         }
+
         &.before {
             &:before {
                 content: '- ' attr(data-label) ' -';
@@ -28,9 +29,11 @@
                 text-transform: uppercase;
             }
         }
+
         &.acceptance {
             display: block;
             margin: 0 0 @indent__base;
+
             img {
                 max-width: 100%;
             }

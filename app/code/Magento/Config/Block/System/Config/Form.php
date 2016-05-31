@@ -309,6 +309,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (array_key_exists($path, $this->_configData)) {
             $data = $this->_configData[$path];
             $inherit = false;
+            
+            if ($field->hasBackendModel()) {
+                $backendModel = $field->getBackendModel();
+                $backendModel->setPath($path)
+                    ->setValue($data)
+                    ->setWebsite($this->getWebsiteCode())
+                    ->setStore($this->getStoreCode())
+                    ->afterLoad();
+                $data = $backendModel->getValue();
+            }
+            
         } elseif ($field->getConfigPath() !== null) {
             $data = $this->getConfigValue($field->getConfigPath());
         } else {
@@ -326,20 +337,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $elementName = $this->_generateElementName($field->getPath(), $fieldPrefix);
         $elementId = $this->_generateElementId($field->getPath($fieldPrefix));
-
-        if ($field->hasBackendModel()) {
-            $backendModel = $field->getBackendModel();
-            $backendModel->setPath(
-                $path
-            )->setValue(
-                $data
-            )->setWebsite(
-                $this->getWebsiteCode()
-            )->setStore(
-                $this->getStoreCode()
-            )->afterLoad();
-            $data = $backendModel->getValue();
-        }
 
         $dependencies = $field->getDependencies($fieldPrefix, $this->getStoreCode());
         $this->_populateDependenciesBlock($dependencies, $elementId, $elementName);
@@ -364,7 +361,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'scope_id' => $this->getScopeId(),
                 'scope_label' => $this->getScopeLabel($field),
                 'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
-                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite())
+                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
+                'can_restore_to_default' => $this->isCanRestoreToDefault($field->canRestore())
             ]
         );
         $field->populateInput($formField);
@@ -506,6 +504,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Check if can use restore value
+     *
+     * @param int $fieldValue
+     * @return bool
+     */
+    public function isCanRestoreToDefault($fieldValue)
+    {
+        if ($this->getScope() == self::SCOPE_DEFAULT && $fieldValue) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Retrieve current scope
      *
      * @return string
@@ -607,6 +619,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
      * to getBlala() methods to be later set from controller with setters
      */
+
     /**
      * Enter description here...
      *

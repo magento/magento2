@@ -47,7 +47,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
@@ -116,7 +116,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
             false
         );
         $itemNoDiscount->expects($this->once())->method('getNoDiscount')->willReturn(true);
-        $this->validatorMock->expects($this->any())->method('sortItemsByPriority')->willReturnArgument(0);
+        $this->validatorMock->expects($this->once())->method('sortItemsByPriority')
+            ->with([$itemNoDiscount], $this->addressMock)
+            ->willReturnArgument(0);
         $storeMock = $this->getMock('Magento\Store\Model\Store', ['getStore', '__wakeup'], [], '', false);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
@@ -145,7 +147,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         $itemWithParentId->expects($this->once())->method('getParentItem')->willReturn(true);
 
         $this->validatorMock->expects($this->any())->method('canApplyDiscount')->willReturn(true);
-        $this->validatorMock->expects($this->any())->method('sortItemsByPriority')->willReturnArgument(0);
+        $this->validatorMock->expects($this->any())->method('sortItemsByPriority')
+            ->with([$itemWithParentId], $this->addressMock)
+            ->willReturnArgument(0);
 
         $storeMock = $this->getMock('\Magento\Store\Model\Store', ['getStore', '__wakeup'], [], '', false);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
@@ -197,7 +201,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->validatorMock->expects($this->any())->method('canApplyDiscount')->willReturn(true);
-        $this->validatorMock->expects($this->any())->method('sortItemsByPriority')->willReturnArgument(0);
+        $this->validatorMock->expects($this->once())->method('sortItemsByPriority')
+            ->with([$itemWithChildren], $this->addressMock)
+            ->willReturnArgument(0);
         $this->validatorMock->expects($this->any())->method('canApplyRules')->willReturn(true);
 
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
@@ -296,7 +302,9 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
         $itemWithChildren->expects($this->once())->method('getHasChildren')->willReturn(false);
 
         $this->validatorMock->expects($this->any())->method('canApplyDiscount')->willReturn(true);
-        $this->validatorMock->expects($this->any())->method('sortItemsByPriority')->willReturnArgument(0);
+        $this->validatorMock->expects($this->once())->method('sortItemsByPriority')
+            ->with([$itemWithChildren], $this->addressMock)
+            ->willReturnArgument(0);
 
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()

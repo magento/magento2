@@ -818,4 +818,31 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
         $this->_eavConfig->clear();
         return parent::afterDelete();
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        $this->unsetData('entity_type');
+        return array_diff(
+            parent::__sleep(),
+            ['_indexerEavProcessor', '_productFlatIndexerProcessor', '_productFlatIndexerHelper', 'attrLockValidator']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_indexerEavProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
+        $this->_productFlatIndexerProcessor = $objectManager->get(
+            \Magento\Catalog\Model\Indexer\Product\Eav\Processor::class
+        );
+        $this->_productFlatIndexerHelper = $objectManager->get(\Magento\Catalog\Helper\Product\Flat\Indexer::class);
+        $this->attrLockValidator = $objectManager->get(LockValidatorInterface::class);
+    }
 }

@@ -18,8 +18,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Order\Admin\Item */
     protected $item;
 
-
-    public function setUp()
+    protected function setUp()
     {
         $this->orderItemMock = $this->getMockBuilder('Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()

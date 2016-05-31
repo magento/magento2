@@ -91,9 +91,20 @@ define(
                 }
             },
             {
-                title: 'Maestro',
+                title: 'Maestro International',
                 type: 'MI',
-                pattern: '^((5((0|[6-9])\\d*)?)|(6|6[37]\\d*))$',
+                pattern: '^(5(0|[6-9])|63|67(?!59|6770|6774))\\d*$',
+                gaps: [4, 8, 12],
+                lengths: [12, 13, 14, 15, 16, 17, 18, 19],
+                code: {
+                    name: 'CVC',
+                    size: 3
+                }
+            },
+            {
+                title: 'Maestro Domestic',
+                type: 'MD',
+                pattern: '^6759(?!24|38|40|6[3-9]|70|76)|676770|676774\\d*$',
                 gaps: [4, 8, 12],
                 lengths: [12, 13, 14, 15, 16, 17, 18, 19],
                 code: {

@@ -51,7 +51,7 @@ class ConvertToCsvTest extends \PHPUnit_Framework_TestCase
      */
     protected $component;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
             ->getMockForAbstractClass();
@@ -192,6 +192,9 @@ class ConvertToCsvTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getItems'])
             ->getMockForAbstractClass();
 
+        $searchCriteria = $this->getMockBuilder('\Magento\Framework\Api\SearchCriteriaInterface')
+            ->setMethods(['setPageSize', 'setCurrentPage'])
+            ->getMockForAbstractClass();
         $this->component->expects($this->any())
             ->method('getName')
             ->willReturn($componentName);
@@ -203,13 +206,30 @@ class ConvertToCsvTest extends \PHPUnit_Framework_TestCase
             ->method('getDataProvider')
             ->willReturn($dataProvider);
 
-        $dataProvider->expects($this->once())
+        $dataProvider->expects($this->exactly(2))
             ->method('getSearchResult')
             ->willReturn($searchResult);
+
+        $dataProvider->expects($this->once())
+            ->method('getSearchCriteria')
+            ->willReturn($searchCriteria);
 
         $searchResult->expects($this->once())
             ->method('getItems')
             ->willReturn($items);
+
+        $searchResult->expects($this->once())
+            ->method('getTotalCount')
+            ->willReturn(1);
+
+        $searchCriteria->expects($this->any())
+            ->method('setCurrentPage')
+            ->willReturnSelf();
+
+        $searchCriteria->expects($this->once())
+            ->method('setPageSize')
+            ->with(200)
+            ->willReturnSelf();
     }
 
     protected function mockFilter()

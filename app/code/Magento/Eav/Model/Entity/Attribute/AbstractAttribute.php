@@ -584,7 +584,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     protected function _getDefaultSourceModel()
     {
-        return $this->getEntity()->getDefaultAttributeSourceModel();
+        return $this->getEntityType()->getEntity()->getDefaultAttributeSourceModel();
     }
 
     /**
@@ -593,15 +593,13 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function isValueEmpty($value)
     {
-        $attrType = $this->getBackend()->getType();
-        $isEmpty = (is_array($value) && count($value) == 0) ||
-            $value === null ||
-            $value === false && $attrType != 'int' ||
-            $value === '' && ($attrType == 'int' ||
-            $attrType == 'decimal' ||
-            $attrType == 'datetime');
-
-        return $isEmpty;
+        /** @var array $emptyStringTypes list of attribute types that treat empty string as a possible value */
+        $emptyStringTypes = ['int', 'decimal', 'datetime', 'varchar', 'text', 'static'];
+        $attributeType = $this->getBackend()->getType();
+        return (is_array($value) && count($value) == 0)
+            || $value === null
+            || ($value === false && $attributeType != 'int')
+            || ($value === '' && in_array($attributeType, $emptyStringTypes));
     }
 
     /**
@@ -1236,5 +1234,46 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     public function setExtensionAttributes(\Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            [
+                '_eavConfig',
+                '_eavTypeFactory',
+                '_storeManager',
+                '_resourceHelper',
+                '_universalFactory',
+                'optionDataFactory',
+                'dataObjectProcessor',
+                'dataObjectHelper',
+                '_entity',
+                '_backend',
+                '_source',
+                '_frontend',
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        $this->_eavTypeFactory = $objectManager->get(\Magento\Eav\Model\Entity\TypeFactory::class);
+        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_resourceHelper = $objectManager->get(\Magento\Eav\Model\ResourceModel\Helper::class);
+        $this->_universalFactory = $objectManager->get(\Magento\Framework\Validator\UniversalFactory ::class);
+        $this->optionDataFactory = $objectManager->get(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class);
+        $this->dataObjectProcessor = $objectManager->get(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->dataObjectHelper = $objectManager->get(\Magento\Framework\Api\DataObjectHelper::class);
     }
 }

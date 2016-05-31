@@ -234,10 +234,13 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     public static function getStaticAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
-        if ($attribute->getAttributeCode() == 'category_ids') {
+        if (in_array($attribute->getAttributeCode(), ['category_ids', 'media_gallery'])) {
             return self::FILTER_TYPE_INPUT;
         }
         $columns = $attribute->getFlatColumns();
+        if (empty($columns)) {
+            return self::FILTER_TYPE_INPUT;
+        }
         switch ($columns[$attribute->getAttributeCode()]['type']) {
             case \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER:
             case \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT:

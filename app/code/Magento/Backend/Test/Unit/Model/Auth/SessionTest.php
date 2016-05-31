@@ -140,22 +140,14 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsLoggedInPositive()
     {
-        $lifetime = 900;
         $user = $this->getMock('Magento\User\Model\User', ['getId', '__wakeup'], [], '', false);
         $user->expects($this->once())
             ->method('getId')
             ->will($this->returnValue(1));
 
-        $this->session->setUpdatedAt(time() + $lifetime); // Emulate just updated session
-
         $this->storage->expects($this->any())
             ->method('getUser')
             ->will($this->returnValue($user));
-
-        $this->config->expects($this->once())
-            ->method('getValue')
-            ->with(\Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME)
-            ->will($this->returnValue($lifetime));
 
         $this->assertTrue($this->session->isLoggedIn());
     }
@@ -164,17 +156,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $name = session_name();
         $cookie = 'cookie';
-        $lifetime = 900;
         $path = '/';
         $domain = 'magento2';
         $secure = true;
         $httpOnly = true;
 
         $cookieMetadata = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
-        $cookieMetadata->expects($this->once())
-            ->method('setDuration')
-            ->with($lifetime)
-            ->will($this->returnSelf());
         $cookieMetadata->expects($this->once())
             ->method('setPath')
             ->with($path)
@@ -204,10 +191,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->method('setPublicCookie')
             ->with($name, $cookie, $cookieMetadata);
 
-        $this->config->expects($this->once())
-            ->method('getValue')
-            ->with(\Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME)
-            ->will($this->returnValue($lifetime));
         $this->sessionConfig->expects($this->once())
             ->method('getCookiePath')
             ->will($this->returnValue($path));

@@ -27,7 +27,7 @@ class NoRouteHandlerTest extends \Magento\Framework\TestFramework\Unit\BaseTestC
      */
     private $requestMock;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->configMock = $this->basicMock('Magento\Framework\App\Config\ScopeConfigInterface');

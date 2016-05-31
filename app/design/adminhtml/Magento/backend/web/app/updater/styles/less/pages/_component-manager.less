@@ -24,10 +24,12 @@
 .componenet-manager-wrap {
     border: 1px solid @component-manager-wrap__border-color;
     margin: 0 0 @indent__xl;
+
     .componenet-manager-account {
         .lib-font-size(14);
         float: right;
         padding: .6rem 0 0;
+
         .sign-in-out {
             margin-left: @indent__base;
         }
@@ -53,22 +55,30 @@
     list-style: none;
     margin: 0;
     text-align: center;
+
     .btn {
         border: 1px solid @component-manager-button__border-color;
+        display: block;
+        margin: @indent__s auto 0;
     }
+
     .item-title {
         margin: 0 0 1.5rem;
     }
+
     .item-number {
         .lib-font-size(60);
         line-height: .8;
         margin: 0 0 1.5rem;
     }
+
     .item-date {
         margin: 0 0 3.7rem;
     }
+
     .item-install {
         margin: 0 0 @indent__base;
+
         .btn {
             .lib-button-as-link(
             @_link-color: @link__color,
@@ -80,6 +90,7 @@
             );
             .lib-font-size(14);
             font-weight: @font-weight__regular;
+
             &.disabled {
                 text-decoration: none;
             }

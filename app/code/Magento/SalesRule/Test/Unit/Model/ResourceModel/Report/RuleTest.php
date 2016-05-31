@@ -38,7 +38,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock]);
+        $selectRenderer = $this->getMockBuilder('Magento\Framework\DB\Select\SelectRenderer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [$dbAdapterMock, $selectRenderer]);
         $select->expects(
             $this->once()
         )->method(

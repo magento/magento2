@@ -45,9 +45,9 @@
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
             <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
-            <data name="prices/category_price_excl_tax" xsi:type="string">83.05</data>
+            <data name="prices/category_price_excl_tax" xsi:type="string">83.04</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">89.90</data>
-            <data name="prices/product_view_price_excl_tax" xsi:type="string">83.05</data>
+            <data name="prices/product_view_price_excl_tax" xsi:type="string">83.04</data>
             <data name="prices/product_view_price_incl_tax" xsi:type="string">89.90</data>
             <data name="prices/cart_item_price_excl_tax" xsi:type="string">83.05</data>
             <data name="prices/cart_item_price_incl_tax" xsi:type="string">89.90</data>
@@ -74,9 +74,9 @@
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
             <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
-            <data name="prices/category_price_excl_tax" xsi:type="string">276.81</data>
+            <data name="prices/category_price_excl_tax" xsi:type="string">276.82</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">299.65</data>
-            <data name="prices/product_view_price_excl_tax" xsi:type="string">276.81</data>
+            <data name="prices/product_view_price_excl_tax" xsi:type="string">276.82</data>
             <data name="prices/product_view_price_incl_tax" xsi:type="string">299.65</data>
             <data name="prices/cart_item_price_excl_tax" xsi:type="string">13.84</data>
             <data name="prices/cart_item_price_incl_tax" xsi:type="string">14.98</data>

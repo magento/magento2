@@ -56,6 +56,13 @@ abstract class Grid extends Block
     protected $rowItem = 'tbody tr';
 
     /**
+     * The last row in the grid.
+     *
+     * @var string
+     */
+    protected $lastRowItem = 'tbody tr:last-child';
+
+    /**
      * Locator value for link in action column
      *
      * @var string
@@ -269,13 +276,7 @@ abstract class Grid extends Block
      */
     protected function waitLoader()
     {
-        $this->browser->waitUntil(
-            function () {
-                $element = $this->browser->find($this->loader);
-                return $element->isVisible() == false ? true : null;
-            }
-        );
-
+        $this->waitForElementNotVisible($this->loader);
         $this->getTemplateBlock()->waitLoader();
     }
 

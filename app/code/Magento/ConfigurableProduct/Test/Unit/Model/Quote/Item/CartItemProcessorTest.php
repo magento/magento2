@@ -5,6 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Quote\Item;
 
+use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductOptionExtensionAttributes;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
 class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -13,24 +16,29 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $objectFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionExtensionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionValueFactoryMock;
+
+    /**
+     * @var ProductOptionExtensionAttributes|MockObject
+     */
+    private $productOptionExtensionAttributes;
 
     protected function setUp()
     {
@@ -55,6 +63,16 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false
+        );
+
+        $this->productOptionExtensionAttributes = $this->getMockForAbstractClass(
+            ProductOptionExtensionAttributes::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['setConfigurableItemOptions']
         );
 
         $this->model = new \Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor(
@@ -156,21 +174,16 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
 
-        $extAttributeMock = $this->getMock(
-            '\Magento\Quote\Api\Data\ProductOptionExtension',
-            ['setConfigurableItemOptions'],
-            [],
-            '',
-            false
-        );
-        $this->optionExtensionFactoryMock->expects($this->once())->method('create')->willReturn($extAttributeMock);
-        $extAttributeMock->expects($this->once())
+        $this->optionExtensionFactoryMock->expects(static::once())
+            ->method('create')
+            ->willReturn($this->productOptionExtensionAttributes);
+        $this->productOptionExtensionAttributes->expects($this->once())
             ->method('setConfigurableItemOptions')
             ->with([$optionValueMock])
             ->willReturnSelf();
         $productOptionMock->expects($this->once())
             ->method('setExtensionAttributes')
-            ->with($extAttributeMock)
+            ->with($this->productOptionExtensionAttributes)
             ->willReturnSelf();
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock)->willReturnSelf();
 
@@ -200,27 +213,22 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $optionValueMock->expects($this->once())->method('setOptionId')->with($optionId)->willReturnSelf();
         $optionValueMock->expects($this->once())->method('setOptionValue')->with($optionValue)->willReturnSelf();
 
-        $extAttributeMock = $this->getMock(
-            '\Magento\Quote\Api\Data\ProductOptionExtension',
-            ['setConfigurableItemOptions'],
-            [],
-            '',
-            false
-        );
-        $extAttributeMock->expects($this->once())
+        $this->productOptionExtensionAttributes->expects($this->once())
             ->method('setConfigurableItemOptions')
             ->with([$optionValueMock])
             ->willReturnSelf();
 
         $productOptionMock = $this->getMock('\Magento\Quote\Api\Data\ProductOptionInterface');
-        $productOptionMock->expects($this->exactly(2))->method('getExtensionAttributes')->willReturn($extAttributeMock);
+        $productOptionMock->expects(static::exactly(2))
+            ->method('getExtensionAttributes')
+            ->willReturn($this->productOptionExtensionAttributes);
 
         $cartItemMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $cartItemMock->expects($this->exactly(2))->method('getProductOption')->willReturn($productOptionMock);
 
         $productOptionMock->expects($this->once())
             ->method('setExtensionAttributes')
-            ->with($extAttributeMock)
+            ->with($this->productOptionExtensionAttributes)
             ->willReturnSelf();
         $cartItemMock->expects($this->once())->method('setProductOption')->with($productOptionMock)->willReturnSelf();
 

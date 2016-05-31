@@ -6,9 +6,10 @@
 define([
     'underscore',
     'mageUtils',
+    'uiLayout',
     'uiElement',
     'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Element, validator) {
+], function (_, utils, layout, Element, validator) {
     'use strict';
 
     return Element.extend({
@@ -18,21 +19,39 @@ define([
             focused: false,
             required: false,
             disabled: false,
+            valueChangedByUser: false,
+            elementTmpl: 'ui/form/element/input',
             tooltipTpl: 'ui/form/element/helper/tooltip',
+            fallbackResetTpl: 'ui/form/element/helper/fallback-reset',
             'input_type': 'input',
             placeholder: '',
             description: '',
+            labelVisible: true,
             label: '',
             error: '',
             warn: '',
             notice: '',
             customScope: '',
+            default: '',
+            isDifferedFromDefault: false,
+            showFallbackReset: false,
             additionalClasses: {},
+            isUseDefault: '',
+            valueUpdate: false, // ko binding valueUpdate
 
+            switcherConfig: {
+                component: 'Magento_Ui/js/form/switcher',
+                name: '${ $.name }_switcher',
+                target: '${ $.name }',
+                property: 'value'
+            },
             listens: {
                 visible: 'setPreview',
+                value: 'setDifferedFromDefault',
                 '${ $.provider }:data.reset': 'reset',
-                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
+                '${ $.provider }:data.overload': 'overload',
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
+                'isUseDefault': 'toggleUseDefault'
             },
 
             links: {
@@ -49,7 +68,8 @@ define([
 
             this._super()
                 .setInitialValue()
-                ._setClasses();
+                ._setClasses()
+                .initSwitcher();
 
             return this;
         },
@@ -64,7 +84,8 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn')
+            this.observe('error disabled focused preview visible value warn isDifferedFromDefault')
+                .observe('isUseDefault')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -80,18 +101,35 @@ define([
         initConfig: function () {
             var uid = utils.uniqueid(),
                 name,
+                valueUpdate,
                 scope;
 
             this._super();
 
-            scope   = this.dataScope,
+            scope   = this.dataScope;
             name    = scope.split('.').slice(1);
+
+            valueUpdate = this.showFallbackReset ? 'afterkeydown' : this.valueUpdate;
 
             _.extend(this, {
                 uid: uid,
                 noticeId: 'notice-' + uid,
-                inputName: utils.serializeName(name.join('.'))
+                inputName: utils.serializeName(name.join('.')),
+                valueUpdate: valueUpdate
             });
+
+            return this;
+        },
+
+        /**
+         * Initializes switcher element instance.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initSwitcher: function () {
+            if (this.switcherConfig.enabled) {
+                layout([this.switcherConfig]);
+            }
 
             return this;
         },
@@ -104,8 +142,12 @@ define([
         setInitialValue: function () {
             this.initialValue = this.getInitialValue();
 
-            this.value(this.initialValue);
+            if (this.value.peek() !== this.initialValue) {
+                this.value(this.initialValue);
+            }
+
             this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
 
             return this;
         },
@@ -129,7 +171,7 @@ define([
             }
 
             _.extend(this.additionalClasses, {
-                required: this.required,
+                _required: this.required,
                 _error: this.error,
                 _warn: this.warn,
                 _disabled: this.disabled
@@ -148,7 +190,11 @@ define([
                 value;
 
             values.some(function (v) {
-                return !utils.isEmpty(value = v);
+                if (v !== null && v !== undefined) {
+                    value = v;
+                    return true;
+                }
+                return false;
             });
 
             return this.normalizeData(value);
@@ -168,7 +214,77 @@ define([
         },
 
         /**
-         * Returnes unwrapped preview observable.
+         * Show element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        show: function () {
+            this.visible(true);
+
+            return this;
+        },
+
+        /**
+         * Hide element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        hide: function () {
+            this.visible(false);
+
+            return this;
+        },
+
+        /**
+         * Disable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        disable: function () {
+            this.disabled(true);
+
+            return this;
+        },
+
+        /**
+         * Enable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        enable: function () {
+            this.disabled(false);
+
+            return this;
+        },
+
+        /**
+         *
+         * @param {(String|Object)} rule
+         * @param {(Object|Boolean)} [options]
+         * @returns {Abstract} Chainable.
+         */
+        setValidation: function (rule, options) {
+            var rules =  utils.copy(this.validation),
+                changed;
+
+            if (_.isObject(rule)) {
+                _.extend(this.validation, rule);
+            } else {
+                this.validation[rule] = options;
+            }
+
+            changed = utils.compare(rules, this.validation).equal;
+
+            if (changed) {
+                this.required(!!rules['required-entry']);
+                this.validate();
+            }
+
+            return this;
+        },
+
+        /**
+         * Returns unwrapped preview observable.
          *
          * @returns {String} Value of the preview observable.
          */
@@ -177,7 +293,7 @@ define([
         },
 
         /**
-         * Checkes if element has addons
+         * Checks if element has addons
          *
          * @returns {Boolean}
          */
@@ -186,12 +302,21 @@ define([
         },
 
         /**
+         * Checks if element has service setting
+         *
+         * @returns {Boolean}
+         */
+        hasService: function() {
+            return this.service && this.service.template;
+        },
+
+        /**
          * Defines if value has changed.
          *
          * @returns {Boolean}
          */
         hasChanged: function () {
-            var notEqual = this.value() != this.initialValue;
+            var notEqual = this.value() !== this.initialValue;
 
             return !this.visible() ? false : notEqual;
         },
@@ -207,9 +332,22 @@ define([
 
         /**
          * Sets value observable to initialValue property.
+         *
+         * @returns {Abstract} Chainable.
          */
         reset: function () {
             this.value(this.initialValue);
+            this.error(false);
+
+            return this;
+        },
+
+        /**
+         * Sets current state as initial.
+         */
+        overload: function () {
+            this.setInitialValue();
+            this.bubble('update', this.hasChanged());
         },
 
         /**
@@ -241,11 +379,13 @@ define([
          * @returns {Object} Validate information.
          */
         validate: function () {
-            var value = this.value(),
-                msg = validator(this.validation, value),
-                isValid = !this.visible() || !msg;
+            var value   = this.value(),
+                result  = validator(this.validation, value, this.validationParams),
+                message = !this.disabled() && this.visible() ? result.message : '',
+                isValid = this.disabled() || !this.visible() || result.passed;
 
-            this.error(msg);
+            this.error(message);
+            this.bubble('error', message);
 
             //TODO: Implement proper result propagation for form
             if (!isValid) {
@@ -265,6 +405,36 @@ define([
             this.bubble('update', this.hasChanged());
 
             this.validate();
+        },
+
+        /**
+         * Restore value to default
+         */
+        restoreToDefault: function () {
+            this.value(this.default);
+        },
+
+        /**
+         * Update whether value differs from default value
+         */
+        setDifferedFromDefault: function () {
+            var value = typeof this.value() != 'undefined' && this.value() !== null ? this.value() : '',
+                defaultValue = typeof this.default != 'undefined' && this.default !== null ? this.default : '';
+            this.isDifferedFromDefault(value !== defaultValue);
+        },
+
+        /**
+         * @param {Boolean} state
+         */
+        toggleUseDefault: function (state) {
+            this.disabled(state);
+        },
+
+        /**
+         *  Callback when value is changed by user
+         */
+        userChanges: function() {
+            this.valueChangedByUser = true;
         }
     });
 });

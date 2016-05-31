@@ -6,13 +6,12 @@
 
 namespace Magento\Review\Test\Block\Adminhtml\Product;
 
-use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Class Grid
- * Review catalog product grid
+ * Review catalog product grid.
  */
-class Grid extends ParentGrid
+class Grid extends DataGrid
 {
     /**
      * Grid filter selectors
@@ -20,18 +19,11 @@ class Grid extends ParentGrid
      * @var array
      */
     protected $filters = [
-        'id' => [
-            'selector' => 'input[name="entity_id"]',
+        'title' => [
+            'selector' => 'input[name="title"]',
         ],
-        'name' => [
-            'selector' => 'input[name="name"]',
+        'sku' => [
+            'selector' => 'input[name="sku"]',
         ],
     ];
-
-    /**
-     * Locator value for link in action column
-     *
-     * @var string
-     */
-    protected $editLink = '.col-entity_id';
 }

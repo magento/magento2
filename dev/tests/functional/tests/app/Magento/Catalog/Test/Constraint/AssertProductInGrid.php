@@ -16,7 +16,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertProductInGrid extends AbstractConstraint
 {
     /**
-     * Product fixture
+     * Product fixture.
      *
      * @var FixtureInterface $product
      */
@@ -47,7 +47,7 @@ class AssertProductInGrid extends AbstractConstraint
      */
     protected function prepareFilter()
     {
-        $productStatus = ($this->product->getStatus() === null || $this->product->getStatus() === 'Product online')
+        $productStatus = ($this->product->getStatus() === null || $this->product->getStatus() === 'Yes')
             ? 'Enabled'
             : 'Disabled';
         $filter = [

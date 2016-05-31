@@ -32,6 +32,7 @@
             <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_visible_in_advanced_search" xsi:type="string">Yes</data>
             <data name="productAttribute/data/is_comparable" xsi:type="string">Yes</data>
+            <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
@@ -109,6 +110,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation6">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="attributeSet/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Dropdown</data>
@@ -129,6 +131,7 @@
             <data name="assertProduct/data/name" xsi:type="string">Product name</data>
             <data name="assertProduct/data/sku" xsi:type="string">product-sku</data>
             <data name="assertProduct/data/price" xsi:type="string">35</data>
+            <data name="sectionName" xsi:type="string">product-details</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />

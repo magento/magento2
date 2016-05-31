@@ -5,6 +5,8 @@
  */
 namespace Magento\Checkout\Block\Checkout;
 
+use Magento\Framework\App\ObjectManager;
+
 class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcessorInterface
 {
     /**
@@ -23,6 +25,11 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $merger;
 
     /**
+     * @var \Magento\Customer\Model\Options
+     */
+    private $options;
+
+    /**
      * @param \Magento\Customer\Model\AttributeMetadataDataProvider $attributeMetadataDataProvider
      * @param \Magento\Ui\Component\Form\AttributeMapper $attributeMapper
      * @param AttributeMerger $merger
@@ -38,12 +45,21 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * Process js Layout of block
-     *
-     * @param array $jsLayout
+     * @deprecated
+     * @return \Magento\Customer\Model\Options
+     */
+    private function getOptions()
+    {
+        if (!is_object($this->options)) {
+            $this->options = ObjectManager::getInstance()->get(\Magento\Customer\Model\Options::class);
+        }
+        return $this->options;
+    }
+
+    /**
      * @return array
      */
-    public function process($jsLayout)
+    private function getAddressAttributes()
     {
         /** @var \Magento\Eav\Api\Data\AttributeInterface[] $attributes */
         $attributes = $this->attributeMetadataDataProvider->loadAttributesCollection(
@@ -53,16 +69,66 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
 
         $elements = [];
         foreach ($attributes as $attribute) {
+            $code = $attribute->getAttributeCode();
             if ($attribute->getIsUserDefined()) {
                 continue;
             }
-            $elements[$attribute->getAttributeCode()] = $this->attributeMapper->map($attribute);
-            if (isset($elements[$attribute->getAttributeCode()]['label'])) {
-                $label = $elements[$attribute->getAttributeCode()]['label'];
-                $elements[$attribute->getAttributeCode()]['label'] = __($label);
+            $elements[$code] = $this->attributeMapper->map($attribute);
+            if (isset($elements[$code]['label'])) {
+                $label = $elements[$code]['label'];
+                $elements[$code]['label'] = __($label);
+            }
+        }
+        return $elements;
+    }
+
+    /**
+     * Convert elements(like prefix and suffix) from inputs to selects when necessary
+     *
+     * @param array $elements address attributes
+     * @param array $attributesToConvert fields and their callbacks
+     * @return array
+     */
+    private function convertElementsToSelect($elements, $attributesToConvert)
+    {
+        $codes = array_keys($attributesToConvert);
+        foreach (array_keys($elements) as $code) {
+            if (!in_array($code, $codes)) {
+                continue;
+            }
+            $options = call_user_func($attributesToConvert[$code]);
+            if (!is_array($options)) {
+                continue;
+            }
+            $elements[$code]['dataType'] = 'select';
+            $elements[$code]['formElement'] = 'select';
+
+            foreach ($options as $key => $value) {
+                $elements[$code]['options'][] = [
+                    'value' => $key,
+                    'label' => $value,
+                ];
             }
         }
 
+        return $elements;
+    }
+
+    /**
+     * Process js Layout of block
+     *
+     * @param array $jsLayout
+     * @return array
+     */
+    public function process($jsLayout)
+    {
+        $attributesToConvert = [
+            'prefix' => [$this->getOptions(), 'getNamePrefixOptions'],
+            'suffix' => [$this->getOptions(), 'getNameSuffixOptions'],
+        ];
+
+        $elements = $this->getAddressAttributes();
+        $elements = $this->convertElementsToSelect($elements, $attributesToConvert);
         // The following code is a workaround for custom address attributes
         if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
             ['payment']['children']
@@ -147,7 +213,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                                             'customEntry' => 'billingAddress' . $paymentCode . '.region',
                                         ],
                                         'validation' => [
-                                            'validate-select' => true,
+                                            'required-entry' => true,
                                         ],
                                         'filterBy' => [
                                             'target' => '${ $.provider }:${ $.parentScope }.country_id',
@@ -173,7 +239,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                                     'telephone' => [
                                         'config' => [
                                             'tooltip' => [
-                                                'description' => 'For delivery questions.',
+                                                'description' => __('For delivery questions.'),
                                             ],
                                         ],
                                     ],

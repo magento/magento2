@@ -31,7 +31,7 @@ class UrnResolver
 
         $componentRegistrar = new ComponentRegistrar();
         $matches = [];
-        $modulePattern = '/urn:(?<vendor>([a-zA-Z]*)):module:(?<module>([A-Za-z\_]*)):(?<path>(.+))/';
+        $modulePattern = '/urn:(?<vendor>([a-zA-Z]*)):module:(?<module>([A-Za-z0-9\_]*)):(?<path>(.+))/';
         $frameworkPattern = '/urn:(?<vendor>([a-zA-Z]*)):(?<framework>(framework[A-Za-z\-]*)):(?<path>(.+))/';
         if (preg_match($modulePattern, $schema, $matches)) {
             //urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd

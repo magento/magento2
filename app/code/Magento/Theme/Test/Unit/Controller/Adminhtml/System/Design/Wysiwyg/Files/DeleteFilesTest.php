@@ -22,7 +22,7 @@ class DeleteFilesTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
     protected $response;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->storage = $this->getMock('Magento\Theme\Model\Wysiwyg\Storage', [], [], '', false);

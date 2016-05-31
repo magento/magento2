@@ -39,6 +39,7 @@ abstract class AbstractEntity
     const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
     const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
+    const ERROR_CODE_CATEGORY_NOT_VALID = 'categoryNotValid';
 
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
@@ -237,6 +238,13 @@ abstract class AbstractEntity
      * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
+
+    /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -827,5 +835,19 @@ abstract class AbstractEntity
     public function getValidColumnNames()
     {
         return $this->validColumnNames;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

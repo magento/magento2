@@ -48,7 +48,7 @@ class AssertProductNotVisibleInCategory extends AbstractConstraint
         }
         \PHPUnit_Framework_Assert::assertFalse(
             $isProductVisible,
-            'Product is exist on category page.'
+            'Product exists on category page.'
         );
     }
 

@@ -39,27 +39,27 @@ use Magento\Mtf\TestCase\Injectable;
 class CreateConfigurableProductEntityTest extends Injectable
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
 
     /**
-     * Product page with a grid
+     * Product page with a grid.
      *
      * @var CatalogProductIndex
      */
     protected $productIndex;
 
     /**
-     * Page to create a product
+     * Page to create a product.
      *
      * @var CatalogProductNew
      */
     protected $productNew;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CatalogProductIndex $productIndex
      * @param CatalogProductNew $productNew
@@ -72,7 +72,7 @@ class CreateConfigurableProductEntityTest extends Injectable
     }
 
     /**
-     * Test create catalog Configurable product run
+     * Test create catalog Configurable product run.
      *
      * @param ConfigurableProduct $product
      * @return void

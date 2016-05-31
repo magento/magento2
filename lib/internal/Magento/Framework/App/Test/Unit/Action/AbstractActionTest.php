@@ -26,7 +26,7 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->disableOriginalConstructor()->getMock();

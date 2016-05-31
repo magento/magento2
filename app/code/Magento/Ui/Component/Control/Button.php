@@ -20,8 +20,19 @@ class Button extends Template implements ControlInterface
      */
     protected function _construct()
     {
-        $this->setTemplate('Magento_Ui::control/button/default.phtml');
+        $this->setTemplate($this->getTemplatePath());
+
         parent::_construct();
+    }
+
+    /**
+     * Retrieve template path
+     *
+     * @return string
+     */
+    protected function getTemplatePath()
+    {
+        return 'Magento_Ui::control/button/default.phtml';
     }
 
     /**

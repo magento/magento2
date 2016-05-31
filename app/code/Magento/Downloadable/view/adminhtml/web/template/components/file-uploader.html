@@ -1,0 +1,19 @@
+<div class="admin__field-control">
+    <div class="file-uploader" data-role="drop-zone" css="_loading: isLoading">
+        <each args="data: value, as: '$file'">
+            <div class="file-uploader-summary">
+                <div class="file-uploader-filename">
+                    <!-- ko if: $file.url --><a attr="href: $file.url" target="_blank" text="$file.name"/><!-- /ko -->
+                    <!-- ko if: !$file.url --><text args="$file.name"/><!-- /ko -->
+                    (<text args="$parent.formatSize($file.size)"/>)
+                </div>
+            </div>
+        </each>
+        <div class="file-uploader-area">
+            <input type="file" afterRender="onElementRender" attr="id: uid, name: fileInputName, multiple: isMultipleFiles"/>
+            <label class="file-uploader-button action-secondary" attr="for: uid" translate="'Browse Files...'"/>
+
+            <span class="file-uploader-spinner"/>
+        </div>
+    </div>
+</div>

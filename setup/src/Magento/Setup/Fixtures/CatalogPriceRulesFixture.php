@@ -34,6 +34,10 @@ class CatalogPriceRulesFixture extends Fixture
         $category = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
         /** @var $model  \Magento\CatalogRule\Model\Rule*/
         $model = $this->fixtureModel->getObjectManager()->get('Magento\CatalogRule\Model\Rule');
+        /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
+        $metadataPool = $this->fixtureModel->getObjectManager()->get('Magento\Framework\EntityManager\MetadataPool');
+        $metadata = $metadataPool->getMetadata('Magento\CatalogRule\Api\Data\RuleInterface');
+
         //Get all websites
         $categoriesArray = [];
         $websites = $storeManager->getWebsites();
@@ -57,12 +61,14 @@ class CatalogPriceRulesFixture extends Fixture
         }
         asort($categoriesArray);
         $categoriesArray = array_values($categoriesArray);
-        $idField = $model->getIdFieldName();
+        $linkField = $metadata->getLinkField();
+        $idField = $metadata->getIdentifierField();
 
         for ($i = 0; $i < $catalogPriceRulesCount; $i++) {
             $ruleName = sprintf('Catalog Price Rule %1$d', $i);
             $data = [
                 $idField                => null,
+                $linkField              => null,
                 'name'                  => $ruleName,
                 'description'           => '',
                 'is_active'             => '1',
@@ -94,9 +100,6 @@ class CatalogPriceRulesFixture extends Fixture
                 ],
                 'simple_action'             => 'by_percent',
                 'discount_amount'           => '15',
-                'sub_is_enable'              => '0',
-                'sub_simple_action'             => 'by_percent',
-                'sub_discount_amount'         => '0',
                 'stop_rules_processing'      => '0',
                 'page'                      => '1',
                 'limit'                     => '20',

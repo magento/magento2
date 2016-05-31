@@ -58,10 +58,7 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
             ->method('getPayment')
             ->will($this->returnValue($this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false)));
 
-        $methodMock = $this->getMock('Magento\Payment\Model\Method\AbstractMethod', ['setInfoInstance', 'getCode'], [], '', false);
-        $methodMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn(Free::PAYMENT_METHOD_FREE_CODE);
+        $methodMock = $this->getMock('Magento\Payment\Model\Method\AbstractMethod', [], [], '', false);
 
         $compositeMock = $this->getMock('\Magento\Payment\Model\Checks\Composite', [], [], '', false);
         $compositeMock->expects($this->atLeastOnce())

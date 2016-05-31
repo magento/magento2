@@ -35,6 +35,10 @@ $createDateStore = $block->getStoreCreateDate();
         </tr>
         <?php endif; ?>
         <tr>
+            <th><?php /* @escapeNotVerified */ echo __('Account Lock:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $block->getAccountLock() ?></td>
+        </tr>
+        <tr>
             <th><?php /* @escapeNotVerified */ echo __('Confirmed email:') ?></th>
             <td><?php /* @escapeNotVerified */ echo $block->getIsConfirmedStatus() ?></td>
         </tr>

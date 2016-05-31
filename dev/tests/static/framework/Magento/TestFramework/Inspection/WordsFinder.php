@@ -80,17 +80,26 @@ class WordsFinder
     protected $_baseDir;
 
     /**
+     * Component Registrar
+     *
+     * @var \Magento\Framework\Component\ComponentRegistrar
+     */
+    protected $componentRegistrar;
+
+    /**
      * @param string|array $configFiles
      * @param string $baseDir
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      * @param bool $isCopyrightChecked
      * @throws \Magento\TestFramework\Inspection\Exception
      */
-    public function __construct($configFiles, $baseDir, $isCopyrightChecked = false)
+    public function __construct($configFiles, $baseDir, $componentRegistrar, $isCopyrightChecked = false)
     {
         if (!is_dir($baseDir)) {
             throw new \Magento\TestFramework\Inspection\Exception("Base directory {$baseDir} does not exist");
         }
         $this->_baseDir = str_replace('\\', '/', realpath($baseDir));
+        $this->componentRegistrar = $componentRegistrar;
 
         // Load config files
         if (!is_array($configFiles)) {
@@ -176,7 +185,15 @@ class WordsFinder
                     'A "path" must be defined for the whitelisted item'
                 );
             }
-            $path = $this->_baseDir . '/' . (string)$path[0];
+            $component = $node->xpath('component');
+            if ($component) {
+                $componentType = $component[0]->xpath('@type')[0];
+                $componentName = $component[0]->xpath('@name')[0];
+                $path = $this->componentRegistrar->getPath((string)$componentType, (string)$componentName)
+                    . '/' . (string)$path[0];
+            } else {
+                $path = $this->_baseDir . '/' . (string)$path[0];
+            }
 
             // Words
             $words = [];
@@ -241,13 +258,12 @@ class WordsFinder
     protected function _findWords($file)
     {
         $checkContents = !$this->_isBinaryFile($file);
-
-        $relPath = $this->_getRelPath($file);
+        $path = $this->getSearchablePath($file);
         $contents = $checkContents ? file_get_contents($file) : '';
 
         $foundWords = [];
         foreach ($this->_words as $word) {
-            if (stripos($relPath, $word) !== false || stripos($contents, $word) !== false) {
+            if (stripos($path, $word) !== false || stripos($contents, $word) !== false) {
                 $foundWords[] = $word;
             }
         }
@@ -314,13 +330,16 @@ class WordsFinder
     }
 
     /**
-     * Return file path relative to base dir
+     * Return the path for words search
      *
      * @param string $file
      * @return string
      */
-    protected function _getRelPath($file)
+    protected function getSearchablePath($file)
     {
+        if (strpos($file, $this->_baseDir) === false) {
+            return $file;
+        }
         return substr($file, strlen($this->_baseDir) + 1);
     }
 }

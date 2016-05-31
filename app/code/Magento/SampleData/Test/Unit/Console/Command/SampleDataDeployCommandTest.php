@@ -11,55 +11,91 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
-    public function testExecute()
+    /**
+     * @param array     $sampleDataPackages
+     * @param int       $appRunResult - int 0 if everything went fine, or an error code
+     * @param string    $expectedMsg
+     * @return          void
+     *
+     * @dataProvider processDataProvider
+     */
+    public function testExecute(array $sampleDataPackages, $appRunResult, $expectedMsg)
     {
-        $this->markTestSkipped('MAGETWO-43636: This test should be fixed by NORD team');
         $directoryRead = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
-        $directoryRead->expects($this->atLeastOnce())->method('getAbsolutePath')->willReturn('/path/to/composer.json');
+        $directoryRead->expects($this->any())->method('getAbsolutePath')->willReturn('/path/to/composer.json');
 
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->atLeastOnce())->method('getDirectoryRead')->with(DirectoryList::ROOT)
+        $filesystem->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::ROOT)
             ->willReturn($directoryRead);
 
         $sampleDataDependency = $this->getMock('Magento\SampleData\Model\Dependency', [], [], '', false);
-        $sampleDataDependency->expects($this->atLeastOnce())->method('getSampleDataPackages')->willReturn(
-            [
-                'magento/module-cms-sample-data' => '1.0.0-beta'
-            ]
-        );
-
-        $arrayInput = $this->getMock('Symfony\Component\Console\Input\ArrayInput', [], [], '', false);
+        $sampleDataDependency
+            ->expects($this->any())
+            ->method('getSampleDataPackages')
+            ->willReturn($sampleDataPackages);
 
         $arrayInputFactory = $this
             ->getMock('Symfony\Component\Console\Input\ArrayInputFactory', ['create'], [], '', false);
-        $requireArgs = [
-            'command' => 'require',
-            '--working-dir' => '/path/to/composer.json',
-            '--no-interaction' => 1,
-            '--no-progress' => 1,
-            'packages' => ['magento/module-cms-sample-data:1.0.0-beta']
-        ];
-        $arrayInputFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->with(['parameters' => $requireArgs])
-            ->willReturn($arrayInput);
-        $application = $this->getMock('Composer\Console\Application', [], [], '', false);
-        $application->expects($this->atLeastOnce())->method('run')->with($arrayInput, $this->anything())
-            ->willReturnCallback(function ($input, $output) {
-                $input->getFirstArgument();
-                $output->writeln('./composer.json has been updated');
-            });
+        $arrayInputFactory->expects($this->never())->method('create');
 
+        array_walk($sampleDataPackages, function (&$v, $k) {
+            $v = "$k:$v";
+        });
+
+        $packages = array_values($sampleDataPackages);
+
+        $requireArgs = [
+            'command'       => 'require',
+            '--working-dir' => '/path/to/composer.json',
+            '--no-progress' => 1,
+            'packages'      => $packages,
+        ];
+        $commandInput = new \Symfony\Component\Console\Input\ArrayInput($requireArgs);
+
+        $application = $this->getMock('Composer\Console\Application', [], [], '', false);
+        $application->expects($this->any())->method('run')
+            ->with($commandInput, $this->anything())
+            ->willReturn($appRunResult);
+        if (($appRunResult !== 0) && !empty($sampleDataPackages)) {
+            $application->expects($this->once())->method('resetComposer')->willReturnSelf();
+        }
         $applicationFactory = $this->getMock('Composer\Console\ApplicationFactory', ['create'], [], '', false);
-        $applicationFactory->expects($this->atLeastOnce())->method('create')->willReturn($application);
+        $applicationFactory->expects($this->any())->method('create')->willReturn($application);
 
         $commandTester = new CommandTester(
             new SampleDataDeployCommand($filesystem, $sampleDataDependency, $arrayInputFactory, $applicationFactory)
         );
         $commandTester->execute([]);
 
-        $expectedMsg = './composer.json has been updated' . PHP_EOL;
-
         $this->assertEquals($expectedMsg, $commandTester->getDisplay());
+    }
+
+    /**
+     * @return array
+     */
+    public function processDataProvider()
+    {
+        return [
+            [
+                'sampleDataPackages' => [],
+                'appRunResult' => 1,
+                'expectedMsg' => 'There is no sample data for current set of modules.' . PHP_EOL,
+            ],
+            [
+                'sampleDataPackages' => [
+                    'magento/module-cms-sample-data' => '1.0.0-beta',
+                ],
+                'appRunResult' => 1,
+                'expectedMsg' => 'There is an error during sample data deployment. Composer file will be reverted.'
+                    . PHP_EOL,
+            ],
+            [
+                'sampleDataPackages' => [
+                    'magento/module-cms-sample-data' => '1.0.0-beta',
+                ],
+                'appRunResult' => 0,
+                'expectedMsg' => '',
+            ],
+        ];
     }
 }

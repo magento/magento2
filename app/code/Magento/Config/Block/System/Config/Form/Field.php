@@ -47,17 +47,16 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
         }
 
         $html = '<td class="label"><label for="' .
-            $element->getHtmlId() .
-            '">' .
+            $element->getHtmlId() . '"><span' .
+            $this->_renderScopeLabel($element) . '>' .
             $element->getLabel() .
-            '</label></td>';
+            '</span></label></td>';
         $html .= $this->_renderValue($element);
 
         if ($isCheckboxRequired) {
             $html .= $this->_renderInheritCheckbox($element);
         }
 
-        $html .= $this->_renderScopeLabel($element);
         $html .= $this->_renderHint($element);
 
         return $this->_decorateRowHtml($element, $html);
@@ -124,7 +123,9 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      */
     protected function _isInheritCheckboxRequired(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        return $element->getCanUseWebsiteValue() || $element->getCanUseDefaultValue();
+        return $element->getCanUseWebsiteValue()
+            || $element->getCanUseDefaultValue()
+            || $element->getCanRestoreToDefault();
     }
 
     /**
@@ -135,7 +136,10 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      */
     protected function _getInheritCheckboxLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $checkboxLabel = __('Use Default');
+        $checkboxLabel = __('Use system value');
+        if ($element->getCanUseDefaultValue()) {
+            $checkboxLabel = __('Use Default');
+        }
         if ($element->getCanUseWebsiteValue()) {
             $checkboxLabel = __('Use Website');
         }
@@ -150,12 +154,12 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      */
     protected function _renderScopeLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $html = '<td class="scope-label">';
+        $scopeString = '';
         if ($element->getScope() && false == $this->_storeManager->isSingleStoreMode()) {
-            $html .= $element->getScopeLabel();
+            $scopeString .= ' data-config-scope="' . $element->getScopeLabel() . '"';
         }
-        $html .= '</td>';
-        return $html;
+
+        return $scopeString;
     }
 
     /**
@@ -181,7 +185,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      * @param string $html
      * @return string
      */
-    protected function _decorateRowHtml($element, $html)
+    protected function _decorateRowHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element, $html)
     {
         return '<tr id="row_' . $element->getHtmlId() . '">' . $html . '</tr>';
     }

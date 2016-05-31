@@ -53,6 +53,8 @@ class Editable extends AbstractBlock implements RendererInterface
                 $element->getName() .
                 '" value="' .
                 $element->getValue() .
+                '" data-form-part="' .
+                $element->getData('data-form-part') .
                 '"/> ' .
                 htmlspecialchars(
                     $valueName

@@ -50,6 +50,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_catalogProductCompareItem;
 
     /**
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy

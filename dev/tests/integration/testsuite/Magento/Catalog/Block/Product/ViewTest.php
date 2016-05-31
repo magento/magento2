@@ -26,8 +26,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_block = $objectManager->create('Magento\Catalog\Block\Product\View');
-        $this->_product = $objectManager->create('Magento\Catalog\Model\Product');
-        $this->_product->load(1);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->_product = $productRepository->get('simple');
+
         $objectManager->get('Magento\Framework\Registry')->unregister('product');
         $objectManager->get('Magento\Framework\Registry')->register('product', $this->_product);
     }
@@ -57,7 +60,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')->unregister('product');
-        $this->_block->setProductId(1);
+        $this->_block->setProductId($this->_product->getId());
         $this->assertEquals($this->_product->getId(), $this->_block->getProduct()->getId());
     }
 
@@ -69,7 +72,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testGetAddToCartUrl()
     {
         $url = $this->_block->getAddToCartUrl($this->_product);
-        $this->assertStringMatchesFormat('%scheckout/cart/add/%sproduct/1/', $url);
+        $this->assertStringMatchesFormat('%scheckout/cart/add/%sproduct/' . $this->_product->getId() . '/', $url);
     }
 
     public function testGetJsonConfig()
@@ -77,7 +80,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $config = (array)json_decode($this->_block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
-        $this->assertEquals(1, $config['productId']);
+        $this->assertEquals($this->_product->getId(), $config['productId']);
     }
 
     public function testHasOptions()

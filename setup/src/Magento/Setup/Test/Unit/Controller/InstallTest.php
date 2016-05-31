@@ -55,7 +55,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
             $this->webLogger,
             $installerFactory,
             $this->progressFactory,
-            $this->sampleDataState
+            $this->sampleDataState,
+            $this->deploymentConfig
         );
 
         $deploymentConfigReflection = new \ReflectionClass(get_class($this->controller));

@@ -5,15 +5,19 @@
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel\Fulltext;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_TestCase;
+use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollectionTest;
 
-class CollectionTest extends PHPUnit_Framework_TestCase
+class CollectionTest extends BaseCollectionTest
 {
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection
      */
     private $model;
+
+    /**
+     * @var \Magento\Framework\Api\Filter
+     */
+    private $filter;
 
     /**
      * setUp method for CollectionTest
@@ -25,7 +29,15 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $storeManager = $this->getStoreManager();
         $universalFactory = $this->getUniversalFactory();
         $scopeConfig = $this->getScopeConfig();
-        $requestBuilder = $this->getRequestBuilder();
+        $criteriaBuilder = $this->getCriteriaBuilder();
+        $filterBuilder = $this->getFilterBuilder();
+
+        $this->prepareObjectManager([
+            [
+                'Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation',
+                $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation')
+            ],
+        ]);
 
         $this->model = $helper->getObject(
             'Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection',
@@ -33,9 +45,14 @@ class CollectionTest extends PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager,
                 'universalFactory' => $universalFactory,
                 'scopeConfig' => $scopeConfig,
-                'requestBuilder' => $requestBuilder
             ]
         );
+
+        $search = $this->getMockForAbstractClass('\Magento\Search\Api\SearchInterface');
+        $this->model->setSearchCriteriaBuilder($criteriaBuilder);
+        $this->model->setSearch($search);
+        $this->model->setFilterBuilder($filterBuilder);
+
     }
 
     /**
@@ -46,67 +63,6 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     public function testGetFacetedData()
     {
         $this->model->getFacetedData('field');
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getStoreManager()
-    {
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-
-        $storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
-            ->setMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $storeManager->expects($this->once())
-            ->method('getStore')
-            ->willReturn($store);
-
-        return $storeManager;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getUniversalFactory()
-    {
-        $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $entity = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
-            ->setMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $entity->expects($this->once())
-            ->method('getConnection')
-            ->willReturn($connection);
-        $entity->expects($this->exactly(2))
-            ->method('getTable')
-            ->willReturnArgument(0);
-        $entity->expects($this->once())
-            ->method('getDefaultAttributes')
-            ->willReturn(['attr1', 'attr2']);
-        $entity->expects($this->once())
-            ->method('getEntityTable')
-            ->willReturn('table');
-
-        $universalFactory = $this->getMockBuilder('Magento\Framework\Validator\UniversalFactory')
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $universalFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($entity);
-
-        return $universalFactory;
     }
 
     /**
@@ -128,20 +84,53 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getRequestBuilder()
+    protected function getCriteriaBuilder()
     {
-        $requestBuilder = $this->getMockBuilder('Magento\Framework\Search\Request\Builder')
-            ->setMethods(['bind', 'setRequestName'])
+        $criteriaBuilder = $this->getMockBuilder('Magento\Framework\Api\Search\SearchCriteriaBuilder')
+            ->setMethods(['addFilter', 'create', 'setRequestName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $requestBuilder->expects($this->once())
-            ->method('bind')
-            ->withConsecutive(['price_dynamic_algorithm', 1]);
-        $requestBuilder->expects($this->once())
+        $this->filter = new \Magento\Framework\Api\Filter();
+        $this->filter->setField('price_dynamic_algorithm');
+        $this->filter->setValue(1);
+        $criteriaBuilder->expects($this->once())
+            ->method('addFilter')
+            ->with($this->filter);
+        $criteria = $this->getMock('Magento\Framework\Api\Search\SearchCriteria', [], [], '', false);
+        $criteriaBuilder->expects($this->once())->method('create')->willReturn($criteria);
+        $criteria->expects($this->once())
             ->method('setRequestName')
             ->withConsecutive(['catalog_view_container'])
             ->willThrowException(new \Exception('setRequestName', 333));
 
-        return $requestBuilder;
+        return $criteriaBuilder;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getFilterBuilder()
+    {
+        $filterBuilder = $this->getMock('Magento\Framework\Api\FilterBuilder', [], [], '', false);
+        $filterBuilder->expects($this->once())->method('setField')->with('price_dynamic_algorithm');
+        $filterBuilder->expects($this->once())->method('setValue')->with(1);
+        $filterBuilder->expects($this->once())->method('create')->willReturn($this->filter);
+        return $filterBuilder;
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

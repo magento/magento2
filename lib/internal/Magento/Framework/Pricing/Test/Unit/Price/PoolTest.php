@@ -36,7 +36,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->prices = [
             'regular_price' => 'RegularPrice',

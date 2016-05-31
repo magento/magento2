@@ -19,5 +19,8 @@ class AssertDownloadableProductForm extends AssertProductForm
      *
      * @var array
      */
-    protected $sortFields = ['downloadable_links/downloadable/link::sort_order'];
+    protected $sortFields = [
+        'downloadable_links/downloadable/link::sort_order',
+        'downloadable_sample/downloadable/sample::sort_order',
+    ];
 }

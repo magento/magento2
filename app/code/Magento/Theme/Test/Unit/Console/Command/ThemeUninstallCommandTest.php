@@ -80,7 +80,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
@@ -138,7 +138,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
-        $this->tester->execute(['theme' => ['test1', 'test2']]);
+        $this->tester->execute(['theme' => ['area/vendor/test1', 'area/vendor/test2']]);
         $this->assertContains(
             'test1 is not an installed Composer package',
             $this->tester->getDisplay()
@@ -156,9 +156,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(false);
-        $this->tester->execute(['theme' => ['test1', 'test2']]);
+        $this->tester->execute(['theme' => ['area/vendor/test1', 'area/vendor/test2']]);
         $this->assertContains(
-            'Unknown theme(s): test1, test2' . PHP_EOL,
+            'Unknown theme(s): area/vendor/test1, area/vendor/test2' . PHP_EOL,
             $this->tester->getDisplay()
         );
     }
@@ -168,7 +168,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->themePackageInfo->expects($this->exactly(4))
             ->method('getPackageName')
             ->will($this->returnValueMap([
-                ['test1', 'dummy1'], ['test2', 'magento/theme-b'], ['test3', ''], ['test4', 'dummy2']
+                ['area/vendor/test1', 'dummy1'],
+                ['area/vendor/test2', 'magento/theme-b'],
+                ['area/vendor/test3', ''],
+                ['area/vendor/test4', 'dummy2'],
             ]));
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
@@ -177,17 +180,24 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->collection->expects($this->at(3))->method('hasTheme')->willReturn(true);
         $this->collection->expects($this->at(5))->method('hasTheme')->willReturn(false);
         $this->collection->expects($this->at(7))->method('hasTheme')->willReturn(true);
-        $this->tester->execute(['theme' => ['test1', 'test2', 'test3', 'test4']]);
+        $this->tester->execute([
+            'theme' => [
+                'area/vendor/test1',
+                'area/vendor/test2',
+                'area/vendor/test3',
+                'area/vendor/test4',
+            ],
+        ]);
         $this->assertContains(
-            'test1, test4 are not installed Composer packages',
+            'area/vendor/test1, area/vendor/test4 are not installed Composer packages',
             $this->tester->getDisplay()
         );
         $this->assertNotContains(
-            'test2 is not an installed Composer package',
+            'area/vendor/test2 is not an installed Composer package',
             $this->tester->getDisplay()
         );
         $this->assertContains(
-            'Unknown theme(s): test3' . PHP_EOL,
+            'Unknown theme(s): area/vendor/test3' . PHP_EOL,
             $this->tester->getDisplay()
         );
     }
@@ -276,7 +286,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->backupRollbackFactory->expects($this->once())
             ->method('create')
             ->willReturn($backupRollback);
-        $this->tester->execute(['theme' => ['test'], '--backup-code' => true]);
+        $this->tester->execute(['theme' => ['area/vendor/test'], '--backup-code' => true]);
         $this->tester->getDisplay();
     }
 
@@ -284,7 +294,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpExecute();
         $this->cleanupFiles->expects($this->never())->method('clearMaterializedViewFiles');
-        $this->tester->execute(['theme' => ['test']]);
+        $this->tester->execute(['theme' => ['area/vendor/test']]);
         $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
         $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
         $this->assertContains('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
@@ -295,10 +305,42 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpExecute();
         $this->cleanupFiles->expects($this->once())->method('clearMaterializedViewFiles');
-        $this->tester->execute(['theme' => ['test'], '-c' => true]);
+        $this->tester->execute(['theme' => ['area/vendor/test'], '-c' => true]);
         $this->assertContains('Enabling maintenance mode', $this->tester->getDisplay());
         $this->assertContains('Disabling maintenance mode', $this->tester->getDisplay());
         $this->assertNotContains('Alert: Generated static view files were not cleared.', $this->tester->getDisplay());
         $this->assertContains('Generated static view files cleared successfully', $this->tester->getDisplay());
+    }
+
+    /**
+     * @param $themePath
+     * @dataProvider dataProviderThemeFormat
+     */
+    public function testExecuteWrongThemeFormat($themePath)
+    {
+        $this->tester->execute(['theme' => [$themePath]]);
+        $this->assertContains(
+            'Theme path should be specified as full path which is area/vendor/name.',
+            $this->tester->getDisplay()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderThemeFormat()
+    {
+        return [
+            ['test1'],
+            ['/test1'],
+            ['test1/'],
+            ['/test1/'],
+            ['vendor/test1'],
+            ['/vendor/test1'],
+            ['vendor/test1/'],
+            ['/vendor/test1/'],
+            ['area/vendor/test1/'],
+            ['/area/vendor/test1'],
+        ];
     }
 }

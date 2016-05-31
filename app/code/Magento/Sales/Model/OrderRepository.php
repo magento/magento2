@@ -10,11 +10,16 @@ use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
+<<<<<<< HEAD
 use Magento\Sales\Api\Data\OrderExtension;
+=======
+use Magento\Sales\Api\Data\OrderExtensionFactory;
+>>>>>>> develop
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Repository class for @see OrderInterface
@@ -33,9 +38,15 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     protected $searchResultFactory = null;
 
     /**
+<<<<<<< HEAD
      * @var OrderExtension
      */
     private $orderExtension;
+=======
+     * @var OrderExtensionFactory
+     */
+    private $orderExtensionFactory;
+>>>>>>> develop
 
     /**
      * @var ShippingAssignmentBuilder
@@ -96,15 +107,26 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
-        //@TODO: fix search logic
         /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
+            $this->addFilterGroupToCollection($filterGroup, $searchResult);
         }
+
+        $sortOrders = $searchCriteria->getSortOrders();
+        if ($sortOrders === null) {
+            $sortOrders = [];
+        }
+        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        foreach ($sortOrders as $sortOrder) {
+            $field = $sortOrder->getField();
+            $searchResult->addOrder(
+                $field,
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
+            );
+        }
+
+        $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
         foreach ($searchResult->getItems() as $order) {
@@ -161,7 +183,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         $extensionAttributes = $order->getExtensionAttributes();
 
         if ($extensionAttributes === null) {
+<<<<<<< HEAD
             $extensionAttributes = $this->getOrderExtensionDependency();
+=======
+            $extensionAttributes = $this->getOrderExtensionFactory()->create();
+>>>>>>> develop
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
@@ -173,6 +199,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     }
 
     /**
+<<<<<<< HEAD
      * Get the new OrderExtension dependency for application code
      * @return OrderExtension
      * @deprecated
@@ -185,6 +212,21 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             );
         }
         return $this->orderExtension;
+=======
+     * Get the new OrderExtensionFactory for application code
+     * 
+     * @return OrderExtensionFactory
+     * @deprecated
+     */
+    private function getOrderExtensionFactory()
+    {
+        if (!$this->orderExtensionFactory instanceof OrderExtensionFactory) {
+            $this->orderExtensionFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                '\Magento\Sales\Api\Data\OrderExtensionFactory'
+            );
+        }
+        return $this->orderExtensionFactory;
+>>>>>>> develop
     }
 
     /**
@@ -202,4 +244,31 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         }
         return $this->shippingAssignmentBuilder;
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    protected function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
+    ) {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $conditions[] = [$condition => $filter->getValue()];
+            $fields[] = $filter->getField();
+        }
+        if ($fields) {
+            $searchResult->addFieldToFilter($fields, $conditions);
+        }
+    }
+>>>>>>> develop
 }

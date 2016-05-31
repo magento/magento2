@@ -17,7 +17,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $booleanUtilsMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->booleanUtilsMock = $this->getMock('Magento\Framework\Stdlib\BooleanUtils', [], [], '', false);
         $this->model = new \Magento\Directory\Model\Country\Postcode\Config\Converter($this->booleanUtilsMock);

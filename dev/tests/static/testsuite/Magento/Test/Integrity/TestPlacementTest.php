@@ -24,7 +24,7 @@ class TestPlacementTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->root = Files::init()->getPathToSource();
+        $this->root = BP;
     }
 
     public function testUnitTestFilesPlacement()

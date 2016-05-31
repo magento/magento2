@@ -13,6 +13,7 @@ use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Paypal\Controller\Transparent\Response;
 use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
+use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class ResponseTest
@@ -44,6 +45,11 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     /** @var ResponseValidator|\PHPUnit_Framework_MockObject_MockObject */
     private $responseValidatorMock;
+
+    /**
+     * @var Transparent | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $payflowFacade;
 
     protected function setUp()
     {
@@ -85,13 +91,20 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator'
         )->disableOriginalConstructor()
             ->getMock();
+        $this->payflowFacade = $this->getMockBuilder(
+            Transparent::class
+        )
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
 
         $this->object = new Response(
             $this->contextMock,
             $this->coreRegistryMock,
             $this->transactionMock,
             $this->responseValidatorMock,
-            $this->resultLayoutFactoryMock
+            $this->resultLayoutFactoryMock,
+            $this->payflowFacade
         );
     }
 
@@ -105,7 +118,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->willReturn($objectMock);
         $this->responseValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($objectMock);
+            ->with($objectMock, $this->payflowFacade);
         $this->transactionMock->expects($this->once())
             ->method('savePaymentInQuote')
             ->with($objectMock);
@@ -132,7 +145,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             ->willReturn($objectMock);
         $this->responseValidatorMock->expects($this->once())
             ->method('validate')
-            ->with($objectMock)
+            ->with($objectMock, $this->payflowFacade)
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Error')));
         $this->coreRegistryMock->expects($this->once())
             ->method('register')

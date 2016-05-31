@@ -32,7 +32,7 @@ class RateRegistryTest extends \PHPUnit_Framework_TestCase
 
     const TAX_RATE_ID = 1;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->rateModelFactoryMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\RateFactory')

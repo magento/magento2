@@ -13,49 +13,47 @@ use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
- *
  * Preconditions:
- * 1. Create custom storeView
- * 2. Create simple product
+ * 1. Create custom storeView.
+ * 2. Create simple product.
  *
  * Steps:
- * 1. Open Backend
- * 2. Go to Marketing->Url Redirects
- * 3. Click "Add URL Rewrite" button
- * 4. Select "For Product" from  "Create URL Rewrite:" dropdown
- * 5. Select created early product
- * 6. Click "Skip Category Selection" button
- * 7. Fill data according to dataset
- * 8. Perform all assertions
+ * 1. Open Backend.
+ * 2. Go to Marketing > Url Redirects.
+ * 3. Click "Add URL Rewrite" button.
+ * 4. Select "For Product" from "Create URL Rewrite:" dropdown.
+ * 5. Select created early product.
+ * 6. Click "Skip Category Selection" button.
+ * 7. Fill data according to dataset.
+ * 8. Perform all assertions.
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites_(MX)
  * @ZephyrId MAGETWO-25150
  */
 class CreateProductUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
-    const TEST_TYPE = 'acceptance_test';
+    const DOMAIN = 'MX';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
-     * Url rewrite index page
+     * Url rewrite index page.
      *
      * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
-     * Url rewrite edit page
+     * Url rewrite edit page.
      *
      * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
-     * Prepare pages
+     * Prepare pages.
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit

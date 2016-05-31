@@ -20,7 +20,7 @@ abstract class AbstractCacheCommandTest extends \PHPUnit_Framework_TestCase
      */
     protected $command;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->cacheManagerMock = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
     }

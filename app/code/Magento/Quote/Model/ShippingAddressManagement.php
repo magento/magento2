@@ -107,11 +107,10 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
         try {
-            $this->totalsCollector->collectAddressTotals($quote, $address);
             $address->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please, check input data.'));
+            throw new InputException(__('Unable to save address. Please check input data.'));
         }
 
         if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {

@@ -5,8 +5,8 @@
  */
 namespace Magento\Customer\Block\Form;
 
-use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AccountManagement;
 
 /**
  * Customer edit form block
@@ -64,5 +64,25 @@ class Edit extends \Magento\Customer\Block\Account\Dashboard
     public function getChangePassword()
     {
         return $this->customerSession->getChangePassword();
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     */
+    public function getMinimumPasswordLength()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH);
+    }
+
+    /**
+     * Get minimum password length
+     *
+     * @return string
+     */
+    public function getRequiredCharacterClassesNumber()
+    {
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
 }

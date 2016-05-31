@@ -5,6 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
+use Magento\Framework\Exception\CouldNotSaveException;
+
 class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -88,6 +90,29 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
             $orderId,
             $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock)
         );
+    }
+
+    /**
+     * @expectedExceptionMessage Unable to place order. Please try again later.
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function testSavePaymentInformationAndPlaceOrderException()
+    {
+        $cartId = 100;
+        $email = 'email@magento.com';
+        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
+        $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+
+        $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $this->billingAddressManagementMock->expects($this->once())
+            ->method('assign')
+            ->with($cartId, $billingAddressMock);
+        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $exception = new CouldNotSaveException(__('DB exception'));
+        $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
+
+        $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
     }
 
     public function testSavePaymentInformation()

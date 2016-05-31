@@ -165,6 +165,22 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->deleteProduct($fixtureProduct[ProductInterface::SKU]);
     }
 
+    public function testCreateInvalidPriceFormat()
+    {
+        $this->_markTestAsRestOnly("In case of SOAP type casting is handled by PHP SoapServer, no need to test it");
+        $expectedMessage = 'Error occurred during "price" processing. '
+            . 'Invalid type for value: "invalid_format". Expected Type: "float".';
+
+        try {
+            $this->saveProduct(['name' => 'simple', 'price' => 'invalid_format', 'sku' => 'simple']);
+            $this->fail("Expected exception was not raised");
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+        }
+    }
+
     /**
      * @param array $fixtureProduct
      *
@@ -270,13 +286,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * @param string $productSku
      * @return array
      */
-    protected function getOptionsData()
+    protected function getOptionsData($productSku)
     {
         return [
             [
-                "product_sku" => "simple",
+                "product_sku" => $productSku,
                 "title" => "DropdownOption",
                 "type" => "drop_down",
                 "sort_order" => 0,
@@ -291,7 +308,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 ],
             ],
             [
-                "product_sku" => "simple",
+                "product_sku" => $productSku,
                 "title" => "CheckboxOption",
                 "type" => "checkbox",
                 "sort_order" => 1,
@@ -312,7 +329,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         //Create product with options
         $productData = $this->getSimpleProductData();
-        $optionsDataInput = $this->getOptionsData();
+        $optionsDataInput = $this->getOptionsData($productData['sku']);
         $productData['options'] = $optionsDataInput;
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -330,10 +347,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "price_type" => "fixed",
             'sort_order' => 3,
         ];
-        $option1Id = $options[0]['option_id'];
-        $option2Id = $options[1]['option_id'];
         $options[1] = [
-            "product_sku" => "simple",
+            "product_sku" => $productData['sku'],
             "title" => "DropdownOption2",
             "type" => "drop_down",
             "sort_order" => 3,
@@ -354,8 +369,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(2, count($options));
         $this->assertEquals(2, count($options[0]['values']));
         $this->assertEquals(1, count($options[1]['values']));
-        $this->assertEquals($option1Id, $options[0]['option_id']);
-        $this->assertTrue($option2Id < $options[1]['option_id']);
 
         //update product without setting options field, option should not be changed
         unset($response['options']);

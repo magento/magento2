@@ -4,33 +4,33 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+namespace Magento\Directory\Model\Currency\Import;
 
 /**
  * Currency rate import model (From www.webservicex.net)
  */
-namespace Magento\Directory\Model\Currency\Import;
-
 class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
     /**
-     * @var string
+     * Currency converter url
      */
+    // @codingStandardsIgnoreStart
     const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    // @codingStandardsIgnoreEnd
 
     /**
-     * HTTP client
+     * Http Client Factory
      *
-     * @var \Magento\Framework\HTTP\ZendClient
+     * @var \Magento\Framework\HTTP\ZendClientFactory
      */
-    protected $_httpClient;
+    protected $httpClientFactory;
 
     /**
-     * Core store config
+     * Core scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -41,8 +41,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($currencyFactory);
-        $this->_scopeConfig = $scopeConfig;
-        $this->_httpClient = new \Magento\Framework\HTTP\ZendClient();
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -55,13 +54,15 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     {
         $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
         $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
+        /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
+        $httpClient = $this->getHttpClientFactory()->create();
 
         try {
-            $response = $this->_httpClient->setUri(
+            $response = $httpClient->setUri(
                 $url
             )->setConfig(
                 [
-                    'timeout' => $this->_scopeConfig->getValue(
+                    'timeout' => $this->scopeConfig->getValue(
                         'currency/webservicex/timeout',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
@@ -71,7 +72,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
             )->getBody();
 
             $xml = simplexml_load_string($response, null, LIBXML_NOERROR);
-            if (!$xml) {
+            if (!$xml || (isset($xml[0]) && $xml[0] == -1)) {
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
                 return null;
             }
@@ -83,5 +84,21 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
             }
         }
+    }
+
+    /**
+     * Get HttpClientFactory dependency
+     *
+     * @return \Magento\Framework\HTTP\ZendClientFactory
+     *
+     * @deprecated
+     */
+    private function getHttpClientFactory()
+    {
+        if ($this->httpClientFactory === null) {
+            $this->httpClientFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\HTTP\ZendClientFactory');
+        }
+        return $this->httpClientFactory;
     }
 }

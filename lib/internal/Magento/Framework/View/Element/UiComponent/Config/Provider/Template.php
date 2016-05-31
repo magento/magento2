@@ -97,7 +97,7 @@ class Template
         if (isset($this->cachedTemplates[$hash])) {
             return $this->cachedTemplates[$hash];
         }
-
+        $this->domMerger->unsetDom();
         $this->cachedTemplates[$hash] = $this->readerFactory->create(
             [
                 'fileCollector' => $this->aggregatedFileCollectorFactory->create(['searchPattern' => $template]),

@@ -7,7 +7,6 @@
 namespace Magento\Payment\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
-use Magento\Payment\Model\Method\Free;
 
 class MethodList
 {
@@ -42,22 +41,10 @@ class MethodList
     {
         $store = $quote ? $quote->getStoreId() : null;
         $methods = [];
-        $isFreeAdded = false;
         foreach ($this->paymentHelper->getStoreMethods($store, $quote) as $method) {
             if ($this->_canUseMethod($method, $quote)) {
                 $method->setInfoInstance($quote->getPayment());
                 $methods[] = $method;
-                if ($method->getCode() == Free::PAYMENT_METHOD_FREE_CODE) {
-                    $isFreeAdded = true;
-                }
-            }
-        }
-        if (!$isFreeAdded) {
-            /** @var \Magento\Payment\Model\Method\Free $freeMethod */
-            $freeMethod = $this->paymentHelper->getMethodInstance(Free::PAYMENT_METHOD_FREE_CODE);
-            if ($freeMethod->isAvailableInConfig()) {
-                $freeMethod->setInfoInstance($quote->getPayment());
-                $methods[] = $freeMethod;
             }
         }
         return $methods;

@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Catalog\Api\Data\CategoryInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -66,6 +69,17 @@ class Category extends AbstractResource
     protected $_categoryTreeFactory;
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * @var Category\AggregateCount
+     */
+    protected $aggregateCount;
+
+    /**
+     * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -92,7 +106,6 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-
         $this->connectionName  = 'catalog';
     }
 
@@ -172,20 +185,8 @@ class Category extends AbstractResource
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
         parent::_beforeDelete($object);
-
-        /**
-         * Update children count for all parent categories
-         */
-        $parentIds = $object->getParentIds();
-        if ($parentIds) {
-            $childDecrease = $object->getChildrenCount() + 1;
-            // +1 is itself
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
-            $where = ['entity_id IN(?)' => $parentIds];
-            $this->getConnection()->update($this->getEntityTable(), $data, $where);
-        }
+        $this->getAggregateCount()->processDelete($object);
         $this->deleteChildren($object);
-        return $this;
     }
 
     /**
@@ -196,20 +197,16 @@ class Category extends AbstractResource
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
-        $connection = $this->getConnection();
-        $pathField = $connection->quoteIdentifier('path');
+        if ($object->getSkipDeleteChildren()) {
+            return $this;
+        }
 
-        $select = $connection->select()->from(
-            $this->getEntityTable(),
-            ['entity_id']
-        )->where(
-            $pathField . ' LIKE :c_path'
-        );
-
-        $childrenIds = $connection->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
-
-        if (!empty($childrenIds)) {
-            $connection->delete($this->getEntityTable(), ['entity_id IN (?)' => $childrenIds]);
+        $categories = $this->_categoryCollectionFactory->create();
+        $categories->addAttributeToFilter('path', ['like' => $object->getPath() . '/%']);
+        $childrenIds = $categories->getAllIds();
+        foreach ($categories as $category) {
+            $category->setSkipDeleteChildren(true);
+            $category->delete();
         }
 
         /**
@@ -524,7 +521,7 @@ class Category extends AbstractResource
         $table = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-
+        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $storeId,
@@ -536,11 +533,11 @@ class Category extends AbstractResource
             ['COUNT(m.entity_id)']
         )->joinLeft(
             ['d' => $table],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.entity_id = m.entity_id',
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
             []
         )->joinLeft(
             ['c' => $table],
-            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = m.entity_id",
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
             []
         )->where(
             'm.path LIKE :c_path'
@@ -576,20 +573,22 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
+        $linkField = $this->getLinkField();
         $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
-        $select = $this->getConnection()->select()->from(
-            $attribute->getBackend()->getTable(),
+        $selectEntities = $this->getConnection()->select()->from(
+            ['ce' => $this->getTable('catalog_category_entity')],
             ['entity_id']
+        )->joinLeft(
+            ['ci' => $attribute->getBackend()->getTable()],
+            "ci.{$linkField} = ce.{$linkField} AND attribute_id = :attribute_id",
+            ['value']
         )->where(
-            'attribute_id = :attribute_id'
+            'ci.value = :value'
         )->where(
-            'value = :value'
-        )->where(
-            'entity_id IN(?)',
+            'ce.entity_id IN (?)',
             $entityIdsFilter
         );
-
-        return $this->getConnection()->fetchCol($select, $bind);
+        return $this->getConnection()->fetchCol($selectEntities, $bind);
     }
 
     /**
@@ -745,10 +744,12 @@ class Category extends AbstractResource
      */
     public function getChildren($category, $recursive = true)
     {
+        $linkField = $this->getLinkField();
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
+        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $category->getStoreId(),
@@ -760,11 +761,11 @@ class Category extends AbstractResource
             'entity_id'
         )->joinLeft(
             ['d' => $backendTable],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.entity_id = m.entity_id',
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
             []
         )->joinLeft(
             ['c' => $backendTable],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = m.entity_id',
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
             []
         )->where(
             $checkSql . ' = :scope'
@@ -978,5 +979,74 @@ class Category extends AbstractResource
         $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
         return (int)$connection->fetchOne($select);
+    }
+
+    /**
+     * Reset firstly loaded attributes
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @param integer $entityId
+     * @param array|null $attributes
+     * @return $this
+     */
+    public function load($object, $entityId, $attributes = [])
+    {
+        $this->_attributes = [];
+        $this->loadAttributesMetadata($attributes);
+        $object = $this->getEntityManager()->load($object, $entityId);
+        if (!$this->getEntityManager()->has($object)) {
+            $object->isObjectNew(true);
+        }
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete($object)
+    {
+        $this->getEntityManager()->delete($object);
+        $this->_eventManager->dispatch(
+            'catalog_category_delete_after_done',
+            ['product' => $object]
+        );
+        return $this;
+    }
+
+    /**
+     * Save entity's attributes into the object's resource
+     *
+     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getEntityManager()->save($object);
+        return $this;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\EntityManager');
+        }
+        return $this->entityManager;
+    }
+
+    /**
+     * @return Category\AggregateCount
+     */
+    private function getAggregateCount()
+    {
+        if (null === $this->aggregateCount) {
+            $this->aggregateCount = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Category\AggregateCount');
+        }
+        return $this->aggregateCount;
     }
 }

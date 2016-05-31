@@ -29,6 +29,7 @@
         <link src='Magento_Swagger::swagger-ui/js/lang/translator.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lang/ru.js' type='text/javascript'/>
         <link src='Magento_Swagger::swagger-ui/js/lang/en.js' type='text/javascript'/>
+        <link src='Magento_Swagger::swagger-ui/js/magento-swagger.js' type='text/javascript'/>
 
         <!--Remove require-js assets-->
         <remove src="requirejs/require.js"/>

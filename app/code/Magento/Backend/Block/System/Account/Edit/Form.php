@@ -100,7 +100,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'password',
                 'label' => __('New Password'),
                 'title' => __('New Password'),
-                'class' => 'input-text validate-admin-password'
+                'class' => 'validate-admin-password admin__control-text'
             ]
         );
 
@@ -110,7 +110,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'password_confirmation',
                 'label' => __('Password Confirmation'),
-                'class' => 'input-text validate-cpassword'
+                'class' => 'validate-cpassword admin__control-text'
             ]
         );
 
@@ -138,7 +138,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Your Password'),
                 'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
                 'title' => __('Your Password'),
-                'class' => 'input-text validate-current-password required-entry',
+                'class' => 'validate-current-password required-entry admin__control-text',
                 'required' => true
             ]
         );

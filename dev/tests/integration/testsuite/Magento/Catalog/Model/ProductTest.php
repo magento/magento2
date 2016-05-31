@@ -14,9 +14,16 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @see \Magento\Catalog\Model\ProductExternalTest
  * @see \Magento\Catalog\Model\ProductPriceTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
+
     /**
      * @var \Magento\Catalog\Model\Product
      */
@@ -24,6 +31,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
@@ -156,7 +166,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testDuplicate()
     {
-        $this->_model->load(1);
+        $this->_model = $this->productRepository->get('simple');
+
         // fixture
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -184,14 +195,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testDuplicateSkuGeneration()
     {
-        $this->_model->load(1);
+        $this->_model = $this->productRepository->get('simple');
+
         $this->assertEquals('simple', $this->_model->getSku());
         /** @var \Magento\Catalog\Model\Product\Copier $copier */
         $copier = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Catalog\Model\Product\Copier'
         );
         $duplicate = $copier->copy($this->_model);
-        $this->assertEquals('simple-3', $duplicate->getSku());
+        $this->assertEquals('simple-5', $duplicate->getSku());
     }
 
     /**
@@ -270,7 +282,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSalable()
     {
-        $this->_model->load(1);
+        $this->_model = $this->productRepository->get('simple');
+
         // fixture
         $this->assertTrue((bool)$this->_model->isSalable());
         $this->assertTrue((bool)$this->_model->isSaleable());
@@ -345,12 +358,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model->reset();
         $this->_assertEmpty($model);
 
-        $this->_model->addOption(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product\Option')
-        );
-        $this->_model->reset();
-        $this->_assertEmpty($model);
-
         $this->_model->canAffectOptions(true);
         $this->_model->reset();
         $this->_assertEmpty($model);
@@ -367,7 +374,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($model->getOrigData());
         $this->assertEquals([], $model->getCustomOptions());
         // impossible to test $_optionInstance
-        $this->assertEquals([], $model->getOptions());
         $this->assertFalse($model->canAffectOptions());
     }
 
@@ -376,7 +382,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsProductsHasSku()
     {
-        $this->assertTrue($this->_model->isProductsHasSku([10, 11]));
+        $product1 = $this->productRepository->get('simple1');
+        $product2 = $this->productRepository->get('simple2');
+
+        $this->assertTrue(
+            $this->_model->isProductsHasSku(
+                [$product1->getId(), $product2->getId()]
+            )
+        );
     }
 
     public function testProcessBuyRequest()
@@ -421,13 +434,54 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/products_with_unique_input_attribute.php
+     */
+    public function testValidateUniqueInputAttributeValue()
+    {
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Catalog\Model\ResourceModel\Eav\Attribute')
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'unique_input_attribute');
+        $this->_model->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product with non-unique value'
+        )->setSku(
+            'some product SKU'
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setData(
+            $attribute->getAttributeCode(),
+            'unique value'
+        )->setVisibility(
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        )->setCollectExceptionMessages(
+            true
+        );
+
+        $validationResult = $this->_model->validate();
+        $this->assertCount(1, $validationResult);
+        $this->assertContains(
+            'The value of attribute "' . $attribute->getDefaultFrontendLabel() . '" must be unique',
+            $validationResult
+        );
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
      */
     public function testGetOptions()
     {
-        $this->_model->load(1);
-        $options = $this->_model->getOptions();
-        $this->assertEquals(4, count($options));
+        $this->_model = $this->productRepository->get('simple');
+
+        $this->assertEquals(4, count($this->_model->getOptions()));
     }
 }

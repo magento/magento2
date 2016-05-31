@@ -40,7 +40,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected $eavConfigMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_processor = $this->getMock(
             'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
@@ -101,6 +101,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($dbAdapterMock));
 
+        $attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
                 'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
@@ -110,7 +114,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                     'indexerEavProcessor' => $this->_eavProcessor,
                     'resource' => $this->resourceMock,
                     'data' => ['id' => 1],
-                    'eavConfig' => $this->eavConfigMock
+                    'eavConfig' => $this->eavConfigMock,
+                    'attributeCache' => $attributeCacheMock
                 ]
         );
     }

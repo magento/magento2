@@ -4,7 +4,7 @@
 //  */
 
 //
-//  Cashe Management
+//  Cache Management
 //  _____________________________________________
 
 @grid-severity-critical-background: #f9d4d4;
@@ -64,6 +64,7 @@
 
 .additional-cache-management {
     margin-bottom: 0;
+
     h2 {
         border-bottom: @additional-cache-management-border;
         box-sizing: border-box;
@@ -72,6 +73,7 @@
         padding: 0;
         position: static;
         width: 100%;
+
         span {
             color: @additional-cache-management-heading-color;
             display: inline-block;
@@ -80,10 +82,28 @@
             padding: 7px 0 10px;
         }
     }
+
     span {
         color: @additional-cache-management-text-color;
         font-size: @additional-cache-management-text-size;
         font-weight: @additional-cache-management-font-weight;
         margin: 5px 0 6px;
+    }
+}
+
+.adminhtml-cache-index {
+    .data-grid-checkbox-cell {
+        &.col-select.col-massaction {
+            cursor: pointer;
+        }
+    }
+
+    .data-grid-checkbox-cell-inner {
+        margin: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+        padding: 0;
+
+        &:before {
+            content: none;
+        }
     }
 }

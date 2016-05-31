@@ -21,59 +21,28 @@
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
                 </item>
             </argument>
         </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
     </dataSource>
-    <container name="listing_top">
+    <listingToolbar name="listing_top">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/toolbar</item>
+                <item name="sticky" xsi:type="boolean">true</item>
             </item>
         </argument>
-        <bookmark name="bookmarks">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">product_listing</item>
-                    </item>
-                </item>
-            </argument>
-        </bookmark>
-        <component name="columns_controls">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                    <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">product_listing.product_listing.product_columns</item>
-                    </item>
-                </item>
-            </argument>
-        </component>
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
         <filters name="listing_filters">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsProvider" xsi:type="string">product_listing.product_listing.product_columns</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
-                </item>
-            </argument>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.listing_filters</item>
+                        <item name="provider" xsi:type="string">${ $.parentName }</item>
                         <item name="dataScope" xsi:type="string">store_id</item>
                         <item name="caption" xsi:type="string" translate="true">All Store Views</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
@@ -84,9 +53,7 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">product_listing.product_listing.product_columns.ids</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
-                    <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
             <action name="delete">
@@ -136,25 +103,11 @@
                 </argument>
             </action>
         </massaction>
-        <paging name="listing_paging">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">product_listing.product_listing.product_columns.ids</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.paging</item>
-                    </item>
-                </item>
-            </argument>
-        </paging>
-    </container>
+        <paging name="listing_paging"/>
+    </listingToolbar>
     <columns name="product_columns" class="Magento\Catalog\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
                         <item name="provider" xsi:type="string">product_listing.product_listing.product_columns.actions</item>
@@ -163,11 +116,6 @@
                             <item name="0" xsi:type="string">edit</item>
                             <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
                         </item>
-                    </item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
                 </item>
             </item>
@@ -282,13 +230,12 @@
                 </item>
             </argument>
         </column>
-        <column name="websites">
+        <column name="websites" class="Magento\Catalog\Ui\Component\Listing\Columns\Websites">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Store\Model\ResourceModel\Website\Collection</item>
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Websites</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                 </item>

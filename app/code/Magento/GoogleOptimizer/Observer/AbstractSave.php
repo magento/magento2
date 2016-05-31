@@ -52,13 +52,12 @@ abstract class AbstractSave implements ObserverInterface
      *
      * @param Observer $observer
      * @return $this
-     * @throws \InvalidArgumentException
      */
     public function execute(Observer $observer)
     {
         $this->_initEntity($observer);
 
-        if ($this->_isGoogleExperimentActive()) {
+        if ($this->_isGoogleExperimentActive() && $this->isDataAvailable()) {
             $this->_processCode();
         }
 
@@ -112,11 +111,10 @@ abstract class AbstractSave implements ObserverInterface
      */
     protected function _initRequestParams()
     {
-        $params = $this->_request->getParam('google_experiment');
-        if (!is_array($params) || !isset($params['experiment_script']) || !isset($params['code_id'])) {
+        if (!$this->isDataAvailable()) {
             throw new \InvalidArgumentException('Wrong request parameters');
         }
-        $this->_params = $params;
+        $this->_params = $this->getRequestData();
     }
 
     /**
@@ -180,5 +178,22 @@ abstract class AbstractSave implements ObserverInterface
     protected function _deleteCode()
     {
         $this->_modelCode->delete();
+    }
+
+    /**
+     * @return bool
+     */
+    private function isDataAvailable()
+    {
+        $params = $this->getRequestData();
+        return is_array($params) && isset($params['experiment_script']) && isset($params['code_id']);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getRequestData()
+    {
+        return $this->_request->getParam('google_experiment');
     }
 }

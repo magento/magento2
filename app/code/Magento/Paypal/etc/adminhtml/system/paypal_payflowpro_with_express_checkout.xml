@@ -14,6 +14,8 @@
             <field id="enable_paypal_payflow">
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
             </field>
+            <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+            <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
             <group id="paypal_payflow_api_settings" translate="label">
                 <label>Payflow Pro and Express Checkout</label>
                 <field id="business_account" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/business_account" translate="label" sortOrder="10">
@@ -41,7 +43,14 @@
                     <field id="enable_paypal_payflow"/>
                 </requires>
             </field>
-            <group id="paypal_payflow_advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="22">
+            <field id="express_checkout_bml_sort_order" sortOrder="30" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_bml_sort_order">
+                <config_path>payment/payflow_express_bml/sort_order</config_path>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Depends\BmlSortOrder</frontend_model>
+                <depends>
+                    <field id="enable_express_checkout_bml_payflow">1</field>
+                </depends>
+            </field>
+            <group id="paypal_payflow_advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="40">
                 <label>Advertise PayPal Credit</label>
                 <comment>
                     <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>

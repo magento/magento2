@@ -171,11 +171,17 @@ abstract class AbstractAssertForm extends AbstractConstraint
         }
 
         if ($key) {
-            $data[$key] = $order ? $this->sortMultidimensionalArray($data[$key], $order) : $data[$key];
-            $data[$key] = $nextPath ? $this->sortDataByPath($data[$key], $nextPath) : $data[$key];
+            if ($order) {
+                $data[$key] = $this->sortMultidimensionalArray($data[$key], $order);
+            }
+            if ($nextPath) {
+                $data[$key] = $this->sortDataByPath($data[$key], $nextPath);
+            }
         } else {
             $data = $this->sortMultidimensionalArray($data, $order);
-            $data = $nextPath ? $this->sortDataByPath($data, $nextPath) : $data;
+            if ($nextPath) {
+                $data = $this->sortDataByPath($data, $nextPath);
+            }
         }
 
         return $data;
@@ -193,13 +199,10 @@ abstract class AbstractAssertForm extends AbstractConstraint
         $result = [];
         foreach ($data as $key => $value) {
             if (isset($value[$orderKey])) {
-                $orderValue = is_numeric($value[$orderKey]) ? floatval($value[$orderKey]) : $value[$orderKey];
-                $result[$orderValue] = $value;
-            } else {
-                $result[$key] = $value;
+                $key = is_numeric($value[$orderKey]) ? (int)$value[$orderKey] : $value[$orderKey];
             }
+            $result[$key] = $value;
         }
-
         ksort($result);
         return $result;
     }

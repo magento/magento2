@@ -43,8 +43,8 @@ class Auto implements AlgorithmInterface
     ) {
         $data = [];
         $range = $this->dataProvider->getRange();
-        if (!$range && $entityStorage->getSource()) {
-            $range = $this->getRange($bucket, $dimensions, $entityStorage);
+        if ($entityStorage->getSource()) {
+            $range = !empty($range) ? $range : $this->getRange($bucket, $dimensions, $entityStorage);
             $dbRanges = $this->dataProvider->getAggregation($bucket, $dimensions, $range, $entityStorage);
             $data = $this->dataProvider->prepareData($range, $dbRanges);
         }

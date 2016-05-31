@@ -20,6 +20,13 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface $dateTimeFormatter */
         $dateTimeFormatter = $objectManager->getObject('Magento\Framework\Stdlib\DateTime\DateTimeFormatter');
+        $localeResolver = $objectManager->getObject('Magento\Framework\Locale\Resolver');
+
+        $reflection = new \ReflectionClass('Magento\Framework\Stdlib\DateTime\DateTimeFormatter');
+        $reflectionProperty = $reflection->getProperty('localeResolver');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($dateTimeFormatter, $localeResolver);
+
         $formattedDate = $dateTimeFormatter->formatObject($testDatetime);
 
         $htmlId = 'test_HTML_id';
@@ -58,12 +65,11 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             '<tr id="row_' . $htmlId . '">' .
             '<td class="label">' .
-            '<label for="' . $htmlId . '">' . $label . '</label>' .
+            '<label for="' . $htmlId . '"><span>' . $label . '</span></label>' .
             '</td>' .
             '<td class="value">' .
             $formattedDate .
             '</td>' .
-            '<td class="scope-label"></td>' .
             '<td class=""></td>' .
             '</tr>',
             $html

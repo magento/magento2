@@ -153,6 +153,18 @@ class ResourceConnection
     }
 
     /**
+     * Gets table placeholder by table name
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function getTablePlaceholder($tableName)
+    {
+        $tableName = preg_replace('/^' . preg_quote($this->getTablePrefix()) . '_/', '', $tableName);
+        return $tableName;
+    }
+
+    /**
      * Build a trigger name
      *
      * @param string $tableName  The table that is the subject of the trigger

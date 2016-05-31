@@ -17,6 +17,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Downloadable\Model\Product\Type
      */
     private $target;
+
     /**
      * @var TypeHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -83,6 +84,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'getDownloadableData',
                 'setTypeHasOptions',
                 'setLinksExist',
+                'getDownloadableLinks',
                 '__wakeup',
             ],
             [],
@@ -145,15 +147,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $this->target->beforeSave($this->product);
     }
 
-    public function testSave()
+    public function testHasLinks()
     {
-        $data = ['sample' => ['sampleData', 'link' => ['linkData']]];
-        $this->product->expects($this->once())
-            ->method('getDownloadableData')
-            ->will($this->returnValue($data));
-        $this->typeHandler->expects($this->once())
-            ->method('save')
-            ->with($this->product, $data);
-        $this->target->save($this->product);
+        $this->product->expects($this->exactly(2))
+            ->method('getDownloadableLinks')
+            ->willReturn(['link1', 'link2']);
+        $this->assertTrue($this->target->hasLinks($this->product));
     }
 }

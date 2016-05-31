@@ -32,13 +32,6 @@ class Addresses extends Tab
     protected $customerAddress = '//*[contains(@class, "address-list-item")][%d]';
 
     /**
-     * Active address tab.
-     *
-     * @var string
-     */
-    protected $addressTab = '.address-item-edit[data-bind="visible: element.active"]:not([style="display: none;"])';
-
-    /**
      * Magento loader.
      *
      * @var string
@@ -56,7 +49,7 @@ class Addresses extends Tab
         $addresses = is_array($address) ? $address : [$address];
         foreach ($addresses as $address) {
             $this->addNewAddress();
-            $this->fillFormTab($address->getData(), $this->_rootElement);
+            $this->setFieldsData($address->getData(), $this->_rootElement);
         }
 
         return $this;
@@ -95,7 +88,7 @@ class Addresses extends Tab
             }
             $this->_fill($this->dataMapping($defaultAddress));
 
-            $this->fillFormTab(array_diff($addressData, $defaultAddress), $this->_rootElement);
+            $this->setFieldsData(array_diff($addressData, $defaultAddress), $this->_rootElement);
         }
 
         return $this;
@@ -141,7 +134,7 @@ class Addresses extends Tab
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         /* Skip get data for standard method. Use getDataAddresses. */
         return [];
@@ -153,7 +146,6 @@ class Addresses extends Tab
     protected function addNewAddress()
     {
         $this->_rootElement->find($this->addNewAddress)->click();
-        $this->waitForElementVisible($this->addressTab);
     }
 
     /**

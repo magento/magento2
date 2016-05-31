@@ -12,9 +12,11 @@ use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
 use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Class Stock
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Stock
 {
@@ -48,6 +50,11 @@ class Stock
     private $stockRegistryProvider;
 
     /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param StatusFactory $stockStatusFactory
@@ -69,13 +76,13 @@ class Stock
      * Assign stock status information to product
      *
      * @param Product $product
-     * @param int $stockStatus
+     * @param int $status
      * @return void
      */
-    public function assignStatusToProduct(Product $product, $stockStatus = null)
+    public function assignStatusToProduct(Product $product, $status = null)
     {
-        if ($stockStatus === null) {
-            $websiteId = $product->getStore()->getWebsiteId();
+        if ($status === null) {
+            $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
             $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
             $status = $stockStatus->getStockStatus();
         }
@@ -86,11 +93,12 @@ class Stock
      * Add stock status information to products
      *
      * @param AbstractCollection $productCollection
+     * @deprecated Use Stock::addIsInStockFilterToCollection instead
      * @return void
      */
     public function addStockStatusToProducts(AbstractCollection $productCollection)
     {
-        $websiteId = $this->storeManager->getStore($productCollection->getStoreId())->getWebsiteId();
+        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
             $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
@@ -139,8 +147,16 @@ class Stock
      */
     public function addIsInStockFilterToCollection($collection)
     {
-        $resource = $this->getStockStatusResource();
-        $resource->addIsInStockFilterToCollection($collection);
+        $stockFlag = 'has_stock_status_filter';
+        if (!$collection->hasFlag($stockFlag)) {
+            $isShowOutOfStock = $this->scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $resource = $this->getStockStatusResource();
+            $resource->addStockDataToCollection($collection, !$isShowOutOfStock);
+            $collection->setFlag($stockFlag, true);
+        }
     }
 
     /**
@@ -152,5 +168,19 @@ class Stock
             $this->stockStatusResource = $this->stockStatusFactory->create();
         }
         return $this->stockStatusResource;
+    }
+
+    /**
+     * @return StockConfigurationInterface
+     *
+     * @deprecated
+     */
+    private function getStockConfiguration()
+    {
+        if ($this->stockConfiguration === null) {
+            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+        }
+        return $this->stockConfiguration;
     }
 }

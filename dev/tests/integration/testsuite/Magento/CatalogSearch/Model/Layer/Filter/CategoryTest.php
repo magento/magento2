@@ -11,7 +11,7 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
 /**
  * Test class for \Magento\CatalogSearch\Model\Layer\Filter\Category.
  *
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @magentoDataFixture Magento/Catalog/_files/categories.php
  */
@@ -106,26 +106,31 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $request = $objectManager->get('Magento\TestFramework\Request');
-        $request->setParam('cat', 4);
+        $request->setParam('cat', 3);
         $this->_model->apply($request);
 
         /** @var $category \Magento\Catalog\Model\Category */
         $category = $objectManager->get('Magento\Framework\Registry')->registry(self::CURRENT_CATEGORY_FILTER);
         $this->assertInstanceOf('Magento\Catalog\Model\Category', $category);
-        $this->assertEquals(4, $category->getId());
+        $this->assertEquals(3, $category->getId());
 
         $items = $this->_model->getItems();
 
         $this->assertInternalType('array', $items);
-        $this->assertEquals(1, count($items));
+        $this->assertEquals(2, count($items));
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];
-
         $this->assertInstanceOf('Magento\Catalog\Model\Layer\Filter\Item', $item);
         $this->assertSame($this->_model, $item->getFilter());
-        $this->assertEquals('Category 1.1.1', $item->getLabel());
-        $this->assertEquals(5, $item->getValue());
-        $this->assertEquals(1, $item->getCount());
+        $this->assertEquals('Category 1.1', $item->getLabel());
+        $this->assertEquals(4, $item->getValue());
+        $this->assertEquals(2, $item->getCount());
+
+        $item = $items[1];
+        $this->assertInstanceOf('Magento\Catalog\Model\Layer\Filter\Item', $item);
+        $this->assertEquals('Category 1.2', $item->getLabel());
+        $this->assertEquals(13, $item->getValue());
+        $this->assertEquals(2, $item->getCount());
     }
 }

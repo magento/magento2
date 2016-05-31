@@ -31,7 +31,7 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
     /*
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
@@ -130,10 +130,8 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-
         // No exception thrown
         $this->assertSame($jsonObject, $notification->execute());
-
     }
 
     /**

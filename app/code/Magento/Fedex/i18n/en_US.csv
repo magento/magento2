@@ -1,9 +1,3 @@
-None,None
-"Sort Order","Sort Order"
-Title,Title
-Password,Password
-"Unable to retrieve tracking","Unable to retrieve tracking"
-"Failed to parse xml document: %1","Failed to parse xml document: %1"
 "Europe First Priority","Europe First Priority"
 "1 Day Freight","1 Day Freight"
 "2 Day Freight","2 Day Freight"
@@ -41,32 +35,43 @@ Station,Station
 Adult,Adult
 Direct,Direct
 Indirect,Indirect
+Pounds,Pounds
+Kilograms,Kilograms
+"For some reason we can\'t retrieve tracking info right now.","For some reason we can\'t retrieve tracking info right now."
 status,status
 "Empty response","Empty response"
-Key,Key
-Debug,Debug
-"Enabled for Checkout","Enabled for Checkout"
-"Calculate Handling Fee","Calculate Handling Fee"
-"Handling Applied","Handling Applied"
-"Handling Fee","Handling Fee"
-"Allowed Methods","Allowed Methods"
-"Displayed Error Message","Displayed Error Message"
-"Free Method","Free Method"
-"Free Shipping Amount Threshold","Free Shipping Amount Threshold"
-"Ship to Applicable Countries","Ship to Applicable Countries"
-"Ship to Specific Countries","Ship to Specific Countries"
-"Show Method if Not Applicable","Show Method if Not Applicable"
+None,None
+"Field ","Field "
+" is required."," is required."
 FedEx,FedEx
+"Enabled for Checkout","Enabled for Checkout"
+Title,Title
 "Account ID","Account ID"
 "Please make sure to use only digits here. No dashes are allowed.","Please make sure to use only digits here. No dashes are allowed."
 "Meter Number","Meter Number"
+Key,Key
+Password,Password
 "Sandbox Mode","Sandbox Mode"
 "Web-Services URL (Production)","Web-Services URL (Production)"
 "Web-Services URL (Sandbox)","Web-Services URL (Sandbox)"
 "Packages Request Type","Packages Request Type"
 Packaging,Packaging
 Dropoff,Dropoff
+"Weight Unit","Weight Unit"
 "Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)","Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)"
+"Calculate Handling Fee","Calculate Handling Fee"
+"Handling Applied","Handling Applied"
+"Handling Fee","Handling Fee"
 "Residential Delivery","Residential Delivery"
+"Allowed Methods","Allowed Methods"
 "Hub ID","Hub ID"
 "The field is applicable if the Smart Post method is selected.","The field is applicable if the Smart Post method is selected."
+"Free Method","Free Method"
+"Free Shipping Amount Threshold","Free Shipping Amount Threshold"
+"Enable Free Shipping Threshold","Enable Free Shipping Threshold"
+"Displayed Error Message","Displayed Error Message"
+"Ship to Applicable Countries","Ship to Applicable Countries"
+"Ship to Specific Countries","Ship to Specific Countries"
+Debug,Debug
+"Show Method if Not Applicable","Show Method if Not Applicable"
+"Sort Order","Sort Order"

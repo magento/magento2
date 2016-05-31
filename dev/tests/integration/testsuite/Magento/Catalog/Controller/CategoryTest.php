@@ -54,7 +54,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider getViewActionDataProvider
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {

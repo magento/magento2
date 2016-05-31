@@ -25,6 +25,7 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $mainTable
      * @param string $eventPrefix
      * @param string $eventObject
@@ -41,6 +42,7 @@ class Collection extends BlockCollection implements SearchResultInterface
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $mainTable,
         $eventPrefix,
         $eventObject,
@@ -55,6 +57,7 @@ class Collection extends BlockCollection implements SearchResultInterface
             $fetchStrategy,
             $eventManager,
             $storeManager,
+            $metadataPool,
             $connection,
             $resource
         );
@@ -80,7 +83,6 @@ class Collection extends BlockCollection implements SearchResultInterface
     {
         $this->aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection

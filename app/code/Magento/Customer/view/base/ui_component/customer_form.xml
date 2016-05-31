@@ -20,12 +20,14 @@
             <item name="back" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\BackButton</item>
             <item name="delete" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\DeleteButton</item>
             <item name="invalidateToken" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\InvalidateTokenButton</item>
+            <item name="unlock" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\UnlockButton</item>
             <item name="resetPassword" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\ResetPasswordButton</item>
             <item name="order" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\OrderButton</item>
             <item name="reset" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\ResetButton</item>
             <item name="save" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\SaveButton</item>
             <item name="save_and_continue" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\SaveAndContinueButton</item>
         </item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
     </argument>
     <dataSource name="customer_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -101,7 +103,7 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="link" xsi:type="string">http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes</item>
+                        <item name="link" xsi:type="string">http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</item>
                         <item name="description" xsi:type="string" translate="true">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
                     </item>
                 </item>
@@ -146,6 +148,13 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="source" xsi:type="string">customer</item>
+                        <item name="prefer" xsi:type="string">checkbox</item>
+                        <item name="description" xsi:type="string" translate="true">Disable Automatic Group Change Based on VAT ID</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">1</item>
+                            <item name="false" xsi:type="string">0</item>
+                        </item>
+                        <item name="default" xsi:type="string">0</item>
                     </item>
                 </argument>
             </field>
@@ -196,9 +205,6 @@
         </field>
         <field name="email">
             <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="extends" xsi:type="string">input</item>
-                </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">email</item>
@@ -346,41 +352,6 @@
                 </item>
             </argument>
         </field>
-        <container name="street_container">
-            <argument name="data" xsi:type="array">
-                <item name="type" xsi:type="string">group</item>
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">Street Address</item>
-                    <item name="required" xsi:type="boolean">true</item>
-                    <item name="dataScope" xsi:type="string">street</item>
-                    <item name="sortOrder" xsi:type="string">45</item>
-                </item>
-            </argument>
-            <field name="street">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">0</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="source" xsi:type="string">address</item>
-                        <item name="validation" xsi:type="array">
-                            <item name="required-entry" xsi:type="boolean">true</item>
-                        </item>
-                    </item>
-                </argument>
-            </field>
-            <field name="street_second">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">1</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="source" xsi:type="string">address</item>
-                    </item>
-                </argument>
-            </field>
-        </container>
         <field name="city">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -483,6 +454,8 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
                     <item name="displayArea" xsi:type="string">head</item>
                     <item name="uniqueNs" xsi:type="string">default_billing</item>
                     <item name="uniqueProp" xsi:type="string">value</item>
@@ -500,6 +473,8 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
                     <item name="displayArea" xsi:type="string">head</item>
                     <item name="uniqueNs" xsi:type="string">default_shipping</item>
                     <item name="uniqueProp" xsi:type="string">value</item>

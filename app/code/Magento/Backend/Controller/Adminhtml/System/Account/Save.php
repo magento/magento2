@@ -9,9 +9,31 @@ use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Security\Model\SecurityCookie;
 
 class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
 {
+    /**
+     * @var SecurityCookie
+     */
+    private $securityCookie;
+
+    /**
+     * Get security cookie
+     *
+     * @return SecurityCookie
+     * @deprecated
+     */
+    private function getSecurityCookie()
+    {
+        if (!($this->securityCookie instanceof SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
+        } else {
+            return $this->securityCookie;
+        }
+    }
+
     /**
      * Saving edited user information
      *
@@ -43,21 +65,27 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
         /** Before updating admin user data, ensure that password of current admin user is entered and is correct */
         $currentUserPasswordField = \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD;
         $currentUserPassword = $this->getRequest()->getParam($currentUserPasswordField);
-        $isCurrentUserPasswordValid = !empty($currentUserPassword) && is_string($currentUserPassword);
         try {
-            if (!($isCurrentUserPasswordValid && $user->verifyIdentity($currentUserPassword))) {
-                throw new AuthenticationException(__('You have entered an invalid password for current user.'));
-            }
+            $user->performIdentityCheck($currentUserPassword);
             if ($password !== '') {
                 $user->setPassword($password);
                 $user->setPasswordConfirmation($passwordConfirmation);
             }
-            $user->save();
-            /** Send password reset email notification only when password was changed */
-            if ($password !== '') {
-                $user->sendPasswordResetNotificationEmail();
+            $errors = $user->validate();
+            if ($errors !== true && !empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->messageManager->addError($error);
+                }
+            } else {
+                $user->save();
+                $user->sendNotificationEmailsIfRequired();
+                $this->messageManager->addSuccess(__('You saved the account.'));
             }
-            $this->messageManager->addSuccess(__('You saved the account.'));
+        } catch (UserLockedException $e) {
+            $this->_auth->logout();
+            $this->getSecurityCookie()->setLogoutReasonCookie(
+                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            );
         } catch (ValidatorException $e) {
             $this->messageManager->addMessages($e->getMessages());
             if ($e->getMessage()) {

@@ -22,7 +22,10 @@ use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Framework\App\ObjectManager;
+<<<<<<< HEAD
 use Magento\Quote\Model\QuoteIdMaskFactory;
+=======
+>>>>>>> develop
 
 /**
  * Class QuoteManagement
@@ -133,7 +136,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $quoteFactory;
 
     /**
+<<<<<<< HEAD
      * @var QuoteIdMaskFactory
+=======
+     * @var \Magento\Quote\Model\QuoteIdMaskFactory
+>>>>>>> develop
      */
     private $quoteIdMaskFactory;
 
@@ -270,7 +277,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
         $quoteIdMaskFactory = $this->getQuoteIdMaskFactory();
+<<<<<<< HEAD
         /** @var  \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+=======
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
+>>>>>>> develop
         $quoteIdMask = $quoteIdMaskFactory->create()->load($cartId, 'quote_id');
         if ($quoteIdMask->getId()) {
             $quoteIdMask->delete();
@@ -335,10 +346,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->getPayment()->setQuote($quote);
 
             $data = $paymentMethod->getData();
-            if (isset($data['additional_data'])) {
-                $data = array_merge($data, (array)$data['additional_data']);
-                unset($data['additional_data']);
-            }
             $quote->getPayment()->importData($data);
         }
 
@@ -354,7 +361,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order = $this->submit($quote);
 
         if (null == $order) {
-            throw new LocalizedException(__('Cannot place order.'));
+            throw new LocalizedException(__('Unable to place order. Please try again later.'));
         }
 
         $this->checkoutSession->setLastQuoteId($quote->getId());
@@ -562,13 +569,22 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     }
 
     /**
+<<<<<<< HEAD
      * @return QuoteIdMaskFactory
+=======
+     * @return \Magento\Quote\Model\QuoteIdMaskFactory
+>>>>>>> develop
      * @deprecated
      */
     private function getQuoteIdMaskFactory()
     {
         if (!$this->quoteIdMaskFactory) {
+<<<<<<< HEAD
             $this->quoteIdMaskFactory = ObjectManager::getInstance()->get(QuoteIdMaskFactory::class);
+=======
+            $this->quoteIdMaskFactory = ObjectManager::getInstance()
+                ->get(\Magento\Quote\Model\QuoteIdMaskFactory::class);
+>>>>>>> develop
         }
         return $this->quoteIdMaskFactory;
     }

@@ -134,6 +134,11 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Request\DataPersistor">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Backend\Model\Session\Quote\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">adminhtml_quote</argument>
@@ -144,7 +149,7 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Quote\Storage</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="cacheEnableCommand" xsi:type="object">Magento\Backend\Console\Command\CacheEnableCommand</item>
@@ -166,6 +171,46 @@
         <arguments>
             <argument name="backendApps" xsi:type="array">
                 <item name="setup" xsi:type="object">Magento\Setup\BackendApp</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Response\HeaderManager">
+        <arguments>
+            <argument name="headerProviderList" xsi:type="array">
+                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XFrameOptions</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="theme_theme_id" xsi:type="array">
+                    <item name="path" xsi:type="string">design/theme/theme_id</item>
+                    <item name="fieldset" xsi:type="string">theme</item>
+                    <item name="backend_model" xsi:type="string">Magento\Theme\Model\Design\Backend\Theme</item>
+                    <item name="use_in_grid" xsi:type="boolean">true</item>
+                </item>
+                <item name="theme_ua_regexp" xsi:type="array">
+                    <item name="path" xsi:type="string">design/theme/ua_regexp</item>
+                    <item name="fieldset" xsi:type="string">desing_rule</item>
+                    <item name="backend_model" xsi:type="string">Magento\Theme\Model\Design\Backend\Exceptions</item>
+                </item>
+                <item name="pagination_pagination_frame" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/pagination_frame</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
+                <item name="pagination_pagination_frame_skip" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/pagination_frame_skip</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
+                <item name="pagination_anchor_text_for_previous" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/anchor_text_for_previous</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
+                <item name="pagination_anchor_text_for_next" xsi:type="array">
+                    <item name="path" xsi:type="string">design/pagination/anchor_text_for_next</item>
+                    <item name="fieldset" xsi:type="string">other_settings/pagination</item>
+                </item>
             </argument>
         </arguments>
     </type>

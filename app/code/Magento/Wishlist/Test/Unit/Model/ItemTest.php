@@ -68,7 +68,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()
@@ -319,6 +319,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with([]);
         $this->productRepository->expects($this->once())
             ->method('getById')
+            ->with($productId, false, $storeId, true)
             ->willReturn($productMock);
         $this->assertEquals($productMock, $this->model->getProduct());
     }

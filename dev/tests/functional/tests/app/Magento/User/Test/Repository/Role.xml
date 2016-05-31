@@ -11,17 +11,20 @@
         <dataset name="default">
             <field name="rolename" xsi:type="string">RoleName%isolation%</field>
             <field name="resource_access" xsi:type="string">All</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
         </dataset>
 
         <dataset name="Administrators">
             <field name="rolename" xsi:type="string">Administrators</field>
             <field name="resource_access" xsi:type="string">All</field>
             <field name="role_id" xsi:type="string">1</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
         </dataset>
 
         <dataset name="role_sales">
             <field name="rolename" xsi:type="string">RoleName%isolation%</field>
             <field name="resource_access" xsi:type="string">Custom</field>
+            <field name="current_password" xsi:type="string">%current_password%</field>
             <field name="roles_resources" xsi:type="array">
                 <item name="Sales" xsi:type="string">Magento_Sales::sales</item>
                 <item name="Operation" xsi:type="string">Magento_Sales::sales_operation</item>

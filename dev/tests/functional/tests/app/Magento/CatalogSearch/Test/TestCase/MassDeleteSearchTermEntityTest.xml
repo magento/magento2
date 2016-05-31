@@ -12,7 +12,6 @@
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend" />
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymMassActionNotOnFrontend" />
         </variation>
     </testCase>
 </config>

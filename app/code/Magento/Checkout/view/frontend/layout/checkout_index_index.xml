@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
             <block class="Magento\Checkout\Block\Onepage" name="checkout.root" template="onepage.phtml" cacheable="false">
@@ -41,7 +41,7 @@
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
                                         <item name="displayArea" xsi:type="string">authentication</item>
                                         <item name="children" xsi:type="array">
-                                        <!--Additional authentication fields-->
+                                            <!--Additional authentication fields-->
                                             <item name="errors" xsi:type="array">
                                                 <item name="sortOrder" xsi:type="string">0</item>
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication-messages</item>
@@ -167,7 +167,7 @@
                                                                 <item name="children" xsi:type="array">
                                                                     <!-- address-list-additional-addresses -->
                                                                 </item>
-                                                              </item>
+                                                            </item>
                                                             <item name="before-shipping-method-form" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">before-shipping-method-form</item>
@@ -184,7 +184,7 @@
                                                                 </item>
                                                                 <item name="displayArea" xsi:type="string">additional-fieldsets</item>
                                                                 <item name="children" xsi:type="array">
-                                                                     <!-- The following items override configuration of corresponding address attributes -->
+                                                                    <!-- The following items override configuration of corresponding address attributes -->
                                                                     <item name="region" xsi:type="array">
                                                                         <!-- Make region attribute invisible on frontend. Corresponding input element is created by region_id field -->
                                                                         <item name="visible" xsi:type="boolean">false</item>
@@ -197,7 +197,7 @@
                                                                             <item name="customEntry" xsi:type="string">shippingAddress.region</item>
                                                                         </item>
                                                                         <item name="validation" xsi:type="array">
-                                                                            <item name="validate-select" xsi:type="string">true</item>
+                                                                            <item name="required-entry" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <!-- Value of region_id field is filtered by the value of county_id attribute -->
                                                                         <item name="filterBy" xsi:type="array">
@@ -308,6 +308,17 @@
                                                                     <item name="deps" xsi:type="array">
                                                                         <item name="0" xsi:type="string">checkout.steps.billing-step.payment.renders</item>
                                                                         <item name="1" xsi:type="string">checkout.steps.billing-step.payment.additional-payment-validators</item>
+                                                                    </item>
+                                                                </item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="before-place-order" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">before-place-order</item>
+                                                                        <item name="dataScope" xsi:type="string">before-place-order</item>
+                                                                        <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                        <item name="config" xsi:type="array">
+                                                                            <item name="template" xsi:type="string">Magento_Checkout/payment/before-place-order</item>
+                                                                        </item>
                                                                     </item>
                                                                 </item>
                                                             </item>
@@ -432,5 +443,6 @@
             </block>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>
+        <move element="logo" destination="checkout.header.wrapper"/>
     </body>
 </page>

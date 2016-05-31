@@ -9,6 +9,7 @@ namespace Magento\Integration\Model\Config\Integration;
  * Service config data reader.
  *
  * @codeCoverageIgnore
+ * @deprecated
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {

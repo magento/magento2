@@ -345,7 +345,11 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
                 $one = new \Magento\Framework\DataObject();
                 $one->setName(
+<<<<<<< HEAD
                     __($attribute['label_value']) ? __($attribute['label_value']) : __($attribute['frontend_label'])
+=======
+                    $attribute['label_value'] ? __($attribute['label_value']) : __($attribute['frontend_label'])
+>>>>>>> develop
                 )
                     ->setAmount($amount)
                     ->setTaxAmount($taxAmount)

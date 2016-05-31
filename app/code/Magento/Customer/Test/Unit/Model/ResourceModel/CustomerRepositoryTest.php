@@ -88,7 +88,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
     
-    public function setUp()
+    protected function setUp()
     {
         $this->customerResourceModel =
             $this->getMock('Magento\Customer\Model\ResourceModel\Customer', [], [], '', false);
@@ -180,51 +180,12 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function prepareMocksForValidation($isValid = false)
-    {
-        $attributeMetaData = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AttributeMetadataInterface',
-            [],
-            '',
-            false
-        );
-        $attributeMetaData->expects($this->atLeastOnce())
-            ->method('isRequired')
-            ->willReturn(true);
-        $this->customerMetadata->expects($this->atLeastOnce())
-            ->method('getAttributeMetadata')
-            ->willReturn($attributeMetaData);
-
-        $this->customer->expects($this->once())
-            ->method('getFirstname')
-            ->willReturn($isValid ? 'Firstname' : false);
-        $this->customer->expects($this->once())
-            ->method('getLastname')
-            ->willReturn($isValid ? 'Lastname' : false);
-        $this->customer->expects($this->atLeastOnce())
-            ->method('getEmail')
-            ->willReturn($isValid ? 'example@example.com' : false);
-        $this->customer->expects($this->once())
-            ->method('getDob')
-            ->willReturn($isValid ? '12/12/2015' : false);
-        $this->customer->expects($this->atLeastOnce())
-            ->method('getTaxvat')
-            ->willReturn($isValid ? 'taxvat' : false);
-        $this->customer->expects($this->once())
-            ->method('getGender')
-            ->willReturn($isValid ? 'gender' : false);
-    }
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSave()
     {
         $customerId = 1;
         $storeId = 2;
-        $this->prepareMocksForValidation(true);
 
         $region = $this->getMockForAbstractClass('Magento\Customer\Api\Data\RegionInterface', [], '', false);
         $address = $this->getMockForAbstractClass(
@@ -268,6 +229,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setRpTokenCreatedAt',
                 'getDataModel',
                 'setPasswordHash',
+                'setFailuresNum',
+                'setFirstFailure',
+                'setLockExpires',
                 'save',
             ],
             [],
@@ -294,7 +258,10 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'getRpToken',
                 'getRpTokenCreatedAt',
-                'getPasswordHash'
+                'getPasswordHash',
+                'getFailuresNum',
+                'getFirstFailure',
+                'getLockExpires',
             ],
             [],
             '',
@@ -383,14 +350,23 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerSecureData->expects($this->once())
             ->method('getPasswordHash')
             ->willReturn('passwordHash');
+        $customerSecureData->expects($this->once())
+            ->method('getFailuresNum')
+            ->willReturn('failuresNum');
+        $customerSecureData->expects($this->once())
+            ->method('getFirstFailure')
+            ->willReturn('firstFailure');
+        $customerSecureData->expects($this->once())
+            ->method('getLockExpires')
+            ->willReturn('lockExpires');
 
-        $customerModel->expects($this->exactly(2))
+        $customerModel->expects($this->once())
             ->method('setRpToken')
             ->willReturnMap([
                 ['rpToken', $customerModel],
                 [null, $customerModel],
             ]);
-        $customerModel->expects($this->exactly(2))
+        $customerModel->expects($this->once())
             ->method('setRpTokenCreatedAt')
             ->willReturnMap([
                 ['rpTokenCreatedAt', $customerModel],
@@ -400,6 +376,15 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerModel->expects($this->once())
             ->method('setPasswordHash')
             ->with('passwordHash');
+        $customerModel->expects($this->once())
+            ->method('setFailuresNum')
+            ->with('failuresNum');
+        $customerModel->expects($this->once())
+            ->method('setFirstFailure')
+            ->with('firstFailure');
+        $customerModel->expects($this->once())
+            ->method('setLockExpires')
+            ->with('lockExpires');
         $customerModel->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -442,7 +427,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $storeId = 2;
         $passwordHash = 'ukfa4sdfa56s5df02asdf4rt';
-        $this->prepareMocksForValidation(true);
 
         $region = $this->getMockForAbstractClass('Magento\Customer\Api\Data\RegionInterface', [], '', false);
         $address = $this->getMockForAbstractClass(
@@ -612,15 +596,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
-    public function testSaveWithException()
-    {
-        $this->prepareMocksForValidation(false);
-        $this->model->save($this->customer);
-    }
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetList()
@@ -722,7 +697,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$filterGroup]);
         $collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with([['attribute' => 'Field', 'eq' => 'Value']], []);
+            ->with([['attribute' => 'Field', 'eq' => 'Value']]);
         $filterGroup->expects($this->once())
             ->method('getFilters')
             ->willReturn([$filter]);
@@ -801,7 +776,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->model->deleteById($customerId));
     }
-
 
     public function testDelete()
     {

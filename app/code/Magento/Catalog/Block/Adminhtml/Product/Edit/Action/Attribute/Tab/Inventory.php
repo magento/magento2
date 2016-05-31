@@ -21,6 +21,11 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     protected $stockConfiguration;
 
     /**
+     * @var array
+     */
+    protected $disabledFields = [];
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CatalogInventory\Model\Source\Backorders $backorders
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
@@ -111,5 +116,15 @@ class Inventory extends \Magento\Backend\Block\Widget implements \Magento\Backen
     public function isHidden()
     {
         return false;
+    }
+
+    /**
+     * @param string $fieldName
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function isAvailable($fieldName)
+    {
+        return true;
     }
 }

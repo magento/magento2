@@ -279,6 +279,10 @@ class Filesystem extends AbstractBackup
             }
 
             mkdir($backupsDir);
+<<<<<<< HEAD
+=======
+            chmod($backupsDir);
+>>>>>>> develop
         }
 
         if (!is_writable($backupsDir)) {

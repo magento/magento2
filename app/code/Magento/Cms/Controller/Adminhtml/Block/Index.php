@@ -37,6 +37,10 @@ class Index extends \Magento\Cms\Controller\Adminhtml\Block
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $this->initPage($resultPage)->getConfig()->getTitle()->prepend(__('Blocks'));
+
+        $dataPersistor = $this->_objectManager->get('Magento\Framework\App\Request\DataPersistorInterface');
+        $dataPersistor->clear('cms_block');
+
         return $resultPage;
     }
 }

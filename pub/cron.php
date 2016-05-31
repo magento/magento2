@@ -20,9 +20,6 @@ if (php_sapi_name() === 'cli'){
 }
 
 try {
-    if (empty($opt['group'])) {
-        $opt['group'] = 'default';
-    }
     foreach ($opt as $key => $value) {
         $opt[$key] = escapeshellarg($value);
     }

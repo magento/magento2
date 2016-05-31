@@ -13,6 +13,13 @@ use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 class CreateOptions extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::attributes_attributes';
+
+    /**
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
@@ -35,16 +42,6 @@ class CreateOptions extends Action
         $this->jsonHelper = $jsonHelper;
         $this->attributeFactory = $attributeFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
     }
 
     /**

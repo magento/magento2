@@ -18,7 +18,7 @@ class ExportCouponsXml extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
     public function execute()
     {
         $this->_initRule();
-        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
         if ($rule->getId()) {
             $fileName = 'coupon_codes.xml';
             $content = $this->_view->getLayout()->createBlock(

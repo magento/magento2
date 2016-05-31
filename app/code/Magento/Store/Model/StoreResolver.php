@@ -51,6 +51,11 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $request;
 
     /**
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
+    /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param \Magento\Framework\App\RequestInterface $request

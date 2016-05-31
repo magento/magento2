@@ -2,7 +2,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/*
 define([
     'jquery',
     'Magento_Catalog/catalog/type-events',
@@ -27,9 +27,9 @@ define([
             }
             this.hideWarning();
             $(this.messageSelector).notification('add', {
-                message: $.mage.__('We can\'t save custom-defined options with price type "percent" for ' +
+                message: $.mage.__('Custom options with price type "percent" is not available for ' +
                     'configurable product.'),
-                error: true,
+                error: false,
                 messageContainer: this.messageSelector
             });
         },
@@ -80,3 +80,4 @@ define([
         }
     };
 });
+*/

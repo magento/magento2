@@ -17,11 +17,6 @@ class Validator implements ValidatorInterface
     private $_paypalConfigFactory;
 
     /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    private $_checkoutSession;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     private $_registry;
@@ -116,7 +111,7 @@ class Validator implements ValidatorInterface
     }
 
     /**
-     * Сhecks payment method and quote availability
+     * Checks payment method and quote availability
      *
      * @param string $paymentCode
      * @return bool

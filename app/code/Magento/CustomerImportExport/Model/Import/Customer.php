@@ -154,6 +154,9 @@ class Customer extends AbstractCustomer
         CustomerInterface::GENDER,
         'rp_token',
         'rp_token_created_at',
+        'failures_num',
+        'first_failure',
+        'lock_expires',
     ];
 
     /**
@@ -362,7 +365,7 @@ class Customer extends AbstractCustomer
 
         // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
-            $entityRow['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
+            $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
 
         // attribute values
@@ -370,20 +373,24 @@ class Customer extends AbstractCustomer
             if ($newCustomer && !strlen($value)) {
                 continue;
             }
+
+            $attributeParameters = $this->_attributes[$attributeCode];
+            if ('select' == $attributeParameters['type']) {
+                $value = isset($attributeParameters['options'][strtolower($value)])
+                    ? $attributeParameters['options'][strtolower($value)]
+                    : 0;
+            } elseif ('datetime' == $attributeParameters['type'] && !empty($value)) {
+                $value = (new \DateTime())->setTimestamp(strtotime($value));
+                $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            }
+
             if (!$this->_attributes[$attributeCode]['is_static']) {
                 /** @var $attribute \Magento\Customer\Model\Attribute */
                 $attribute = $this->_customerModel->getAttribute($attributeCode);
                 $backendModel = $attribute->getBackendModel();
-                $attributeParameters = $this->_attributes[$attributeCode];
-
-                if ('select' == $attributeParameters['type']) {
-                    $value = isset($attributeParameters['options'][strtolower($value)])
-                        ? $attributeParameters['options'][strtolower($value)]
-                        : 0;
-                } elseif ('datetime' == $attributeParameters['type']) {
-                    $value = (new \DateTime())->setTimestamp(strtotime($value));
-                    $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-                } elseif ($backendModel) {
+                if ($backendModel
+                    && $attribute->getFrontendInput() != 'select'
+                    && $attribute->getFrontendInput() != 'datetime') {
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
                     $value = $this->_customerModel->getData($attributeCode);
                 }

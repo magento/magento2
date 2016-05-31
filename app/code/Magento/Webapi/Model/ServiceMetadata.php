@@ -6,7 +6,7 @@
 namespace Magento\Webapi\Model;
 
 use Magento\Webapi\Model\Config\Converter;
-use Magento\Framework\App\Cache\Type\Webapi as WebApiCache;
+use Magento\Webapi\Model\Cache\Type\Webapi as WebApiCache;
 
 /**
  * Service Metadata Model
@@ -27,6 +27,12 @@ class ServiceMetadata
     const KEY_IS_REQUIRED = 'inputRequired';
 
     const KEY_ACL_RESOURCES = 'resources';
+
+    const KEY_ROUTES = 'routes';
+
+    const KEY_ROUTE_METHOD = 'method';
+
+    const KEY_ROUTE_PARAMS = 'parameters';
 
     const SERVICES_CONFIG_CACHE_ID = 'services-services-config';
 
@@ -275,8 +281,8 @@ class ServiceMetadata
                 $version = explode('/', ltrim($url, '/'))[0];
                 $serviceName = $this->getServiceName($serviceClass, $version);
                 $methodName = $data[Converter::KEY_SERVICE][Converter::KEY_METHOD];
-                $routes[$serviceName][Converter::KEY_ROUTES][$url][$method][Converter::KEY_METHOD] = $methodName;
-                $routes[$serviceName][Converter::KEY_ROUTES][$url][$method][Converter::KEY_DATA_PARAMETERS]
+                $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_METHOD] = $methodName;
+                $routes[$serviceName][self::KEY_ROUTES][$url][$method][self::KEY_ROUTE_PARAMS]
                     = $data[Converter::KEY_DATA_PARAMETERS];
 
             }

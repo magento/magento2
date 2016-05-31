@@ -7,12 +7,16 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Psr\Log\LoggerInterface" type="Magento\Framework\Logger\Monolog" />
+    <preference for="Magento\Framework\EntityManager\EntityMetadataInterface" type="Magento\Framework\EntityManager\EntityMetadata" />
+    <preference for="Magento\Framework\EntityManager\HydratorInterface" type="Magento\Framework\EntityManager\Hydrator" />
     <preference for="Magento\Framework\View\Template\Html\MinifierInterface" type="Magento\Framework\View\Template\Html\Minifier" />
+    <preference for="Magento\Framework\Model\Entity\ScopeInterface" type="Magento\Framework\Model\Entity\Scope" />
     <preference for="Magento\Framework\ObjectManager\FactoryInterface" type="Magento\Framework\ObjectManager\Factory\Dynamic\Developer" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\Framework\Search\Adapter\Mysql\Filter\Preprocessor" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\Framework\Search\Request\Aggregation\Status" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface" type="Magento\Framework\Search\Adapter\Mysql\Field\Field"/>
+    <preference for="Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface" type="Magento\Framework\Search\Adapter\Aggregation\AggregationResolver"/>
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
@@ -119,7 +123,10 @@
     <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
     <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator" />
     <preference for="Magento\Framework\Session\StorageInterface" type="Magento\Framework\Session\Storage" />
+    <preference for="Magento\Framework\App\Request\DataPersistorInterface" type="Magento\Framework\App\Request\DataPersistor" />
     <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Framework\Url\RouteParamsResolver" />
+    <preference for="Magento\Framework\Url\RouteParamsPreprocessorInterface" type="Magento\Framework\Url\RouteParamsPreprocessorComposite" />
+    <preference for="Magento\Framework\Url\ModifierInterface" type="Magento\Framework\Url\ModifierComposite" />
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
     <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
@@ -128,7 +135,7 @@
     <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format" />
     <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
     <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
-
+    <preference for="Magento\Framework\Communication\ConfigInterface" type="Magento\Framework\Communication\Config" />
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\ModuleResource" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
@@ -143,6 +150,11 @@
     <preference for="Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple" />
     <preference for="Cm\RedisSession\Handler\ConfigInterface" type="Magento\Framework\Session\SaveHandler\Redis\Config"/>
     <preference for="Cm\RedisSession\Handler\LoggerInterface" type="Magento\Framework\Session\SaveHandler\Redis\Logger"/>
+<<<<<<< HEAD
+=======
+    <preference for="Magento\Framework\EntityManager\MapperInterface" type="Magento\Framework\EntityManager\CompositeMapper"/>
+    <preference for="Magento\Framework\Console\CommandListInterface" type="Magento\Framework\Console\CommandList"/>
+>>>>>>> develop
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -152,6 +164,20 @@
     <type name="Magento\Framework\Logger\Handler\System">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Communication\Config\CompositeReader">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="xmlReader" xsi:type="array">
+                    <item name="reader" xsi:type="object">Magento\Framework\Communication\Config\Reader\XmlReader</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+                <item name="envReader" xsi:type="array">
+                    <item name="reader" xsi:type="object">Magento\Framework\Communication\Config\Reader\EnvReader</item>
+                    <item name="sortOrder" xsi:type="string">20</item>
+                </item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Logger\Monolog">
@@ -1059,6 +1085,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Validator\Factory">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
     <type name="Magento\Server\Reflection" shared="false" />
     <type name="Magento\Framework\Reflection\DataObjectProcessor">
         <arguments>
@@ -1079,6 +1110,103 @@
             <argument name="converter" xsi:type="object">Magento\Framework\Config\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Framework\Config\SchemaLocator</argument>
             <argument name="fileResolver" xsi:type="object">Magento\Framework\Config\FileResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\SelectFactory">
+        <arguments>
+            <argument name="selectRenderer" xsi:type="object">Magento\Framework\DB\Select\RendererProxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Form\Filter\Date">
+        <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Framework\Locale\ResolverInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\DB\Select\SelectRenderer">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="distinct" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\DistinctRenderer</item>
+                    <item name="sort" xsi:type="string">100</item>
+                    <item name="part" xsi:type="string">distinct</item>
+                </item>
+                <item name="columns" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\ColumnsRenderer</item>
+                    <item name="sort" xsi:type="string">200</item>
+                    <item name="part" xsi:type="string">columns</item>
+                </item>
+                <item name="union" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\UnionRenderer</item>
+                    <item name="sort" xsi:type="string">300</item>
+                    <item name="part" xsi:type="string">union</item>
+                </item>
+                <item name="from" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\FromRenderer</item>
+                    <item name="sort" xsi:type="string">400</item>
+                    <item name="part" xsi:type="string">from</item>
+                </item>
+                <item name="where" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\WhereRenderer</item>
+                    <item name="sort" xsi:type="string">500</item>
+                    <item name="part" xsi:type="string">where</item>
+                </item>
+                <item name="group" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\GroupRenderer</item>
+                    <item name="sort" xsi:type="string">600</item>
+                    <item name="part" xsi:type="string">group</item>
+                </item>
+                <item name="having" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\HavingRenderer</item>
+                    <item name="sort" xsi:type="string">700</item>
+                    <item name="part" xsi:type="string">having</item>
+                </item>
+                <item name="order" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\OrderRenderer</item>
+                    <item name="sort" xsi:type="string">800</item>
+                    <item name="part" xsi:type="string">order</item>
+                </item>
+                <item name="limit" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\LimitRenderer</item>
+                    <item name="sort" xsi:type="string">900</item>
+                    <item name="part" xsi:type="string">limitcount</item>
+                </item>
+                <item name="for_update" xsi:type="array">
+                    <item name="renderer" xsi:type="object">Magento\Framework\DB\Select\ForUpdateRenderer</item>
+                    <item name="sort" xsi:type="string">1000</item>
+                    <item name="part" xsi:type="string">forupdate</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\EntityManager\OperationPool">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="checkIfExists" xsi:type="string">Magento\Framework\EntityManager\Operation\CheckIfExists</item>
+                    <item name="read" xsi:type="string">Magento\Framework\EntityManager\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\EntityManager\Operation\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\EntityManager\Operation\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\EntityManager\Operation\Delete</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\FlushCacheByTags">
+        <arguments>
+            <argument name="cacheList" xsi:type="array">
+                <item name="block_html" xsi:type="const">Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
+        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
+    </type>
+    <type name="Magento\Framework\EntityManager\CompositeMapper">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="mapper" xsi:type="object">Magento\Framework\EntityManager\Mapper</item>
+                <item name="customAttributesMapper" xsi:type="object">Magento\Framework\EntityManager\CustomAttributesMapper</item>
+            </argument>
         </arguments>
     </type>
 </config>

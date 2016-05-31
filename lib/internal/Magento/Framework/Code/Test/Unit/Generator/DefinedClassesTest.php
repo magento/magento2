@@ -36,7 +36,7 @@ namespace Magento\Framework\Code\Test\Unit\Generator {
         /** @var  AutoloaderInterface */
         private $initAutoloader;
 
-        public function setUp()
+        protected function setUp()
         {
             $this->model = new DefinedClasses();
             self::$definedClassesTestActive = true;

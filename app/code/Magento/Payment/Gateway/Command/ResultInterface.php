@@ -5,6 +5,11 @@
  */
 namespace Magento\Payment\Gateway\Command;
 
+/**
+ * Interface ResultInterface
+ * @package Magento\Payment\Gateway\Command
+ * @api
+ */
 interface ResultInterface
 {
     /**

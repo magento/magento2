@@ -10,6 +10,8 @@ namespace Magento\Catalog\Model\Layer\Filter;
  *
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_weight_filterable.php
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class DecimalTest extends \PHPUnit_Framework_TestCase
 {

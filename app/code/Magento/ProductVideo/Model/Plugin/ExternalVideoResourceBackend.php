@@ -3,13 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ProductVideo\Model\Plugin;
 
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 
 /**
- * Attribute Media Resource decorator
+ * Media Resource decorator
  */
 class ExternalVideoResourceBackend
 {
@@ -27,13 +26,13 @@ class ExternalVideoResourceBackend
     }
 
     /**
-     * @param Media $originalResourceModel
+     * @param Gallery $originalResourceModel
      * @param array $valueIdMap
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDuplicate(Media $originalResourceModel, array $valueIdMap)
+    public function afterDuplicate(Gallery $originalResourceModel, array $valueIdMap)
     {
         $mediaGalleryEntitiesData = $this->videoResourceModel->loadByIds(array_keys($valueIdMap));
         foreach ($mediaGalleryEntitiesData as $row) {

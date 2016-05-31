@@ -41,14 +41,14 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
     {
         $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' . $row->getUrl() . '">' . __(
             'Read Details'
-        ) . '</a>' : '';
+        ) . '</a> | ' : '';
 
         $markAsReadHtml = !$row->getIsRead() ? '<a class="action-mark" href="' . $this->getUrl(
             '*/*/markAsRead/',
             ['_current' => true, 'id' => $row->getId()]
         ) . '">' . __(
             'Mark as Read'
-        ) . '</a>' : '';
+        ) . '</a> | ' : '';
 
         $encodedUrl = $this->_urlHelper->getEncodedUrl();
         return sprintf(

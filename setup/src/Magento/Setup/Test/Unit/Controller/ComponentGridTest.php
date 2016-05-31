@@ -10,6 +10,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Setup\Controller\ComponentGrid;
+<<<<<<< HEAD
 use Magento\Setup\Model\DateTime\TimezoneProvider;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UpdatePackagesCache;
@@ -17,6 +18,13 @@ use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Setup\Model\MarketplaceManager;
+=======
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Model\PackagesAuth;
+use Magento\Setup\Model\PackagesData;
+>>>>>>> develop
 
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,6 +34,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     private $composerInformationMock;
 
     /**
+<<<<<<< HEAD
      * @var UpdatePackagesCache|\PHPUnit_Framework_MockObject_MockObject
      */
     private $updatePackagesCacheMock;
@@ -37,6 +46,8 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     private $timezoneMock;
 
     /**
+=======
+>>>>>>> develop
      * @var FullModuleList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fullModuleListMock;
@@ -66,6 +77,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
+<<<<<<< HEAD
      * @var MarketplaceManager
      */
     private $marketplaceManagerMock;
@@ -79,11 +91,35 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private $lastSyncData = [];
+=======
+     * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $packagesData;
+
+    /**
+     * @var PackagesAuth|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $packagesAuth;
+    
+    /**
+     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectManagerProvider;
+    
+    /**
+     * @var array
+     */
+    private $componentData = [];
+>>>>>>> develop
 
     /**
      * @var array
      */
+<<<<<<< HEAD
     private $convertedLastSyncDate = [];
+=======
+    private $lastSyncData = [];
+>>>>>>> develop
 
     /**#@+
      * Canned formatted date and time to return from mock
@@ -94,6 +130,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+<<<<<<< HEAD
         $this->convertedLastSyncDate = [
             'lastSyncDate' => [
                 'date' => self::FORMATTED_DATE,
@@ -103,6 +140,13 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
 
         $this->lastSyncData = [
             "lastSyncDate" => "1447271496",
+=======
+        $this->lastSyncData = [
+            "lastSyncDate" => [
+                'date' => self::FORMATTED_DATE,
+                'time' => self::FORMATTED_TIME,
+            ],
+>>>>>>> develop
             "packages" => [
                 'magento/sample-module-one' => [
                     'name' => 'magento/sample-module-one',
@@ -136,17 +180,22 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             false
         );
         /** @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject $objectManagerProvider */
+<<<<<<< HEAD
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManager);
+=======
+        $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+>>>>>>> develop
         $this->packageInfoFactoryMock = $this
             ->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
         $this->enabledModuleListMock = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
         $this->enabledModuleListMock->expects($this->any())->method('has')->willReturn(true);
         $this->fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $this->fullModuleListMock->expects($this->any())->method('getNames')->willReturn($allComponentData);
+<<<<<<< HEAD
         $this->timezoneMock = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
@@ -173,6 +222,19 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             $this->marketplaceManagerMock
         );
         $this->controller->setTimezone($timezoneProviderMock->get());
+=======
+        
+        $this->packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
+        $this->packagesData = $this->getMock('Magento\Setup\Model\PackagesData', [], [], '', false);
+        $this->packagesAuth = $this->getMock('Magento\Setup\Model\PackagesAuth', [], [], '', false);
+
+        $this->controller = new ComponentGrid(
+            $this->composerInformationMock,
+            $this->objectManagerProvider,
+            $this->packagesData,
+            $this->packagesAuth
+        );
+>>>>>>> develop
     }
 
     public function testIndexAction()
@@ -184,6 +246,21 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
 
     public function testComponentsAction()
     {
+<<<<<<< HEAD
+=======
+        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->objectManagerProvider->expects($this->once())
+            ->method('get')
+            ->willReturn($objectManager);
+        $objectManager->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                ['Magento\Framework\Module\PackageInfoFactory', $this->packageInfoFactoryMock],
+                ['Magento\Framework\Module\FullModuleList', $this->fullModuleListMock],
+                ['Magento\Framework\Module\ModuleList', $this->enabledModuleListMock],
+            ]);
+        $this->packageInfoFactoryMock->expects($this->once())->method('create')->willReturn($this->packageInfo);
+>>>>>>> develop
         $this->fullModuleListMock->expects($this->once())
             ->method('getNames')
             ->willReturn(['magento/sample-module1']);
@@ -205,10 +282,19 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->composerInformationMock->expects($this->once())
             ->method('isPackageInComposerJson')
             ->willReturn(true);
+<<<<<<< HEAD
         $this->updatePackagesCacheMock->expects($this->once())
             ->method('getPackagesForUpdate')
             ->willReturn($this->lastSyncData);
         $this->setupTimezoneMock();
+=======
+        $this->packagesAuth->expects($this->once())->method('getAuthJsonData')->willReturn([
+            'username' => 'someusername', 'password' => 'somepassword'
+        ]);
+        $this->packagesData->expects($this->once())
+            ->method('syncPackagesData')
+            ->willReturn($this->lastSyncData);
+>>>>>>> develop
         $jsonModel = $this->controller->componentsAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -228,23 +314,34 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $variables['components']);
         $this->assertArrayHasKey('total', $variables);
         $this->assertEquals(1, $variables['total']);
+<<<<<<< HEAD
         $expectedLastSyncData = array_replace($this->lastSyncData, $this->convertedLastSyncDate);
         $this->assertEquals($expectedLastSyncData, $variables['lastSyncData']);
+=======
+        $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);
+>>>>>>> develop
     }
 
     public function testSyncAction()
     {
+<<<<<<< HEAD
         $this->updatePackagesCacheMock->expects($this->once())
             ->method('syncPackagesForUpdate');
         $this->updatePackagesCacheMock->expects($this->once())
             ->method('getPackagesForUpdate')
             ->willReturn($this->lastSyncData);
         $this->setupTimezoneMock();
+=======
+        $this->packagesData->expects($this->once())
+            ->method('syncPackagesData')
+            ->willReturn($this->lastSyncData);
+>>>>>>> develop
         $jsonModel = $this->controller->syncAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
+<<<<<<< HEAD
         $expectedLastSyncData = array_replace($this->lastSyncData, $this->convertedLastSyncDate);
         $this->assertEquals($expectedLastSyncData, $variables['lastSyncData']);
     }
@@ -276,5 +373,8 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
                 null,
                 null
             )->willReturn(self::FORMATTED_TIME);
+=======
+        $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);
+>>>>>>> develop
     }
 }

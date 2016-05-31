@@ -14,14 +14,12 @@ use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
- * Class Curl
- * Create new configurable product via curl
+ * Create new configurable product via curl.
  */
 class Curl extends ProductCurl implements ConfigurableProductInterface
 {
     /**
-     * Constructor
-     *
+     * @constructor
      * @param DataInterface $configuration
      * @param EventManagerInterface $eventManager
      */
@@ -30,10 +28,6 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
         parent::__construct($configuration, $eventManager);
 
         $this->mappingData += [
-            'is_percent' => [
-                'Yes' => 1,
-                'No' => 0,
-            ],
             'include' => [
                 'Yes' => 1,
                 'No' => 0,
@@ -42,23 +36,21 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     }
 
     /**
-     * Prepare POST data for creating product request
+     * Prepare POST data for creating product request.
      *
-     * @param FixtureInterface $product
-     * @param string|null $prefix [optional]
+     * @param FixtureInterface $fixture
      * @return array
      */
-    protected function prepareData(FixtureInterface $product, $prefix = null)
+    public function prepareData(FixtureInterface $fixture)
     {
-        $data = parent::prepareData($product, null);
+        $data = parent::prepareData($fixture);
 
         /** @var ConfigurableAttributesData $configurableAttributesData */
-        $configurableAttributesData = $product->getDataFieldConfig('configurable_attributes_data')['source'];
-        $attributeSetId = $data['attribute_set_id'];
+        $configurableAttributesData = $fixture->getDataFieldConfig('configurable_attributes_data')['source'];
+        $attributeSetId = $data['product']['attribute_set_id'];
 
-        $data['configurable_attributes_data'] = $this->prepareAttributesData($configurableAttributesData);
-        $data = $prefix ? [$prefix => $data] : $data;
-        $data['variations-matrix'] = $this->prepareVariationsMatrix($product);
+        $data['product']['configurable_attributes_data'] = $this->prepareAttributesData($configurableAttributesData);
+        $data['configurable-matrix'] = $this->prepareConfigurableMatrix($fixture);
         $data['attributes'] = $this->prepareAttributes($configurableAttributesData);
         $data['new-variations-attribute-set-id'] = $attributeSetId;
         $data['associated_product_ids'] = $this->prepareAssociatedProductIds($configurableAttributesData);
@@ -67,7 +59,30 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     }
 
     /**
-     * Preparing attribute data
+     * Preparation of attribute set data.
+     *
+     * @return void
+     */
+    protected function prepareAttributeSet()
+    {
+        /** @var ConfigurableAttributesData $configurableAttributesData */
+        $configurableAttributesData = $this->fixture->getDataFieldConfig('configurable_attributes_data')['source'];
+        $attributeSet = $configurableAttributesData->getAttributeSet();
+
+        if ($attributeSet) {
+            $this->fields['product']['attribute_set_id'] = $attributeSet->getAttributeSetId();
+        } elseif ($this->fixture->hasData('attribute_set_id')) {
+            $this->fields['product']['attribute_set_id'] = $this->fixture
+                ->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()
+                ->getAttributeSetId();
+        } else {
+            $this->fields['product']['attribute_set_id'] = 'Default';
+        }
+    }
+
+    /**
+     * Preparing attribute data.
      *
      * @param ConfigurableAttributesData $configurableAttributesData
      * @return array
@@ -76,7 +91,6 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     {
         $optionFields = [
             'pricing_value',
-            'is_percent',
             'include',
         ];
         $result = [];
@@ -106,12 +120,12 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     }
 
     /**
-     * Preparing matrix data
+     * Preparing matrix data.
      *
      * @param FixtureInterface $product
      * @return array
      */
-    protected function prepareVariationsMatrix(FixtureInterface $product)
+    protected function prepareConfigurableMatrix(FixtureInterface $product)
     {
         /** @var ConfigurableAttributesData $configurableAttributesData */
         $configurableAttributesData = $product->getDataFieldConfig('configurable_attributes_data')['source'];
@@ -144,6 +158,9 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
 
             $keyIds = implode('-', $keyIds);
             $variation['configurable_attribute'] = '{' . implode(',', $configurableAttribute) . '}';
+            $variation['variationKey'] = $keyIds;
+            $variation['newProduct'] = 1;
+            $variation['status'] = 1;
             $result[$keyIds] = $variation;
         }
 
@@ -151,7 +168,7 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     }
 
     /**
-     * Prepare attributes
+     * Prepare attributes.
      *
      * @param ConfigurableAttributesData $configurableAttributesData
      * @return array
@@ -168,7 +185,7 @@ class Curl extends ProductCurl implements ConfigurableProductInterface
     }
 
     /**
-     * Prepare associated product ids
+     * Prepare associated product ids.
      *
      * @param ConfigurableAttributesData $configurableAttributesData
      * @return array

@@ -11,6 +11,11 @@ use Magento\Payment\Gateway\Http\ConverterInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 
+/**
+ * Class Soap
+ * @package Magento\Payment\Gateway\Http\Client
+ * @api
+ */
 class Soap implements ClientInterface
 {
     /**

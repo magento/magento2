@@ -107,7 +107,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up instances and mock objects
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->response = $this->getMock('Magento\Framework\App\ResponseInterface');
@@ -125,11 +125,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
 
         $this->page = $this->getMockBuilder('Magento\Framework\View\Page')
-            ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout'])
+            ->setMethods(['getConfig', 'initLayout', 'addPageLayoutHandles', 'getLayout', 'addUpdate'])
             ->disableOriginalConstructor()->getMock();
         $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
         $this->page->expects($this->any())->method('addPageLayoutHandles')->will($this->returnSelf());
         $this->page->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+        $this->page->expects($this->any())->method('addUpdate')->willReturnSelf();
 
         $this->view = $this->getMock('Magento\Framework\App\ViewInterface');
         $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
@@ -192,8 +193,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $this->categoryHelper->expects($this->any())->method('canShow')->will($this->returnValue(true));
 
-        $settings = $this->getMock('Magento\Framework\DataObject', ['getPageLayout'], [], '', false);
+        $settings = $this->getMock(
+            'Magento\Framework\DataObject',
+            ['getPageLayout', 'getLayoutUpdates'],
+            [],
+            '',
+            false
+        );
         $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
+        $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
 
         $this->catalogDesign->expects($this->any())->method('getDesignSettings')->will($this->returnValue($settings));
 

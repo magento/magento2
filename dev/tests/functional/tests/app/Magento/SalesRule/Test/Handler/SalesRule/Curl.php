@@ -41,10 +41,26 @@ class Curl extends Conditions implements SalesRuleInterface
             'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
             'attribute' => 'base_subtotal',
         ],
+        'Total Items Quantity' => [
+            'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+            'attribute' => 'total_qty',
+        ],
         'Conditions combination' => [
             'type' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
             'aggregator' => 'all',
             'value' => '1',
+        ],
+        'Products subselection' => [
+            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product\Subselect',
+            'attribute' => 'qty',
+            'operator' => '==',
+            'value' => '1',
+            'aggregator' => 'all',
+        ],
+        'Product attribute combination' => [
+            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product\Found',
+            'value' => '1',
+            'aggregator' => 'all',
         ],
         'Shipping Country' => [
             'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
@@ -57,6 +73,18 @@ class Curl extends Conditions implements SalesRuleInterface
         'Category' => [
             'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
             'attribute' => 'category_ids',
+        ],
+        'Price in cart' => [
+            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'attribute' => 'quote_item_price',
+        ],
+        'Quantity in cart' => [
+            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'attribute' => 'quote_item_qty',
+        ],
+        'Row total in cart' => [
+            'type' => 'Magento\SalesRule\Model\Rule\Condition\Product',
+            'attribute' => 'quote_item_row_total',
         ]
     ];
 
@@ -74,8 +102,8 @@ class Curl extends Conditions implements SalesRuleInterface
      */
     protected $mappingData = [
         'is_active' => [
-            'Active' => 1,
-            'Inactive' => 0,
+            'Yes' => 1,
+            'No' => 0,
         ],
         'coupon_type' => [
             'No Coupon' => 1,

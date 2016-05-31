@@ -29,7 +29,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $calculatorMock;
 
@@ -56,7 +56,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $qty = 1;
         $this->saleableItemMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
@@ -110,5 +110,24 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     public function getValueDataProvider()
     {
         return [[77, 77], [0, 0], [false, 99]];
+    }
+
+    public function testGetAmount()
+    {
+        $amount = 20.;
+
+        $priceMock = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
+            ->getMockForAbstractClass();
+
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrices')
+            ->willReturn([$priceMock]);
+
+        $this->calculatorMock->expects($this->once())
+            ->method('getAmount')
+            ->with(false, $this->saleableItemMock)
+            ->willReturn($amount);
+
+        $this->assertEquals($amount, $this->basePrice->getAmount());
     }
 }

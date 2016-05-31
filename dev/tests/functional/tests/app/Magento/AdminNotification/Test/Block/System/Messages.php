@@ -18,7 +18,7 @@ class Messages extends Block
      *
      * @var string
      */
-    protected $closePopup = '.ui-dialog-titlebar-close';
+    protected $closePopup = '[data-role="closeBtn"]';
 
     /**
      * Close popup block.

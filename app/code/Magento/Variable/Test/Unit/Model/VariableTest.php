@@ -24,7 +24,7 @@ class VariableTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->escaperMock = $this->getMockBuilder('Magento\Framework\Escaper')

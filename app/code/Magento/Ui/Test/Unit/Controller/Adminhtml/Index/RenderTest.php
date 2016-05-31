@@ -32,7 +32,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $uiFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()

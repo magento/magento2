@@ -71,7 +71,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
     
-    public function setUp()
+    protected function setUp()
     {
         $this->groupRegistry = $this->getMock(
             'Magento\Customer\Model\GroupRegistry',

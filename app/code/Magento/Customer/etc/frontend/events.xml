@@ -27,5 +27,6 @@
     </event>
     <event name="customer_customer_authenticated">
         <observer name="customer_password" instance="Magento\Customer\Observer\UpgradeCustomerPasswordObserver" />
+        <observer name="customer_unlock" instance="Magento\Customer\Observer\CustomerLoginSuccessObserver" />
     </event>
 </config>

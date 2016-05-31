@@ -154,7 +154,7 @@ toggleValueElements($('inventory_use_config_max_sale_qty'), $('inventory_use_con
         <?php if (!$block->isVirtual()) : ?>
         <div class="field">
             <label class="label" for="inventory_is_decimal_divided">
-                <span><?php /* @escapeNotVerified */ echo __('Allow Multiple Boxes for Shipping.') ?></span>
+                <span><?php /* @escapeNotVerified */ echo __('Allow Multiple Boxes for Shipping') ?></span>
             </label>
             <div class="control">
                 <select id="inventory_is_decimal_divided" name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[stock_data][is_decimal_divided]" <?php /* @escapeNotVerified */ echo $_readonly;?>>

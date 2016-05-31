@@ -23,11 +23,12 @@ define([
             state: {},
             priceFormat: {},
             optionTemplate: '<%- data.label %>' +
-            '<% if (data.finalPrice.value) { %>' +
+            "<% if (typeof data.finalPrice.value !== 'undefined') { %>" +
             ' <%- data.finalPrice.formatted %>' +
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
-            mediaGalleryInitial: null
+            mediaGalleryInitial: null,
+            onlyMainImg: false
         },
 
         /**
@@ -253,14 +254,45 @@ define([
          * @private
          */
         _changeProductImage: function () {
-            var images = this.options.spConfig.images[this.simpleProduct],
+            var images,
+                initialImages = $.extend(true, [], this.options.mediaGalleryInitial),
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
+
+            if (this.options.spConfig.images[this.simpleProduct]) {
+                images = $.extend(true, [], this.options.spConfig.images[this.simpleProduct]);
+            }
+
+            function updateGallery(imagesArr) {
+                var imgToUpdate,
+                    mainImg;
+
+                mainImg = imagesArr.filter(function (img) {
+                    return img.isMain;
+                });
+
+                imgToUpdate = mainImg.length ? mainImg[0] : imagesArr[0];
+                galleryObject.updateDataByIndex(0, imgToUpdate);
+                galleryObject.seek(1);
+            }
 
             if (galleryObject) {
                 if (images) {
-                    galleryObject.updateData(images);
+                    images.map(function (img) {
+                        img.type = 'image';
+                    });
+
+                    if (this.options.onlyMainImg) {
+                        updateGallery(images);
+                    } else {
+                        galleryObject.updateData(images)
+                    }
                 } else {
-                    galleryObject.updateData(this.options.mediaGalleryInitial);
+                    if (this.options.onlyMainImg) {
+                        updateGallery(initialImages);
+                    } else {
+                        galleryObject.updateData(this.options.mediaGalleryInitial);
+                        $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                    }
                 }
             }
         },

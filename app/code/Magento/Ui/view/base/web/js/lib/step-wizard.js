@@ -24,16 +24,28 @@ define([
         }
     );
 
-    Wizard = function (steps) {
+    Wizard = function (steps, modalClass) {
         this.steps = steps;
         this.index = 0;
         this.data = {};
-        this.element = $('[data-role=steps-wizard-main]');
-        this.nextLabel = '[data-role="step-wizard-next"]';
-        this.prevLabel = '[data-role="step-wizard-prev"]';
         this.nextLabelText = 'Next';
         this.prevLabelText = 'Back';
-        $(this.element).notification();
+        this.initSelectors = function (modalClass) {
+            var elementSelector = '[data-role=steps-wizard-main]';
+
+            this.nextLabel = '[data-role="step-wizard-next"]';
+            this.prevLabel = '[data-role="step-wizard-prev"]';
+
+            if (modalClass) {
+                this.nextLabel = '.' + modalClass + ' ' + this.nextLabel;
+                this.prevLabel = '.' + modalClass + ' ' + this.prevLabel;
+                elementSelector = '.' + modalClass + elementSelector;
+            }
+
+            this.element = $(elementSelector);
+            $(this.element).notification();
+        };
+        this.initSelectors(modalClass);
         this.move = function (newIndex) {
             if (!this.preventSwitch(newIndex)) {
                 if (newIndex > this.index) {
@@ -143,6 +155,7 @@ define([
 
     return Component.extend({
         defaults: {
+            modalClass: '',
             initData: [],
             stepsNames: [],
             selectedStep: '',
@@ -166,6 +179,13 @@ define([
 
             return this;
         },
+        destroy: function () {
+            _.each(this.steps, function (step) {
+                step.destroy();
+            });
+
+            this._super();
+        },
         wrapDisabledBackButton: function (stepName) {
             if (_.first(this.stepsNames) === stepName) {
                 this.disabled(true);
@@ -184,18 +204,14 @@ define([
             this.selectedStep(this.wizard.prev());
         },
         open: function () {
-            var $form = $('[data-form=edit-product]');
-
-            if (!$form.valid()) {
-                $form.data('validator').focusInvalid();
-            } else {
-                this.selectedStep(this.stepsNames.first());
-                this.wizard = new Wizard(this.steps);
-                $('[data-role=step-wizard-dialog]').trigger('openModal');
-            }
+            this.selectedStep(this.stepsNames.first());
+            this.wizard = new Wizard(this.steps, this.modalClass);
         },
         close: function () {
-            $('[data-role=step-wizard-dialog]').trigger('closeModal');
+            var modal =  uiRegistry.get(this.initData.configurableModal);
+            if (!_.isUndefined(modal)) {
+                modal.closeModal();
+            }
         },
         showSpecificStep: function () {
             var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),

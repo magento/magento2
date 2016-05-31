@@ -12,7 +12,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->object = new \Magento\Cron\Model\Groups\Config\Converter\Xml();
     }
@@ -33,6 +33,6 @@ XML;
         $results = $this->object->convert($xml);
         $this->assertArrayHasKey('test', $results);
         $this->assertArrayHasKey('schedule_generate_every', $results['test']);
-        $this->assertEquals('1', $results['test']['schedule_generate_every']);
+        $this->assertEquals('1', $results['test']['schedule_generate_every']['value']);
     }
 }

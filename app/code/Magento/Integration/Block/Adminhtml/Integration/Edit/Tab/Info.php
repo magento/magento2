@@ -33,6 +33,8 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
 
     const DATA_CONSUMER_ID = 'consumer_id';
 
+    const DATA_CONSUMER_PASSWORD = 'current_password';
+
     /**#@-*/
 
     /**
@@ -159,6 +161,23 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 'note' => __(
                     'URL to redirect user to link their 3rd party account with this Magento integration credentials.'
                 )
+            ]
+        );
+
+        $currentUserVerificationFieldset = $form->addFieldset(
+            'current_user_verification_fieldset',
+            ['legend' => __('Current User Identity Verification')]
+        );
+        $currentUserVerificationFieldset->addField(
+            self::DATA_CONSUMER_PASSWORD,
+            'password',
+            [
+                'name' => self::DATA_CONSUMER_PASSWORD,
+                'label' => __('Your Password'),
+                'id' => self::DATA_CONSUMER_PASSWORD,
+                'title' => __('Your Password'),
+                'class' => 'input-text validate-current-password required-entry',
+                'required' => true
             ]
         );
     }

@@ -34,7 +34,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
      */
     private $sharedInstances;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->setMethods([])
@@ -212,12 +212,14 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
                 '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [
-                        '_i_' => 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencySharedTesting',
+                        '_i_' => 'Magento\Framework\ObjectManager\Test\Unit'
+                            . '\Factory\Fixture\Compiled\DependencySharedTesting',
                     ],
                     'array_configured_array' => [
                         'array_array_value' => 'value',
                         'array_array_configured_instance' => [
-                            '_ins_' => 'Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\DependencyTesting',
+                            '_ins_' => 'Magento\Framework\ObjectManager'
+                                . '\Test\Unit\Factory\Fixture\Compiled\DependencyTesting',
                         ],
                     ],
                     'array_global_argument' => [

@@ -15,6 +15,9 @@
                     </argument>
                 </arguments>
             </block>
+            <referenceContainer name="category.product.list.additional">
+                <block class="Magento\Wishlist\Block\AddToWishlist" template="Magento_Wishlist::addto.phtml" />
+            </referenceContainer>
         </referenceContainer>
     </body>
 </page>

@@ -28,7 +28,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
 class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -39,11 +39,17 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
      * @param CatalogRule $catalogPriceRule
      * @param string $product
      * @param string $conditionEntity
+     * @param bool $isWithApply
      * @param Customer $customer
      * @return array
      */
-    public function testCreate(CatalogRule $catalogPriceRule, $product, $conditionEntity, Customer $customer = null)
-    {
+    public function testCreate(
+        CatalogRule $catalogPriceRule,
+        $product,
+        $conditionEntity,
+        $isWithApply = true,
+        Customer $customer = null
+    ) {
         /** @var CatalogProductSimple $productSimple */
         $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => $product]);
         // Prepare data
@@ -60,8 +66,10 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->save();
 
-        // Apply Catalog Price Rule
-        $this->catalogRuleIndex->getGridPageActions()->applyRules();
+        if ($isWithApply) {
+            // Apply Catalog Price Rule
+            $this->catalogRuleIndex->getGridPageActions()->applyRules();
+        }
 
         // Create simple product
         $productSimple->persist();

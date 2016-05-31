@@ -10,7 +10,10 @@ namespace Magento\Catalog\Model\Product\Media;
 
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Store\Model\StoreManagerInterface;
+<<<<<<< HEAD
 use Magento\Framework\App\ObjectManager;
+=======
+>>>>>>> develop
 
 /**
  * Catalog product media config
@@ -205,4 +208,19 @@ class Config implements ConfigInterface
     {
         return $this->getAttributeHelper()->getAttributeCodesByFrontendType('media_image');
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     * @return Attribute
+     */
+    private function getAttributeHelper()
+    {
+        if (null === $this->attributeHelper) {
+            $this->attributeHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Eav\Model\Entity\Attribute');
+        }
+        return $this->attributeHelper;
+    }
+>>>>>>> develop
 }

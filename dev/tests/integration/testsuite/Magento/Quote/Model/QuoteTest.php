@@ -26,8 +26,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
 
-        $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-        $product->load(21);
+        $productRepository = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('virtual-product');
         $quote->addProduct($product);
         $quote->collectTotals();
 
@@ -288,9 +288,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote->load('test01', 'reserved_order_id');
 
         $productStockQty = 100;
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-        $product->load(2);
+
+        $productRepository = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('simple-1');
+
         $quote->addProduct($product, 50);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
         $this->assertEquals(50, $quote->getItemsQty());

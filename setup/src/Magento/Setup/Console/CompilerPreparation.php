@@ -11,7 +11,6 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Setup\Console\Command\DiCompileCommand;
-use Magento\Setup\Console\Command\DiCompileMultiTenantCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -49,28 +48,25 @@ class CompilerPreparation
      */
     public function handleCompilerEnvironment()
     {
-        $compilationCommands = [DiCompileCommand::NAME, DiCompileMultiTenantCommand::NAME];
+        $compilationCommands = [DiCompileCommand::NAME];
         $cmdName = $this->input->getFirstArgument();
         $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
-
         if (!in_array($cmdName, $compilationCommands) || $isHelpOption) {
             return;
         }
+        $compileDirList = [];
+        $mageInitParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
+        $mageDirs = isset($mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
+            ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
+            : [];
+        $directoryList = new DirectoryList(BP, $mageDirs);
+        $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
+        $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
 
-        $generationDir = ($cmdName === DiCompileMultiTenantCommand::NAME)
-            ? $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
-            : null;
-
-        if (!$generationDir) {
-            $mageInitParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
-            $mageDirs = isset($mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
-                ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
-                : [];
-            $generationDir = (new DirectoryList(BP, $mageDirs))->getPath(DirectoryList::GENERATION);
-        }
-
-        if ($this->filesystemDriver->isExists($generationDir)) {
-            $this->filesystemDriver->deleteDirectory($generationDir);
+        foreach ($compileDirList as $compileDir) {
+            if ($this->filesystemDriver->isExists($compileDir)) {
+                $this->filesystemDriver->deleteDirectory($compileDir);
+            }
         }
     }
 }

@@ -27,15 +27,14 @@ class AssertProductForm extends AbstractAssertForm
     ];
 
     /**
-     * Sort fields for fixture and form data
+     * Sort fields for fixture and form data.
      *
      * @var array
      */
     protected $sortFields = [
-        'custom_options::title',
-        'cross_sell_products::entity_id',
-        'up_sell_products::entity_id',
-        'related_products::entity_id',
+        'cross_sell_products::id',
+        'up_sell_products::id',
+        'related_products::id',
     ];
 
     /**

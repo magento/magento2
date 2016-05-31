@@ -10,6 +10,7 @@
 
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
 /**
@@ -17,6 +18,7 @@ use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
  * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -184,6 +186,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_nextAttrId;
 
     /**
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -201,11 +210,11 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
     ) {
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_productTypesConfig = $productTypesConfig;
         $this->_resourceHelper = $resourceHelper;
         $this->_resource = $resource;
         $this->_productColFac = $_productColFac;
-        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_connection = $this->_entityModel->getConnection();
     }
 
@@ -318,9 +327,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 foreach ($dataWithExtraVirtualRows as $data) {
                     if (!empty($data['_super_products_sku'])) {
                         if (isset($newSku[$data['_super_products_sku']])) {
-                            $productIds[] = $newSku[$data['_super_products_sku']]['entity_id'];
+                            $productIds[] = $newSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
                         } elseif (isset($oldSku[$data['_super_products_sku']])) {
-                            $productIds[] = $oldSku[$data['_super_products_sku']]['entity_id'];
+                            $productIds[] = $oldSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
                         }
                     }
                 }
@@ -330,7 +339,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 'type_id',
                 $this->_productTypesConfig->getComposableTypes()
             )->addFieldToFilter(
-                'entity_id',
+                $this->getProductEntityLinkField(),
                 ['in' => $productIds]
             )->addAttributeToSelect(
                 array_keys($this->_superAttributes)
@@ -340,7 +349,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $data = array_intersect_key($product->getData(), $this->_superAttributes);
                 foreach ($data as $attrCode => $value) {
                     $attrId = $this->_superAttributes[$attrCode]['id'];
-                    $this->_skuSuperAttributeValues[$attrSetName][$product->getId()][$attrId] = $value;
+                    $productId = $product->getData($this->getProductEntityLinkField());
+                    $this->_skuSuperAttributeValues[$attrSetName][$productId][$attrId] = $value;
                 }
             }
         }
@@ -361,7 +371,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         foreach ($bunch as $rowData) {
             $sku = $rowData[ImportProduct::COL_SKU];
             $productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
-            $productIds[] = $productData['entity_id'];
+            $productIds[] = $productData[$this->getProductEntityLinkField()];
         }
 
         $this->_productSuperAttrs = [];
@@ -405,6 +415,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _processSuperData()
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         if ($this->_productSuperData) {
             $usedCombs = [];
             // is associated products applicable?
@@ -434,12 +445,17 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $usedCombs[$comb] = true;
                 }
                 $this->_superAttributesData['super_link'][] = [
-                    'product_id' => $assocId,
+                    'product_id' => $this->_productSuperData['assoc_entity_ids'][$assocId],
                     'parent_id' => $this->_productSuperData['product_id'],
                 ];
+                $subEntityId = $this->_connection->fetchOne(
+                    $this->_connection->select()->from(
+                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')], ['entity_id']
+                    )->where($metadata->getLinkField() . ' = ?', $assocId)
+                );
                 $this->_superAttributesData['relation'][] = [
                     'parent_id' => $this->_productSuperData['product_id'],
-                    'child_id' => $assocId,
+                    'child_id' => $subEntityId,
                 ];
             }
         }
@@ -608,15 +624,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _collectSuperData($rowData)
     {
-        $productId = $this->_productData['entity_id'];
+        $entityId = $this->_productData[$this->getProductEntityIdentifierField()];
+        $linkId = $this->_productData[$this->getProductEntityLinkField()];
 
         $this->_processSuperData();
 
         $this->_productSuperData = [
-            'product_id' => $productId,
+            'product_id' => $linkId,
+            'entity_id' => $entityId,
             'attr_set_code' => $this->_productData['attr_set_code'],
-            'used_attributes' => empty($this->_skuSuperData[$productId]) ? [] : $this
-                ->_skuSuperData[$productId],
+            'used_attributes' => empty($this->_skuSuperData[$linkId]) ? [] : $this->_skuSuperData[$linkId],
             'assoc_ids' => [],
         ];
 
@@ -631,15 +648,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
             $attrParams = $this->_superAttributes[$data['_super_attribute_code']];
 
-            if ($this->_getSuperAttributeId($productId, $attrParams['id'])) {
-                $productSuperAttrId = $this->_getSuperAttributeId($productId, $attrParams['id']);
-            } elseif (isset($this->_superAttributesData['attributes'][$productId][$attrParams['id']])) {
+            // @todo understand why do we need this condition
+            if ($this->_getSuperAttributeId($linkId, $attrParams['id'])) {
+                $productSuperAttrId = $this->_getSuperAttributeId($linkId, $attrParams['id']);
+            } elseif (isset($this->_superAttributesData['attributes'][$linkId][$attrParams['id']])) {
                 $attributes = $this->_superAttributesData['attributes'];
-                $productSuperAttrId = $attributes[$productId][$attrParams['id']]['product_super_attribute_id'];
-                $this->_collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels);
+                $productSuperAttrId = $attributes[$linkId][$attrParams['id']]['product_super_attribute_id'];
+                $this->_collectSuperDataLabels($data, $productSuperAttrId, $linkId, $variationLabels);
             } else {
                 $productSuperAttrId = $this->_getNextAttrId();
-                $this->_collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels);
+                $this->_collectSuperDataLabels($data, $productSuperAttrId, $linkId, $variationLabels);
             }
         }
         //@codingStandardsIgnoreEnd
@@ -658,18 +676,19 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
         if (!empty($data['_super_products_sku'])) {
-            $superProductId = '';
             if (isset($newSku[$data['_super_products_sku']])) {
-                $superProductId = $newSku[$data['_super_products_sku']]['entity_id'];
+                $superProductRowId = $newSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
+                $superProductEntityId = $newSku[$data['_super_products_sku']][$this->getProductEntityIdentifierField()];
             } elseif (isset($oldSku[$data['_super_products_sku']])) {
-                $superProductId = $oldSku[$data['_super_products_sku']]['entity_id'];
+                $superProductRowId = $oldSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
+                $superProductEntityId = $oldSku[$data['_super_products_sku']][$this->getProductEntityIdentifierField()];
             }
-
-            if ($superProductId) {
+            if (isset($superProductRowId)) {
                 if (isset($data['display']) && $data['display'] == 0) {
-                    $this->_simpleIdsToDelete[] = $superProductId;
+                    $this->_simpleIdsToDelete[] = $superProductRowId;
                 } else {
-                    $this->_productSuperData['assoc_ids'][$superProductId] = true;
+                    $this->_productSuperData['assoc_ids'][$superProductRowId] = true;
+                    $this->_productSuperData['assoc_entity_ids'][$superProductRowId] = $superProductEntityId;
                 }
             }
         }
@@ -819,5 +838,20 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
         return !$error;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductEntityIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }

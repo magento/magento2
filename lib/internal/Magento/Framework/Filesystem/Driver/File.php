@@ -9,6 +9,7 @@ namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class File
@@ -268,7 +269,7 @@ class File implements DriverInterface
     {
         clearstatcache();
         $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
-        $result = @glob($globPattern, GLOB_BRACE);
+        $result = Glob::glob($globPattern, Glob::GLOB_BRACE);
         return is_array($result) ? $result : [];
     }
 
@@ -296,7 +297,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'The "%1" path cannot be renamed into "%2" %3',
+                    'The path "%1" cannot be renamed into "%2" %3',
                     [$oldPath, $newPath, $this->getWarningMessage()]
                 )
             );
@@ -701,16 +702,34 @@ class File implements DriverInterface
      */
     public function fileWrite($resource, $data)
     {
-        $result = @fwrite($resource, $data);
-        if (false === $result) {
-            throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+        $lenData = strlen($data);
+        for ($result = 0; $result < $lenData; $result += $fwrite) {
+            $fwrite = @fwrite($resource, substr($data, $result));
+            if (0 === $fwrite) {
+                $this->fileSystemException('Unable to write');
+            }
+            if (false === $fwrite) {
+                $this->fileSystemException(
                     'Error occurred during execution of fileWrite %1',
                     [$this->getWarningMessage()]
-                )
-            );
+                );
+            }
         }
+
         return $result;
+    }
+
+    /**
+     * Throw a FileSystemException with a Phrase of message and optional arguments
+     *
+     * @param string $message
+     * @param array $arguments
+     * @return void
+     * @throws FileSystemException
+     */
+    private function fileSystemException($message, $arguments = [])
+    {
+        throw new FileSystemException(new \Magento\Framework\Phrase($message, $arguments));
     }
 
     /**

@@ -62,12 +62,20 @@ class Server
             foreach ($configuredHosts as $host) {
                 $servers[] = UriFactory::factory('')
                     ->setHost($host['host'])
+<<<<<<< HEAD
                     ->setPort(isset($host['port']) ? $host['port'] : self::DEFAULT_PORT);
             }
         } elseif ($this->request->getHttpHost()) {
             $servers[] = UriFactory::factory('')
                 ->setHost($this->request->getHttpHost())
                 ->setPort(self::DEFAULT_PORT);
+=======
+                    ->setPort(isset($host['port']) ? $host['port'] : self::DEFAULT_PORT)
+                ;
+            }
+        } elseif ($this->request->getHttpHost()) {
+            $servers[] = UriFactory::factory('')->setHost($this->request->getHttpHost())->setPort(self::DEFAULT_PORT);
+>>>>>>> develop
         } else {
             $servers[] = UriFactory::factory($this->urlBuilder->getUrl('*', ['_nosid' => true]));
         }
