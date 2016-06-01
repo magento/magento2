@@ -36,17 +36,24 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $translateMock;
 
+    /**
+     * @var \Magento\Theme\Model\View\Design|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $designMock;
+
     protected function setUp()
     {
         $this->configMock = $this->getMock(\Magento\Translation\Model\Js\Config::class, [], [], '', false);
         $this->dataProviderMock = $this->getMock(\Magento\Translation\Model\Js\DataProvider::class, [], [], '', false);
         $this->areaListMock = $this->getMock(\Magento\Framework\App\AreaList::class, [], [], '', false);
         $this->translateMock = $this->getMockForAbstractClass(\Magento\Framework\TranslateInterface::class);
+        $this->designMock = $this->getMock(\Magento\Theme\Model\View\Design::class, [], [], '', false);
         $this->model = new PreProcessor(
             $this->configMock,
             $this->dataProviderMock,
             $this->areaListMock,
-            $this->translateMock
+            $this->translateMock,
+            $this->designMock
         );
     }
 
@@ -60,6 +67,7 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $themePath = '*/*';
         $dictionary = ['hello' => 'bonjour'];
         $areaCode = 'adminhtml';
+        $locale = 'en_US';
         $area = $this->getMock(\Magento\Framework\App\Area::class, [], [], '', false);
 
         $chain->expects($this->once())
@@ -80,6 +88,16 @@ class PreProcessorTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
+        $context->expects($this->once())
+            ->method('getLocale')
+            ->willReturn($locale);
+
+        $this->translateMock->expects($this->once())
+            ->method('setLocale')
+            ->with($locale);
+        $this->designMock->expects($this->once())
+            ->method('setDesignTheme')
+            ->with($themePath);
 
         $this->areaListMock->expects($this->once())
             ->method('getArea')
