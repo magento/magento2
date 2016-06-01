@@ -15,6 +15,21 @@ define([
     'use strict';
 
     /**
+     * Checks value type and cast to boolean if needed
+     *
+     * @param {*} value
+     *
+     * @returns {Boolean|*} casted or origin value
+     */
+    function castValue(value) {
+        if (_.isUndefined(value) || value === '' || _.isNull(value)) {
+            return false;
+        }
+
+        return value;
+    }
+
+    /**
      * Compares arrays.
      *
      * @param {Array} base - array as method bases its decision on first argument.
@@ -30,7 +45,7 @@ define([
             return false;
         }
 
-        /*eslint-disable max-depth, eqeqeq */
+        /*eslint-disable max-depth, eqeqeq, no-use-before-define */
         for (index; index < length; index++) {
             if (_.isArray(base[index]) && _.isArray(current[index])) {
                 if (!compareArrays(base[index], current[index])) {
@@ -43,7 +58,7 @@ define([
             } else if (castValue(base[index]) != castValue(current[index])) {
                 return false;
             }
-        }/*eslint-enable max-depth, eqeqeq */
+        }/*eslint-enable max-depth, eqeqeq, no-use-before-define */
 
         return true;
     }
@@ -76,21 +91,6 @@ define([
         }/*eslint-enable max-depth, eqeqeq */
 
         return true;
-    }
-
-    /**
-     * Checks value type and cast to boolean if needed
-     *
-     * @param {*} value
-     *
-     * @returns {Boolean|*} casted or origin value
-     */
-    function castValue(value) {
-        if (_.isUndefined(value) || value === '' || _.isNull(value)) {
-            return false;
-        }
-
-        return value;
     }
 
     return uiCollection.extend({
@@ -243,7 +243,6 @@ define([
 
             this.isDefaultState(result);
         },
-
 
         /**
          * Inits default component state

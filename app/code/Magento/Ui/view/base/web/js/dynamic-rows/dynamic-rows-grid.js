@@ -46,7 +46,7 @@ define([
         setToInsertData: function () {
             var insertData = [],
                 obj;
-            
+
             if (this.recordData().length && !this.update) {
                 this.recordData.each(function (recordData) {
                     obj = {};
