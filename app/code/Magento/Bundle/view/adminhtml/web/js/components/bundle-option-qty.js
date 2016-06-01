@@ -29,7 +29,7 @@ define([
          * @inheritdoc
          */
         hasChanged: function () {
-            var notEqual = this.value() !== this.initialValue.toString();
+            var notEqual = this.value().toString() !== this.initialValue.toString();
 
             return !this.visible() ? false : notEqual;
         }
