@@ -56,6 +56,11 @@ abstract class AbstractConfig implements ConfigInterface
     private $productMetadata;
 
     /**
+     * @var string
+     */
+    private static $bnCode = 'Magento_Cart_%s';
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
@@ -329,12 +334,7 @@ abstract class AbstractConfig implements ConfigInterface
      */
     public function getBuildNotationCode()
     {
-        $bnCode = $this->_scopeConfig->getValue(
-            'paypal/bncode',
-            ScopeInterface::SCOPE_STORE,
-            $this->_storeId
-        );
-        return sprintf($bnCode, $this->getProductMetadata()->getEdition());
+        return sprintf(self::$bnCode, $this->getProductMetadata()->getEdition());
     }
 
     /**
