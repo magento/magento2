@@ -418,8 +418,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
                 \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             )
         );
-
-        return $this->initialRequestSecure($offLoaderHeader);
+        //Store the normally cased version in db for use in varnish config, Apache uppercases all server headers.
+        return $this->initialRequestSecure(strtoupper($offLoaderHeader));
     }
 
     /**
