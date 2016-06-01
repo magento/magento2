@@ -75,7 +75,7 @@ sub vcl_recv {
     # static files are always cacheable. remove SSL flag and cookie
         if (req.url ~ "^/(pub/)?(media|static)/.*\.(ico|css|js|jpg|jpeg|png|gif|tiff|bmp|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)$") {
         unset req.http.Https;
-        unset req.http./* {{ ssl_offloaded_header }} */
+        unset req.http./* {{ ssl_offloaded_header }} */;
         unset req.http.Cookie;
     }
 
