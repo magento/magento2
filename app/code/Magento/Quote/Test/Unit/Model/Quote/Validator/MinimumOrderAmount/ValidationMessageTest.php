@@ -77,4 +77,15 @@ class ValidationMessageTest extends \PHPUnit_Framework_TestCase
             $this->model->getMessage()
         );
     }
+
+    public function testGetConfigMessage()
+    {
+        $configMessage = 'config_message';
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with('sales/minimum_order/description', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->willReturn($configMessage);
+
+        $this->assertEquals($configMessage, $this->model->getMessage());
+    }
 }

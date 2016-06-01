@@ -55,7 +55,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
      */
-    private $validationMessages;
+    private $minimumAmountErrorMessage;
 
     /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -114,7 +114,7 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $address->setCollectShippingRates(true);
 
         if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->getMinimumAmountErrorMessageDependency()->getMessage());
+            throw new InputException($this->getMinimumAmountErrorMessage()->getMessage());
         }
 
         try {
@@ -144,15 +144,16 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
 
     /**
      * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     * @deprecated
      */
-    private function getMinimumAmountErrorMessageDependency()
+    private function getMinimumAmountErrorMessage()
     {
-        if ($this->validationMessages === null) {
+        if ($this->minimumAmountErrorMessage === null) {
             $objectManager = ObjectManager::getInstance();
-            $this->validationMessages = $objectManager->get(
+            $this->minimumAmountErrorMessage = $objectManager->get(
                 \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
             );
         }
-        return $this->validationMessages;
+        return $this->minimumAmountErrorMessage;
     }
 }
