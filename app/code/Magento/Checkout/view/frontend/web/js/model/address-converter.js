@@ -116,28 +116,13 @@ define(
             },
 
             addressToEstimationAddress: function (address) {
-                var estimatedAddressData = {
-                    'street': address.street,
-                    'city': address.city,
-                    'region_id': address.regionId,
-                    'region': address.region,
-                    'country_id': address.countryId,
-                    'postcode': address.postcode,
-                    'email': address.email,
-                    'customer_id': address.customerId,
-                    'firstname': address.firstname,
-                    'lastname': address.lastname,
-                    'middlename': address.middlename,
-                    'prefix': address.prefix,
-                    'suffix': address.suffix,
-                    'vat_id': address.vatId,
-                    'company': address.company,
-                    'telephone': address.telephone,
-                    'fax': address.fax,
-                    'custom_attributes': address.customAttributes
+                var self = this;
+                var estimatedAddressData = {};
 
-                };
-               return this.formAddressDataToQuoteAddress(estimatedAddressData);
+                $.each(address, function (key) {
+                    estimatedAddressData[self.toUnderscore(key)] = address[key];
+                });
+                return this.formAddressDataToQuoteAddress(estimatedAddressData);
             }
         };
     }
