@@ -139,8 +139,7 @@ class OrderGet
     ) {
         /** @var  $order */
         foreach ($resultOrder->getItems() as $order) {
-            $this->getOrderGiftMessage($order);
-            $this->getOrderItemGiftMessage($order);
+            $this->afterGet($subject, $order);
         }
         return $resultOrder;
     }
