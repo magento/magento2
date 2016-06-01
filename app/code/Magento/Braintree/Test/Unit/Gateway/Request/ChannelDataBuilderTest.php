@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
+
 use Magento\Braintree\Gateway\Request\ChannelDataBuilder;
 use Magento\Framework\App\ProductMetadataInterface;
 
@@ -53,8 +54,8 @@ class ChannelDataBuilderTest extends \PHPUnit_Framework_TestCase
     public function buildDataProvider()
     {
         return [
-            ['Community', ['channel' => 'Magento2_Cart_Community_BT']],
-            ['Enterprise', ['channel' => 'Magento2_Cart_Enterprise_BT']],
+            ['FirstEdition', ['channel' => 'Magento2_Cart_FirstEdition_BT']],
+            ['SecondEdition', ['channel' => 'Magento2_Cart_SecondEdition_BT']],
         ];
     }
 }
