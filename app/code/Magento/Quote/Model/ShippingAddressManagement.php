@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface as Logger;
@@ -50,6 +51,11 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
      * @var Quote\TotalsCollector
      */
     protected $totalsCollector;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     */
+    private $validationMessages;
 
     /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
@@ -106,19 +112,16 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $address->setSameAsBilling($sameAsBilling);
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
+
+        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
+            throw new InputException($this->getMinimumAmountErrorMessageDependency()->getMessage());
+        }
+
         try {
             $address->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please check input data.'));
-        }
-
-        if (!$quote->validateMinimumAmount($quote->getIsMultiShipping())) {
-            throw new InputException($this->scopeConfig->getValue(
-                'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $quote->getStoreId()
-            ));
         }
         return $quote->getShippingAddress()->getId();
     }
@@ -137,5 +140,19 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */
         return $quote->getShippingAddress();
+    }
+
+    /**
+     * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     */
+    private function getMinimumAmountErrorMessageDependency()
+    {
+        if ($this->validationMessages === null) {
+            $objectManager = ObjectManager::getInstance();
+            $this->validationMessages = $objectManager->get(
+                \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
+            );
+        }
+        return $this->validationMessages;
     }
 }
