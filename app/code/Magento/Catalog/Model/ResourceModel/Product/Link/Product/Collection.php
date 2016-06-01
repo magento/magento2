@@ -425,8 +425,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Get MetadataPool instance
      * @return MetadataPool
+     * @deprecated
      */
-    protected function getMetadataPool()
+    private function getMetadataPool()
     {
         if (!$this->metadataPool) {
             $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
