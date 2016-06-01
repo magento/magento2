@@ -2272,7 +2272,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        if ($this->getOrigData('status') != $this->getData('status')) {
+        
+        if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
             foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
@@ -2280,9 +2281,30 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if ($this->getAppState()->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
         }
+
         return array_unique($identities);
     }
 
+    /**
+     * Check whether stock status changed
+     * 
+     * @return bool
+     */
+    private function isStockStatusChanged()
+    {
+        $stockItem = null;
+        $extendedAttributes = $this->getExtensionAttributes();
+        if ($extendedAttributes !== null) {
+            $stockItem = $extendedAttributes->getStockItem();
+        }
+        $stockData = $this->getStockData();
+        return (
+            (null !== $stockData)
+            && (null !== $stockItem)
+            && ($stockItem->getIsInStock() != $stockData['is_in_stock'])
+        );
+    }
+    
     /**
      * Reload PriceInfo object
      *
