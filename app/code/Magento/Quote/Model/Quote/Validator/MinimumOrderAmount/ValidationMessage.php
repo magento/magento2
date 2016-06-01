@@ -38,7 +38,7 @@ class ValidationMessage
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return \Magento\Framework\Phrase|mixed
      * @throws \Zend_Currency_Exception
      */
     public function getMessage()

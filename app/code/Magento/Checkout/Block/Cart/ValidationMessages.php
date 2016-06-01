@@ -22,7 +22,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
     /**
      * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
      */
-    private $validationMessages;
+    private $minimumAmountErrorMessage;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -78,22 +78,23 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
     protected function validateMinimumAmount()
     {
         if (!$this->cartHelper->getQuote()->validateMinimumAmount()) {
-            $this->messageManager->addNotice($this->getMinimumAmountErrorMessageDependency()->getMessage());
+            $this->messageManager->addNotice($this->getMinimumAmountErrorMessage()->getMessage());
         }
     }
 
     /**
      * @return \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     * @deprecated
      */
-    private function getMinimumAmountErrorMessageDependency()
+    private function getMinimumAmountErrorMessage()
     {
-        if ($this->validationMessages === null) {
+        if ($this->minimumAmountErrorMessage === null) {
             $objectManager = ObjectManager::getInstance();
-            $this->validationMessages = $objectManager->get(
+            $this->minimumAmountErrorMessage = $objectManager->get(
                 \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage::class
             );
         }
-        return $this->validationMessages;
+        return $this->minimumAmountErrorMessage;
     }
 
     /**
