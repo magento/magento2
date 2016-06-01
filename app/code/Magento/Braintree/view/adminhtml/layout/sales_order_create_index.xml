@@ -16,7 +16,6 @@
         <referenceBlock name="content">
             <block name="braintree_payment_script"
                    as="braintree_payment_script"
-                   after="billing_method"
                    template="Magento_Braintree::payment/script.phtml"
                    class="Magento\Braintree\Block\Payment"/>
         </referenceBlock>

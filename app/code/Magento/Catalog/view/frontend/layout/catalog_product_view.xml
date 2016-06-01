@@ -30,21 +30,21 @@
         </referenceBlock>
         <referenceContainer name="content">
             <container name="product.info.main" htmlTag="div" htmlClass="product-info-main" before="-">
-                <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price" after="product.info.review">
+                <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price">
                     <container name="product.info.stock.sku" label="Product auxiliary info" htmlTag="div" htmlClass="product-info-stock-sku">
                         <container name="product.info.type" before="-"/>
-                        <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.info.type">
-                            <arguments>
-                                <argument name="at_call" xsi:type="string">getSku</argument>
-                                <argument name="at_code" xsi:type="string">sku</argument>
-                                <argument name="css_class" xsi:type="string">sku</argument>
-                                <argument name="at_label" xsi:type="string">default</argument>
-                                <argument name="add_attribute" xsi:type="string">itemprop="sku"</argument>
-                            </arguments>
-                        </block>
+                            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.info.type">
+                                <arguments>
+                                    <argument name="at_call" xsi:type="string">getSku</argument>
+                                    <argument name="at_code" xsi:type="string">sku</argument>
+                                    <argument name="css_class" xsi:type="string">sku</argument>
+                                    <argument name="at_label" xsi:type="string">default</argument>
+                                    <argument name="add_attribute" xsi:type="string">itemprop="sku"</argument>
+                                </arguments>
+                            </block>
                     </container>
                     <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" after="product.info.stock.sku" />
-                    <block class="Magento\Catalog\Pricing\Render" name="product.price.final" after="product.info.sku">
+                    <block class="Magento\Catalog\Pricing\Render" name="product.price.final">
                         <arguments>
                             <argument name="price_render" xsi:type="string">product.price.render.default</argument>
                             <argument name="price_type_code" xsi:type="string">final_price</argument>
@@ -81,7 +81,7 @@
                     </block>
                 </block>
                 <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint">
-                    <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links" after="product.info.overview">
+                    <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links">
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.mailto" template="product/view/mailto.phtml"/>
                     </container>
