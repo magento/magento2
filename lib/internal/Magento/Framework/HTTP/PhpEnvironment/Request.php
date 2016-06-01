@@ -22,6 +22,9 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     const SCHEME_HTTPS = 'https';
     /**#@-*/
 
+    // Configuration path
+    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
+
     /**
      * @var string
      */
@@ -85,6 +88,12 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     protected $converter;
 
+    /**
+     * @var /Magento/Framework/App/Config
+     */
+    protected $_appconfig;
+    
+    
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -364,7 +373,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function getScheme()
     {
-        return ($this->getServer('HTTPS') == 'on') ? self::SCHEME_HTTPS : self::SCHEME_HTTP;
+        return ($this->isSecure())? self::SCHEME_HTTPS : self::SCHEME_HTTP;
     }
 
     /**
@@ -396,7 +405,66 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function isSecure()
     {
-        return ($this->getScheme() == self::SCHEME_HTTPS);
+        if ($this->immediateRequestSecure()) {
+            return true;
+        }
+        /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
+        installed MAGETWO-31756 */
+        // Check if a proxy sent a header indicating an initial secure request
+        $config = $this->getAppConfig();
+        $offLoaderHeader = trim(
+            (string)$config->getValue(
+                self::XML_PATH_OFFLOADER_HEADER,
+                \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+            )
+        );
+
+        return $this->initialRequestSecure($offLoaderHeader);
+    }
+
+    /**
+     * Create an instance of Magento\Framework\App\Config
+     *
+     * @return \Magento\Framework\App\Config
+     *
+     * @deprecated
+     */
+    private function getAppConfig(){
+        if ($this->_appconfig == null){
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $this->_appconfig = $objectManager->get('Magento\Framework\App\Config');
+        }
+        
+        return $this->_appconfig;
+        
+    }
+
+
+    /**
+     * Checks if the immediate request is delivered over HTTPS
+     *
+     * @return bool
+     */
+    protected function immediateRequestSecure()
+    {
+        $https = $this->getServer('HTTPS');
+        $headerServerPort = $this->getServer('SERVER_PORT');
+        return !empty($https) && ($https != 'off') || (isset($headerServerPort) && $headerServerPort == "443");
+    }
+
+
+    /**
+     * In case there is a proxy server, checks if the initial request to the proxy was delivered over HTTPS
+     *
+     * @param string $offLoaderHeader
+     * @return bool
+     */
+    protected function initialRequestSecure($offLoaderHeader)
+    {
+        $header = $this->getServer($offLoaderHeader);
+        $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
+        return !empty($offLoaderHeader)
+        && (isset($header) && ($header === 'https') || isset($httpHeader) && ($httpHeader === 'https'));
     }
 
     /**

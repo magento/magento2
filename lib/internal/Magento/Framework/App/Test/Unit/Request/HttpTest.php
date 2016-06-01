@@ -77,10 +77,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\App\Request\Http
      */
-    private function getModel($uri = null)
+    private function getModel($uri = null, $mockAppConfig = true)
     {
         $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
-        return $testFrameworkObjectManager->getObject(
+        $model = $testFrameworkObjectManager->getObject(
             'Magento\Framework\App\Request\Http',
             [
                 'routeConfig' => $this->_routerListMock,
@@ -90,6 +90,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
                 'uri' => $uri,
             ]
         );
+
+        if($mockAppConfig){
+            $MockAppConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $testFrameworkObjectManager->setBackwardCompatibleProperty($model, '_appconfig', $MockAppConfig );
+        }
+
+        return $model;
     }
 
     public function testGetOriginalPathInfoWithTestUri()
@@ -329,7 +336,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSecure($isSecure, $serverHttps, $headerOffloadKey, $headerOffloadValue, $configCall)
     {
-        $this->_model = $this->getModel();
+        $this->_model = $this->getModel(null, false);
         $configOffloadHeader = 'Header-From-Proxy';
         $configMock = $this->getMockBuilder('Magento\Framework\App\Config')
             ->disableOriginalConstructor()
@@ -339,10 +346,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn($configOffloadHeader);
-        $this->objectManager->expects($this->exactly($configCall))
-            ->method('get')
-            ->with('Magento\Framework\App\Config')
-            ->will($this->returnValue($configMock));
+        $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
+        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model,"_appconfig" ,$configMock);
 
         $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
         $this->_model->getServer()->set('HTTPS', $serverHttps);

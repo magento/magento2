@@ -147,7 +147,12 @@ class Config
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             ),
             '/* {{ ips }} */' => $this->_getAccessList(),
-            '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions()
+            '/* {{ design_exceptions_code }} */' => $this->_getDesignExceptions(),
+            //X_FORWARDED_PROTO will be $SERVER['HTTP_X_FORWARDED_PROTO'] and `X-Forwarded-Proto: https` in actual http headers
+            '/* {{ ssl_offloaded_header }} */' => str_replace("_", "-",$this->_scopeConfig->getValue(
+                \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE))
+
         ];
     }
 
