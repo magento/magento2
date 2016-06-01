@@ -14,6 +14,85 @@ define([
 ], function (ko, utils, _, layout, uiCollection, registry, $t) {
     'use strict';
 
+    /**
+     * Compares arrays.
+     *
+     * @param {Array} base - array as method bases its decision on first argument.
+     * @param {Array} current - second array
+     *
+     * @returns {Boolean} result - is current array equal to base array
+     */
+    function compareArrays(base, current) {
+        var index = 0,
+            length = base.length;
+
+        if (base.length !== current.length) {
+            return false;
+        }
+
+        /*eslint-disable max-depth, eqeqeq */
+        for (index; index < length; index++) {
+            if (_.isArray(base[index]) && _.isArray(current[index])) {
+                if (!compareArrays(base[index], current[index])) {
+                    return false;
+                }
+            } else if (typeof base[index] === 'object' && typeof current[index] === 'object') {
+                if (!compareObjects(base[index], current[index])) {
+                    return false;
+                }
+            } else if (castValue(base[index]) != castValue(current[index])) {
+                return false;
+            }
+        }/*eslint-enable max-depth, eqeqeq */
+
+        return true;
+    }
+
+    /**
+     * Compares objects. Compares only properties from origin object,
+     * if current object has more properties - they are not considered
+     *
+     * @param {Object} base - first object
+     * @param {Object} current - second object
+     *
+     * @returns {Boolean} result - is current object equal to base object
+     */
+    function compareObjects(base, current) {
+        var prop;
+
+        /*eslint-disable max-depth, eqeqeq*/
+        for (prop in base) {
+            if (_.isArray(base[prop]) && _.isArray(current[prop])) {
+                if (!compareArrays(base[prop], current[prop])) {
+                    return false;
+                }
+            } else if (typeof base[prop] === 'object' && typeof current[prop] === 'object') {
+                if (!compareObjects(base[prop], current[prop])) {
+                    return false;
+                }
+            } else if (castValue(base[prop]) != castValue(current[prop])) {
+                return false;
+            }
+        }/*eslint-enable max-depth, eqeqeq */
+
+        return true;
+    }
+
+    /**
+     * Checks value type and cast to boolean if needed
+     *
+     * @param {*} value
+     *
+     * @returns {Boolean|*} casted or origin value
+     */
+    function castValue(value) {
+        if (_.isUndefined(value) || value === '' || _.isNull(value)) {
+            return false;
+        }
+
+        return value;
+    }
+
     return uiCollection.extend({
         defaults: {
             defaultRecord: false,
@@ -36,6 +115,8 @@ define([
             deleteValue: true,
             showSpinner: true,
             isDifferedFromDefault: false,
+            defaultState: [],
+            isDefaultState: true,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
                 name: '${ $.name }_dnd',
@@ -60,9 +141,10 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault parsePagesData',
+                recordData: 'setDifferedFromDefault parsePagesData checkDefaultState',
                 currentPage: 'changePage',
-                elems: 'checkSpinner'
+                elems: 'checkSpinner',
+                isDefaultState: 'updateTrigger'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
@@ -83,6 +165,7 @@ define([
          */
         initialize: function () {
             this._super()
+                .initDefaultState()
                 .initChildren()
                 .initDnd()
                 .setColumnsHeaderListener()
@@ -109,14 +192,15 @@ define([
                     'disabled',
                     'labels',
                     'showSpinner',
-                    'isDifferedFromDefault'
+                    'isDifferedFromDefault',
+                    'isDefaultState'
                 ]);
 
             return this;
         },
 
         /**
-         * Init DND module
+         * Inits DND module
          *
          * @returns {Object} Chainable.
          */
@@ -129,7 +213,7 @@ define([
         },
 
         /**
-         * Check columnsHeaderAfterRender property,
+         * Checks columnsHeaderAfterRender property,
          * and set listener on elems if needed
          *
          * @returns {Object} Chainable.
@@ -140,6 +224,56 @@ define([
             }
 
             return this;
+        },
+
+        /**
+         * Checks whether component's state is default or not
+         */
+        checkDefaultState: function () {
+            var result = true,
+                recordsData = utils.copy(this.recordData()),
+                currentData = this.deleteProperty ?
+                    _.filter(recordsData, function (elem) {
+                        return elem[this.deleteProperty] !== this.deleteValue;
+                    }, this) : recordsData;
+
+            if (_.isArray(this.defaultState)) {
+                result = compareArrays(this.defaultState, currentData);
+            }
+
+            this.isDefaultState(result);
+        },
+
+
+        /**
+         * Inits default component state
+         *
+         * @param {Array} data
+         *
+         * @returns Chainable.
+         */
+        initDefaultState: function (data) {
+            var defaultState = data || utils.copy(this.recordData());
+
+            this.defaultState = defaultState;
+
+            return this;
+        },
+
+        /**
+         * Triggers update event
+         *
+         * @param {Boolean} val
+         */
+        updateTrigger: function (val) {
+            this.trigger('update', !val);
+        },
+
+        /**
+         * Returns component state
+         */
+        hasChanged: function () {
+            return !this.isDefaultState();
         },
 
         /**
