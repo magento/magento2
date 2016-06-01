@@ -51,6 +51,16 @@ class Tree
     }
 
     /**
+     * Check is request use default scope
+     *
+     * @return bool
+     */
+    public function isAdminStore()
+    {
+        return $this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE;
+    }
+
+    /**
      * @param \Magento\Catalog\Model\Category|null $category
      * @return Node|null
      */
