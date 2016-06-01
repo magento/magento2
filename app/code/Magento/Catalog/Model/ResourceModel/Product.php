@@ -315,9 +315,6 @@ class Product extends AbstractResource
      */
     protected function _saveWebsiteIds($product)
     {
-//        if (empty(array_diff($product->getWebsiteIds(), [0]))) {
-//            $product->setWebsiteIds([1]);
-//        }
         if ($this->_storeManager->isSingleStoreMode()) {
             $id = $this->_storeManager->getDefaultStoreView()->getWebsiteId();
             $product->setWebsiteIds([$id]);
