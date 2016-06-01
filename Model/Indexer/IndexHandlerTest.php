@@ -18,7 +18,7 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
  * achieve this, use @magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
  * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest'
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  */
 class IndexHandlerTest extends \PHPUnit_Framework_TestCase
