@@ -133,9 +133,9 @@ class IndexHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexRowAfterEdit()
     {
-        $this->reindexAll();
         $this->productApple->setData('name', 'Simple Product Cucumber');
         $this->productApple->save();
+        $this->reindexAll();
 
         foreach ($this->storeIds as $storeId) {
             $products = $this->searchByName('Apple', $storeId);
