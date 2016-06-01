@@ -407,7 +407,8 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         array_walk($rangeFilter, function (&$item) {
             if (!empty($item)) {
-                $item = gmdate('c', strtotime($item));
+                $item = gmdate('c', strtotime($item)) . 'Z';
+                $item = str_replace('+00:00', '', $item);
             }
         });
         $this->requestBuilder->bind('date.from', $rangeFilter['from']);
