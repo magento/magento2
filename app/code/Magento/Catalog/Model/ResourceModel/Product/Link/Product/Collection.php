@@ -438,7 +438,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Join Product To Links
      * @return void
      */
-    protected function joinProductsToLinks()
+    private function joinProductsToLinks()
     {
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $this->getSelect()
