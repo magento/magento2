@@ -34,7 +34,7 @@ class ChannelDataBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $edition
      * @param array $expected
-     * @covers ChannelDataBuilder::build
+     * @covers \Magento\Braintree\Gateway\Request\ChannelDataBuilder::build
      * @dataProvider buildDataProvider
      */
     public function testBuild($edition, array $expected)
