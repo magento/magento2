@@ -77,7 +77,9 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
             $imageTypes[$attributeCode] = [
                 'code' => $attributeCode,
                 'value' => '',
-                'name' => '',
+                'label' => $attributeCode,
+                'scope' => '',
+                'name' => $attributeCode,
             ];
         }
         return $imageTypes;

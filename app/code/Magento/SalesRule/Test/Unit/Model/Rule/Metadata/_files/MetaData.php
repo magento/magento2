@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 return [
     'rule_information' =>
         [
@@ -101,7 +106,7 @@ return [
                                                             ],
                                                             [
                                                                 'label' => __('Fixed amount discount for whole cart'),
-                                                                'value' => 'by_percent',
+                                                                'value' => 'cart_fixed',
                                                             ],
                                                             [
                                                                 'label' => __(

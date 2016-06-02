@@ -25,6 +25,7 @@ class ProcessableException extends LocalizedException
     const API_COUNTRY_FILTER_DECLINE = 10537;
     const API_MAXIMUM_AMOUNT_FILTER_DECLINE = 10538;
     const API_OTHER_FILTER_DECLINE = 10539;
+    const API_ADDRESS_MATCH_FAIL = 10736;
     /**#@-*/
 
     /**
@@ -61,8 +62,13 @@ class ProcessableException extends LocalizedException
                     'I\'m sorry - but we are not able to complete your transaction. Please contact us so we can assist you.'
                 );
                 break;
+            case self::API_ADDRESS_MATCH_FAIL:
+                $message = __(
+                    'A match of the Shipping Address City, State, and Postal Code failed.'
+                );
+                break;
             default:
-                $message = __($this->getMessage());
+                $message = __('We can\'t place the order.');
                 break;
         }
         return $message;

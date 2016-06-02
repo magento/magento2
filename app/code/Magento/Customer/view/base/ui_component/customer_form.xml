@@ -103,7 +103,7 @@
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="link" xsi:type="string">http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes</item>
+                        <item name="link" xsi:type="string">http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</item>
                         <item name="description" xsi:type="string" translate="true">If your Magento site has multiple views, you can set the scope to apply to a specific view.</item>
                     </item>
                 </item>
@@ -148,6 +148,7 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="source" xsi:type="string">customer</item>
+                        <item name="prefer" xsi:type="string">checkbox</item>
                         <item name="description" xsi:type="string" translate="true">Disable Automatic Group Change Based on VAT ID</item>
                         <item name="valueMap" xsi:type="array">
                             <item name="true" xsi:type="string">1</item>

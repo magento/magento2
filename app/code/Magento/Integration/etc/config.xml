@@ -17,6 +17,10 @@
                 <post_maxredirects>0</post_maxredirects>
                 <post_timeout>5</post_timeout>
             </consumer>
+            <authentication_lock>
+                <max_failures_count>6</max_failures_count>
+                <timeout>1800</timeout>
+            </authentication_lock>
         </oauth>
     </default>
 </config>

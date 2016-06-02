@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Model\ResourceModel\Db;
 
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class ReadEntityRow

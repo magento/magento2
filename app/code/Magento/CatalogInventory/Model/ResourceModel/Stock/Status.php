@@ -6,9 +6,11 @@
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
 use Magento\CatalogInventory\Model\Stock;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * CatalogInventory Stock Status per website Resource Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -16,6 +18,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Store model manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
+     * @deprecated
      */
     protected $_storeManager;
 
@@ -30,6 +33,11 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Eav\Model\Config
      */
     protected $eavConfig;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -190,11 +198,12 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DB\Select $select
      * @param \Magento\Store\Model\Website $website
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return Status
      */
     public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
     {
-        $websiteId = $website->getId();
+        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
         $select->joinLeft(
             ['stock_status' => $this->getMainTable()],
             'e.entity_id = stock_status.product_id AND stock_status.website_id=' . $websiteId,
@@ -211,7 +220,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function addStockDataToCollection($collection, $isFilterInStock)
     {
-        $websiteId = $this->_storeManager->getStore($collection->getStoreId())->getWebsiteId();
+        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
         $joinCondition = $this->getConnection()->quoteInto(
             'e.entity_id = stock_status_index.product_id' . ' AND stock_status_index.website_id = ?',
             $websiteId
@@ -245,7 +254,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function addIsInStockFilterToCollection($collection)
     {
-        $websiteId = $this->_storeManager->getStore($collection->getStoreId())->getWebsiteId();
+        $websiteId = $this->getStockConfiguration()->getDefaultScopeId();
         $joinCondition = $this->getConnection()->quoteInto(
             'e.entity_id = stock_status_index.product_id' . ' AND stock_status_index.website_id = ?',
             $websiteId
@@ -324,5 +333,19 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         }
         return $statuses;
+    }
+
+    /**
+     * @return StockConfigurationInterface
+     *
+     * @deprecated
+     */
+    private function getStockConfiguration()
+    {
+        if ($this->stockConfiguration === null) {
+            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+        }
+        return $this->stockConfiguration;
     }
 }

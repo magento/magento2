@@ -9,6 +9,10 @@ use Magento\Checkout\Block\Cart\AbstractCart;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address\Rate;
 
+/**
+ * Class Price
+ * @deprecated
+ */
 class Price extends AbstractCart
 {
     /**

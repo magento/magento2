@@ -86,23 +86,25 @@ class Registration
      */
     protected function updateThemeData()
     {
-        $themesData = $this->themeCollection->loadData();
-        /** @var \Magento\Theme\Model\Theme $themeData */
-        foreach ($themesData as $themeData) {
-            if ($themeData->getParentTheme()) {
-                $parentTheme = $this->themeLoader->getThemeByFullPath(
-                    $themeData->getParentTheme()->getFullPath()
+        $themesFromConfig = $this->themeCollection->loadData();
+        /** @var \Magento\Theme\Model\Theme $themeFromConfig */
+        foreach ($themesFromConfig as $themeFromConfig) {
+            /** @var \Magento\Theme\Model\Theme $themeFromDb */
+            $themeFromDb = $this->themeLoader->getThemeByFullPath(
+                $themeFromConfig->getArea()
+                . Theme::THEME_PATH_SEPARATOR
+                . $themeFromConfig->getThemePath()
+            );
+
+            if ($themeFromConfig->getParentTheme()) {
+                $parentThemeFromDb = $this->themeLoader->getThemeByFullPath(
+                    $themeFromConfig->getParentTheme()->getFullPath()
                 );
-                $themeData->setParentId($parentTheme->getId());
+                $themeFromDb->setParentId($parentThemeFromDb->getId());
             }
 
-            /** @var \Magento\Theme\Model\Theme $theme */
-            $theme = $this->themeLoader->getThemeByFullPath(
-                $themeData->getArea()
-                . Theme::THEME_PATH_SEPARATOR
-                . $themeData->getThemePath()
-            );
-            $theme->addData($themeData->toArray())->save();
+            $themeFromDb->setThemeTitle($themeFromConfig->getThemeTitle());
+            $themeFromDb->save();
         }
     }
 }

@@ -70,7 +70,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         $this->_helperMock->expects($this->once())->method('isGoogleExperimentActive')->will($this->returnValue(true));
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -98,8 +98,6 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $params
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Wrong request parameters
      * @dataProvider dataProviderWrongRequestForCreating
      */
     public function testCreatingCodeIfRequestIsNotValid($params)
@@ -143,7 +141,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         $this->_helperMock->expects($this->once())->method('isGoogleExperimentActive')->will($this->returnValue(true));
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -184,7 +182,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         $this->_helperMock->expects($this->once())->method('isGoogleExperimentActive')->will($this->returnValue(true));
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(
@@ -215,7 +213,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_requestMock->expects(
-            $this->once()
+            $this->exactly(3)
         )->method(
             'getParam'
         )->with(

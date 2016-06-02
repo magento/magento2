@@ -74,7 +74,11 @@ class Save extends Action
 
             $this->dataPersistor->clear('theme_design_config');
 
+            $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
             $resultRedirect->setPath('theme/design_config/');
+            if ($returnToEdit) {
+                $resultRedirect->setPath('theme/design_config/edit', ['scope' => $scope, 'scope_id' => $scopeId]);
+            }
             return $resultRedirect;
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());

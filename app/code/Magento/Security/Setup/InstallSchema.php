@@ -88,9 +88,9 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'ip',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false],
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                15,
+                ['nullable' => false],
                 'Remote user IP'
             )
             ->addIndex(
@@ -151,9 +151,9 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addColumn(
                 'ip',
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                null,
-                ['unsigned' => true, 'nullable' => false],
+                \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                15,
+                ['nullable' => false],
                 'Remote user IP'
             )
             ->addIndex(

@@ -22,7 +22,7 @@ class UpdateEntityRowTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
@@ -50,7 +50,7 @@ class UpdateEntityRowTest extends \PHPUnit_Framework_TestCase
         $output['test_column_name'] = 'test_column_name';
         $expectedResult = true;
 
-        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')

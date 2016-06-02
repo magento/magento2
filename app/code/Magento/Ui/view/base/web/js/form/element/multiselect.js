@@ -17,9 +17,40 @@ define([
         },
 
         /**
-         * Splits incoming string value.
-         *
-         * @returns {Array}
+         * @inheritdoc
+         */
+        initConfig: function () {
+            this._super();
+
+            this.value = this.normalizeData(this.value);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        initLinks: function () {
+            var scope = this.source.get(this.dataScope);
+
+            this.multipleScopeValue = _.isArray(scope) ? utils.copy(scope) : undefined;
+
+            return this._super();
+        },
+
+        /**
+         * @inheritdoc
+         */
+        setInitialValue: function () {
+            this._super();
+
+            this.initialValue = utils.copy(this.initialValue);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
          */
         normalizeData: function (value) {
             if (utils.isEmpty(value)) {
@@ -30,15 +61,47 @@ define([
         },
 
         /**
-         * Defines if value has changed
-         *
-         * @returns {Boolean}
+         * @inheritdoc
+         */
+        getInitialValue: function () {
+            var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
+                value;
+
+            values.some(function (v) {
+                return _.isArray(v) && (value = utils.copy(v));
+            });
+
+            return value;
+        },
+
+        /**
+         * @inheritdoc
          */
         hasChanged: function () {
             var value = this.value(),
                 initial = this.initialValue;
 
             return !utils.equalArrays(value, initial);
+        },
+
+        /**
+         * @inheritdoc
+         */
+        reset: function () {
+            this.value(utils.copy(this.initialValue));
+            this.error(false);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        clear: function () {
+            this.value([]);
+            this.error(false);
+
+            return this;
         }
     });
 });

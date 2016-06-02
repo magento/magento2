@@ -10,7 +10,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Helper\File;
 use Magento\Downloadable\Model\ComponentInterface;
 use Magento\Framework\Json\Helper\Data;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class AbstractTypeHandler
@@ -44,16 +45,13 @@ abstract class AbstractTypeHandler
     /**
      * @param Data $jsonHelper
      * @param File $downloadableFile
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Data $jsonHelper,
-        File $downloadableFile,
-        MetadataPool $metadataPool
+        File $downloadableFile
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->downloadableFile = $downloadableFile;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -195,5 +193,17 @@ abstract class AbstractTypeHandler
     protected function clear()
     {
         $this->deletedItems = [];
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

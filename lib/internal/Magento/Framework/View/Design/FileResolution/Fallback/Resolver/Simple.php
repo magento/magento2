@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
@@ -32,8 +34,11 @@ class Simple implements Fallback\ResolverInterface
     protected $rulePool;
 
     /**
-     * Constructor
-     *
+     * @var DirectoryList
+     */
+    private $directoryList;
+
+    /**
      * @param ReadFactory $readFactory
      * @param RulePool $rulePool
      */
@@ -48,7 +53,6 @@ class Simple implements Fallback\ResolverInterface
      */
     public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
     {
-        self::assertFilePathFormat($file);
 
         $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
         foreach ($params as $key => $param) {
@@ -79,6 +83,34 @@ class Simple implements Fallback\ResolverInterface
     }
 
     /**
+     * Validate the file path to be secured
+     *
+     * @param string $fileName
+     * @param string $filePath
+     * @return bool
+     */
+    private function checkFilePathAccess($fileName, $filePath)
+    {
+        // Check if file name not contains any references '/./', '/../'
+        if (strpos(str_replace('\\', '/', $fileName), './') === false) {
+            return true;
+        }
+
+        $realPath = realpath($filePath);
+        $directoryWeb = $this->readFactory->create(
+            $this->getDirectoryList()->getPath(DirectoryList::LIB_WEB)
+        );
+        $fileRead = $this->readFactory->create($realPath);
+
+        // Check if file path starts with web lib directory path
+        if (strpos($fileRead->getAbsolutePath(), $directoryWeb->getAbsolutePath()) === 0) {
+            return true;
+        }
+
+        throw new \InvalidArgumentException("File path '{$filePath}' is forbidden for security reasons.");
+    }
+
+    /**
      * Get path of file after using fallback rules
      *
      * @param RuleInterface $fallbackRule
@@ -91,10 +123,24 @@ class Simple implements Fallback\ResolverInterface
         foreach ($fallbackRule->getPatternDirs($params) as $dir) {
             $path = "{$dir}/{$file}";
             $dirRead = $this->readFactory->create($dir);
-            if ($dirRead->isExist($file)) {
+            if ($dirRead->isExist($file) && $this->checkFilePathAccess($file, $path)) {
                 return $path;
             }
         }
         return false;
+    }
+
+    /**
+     * Retrieve directory list object
+     *
+     * @return DirectoryList
+     */
+    protected function getDirectoryList()
+    {
+        if (null === $this->directoryList) {
+            $this->directoryList = \Magento\Framework\App\ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 }

@@ -56,6 +56,9 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
             foreach ($dataSource['data']['items'] as & $item) {
                 $websites = [];
                 foreach ($item[$fieldName] as $websiteId) {
+                    if (!isset($websiteNames[$websiteId])) {
+                        continue;
+                    }
                     $websites[] = $websiteNames[$websiteId];
                 }
                 $item[$fieldName] = implode(', ', $websites);

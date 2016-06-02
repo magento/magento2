@@ -6,10 +6,11 @@ define([
     'jquery',
     'underscore',
     './utils',
+    'moment',
     'jquery/validate',
     'jquery/ui',
     'mage/translate'
-], function ($, _, utils) {
+], function ($, _, utils, moment) {
     'use strict';
 
     /**
@@ -73,7 +74,7 @@ define([
         "range-words": [
             function(value, params) {
                 return utils.stripHtml(value).match(/\b\w+\b/g).length >= params[0] &&
-                        value.match(/bw+b/g).length < params[1];
+                    value.match(/bw+b/g).length < params[1];
             },
             $.mage.__('Please enter between {0} and {1} words.')
         ],
@@ -702,27 +703,21 @@ define([
         ],
         "less-than-equals-to": [
             function(value, params) {
-                if ($.isNumeric($(params).val()) && $.isNumeric(value)) {
-                    this.lteToVal = $(params).val();
-                    return parseFloat(value) <= parseFloat($(params).val());
+                if ($.isNumeric(params) && $.isNumeric(value)) {
+                    return parseFloat(value) <= parseFloat(params);
                 }
                 return true;
             },
-            function() {
-                return 'Please enter a value less than or equal to %s.'.replace('%s', this.lteToVal);
-            }
+            $.mage.__('Please enter a value less than or equal to {0}.')
         ],
         "greater-than-equals-to": [
             function(value, params) {
-                if ($.isNumeric($(params).val()) && $.isNumeric(value)) {
-                    this.gteToVal = $(params).val();
-                    return parseFloat(value) >= parseFloat($(params).val());
+                if ($.isNumeric(params) && $.isNumeric(value)) {
+                    return parseFloat(value) >= parseFloat(params);
                 }
                 return true;
             },
-            function() {
-                return 'Please enter a value greater than or equal to %s.'.replace('%s', this.gteToVal);
-            }
+            $.mage.__('Please enter a value greater than or equal to {0}.')
         ],
         "validate-emails": [
             function(value) {
@@ -758,7 +753,7 @@ define([
              * @param value - input field value
              * @return {*}
              */
-            function(value) {
+                function(value) {
                 return value;
             }, $.mage.__('Please enter issue number or start date for switch/solo card type.')
         ],
@@ -851,6 +846,18 @@ define([
                 return !value || (/<script\b[^>]*>([\s\S]*?)<\/script>$/ig).test(value);
             },
             $.mage.__('Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document.')
+        ],
+        'date_range_min': [
+            function (value, minValue, params) {
+                return moment.utc(value, params.dateFormat).unix() >= minValue;
+            },
+            $.mage.__('The date is not within the specified range.')
+        ],
+        'date_range_max': [
+            function (value, maxValue, params) {
+                return moment.utc(value, params.dateFormat).unix() <= maxValue;
+            },
+            $.mage.__('The date is not within the specified range.')
         ]
     }, function (data) {
         return {

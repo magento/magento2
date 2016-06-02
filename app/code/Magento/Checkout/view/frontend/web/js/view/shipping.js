@@ -67,7 +67,7 @@ define(
             isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
-            saveInAddressBook: true,
+            saveInAddressBook: 1,
             quoteIsVirtual: quote.isVirtual(),
 
             /**
@@ -75,9 +75,11 @@ define(
              */
             initialize: function () {
                 var self = this,
-                    hasNewAddress;
+                    hasNewAddress,
+                    fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
 
                 this._super();
+                shippingRatesValidator.initFields(fieldsetName);
 
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep(
@@ -128,15 +130,6 @@ define(
              */
             navigate: function () {
                 //load data from server for shipping step
-            },
-
-            /**
-             * @param {Object} element
-             */
-            initElement: function (element) {
-                if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
-                }
             },
 
             /**
@@ -296,7 +289,7 @@ define(
                     }
 
                     if (customer.isLoggedIn()) {
-                        shippingAddress.save_in_address_book = true;
+                        shippingAddress.save_in_address_book = 1;
                     }
                     selectShippingAddress(shippingAddress);
                 }

@@ -5,9 +5,6 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\Entity\MetadataPool;
-
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
@@ -26,13 +23,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
      */
     protected $_attrOptionFactory;
-
-    /**
-     * Metadata Pool
-     *
-     * @var MetadataPool
-     */
-    protected $metadataPool;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
@@ -76,7 +66,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         }
         $options = $defaultValues ? $this->_optionsDefault[$storeId] : $this->_options[$storeId];
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            $options = $this->addEmptyOption($options);
         }
 
         return $options;
@@ -99,8 +89,18 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             ->load()
             ->toOptionArray();
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            $options = $this->addEmptyOption($options);
         }
+        return $options;
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    private function addEmptyOption(array $options)
+    {
+        array_unshift($options, ['label' => $this->getAttribute()->getIsRequired() ? '' : ' ', 'value' => '']);
         return $options;
     }
 
@@ -148,23 +148,20 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function addValueSortToCollection($collection, $dir = \Magento\Framework\DB\Select::SQL_ASC)
     {
-        $valueTable1 = $this->getAttribute()->getAttributeCode() . '_t1';
-        $valueTable2 = $this->getAttribute()->getAttributeCode() . '_t2';
-
-        // FIXME: we can not use \Magento\Catalog\Api\Data\ProductInterface::class
-        $linkField = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->getLinkField();
-
+        $attribute = $this->getAttribute();
+        $valueTable1 = $attribute->getAttributeCode() . '_t1';
+        $valueTable2 = $attribute->getAttributeCode() . '_t2';
+        $linkField = $attribute->getEntity()->getLinkField();
         $collection->getSelect()->joinLeft(
-            [$valueTable1 => $this->getAttribute()->getBackend()->getTable()],
-            "e.entity_id={$valueTable1}.{$linkField}" .
-            " AND {$valueTable1}.attribute_id='{$this->getAttribute()->getId()}'" .
+            [$valueTable1 => $attribute->getBackend()->getTable()],
+            "e.{$linkField}={$valueTable1}." . $linkField .
+            " AND {$valueTable1}.attribute_id='{$attribute->getId()}'" .
             " AND {$valueTable1}.store_id=0",
             []
         )->joinLeft(
-            [$valueTable2 => $this->getAttribute()->getBackend()->getTable()],
-            "e.entity_id={$valueTable2}.{$linkField}" .
-            " AND {$valueTable2}.attribute_id='{$this->getAttribute()->getId()}'" .
+            [$valueTable2 => $attribute->getBackend()->getTable()],
+            "e.{$linkField}={$valueTable2}." . $linkField .
+            " AND {$valueTable2}.attribute_id='{$attribute->getId()}'" .
             " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
             []
         );
@@ -176,11 +173,11 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
         $this->_attrOptionFactory->create()->addOptionValueToCollection(
             $collection,
-            $this->getAttribute(),
+            $attribute,
             $valueExpr
         );
 
-        $collection->getSelect()->order("{$this->getAttribute()->getAttributeCode()} {$dir}");
+        $collection->getSelect()->order("{$attribute->getAttributeCode()} {$dir}");
 
         return $this;
     }
@@ -255,18 +252,5 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getFlatUpdateSelect($store)
     {
         return $this->_attrOptionFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store);
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-        return $this->metadataPool;
     }
 }

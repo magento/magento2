@@ -46,9 +46,6 @@ define([
                         data.intype = swatchOptionTextDefaultInputType;
                     }
 
-                    if (!this.totalItems) {
-                        data.checked = 'checked';
-                    }
                     element = this.template({
                         data: data
                     });

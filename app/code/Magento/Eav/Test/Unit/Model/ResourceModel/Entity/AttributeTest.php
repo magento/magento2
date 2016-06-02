@@ -8,6 +8,8 @@
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -40,8 +42,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testSaveOptionSystemAttribute()
     {
         /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
-        /** @var $resourceModelMock \Magento\Eav\Model\ResourceModel\Entity\Attribute */
-        list($connectionMock, $resourceModelMock) = $this->_prepareResourceModel();
+        /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
+        list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $attributeData = [
             'attribute_id' => '123',
@@ -102,7 +104,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
         $connectionMock->expects($this->never())->method('delete');
 
-        $resourceModelMock->save($model);
+        $resourceModel->save($model);
     }
 
     /**
@@ -111,8 +113,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testSaveOptionNewUserDefinedAttribute()
     {
         /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
-        /** @var $resourceModelMock \Magento\Eav\Model\ResourceModel\Entity\Attribute */
-        list($connectionMock, $resourceModelMock) = $this->_prepareResourceModel();
+        /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
+        list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $attributeData = [
             'entity_type_id' => 4,
@@ -197,7 +199,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $resourceModelMock->save($model);
+        $resourceModel->save($model);
     }
 
     /**
@@ -206,8 +208,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testSaveOptionNoValue()
     {
         /** @var $connectionMock \PHPUnit_Framework_MockObject_MockObject */
-        /** @var $resourceModelMock \Magento\Eav\Model\ResourceModel\Entity\Attribute */
-        list($connectionMock, $resourceModelMock) = $this->_prepareResourceModel();
+        /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
+        list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var $model \Magento\Framework\Model\AbstractModel */
@@ -220,7 +222,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $connectionMock->expects($this->never())->method('delete');
         $connectionMock->expects($this->never())->method('update');
 
-        $resourceModelMock->save($model);
+        $resourceModel->save($model);
     }
 
     /**
@@ -330,18 +332,29 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
+        $configMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)->disableOriginalConstructor()->getMock();
+        $attributeCacheMock = $this->getMockBuilder(
+            \Magento\Eav\Model\Entity\AttributeCache::class
+        )->disableOriginalConstructor()->getMock();
         $arguments = [
             'context' => $contextMock,
             'storeManager' => $storeManager,
             'eavEntityType' => $eavEntityType,
         ];
-        $resourceModelMock = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute',
-            ['getAdditionalAttributeTable'],
-            $arguments
+        $helper = new ObjectManager($this);
+        $resourceModel = $helper->getObject(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class, $arguments);
+        $helper->setBackwardCompatibleProperty(
+            $resourceModel,
+            'config',
+            $configMock
         );
-
-        return [$connectionMock, $resourceModelMock];
+        $helper->setBackwardCompatibleProperty(
+            $resourceModel,
+            'attributeCache',
+            $attributeCacheMock
+        );
+        
+        return [$connectionMock, $resourceModel];
     }
 
     /**

@@ -50,6 +50,7 @@ define(
              */
             placePendingPaymentOrder: function () {
                 if (this.placeOrder()) {
+                    fullScreenLoader.startLoader();
                     this.isInAction(true);
                     // capture all click events
                     document.addEventListener('click', iframe.stopEventPropagation, true);
@@ -61,6 +62,7 @@ define(
                 return this._super()
                     .fail(
                         function () {
+                            fullScreenLoader.stopLoader();
                             self.isInAction(false);
                             document.removeEventListener('click', iframe.stopEventPropagation, true);
                         }
@@ -71,7 +73,15 @@ define(
              * After place order callback
              */
             afterPlaceOrder: function () {
+                if (this.iframeIsLoaded) {
+                    document.getElementById(this.getCode() + '-iframe')
+                        .contentWindow.location.reload();
+                }
+
                 this.paymentReady(true);
+                this.iframeIsLoaded = true;
+                this.isPlaceOrderActionAllowed(true);
+                fullScreenLoader.stopLoader();
             },
 
             /**
