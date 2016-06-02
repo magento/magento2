@@ -13,14 +13,14 @@ namespace Magefan\LoginAsCustomer\Controller\Adminhtml\Login;
  */
 class Login extends \Magento\Backend\App\Action
 {
-	/**
+    /**
      * Login as customer action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
-    	$customerId = (int) $this->getRequest()->getParam('customer_id');
+        $customerId = (int) $this->getRequest()->getParam('customer_id');
 
         $login = $this->_objectManager
             ->create('\Magefan\LoginAsCustomer\Model\Login')
@@ -30,18 +30,18 @@ class Login extends \Magento\Backend\App\Action
 
         $customer = $login->getCustomer();
 
-    	if (!$customer->getId()) {
-    		$this->messageManager->addError(__('Customer with this ID are no longer exist.'));
-    		$this->_redirect('customer/index/index');
-    		return;
-    	}
+        if (!$customer->getId()) {
+            $this->messageManager->addError(__('Customer with this ID are no longer exist.'));
+            $this->_redirect('customer/index/index');
+            return;
+        }
 
         $user = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
         $login->generate($user->getId());
 
         $redirectUrl = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
             ->getStore($customer->getStoreId())
-            ->getUrl('loginascustomer/login/index', ['secret' => $login->getSecret()]);
+            ->getUrl('loginascustomer/login/index', ['secret' => $login->getSecret(), '_nosid' => true]);
 
         $this->getResponse()->setRedirect($redirectUrl);
     }

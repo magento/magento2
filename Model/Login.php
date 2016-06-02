@@ -44,10 +44,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
      */
     protected $_customer;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_eventManager;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -71,7 +67,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Store\Model\StoreManagerInterface $eventManager
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Math\Random $random
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -83,7 +78,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Store\Model\StoreManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Math\Random $random,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -92,7 +86,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_customerSession = $customerSession;
-        $this->_eventManager = $eventManager;
         $this->_dateTime = $dateTime;
         $this->_random = $random;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -172,10 +165,9 @@ class Login extends \Magento\Framework\Model\AbstractModel
             throw new Exception(__("Customer are no longer exist."), 1);
         }
 
-        $this->_eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
-
-        $this->_customerSession->loginById($customer->getId());
-        $this->_customerSession->regenerateId();
+        if ($this->_customerSession->loginById($customer->getId())) {
+            $this->_customerSession->regenerateId();
+        }
 
         $this->setUsed(1)->save();
 
