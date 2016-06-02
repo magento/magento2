@@ -432,7 +432,7 @@ define([
 
             for (t = 0; t < thumbs.length; t++) {
                 this._setThumbsIcon(thumbs.eq(t), t);
-                this._checkForVideo(e, fotorama, t);
+                this._checkForVideo(e, fotorama, t + 1);
             }
 
             this.fotoramaItem.on('fotorama:showend', $.proxy(function (evt, fotoramaData) {
