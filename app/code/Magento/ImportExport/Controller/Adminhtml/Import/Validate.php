@@ -35,20 +35,24 @@ class Validate extends ImportResultController
 
             /** @var $import \Magento\ImportExport\Model\Import */
             $import = $this->_objectManager->create('Magento\ImportExport\Model\Import')->setData($data);
-            $source = ImportAdapter::findAdapterFor(
-                $import->uploadSource(),
-                $this->_objectManager->create('Magento\Framework\Filesystem')
-                    ->getDirectoryWrite(DirectoryList::ROOT),
-                $data[$import::FIELD_FIELD_SEPARATOR]
-            );
-            $validationResult = $import->validateSource($source);
-
+            $validationResult = null;
+            try {
+                $source = ImportAdapter::findAdapterFor(
+                    $import->uploadSource(),
+                    $this->_objectManager->create('Magento\Framework\Filesystem')
+                        ->getDirectoryWrite(DirectoryList::ROOT),
+                    $data[$import::FIELD_FIELD_SEPARATOR]
+                );
+                $validationResult = $import->validateSource($source);
+            } catch (\Exception $e) {
+                $resultBlock->addError(__($e->getMessage()));
+            }
             if (!$import->getProcessedRowsCount()) {
                 if (!$import->getErrorAggregator()->getErrorsCount()) {
                     $resultBlock->addError(__('This file is empty. Please try another one.'));
                 } else {
                     foreach ($import->getErrorAggregator()->getAllErrors() as $error) {
-                        $resultBlock->addError($error->getErrorMessage(), false);
+                        $resultBlock->addError($error->getErrorMessage());
                     }
                 }
             } else {
@@ -65,10 +69,7 @@ class Validate extends ImportResultController
                             true
                         );
                     } else {
-                        $resultBlock->addError(
-                            __('The file is valid, but we can\'t import it for some reason.'),
-                            false
-                        );
+                        $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));
                     }
                 }
                 $resultBlock->addNotice(
