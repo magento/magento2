@@ -172,4 +172,13 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1', $attributeMetadata->isSystem(), '"Is system" field value is invalid');
         $this->assertEquals('40', $attributeMetadata->getSortOrder(), 'Sort order is invalid');
     }
+
+    protected function tearDown()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /* @var \Magento\Framework\Config\CacheInterface $cache */
+        $cache = $objectManager->create('Magento\Framework\Config\CacheInterface');
+        $cache->remove('extension_attributes_config');
+    }
 }

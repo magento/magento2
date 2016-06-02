@@ -51,6 +51,21 @@ define([
             enableBmlPayPal:      '[data-enable="bml-api"]',
 
             /**
+             * An attribute of the element responsible for the visibility of the PayPal Merchant Id (data attribute)
+             */
+            dependsMerchantId:  '[data-enable="merchant-id"]',
+
+            /**
+             * An attribute of the element responsible for the visibility of the Payflow Bml Sort Order (data attribute)
+             */
+            dependsBmlSortOrder:    '[data-enable="bml-sort-order"]',
+
+            /**
+             * An attribute of the element responsible for the visibility of the PayPal Bml Sort Order (data attribute)
+             */
+            dependsBmlApiSortOrder:    '[data-enable="bml-api-sort-order"]',
+
+            /**
              * Templates element selectors
              */
             templates: {
@@ -157,6 +172,9 @@ define([
                                 enableInContextPayPal: this.enableInContextPayPal,
                                 enableBml: this.enableBml,
                                 enableBmlPayPal: this.enableBmlPayPal,
+                                dependsMerchantId: this.dependsMerchantId,
+                                dependsBmlSortOrder: this.dependsBmlSortOrder,
+                                dependsBmlApiSortOrder: this.dependsBmlApiSortOrder,
                                 solutionsElements: this.solutionsElements,
                                 argument: instance.argument
                             }

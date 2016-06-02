@@ -65,10 +65,15 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->productOptionExtensionAttributes = $this->getMockBuilder(ProductOptionExtensionAttributes::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setConfigurableItemOptions'])
-            ->getMock();
+        $this->productOptionExtensionAttributes = $this->getMockForAbstractClass(
+            ProductOptionExtensionAttributes::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['setConfigurableItemOptions']
+        );
 
         $this->model = new \Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor(
             $this->objectFactoryMock,

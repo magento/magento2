@@ -7,7 +7,7 @@
 namespace Magento\Eav\Model;
 
 use Magento\Framework\Model\EntitySnapshot\AttributeProviderInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 

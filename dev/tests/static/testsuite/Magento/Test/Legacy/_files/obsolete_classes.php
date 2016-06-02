@@ -762,7 +762,6 @@ return [
     ],
     ['Magento\Catalog\Model\Product\AttributeSet\AlreadyExistsException'],
     ['Magento\Catalog\Model\Product\Option\Type\File\Exception'],
-    ['Magento\Catalog\Model\Product\Option\Converter'],
     [
         'Magento\Catalog\Model\Product\Option\Type\File\LargeSizeException',
         'Magento\Framework\Exception\File\LargeSizeException',
@@ -4221,5 +4220,7 @@ return [
     ['Magento\Braintree\Test\Unit\Model\VaultTest'],
     ['Magento\Braintree\Test\Unit\Observer\DeleteBraintreeCustomerTest'],
     ['Magento\Braintree\Test\Unit\Observer\ProcessBraintreeAddressTest'],
-    ['Magento\Braintree\Test\Unit\Observer\ProcessBraintreePaymentTest']
+    ['Magento\Braintree\Test\Unit\Observer\ProcessBraintreePaymentTest'],
+    ['Magento\Catalog\Model\Webapi\Product\Option\Type\File\Validator'],
+    ['Magento\Catalog\Test\Unit\Webapi\Product\Option\Type\File\ValidatorTest'],
 ];

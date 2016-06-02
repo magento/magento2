@@ -27,7 +27,7 @@ define([
          */
         initialize: function () {
             this._super();
-            this.handleProductType(this.isDownloadable, true);
+            this.handleProductType(this.isDownloadable);
 
             return this;
         },
@@ -48,19 +48,18 @@ define([
          * Change content for container and visibility for button
          *
          * @param {String} isDownloadable
-         * @param {Boolean} onlyContent
          */
-        handleProductType: function (isDownloadable, onlyContent) {
+        handleProductType: function (isDownloadable) {
             if (isDownloadable === '1') {
                 this.content(this.content2);
 
-                if (onlyContent !== true) {
+                if (this.createConfigurableButton()) {
                     this.createConfigurableButton().visible(false);
                 }
             } else {
                 this.content(this.content1);
 
-                if (onlyContent !== true) {
+                if (this.createConfigurableButton()) {
                     this.createConfigurableButton().visible(true);
                 }
             }

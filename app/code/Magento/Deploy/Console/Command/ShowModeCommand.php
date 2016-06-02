@@ -14,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\State;
 
 /**
- * Command for change the Magento mode
+ * Command to show application mode
  */
 class ShowModeCommand extends Command
 {
@@ -62,7 +62,9 @@ class ShowModeCommand extends Command
                 ]
             );
             $currentMode = $mode->getMode() ?: State::MODE_DEFAULT;
-            $output->writeln("Current application mode: $currentMode.");
+            $output->writeln(
+                "Current application mode: $currentMode. (Note: Environment variables may override this value.)"
+            );
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {

@@ -49,7 +49,7 @@ define([
                 }
 
                 $('body').notification('clear');
-                $.each(resp.messages, function (key, message) {
+                $.each(resp.messages || [resp.message] || [], function (key, message) {
                     $('body').notification('add', {
                         error: resp.error,
                         message: message,

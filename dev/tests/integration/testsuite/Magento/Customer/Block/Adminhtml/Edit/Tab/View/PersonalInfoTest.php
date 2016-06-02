@@ -183,7 +183,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testIsConfirmedStatusConfirmed()
     {
         $this->_loadCustomer();
-        $this->assertEquals('Confirmed', $this->_block->getIsConfirmedStatus());
+        $this->assertEquals(__('Confirmation Not Required'), $this->_block->getIsConfirmedStatus());
     }
 
     /**

@@ -330,7 +330,9 @@ class Topmenu extends Template implements IdentityInterface
      */
     public function addIdentity($identity)
     {
-        $this->identities[] = $identity;
+        if (!in_array($identity, $this->identities)) {
+            $this->identities[] = $identity;
+        }
     }
 
     /**
@@ -363,5 +365,15 @@ class Topmenu extends Template implements IdentityInterface
     protected function getCacheTags()
     {
         return array_merge(parent::getCacheTags(), $this->getIdentities());
+    }
+
+    /**
+     * Get menu object.
+     *
+     * @return Node
+     */
+    public function getMenu()
+    {
+        return $this->_menu;
     }
 }

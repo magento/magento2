@@ -9,6 +9,7 @@ namespace Magento\Customer\Observer;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State as AppState;
@@ -73,6 +74,11 @@ class AfterAddressSaveObserver implements ObserverInterface
     protected $escaper;
 
     /**
+     * @var CustomerSession
+     */
+    private $customerSession;
+
+    /**
      * @param Vat $customerVat
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
@@ -81,6 +87,7 @@ class AfterAddressSaveObserver implements ObserverInterface
      * @param ManagerInterface $messageManager
      * @param Escaper $escaper
      * @param AppState $appState
+     * @param CustomerSession $customerSession
      */
     public function __construct(
         Vat $customerVat,
@@ -90,7 +97,8 @@ class AfterAddressSaveObserver implements ObserverInterface
         ScopeConfigInterface $scopeConfig,
         ManagerInterface $messageManager,
         Escaper $escaper,
-        AppState $appState
+        AppState $appState,
+        CustomerSession $customerSession
     ) {
         $this->_customerVat = $customerVat;
         $this->_customerAddress = $customerAddress;
@@ -100,6 +108,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         $this->messageManager = $messageManager;
         $this->escaper = $escaper;
         $this->appState = $appState;
+        $this->customerSession = $customerSession;
     }
 
     /**
@@ -132,6 +141,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
                     $customer->setGroupId($defaultGroupId);
                     $customer->save();
+                    $this->customerSession->setCustomerGroupId($defaultGroupId);
                 }
             } else {
                 $result = $this->_customerVat->checkVatNumber(
@@ -148,6 +158,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $newGroupId) {
                     $customer->setGroupId($newGroupId);
                     $customer->save();
+                    $this->customerSession->setCustomerGroupId($newGroupId);
                 }
 
                 $customerAddress->setVatValidationResult($result);

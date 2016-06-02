@@ -70,6 +70,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 'cookieManager' => $this->cookieManagerMock,
                 'context'       => $context,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'request' => $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false, false),
                 'resource' => $resourceMock,
             ]
         );
@@ -91,7 +92,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $cookiePath = 'some_path';
         $this->configMock->expects($this->once())->method('getCookiePath')->will($this->returnValue($cookiePath));
-        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadata')
+        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataMock->expects($this->once())
@@ -99,7 +100,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->with($cookiePath)
             ->will($this->returnSelf());
         $this->cookieMetadataFactoryMock->expects($this->once())
-            ->method('createCookieMetadata')
+            ->method('createSensitiveCookieMetadata')
             ->will($this->returnValue($cookieMetadataMock));
         $this->cookieManagerMock->expects(
             $this->once()
@@ -128,6 +129,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $cookieMetadataMock->expects($this->once())
             ->method('setDuration')
             ->with($duration)
+            ->will($this->returnSelf());
+        $cookieMetadataMock->expects($this->once())
+            ->method('setSecure')
+            ->with(false)
             ->will($this->returnSelf());
         $cookieMetadataMock->expects($this->once())
             ->method('setHttpOnly')
@@ -171,6 +176,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setDuration')
             ->with($cookieDuration)
+            ->will($this->returnSelf());
+        $cookieMetadataMock->expects($this->exactly($numCalls))
+            ->method('setSecure')
+            ->with(false)
             ->will($this->returnSelf());
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setHttpOnly')

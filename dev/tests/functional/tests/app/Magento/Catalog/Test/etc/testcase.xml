@@ -8,9 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/TestCase/etc/testcase.xsd">
     <scenario name="CreateProductAttributeEntityFromProductPageTest" firstStep="openProductOnBackend">
         <step name="openProductOnBackend" module="Magento_Catalog" next="addNewAttributeFromProductPage"/>
-        <step name="addNewAttributeFromProductPage" module="Magento_Catalog" next="fillAttributeFormOnProductPage">
-            <item name="tabName" value="product-details"/>
-        </step>
+        <step name="addNewAttributeFromProductPage" module="Magento_Catalog" next="fillAttributeFormOnProductPage"/>
         <step name="fillAttributeFormOnProductPage" module="Magento_Catalog" next="saveAttributeOnProductPage"/>
         <step name="saveAttributeOnProductPage" module="Magento_Catalog" next="setDefaultAttributeValue"/>
         <step name="setDefaultAttributeValue" module="Magento_Catalog" next="saveProduct"/>

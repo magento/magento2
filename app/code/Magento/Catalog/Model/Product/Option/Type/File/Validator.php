@@ -38,7 +38,7 @@ abstract class Validator
         \Magento\Framework\File\Size $fileSize
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $this->fileSize = $fileSize;
     }
 

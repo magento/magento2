@@ -102,7 +102,6 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
             ->method('getAggregatorType')
             ->willReturn('getAggregatorType');
 
-
         $dataCondition1 = $this->getMockBuilder('\Magento\SalesRule\Model\Data\Condition')
             ->disableOriginalConstructor()
             ->setMethods(['create', 'load', 'getConditionType', 'getValue', 'getAttributeName', 'getOperator',
@@ -174,10 +173,10 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->willReturn(['data_1'=>1]);
 
-         $this->dataObjectProcessor
-             ->expects($this->any())
-             ->method('buildOutputDataArray')
-             ->willReturn(['data_2'=>2]);
+        $this->dataObjectProcessor
+            ->expects($this->any())
+            ->method('buildOutputDataArray')
+            ->willReturn(['data_2'=>2]);
 
         $this->ruleFactory
             ->expects($this->any())
@@ -186,5 +185,121 @@ class ToModelTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->model->toModel($dataModel);
         $this->assertEquals($ruleModel, $result);
+    }
+
+    /**
+     * @dataProvider expectedDatesProvider
+     */
+    public function testFormattingDate($data)
+    {
+        /**
+         * @var \Magento\SalesRule\Model\Data\Rule|\PHPUnit_Framework_MockObject_MockObject $dataModel
+         */
+        $dataModel = $this->getMockBuilder(\Magento\SalesRule\Model\Data\Rule::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'create',
+                    'load',
+                    'getData',
+                    'getRuleId',
+                    'getCondition',
+                    'getActionCondition',
+                    'getStoreLabels',
+                    'getFromDate',
+                    'setFromDate',
+                    'getToDate',
+                    'setToDate',
+                ]
+            )
+            ->getMock();
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('getRuleId')
+            ->willReturn(null);
+
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('getCondition')
+            ->willReturn(false);
+
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('getActionCondition')
+            ->willReturn(false);
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('getStoreLabels')
+            ->willReturn([]);
+        $ruleModel = $this->getMockBuilder('\Magento\SalesRule\Model\Rule')
+            ->disableOriginalConstructor()
+            ->setMethods(['create', 'load', 'getId', 'getData'])
+            ->getMock();
+        $ruleModel
+            ->expects($this->atLeastOnce())
+            ->method('getData')
+            ->willReturn(['data_1'=>1]);
+
+        $this->dataObjectProcessor
+            ->expects($this->any())
+            ->method('buildOutputDataArray')
+            ->willReturn(['data_2'=>2]);
+
+        $this->ruleFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($ruleModel);
+
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('getFromDate')
+            ->willReturn($data['from_date']);
+
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('getToDate')
+            ->willReturn($data['to_date']);
+
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('setFromDate')
+            ->with($data['expected_from_date']);
+
+        $dataModel
+            ->expects($this->atLeastOnce())
+            ->method('setToDate')
+            ->with($data['expected_to_date']);
+
+        $this->model->toModel($dataModel);
+    }
+
+    public function expectedDatesProvider()
+    {
+        return [
+            'mm/dd/yyyy to yyyy-mm-dd' => [
+                [
+                    'from_date' => '03/24/2016',
+                    'to_date' => '03/25/2016',
+                    'expected_from_date' => '2016-03-24T00:00:00-0700',
+                    'expected_to_date' => '2016-03-25T00:00:00-0700',
+                ]
+            ],
+            'yyyy-mm-dd to yyyy-mm-dd' => [
+                [
+                    'from_date' => '2016-03-24',
+                    'to_date' => '2016-03-25',
+                    'expected_from_date' => '2016-03-24T00:00:00-0700',
+                    'expected_to_date' => '2016-03-25T00:00:00-0700',
+                ]
+            ],
+            'yymmdd to yyyy-mm-dd' => [
+                [
+                    'from_date' => '20160324',
+                    'to_date' => '20160325',
+                    'expected_from_date' => '2016-03-24T00:00:00-0700',
+                    'expected_to_date' => '2016-03-25T00:00:00-0700',
+                ]
+            ],
+        ];
     }
 }

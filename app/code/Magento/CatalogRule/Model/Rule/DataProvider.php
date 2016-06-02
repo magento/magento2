@@ -74,6 +74,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $rule = $this->collection->getNewEmptyItem();
             $rule->setData($data);
             $this->loadedData[$rule->getId()] = $rule->getData();
+            $this->dataPersistor->clear('catalog_rule');
         }
 
         return $this->loadedData;

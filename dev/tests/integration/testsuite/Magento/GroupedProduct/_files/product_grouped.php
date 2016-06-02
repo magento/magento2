@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_simple_duplicated.php';
+require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_associated.php';
 require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_virtual_in_stock.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
-
-$productId = $productRepository->get('simple-1')->getId();
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
@@ -37,9 +35,10 @@ $product->setTypeId(
 
 $newLinks = [];
 $productLinkFactory = $objectManager->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
 $productLink = $productLinkFactory->create();
-$linkedProduct = $productRepository->getById($productId);
+$linkedProduct = $productRepository->getById(1);
 $productLink->setSku($product->getSku())
     ->setLinkType('associated')
     ->setLinkedProductSku($linkedProduct->getSku())
@@ -48,6 +47,7 @@ $productLink->setSku($product->getSku())
     ->getExtensionAttributes()
     ->setQty(1);
 $newLinks[] = $productLink;
+
 /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
 $productLink = $productLinkFactory->create();
 $linkedProduct = $productRepository->getById(21);
@@ -57,7 +57,7 @@ $productLink->setSku($product->getSku())
     ->setLinkedProductType($linkedProduct->getTypeId())
     ->setPosition(2)
     ->getExtensionAttributes()
-    ->setQty(1);
+    ->setQty(2);
 $newLinks[] = $productLink;
 $product->setProductLinks($newLinks);
 $product->save();

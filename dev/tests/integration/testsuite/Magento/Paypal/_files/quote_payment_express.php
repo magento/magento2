@@ -28,7 +28,12 @@ $product->setTypeId('simple')
     ->setPrice(10)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->save();
+    ->setStockData(
+        [
+            'qty' => 100,
+            'is_in_stock' => 1,
+        ]
+    )->save();
 $product->load(1);
 
 $billingData = [

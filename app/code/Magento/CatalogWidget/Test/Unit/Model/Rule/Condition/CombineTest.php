@@ -72,7 +72,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectValidatedAttributes()
     {
-        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
+        $collection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $condition = $this->getMockBuilder('Magento\CatalogWidget\Model\Rule\Condition\Combine')

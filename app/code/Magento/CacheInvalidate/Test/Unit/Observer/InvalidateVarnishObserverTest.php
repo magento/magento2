@@ -55,7 +55,7 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
     public function testInvalidateVarnish()
     {
         $tags = ['cache_1', 'cache_group'];
-        $pattern = '((^|,)cache(,|$))|((^|,)cache_1(,|$))|((^|,)cache_group(,|$))';
+        $pattern = '((^|,)cache_1(,|$))|((^|,)cache_group(,|$))';
 
         $this->configMock->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
         $this->configMock->expects(

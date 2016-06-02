@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
+use Magento\Framework\Indexer\CacheContext;
+
 class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -17,8 +19,15 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
      */
     protected $rowsActionFactory;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
+
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    private $cacheContext;
 
     /**
      * @param Flat\Action\FullFactory $fullActionFactory
@@ -54,6 +63,7 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
             $action->reindex($ids, true);
         }
         $action->reindex($ids);
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
     }
 
     /**
@@ -64,6 +74,7 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
     public function executeFull()
     {
         $this->fullActionFactory->create()->reindexAll();
+        $this->getCacheContext()->registerTags([\Magento\Catalog\Model\Category::CACHE_TAG]);
     }
 
     /**
@@ -86,5 +97,20 @@ class Flat implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
     public function executeRow($id)
     {
         $this->execute([$id]);
+    }
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated
+     */
+    protected function getCacheContext()
+    {
+        if (!($this->cacheContext instanceof CacheContext)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        } else {
+            return $this->cacheContext;
+        }
     }
 }

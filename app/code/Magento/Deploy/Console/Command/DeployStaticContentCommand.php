@@ -17,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
 
 /**
- * Command for deploy static content
+ * Deploy static content command
  */
 class DeployStaticContentCommand extends Command
 {
@@ -118,6 +118,6 @@ class DeployStaticContentCommand extends Command
             'Magento\Deploy\Model\Deployer',
             ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
         );
-        $deployer->deploy($this->objectManagerFactory, $languages);
+        return $deployer->deploy($this->objectManagerFactory, $languages);
     }
 }

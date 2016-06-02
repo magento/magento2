@@ -5,11 +5,13 @@
  */
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Source\Stock;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * Data provider for advanced inventory form
@@ -21,7 +23,7 @@ class AdvancedInventory extends AbstractModifier
     /**
      * @var LocatorInterface
      */
-    protected $locator;
+    private $locator;
 
     /**
      * @var StockRegistryInterface
@@ -29,36 +31,36 @@ class AdvancedInventory extends AbstractModifier
     private $stockRegistry;
 
     /**
-     * @var Stock
-     */
-    private $stock;
-
-    /**
      * @var ArrayManager
      */
-    protected $arrayManager;
+    private $arrayManager;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfiguration;
 
     /**
      * @var array
      */
-    protected $meta = [];
+    private $meta = [];
 
     /**
      * @param LocatorInterface $locator
-     * @param Stock $stock
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         LocatorInterface $locator,
-        Stock $stock,
         StockRegistryInterface $stockRegistry,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        StockConfigurationInterface $stockConfiguration
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
-        $this->stock = $stock;
         $this->arrayManager = $arrayManager;
+        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
@@ -71,12 +73,13 @@ class AdvancedInventory extends AbstractModifier
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
 
+        /** @var StockItemInterface $stockItem */
         $stockItem = $this->stockRegistry->getStockItem(
             $modelId,
             $model->getStore()->getWebsiteId()
         );
 
-        $stockData = $stockItem->getData();
+        $stockData = $modelId ? $this->getData($stockItem) : [];
         if (!empty($stockData)) {
             $data[$modelId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS] = $stockData;
         }
@@ -85,34 +88,55 @@ class AdvancedInventory extends AbstractModifier
                 (int)$stockData['is_in_stock'];
         }
 
-        return $this->prepareStockData($data);
-    }
+        if (!empty($this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY))) {
+            $minSaleQtyData = null;
+            $defaultConfigValue = $this->stockConfiguration->getDefaultConfigValue(StockItemInterface::MIN_SALE_QTY);
 
-    /**
-     * Prepare data for stock_data fields
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function prepareStockData(array $data)
-    {
-        $productId = $this->locator->getProduct()->getId();
-        $stockDataFields = [
-            'qty_increments',
-            'min_qty',
-            'min_sale_qty',
-            'max_sale_qty',
-            'notify_stock_qty',
-        ];
+            if (strpos($defaultConfigValue, 'a:') === 0) {
+                // Set data source for dynamicRows Minimum Qty Allowed in Shopping Cart
+                $minSaleQtyValue = unserialize($defaultConfigValue);
 
-        foreach ($stockDataFields as $field) {
-            if (isset($data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field])) {
-                $data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field] =
-                    (float)$data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field];
+                foreach ($minSaleQtyValue as $group => $qty) {
+                    $minSaleQtyData[] = [
+                        StockItemInterface::CUSTOMER_GROUP_ID => $group,
+                        StockItemInterface::MIN_SALE_QTY => $qty
+                    ];
+                }
+            } else {
+                $minSaleQtyData = $defaultConfigValue;
             }
+
+            $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/stock_data/min_qty_allowed_in_shopping_cart';
+            $data = $this->arrayManager->set($path, $data, $minSaleQtyData);
         }
 
         return $data;
+    }
+
+    /**
+     * Get Stock Data
+     *
+     * @param StockItemInterface $stockItem
+     * @return array
+     */
+    private function getData(StockItemInterface $stockItem)
+    {
+        $result = $stockItem->getData();
+
+        $result[StockItemInterface::MANAGE_STOCK] = (int)$stockItem->getManageStock();
+        $result[StockItemInterface::QTY] = (float)$stockItem->getQty();
+        $result[StockItemInterface::MIN_QTY] = (float)$stockItem->getMinQty();
+        $result[StockItemInterface::MIN_SALE_QTY] = (float)$stockItem->getMinSaleQty();
+        $result[StockItemInterface::MAX_SALE_QTY] = (float)$stockItem->getMaxSaleQty();
+        $result[StockItemInterface::IS_QTY_DECIMAL] = (int)$stockItem->getIsQtyDecimal();
+        $result[StockItemInterface::IS_DECIMAL_DIVIDED]= (int)$stockItem->getIsDecimalDivided();
+        $result[StockItemInterface::BACKORDERS] = (int)$stockItem->getBackorders();
+        $result[StockItemInterface::NOTIFY_STOCK_QTY] = (float)$stockItem->getNotifyStockQty();
+        $result[StockItemInterface::ENABLE_QTY_INCREMENTS] = (int)$stockItem->getEnableQtyIncrements();
+        $result[StockItemInterface::QTY_INCREMENTS] = (float)$stockItem->getQtyIncrements();
+        $result[StockItemInterface::IS_IN_STOCK] = (int)$stockItem->getIsInStock();
+
+        return $result;
     }
 
     /**
@@ -184,10 +208,13 @@ class AdvancedInventory extends AbstractModifier
                 'visible' => '1',
                 'require' => '0',
                 'additionalClasses' => 'admin__field-small',
+                'label' => __('Quantity'),
+                'scopeLabel' => '[GLOBAL]',
                 'dataScope' => 'qty',
                 'validation' => [
                     'validate-number' => true,
                     'validate-digits' => true,
+                    'less-than-equals-to' => StockDataFilter::MAX_QTY_VALUE,
                 ],
                 'imports' => [
                     'handleChanges' => '${$.provider}:data.product.stock_data.is_qty_decimal',

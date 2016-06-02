@@ -32,6 +32,13 @@ class CollectionTest extends BaseCollectionTest
         $criteriaBuilder = $this->getCriteriaBuilder();
         $filterBuilder = $this->getFilterBuilder();
 
+        $this->prepareObjectManager([
+            [
+                'Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation',
+                $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation')
+            ],
+        ]);
+
         $this->model = $helper->getObject(
             'Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection',
             [
@@ -109,5 +116,21 @@ class CollectionTest extends BaseCollectionTest
         $filterBuilder->expects($this->once())->method('setValue')->with(1);
         $filterBuilder->expects($this->once())->method('create')->willReturn($this->filter);
         return $filterBuilder;
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

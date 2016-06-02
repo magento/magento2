@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
+use Magento\Framework\Indexer\CacheContext;
+
 class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
@@ -22,8 +24,15 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      */
     protected $rowsActionFactory;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry */
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
     protected $indexerRegistry;
+
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    protected $cacheContext;
 
     /**
      * @param Product\Action\FullFactory $fullActionFactory
@@ -49,6 +58,18 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
     public function execute($ids)
     {
         $this->executeAction($ids);
+        $this->registerEntities($ids);
+    }
+
+    /**
+     * Add entities to cache context
+     *
+     * @param int[] $ids
+     * @return void
+     */
+    protected function registerEntities($ids)
+    {
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Category::CACHE_TAG, $ids);
     }
 
     /**
@@ -59,6 +80,17 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
     public function executeFull()
     {
         $this->fullActionFactory->create()->execute();
+        $this->registerTags();
+    }
+
+    /**
+     * Add tags to cache context
+     *
+     * @return void
+     */
+    protected function registerTags()
+    {
+        $this->getCacheContext()->registerTags([\Magento\Catalog\Model\Category::CACHE_TAG]);
     }
 
     /**
@@ -102,5 +134,20 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
         $action->execute($ids);
 
         return $this;
+    }
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated
+     */
+    protected function getCacheContext()
+    {
+        if (!($this->cacheContext instanceof CacheContext)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        } else {
+            return $this->cacheContext;
+        }
     }
 }

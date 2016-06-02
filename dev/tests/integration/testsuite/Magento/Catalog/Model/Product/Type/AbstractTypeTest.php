@@ -124,7 +124,13 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             'catalog_product',
             'sku'
         );
-        $this->assertSame($sku, $this->_model->getAttributeById($sku->getId(), $product));
+        $this->assertSame(
+            $sku->getAttributeId(),
+            $this->_model->getAttributeById(
+                $sku->getId(),
+                $product
+            )->getAttributeId()
+        );
     }
 
     /**
@@ -190,7 +196,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
         $product = $repository->get('simple');
         // fixture
-        $this->assertEquals(
+
+        $this->assertContains(
             'Please specify product\'s required option(s).',
             $this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product)
         );

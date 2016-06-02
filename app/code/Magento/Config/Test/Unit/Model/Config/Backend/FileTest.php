@@ -17,6 +17,10 @@ use Magento\Framework\Registry;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 
+/**
+ * Class FileTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /** @var File */
@@ -61,6 +65,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->typeListMock = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
             ->getMockForAbstractClass();
         $this->uploaderFactoryMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\UploaderFactory')
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->requestDataMock

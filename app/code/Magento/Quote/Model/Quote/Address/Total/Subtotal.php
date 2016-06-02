@@ -71,6 +71,8 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
          */
         $this->quoteValidator->validateQuoteAmount($quote, $total->getSubtotal());
         $this->quoteValidator->validateQuoteAmount($quote, $total->getBaseSubtotal());
+        $address->setSubtotal($total->getSubtotal());
+        $address->setBaseSubtotal($total->getBaseSubtotal());
         return $this;
     }
 

@@ -10,7 +10,7 @@
         <section id="design">
             <group id="search_engine_robots" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Search Engine Robots</label>
-                <field id="default_robots" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="default_robots" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Robots</label>
                     <comment>This will be included before head closing tag in page HTML.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Design\Robots</source_model>

@@ -3,13 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
+use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Driver\File;
 
 class FilePermissions
 {
@@ -22,11 +21,6 @@ class FilePermissions
      * @var DirectoryList
      */
     protected $directoryList;
-
-    /**
-     * @var File
-     */
-    protected $driverFile;
 
     /**
      * List of required writable directories for installation
@@ -66,16 +60,13 @@ class FilePermissions
     /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
-     * @param File $driverFile
      */
     public function __construct(
         Filesystem $filesystem,
-        DirectoryList $directoryList,
-        File $driverFile
+        DirectoryList $directoryList
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
-        $this->driverFile = $driverFile;
     }
 
     /**
@@ -152,16 +143,24 @@ class FilePermissions
         );
         $noWritableFilesFolders = [
             $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) .'/'
+            $this->directoryList->getPath(DirectoryList::DI) . '/',
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
+
+        $directoryIterator = new ExcludeFilter(
+            $directoryIterator,
+            [
+                $this->directoryList->getPath(DirectoryList::SESSION) . '/',
+            ]
+        );
+
         $foundNonWritable = false;
 
         try {
             foreach ($directoryIterator as $subDirectory) {
                 if (!$subDirectory->isWritable() && !$subDirectory->isLink()) {
-                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory;
+                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory->getPathname();
                     $foundNonWritable = true;
                 }
             }
@@ -213,28 +212,6 @@ class FilePermissions
     }
 
     /**
-     * Checks if var/generation/* has read and execute permissions
-     *
-     * @return bool
-     */
-    public function checkDirectoryPermissionForCLIUser()
-    {
-        $varGenerationDir = $this->directoryList->getPath(DirectoryList::GENERATION);
-        $dirs = $this->driverFile->readDirectory($varGenerationDir);
-        array_unshift($dirs, $varGenerationDir);
-
-        foreach ($dirs as $dir) {
-            if (!is_dir($dir)
-                || !is_readable($dir)
-                || !is_executable($dir)
-            ) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Checks if directory exists and is readable
      *
      * @param \Magento\Framework\Filesystem\Directory\WriteInterface $directory
@@ -249,22 +226,31 @@ class FilePermissions
     }
 
     /**
-     * Checks writable paths for installation
+     * Checks writable paths for installation, returns associative array if input is true, else returns simple array
      *
+     * @param bool $associative
      * @return array
      */
-    public function getMissingWritablePathsForInstallation()
+    public function getMissingWritablePathsForInstallation($associative = false)
     {
         $required = $this->getInstallationWritableDirectories();
         $current = $this->getInstallationCurrentWritableDirectories();
         $missingPaths = [];
         foreach (array_diff($required, $current) as $missingPath) {
             if (isset($this->nonWritablePathsInDirectories[$missingPath])) {
-                $missingPaths = array_merge(
-                    $missingPaths,
-                    $this->nonWritablePathsInDirectories[$missingPath]
-                );
+                if ($associative) {
+                    $missingPaths[$missingPath] = $this->nonWritablePathsInDirectories[$missingPath];
+                } else {
+                    $missingPaths = array_merge(
+                        $missingPaths,
+                        $this->nonWritablePathsInDirectories[$missingPath]
+                    );
+                }
             }
+        }
+        if ($associative) {
+            $required = array_flip($required);
+            $missingPaths = array_merge($required, $missingPaths);
         }
         return $missingPaths;
     }

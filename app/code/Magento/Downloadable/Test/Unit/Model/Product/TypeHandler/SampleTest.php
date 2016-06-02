@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 
+use Magento\Downloadable\Model\Product\TypeHandler\Sample;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -55,19 +56,23 @@ class SampleTest extends \PHPUnit_Framework_TestCase
         $sampleResourceFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->sampleResource));
-        $this->metadataPoolMock = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPoolMock = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $this->metadataMock = $this->getMock('Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
-            'Magento\Downloadable\Model\Product\TypeHandler\Sample',
+            Sample::class,
             [
                 'sampleFactory' => $this->sampleFactory,
                 'sampleResourceFactory' => $sampleResourceFactory,
                 'metadataPool' => $this->metadataPoolMock
             ]
         );
+        $refClass = new \ReflectionClass(Sample::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->target, $this->metadataPoolMock);
     }
 
     /**

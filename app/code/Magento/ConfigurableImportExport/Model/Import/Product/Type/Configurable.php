@@ -415,6 +415,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _processSuperData()
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         if ($this->_productSuperData) {
             $usedCombs = [];
             // is associated products applicable?
@@ -447,9 +448,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     'product_id' => $this->_productSuperData['assoc_entity_ids'][$assocId],
                     'parent_id' => $this->_productSuperData['product_id'],
                 ];
+                $subEntityId = $this->_connection->fetchOne(
+                    $this->_connection->select()->from(
+                        ['cpe' => $this->_resource->getTableName('catalog_product_entity')], ['entity_id']
+                    )->where($metadata->getLinkField() . ' = ?', $assocId)
+                );
                 $this->_superAttributesData['relation'][] = [
                     'parent_id' => $this->_productSuperData['product_id'],
-                    'child_id' => $assocId,
+                    'child_id' => $subEntityId,
                 ];
             }
         }

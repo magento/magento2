@@ -28,7 +28,7 @@
     <route url="/V1/stockStatuses/:productSku" method="GET">
         <service class="Magento\CatalogInventory\Api\StockRegistryInterface" method="getStockStatusBySku"/>
         <resources>
-            <resource ref="anonymous"/>
+            <resource ref="Magento_CatalogInventory::cataloginventory"/>
         </resources>
     </route>
 </routes>

@@ -71,7 +71,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      */
     private function getRelatedProducts($entityIds)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $select = $this->getConnection()->select()->union(
             [
                 $this->getConnection()->select()
@@ -158,7 +158,7 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
      */
     protected function _applyConfigurableOption()
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $connection = $this->getConnection();
         $coaTable = $this->_getConfigurableOptionAggregateTable();
         $copTable = $this->_getConfigurableOptionPriceTable();

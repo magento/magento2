@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 /**
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @magentoAppArea adminhtml
  */
 class EavTest extends \PHPUnit_Framework_TestCase
@@ -14,6 +16,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
     /**
      * @var \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
      */
@@ -57,6 +60,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
      */
     public function testModifyMeta()
     {
+        $this->objectManager->get(\Magento\Eav\Model\Entity\AttributeCache::class)->clear();
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load(1);
@@ -68,7 +72,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_admin_store.php
      */
     public function testModifyData()
     {

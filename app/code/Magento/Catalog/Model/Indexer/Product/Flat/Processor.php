@@ -33,11 +33,12 @@ class Processor extends \Magento\Framework\Indexer\AbstractProcessor
      * Reindex single row by id
      *
      * @param int $id
+     * @param bool $forceReindex
      * @return void
      */
-    public function reindexRow($id)
+    public function reindexRow($id, $forceReindex = false)
     {
-        if (!$this->_state->isFlatEnabled() || $this->getIndexer()->isScheduled()) {
+        if (!$this->_state->isFlatEnabled() || (!$forceReindex && $this->getIndexer()->isScheduled())) {
             return;
         }
         $this->getIndexer()->reindexRow($id);
@@ -47,11 +48,12 @@ class Processor extends \Magento\Framework\Indexer\AbstractProcessor
      * Reindex multiple rows by ids
      *
      * @param int[] $ids
+     * @param bool $forceReindex
      * @return void
      */
-    public function reindexList($ids)
+    public function reindexList($ids, $forceReindex = false)
     {
-        if (!$this->_state->isFlatEnabled() || $this->getIndexer()->isScheduled()) {
+        if (!$this->_state->isFlatEnabled() || (!$forceReindex && $this->getIndexer()->isScheduled())) {
             return;
         }
         $this->getIndexer()->reindexList($ids);

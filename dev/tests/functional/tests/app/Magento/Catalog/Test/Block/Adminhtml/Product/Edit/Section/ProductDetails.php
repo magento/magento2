@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
-use Magento\Catalog\Test\Fixture\Category;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
 
@@ -21,12 +20,29 @@ class ProductDetails extends Section
      * @var string
      */
     protected $categoryIds = '.admin__field[data-index="category_ids"]';
+
     /**
      * Locator for following sibling of category element.
      *
      * @var string
      */
     protected $newCategoryRootElement = '.product_form_product_form_create_category_modal';
+
+    /**
+     * Fixture mapping.
+     *
+     * @param array|null $fields
+     * @param string|null $parent
+     * @return array
+     */
+    protected function dataMapping(array $fields = null, $parent = null)
+    {
+        if (isset($fields['custom_attribute'])) {
+            $this->placeholders = ['attribute_code' => $fields['custom_attribute']['value']['code']];
+            $this->applyPlaceholders();
+        }
+        return parent::dataMapping($fields, $parent);
+    }
 
     /**
      * Fill data to fields on section.
