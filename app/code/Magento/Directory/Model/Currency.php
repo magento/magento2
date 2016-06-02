@@ -411,6 +411,22 @@ class Currency extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Map currency alias to currency code
+     *
+     * @param string $code
+     * @return string
+     */
+    public function mapCurrencyCode($code)
+    {
+        $currencyMapping = [
+            'RMB' => 'CNY',
+            'CNH' => 'CNY'
+        ];
+
+        return isset($currencyMapping[$code]) ? $currencyMapping[$code] : $code;
+    }
+
+    /**
      * This method removes LRM and RLM marks from string
      *
      * @param string $string
