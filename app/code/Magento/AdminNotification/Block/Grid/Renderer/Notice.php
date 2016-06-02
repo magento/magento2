@@ -20,7 +20,6 @@ class Notice extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
         return '<span class="grid-row-title">' .
             $this->escapeHtml($row->getTitle()) .
             '</span>' .
-            ($row->getDescription() ? '<br />' .
-            $row->getDescription() : '');
+            ($row->getDescription() ? '<br />' . $this->escapeHtml($row->getDescription()) : '');
     }
 }
