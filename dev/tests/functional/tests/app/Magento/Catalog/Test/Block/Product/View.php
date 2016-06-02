@@ -173,7 +173,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img--full';
+    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img--full';
 
     /**
      * Full image close selector
