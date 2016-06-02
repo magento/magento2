@@ -7,7 +7,7 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Api\CategoryListiningInterface;
+use Magento\Catalog\Api\CategoryListInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
@@ -19,7 +19,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\App\ObjectManager;
 
-class CategoryListining implements CategoryListiningInterface
+class CategoryList implements CategoryListInterface
 {
     /**
      * @var CollectionFactory

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategorySearchResultsInterface;
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\CategoryListining;
+use Magento\Catalog\Model\CategoryList;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\Filter;
@@ -22,10 +22,10 @@ use Magento\Catalog\Api\Data\CategorySearchResultsInterfaceFactory;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryListiningTest extends \PHPUnit_Framework_TestCase
+class CategoryListTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CategoryListining
+     * @var CategoryList
      */
     protected $model;
 
@@ -63,7 +63,7 @@ class CategoryListiningTest extends \PHPUnit_Framework_TestCase
         $this->categoryRepository = $this->getMock(CategoryRepositoryInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(
-            CategoryListining::class,
+            CategoryList::class,
             [
                 'categoryCollectionFactory' => $this->categoryCollectionFactory,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessor,

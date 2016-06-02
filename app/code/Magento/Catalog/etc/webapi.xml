@@ -284,7 +284,7 @@
         </resources>
     </route>
     <route url="/V1/categories/list" method="GET">
-        <service class="Magento\Catalog\Api\CategoryListiningInterface" method="getList" />
+        <service class="Magento\Catalog\Api\CategoryListInterface" method="getList" />
         <resources>
             <resource ref="Magento_Catalog::categories" />
         </resources>
