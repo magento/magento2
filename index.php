@@ -32,7 +32,7 @@ try {
 HTML;
     exit(1);
 }
-error_log(print_r($_SERVER, true),3,'/Users/brywaters/Documents/workspace/magento2/magento2ce/request.log');
+
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication('Magento\Framework\App\Http');
