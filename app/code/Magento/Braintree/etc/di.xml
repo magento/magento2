@@ -39,7 +39,7 @@
     </type>
 
     <!-- Logger, initialized with BraintreeConfig -->
-    <virtualType name="BraintreeLogger" type="Magento\Payment\Model\Method\Logger">
+    <virtualType name="BraintreeLoggerForTransactionSale" type="Magento\Payment\Model\Method\Logger">
         <arguments>
             <argument name="config" xsi:type="object">Magento\Braintree\Gateway\Config\Config</argument>
         </arguments>
@@ -164,22 +164,22 @@
 
     <type name="Magento\Braintree\Gateway\Http\Client\TransactionSale">
         <arguments>
-            <argument name="customLogger" xsi:type="object">BraintreeLogger</argument>
+            <argument name="customLogger" xsi:type="object">BraintreeLoggerForTransactionSale</argument>
         </arguments>
     </type>
     <type name="Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement">
         <arguments>
-            <argument name="customLogger" xsi:type="object">BraintreeLogger</argument>
+            <argument name="customLogger" xsi:type="object">BraintreeLoggerForTransactionSale</argument>
         </arguments>
     </type>
     <type name="Magento\Braintree\Gateway\Http\Client\TransactionRefund">
         <arguments>
-            <argument name="customLogger" xsi:type="object">BraintreeLogger</argument>
+            <argument name="customLogger" xsi:type="object">BraintreeLoggerForTransactionSale</argument>
         </arguments>
     </type>
     <type name="Magento\Braintree\Gateway\Http\Client\TransactionVoid">
         <arguments>
-            <argument name="customLogger" xsi:type="object">BraintreeLogger</argument>
+            <argument name="customLogger" xsi:type="object">BraintreeLoggerForTransactionSale</argument>
         </arguments>
     </type>
 
@@ -375,7 +375,7 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="BraintreeTransactionsCollectionFactory" type="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+    <virtualType name="BraintreeTransactionsCollectionFactoryForReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="braintree_report_data_source" xsi:type="string">Magento\Braintree\Model\Report\TransactionsCollection</item>
@@ -385,7 +385,7 @@
 
     <virtualType name="BraintreeTransactionsReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
         <arguments>
-            <argument name="collectionFactory" xsi:type="object">BraintreeTransactionsCollectionFactory</argument>
+            <argument name="collectionFactory" xsi:type="object">BraintreeTransactionsCollectionFactoryForReporting</argument>
         </arguments>
     </virtualType>
 

@@ -153,7 +153,7 @@ define([
         generateAssociatedProducts: function () {
             var productsIds = [];
 
-            this.getUnionInsertData().each(function (data) {
+            this.getUnionInsertData().forEach(function (data) {
                 if (data.id !== null) {
                     productsIds.push(data.id);
                 }

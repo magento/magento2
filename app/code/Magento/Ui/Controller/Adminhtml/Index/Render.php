@@ -22,6 +22,11 @@ class Render extends AbstractAction
      */
     public function execute()
     {
+        if ($this->_request->getParam('namespace') === null) {
+            $this->_redirect('admin/noroute');
+            return;
+        }
+
         $component = $this->factory->create($this->_request->getParam('namespace'));
         $this->prepareComponent($component);
         $this->_response->appendBody((string) $component->render());
