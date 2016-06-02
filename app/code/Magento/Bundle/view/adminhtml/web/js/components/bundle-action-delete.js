@@ -13,7 +13,6 @@ define([
          * @inheritdoc
          */
         hasChanged: function () {
-
             return false;
         }
 
