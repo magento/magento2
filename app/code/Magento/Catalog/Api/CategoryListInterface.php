@@ -9,7 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * @api
  */
-interface CategoryListiningInterface
+interface CategoryListInterface
 {
     /**
      * Get category list

@@ -9,10 +9,10 @@ namespace Magento\Catalog\Api;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-class CategoryListiningTest extends WebapiAbstract
+class CategoryListTest extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/categories/list';
-    const SERVICE_NAME = 'catalogCategoryListiningV1';
+    const SERVICE_NAME = 'catalogCategoryListV1';
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
