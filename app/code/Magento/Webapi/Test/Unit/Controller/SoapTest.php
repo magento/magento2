@@ -102,7 +102,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $appconfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->_requestMock,
-            '_appconfig',
+            'appConfig',
             $appconfig
         );
 

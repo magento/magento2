@@ -22,7 +22,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     const SCHEME_HTTPS = 'https';
     /**#@-*/
 
-    // Configuration path
+    // Configuration path for SSL Offload http header
     const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     /**
@@ -91,7 +91,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     /**
      * @var /Magento/Framework/App/Config
      */
-    protected $_appconfig;
+    protected $appConfig;
     
     
     /**
@@ -373,7 +373,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     public function getScheme()
     {
-        return ($this->isSecure())? self::SCHEME_HTTPS : self::SCHEME_HTTP;
+        return $this->isSecure() ? self::SCHEME_HTTPS : self::SCHEME_HTTP;
     }
 
     /**
@@ -411,15 +411,13 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
         installed MAGETWO-31756 */
         // Check if a proxy sent a header indicating an initial secure request
-        $config = $this->getAppConfig();
         $offLoaderHeader = trim(
-            (string)$config->getValue(
+            (string)$this->getAppConfig()->getValue(
                 self::XML_PATH_OFFLOADER_HEADER,
                 \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
             )
         );
-        //Store the normally cased version in db for use in varnish config, Apache uppercases all server headers.
-        return $this->initialRequestSecure(strtoupper($offLoaderHeader));
+        return $this->initialRequestSecure($offLoaderHeader);
     }
 
     /**
@@ -430,15 +428,12 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @deprecated
      */
     private function getAppConfig(){
-        if ($this->_appconfig == null){
+        if ($this->appConfig == null){
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $this->_appconfig = $objectManager->get('Magento\Framework\App\Config');
+            $this->appConfig = $objectManager->get('Magento\Framework\App\Config');
         }
-        
-        return $this->_appconfig;
-        
+        return $this->appConfig;
     }
-
 
     /**
      * Checks if the immediate request is delivered over HTTPS
@@ -461,6 +456,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     protected function initialRequestSecure($offLoaderHeader)
     {
+        // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
+        $offLoaderHeader = str_replace("-", "_",strtoupper($offLoaderHeader));
         $header = $this->getServer($offLoaderHeader);
         $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
         return !empty($offLoaderHeader)

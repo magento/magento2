@@ -59,8 +59,8 @@ class ProcessLayoutRenderElement implements ObserverInterface
                 'handles' => json_encode($layout->getUpdate()->getHandles())
             ]
         );
-        //Varnish does not support esi over https must change to http
-        $url = (substr($url, 0, 5) === "https")? 'http' . substr($url, 5) : $url;
+        // Varnish does not support esi over https must change to http
+        $url = (substr($url, 0, 5) === 'https')?'http' . substr($url, 5) : $url;
         return sprintf('<esi:include src="%s" />', $url);
     }
 
