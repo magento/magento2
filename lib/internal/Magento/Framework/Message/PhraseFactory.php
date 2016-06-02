@@ -6,7 +6,6 @@
 namespace Magento\Framework\Message;
 
 use Magento\Framework\Phrase;
-use Magento\Framework\Message\MessageInterface;
 
 /**
  * Factory to combine several messages into one
