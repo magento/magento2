@@ -60,7 +60,7 @@
 }
 
 //
-//   Button as a link
+//  Button as a link
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -77,7 +77,7 @@
 }
 
 //
-//   Button revert secondary color
+//  Button revert secondary color
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -87,7 +87,7 @@
 }
 
 //
-//   Button revert secondary size
+//  Button revert secondary size
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -97,7 +97,7 @@
 }
 
 //
-//   Large button
+//  Large button
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -342,7 +342,7 @@
 }
 
 //
-//   Reset left margin
+//  Reset left margin
 //  ---------------------------------------------
 
 @abs-reset-left-margin: {
@@ -453,7 +453,7 @@
     .abs-add-fields-desktop {
         .fieldset {
             .field {
-                 .control {
+                .control {
                     width: auto;
                 }
             }
@@ -659,7 +659,7 @@
 & when (@media-common = true) {
     .abs-split-button {
         .lib-dropdown-split(
-        @_options-selector : ~".items",
+        @_options-selector : ~'.items',
         @_dropdown-split-button-border-radius-fix: true
         );
         vertical-align: middle;
@@ -673,15 +673,16 @@
 @abs-form-field-column-2: {
     .fieldset {
         .field {
+            .lib-form-field-column(@_column: true);
+
             &:nth-last-child(1),
             &:nth-last-child(2) {
                 margin-bottom: 0;
             }
 
-            .lib-form-field-column(@_column: true);
             .field {
-                width: 100%;
                 padding: 0;
+                width: 100%;
             }
         }
     }
@@ -997,9 +998,10 @@
 
             .grand.totals {
                 .lib-font-size(16);
+
                 .mark {
-                    padding-top: @indent__xs;
                     padding-bottom: 0;
+                    padding-top: @indent__xs;
                 }
 
                 .amount {
@@ -1510,8 +1512,8 @@
 
         .pages {
             position: absolute;
-            z-index: 0;
             width: 100%;
+            z-index: 0;
         }
     }
 }
@@ -1581,7 +1583,8 @@
 
 //
 //  Remove bottom border
-//--------------------------------------
+//  ---------------------------------------------
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .abs-no-border-bottom {
         border-bottom: 0;
@@ -1612,7 +1615,7 @@
 & when (@media-common = true) {
     .abs-field-date-input {
         .lib-css(margin-right, @indent__s);
-        width: calc(~"100% - (@{icon-calendar__font-size} + @{indent__s})");
+        width: calc(~'100% - (@{icon-calendar__font-size} + @{indent__s})');
     }
 }
 
@@ -1627,7 +1630,7 @@
 
         input {
             .lib-css(margin-right, @indent__s);
-            width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
+            width: calc(~'100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})');
         }
     }
 }

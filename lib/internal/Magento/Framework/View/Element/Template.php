@@ -315,6 +315,7 @@ class Template extends AbstractBlock
             'BLOCK_TPL',
             $this->_storeManager->getStore()->getCode(),
             $this->getTemplateFile(),
+            'base_url' => $this->getBaseUrl(),
             'template' => $this->getTemplate()
         ];
     }

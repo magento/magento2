@@ -173,7 +173,7 @@ define([
             requests: []
         };
 
-        this._updateRequests = _.debounce(this._updateRequests.bind(this), 50);
+        this._updateRequests = _.debounce(this._updateRequests.bind(this), 10);
         privateData.set(this, data);
     }
 

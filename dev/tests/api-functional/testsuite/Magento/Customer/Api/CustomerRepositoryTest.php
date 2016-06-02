@@ -25,6 +25,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'customerCustomerRepositoryV1';
     const RESOURCE_PATH = '/V1/customers';
+    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
     /**
      * Sample values for testing
@@ -139,6 +140,55 @@ class CustomerRepositoryTest extends WebapiAbstract
             }
         }
         unset($this->customerRepository);
+    }
+
+    /**
+     * Validate update by invalid customer.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Consumer is not authorized to access %resources
+     */
+    public function testInvalidCustomerUpdate()
+    {
+        $this->_markTestAsRestOnly();
+
+        //Create first customer and retrieve customer token.
+        $firstCustomerData = $this->_createCustomer();
+
+        // get customer ID token
+        /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
+        //$customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
+        $customerTokenService = Bootstrap::getObjectManager()->create(
+            'Magento\Integration\Api\CustomerTokenServiceInterface'
+        );
+        $token = $customerTokenService->createCustomerAccessToken($firstCustomerData[Customer::EMAIL], 'test@123');
+
+        //Create second customer and update lastname.
+        $customerData = $this->_createCustomer();
+        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
+        $lastName = $existingCustomerDataObject->getLastname();
+        $customerData[Customer::LASTNAME] = $lastName . 'Updated';
+        $newCustomerDataObject = $this->customerDataFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerDataObject,
+            $customerData,
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/{$customerData[Customer::ID]}",
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'token' => $token,
+            ]
+        ];
+
+        $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
+            $newCustomerDataObject,
+            'Magento\Customer\Api\Data\CustomerInterface'
+        );
+        $requestData = ['customer' => $newCustomerDataObject];
+        $this->_webApiCall($serviceInfo, $requestData);
     }
 
     public function testDeleteCustomer()
@@ -382,7 +432,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $expectedException = new InputException();
                 $expectedException->addError(
                     __(
-                        InputException::REQUIRED_FIELD,
+                        '%fieldName is a required field.',
                         ['fieldName' => Address::FIRSTNAME]
                     )
                 );
@@ -397,7 +447,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => InputException::REQUIRED_FIELD,
+                    'message' => '%fieldName is a required field.',
                     'parameters' => ['fieldName' => Address::FIRSTNAME],
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
@@ -504,7 +554,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => InputException::REQUIRED_FIELD,
+                'message' => '%fieldName is a required field.',
                 'parameters' => [
                     'fieldName' => 'searchCriteria'
                 ],

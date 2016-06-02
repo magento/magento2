@@ -163,6 +163,7 @@ class Helper
         } else {
             $productOptions = [];
         }
+
         $product->addData($productData);
 
         if ($wasLockedMedia) {
@@ -307,20 +308,28 @@ class Helper
     public function mergeProductOptions($productOptions, $overwriteOptions)
     {
         if (!is_array($productOptions)) {
-            $productOptions = [];
-        }
-        if (is_array($overwriteOptions)) {
-            $options = array_replace_recursive($productOptions, $overwriteOptions);
-            array_walk_recursive($options, function (&$item) {
-                if ($item === "") {
-                    $item = null;
-                }
-            });
-        } else {
-            $options = $productOptions;
+            return [];
         }
 
-        return $options;
+        if (!is_array($overwriteOptions)) {
+            return $productOptions;
+        }
+        
+        foreach ($productOptions as $index => $option) {
+            $optionId = $option['option_id'];
+
+            if (!isset($overwriteOptions[$optionId])) {
+                continue;
+            }
+
+            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                    $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
+                }
+            }
+        }
+
+        return $productOptions;
     }
 
     /**

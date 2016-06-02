@@ -61,7 +61,7 @@ class StateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers setError()
+     * @covers \Magento\Framework\Setup\SampleData\State::setError
      */
     public function testHasError()
     {

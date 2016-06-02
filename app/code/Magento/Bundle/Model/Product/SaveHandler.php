@@ -3,11 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
@@ -16,11 +14,6 @@ use Magento\Framework\EntityManager\Operation\ExtensionInterface;
  */
 class SaveHandler implements ExtensionInterface
 {
-    /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
     /**
      * @var OptionRepository
      */
@@ -33,27 +26,23 @@ class SaveHandler implements ExtensionInterface
 
     /**
      * @param OptionRepository $optionRepository
-     * @param MetadataPool $metadataPool
      * @param ProductLinkManagementInterface $productLinkManagement
      */
     public function __construct(
         OptionRepository $optionRepository,
-        MetadataPool $metadataPool,
         ProductLinkManagementInterface $productLinkManagement
     ) {
         $this->optionRepository = $optionRepository;
-        $this->metadataPool = $metadataPool;
         $this->productLinkManagement = $productLinkManagement;
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity, $arguments = [])
+    public function execute($entity, $arguments = [])
     {
         $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
         if ($entity->getTypeId() !== 'bundle' || empty($bundleProductOptions)) {

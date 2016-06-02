@@ -17,7 +17,7 @@ class OauthInputExceptionTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new OauthInputException();
         foreach (['field1', 'field2'] as $param) {
-            $exception->addError(new Phrase(OauthInputException::REQUIRED_FIELD, ['fieldName' => $param]));
+            $exception->addError(new Phrase('%fieldName is a required field.', ['fieldName' => $param]));
         }
         $exception->addError(new Phrase('Message with period.'));
 
