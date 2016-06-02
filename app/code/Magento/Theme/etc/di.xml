@@ -98,7 +98,7 @@
             <argument name="design" xsi:type="object">Magento\Theme\Model\Design\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="theme_uninstall" xsi:type="object">Magento\Theme\Console\Command\ThemeUninstallCommand</item>

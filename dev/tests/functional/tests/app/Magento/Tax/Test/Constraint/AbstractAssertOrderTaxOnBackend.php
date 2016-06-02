@@ -93,6 +93,7 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
         $this->orderInvoiceNew = $orderInvoiceNew;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
         $orderIndex->open();
+        $this->waitBeforeClick();
         $orderIndex->getSalesOrderGrid()->openFirstRow();
         //Check prices on order page
         $actualPrices = [];
@@ -221,5 +222,16 @@ abstract class AbstractAssertOrderTaxOnBackend extends AbstractConstraint
     public function toString()
     {
         return 'Prices on backend after order creation is correct.';
+    }
+
+    /**
+     * Wait for User before click
+     *
+     * @return void
+     */
+    protected function waitBeforeClick()
+    {
+        time_nanosleep(0, 600000000);
+        usleep(1000000);
     }
 }

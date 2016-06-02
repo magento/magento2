@@ -149,7 +149,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testContentTypeEmpty()
     {
+        $expectedData = null;
+        $this->assertEquals($expectedData, $this->model->getContentType());
+    }
+
+    public function testContentTypeAuto()
+    {
         $expectedData = 'default_media_type; charset=default_charset';
+        $this->model->setContentType('auto');
         $this->scopeConfig->expects($this->at(0))->method('getValue')->with('design/head/default_media_type', 'store')
             ->will($this->returnValue('default_media_type'));
         $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/default_charset', 'store')
