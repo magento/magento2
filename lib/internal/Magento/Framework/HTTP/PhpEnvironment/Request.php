@@ -89,7 +89,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     protected $converter;
 
     /**
-     * @var /Magento/Framework/App/Config
+     * @var \Magento\Framework\App\Config
      */
     protected $appConfig;
     
