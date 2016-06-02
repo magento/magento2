@@ -441,8 +441,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     private function joinProductsToLinks()
     {
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $this->getSelect()
-            ->join(['cpe' => 'catalog_product_entity'], "links.product_id = cpe.$linkField", []);
+        if ($this->_hasLinkFilter) {
+            $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+            $this->getSelect()
+                ->join(['cpe' => 'catalog_product_entity'], "links.product_id = cpe.$linkField", []);
+        }
     }
 }
