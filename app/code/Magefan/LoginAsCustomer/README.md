@@ -1,1 +1,0 @@
-The Magefan_LoginAsCustomer implements allow to admins login as customer.
