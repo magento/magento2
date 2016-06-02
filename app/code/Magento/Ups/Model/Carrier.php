@@ -799,7 +799,9 @@ XMLRequest;
                         'shipper_number'
                     ) && !empty($negotiatedArr);
 
-                $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
+                /** @var \Magento\Directory\Model\Currency $currency */
+                $currency = $this->_currencyFactory->create();
+                $allowedCurrencies = $currency->getConfigAllowCurrencies();
 
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
@@ -812,7 +814,9 @@ XMLRequest;
 
                         //convert price with Origin country currency code to base currency code
                         $successConversion = true;
-                        $responseCurrencyCode = (string)$shipElement->TotalCharges->CurrencyCode;
+                        $responseCurrencyCode = $currency->mapCurrencyCode(
+                            (string)$shipElement->TotalCharges->CurrencyCode
+                        );
                         if ($responseCurrencyCode) {
                             if (in_array($responseCurrencyCode, $allowedCurrencies)) {
                                 $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);
