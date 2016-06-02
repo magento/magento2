@@ -26,12 +26,9 @@ class VaultEnableAssigner extends AbstractDataAssignObserver
             return;
         }
 
-        if (isset($additionalData[VaultConfigProvider::IS_ACTIVE_CODE])) {
-            $payment = $this->readPaymentModelArgument($observer);
-            $payment->setAdditionalInformation(
-                VaultConfigProvider::IS_ACTIVE_CODE,
-                filter_var($additionalData[VaultConfigProvider::IS_ACTIVE_CODE], FILTER_VALIDATE_BOOLEAN)
-            );
-        }
+        $payment = $this->readPaymentModelArgument($observer);
+        $enableVault = isset($additionalData[VaultConfigProvider::IS_ACTIVE_CODE]) ?
+            filter_var($additionalData[VaultConfigProvider::IS_ACTIVE_CODE], FILTER_VALIDATE_BOOLEAN) : false;
+        $payment->setAdditionalInformation(VaultConfigProvider::IS_ACTIVE_CODE, $enableVault);
     }
 }

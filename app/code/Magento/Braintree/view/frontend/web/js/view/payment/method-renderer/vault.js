@@ -22,14 +22,6 @@ define([
         },
 
         /**
-         * Get current Braintree vault id
-         * @returns {String}
-         */
-        getId: function () {
-            return 'braintree_' + this.index;
-        },
-
-        /**
          * Get last 4 digits of card
          * @returns {String}
          */
@@ -75,7 +67,7 @@ define([
                     self.hostedFields(function (formComponent) {
                         formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
                         formComponent.additionalData['public_hash'] = self.publicHash;
-                        formComponent.code = 'vault';
+                        formComponent.code = self.code;
                         formComponent.placeOrder();
                     });
                 })
