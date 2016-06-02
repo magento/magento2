@@ -6,6 +6,8 @@
 namespace Magento\Vault\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Payment\Helper\Data;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\VaultPaymentInterface;
@@ -16,6 +18,11 @@ use Magento\Vault\Model\VaultPaymentInterface;
  */
 final class TokensConfigProvider implements ConfigProviderInterface
 {
+    /**
+     * @var string
+     */
+    private static $vaultCode = 'vault';
+
     /**
      * @var VaultPaymentInterface
      */
@@ -35,6 +42,11 @@ final class TokensConfigProvider implements ConfigProviderInterface
      * @var CustomerTokenManagement
      */
     private $customerTokenManagement;
+
+    /**
+     * @var Data
+     */
+    private $paymentDataHelper;
 
     /**
      * Constructor
@@ -64,20 +76,23 @@ final class TokensConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $vaultPayments = [];
-        $storeId = $this->storeManager->getStore()->getId();
-        if (!$this->vaultPayment->isActive($storeId)) {
+        $providers = $this->getComponentProviders();
+
+        if (empty($providers)) {
             return $vaultPayments;
         }
 
-        $providerCode = $this->vaultPayment->getProviderCode($storeId);
-        $componentProvider = $this->getComponentProvider($providerCode);
-        if (null === $componentProvider) {
-            return $vaultPayments;
-        }
+        $tokens = $this->customerTokenManagement->getCustomerSessionTokens();
 
-        foreach ($this->customerTokenManagement->getCustomerSessionTokens() as $i => $token) {
+        foreach ($tokens as $i => $token) {
+            $paymentCode = $token->getPaymentMethodCode();
+            if (!isset($providers[$paymentCode])) {
+                continue;
+            }
+
+            $componentProvider = $providers[$paymentCode];
             $component = $componentProvider->getComponentForToken($token);
-            $vaultPayments[VaultPaymentInterface::CODE . '_item_' . $i] = [
+            $vaultPayments[$paymentCode . '_item_' . $i] = [
                 'config' => $component->getConfig(),
                 'component' => $component->getName()
             ];
@@ -85,9 +100,36 @@ final class TokensConfigProvider implements ConfigProviderInterface
 
         return [
             'payment' => [
-                VaultPaymentInterface::CODE => $vaultPayments
+                self::$vaultCode => $vaultPayments
             ]
         ];
+    }
+
+    /**
+     * Get list of available vault ui token providers
+     * @return TokenUiComponentProviderInterface[]
+     */
+    private function getComponentProviders()
+    {
+        $providers = [];
+        $storeId = $this->storeManager->getStore()->getId();
+        $paymentMethods = $this->getPaymentDataHelper()->getStoreMethods($storeId);
+
+        foreach ($paymentMethods as $method) {
+            /** VaultPaymentInterface $method */
+            if (!$method instanceof VaultPaymentInterface || !$method->isActive($storeId)) {
+                continue;
+            }
+            
+            $providerCode = $method->getProviderCode();
+            $componentProvider = $this->getComponentProvider($providerCode);
+            if ($componentProvider === null) {
+                continue;
+            }
+            $providers[$providerCode] = $componentProvider;
+        }
+
+        return $providers;
     }
 
     /**
@@ -102,5 +144,18 @@ final class TokensConfigProvider implements ConfigProviderInterface
         return $componentProvider instanceof TokenUiComponentProviderInterface
             ? $componentProvider
             : null;
+    }
+
+    /**
+     * Get payment data helper instance
+     * @return Data
+     * @deprecated
+     */
+    private function getPaymentDataHelper()
+    {
+        if ($this->paymentDataHelper === null) {
+            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        }
+        return $this->paymentDataHelper;
     }
 }
