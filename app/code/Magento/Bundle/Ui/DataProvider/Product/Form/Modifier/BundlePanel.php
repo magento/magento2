@@ -671,7 +671,6 @@ class BundlePanel extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'component' => 'Magento_Bundle/js/components/bundle-action-delete',
                                 'componentType' => 'actionDelete',
                                 'dataType' => Form\Element\DataType\Text::NAME,
                                 'label' => '',
