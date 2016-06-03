@@ -168,6 +168,8 @@ class Shipping extends Form
 
     /**
      * Wait for common shipping price block to appear
+     *
+     * @return void
      */
     public function waitForCommonShippingPriceBlock()
     {
