@@ -27,26 +27,18 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     private $paymentDataHelper;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param Context $context
      * @param Config $paymentConfig
      * @param Session $checkoutSession
-     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
         Context $context,
         Config $paymentConfig,
         Session $checkoutSession,
-        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $checkoutSession, $data);
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -55,7 +47,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
      */
     public function isVaultEnabled()
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $this->_storeManager->getStore()->getId();
         $vaultPayment = $this->getVaultPayment();
         return $vaultPayment->isActive($storeId);
     }

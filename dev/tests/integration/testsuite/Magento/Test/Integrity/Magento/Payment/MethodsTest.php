@@ -23,6 +23,9 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function testPaymentMethod($code, $methodClass)
     {
+        if ($code == 'vault') {
+            return;
+        }
         Bootstrap::getObjectManager()->configure($this->getTestConfiguration());
         /** @var $blockFactory \Magento\Framework\View\Element\BlockFactory */
         $blockFactory = Bootstrap::getObjectManager()->get(
