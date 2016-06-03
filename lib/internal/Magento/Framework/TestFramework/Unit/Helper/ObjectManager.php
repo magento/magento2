@@ -217,7 +217,7 @@ class ObjectManager
                                 }
                             }
                         }
-                        return new $className(...$args);
+                        return new $className(...array_values($args));
                     }
                 ));
 

@@ -17,7 +17,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
      */
     public function testPhraseCreation($constructArguments, $getter, $result)
     {
-        $phrase = new Phrase(...$constructArguments);
+        $phrase = new Phrase(...array_values($constructArguments));
         $this->assertEquals($result, $phrase->{$getter}());
     }
 
@@ -57,7 +57,7 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('DomainException', $message);
 
-        new Phrase(...$constructArguments);
+        new Phrase(...array_values($constructArguments));
     }
 
     /**

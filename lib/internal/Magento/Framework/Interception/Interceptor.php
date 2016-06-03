@@ -71,7 +71,7 @@ trait Interceptor
      */
     public function ___callParent($method, array $arguments)
     {
-        return parent::$method(...$arguments);
+        return parent::$method(...array_values($arguments));
     }
 
     /**
@@ -120,7 +120,7 @@ trait Interceptor
             foreach ($pluginInfo[DefinitionInterface::LISTENER_BEFORE] as $code) {
                 $pluginInstance = $this->pluginList->getPlugin($this->subjectType, $code);
                 $pluginMethod = 'before' . $capMethod;
-                $beforeResult = $pluginInstance->$pluginMethod($this, ...$arguments);
+                $beforeResult = $pluginInstance->$pluginMethod($this, ...array_values($arguments));
                 if ($beforeResult) {
                     $arguments = $beforeResult;
                 }
@@ -139,11 +139,11 @@ trait Interceptor
             };
             $pluginInstance = $this->pluginList->getPlugin($this->subjectType, $code);
             $pluginMethod = 'around' . $capMethod;
-            $result = $pluginInstance->$pluginMethod($this, $next, ...$arguments);
+            $result = $pluginInstance->$pluginMethod($this, $next, ...array_values($arguments));
             unset($pluginInstance, $pluginMethod);
         } else {
             // Call original method
-            $result = parent::$method(...$arguments);
+            $result = parent::$method(...array_values($arguments));
         }
         if (isset($pluginInfo[DefinitionInterface::LISTENER_AFTER])) {
             // Call 'after' listeners
