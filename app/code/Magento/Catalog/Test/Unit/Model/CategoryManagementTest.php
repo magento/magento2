@@ -33,7 +33,7 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
         $this->categoryTreeMock = $this->getMock('Magento\Catalog\Model\Category\Tree', [], [], '', false);
         $this->categoriesFactoryMock = $this->getMock(
             'Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
-            ['create'],
+            ['create', 'addFilter', 'getFirstItem'],
             [],
             '',
             false
@@ -86,6 +86,70 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
             $this->model->getTree($rootCategoryId, $depth),
             $this->categoryTreeMock->getTree(null, null)
         );
+    }
+
+    /**
+     * Check is possible to get all categories for all store starting from top level root category
+     */
+    public function testGetTreeForAllScope()
+    {
+
+        $rootCategoryId = null;
+        $depth = null;
+        $category = null;
+        $categoriesMock = $this->getMock(
+            '\Magento\Catalog\Model\ResourceModel\Category\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $categoryMock = $this->getMock(
+            '\Magento\Catalog\Model\Category',
+            [],
+            [],
+            'categoryMock',
+            false
+        );
+        $categoriesMock
+            ->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($categoryMock);
+        $categoriesMock
+            ->expects($this->once())
+            ->method('addFilter')
+            ->with('level', ['eq' => 0])
+            ->willReturnSelf();
+        $this->categoriesFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($categoriesMock);
+        $nodeMock = $this->getMock(
+            '\Magento\Framework\Data\Tree\Node',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->categoryTreeMock
+            ->expects($this->once())
+            ->method('isAdminStore')
+            ->willReturn(true);
+        $this->categoryTreeMock
+            ->expects($this->once())
+            ->method('getTree')
+            ->with($nodeMock, $depth);
+        $this->categoryRepositoryMock
+            ->expects($this->never())
+            ->method('get');
+        $this->categoryTreeMock
+            ->expects($this->once())
+            ->method('getRootNode')
+            ->with($categoryMock)
+            ->willReturn($nodeMock);
+
+        $this->model->getTree();
     }
 
     public function testMove()
