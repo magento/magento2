@@ -130,32 +130,27 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $valuesCollection
      * @param int $storeId
-     * @param bool $useDefaultValue
      * @return void
      */
-    private function addCollectionStoreFilter(&$valuesCollection, $storeId = null, $useDefaultValue = true)
+    private function addCollectionStoreFilter($valuesCollection, $storeId)
     {
-        if ($useDefaultValue) {
-            $valuesCollection->setStoreFilter($storeId, false);
-        } else {
-            $joinCondition = $valuesCollection->getConnection()->quoteInto(
-                'tsv.option_id = main_table.option_id AND tsv.store_id = ?',
+        $joinCondition = $valuesCollection->getConnection()->quoteInto(
+            'tsv.option_id = main_table.option_id AND tsv.store_id = ?',
+            $storeId
+        );
+
+        $select = $valuesCollection->getSelect();
+        $select->joinLeft(
+            ['tsv' => $valuesCollection->getTable('eav_attribute_option_value')],
+            $joinCondition,
+            'value'
+        );
+        if (\Magento\Store\Model\Store::DEFAULT_STORE_ID == $storeId) {
+            $select->where(
+                'tsv.store_id = ?',
                 $storeId
             );
-
-            $select = $valuesCollection->getSelect();
-            $select->joinLeft(
-                ['tsv' => $valuesCollection->getTable('eav_attribute_option_value')],
-                $joinCondition,
-                'value'
-            );
-            if (\Magento\Store\Model\Store::DEFAULT_STORE_ID == $storeId) {
-                $select->where(
-                    'tsv.store_id = ?',
-                    $storeId
-                );
-            }
-            $valuesCollection->setOrder('value', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
         }
+        $valuesCollection->setOrder('value', \Magento\Framework\Data\Collection::SORT_ORDER_ASC);
     }
 }
