@@ -21,6 +21,10 @@ define([
                 values = this._super(),
                 label = [];
 
+            if (_.isString(values)) {
+                values = values.split(',');
+            }
+
             if (!Array.isArray(values)) {
                 values = [values];
             }
