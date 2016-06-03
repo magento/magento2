@@ -60,7 +60,7 @@ class ProcessLayoutRenderElement implements ObserverInterface
             ]
         );
         // Varnish does not support esi over https must change to http
-        $url = (substr($url, 0, 5) === 'https')?'http' . substr($url, 5) : $url;
+        $url = (substr($url, 0, 5) === 'https') ? 'http' . substr($url, 5) : $url;
         return sprintf('<esi:include src="%s" />', $url);
     }
 

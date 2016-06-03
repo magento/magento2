@@ -2,7 +2,7 @@ vcl 4.0;
 
 import std;
 # The minimal Varnish version is 4.0
-# To handle offloaded ssl pass in the following http header: '/* {{ ssl_offloaded_header }} */: https'
+# For SSL offloading, pass the following header in your proxy server or load balancer: '/* {{ ssl_offloaded_header }} */: https'
 
 backend default {
     .host = "/* {{ host }} */";

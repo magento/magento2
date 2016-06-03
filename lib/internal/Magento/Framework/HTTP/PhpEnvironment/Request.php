@@ -92,8 +92,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @var \Magento\Framework\App\Config
      */
     protected $appConfig;
-    
-    
+
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -429,8 +428,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      */
     private function getAppConfig(){
         if ($this->appConfig == null){
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $this->appConfig = $objectManager->get('Magento\Framework\App\Config');
+            $this->appConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Config::class);
         }
         return $this->appConfig;
     }
@@ -444,9 +442,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         $https = $this->getServer('HTTPS');
         $headerServerPort = $this->getServer('SERVER_PORT');
-        return !empty($https) && ($https != 'off') || (isset($headerServerPort) && $headerServerPort == "443");
+        return (!empty($https) && $https != 'off') || $headerServerPort == '443';
     }
-
 
     /**
      * In case there is a proxy server, checks if the initial request to the proxy was delivered over HTTPS
@@ -458,10 +455,11 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
         $offLoaderHeader = str_replace("-", "_",strtoupper($offLoaderHeader));
+        //some webservers do not append HTTP_
         $header = $this->getServer($offLoaderHeader);
+        // apache appends HTTP_
         $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
-        return !empty($offLoaderHeader)
-        && (isset($header) && ($header === 'https') || isset($httpHeader) && ($httpHeader === 'https'));
+        return !empty($offLoaderHeader) && ($header === 'https' || $httpHeader === 'https');
     }
 
     /**
