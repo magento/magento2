@@ -457,9 +457,9 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
         $offLoaderHeader = str_replace('-', '_', strtoupper($offLoaderHeader));
-        //some webservers do not append HTTP_
+        // Some webservers do not append HTTP_
         $header = $this->getServer($offLoaderHeader);
-        // apache appends HTTP_
+        // Apache appends HTTP_
         $httpHeader = $this->getServer('HTTP_' . $offLoaderHeader);
         return !empty($offLoaderHeader) && ($header === 'https' || $httpHeader === 'https');
     }
