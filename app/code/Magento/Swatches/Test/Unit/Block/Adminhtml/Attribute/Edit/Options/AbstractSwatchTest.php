@@ -45,6 +45,11 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $connectionMock;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
@@ -81,6 +86,11 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
             '',
             true
         );
+
+        $this->connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['quoteInto'])
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -125,15 +135,19 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
                 ->with(23)
                 ->will($this->returnSelf());
 
+            $this->connectionMock
+                ->expects($this->any())
+                ->method('quoteInto')
+                ->willReturn('quoted_string_with_value');
+
             $attrOptionCollectionMock
-                ->expects($this->once())
-                ->method('setStoreFilter')
-                ->with(1, false)
-                ->will($this->returnSelf());
+                ->expects($this->any())
+                ->method('getConnection')
+                ->willReturn($this->connectionMock);
 
             $zendDbSelectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-            $attrOptionCollectionMock->expects($this->once())->method('getSelect')->willReturn($zendDbSelectMock);
-            $zendDbSelectMock->expects($this->once())->method('joinLeft')->will($this->returnSelf());
+            $attrOptionCollectionMock->expects($this->any())->method('getSelect')->willReturn($zendDbSelectMock);
+            $zendDbSelectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
 
             $option->expects($this->at(0))->method('getId')->willReturn(14);
             $option->expects($this->at(1))->method('getValue')->willReturn('Blue');
