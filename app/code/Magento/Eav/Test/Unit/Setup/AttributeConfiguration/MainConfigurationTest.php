@@ -7,7 +7,6 @@
 namespace Magento\Eav\Test\Unit\Model\AttributeConfiguration;
 
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
-use Magento\Eav\Setup\AttributeConfiguration\AdditionalConfigurationInterface;
 use Magento\Eav\Setup\AttributeConfiguration\Provider\ProviderInterface;
 use Magento\Eav\Setup\AttributeConfiguration\Provider\ScopeProvider;
 use Magento\Eav\Setup\AttributeConfiguration\MainConfiguration;
@@ -24,11 +23,6 @@ class MainConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     private $inputTypeProviderMock;
 
-    /**
-     * @var AdditionalConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $additionalConfiguration;
-
     protected function setUp()
     {
         $this->inputTypeProviderMock = $this->getMockBuilder(ProviderInterface::class)
@@ -36,10 +30,6 @@ class MainConfigurationTest extends \PHPUnit_Framework_TestCase
                                             ->getMockForAbstractClass();
 
         $this->builder = new MainConfiguration($this->inputTypeProviderMock, new ScopeProvider());
-
-        $this->additionalConfiguration = $this->getMockBuilder(AdditionalConfigurationInterface::class)
-                                              ->setMethods(['toArray'])
-                                              ->getMockForAbstractClass();
     }
 
     public function testBuilderReturnsACompatibleArrayAndChangingStateReturnsANewInstance()
@@ -77,7 +67,6 @@ class MainConfigurationTest extends \PHPUnit_Framework_TestCase
                 'note' => 'note',
                 'global' => ScopedAttributeInterface::SCOPE_STORE,
                 'option' => ['options'],
-                'custom_option' => 'custom_value',
             ],
             $this->builder->toArray()
         );
@@ -89,7 +78,6 @@ class MainConfigurationTest extends \PHPUnit_Framework_TestCase
             ['unique', []],
             ['userDefined', [false]],
             ['required', []],
-            ['withCustomConfiguration', [['custom_option' => 'custom_value']]],
             ['withBackendModel', ['backendModel']],
             ['withBackendTable', ['backendTable']],
             ['withBackendType', ['backendType']],
@@ -106,49 +94,5 @@ class MainConfigurationTest extends \PHPUnit_Framework_TestCase
             ['withSortOrder', [13]],
             ['withSourceModel', ['sourceModel']],
         ];
-    }
-
-    public function testAdditionalInformationIsMergedIntoMainConfiguration()
-    {
-        $this->additionalConfiguration
-             ->expects($this->once())
-             ->method('toArray')
-             ->willReturn(['key1' => 'value1', 'key2' => 'value2']);
-
-        $builder = $this->builder->withAdditionalConfiguration($this->additionalConfiguration);
-
-        $this->assertEquals(['key1' => 'value1', 'key2' => 'value2'], $builder->toArray());
-    }
-
-    public function testAdditionalOptionsCanBeOverwrittenWithACustomOptionsCall()
-    {
-        $this->additionalConfiguration
-            ->expects($this->once())
-            ->method('toArray')
-            ->willReturn(['key1' => 'value1', 'key2' => 'value2']);
-
-        $builder = $this->builder->withAdditionalConfiguration($this->additionalConfiguration)
-                                 ->withCustomConfiguration(['key1' => 'override', 'key3' => 'value3']);
-
-        $this->assertEquals(
-            ['key1' => 'override', 'key2' => 'value2', 'key3' => 'value3'],
-            $builder->toArray()
-        );
-    }
-
-    public function testCustomOptionsCannotBeOverwrittenWithAnAdditionalOptionsCall()
-    {
-        $this->additionalConfiguration
-            ->expects($this->once())
-            ->method('toArray')
-            ->willReturn(['key1' => 'override', 'key2' => 'value2']);
-
-        $builder = $this->builder->withCustomConfiguration(['key1' => 'value1', 'key3' => 'value3'])
-                                 ->withAdditionalConfiguration($this->additionalConfiguration);
-
-        $this->assertEquals(
-            ['key1' => 'value1', 'key2' => 'value2', 'key3' => 'value3'],
-            $builder->toArray()
-        );
     }
 }

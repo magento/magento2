@@ -19,18 +19,6 @@ class MainConfiguration
     private $attributeConfig;
 
     /**
-     * EAV-type specific: catalog, customer, customer address etc.
-     *
-     * @var AdditionalConfigurationInterface
-     */
-    private $additionalConfiguration;
-
-    /**
-     * @var DataObject
-     */
-    private $customConfiguration;
-
-    /**
      * @var ProviderInterface
      */
     private $frontendInputTypeProvider;
@@ -44,26 +32,11 @@ class MainConfiguration
      * @param ProviderInterface $frontendInputTypeProvider
      * @param ProviderInterface $scopeProvider
      */
-    public function __construct(
-        ProviderInterface $frontendInputTypeProvider,
-        ProviderInterface $scopeProvider
-    ) {
+    public function __construct(ProviderInterface $frontendInputTypeProvider, ProviderInterface $scopeProvider)
+    {
         $this->attributeConfig = new DataObject();
-        $this->customConfiguration = new DataObject();
-        $this->additionalConfiguration = new EmptyAdditionalConfiguration();
         $this->frontendInputTypeProvider = $frontendInputTypeProvider;
         $this->scopeProvider = $scopeProvider;
-    }
-
-    /**
-     * @param AdditionalConfigurationInterface $additionalConfiguration
-     * @return MainConfiguration
-     */
-    public function withAdditionalConfiguration(AdditionalConfigurationInterface $additionalConfiguration)
-    {
-        $newInstance = clone $this;
-        $newInstance->additionalConfiguration = $additionalConfiguration;
-        return $newInstance;
     }
 
     /**
@@ -263,33 +236,11 @@ class MainConfiguration
     }
 
     /**
-     * Convenience method to add custom options or overwrite previously-set ones.
-     *
-     * @param array $customProperties
-     * @return MainConfiguration
-     * @throws LocalizedException
-     */
-    public function withCustomConfiguration(array $customProperties)
-    {
-        if (empty($customProperties)) {
-            throw new LocalizedException(__('Custom configuration is empty'));
-        }
-
-        $newInstance = clone $this;
-        $newInstance->customConfiguration->addData($customProperties);
-        return $newInstance;
-    }
-
-    /**
      * @return array
      */
     public function toArray()
     {
-        return array_merge(
-            $this->attributeConfig->toArray(),
-            $this->additionalConfiguration->toArray(),
-            $this->customConfiguration->toArray()
-        );
+        return $this->attributeConfig->toArray();
     }
 
     /**
@@ -298,8 +249,6 @@ class MainConfiguration
     public function __clone()
     {
         $this->attributeConfig = new DataObject($this->attributeConfig->toArray());
-        $this->customConfiguration = new DataObject($this->customConfiguration->toArray());
-        $this->additionalConfiguration = clone $this->additionalConfiguration;
         $this->frontendInputTypeProvider = clone $this->frontendInputTypeProvider;
         $this->scopeProvider = clone $this->scopeProvider;
     }

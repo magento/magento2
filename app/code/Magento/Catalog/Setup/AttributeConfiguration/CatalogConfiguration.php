@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Setup\AttributeConfiguration;
 
 use Magento\Eav\Setup\AttributeConfiguration\AdditionalConfigurationInterface;
+use Magento\Eav\Setup\AttributeConfiguration\MainConfiguration;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -18,11 +19,17 @@ class CatalogConfiguration implements AdditionalConfigurationInterface
     private $attributeConfig;
 
     /**
-     * Constructor
+     * @var MainConfiguration
      */
-    public function __construct()
+    private $mainConfiguration;
+
+    /**
+     * @param MainConfiguration $mainConfiguration
+     */
+    public function __construct(MainConfiguration $mainConfiguration)
     {
         $this->attributeConfig = new DataObject();
+        $this->mainConfiguration = $mainConfiguration;
     }
 
     /**
@@ -197,7 +204,10 @@ class CatalogConfiguration implements AdditionalConfigurationInterface
      */
     public function toArray()
     {
-        return $this->attributeConfig->toArray();
+        return array_merge(
+            $this->mainConfiguration->toArray(),
+            $this->attributeConfig->toArray()
+        );
     }
 
     /**
@@ -205,7 +215,8 @@ class CatalogConfiguration implements AdditionalConfigurationInterface
      */
     public function __clone()
     {
-        $this->attributeConfig = new DataObject($this->toArray());
+        $this->attributeConfig = new DataObject($this->attributeConfig->toArray());
+        $this->mainConfiguration = clone $this->mainConfiguration;
     }
 
     /**

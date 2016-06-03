@@ -7,18 +7,31 @@
 namespace Magento\Catalog\Test\Unit\Setup\AttributeConfiguration;
 
 use Magento\Catalog\Setup\AttributeConfiguration\CatalogConfiguration;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Eav\Setup\AttributeConfiguration\MainConfiguration;
+use Magento\Eav\Setup\AttributeConfiguration\Provider\ProviderInterface;
+use Magento\Eav\Setup\AttributeConfiguration\Provider\ScopeProvider;
 
 class CatalogConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CatalogConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     * @var CatalogConfiguration
      */
     private $builder;
 
+    /**
+     * @var MainConfiguration
+     */
+    private $mainConfiguration;
+
     protected function setUp()
     {
-        $this->builder = (new ObjectManager($this))->getObject(CatalogConfiguration::class);
+        $inputTypeProviderMock = $this->getMockBuilder(ProviderInterface::class)
+                                      ->setMethods(['resolve'])
+                                      ->getMockForAbstractClass();
+
+        $this->mainConfiguration = new MainConfiguration($inputTypeProviderMock, new ScopeProvider());
+
+        $this->builder = new CatalogConfiguration($this->mainConfiguration);
     }
 
     public function testBuilderReturnsACompatibleArrayAndChangingStateReturnsANewInstance()
@@ -94,5 +107,15 @@ class CatalogConfigurationTest extends \PHPUnit_Framework_TestCase
             ['withPosition', [3]],
             ['wysiwygEnabled', []],
         ];
+    }
+
+    public function testAdditionalInformationIsMergedIntoMainConfiguration()
+    {
+        ;
+        $this->builder = new CatalogConfiguration($this->mainConfiguration->unique());
+        $this->assertEquals(
+            ['visible' => true, 'unique' => true],
+            $this->builder->visible()->toArray()
+        );
     }
 }

@@ -7,18 +7,31 @@
 namespace Magento\Customer\Test\Unit\Setup\AttributeConfiguration;
 
 use Magento\Customer\Setup\AttributeConfiguration\CustomerConfiguration;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Eav\Setup\AttributeConfiguration\MainConfiguration;
+use Magento\Eav\Setup\AttributeConfiguration\Provider\ProviderInterface;
+use Magento\Eav\Setup\AttributeConfiguration\Provider\ScopeProvider;
 
 class CustomerConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CustomerConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerConfiguration
      */
     private $builder;
 
+    /**
+     * @var MainConfiguration
+     */
+    private $mainConfiguration;
+
     protected function setUp()
     {
-        $this->builder = (new ObjectManager($this))->getObject(CustomerConfiguration::class);
+        $inputTypeProviderMock = $this->getMockBuilder(ProviderInterface::class)
+                                      ->setMethods(['resolve'])
+                                      ->getMockForAbstractClass();
+
+        $this->mainConfiguration = new MainConfiguration($inputTypeProviderMock, new ScopeProvider());
+
+        $this->builder = new CustomerConfiguration($this->mainConfiguration);
     }
 
     public function testBuilderReturnsACompatibleArray()
@@ -84,5 +97,15 @@ class CustomerConfigurationTest extends \PHPUnit_Framework_TestCase
             ['withSortOrder', [-45]],
             ['withValidationRules', [['min_text_length' => 5]]],
         ];
+    }
+
+    public function testAdditionalInformationIsMergedIntoMainConfiguration()
+    {
+        ;
+        $this->builder = new CustomerConfiguration($this->mainConfiguration->required());
+        $this->assertEquals(
+            ['required' => true, 'system' => true],
+            $this->builder->system()->toArray()
+        );
     }
 }
