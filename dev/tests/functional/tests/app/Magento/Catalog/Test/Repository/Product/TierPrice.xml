@@ -22,6 +22,21 @@
             </field>
         </dataset>
 
+        <dataset name="more_is_cheaper">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">24</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">3</item>
+                <item name="customer_group" xsi:type="string">ALL GROUPS</item>
+            </field>
+            <field name="1" xsi:type="array">
+                <item name="price" xsi:type="string">15</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">30</item>
+                <item name="customer_group" xsi:type="string">ALL GROUPS</item>
+            </field>
+        </dataset>
+
         <dataset name="MAGETWO-23002">
             <field name="0" xsi:type="array">
                 <item name="price" xsi:type="string">90</item>
