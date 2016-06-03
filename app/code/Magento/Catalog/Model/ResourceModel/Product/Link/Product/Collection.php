@@ -444,7 +444,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         if ($this->_hasLinkFilter) {
             $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
             $this->getSelect()
-                ->join(['cpe' => 'catalog_product_entity'], "links.product_id = cpe.$linkField", []);
+                ->join(['cpe' => $this->getMainTable()], "links.product_id = cpe.$linkField", []);
         }
     }
 }
