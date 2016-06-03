@@ -421,6 +421,17 @@ define([
         },
 
         /**
+         * Get record count with filtered delete property.
+         *
+         * @returns {Number} count
+         */
+        getRecordCount: function () {
+            return _.filter(this.recordData(), function (record) {
+                return record[this.deleteProperty] !== this.deleteValue;
+            }, this).length;
+        },
+
+        /**
          * Get number of columns
          *
          * @returns {Number} columns
