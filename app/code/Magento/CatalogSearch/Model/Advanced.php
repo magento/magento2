@@ -368,9 +368,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                 $value = $value['label'];
             }
         } elseif ($attribute->getFrontendInput() == 'boolean') {
-            $value = $value == 1
-                ? __('Yes')
-                : __('No');
+            if (is_numeric($value)) {
+                $value = $value == 1 ? __('Yes') : __('No');
+            } else {
+                $value = false;
+            }
         }
 
         return $value;
