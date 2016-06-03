@@ -45,9 +45,22 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
         if ($rootCategoryId !== null) {
             /** @var \Magento\Catalog\Model\Category $category */
             $category = $this->categoryRepository->get($rootCategoryId);
+        } elseif ($this->categoryTree->isAdminStore()) {
+            $category = $this->getTopLevelCategory();
         }
         $result = $this->categoryTree->getTree($this->categoryTree->getRootNode($category), $depth);
         return $result;
+    }
+
+    /**
+     * Get top level hidden root category
+     *
+     * @return \Magento\Catalog\Model\Category
+     */
+    private function getTopLevelCategory()
+    {
+        $categoriesCollection = $this->categoriesFactory->create();
+        return $categoriesCollection->addFilter('level', ['eq' => 0])->getFirstItem();
     }
 
     /**
