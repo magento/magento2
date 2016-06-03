@@ -320,16 +320,11 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
         $headerScriptName = $this->getServer('SCRIPT_NAME');
 
         if (isset($headerScriptName) && isset($headerHttpHost)) {
-            if($secure = $this->isSecure()){
-                $scheme = 'https://';
-            } else {
-                $scheme = 'http://';
-            }
-
+            $scheme = $this->isSecure() ? 'https://' : 'http://';
             $hostArr = explode(':', $headerHttpHost);
             $host = $hostArr[0];
             $port = isset($hostArr[1])
-                && (!$secure && $hostArr[1] != 80 || $secure && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
+                && (!$this->isSecure() && $hostArr[1] != 80 || $this->isSecure() && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
             $path = $this->getBasePath();
 
             return $scheme . $host . $port . rtrim($path, '/') . '/';
