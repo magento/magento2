@@ -65,7 +65,6 @@ define(
                 var self = this,
                     elements = shippingRatesValidationRules.getObservableFields();
 
-                //TODO: Split zip code validation and element binding for shipping rates request
                 if ($.inArray(postcodeElementName, elements) === -1) {
                     // Add postcode field to observables if not exist for zip code validation support
                     elements.push(postcodeElementName);
