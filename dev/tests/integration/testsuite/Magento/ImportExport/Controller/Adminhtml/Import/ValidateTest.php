@@ -80,8 +80,8 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 'message' => 'File is valid'
             ],
             [
-                'file_name' => 'image.png',
-                'message' => '\'png\' file extension is not supported'
+                'file_name' => 'test.txt',
+                'message' => '\'txt\' file extension is not supported'
             ]
         ];
     }
