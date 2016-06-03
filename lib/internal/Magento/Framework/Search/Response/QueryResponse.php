@@ -12,7 +12,7 @@ use Magento\Framework\Search\ResponseInterface;
 /**
  * Search Response
  */
-class QueryResponse implements ResponseInterface, \IteratorAggregate, \Countable
+class QueryResponse implements ResponseInterface, \Countable
 {
     /**
      * Document Collection
