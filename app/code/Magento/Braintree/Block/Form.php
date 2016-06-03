@@ -14,7 +14,6 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Form\Cc;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
@@ -44,17 +43,11 @@ class Form extends Cc
     private $paymentDataHelper;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param Context $context
      * @param Config $paymentConfig
      * @param Quote $sessionQuote
      * @param GatewayConfig $gatewayConfig
      * @param CcType $ccType
-     * @param StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -63,14 +56,12 @@ class Form extends Cc
         Quote $sessionQuote,
         GatewayConfig $gatewayConfig,
         CcType $ccType,
-        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
         $this->sessionQuote = $sessionQuote;
         $this->gatewayConfig = $gatewayConfig;
         $this->ccType = $ccType;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -99,7 +90,7 @@ class Form extends Cc
      */
     public function isVaultEnabled()
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $this->_storeManager->getStore()->getId();
         $vaultPayment = $this->getVaultPayment();
         return $vaultPayment->isActive($storeId);
     }
