@@ -11,14 +11,13 @@ use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
 use Magento\Braintree\Model\Adminhtml\Source\CcType;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
-use Magento\Vault\Model\Ui\VaultConfigProvider;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 use OAuthTest\Mocks\Common\Service\Mock;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Payment\Helper\Data;
 
 /**
  * Class FormTest
