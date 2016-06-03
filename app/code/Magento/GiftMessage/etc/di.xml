@@ -27,6 +27,5 @@
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="save_gift_message" type="Magento\GiftMessage\Model\Plugin\OrderSave"/>
         <plugin name="get_gift_message" type="Magento\GiftMessage\Model\Plugin\OrderGet"/>
-        <plugin name="add_gift_messages_to_orders" type="Magento\GiftMessage\Model\Plugin\OrderGet"/>
     </type>
 </config>
