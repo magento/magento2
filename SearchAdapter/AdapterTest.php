@@ -63,7 +63,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     public function testAggregationsQuery()
     {
-        $this->markTestSkipped('Range query does not implemented.');
+        $this->markTestSkipped('Range query is not supported. Test is skipped intentionally.');
     }
 
     /**
