@@ -30,7 +30,9 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
      */
     public function getCustomAttribute($attributeCode)
     {
-        return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]) ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode] : null;
+        return isset($this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode])
+            ? $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]
+            : null;
     }
 
     /**
@@ -42,13 +44,6 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
         $attributes = $this->getCustomAttributes();
         $attributes[$attributeCode] = $attributeValue;
         return $this->setCustomAttributes($attributes);
-/*
-        $attributes = is_array($this->getCustomAttributes()) ? $this->getCustomAttributes() : [];
-        $attribute = (array_key_exists($attributeCode, $attributes)) ?
-            $attributes[$attributeCode] : $this->attributeValueFactory->create()->setAttributeCode($attributeCode);
-        $attribute->setValue($attributeValue);
-        $attributes[$attributeCode] = $attribute;
-        return $this->setCustomAttributes($attributes);*/
     }
 
     /**
@@ -74,7 +69,7 @@ class Document extends AbstractSimpleObject implements DocumentInterface, \Itera
      */
     public function getIterator()
     {
-        $attributes = is_array($this->getCustomAttributes()) ? $this->getCustomAttributes() : [];
+        $attributes = (array)$this->getCustomAttributes();
         return new \ArrayIterator($attributes);
     }
 }
