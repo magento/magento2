@@ -25,8 +25,7 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
-
-
+    
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param Category\Tree $categoryTree
