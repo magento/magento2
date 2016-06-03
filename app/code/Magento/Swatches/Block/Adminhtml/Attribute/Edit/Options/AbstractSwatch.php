@@ -111,7 +111,7 @@ abstract class AbstractSwatch extends \Magento\Eav\Block\Adminhtml\Attribute\Edi
             $valuesCollection->setAttributeFilter(
                 $this->getAttributeObject()->getId()
             );
-            $this->addCollectionStoreFilter($valuesCollection, $storeId, false);
+            $this->addCollectionStoreFilter($valuesCollection, $storeId);
             $valuesCollection->getSelect()->joinLeft(
                 ['swatch_table' => $valuesCollection->getTable('eav_attribute_option_swatch')],
                 'swatch_table.option_id = main_table.option_id AND swatch_table.store_id = '.$storeId,
