@@ -220,7 +220,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $products = [$products];
             }
             $identifierField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getIdentifierField();
-            $this->getSelect()->where("cpe.$identifierField IN (?)", $products);
+            $this->getSelect()->where("product_entity_table.$identifierField IN (?)", $products);
             $this->_hasLinkFilter = true;
         }
 
@@ -442,9 +442,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private function joinProductsToLinks()
     {
         if ($this->_hasLinkFilter) {
-            $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+            $metaDataPool = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $linkField = $metaDataPool->getLinkField();
+            $entityTable = $metaDataPool->getEntityTable();
             $this->getSelect()
-                ->join(['cpe' => $this->getMainTable()], "links.product_id = cpe.$linkField", []);
+                ->join(['product_entity_table' => $entityTable], "links.product_id = product_entity_table.$linkField", []);
         }
     }
 }
