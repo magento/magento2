@@ -54,32 +54,6 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider mapCurrencyCodeDataProvider
-     * @param string $currencyCode
-     * @param string $expected
-     */
-    public function testMapCurrencyCode($currencyCode, $expected)
-    {
-        static::assertEquals(
-            $expected,
-            $this->currency->mapCurrencyCode($currencyCode)
-        );
-    }
-
-    /**
-     * Return data sets for testMapCurrencyCode()
-     *
-     * @return array
-     */
-    public function mapCurrencyCodeDataProvider()
-    {
-        return [
-            ['RMB', 'CNY'],
-            ['CNH', 'CNY'],
-            ['USD', 'USD']
-        ];
-    }
-    /**
      * @dataProvider getOutputFormatDataProvider
      * @param $withCurrency
      * @param $noCurrency

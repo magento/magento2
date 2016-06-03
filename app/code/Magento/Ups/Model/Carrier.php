@@ -772,6 +772,22 @@ XMLRequest;
     }
 
     /**
+     * Map currency alias to currency code
+     *
+     * @param string $code
+     * @return string
+     */
+    private function mapCurrencyCode($code)
+    {
+        $currencyMapping = [
+            'RMB' => 'CNY',
+            'CNH' => 'CNY'
+        ];
+
+        return isset($currencyMapping[$code]) ? $currencyMapping[$code] : $code;
+    }
+
+    /**
      * Prepare shipping rate result based on response
      *
      * @param mixed $xmlResponse
@@ -799,10 +815,7 @@ XMLRequest;
                         'shipper_number'
                     ) && !empty($negotiatedArr);
 
-                /** @var \Magento\Directory\Model\Currency $currency */
-                $currency = $this->_currencyFactory->create();
-                $allowedCurrencies = $currency->getConfigAllowCurrencies();
-
+                $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
@@ -814,7 +827,7 @@ XMLRequest;
 
                         //convert price with Origin country currency code to base currency code
                         $successConversion = true;
-                        $responseCurrencyCode = $currency->mapCurrencyCode(
+                        $responseCurrencyCode = $this->mapCurrencyCode(
                             (string)$shipElement->TotalCharges->CurrencyCode
                         );
                         if ($responseCurrencyCode) {
