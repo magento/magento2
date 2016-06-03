@@ -90,6 +90,11 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
     protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
 
     /**
+     * @var string
+     */
+    private $distroBaseUrl;
+
+    /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
      * @param ConfigInterface $routeConfig
@@ -313,8 +318,8 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-      public function getDistroBaseUrl()
-      {
+    public function getDistroBaseUrl()
+    {
         if ($this->distroBaseUrl) {
             return $this->distroBaseUrl;
         }
@@ -339,11 +344,6 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
         }
         return 'http://localhost/';
     }
-
-    /**
-     * @var string
-     */
-    private $distroBaseUrl;
 
     /**
      * Determines a base URL path from environment
