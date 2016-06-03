@@ -37,7 +37,7 @@ class CheckoutWithPaypalFromCartStep implements TestStepInterface
     public function run()
     {
         $this->checkoutCart->open();
-        $this->checkoutCart->getCartBlock()->waitCartContainerLoading();
+        $this->checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         $currentWindow = $this->checkoutCart->getCartBlock()
             ->braintreePaypalCheckout();
         $this->checkoutCart->getBraintreePaypalBlock()->process($currentWindow);
