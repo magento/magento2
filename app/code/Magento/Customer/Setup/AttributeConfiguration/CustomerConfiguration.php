@@ -7,9 +7,9 @@
 namespace Magento\Customer\Setup\AttributeConfiguration;
 
 use Magento\Eav\Setup\AttributeConfiguration\AdditionalConfigurationInterface;
+use Magento\Eav\Setup\AttributeConfiguration\InvalidConfigurationException;
 use Magento\Eav\Setup\AttributeConfiguration\MainConfiguration;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 
 class CustomerConfiguration implements AdditionalConfigurationInterface
 {
@@ -64,14 +64,14 @@ class CustomerConfiguration implements AdditionalConfigurationInterface
     /**
      * @param int $count Must be a positive integer
      * @return CustomerConfiguration
-     * @throws LocalizedException
+     * @throws InvalidConfigurationException
      */
     public function withMultiLineCount($count)
     {
         if (is_int($count) && $count >= 0) {
             return $this->getNewInstanceWithProperty('multiline_count', $count);
         } else {
-            throw new LocalizedException(__('Non-integer or negative multi-line count provided.'));
+            throw new InvalidConfigurationException(__('Non-integer or negative multi-line count provided.'));
         }
     }
 
@@ -88,12 +88,12 @@ class CustomerConfiguration implements AdditionalConfigurationInterface
     /**
      * @param int $sortOrder
      * @return CustomerConfiguration
-     * @throws LocalizedException
+     * @throws InvalidConfigurationException
      */
     public function withSortOrder($sortOrder)
     {
         if (!is_int($sortOrder)) {
-            throw new LocalizedException(__('Non-integer attribute sort order provided.'));
+            throw new InvalidConfigurationException(__('Non-integer attribute sort order provided.'));
         }
         return $this->getNewInstanceWithProperty('position', $sortOrder);
     }
@@ -160,7 +160,6 @@ class CustomerConfiguration implements AdditionalConfigurationInterface
     public function __clone()
     {
         $this->attributeConfig = new DataObject($this->attributeConfig->toArray());
-        $this->mainConfiguration = clone $this->mainConfiguration;
     }
 
     /**
@@ -168,12 +167,12 @@ class CustomerConfiguration implements AdditionalConfigurationInterface
      * @param mixed $propertyValue
      * @param bool $withValueCheck
      * @return CustomerConfiguration
-     * @throws LocalizedException
+     * @throws InvalidConfigurationException
      */
     private function getNewInstanceWithProperty($propertyName, $propertyValue, $withValueCheck = false)
     {
         if ($withValueCheck && empty($propertyValue)) {
-            throw new LocalizedException(__('Value of property "%1" is empty', $propertyName));
+            throw new InvalidConfigurationException(__('Value of property "%1" is empty', $propertyName));
         }
 
         $newInstance = clone $this;

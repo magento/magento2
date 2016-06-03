@@ -7,9 +7,9 @@
 namespace Magento\Catalog\Setup\AttributeConfiguration;
 
 use Magento\Eav\Setup\AttributeConfiguration\AdditionalConfigurationInterface;
+use Magento\Eav\Setup\AttributeConfiguration\InvalidConfigurationException;
 use Magento\Eav\Setup\AttributeConfiguration\MainConfiguration;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 
 class CatalogConfiguration implements AdditionalConfigurationInterface
 {
@@ -153,12 +153,12 @@ class CatalogConfiguration implements AdditionalConfigurationInterface
     /**
      * @param int $position
      * @return CatalogConfiguration
-     * @throws LocalizedException On non-integer position
+     * @throws InvalidConfigurationException On non-integer position
      */
     public function withPosition($position)
     {
         if (!is_int($position)) {
-            throw new LocalizedException(__('Non-integer catalog attribute position provided.'));
+            throw new InvalidConfigurationException(__('Non-integer catalog attribute position provided.'));
         }
         return $this->getNewInstanceWithProperty('position', $position);
     }
@@ -216,7 +216,6 @@ class CatalogConfiguration implements AdditionalConfigurationInterface
     public function __clone()
     {
         $this->attributeConfig = new DataObject($this->attributeConfig->toArray());
-        $this->mainConfiguration = clone $this->mainConfiguration;
     }
 
     /**
@@ -224,12 +223,12 @@ class CatalogConfiguration implements AdditionalConfigurationInterface
      * @param mixed $propertyValue
      * @param bool $withValueCheck
      * @return CatalogConfiguration
-     * @throws LocalizedException
+     * @throws InvalidConfigurationException
      */
     private function getNewInstanceWithProperty($propertyName, $propertyValue, $withValueCheck = false)
     {
         if ($withValueCheck && empty($propertyValue)) {
-            throw new LocalizedException(__('Value of property "%1" is empty', $propertyName));
+            throw new InvalidConfigurationException(__('Value of property "%1" is empty', $propertyName));
         }
 
         $newInstance = clone $this;

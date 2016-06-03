@@ -69,7 +69,7 @@ class CatalogConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Eav\Setup\AttributeConfiguration\InvalidConfigurationException
      */
     public function testBuilderThrowsOnNonIntegerPosition()
     {
@@ -77,7 +77,7 @@ class CatalogConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Eav\Setup\AttributeConfiguration\InvalidConfigurationException
      */
     public function testBuilderThrowsOnEmptyApplyTo()
     {

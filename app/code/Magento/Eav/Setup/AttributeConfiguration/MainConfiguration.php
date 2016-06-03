@@ -9,7 +9,6 @@ namespace Magento\Eav\Setup\AttributeConfiguration;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\AttributeConfiguration\Provider\ProviderInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\LocalizedException;
 
 class MainConfiguration
 {
@@ -89,6 +88,7 @@ class MainConfiguration
     /**
      * @param mixed $inputType
      * @return MainConfiguration
+     * @throws InvalidConfigurationException On invalid input type
      */
     public function withFrontendInput($inputType)
     {
@@ -172,7 +172,7 @@ class MainConfiguration
     /**
      * @param int $scope
      * @return MainConfiguration
-     * @throws LocalizedException On invalid scope
+     * @throws InvalidConfigurationException On invalid scope
      */
     public function withScope($scope)
     {
@@ -207,12 +207,12 @@ class MainConfiguration
     /**
      * @param int $sortOrder
      * @return MainConfiguration
-     * @throws LocalizedException On non-integer sort order
+     * @throws InvalidConfigurationException On non-integer sort order
      */
     public function withSortOrder($sortOrder)
     {
         if (!is_int($sortOrder)) {
-            throw new LocalizedException(__('Non-integer attribute sort order provided.'));
+            throw new InvalidConfigurationException(__('Non-integer attribute sort order provided.'));
         }
         return $this->getNewInstanceWithProperty('sort_order', $sortOrder, false);
     }
@@ -258,12 +258,12 @@ class MainConfiguration
      * @param mixed $propertyValue
      * @param bool $withValueCheck
      * @return MainConfiguration
-     * @throws LocalizedException
+     * @throws InvalidConfigurationException
      */
     private function getNewInstanceWithProperty($propertyName, $propertyValue, $withValueCheck = true)
     {
         if ($withValueCheck && empty($propertyValue)) {
-            throw new LocalizedException(__('Value of property "%1" is empty', $propertyName));
+            throw new InvalidConfigurationException(__('Value of property "%1" is empty', $propertyName));
         }
 
         $newInstance = clone $this;

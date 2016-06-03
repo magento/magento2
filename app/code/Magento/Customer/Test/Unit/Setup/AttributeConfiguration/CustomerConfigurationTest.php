@@ -62,7 +62,7 @@ class CustomerConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Eav\Setup\AttributeConfiguration\InvalidConfigurationException
      */
     public function testBuilderThrowsOnNonIntegerMultiLineCount()
     {
@@ -70,7 +70,7 @@ class CustomerConfigurationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedException \Magento\Eav\Setup\AttributeConfiguration\InvalidConfigurationException
      */
     public function testBuilderThrowsOnNegativeMultiLineCount()
     {
