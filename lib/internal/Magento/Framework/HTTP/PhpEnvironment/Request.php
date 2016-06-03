@@ -426,9 +426,11 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @deprecated
      */
-    private function getAppConfig(){
-        if ($this->appConfig == null){
-            $this->appConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Config::class);
+    private function getAppConfig()
+    {
+        if ($this->appConfig == null) {
+            $this->appConfig =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Framework\App\Config::class);
         }
         return $this->appConfig;
     }
@@ -454,7 +456,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     protected function initialRequestSecure($offLoaderHeader)
     {
         // Transform http header to $_SERVER format ie X-Forwarded-Proto becomes $_SERVER['HTTP_X_FORWARDED_PROTO']
-        $offLoaderHeader = str_replace("-", "_",strtoupper($offLoaderHeader));
+        $offLoaderHeader = str_replace('-', '_', strtoupper($offLoaderHeader));
         //some webservers do not append HTTP_
         $header = $this->getServer($offLoaderHeader);
         // apache appends HTTP_
