@@ -35,7 +35,7 @@ Summary,Summary
 "This attribute is used in configurable products. You cannot remove it from the attribute set.","This attribute is used in configurable products. You cannot remove it from the attribute set."
 "Associated Products","Associated Products"
 "Step 2: Attribute Values","Step 2: Attribute Values"
-"Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU.","Select values from each attribute to include in this product. Each unique combination of values creates a unigue product SKU."
+"Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.","Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU."
 "Sort Variations","Sort Variations"
 Options,Options
 "Select All","Select All"
