@@ -444,7 +444,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         $https = $this->getServer('HTTPS');
         $headerServerPort = $this->getServer('SERVER_PORT');
-        return (!empty($https) && $https != 'off') || $headerServerPort == '443';
+        return (!empty($https) && $https != 'off') || $headerServerPort == 443;
     }
 
     /**
