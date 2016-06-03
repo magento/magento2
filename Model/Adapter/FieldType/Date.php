@@ -46,7 +46,7 @@ class Date
 
     /**
      * Retrieve date value in elasticsearch format (ISO 8601)
-     * Example: 1995-12-31T23:59:59Z
+     * Example: 1995-12-31T23:59:59
      *
      * @param int $storeId
      * @param string|null $date
