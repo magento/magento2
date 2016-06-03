@@ -49,7 +49,7 @@ class Chain implements \Magento\Framework\Interception\ChainInterface
             foreach ($pluginInfo[DefinitionInterface::LISTENER_BEFORE] as $code) {
                 $pluginInstance = $this->pluginList->getPlugin($type, $code);
                 $pluginMethod = 'before' . $capMethod;
-                $beforeResult = $pluginInstance->$pluginMethod($subject, ...$arguments);
+                $beforeResult = $pluginInstance->$pluginMethod($subject, ...array_values($arguments));
                 if ($beforeResult) {
                     $arguments = $beforeResult;
                 }
@@ -64,7 +64,7 @@ class Chain implements \Magento\Framework\Interception\ChainInterface
             };
             $pluginInstance = $this->pluginList->getPlugin($type, $code);
             $pluginMethod = 'around' . $capMethod;
-            $result = $pluginInstance->$pluginMethod($subject, $next, ...$arguments);
+            $result = $pluginInstance->$pluginMethod($subject, $next, ...array_values($arguments));
             unset($pluginInstance, $pluginMethod);
         } else {
             $result = $subject->___callParent($method, $arguments);

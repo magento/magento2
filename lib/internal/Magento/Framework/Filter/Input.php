@@ -344,7 +344,7 @@ class Input implements \Zend_Filter_Interface
         if (is_string($filter)) {
             $filterClassName = 'Zend_Filter_' . ucfirst($filter);
             $filterClassOptions = isset($filterData['args']) ? $filterData['args'] : [];
-            $filter = new $filterClassName(...$filterClassOptions);
+            $filter = new $filterClassName(...array_values($filterClassOptions));
         }
         
         if (!$filter instanceof \Zend_Filter_Interface) {
