@@ -71,8 +71,14 @@ require([
             var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
             $(progressSelector).css('width', '100%');
             if (data.result && !data.result.hasOwnProperty('errorcode')) {
+                $("#content_header").children(".message").remove();
                 $(progressSelector).removeClass('upload-progress').addClass('upload-success');
             } else {
+                var tempErrorMessage = document.createElement("div");
+                tempErrorMessage.className = "message message-warning warning";
+                tempErrorMessage.innerHTML = data.result.error;
+
+                $("#content_header").append(tempErrorMessage);
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
             }
         },
