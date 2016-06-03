@@ -181,10 +181,9 @@ class Sidebar extends AbstractCart
     /**
      * Return max visible item count for minicart
      *
-     * @codeCoverageIgnore
      * @return int
      */
-    protected function getMiniCartMaxItemsCount()
+    private function getMiniCartMaxItemsCount()
     {
         return (int)$this->_scopeConfig->getValue('checkout/sidebar/count', ScopeInterface::SCOPE_STORE);
     }
