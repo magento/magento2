@@ -54,7 +54,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * @var ProductMetadataInterface
      */
-    private $productMetadata;
+    protected $productMetadata;
 
     /**
      * @var string
