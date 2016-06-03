@@ -161,16 +161,15 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
     }
 
-    public function testSaveActionCreateNewGroup()
+    public function testSaveActionCreateNewGroupWithoutCode()
     {
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
-        $this->getRequest()->setParam('code', 'group_code');
 
         $this->dispatch('backend/customer/group/save');
 
         $this->assertSessionMessages(
-            $this->equalTo(['You saved the customer group.']),
-            MessageInterface::TYPE_SUCCESS
+            $this->equalTo(['code is a required field.']),
+            MessageInterface::TYPE_ERROR
         );
     }
 
