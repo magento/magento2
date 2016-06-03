@@ -14,6 +14,7 @@ class DocumentFactory
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
+     * @deprecated
      */
     protected $objectManager;
 
@@ -23,15 +24,22 @@ class DocumentFactory
     private $entityMetadata;
 
     /**
+     * @var \Magento\Framework\Api\AttributeValueFactory
+     */
+    private $attributeValueFactory;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Search\EntityMetadata $entityMetadata
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Search\EntityMetadata $entityMetadata
+//        \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
     ) {
         $this->objectManager = $objectManager;
         $this->entityMetadata = $entityMetadata;
+//        $this->attributeValueFactory = $attributeValueFactory;
     }
 
     /**
@@ -42,21 +50,24 @@ class DocumentFactory
      */
     public function create($rawDocument)
     {
-        /** @var \Magento\Framework\Search\DocumentField[] $fields */
-        $fields = [];
         $documentId = null;
-        $entityId = $this->entityMetadata->getEntityId();
+	$entityId = $this->entityMetadata->getEntityId();
+	$attributes = [];
         foreach ($rawDocument as $rawField) {
             $fieldName = $rawField['name'];
             if ($fieldName === $entityId) {
                 $documentId = $rawField['value'];
             } else {
-                $fields[$fieldName] = $this->objectManager->create('Magento\Framework\Search\DocumentField', $rawField);
+                $attributes[$fieldName] = new \Magento\Framework\Api\AttributeValue([
+		    \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => $fieldName,
+		    \Magento\Framework\Api\AttributeInterface::VALUE => $rawField['value']
+		]);
+		 //$this->attributeValueFactory->create()
             }
         }
-        return $this->objectManager->create(
-            'Magento\Framework\Search\Document',
-            ['documentFields' => $fields, 'documentId' => $documentId]
-        );
+	return new \Magento\Framework\Api\Search\Document([
+	   \Magento\Framework\Api\Search\DocumentInterface::ID => $documentId,
+           \Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => $attributes
+	]);
     }
 }
