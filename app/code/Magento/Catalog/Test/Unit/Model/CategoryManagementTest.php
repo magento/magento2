@@ -27,8 +27,15 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $categoriesFactoryMock;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManagerHelper;
+
     protected function setUp()
     {
+
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->categoryRepositoryMock = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
         $this->categoryTreeMock = $this->getMock('Magento\Catalog\Model\Category\Tree', [], [], '', false);
         $this->categoriesFactoryMock = $this->getMock(
@@ -38,10 +45,39 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->model = new \Magento\Catalog\Model\CategoryManagement(
-            $this->categoryRepositoryMock,
-            $this->categoryTreeMock,
-            $this->categoriesFactoryMock
+
+        $this->model = $this->objectManagerHelper->getObject(
+            '\Magento\Catalog\Model\CategoryManagement',
+            [
+                'categoryRepository' => $this->categoryRepositoryMock,
+                'categoryTree' => $this->categoryTreeMock,
+                'categoriesFactory' => $this->categoriesFactoryMock
+            ]
+        );
+
+        $storeMock = $this->getMock(
+            '\Magento\Store\Model\StoreManager',
+            ['getStore', 'getCode'],
+            [],
+            '',
+            false
+        );
+        $storeMock
+            ->expects($this->any())
+            ->method('getStore')
+            ->willReturnSelf();
+
+        $storeMock
+            ->expects($this->any())
+            ->method('getCode')
+            ->willReturn(1);
+
+
+
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->model,
+            'storeManager',
+            $storeMock
         );
     }
 
@@ -134,10 +170,6 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->categoryTreeMock
             ->expects($this->once())
-            ->method('isAdminStore')
-            ->willReturn(true);
-        $this->categoryTreeMock
-            ->expects($this->once())
             ->method('getTree')
             ->with($nodeMock, $depth);
         $this->categoryRepositoryMock
@@ -148,6 +180,30 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getRootNode')
             ->with($categoryMock)
             ->willReturn($nodeMock);
+
+        $storeMock = $this->getMock(
+            '\Magento\Store\Model\StoreManager',
+            ['getStore', 'getCode'],
+            [],
+            '',
+            false
+        );
+        $storeMock
+            ->expects($this->any())
+            ->method('getStore')
+            ->willReturnSelf();
+
+        $storeMock
+            ->expects($this->once())
+            ->method('getCode')
+            ->willReturn(\Magento\Store\Model\Store::ADMIN_CODE);
+
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->model,
+            'storeManager',
+            $storeMock
+        );
+
 
         $this->model->getTree();
     }
