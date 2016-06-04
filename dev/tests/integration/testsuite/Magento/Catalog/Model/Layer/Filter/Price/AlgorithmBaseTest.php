@@ -67,7 +67,7 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
             ['entityMetadata' => $entityMetadata]
         );
 
-        /** @var \Magento\Framework\Search\Document[] $documents */
+        /** @var \Magento\Framework\Api\Search\Document[] $documents */
         $documents = [];
         foreach ($entityIds as $entityId) {
             $rawDocument = [
