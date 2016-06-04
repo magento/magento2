@@ -30,19 +30,13 @@ class DocumentFactory
     private $entityMetadata;
 
     /**
-     * @var \Magento\Framework\Api\AttributeValueFactory
-     * @deprecated
-     */
-    private $attributeValueFactory;
-
-    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Search\EntityMetadata $entityMetadata
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\Search\EntityMetadata $entityMetadata,
-        \Magento\Framework\Api\AttributeValueFactory $attributeValueFactory
+        \Magento\Framework\Search\EntityMetadata $entityMetadata
     ) {
         $this->entityMetadata = $entityMetadata;
     }
@@ -51,26 +45,26 @@ class DocumentFactory
      * Create Search Document instance
      *
      * @param mixed $rawDocument
-     * @return \Magento\Framework\Search\Document
+     * @return \Magento\Framework\Api\Search\Document
      */
     public function create($rawDocument)
     {
         $documentId = null;
         $entityId = $this->entityMetadata->getEntityId();
         $attributes = [];
-        foreach ($rawDocument as $rawField) {
-            $fieldName = $rawField['name'];
+        foreach ($rawDocument as $fieldName => $value) {
             if ($fieldName === $entityId) {
-                $documentId = $rawField['value'];
+                $documentId = $value;
             } else {
                 $attributes[$fieldName] = new AttributeValue(
                     [
                         AttributeInterface::ATTRIBUTE_CODE => $fieldName,
-                        AttributeInterface::VALUE => $rawField['value'],
+                        AttributeInterface::VALUE => $value,
                     ]
                 );
             }
         }
+
         return new Document(
             [
                 DocumentInterface::ID => $documentId,
