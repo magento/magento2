@@ -84,12 +84,12 @@
                         <item name="downloadable_sample_read" xsi:type="string">Magento\Downloadable\Model\Sample\ReadHandler</item>
                     </item>
                     <item name="create" xsi:type="array">
-                        <item name="downloadable_link_create" xsi:type="string">Magento\Downloadable\Model\Link\SaveHandler</item>
-                        <item name="downloadable_sample_create" xsi:type="string">Magento\Downloadable\Model\Sample\SaveHandler</item>
+                        <item name="downloadable_link_create" xsi:type="string">Magento\Downloadable\Model\Link\CreateHandler</item>
+                        <item name="downloadable_sample_create" xsi:type="string">Magento\Downloadable\Model\Sample\CreateHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
-                        <item name="downloadable_link_update" xsi:type="string">Magento\Downloadable\Model\Sample\SaveHandler</item>
-                        <item name="downloadable_sample_update" xsi:type="string">Magento\Downloadable\Model\Link\SaveHandler</item>
+                        <item name="downloadable_link_update" xsi:type="string">Magento\Downloadable\Model\Sample\UpdateHandler</item>
+                        <item name="downloadable_sample_update" xsi:type="string">Magento\Downloadable\Model\Link\UpdateHandler</item>
                     </item>
                     <item name="delete" xsi:type="array">
                         <item name="downloadable_link_delete" xsi:type="string">Magento\Downloadable\Model\Sample\DeleteHandler</item>
