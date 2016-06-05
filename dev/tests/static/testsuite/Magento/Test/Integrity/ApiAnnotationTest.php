@@ -13,9 +13,9 @@ use Magento\Framework\Component\ComponentRegistrar;
 class ApiAnnotationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * API annotation
+     * API annotation pattern
      */
-    const API_ANNOTATION  = '@api';
+    private $apiAnnotation  = '~/\*{2}(.*@api.*)\*/\s+(?=interface)~s';
 
     public function testApiAnnotations()
     {
@@ -25,7 +25,7 @@ class ApiAnnotationTest extends \PHPUnit_Framework_TestCase
 
         foreach (Files::init()->getFiles($modulePaths, '*.php', true) as $file) {
             $fileContent = file_get_contents($file);
-            if (!preg_match('~' . self::API_ANNOTATION . '~', $fileContent)) {
+            if (!preg_match($this->apiAnnotation, $fileContent)) {
                 $result[] = $file;
             }
         }

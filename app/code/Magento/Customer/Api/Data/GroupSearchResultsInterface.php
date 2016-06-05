@@ -8,13 +8,13 @@ namespace Magento\Customer\Api\Data;
 
 /**
  * Interface for customer groups search results.
+ * @api
  */
 interface GroupSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
      * Get customer groups list.
      *
-     * @api
      * @return \Magento\Customer\Api\Data\GroupInterface[]
      */
     public function getItems();
