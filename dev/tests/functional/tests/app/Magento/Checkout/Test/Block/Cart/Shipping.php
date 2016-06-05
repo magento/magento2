@@ -59,6 +59,13 @@ class Shipping extends Form
     protected $blockWaitElement = '._block-content-loading';
 
     /**
+     * Get shipping price selector for exclude and include price
+     *
+     * @var string
+     */
+    protected $commonShippingPriceSelector = '.shipping .price';
+
+    /**
      * Open estimate shipping and tax form.
      *
      * @return void
@@ -157,5 +164,15 @@ class Shipping extends Form
         // Code under test uses JavaScript delay at this point as well.
         sleep(1);
         $this->waitForElementNotVisible($this->blockWaitElement);
+    }
+
+    /**
+     * Wait for common shipping price block to appear
+     *
+     * @return void
+     */
+    public function waitForCommonShippingPriceBlock()
+    {
+        $this->waitForElementVisible($this->commonShippingPriceSelector, Locator::SELECTOR_CSS);
     }
 }
