@@ -17,7 +17,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
-
+use Magento\Catalog\Model\Product\Visibility;
 /**
  * Import entity product model
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -107,11 +107,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Column product visibility.
      */
     const COL_VISIBILITY = 'visibility';
-
-    /**
-     * Column product visibility value.
-     */
-    const COL_VALUE_VISIBILITY_NON_VISIBLE = 'Not Visible Individually';
 
     /**
      * Column product sku.
@@ -2326,7 +2321,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
             && (empty($rowData[self::COL_VISIBILITY])
-            || $rowData[self::COL_VISIBILITY] !== self::COL_VALUE_VISIBILITY_NON_VISIBLE);
+            || $rowData[self::COL_VISIBILITY]
+            !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
     }
 
     /**

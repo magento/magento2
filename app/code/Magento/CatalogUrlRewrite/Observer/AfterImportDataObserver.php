@@ -19,7 +19,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
-
+use Magento\Catalog\Model\Product\Visibility;
 /**
  * Class AfterImportDataObserver
  *
@@ -222,7 +222,7 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function addProductToImport($product, $storeId)
     {
-        if ($product->getVisibility() == ImportProduct::COL_VALUE_VISIBILITY_NON_VISIBLE) {
+        if ($product->getVisibility() == (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
             return $this;
         }
         if (!isset($this->products[$product->getId()])) {
