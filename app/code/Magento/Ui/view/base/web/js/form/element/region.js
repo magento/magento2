@@ -36,7 +36,7 @@ define([
                 this.validation['required-entry'] = false;
                 this.required(false);
             } else {
-                if (!option['is_region_required']) {
+                if (!('is_region_required' in option) || !option['is_region_required']) {
                     this.error(false);
                     this.validation = _.omit(this.validation, 'required-entry');
                 } else {
