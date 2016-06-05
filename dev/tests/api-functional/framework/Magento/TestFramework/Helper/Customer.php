@@ -15,6 +15,7 @@ class Customer extends WebapiAbstract
 {
     const RESOURCE_PATH = '/V1/customers';
     const SERVICE_NAME = 'customerAccountManagementV1';
+    const CUSTOMER_REPOSITORY_SERVICE_NAME = "customerCustomerRepositoryV1";
     const SERVICE_VERSION = 'V1';
 
     const CONFIRMATION = 'a4fg7h893e39d';
@@ -78,7 +79,11 @@ class Customer extends WebapiAbstract
         );
     }
 
-    public function createSampleCustomer()
+    /**
+     * @param array $additional
+     * @return array|bool|float|int|string
+     */
+    public function createSampleCustomer(array $additional = [])
     {
         $serviceInfo = [
             'rest' => [
@@ -91,8 +96,38 @@ class Customer extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'CreateAccount',
             ],
         ];
+
         $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
-            $this->createSampleCustomerDataObject(),
+            $this->createSampleCustomerDataObject($additional),
+            \Magento\Customer\Api\Data\CustomerInterface::class
+        );
+        $requestData = ['customer' => $customerDataArray, 'password' => self::PASSWORD];
+        $customerData = $this->_webApiCall($serviceInfo, $requestData);
+        return $customerData;
+    }
+
+    /**
+     * Update Existing customer
+     *
+     * @param array $additional
+     * @param int $customerId
+     * @return array|bool|float|int|string
+     */
+    public function updateSampleCustomer(array $additional = [], $customerId) {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . "/" . $customerId,
+                'httpMethod' => RestRequest::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::CUSTOMER_REPOSITORY_SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::CUSTOMER_REPOSITORY_SERVICE_NAME . 'save',
+            ],
+        ];
+
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->createSampleCustomerDataObject($additional),
             '\Magento\Customer\Api\Data\CustomerInterface'
         );
         $requestData = ['customer' => $customerDataArray, 'password' => self::PASSWORD];
@@ -101,11 +136,45 @@ class Customer extends WebapiAbstract
     }
 
     /**
+     * @param array $additional
+     * @return array
+     */
+    private function getCustomerSampleData(array $additional = [])
+    {
+        $customerData = [
+            CustomerData::FIRSTNAME => self::FIRSTNAME,
+            CustomerData::LASTNAME => self::LASTNAME,
+            CustomerData::EMAIL => 'janedoe' . uniqid() . '@example.com',
+            CustomerData::CONFIRMATION => self::CONFIRMATION,
+            CustomerData::CREATED_AT => self::CREATED_AT,
+            CustomerData::CREATED_IN => self::STORE_NAME,
+            CustomerData::DOB => self::DOB,
+            CustomerData::GENDER => self::GENDER,
+            CustomerData::GROUP_ID => self::GROUP_ID,
+            CustomerData::MIDDLENAME => self::MIDDLENAME,
+            CustomerData::PREFIX => self::PREFIX,
+            CustomerData::STORE_ID => self::STORE_ID,
+            CustomerData::SUFFIX => self::SUFFIX,
+            CustomerData::TAXVAT => self::TAXVAT,
+            CustomerData::WEBSITE_ID => self::WEBSITE_ID,
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'disable_auto_group_change',
+                    'value' => '0',
+                ],
+            ],
+        ];
+
+        return array_merge($customerData, $additional);
+    }
+
+    /**
      * Create customer using setters.
      *
+     * @param array $additional
      * @return CustomerInterface
      */
-    public function createSampleCustomerDataObject()
+    public function createSampleCustomerDataObject(array $additional = [])
     {
         $customerAddress1 = $this->customerAddressFactory->create();
         $customerAddress1->setCountryId('US');
@@ -151,30 +220,9 @@ class Customer extends WebapiAbstract
             'Magento\Customer\Api\Data\AddressInterface'
         );
 
-        $customerData = [
-            CustomerData::FIRSTNAME => self::FIRSTNAME,
-            CustomerData::LASTNAME => self::LASTNAME,
-            CustomerData::EMAIL => 'janedoe' . uniqid() . '@example.com',
-            CustomerData::CONFIRMATION => self::CONFIRMATION,
-            CustomerData::CREATED_AT => self::CREATED_AT,
-            CustomerData::CREATED_IN => self::STORE_NAME,
-            CustomerData::DOB => self::DOB,
-            CustomerData::GENDER => self::GENDER,
-            CustomerData::GROUP_ID => self::GROUP_ID,
-            CustomerData::MIDDLENAME => self::MIDDLENAME,
-            CustomerData::PREFIX => self::PREFIX,
-            CustomerData::STORE_ID => self::STORE_ID,
-            CustomerData::SUFFIX => self::SUFFIX,
-            CustomerData::TAXVAT => self::TAXVAT,
-            CustomerData::WEBSITE_ID => self::WEBSITE_ID,
-            CustomerData::KEY_ADDRESSES => [$address1, $address2],
-            'custom_attributes' => [
-                [
-                    'attribute_code' => 'disable_auto_group_change',
-                    'value' => '0',
-                ],
-            ],
-        ];
+        $customerData = $this->getCustomerSampleData(
+            array_merge([CustomerData::KEY_ADDRESSES => [$address1, $address2]], $additional)
+        );
         $customer = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $customer,
