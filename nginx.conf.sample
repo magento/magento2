@@ -26,6 +26,7 @@ root $MAGE_ROOT/pub;
 index index.php;
 autoindex off;
 charset UTF-8;
+error_page 404 403 = /errors/404.php;
 #add_header "X-UA-Compatible" "IE=Edge";
 
 location ~* ^/setup($|/) {
@@ -185,6 +186,7 @@ gzip_types
     image/svg+xml;
 gzip_vary on;
 
-location ~ \.php$ {
+# Banned locations (only reached if the earlier PHP entry point regexes don't match)
+location ~* (\.php$|\.htaccess$|\.git) {
     deny all;
 }
