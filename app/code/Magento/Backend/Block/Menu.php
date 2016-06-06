@@ -450,7 +450,7 @@ class Menu extends \Magento\Backend\Block\Template
             $itemName = substr($menuId, strrpos($menuId, '::') + 2);
             $itemClass = str_replace('_', '-', strtolower($itemName));
 
-            if (count($colBrakes) && $colBrakes[$itemPosition]['colbrake']) {
+            if (count($colBrakes) && $colBrakes[$itemPosition]['colbrake'] && $itemPosition != 1) {
                 $output .= '</ul></li><li class="column"><ul role="menu">';
             }
 
