@@ -183,11 +183,28 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
+        $skipColumns = ['updated_at'];
+        $describe = $this->connection->describeTable($this->getTableName());
+        $columns = [];
+        foreach ($describe as $column) {
+            if (!in_array($column['COLUMN_NAME'], $skipColumns)) {
+                $columns[] = sprintf('NEW.%1$s <> OLD.%1$s',
+                    $this->connection->quoteIdentifier($column['COLUMN_NAME']));
+            }
+        }
+
         switch ($event) {
             case Trigger::EVENT_INSERT:
-            case Trigger::EVENT_UPDATE:
                 return sprintf(
                     "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);",
+                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+                    $this->connection->quoteIdentifier($changelog->getColumnName()),
+                    $this->connection->quoteIdentifier($this->getColumnName())
+                );
+            case Trigger::EVENT_UPDATE:
+                return sprintf(
+                    "IF (%s) THEN INSERT IGNORE INTO %s (%s) VALUES (NEW.%s); END IF;",
+                    implode(' OR ', $columns),
                     $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
                     $this->connection->quoteIdentifier($changelog->getColumnName()),
                     $this->connection->quoteIdentifier($this->getColumnName())
