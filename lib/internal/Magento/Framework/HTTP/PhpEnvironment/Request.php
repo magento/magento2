@@ -433,7 +433,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
                installed MAGETWO-31756 */
             // Check if a proxy sent a header indicating an initial secure request
-            $offLoaderHeader = trim(
+            $this->SSLOffloadHeader = trim(
                 (string)$this->getAppConfig()->getValue(
                     self::XML_PATH_OFFLOADER_HEADER,
                     \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
