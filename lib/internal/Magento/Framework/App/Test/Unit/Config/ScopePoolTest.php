@@ -75,7 +75,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->_object, $requestMock);
         $requestMock->expects($this->any())
-            ->method('getDistroBaseUrl')
+            ->method('getBaseUrl')
             ->willReturn('baseUrl');
     }
 
