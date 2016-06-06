@@ -11,6 +11,19 @@ use Monolog\Logger;
 class Monolog extends Logger
 {
     /**
+     * {@inheritdoc}
+     */
+    public function __construct($name, array $handlers = array(), array $processors = array())
+    {
+        /**
+         * TODO: This should eliminated once https://github.com/Seldaek/monolog/pull/692 appeared in M2
+         */
+        $handlers = array_values($handlers);
+
+        parent::__construct($name, $handlers, $processors);
+    }
+
+    /**
      * Adds a log record.
      *
      * @param  integer $level   The logging level
