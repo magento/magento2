@@ -77,7 +77,7 @@ class OrderSave
 
         $ratesIdQuoteItemId = [];
         foreach ($taxesForItems as $taxesArray) {
-            foreach ($taxesArray->getAppliedTaxes() as $rates) {
+            foreach ($taxesArray['applied_taxes'] as $rates) {
                 if (count($rates['rates']) == 1) {
                     $ratesIdQuoteItemId[$rates['id']][] = [
                         'id' => $taxesArray['item_id'],

@@ -256,49 +256,52 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     //item tax, three tax rates
                     [
                         //first two taxes are combined
-                        [
-                            'amount' => 0.11,
-                            'base_amount' => 0.11,
-                            'percent' => 11,
-                            'id' => 'ILUS',
-                            'rates' => [
+                        'item_id' => self::ITEMID,
+                        'type' => 'product',
+                        'associated_item_id' => null,
+                        'applied_taxes' => [
                                 [
-                                    'percent' => 6,
-                                    'code' => 'IL',
-                                    'title' => 'IL',
+                                'amount' => 0.11,
+                                'base_amount' => 0.11,
+                                'percent' => 11,
+                                'id' => 'ILUS',
+                                'rates' => [
+                                    [
+                                        'percent' => 6,
+                                        'code' => 'IL',
+                                        'title' => 'IL',
+                                    ],
+                                    [
+                                        'percent' => 5,
+                                        'code' => 'US',
+                                        'title' => 'US',
+                                    ],
                                 ],
+                                ],
+                                //city tax
                                 [
-                                    'percent' => 5,
-                                    'code' => 'US',
-                                    'title' => 'US',
+                                    'amount' => 0.03,
+                                    'base_amount' => 0.03,
+                                    'percent' => 3.33,
+                                    'id' => 'CityTax',
+                                    'rates' => [
+                                        [
+                                            'percent' => 3,
+                                            'code' => 'CityTax',
+                                            'title' => 'CityTax',
+                                        ],
+                                    ]
                                 ],
                             ],
-                            'item_id' => self::ITEMID,
-                            'item_type' => 'product',
-                            'associated_item_id' => null,
-                        ],
-                        //city tax
-                        [
-                            'amount' => 0.03,
-                            'base_amount' => 0.03,
-                            'percent' => 3.33,
-                            'id' => 'CityTax',
-                            'rates' => [
-                                [
-                                    'percent' => 3,
-                                    'code' => 'CityTax',
-                                    'title' => 'CityTax',
-                                ],
-                            ],
-                            'item_id' => self::ITEMID,
-                            'item_type' => 'product',
-                            'associated_item_id' => null,
-                        ],
                     ],
                     //shipping tax
                     [
                         //first two taxes are combined
-                        [
+                        'item_id' => null,
+                        'type' => 'shipping',
+                        'associated_item_id' => null,
+                        'applied_taxes' => [
+                            [
                             'amount' => 0.55,
                             'base_amount' => 0.55,
                             'percent' => 11,
@@ -315,26 +318,21 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                                     'title' => 'US',
                                 ],
                             ],
-                            'item_id' => null,
-                            'item_type' => 'shipping',
-                            'associated_item_id' => null,
-                        ],
-                        //city tax
-                        [
-                            'amount' => 0.17,
-                            'base_amount' => 0.17,
-                            'percent' => 3.33,
-                            'id' => 'CityTax',
-                            'rates' => [
-                                [
-                                    'percent' => 3,
-                                    'code' => 'CityTax',
-                                    'title' => 'CityTax',
+                            ],
+                            //city tax
+                            [
+                                'amount' => 0.17,
+                                'base_amount' => 0.17,
+                                'percent' => 3.33,
+                                'id' => 'CityTax',
+                                'rates' => [
+                                    [
+                                        'percent' => 3,
+                                        'code' => 'CityTax',
+                                        'title' => 'CityTax',
+                                    ],
                                 ],
                             ],
-                            'item_id' => null,
-                            'item_type' => 'shipping',
-                            'associated_item_id' => null,
                         ],
                     ],
                 ],
