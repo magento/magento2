@@ -31,7 +31,7 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     const KEY_PERCENT     = 'percent';
     const KEY_AMOUNT      = 'amount';
     const KEY_BASE_AMOUNT = 'base_amount';
-    const KEY_RATES = 'rates';
+    const KEY_RATES       = 'rates';
     /**#@-*/
 
     /**
