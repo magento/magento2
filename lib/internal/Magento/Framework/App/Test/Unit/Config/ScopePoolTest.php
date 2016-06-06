@@ -58,7 +58,7 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                    'getDistroBaseUrl',
+                    'getBaseUrl',
                     'getModuleName',
                     'setModuleName',
                     'getActionName',
