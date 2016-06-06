@@ -47,14 +47,15 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         $product = $observer->getEvent()->getProduct();
 
         $isChangedWebsites = $product->getIsChangedWebsites();
-        if ($product->dataHasChangedFor('url_key') || $product->getIsChangedCategories() || $isChangedWebsites) {
+        if ($product->dataHasChangedFor('url_key') || $product->getIsChangedCategories() || $isChangedWebsites
+            || $product->dataHasChangedFor('visibility')) {
             if ($isChangedWebsites) {
                 $this->urlPersist->deleteByData([
                     UrlRewrite::ENTITY_ID => $product->getId(),
                     UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 ]);
             }
-            if ($product->getVisibility() != Visibility::VISIBILITY_NOT_VISIBLE) {
+            if (!in_array($product->getOrigData('visibility'), $product->getVisibleInSiteVisibilities())) {
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }
         }

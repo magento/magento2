@@ -6,12 +6,13 @@
 namespace Magento\Downloadable\Model\Link;
 
 use Magento\Downloadable\Api\LinkRepositoryInterface as LinkRepository;
+use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
- * Class SaveHandler
+ * Class UpdateHandler
  */
-class SaveHandler implements ExtensionInterface
+class UpdateHandler implements ExtensionInterface
 {
     /**
      * @var LinkRepository
@@ -34,9 +35,12 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        if ($entity->getTypeId() !== 'downloadable') {
+        /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
+        if ($entity->getTypeId() != Type::TYPE_DOWNLOADABLE) {
             return $entity;
         }
+
+        /** @var \Magento\Downloadable\Api\Data\LinkInterface[] $links */
         $links = $entity->getExtensionAttributes()->getDownloadableProductLinks() ?: [];
         $updatedLinks = [];
         $oldLinks = $this->linkRepository->getList($entity->getSku());
@@ -52,6 +56,7 @@ class SaveHandler implements ExtensionInterface
                 $this->linkRepository->delete($link->getId());
             }
         }
+
         return $entity;
     }
 }
