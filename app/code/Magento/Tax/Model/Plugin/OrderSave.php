@@ -112,6 +112,7 @@ class OrderSave
 
         foreach ($taxes as $row) {
             $id = $row['id'];
+            // @todo: should be refactored as part of MAGETWO-53366
             if (isset($row['rates'])) {
                 foreach ($row['rates'] as $tax) {
                     if ($row['percent'] == null) {
