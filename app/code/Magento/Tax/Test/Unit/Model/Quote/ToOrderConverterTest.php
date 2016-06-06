@@ -75,10 +75,16 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $appliedTaxes
+     * @param array $itemsAppliedTaxes
+     * @param array $item_applied_taxes_expected
      * @dataProvider afterConvertDataProvider
      */
-    public function testAfterConvert($appliedTaxes, $itemsAppliedTaxes)
-    {
+    public function testAfterConvert(
+        $appliedTaxes,
+        $itemsAppliedTaxes,
+        $item_applied_taxes_expected
+    ) {
         $this->model->beforeConvert($this->subjectMock, $this->quoteAddressMock);
 
         $this->quoteAddressMock->expects($this->once())
@@ -106,7 +112,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
             ->with(true);
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setItemAppliedTaxes')
-            ->with($itemsAppliedTaxes);
+            ->with($item_applied_taxes_expected);
         $orderMock->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($orderExtensionAttributeMock);
@@ -115,10 +121,16 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array $appliedTaxes
+     * @param array $itemsAppliedTaxes
+     * @param array $item_applied_taxes_expected
      * @dataProvider afterConvertDataProvider
      */
-    public function testAfterConvertNullExtensionAttribute($appliedTaxes, $itemsAppliedTaxes)
-    {
+    public function testAfterConvertNullExtensionAttribute(
+        $appliedTaxes,
+        $itemsAppliedTaxes,
+        $item_applied_taxes_expected
+    ) {
         $this->model->beforeConvert($this->subjectMock, $this->quoteAddressMock);
 
         $this->quoteAddressMock->expects($this->once())
@@ -150,7 +162,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
             ->with(true);
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setItemAppliedTaxes')
-            ->with($itemsAppliedTaxes);
+            ->with($item_applied_taxes_expected);
         $orderMock->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($orderExtensionAttributeMock);
@@ -158,6 +170,11 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($orderMock, $this->model->afterConvert($this->subjectMock, $orderMock));
     }
 
+    /**
+     * Data provider for testAfterConvert and testAfterConvertNullExtensionAttribute
+     *
+     * @return array
+     */
     public function afterConvertDataProvider()
     {
         return [
@@ -180,13 +197,46 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                         [
                             'amount' => 0.06,
                             'item_id' => 146,
+                            'item_type' => 'product',
+                            'associated_item_id' => null
                         ],
                     ],
                     'shipping' => [
                         [
                             'amount' => 0.30,
+                            'item_id' => 146,
                             'item_type' => 'shipping',
+                            'associated_item_id' => null
                         ]
+                    ],
+                ],
+                'item_applied_taxes_expected' => [
+                    'sequence-1' => [
+                            'item_id' => 146,
+                            'type' => 'product',
+                            'associated_item_id' => null,
+                            'applied_taxes' => [
+                                [
+                                'amount' => 0.06,
+                                'item_id' => 146,
+                                'item_type' => 'product',
+                                'associated_item_id' => null,
+                                ]
+                            ],
+
+                    ],
+                    'shipping' => [
+                            'item_id' => 146,
+                            'type' => 'shipping',
+                            'associated_item_id' => null,
+                            'applied_taxes' => [
+                                [
+                                'amount' => 0.30,
+                                'item_id' => 146,
+                                'item_type' => 'shipping',
+                                'associated_item_id' => null,
+                                ]
+                            ],
                     ],
                 ],
             ],
