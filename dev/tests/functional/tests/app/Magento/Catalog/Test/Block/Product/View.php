@@ -558,7 +558,12 @@ class View extends AbstractConfigureBlock
      */
     public function closeFullImage()
     {
-        $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS)->click();
+        $element = $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS);
+        if (!$element->isVisible()) {
+            $element->hover();
+            $this->waitForElementVisible($this->fullImageClose);
+        }
+        $element->click();
     }
 
     /**
