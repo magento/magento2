@@ -6,12 +6,13 @@
 namespace Magento\Downloadable\Model\Sample;
 
 use Magento\Downloadable\Api\SampleRepositoryInterface as SampleRepository;
+use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
- * Class SaveHandler
+ * Class CreateHandler
  */
-class SaveHandler implements ExtensionInterface
+class CreateHandler implements ExtensionInterface
 {
     /**
      * @var SampleRepository
@@ -35,24 +36,15 @@ class SaveHandler implements ExtensionInterface
     public function execute($entity, $arguments = [])
     {
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
-        if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+        if ($entity->getTypeId() != Type::TYPE_DOWNLOADABLE) {
             return $entity;
         }
 
+        /** @var \Magento\Downloadable\Api\Data\SampleInterface[] $samples */
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples() ?: [];
-        $updatedSamples = [];
-        $oldSamples = $this->sampleRepository->getList($entity->getSku());
         foreach ($samples as $sample) {
-            if ($sample->getId()) {
-                $updatedSamples[$sample->getId()] = $sample->getId();
-            }
+            $sample->setId(null);
             $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
-        }
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
-        foreach ($oldSamples as $sample) {
-            if (!isset($updatedSamples[$sample->getId()])) {
-                $this->sampleRepository->delete($sample->getId());
-            }
         }
 
         return $entity;
