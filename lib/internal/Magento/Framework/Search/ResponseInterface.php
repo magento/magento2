@@ -8,7 +8,7 @@ namespace Magento\Framework\Search;
 /**
  * Search Request
  */
-interface ResponseInterface extends \IteratorAggregate
+interface ResponseInterface extends \IteratorAggregate, \Countable
 {
     /**
      * Return Aggregation Collection
