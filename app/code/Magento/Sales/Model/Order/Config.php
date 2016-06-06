@@ -247,7 +247,7 @@ class Config
      */
     protected function _getStatuses($visibility)
     {
-        if ($this->statuses == null) {
+        if ($this->statuses === null) {
             
             $this->statuses = [ true => [], false => [] ];
             
