@@ -11,12 +11,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Customer\Test\Page\Adminhtml\CustomerGroupEdit;
 
 /**
- * Assert that group field is not available.
+ * Assert that group fields are not available.
  */
-class AssertCustomerGroupFieldDisabled extends AbstractConstraint
+class AssertCustomerGroupFieldsDisabled extends AbstractConstraint
 {
     /**
-     * Assert that field is disabled on customer group form.
+     * Assert that fields are disabled on customer group form.
      *
      * @param CustomerGroupEdit $customerGroupEdit
      * @param array $disabledFields
@@ -35,12 +35,12 @@ class AssertCustomerGroupFieldDisabled extends AbstractConstraint
     }
 
     /**
-     * Success assert of customer group field not available.
+     * Success assert of customer fields are not available.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Customer group field is not available.';
+        return 'Customer fields are not available.';
     }
 }
