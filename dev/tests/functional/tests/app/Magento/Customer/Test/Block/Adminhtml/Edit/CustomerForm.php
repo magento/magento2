@@ -7,9 +7,9 @@
 namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Customer\Test\Fixture\Address;
 
 /**
  * Form for creation of the customer.
@@ -79,9 +79,10 @@ class CustomerForm extends FormTabs
      *
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
+     * @param Address|null $addressToDelete
      * @return $this
      */
-    public function updateCustomer(FixtureInterface $customer, $address = null)
+    public function updateCustomer(FixtureInterface $customer, $address = null, Address $addressToDelete = null)
     {
         $this->waitForm();
 
@@ -89,7 +90,11 @@ class CustomerForm extends FormTabs
         if ($isHasData) {
             parent::fill($customer);
         }
-        if (null !== $address) {
+        if ($addressToDelete !== null) {
+            $this->openTab('addresses');
+            $this->getTab('addresses')->deleteCustomerAddress($addressToDelete);
+        }
+        if ($address !== null) {
             $this->openTab('addresses');
             $this->getTab('addresses')->updateAddresses($address);
         }
