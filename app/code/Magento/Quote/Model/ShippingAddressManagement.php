@@ -97,6 +97,10 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 
+        if ($customerAddressId === null) {
+            $address->setCustomerAddressId(null);
+        }
+
         if ($customerAddressId) {
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);

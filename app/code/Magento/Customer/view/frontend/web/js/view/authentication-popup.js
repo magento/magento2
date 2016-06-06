@@ -17,8 +17,9 @@ define(
         'Magento_Ui/js/modal/alert',
         'mage/validation'
     ],
-    function($, ko, Component, loginAction, customerData, authenticationPopup, $t, url, alert) {
+    function ($, ko, Component, loginAction, customerData, authenticationPopup, $t, url, alert) {
         'use strict';
+
         return Component.extend({
             registerUrl: window.authenticationPopup.customerRegisterUrl,
             forgotPasswordUrl: window.authenticationPopup.customerForgotPasswordUrl,
@@ -30,11 +31,14 @@ define(
                 template: 'Magento_Customer/authentication-popup'
             },
 
-            initialize: function() {
+            /**
+             * Init
+             */
+            initialize: function () {
                 var self = this;
                 this._super();
                 url.setBaseUrl(window.authenticationPopup.baseUrl);
-                loginAction.registerLoginCallback(function() {
+                loginAction.registerLoginCallback(function () {
                     self.isLoading(false);
                 });
             },
@@ -47,13 +51,14 @@ define(
             },
 
             /** Is login form enabled for current customer */
-            isActive: function() {
+            isActive: function () {
                 var customer = customerData.get('customer');
+
                 return customer() == false;
             },
 
             /** Show login popup window */
-            showModal: function() {
+            showModal: function () {
                 if (this.modalWindow) {
                     $(this.modalWindow).modal('openModal');
                 } else {
@@ -64,15 +69,15 @@ define(
             },
 
             /** Provide login action */
-            login: function(loginForm) {
+            login: function (loginForm) {
                 var loginData = {},
                     formDataArray = $(loginForm).serializeArray();
                 formDataArray.forEach(function (entry) {
                     loginData[entry.name] = entry.value;
                 });
 
-                if($(loginForm).validation()
-                    && $(loginForm).validation('isValid')
+                if ($(loginForm).validation() &&
+                    $(loginForm).validation('isValid')
                 ) {
                     this.isLoading(true);
                     loginAction(loginData, null, false);
