@@ -37,7 +37,7 @@ class Merged implements \Iterator
     /**
      * @var Filesystem
      */
-    protected $filesystem;
+    private $filesystem;
 
     /**
      * @var MergeableInterface[]
@@ -195,6 +195,7 @@ class Merged implements \Iterator
 
     /**
      * @return Filesystem
+     * @deprecated
      */
     private function getFilesystem()
     {
