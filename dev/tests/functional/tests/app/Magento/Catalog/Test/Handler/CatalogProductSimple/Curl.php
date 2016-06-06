@@ -119,10 +119,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Yes' => 1,
             'No' => 0,
         ],
-        'use_config_enable_qty_increments' => [
-            'Yes' => 1,
-            'No' => 0,
-        ],
     ];
 
     /**
@@ -138,12 +134,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             ]
         ],
         'customer_group' => [
-            'name' => 'cust_group',
-            'data' => [
-                'ALL GROUPS' => 32000,
-                'NOT LOGGED IN' => 0,
-                'General' => 1
-            ]
+            'name' => 'cust_group'
         ]
     ];
 
@@ -455,9 +446,14 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function preparePriceFields(array $fields)
     {
-        foreach ($fields as &$field) {
+        foreach ($fields as $priceKey => &$field) {
             foreach ($this->priceData as $key => $data) {
-                $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
+                if ($data['name'] == 'cust_group') {
+                    $field[$data['name']] = $this->fixture->getDataFieldConfig('tier_price')['source']
+                        ->getCustomerGroups()[$priceKey]->getCustomerGroupId();
+                } else {
+                    $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
+                }
                 unset($field[$key]);
             }
             $field['delete'] = '';
