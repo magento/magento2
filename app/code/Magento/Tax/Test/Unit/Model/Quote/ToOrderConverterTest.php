@@ -77,13 +77,13 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $appliedTaxes
      * @param array $itemsAppliedTaxes
-     * @param array $item_applied_taxes_expected
+     * @param array $itemAppliedTaxesExpected
      * @dataProvider afterConvertDataProvider
      */
     public function testAfterConvert(
         $appliedTaxes,
         $itemsAppliedTaxes,
-        $item_applied_taxes_expected
+        $itemAppliedTaxesExpected
     ) {
         $this->model->beforeConvert($this->subjectMock, $this->quoteAddressMock);
 
@@ -112,7 +112,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
             ->with(true);
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setItemAppliedTaxes')
-            ->with($item_applied_taxes_expected);
+            ->with($itemAppliedTaxesExpected);
         $orderMock->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($orderExtensionAttributeMock);
@@ -123,13 +123,13 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $appliedTaxes
      * @param array $itemsAppliedTaxes
-     * @param array $item_applied_taxes_expected
+     * @param array $itemAppliedTaxesExpected
      * @dataProvider afterConvertDataProvider
      */
     public function testAfterConvertNullExtensionAttribute(
         $appliedTaxes,
         $itemsAppliedTaxes,
-        $item_applied_taxes_expected
+        $itemAppliedTaxesExpected
     ) {
         $this->model->beforeConvert($this->subjectMock, $this->quoteAddressMock);
 
@@ -162,7 +162,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
             ->with(true);
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setItemAppliedTaxes')
-            ->with($item_applied_taxes_expected);
+            ->with($itemAppliedTaxesExpected);
         $orderMock->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($orderExtensionAttributeMock);
