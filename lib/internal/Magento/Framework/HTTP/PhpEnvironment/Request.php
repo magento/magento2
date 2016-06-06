@@ -92,7 +92,14 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      * @var \Magento\Framework\App\Config
      */
     protected $appConfig;
-
+    
+    /**
+     * Name of http header to check for ssl offloading default value is X-Forwarded-Proto
+     *
+     * @var string
+     */
+    protected $SSLOffloadHeader;
+    
     /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
@@ -407,16 +414,34 @@ class Request extends \Zend\Http\PhpEnvironment\Request
         if ($this->immediateRequestSecure()) {
             return true;
         }
-        /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
-        installed MAGETWO-31756 */
-        // Check if a proxy sent a header indicating an initial secure request
-        $offLoaderHeader = trim(
-            (string)$this->getAppConfig()->getValue(
-                self::XML_PATH_OFFLOADER_HEADER,
-                \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-            )
-        );
-        return $this->initialRequestSecure($offLoaderHeader);
+      
+        return $this->initialRequestSecure($this->getSSLOffloadHeader());
+    }
+
+    /***
+     *
+     * Get value of SSL offload http header from configuration -- defaults to X-Forwarded-Proto
+     *
+     * @return string
+     */
+    private function getSSLOffloadHeader()
+    {
+        
+        // Lets read from db only one time okay.
+        if ($this->SSLOffloadHeader === null){
+
+            /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
+               installed MAGETWO-31756 */
+            // Check if a proxy sent a header indicating an initial secure request
+            $offLoaderHeader = trim(
+                (string)$this->getAppConfig()->getValue(
+                    self::XML_PATH_OFFLOADER_HEADER,
+                    \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                )
+            );   }
+
+        return $this->SSLOffloadHeader;
+
     }
 
     /**

@@ -91,7 +91,8 @@ class ScopePool
     public function getScope($scopeType, $scopeCode = null)
     {
         $scopeCode = $this->_getScopeCode($scopeType, $scopeCode);
-        $baseUrl = $this->getRequest()->getDistroBaseUrl();
+        // Skip our Magento Scheme detection https and http are in same key space
+        $baseUrl = $this->getRequest()->getBaseUrl();
         $code = $scopeType . '|' . $scopeCode . '|' . $baseUrl;
         if (!isset($this->_scopes[$code])) {
             $cacheKey = $this->_cacheId . '|' . $code;
