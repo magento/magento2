@@ -5,8 +5,10 @@
  */
 namespace Magento\Quote\Model\QuoteRepository;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 class SaveHandler
 {
@@ -29,6 +31,11 @@ class SaveHandler
      * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister
      */
     private $shippingAssignmentPersister;
+
+    /**
+     * @var \Magento\Framework\Message\PhraseFactory
+     */
+    private $phraseFactory;
 
     /**
      * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
@@ -70,6 +77,13 @@ class SaveHandler
                 }
             }
         }
+        $errors = $quote->getErrors();
+        if (!empty($errors)) {
+            $phraseFactory = $this->getPhraseFactory();
+            throw new CouldNotSaveException(
+                $phraseFactory->create('Following errors occurred on save: %1', $errors)
+            );
+        }
 
         // Billing Address processing
         $billingAddress = $quote->getBillingAddress();
@@ -81,6 +95,18 @@ class SaveHandler
 
         $this->quoteResourceModel->save($quote->collectTotals());
         return $quote;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Framework\Message\PhraseFactory
+     */
+    private function getPhraseFactory()
+    {
+        if (!is_object($this->phraseFactory)) {
+            $this->phraseFactory = ObjectManager::getInstance()->get(\Magento\Framework\Message\PhraseFactory::class);
+        }
+        return $this->phraseFactory;
     }
 
     /**
