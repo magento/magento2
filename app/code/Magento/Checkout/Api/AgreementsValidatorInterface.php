@@ -7,6 +7,7 @@ namespace Magento\Checkout\Api;
 
 /**
  * Interface AgreementsValidatorInterface
+ * @api
  */
 interface AgreementsValidatorInterface
 {

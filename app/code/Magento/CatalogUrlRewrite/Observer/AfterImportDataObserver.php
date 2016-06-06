@@ -19,7 +19,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Event\ObserverInterface;
-
+use Magento\Catalog\Model\Product\Visibility;
 /**
  * Class AfterImportDataObserver
  *
@@ -93,6 +93,7 @@ class AfterImportDataObserver implements ObserverInterface
         'url_key',
         'url_path',
         'name',
+        'visibility',
     ];
 
     /**
@@ -221,6 +222,9 @@ class AfterImportDataObserver implements ObserverInterface
      */
     protected function addProductToImport($product, $storeId)
     {
+        if ($product->getVisibility() == (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]) {
+            return $this;
+        }
         if (!isset($this->products[$product->getId()])) {
             $this->products[$product->getId()] = [];
         }
@@ -321,6 +325,9 @@ class AfterImportDataObserver implements ObserverInterface
             foreach ($productsByStores as $storeId => $product) {
                 foreach ($this->categoryCache[$productId] as $categoryId) {
                     $category = $this->import->getCategoryProcessor()->getCategoryById($categoryId);
+                    if ($category->getParentId() == Category::TREE_ROOT_ID) {
+                        continue;
+                    }
                     $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
