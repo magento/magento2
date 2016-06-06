@@ -6,6 +6,7 @@
 namespace Magento\Sales\Model\Order\Status;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\AbstractModel;
 
@@ -43,6 +44,11 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     protected $_storeManager;
 
     /**
+     * @var TimezoneInterface
+     */
+    protected $localeDate;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -58,6 +64,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
+        TimezoneInterface $localeDate,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -72,6 +79,7 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
             $resourceCollection,
             $data
         );
+        $this->localeDate = $localeDate;
         $this->_storeManager = $storeManager;
     }
 
@@ -204,6 +212,16 @@ class History extends AbstractModel implements OrderStatusHistoryInterface
     public function setCreatedAt($createdAt)
     {
         return $this->setData(OrderStatusHistoryInterface::CREATED_AT, $createdAt);
+    }
+
+    /**
+     * Get object created at date affected current active store timezone
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAtDate()
+    {
+        return $this->localeDate->date(new \DateTime($this->getCreatedAt()));
     }
 
     /**
