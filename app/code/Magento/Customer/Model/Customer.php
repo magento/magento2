@@ -1328,4 +1328,24 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         }
         return false;
     }
+
+    /**
+     * Return Password Confirmation
+     *
+     * @return string
+     */
+    public function getPasswordConfirm()
+    {
+        return (string) $this->getData('password_confirm');
+    }
+
+    /**
+     * Return Password Confirmation
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return (string) $this->getData('password');
+    }
 }
