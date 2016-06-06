@@ -73,12 +73,13 @@ class UpgradeSystemTest extends Injectable
         );
         $version = $upgrade['upgradeVersion'];
 
+        $suffix = "( (CE|EE))$";
         $normalVersion = '(0|[1-9]\d*)';
-        $preReleaseVersion = '((0(?!\d+(\.|\+|$))|[1-9A-Za-z])[0-9A-Za-z-]*)';
+        $preReleaseVersion = "((0(?!\\d+(\\.|\\+|{$suffix}))|[1-9A-Za-z])[0-9A-Za-z-]*)";
         $buildVersion = '([0-9A-Za-z][0-9A-Za-z-]*)';
-        $versionPattern = "/^$normalVersion(\\.$normalVersion){2}"
-            . "(-$preReleaseVersion(\\.$preReleaseVersion)*)?"
-            . "(\\+$buildVersion(\\.$buildVersion)*)?$/";
+        $versionPattern = "/^{$normalVersion}(\\.{$normalVersion}){2}"
+            . "(-{$preReleaseVersion}(\\.{$preReleaseVersion})*)?"
+            . "(\\+{$buildVersion}(\\.{$buildVersion})*)?{$suffix}/";
 
         if (preg_match($versionPattern, $version, $out)) {
             $version = array_shift($out);
