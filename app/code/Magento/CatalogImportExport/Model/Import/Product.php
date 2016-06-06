@@ -16,9 +16,8 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
-
+use Magento\Catalog\Model\Product\Visibility;
 /**
  * Import entity product model
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -103,6 +102,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Column product category.
      */
     const COL_CATEGORY = 'categories';
+
+    /**
+     * Column product visibility.
+     */
+    const COL_VISIBILITY = 'visibility';
 
     /**
      * Column product sku.
@@ -2286,7 +2290,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         // validate custom options
         $this->getOptionEntity()->validateRow($rowData, $rowNum);
-        if (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME])) {
+
+        if ($this->isNeedToValidateUrlKey($rowData)) {
             $urlKey = $this->getUrlKey($rowData);
             $storeCodes = empty($rowData[self::COL_STORE_VIEW_CODE])
                 ? array_flip($this->storeResolver->getStoreCodeToId())
@@ -2306,6 +2311,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
+    }
+
+    /**
+     * @param array $rowData
+     * @return bool
+     */
+    private function isNeedToValidateUrlKey($rowData)
+    {
+        return (!empty($rowData[self::URL_KEY]) || !empty($rowData[self::COL_NAME]))
+            && (empty($rowData[self::COL_VISIBILITY])
+            || $rowData[self::COL_VISIBILITY]
+            !== (string)Visibility::getOptionArray()[Visibility::VISIBILITY_NOT_VISIBLE]);
     }
 
     /**

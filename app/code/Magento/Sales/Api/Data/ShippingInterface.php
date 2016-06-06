@@ -7,6 +7,7 @@ namespace Magento\Sales\Api\Data;
 
 /**
  * Interface ShippingInterface
+ * @api
  */
 interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
