@@ -87,7 +87,7 @@ class UpdateCustomerBackendEntityTest extends Injectable
      * @param Customer $customer
      * @param Customer $initialCustomer
      * @param Address|null $address
-     * @param Address $addressToDelete
+     * @param Address|null $addressToDelete
      * @return Customer
      */
     private function prepareCustomer(
@@ -125,8 +125,8 @@ class UpdateCustomerBackendEntityTest extends Injectable
      *
      * @param Customer $initialCustomer
      * @param Customer $customer
-     * @param Address $address [optional]
-     * @param int $addressIndexToDelete [optional]
+     * @param Address|null $address
+     * @param int|null $addressIndexToDelete
      * @throws \Exception
      * @return array
      */

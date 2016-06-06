@@ -79,7 +79,7 @@ class CustomerForm extends FormTabs
      *
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
-     * @param Address $addressToDelete = null
+     * @param Address|null $addressToDelete
      * @return $this
      */
     public function updateCustomer(FixtureInterface $customer, $address = null, Address $addressToDelete = null)
