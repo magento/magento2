@@ -206,7 +206,7 @@
 
 ###########################################
 ## Deny access to root files to hide sensitive application information
-    RedirectMatch 404 /\.git
+    RedirectMatch 403 /\.git
 
     <Files composer.json>
         order allow,deny
@@ -280,6 +280,10 @@
             order allow,deny
             deny from all
     </Files>
+
+# For 404s and 403s that aren't handled by the application, show plain 404 response
+ErrorDocument 404 /pub/errors/404.php
+ErrorDocument 403 /pub/errors/404.php
 
 ################################
 ## If running in cluster environment, uncomment this
