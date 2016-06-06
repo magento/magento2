@@ -73,8 +73,19 @@ class UpgradeSystemTest extends Injectable
         );
         $version = $upgrade['upgradeVersion'];
 
-        if (preg_match('/^[0-9].[0-9].[0-9]/', $version, $out)) {
+        $normalVersion = '(0|[1-9]\d*)';
+        $preReleaseVersion = '((0(?!\d+(\.|\+|$))|[1-9A-Za-z])[0-9A-Za-z-]*)';
+        $buildVersion = '([0-9A-Za-z][0-9A-Za-z-]*)';
+        $versionPattern = "/^$normalVersion(\\.$normalVersion){2}"
+            . "(-$preReleaseVersion(\\.$preReleaseVersion)*)?"
+            . "(\\+$buildVersion(\\.$buildVersion)*)?$/";
+
+        if (preg_match($versionPattern, $version, $out)) {
             $version = array_shift($out);
+        } else {
+            $this->fail(
+                "Provided version format does not comply with semantic versioning specification. Got '{$version}'"
+            );
         }
 
         // Authenticate in admin area
