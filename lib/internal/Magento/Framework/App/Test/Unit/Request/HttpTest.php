@@ -348,6 +348,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->willReturn($configOffloadHeader);
         $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
         $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model,"appConfig" ,$configMock);
+        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model,"SSLOffloadHeader" ,null );
 
         $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
         $this->_model->getServer()->set('HTTPS', $serverHttps);

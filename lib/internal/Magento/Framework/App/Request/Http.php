@@ -317,9 +317,10 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
     {
         $headerHttpHost = $this->getServer('HTTP_HOST');
         $headerHttpHost = $this->converter->cleanString($headerHttpHost);
+        $headerScriptName = $this->getServer('SCRIPT_NAME');
 
-        if (isset($headerHttpHost)) {
-            if($secure = $this->isSecure()) {
+        if (isset($headerScriptName) && isset($headerHttpHost)) {
+            if ($secure = $this->isSecure()) {
                 $scheme = 'https://';
             } else {
                 $scheme = 'http://';
