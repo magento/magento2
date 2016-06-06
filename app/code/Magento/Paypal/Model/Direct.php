@@ -437,14 +437,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
             $this->_getFormattedCcExpirationDate($payment->getCcExpMonth(), $payment->getCcExpYear())
         )->setCreditCardCvv2(
             $payment->getCcCid()
-        )->setMaestroSoloIssueNumber(
-            $payment->getCcSsIssue()
         );
-
-        if ($payment->getCcSsStartMonth() && $payment->getCcSsStartYear()) {
-            $year = sprintf('%02d', substr($payment->getCcSsStartYear(), -2, 2));
-            $api->setMaestroSoloIssueDate($this->_getFormattedCcExpirationDate($payment->getCcSsStartMonth(), $year));
-        }
 
         // add shipping and billing addresses
         if ($order->getIsVirtual()) {
