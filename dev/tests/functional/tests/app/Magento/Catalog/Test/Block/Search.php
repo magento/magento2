@@ -100,7 +100,7 @@ class Search extends Block
         $this->browser->waitUntil(
             function () {
                 $count = count($this->_rootElement->getElements($this->searchListItems, Locator::SELECTOR_XPATH));
-                sleep(0.2);
+                usleep(200);
                 $newCount = count($this->_rootElement->getElements($this->searchListItems, Locator::SELECTOR_XPATH));
                 return $this->browser->find($this->selectorAriaBusy, Locator::SELECTOR_XPATH)->isVisible()
                     && ($newCount == $count)
