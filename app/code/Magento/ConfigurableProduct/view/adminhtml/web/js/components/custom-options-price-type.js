@@ -15,7 +15,10 @@ define([
             isFiltered: null,
             defaultOptions: null,
             filteredOptions: null,
-            bannedOptions: []
+            bannedOptions: [],
+            listens: {
+                'visible': 'updateValue'
+            }
         },
 
         /**
@@ -71,6 +74,18 @@ define([
             }
 
             return this.filteredOptions;
+        },
+
+        /**
+         * Clears value of hidden select
+         * @param {Boolean} visible
+         */
+        updateValue: function (visible) {
+            if (visible) {
+                this.updateOptions();
+            } else {
+                this.value(null);
+            }
         }
     });
 });
