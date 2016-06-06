@@ -7,6 +7,7 @@ namespace Magento\Downloadable\Api\Data\File;
 
 /**
  * @codeCoverageIgnore
+ * @api
  */
 interface ContentUploaderInterface
 {
