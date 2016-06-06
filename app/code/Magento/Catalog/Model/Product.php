@@ -2299,9 +2299,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         $stockData = $this->getStockData();
         return (
-            (null !== $stockData)
-            && (null !== $stockItem)
+            (is_array($stockData))
             && array_key_exists('is_in_stock', $stockData)
+            && (null !== $stockItem)
             && ($stockItem->getIsInStock() != $stockData['is_in_stock'])
         );
     }
