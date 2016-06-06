@@ -63,8 +63,21 @@ class ToOrderConverter
         }
 
         $itemAppliedTaxes = $this->quoteAddress->getItemsAppliedTaxes();
+        $itemAppliedTaxesModified = [];
         if (!empty($itemAppliedTaxes)) {
-            $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxes);
+            foreach ($itemAppliedTaxes as $key => $itemAppliedTaxItem) {
+                if (is_array($itemAppliedTaxItem) && !empty($itemAppliedTaxItem)) {
+                    foreach ($itemAppliedTaxItem as $itemAppliedTax) {
+                        $itemAppliedTaxesModified[$key]['type'] = $itemAppliedTax['item_type'];
+                        $itemAppliedTaxesModified[$key]['item_id'] = $itemAppliedTax['item_id'];
+                        $itemAppliedTaxesModified[$key]['associated_item_id'] = $itemAppliedTax['associated_item_id'];
+                        $itemAppliedTaxesModified[$key]['applied_taxes'][] = $itemAppliedTax;
+                    }
+                } elseif (!empty($itemAppliedTaxItem)) {
+                    $itemAppliedTaxesModified[$key] = $itemAppliedTaxItem;
+                }
+            }
+            $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxesModified);
         }
         $order->setExtensionAttributes($extensionAttributes);
         return $order;

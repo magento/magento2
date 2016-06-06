@@ -63,11 +63,13 @@ class OrderSave
             return;
         }
 
+        /** @var \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[]|null $taxes */
         $taxes = $extensionAttribute->getAppliedTaxes();
         if ($taxes == null) {
             $taxes = [];
         }
 
+        /** @var \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[]|null $taxesForItems */
         $taxesForItems = $extensionAttribute->getItemAppliedTaxes();
         if ($taxesForItems == null) {
             $taxesForItems = [];
@@ -75,14 +77,14 @@ class OrderSave
 
         $ratesIdQuoteItemId = [];
         foreach ($taxesForItems as $taxesArray) {
-            foreach ($taxesArray as $rates) {
+            foreach ($taxesArray->getAppliedTaxes() as $rates) {
                 if (count($rates['rates']) == 1) {
                     $ratesIdQuoteItemId[$rates['id']][] = [
-                        'id' => $rates['item_id'],
+                        'id' => $taxesArray['item_id'],
                         'percent' => $rates['percent'],
                         'code' => $rates['rates'][0]['code'],
-                        'associated_item_id' => $rates['associated_item_id'],
-                        'item_type' => $rates['item_type'],
+                        'associated_item_id' => $taxesArray['associated_item_id'],
+                        'item_type' => $taxesArray['type'],
                         'amount' => $rates['amount'],
                         'base_amount' => $rates['base_amount'],
                         'real_amount' => $rates['amount'],
@@ -94,11 +96,11 @@ class OrderSave
                         $realAmount = $rates['amount'] * $rate['percent'] / $rates['percent'];
                         $realBaseAmount = $rates['base_amount'] * $rate['percent'] / $rates['percent'];
                         $ratesIdQuoteItemId[$rates['id']][] = [
-                            'id' => $rates['item_id'],
+                            'id' => $taxesArray['item_id'],
                             'percent' => $rate['percent'],
                             'code' => $rate['code'],
-                            'associated_item_id' => $rates['associated_item_id'],
-                            'item_type' => $rates['item_type'],
+                            'associated_item_id' => $taxesArray['associated_item_id'],
+                            'item_type' => $taxesArray['type'],
                             'amount' => $rates['amount'],
                             'base_amount' => $rates['base_amount'],
                             'real_amount' => $realAmount,
