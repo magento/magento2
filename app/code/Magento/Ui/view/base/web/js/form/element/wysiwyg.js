@@ -77,11 +77,22 @@ define([
          * @returns {exports}
          */
         disable: function () {
-            var $button = $(this.buttonClass);
+            var $button = $(this.buttonClass),
+                controls,
+                property;
 
             this.disabled(true);
             $button.attr('disabled', true);
-            tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
+
+            if (tinyMCE) {
+                controls = tinyMCE.activeEditor.controlManager.controls;
+
+                for (property in controls) {
+                    controls[property].setDisabled(true);
+                }
+
+                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', false);
+            }
 
             return this;
         },
@@ -91,11 +102,22 @@ define([
          * @returns {exports}
          */
         enable: function () {
-            var $button = $(this.buttonClass);
+            var $button = $(this.buttonClass),
+                controls,
+                property;
 
             this.disabled(false);
             $button.attr('disabled', false);
-            tinymce.activeEditor.getBody().setAttribute('contenteditable', true);
+
+            if (tinyMCE) {
+                controls = tinyMCE.activeEditor.controlManager.controls;
+
+                for (property in controls) {
+                    controls[property].setDisabled(false);
+                }
+
+                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', true);
+            }
 
             return this;
         }
