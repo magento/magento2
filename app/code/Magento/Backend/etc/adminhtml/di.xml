@@ -133,4 +133,9 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Backend\Model\AdminPathConfig" />
+    <type name="Magento\Framework\View\Page\Config">
+        <arguments>
+            <argument name="isIncludesAvailable" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
 </config>
