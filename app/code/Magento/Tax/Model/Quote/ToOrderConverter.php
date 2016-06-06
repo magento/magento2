@@ -73,8 +73,8 @@ class ToOrderConverter
                         $itemAppliedTaxesModified[$key]['associated_item_id'] = $itemAppliedTax['associated_item_id'];
                         $itemAppliedTaxesModified[$key]['applied_taxes'][] = $itemAppliedTax;
                     }
-                } elseif (!empty($itemAppliedTaxItem)) {
-                    $itemAppliedTaxesModified[$key] = $itemAppliedTaxItem;
+                } elseif (is_array($itemAppliedTaxItem) && empty($itemAppliedTaxItem)) {
+                    $itemAppliedTaxesModified[$key] = [];
                 }
             }
             $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxesModified);
