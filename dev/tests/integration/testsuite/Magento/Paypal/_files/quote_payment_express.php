@@ -18,8 +18,9 @@
     1,
     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
 );
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->setTypeId('simple')
     ->setId(1)
     ->setAttributeSetId(4)
@@ -67,11 +68,11 @@ $shippingAddress->setShippingMethod('flatrate_flatrate');
 $shippingAddress->setCollectShippingRates(true);
 
 /** @var $quote \Magento\Quote\Model\Quote */
-$quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+$quote = $objectManager->create('Magento\Quote\Model\Quote');
 $quote->setCustomerIsGuest(
     true
 )->setStoreId(
-    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    $objectManager->get(
         'Magento\Store\Model\StoreManagerInterface'
     )->getStore()->getId()
 )->setReservedOrderId(
@@ -87,8 +88,10 @@ $quote->setCustomerIsGuest(
 $quote->getShippingAddress()->setShippingMethod('flatrate_flatrate');
 $quote->getShippingAddress()->setCollectShippingRates(true);
 $quote->getPayment()->setMethod(\Magento\Paypal\Model\Config::METHOD_WPS_EXPRESS);
-$quote->collectTotals()->save();
 
+$quoteRepository = $objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+$quoteRepository->save($quote);
+$quote = $quoteRepository->get($quote->getId());
 $quote->setCustomerEmail('admin@example.com');
 
 /** @var $service \Magento\Quote\Api\CartManagementInterface */
