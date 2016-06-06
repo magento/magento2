@@ -8,13 +8,13 @@ namespace Magento\Ui\Api\Data;
 
 /**
  * Interface for bookmark search results.
+ * @api
  */
 interface BookmarkSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
      * Get customers list.
      *
-     * @api
      * @return \Magento\Ui\Api\Data\BookmarkInterface[]
      */
     public function getItems();
