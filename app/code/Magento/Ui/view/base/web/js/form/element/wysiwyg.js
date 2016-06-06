@@ -16,6 +16,7 @@ define([
         defaults: {
             elementSelector: 'textarea',
             value: '',
+            buttonClass: '.action-wysiwyg',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
             },
@@ -69,6 +70,34 @@ define([
             $(node).bindings({
                 value: this.value
             });
+        },
+
+        /**
+         *
+         * @returns {exports}
+         */
+        disable: function () {
+            var $button = $(this.buttonClass);
+
+            this.disabled(true);
+            $button.attr('disabled', true);
+            tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
+
+            return this;
+        },
+
+        /**
+         *
+         * @returns {exports}
+         */
+        enable: function () {
+            var $button = $(this.buttonClass);
+
+            this.disabled(false);
+            $button.attr('disabled', false);
+            tinymce.activeEditor.getBody().setAttribute('contenteditable', true);
+
+            return this;
         }
     });
 });
