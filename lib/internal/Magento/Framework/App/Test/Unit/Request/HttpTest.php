@@ -91,9 +91,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        if($mockAppConfig){
-            $MockAppConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
-            $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $MockAppConfig );
+        if ($mockAppConfig) {
+            $mockConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $mockConfig );
         }
 
         return $model;
@@ -347,8 +347,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn($configOffloadHeader);
 
-        $this->objectManager->setBackwardCompatibleProperty($this->_model,'appConfig' ,$configMock);
-        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'SSLOffloadHeader' ,null );
+        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
+        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'SSLOffloadHeader', null );
 
         $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
         $this->_model->getServer()->set('HTTPS', $serverHttps);
