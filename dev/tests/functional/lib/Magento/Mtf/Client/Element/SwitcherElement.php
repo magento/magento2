@@ -6,6 +6,8 @@
 
 namespace Magento\Mtf\Client\Element;
 
+use Magento\Mtf\Client\Locator;
+
 /**
  * Toggle element in the backend.
  * Switches value between YES and NO.
@@ -18,6 +20,13 @@ class SwitcherElement extends SimpleElement
      * @var string
      */
     protected $parentContainer = 'parent::div[@data-role="switcher"]';
+
+    /**
+     * XPath selector for label text on swticher element.
+     *
+     * @var string
+     */
+    private $labelText = './following-sibling::label';
 
     /**
      * Set value to Yes or No.
@@ -33,7 +42,7 @@ class SwitcherElement extends SimpleElement
             );
         }
         if ($value != $this->getValue()) {
-            $this->click();
+            $this->find($this->labelText, Locator::SELECTOR_XPATH)->click();
         }
     }
 
