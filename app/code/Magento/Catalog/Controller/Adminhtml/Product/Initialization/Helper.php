@@ -170,10 +170,6 @@ class Helper
             $product->lockAttribute('media');
         }
 
-        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
-            $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
-        }
-
         /**
          * Check "Use Default Value" checkboxes values
          */

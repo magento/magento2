@@ -54,12 +54,12 @@
             </filterSelect>
         </filters>
         <massaction name="listing_massaction">
-            <action name="pdfcreditmemos_order">
+            <action name="pdfcreditmemos_order" class="Magento\Sales\Ui\Component\Control\PdfAction">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="type" xsi:type="string">pdfcreditmemos_order</item>
                         <item name="label" xsi:type="string" translate="true">PDF Creditmemos</item>
-                        <item name="url" xsi:type="url" path="sales/creditmemo/pdfcreditmemos"/>
+                        <item name="pdfAction" xsi:type="string">sales/creditmemo/pdfcreditmemos</item>
                     </item>
                 </argument>
             </action>
