@@ -27,21 +27,57 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $categoriesFactoryMock;
 
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManagerHelper;
+
     protected function setUp()
     {
+
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->categoryRepositoryMock = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
         $this->categoryTreeMock = $this->getMock('Magento\Catalog\Model\Category\Tree', [], [], '', false);
         $this->categoriesFactoryMock = $this->getMock(
             'Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
-            ['create'],
+            ['create', 'addFilter', 'getFirstItem'],
             [],
             '',
             false
         );
-        $this->model = new \Magento\Catalog\Model\CategoryManagement(
-            $this->categoryRepositoryMock,
-            $this->categoryTreeMock,
-            $this->categoriesFactoryMock
+
+        $this->model = $this->objectManagerHelper->getObject(
+            '\Magento\Catalog\Model\CategoryManagement',
+            [
+                'categoryRepository' => $this->categoryRepositoryMock,
+                'categoryTree' => $this->categoryTreeMock,
+                'categoriesFactory' => $this->categoriesFactoryMock
+            ]
+        );
+
+        $storeMock = $this->getMock(
+            '\Magento\Store\Model\StoreManager',
+            ['getStore', 'getCode'],
+            [],
+            '',
+            false
+        );
+        $storeMock
+            ->expects($this->any())
+            ->method('getStore')
+            ->willReturnSelf();
+
+        $storeMock
+            ->expects($this->any())
+            ->method('getCode')
+            ->willReturn(1);
+
+
+
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->model,
+            'storeManager',
+            $storeMock
         );
     }
 
@@ -86,6 +122,90 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
             $this->model->getTree($rootCategoryId, $depth),
             $this->categoryTreeMock->getTree(null, null)
         );
+    }
+
+    /**
+     * Check is possible to get all categories for all store starting from top level root category
+     */
+    public function testGetTreeForAllScope()
+    {
+
+        $rootCategoryId = null;
+        $depth = null;
+        $category = null;
+        $categoriesMock = $this->getMock(
+            '\Magento\Catalog\Model\ResourceModel\Category\Collection',
+            [],
+            [],
+            '',
+            false
+        );
+        $categoryMock = $this->getMock(
+            '\Magento\Catalog\Model\Category',
+            [],
+            [],
+            'categoryMock',
+            false
+        );
+        $categoriesMock
+            ->expects($this->once())
+            ->method('getFirstItem')
+            ->willReturn($categoryMock);
+        $categoriesMock
+            ->expects($this->once())
+            ->method('addFilter')
+            ->with('level', ['eq' => 0])
+            ->willReturnSelf();
+        $this->categoriesFactoryMock
+            ->expects($this->once())
+            ->method('create')
+            ->willReturn($categoriesMock);
+        $nodeMock = $this->getMock(
+            '\Magento\Framework\Data\Tree\Node',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->categoryTreeMock
+            ->expects($this->once())
+            ->method('getTree')
+            ->with($nodeMock, $depth);
+        $this->categoryRepositoryMock
+            ->expects($this->never())
+            ->method('get');
+        $this->categoryTreeMock
+            ->expects($this->once())
+            ->method('getRootNode')
+            ->with($categoryMock)
+            ->willReturn($nodeMock);
+
+        $storeMock = $this->getMock(
+            '\Magento\Store\Model\StoreManager',
+            ['getStore', 'getCode'],
+            [],
+            '',
+            false
+        );
+        $storeMock
+            ->expects($this->any())
+            ->method('getStore')
+            ->willReturnSelf();
+
+        $storeMock
+            ->expects($this->once())
+            ->method('getCode')
+            ->willReturn(\Magento\Store\Model\Store::ADMIN_CODE);
+
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->model,
+            'storeManager',
+            $storeMock
+        );
+
+
+        $this->model->getTree();
     }
 
     public function testMove()
