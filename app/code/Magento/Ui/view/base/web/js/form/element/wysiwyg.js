@@ -77,12 +77,17 @@ define([
          * @returns {exports}
          */
         disable: function () {
-            var $button = $(this.buttonClass),
-                controls,
+            var controls,
                 property;
 
             this.disabled(true);
-            $button.attr('disabled', true);
+
+            $.async({
+                component: this,
+                selector: this.buttonClass
+            }, function (element) {
+                $(element).attr('disabled', true);
+            });
 
             if (tinyMCE) {
                 controls = tinyMCE.activeEditor.controlManager.controls;
@@ -102,12 +107,17 @@ define([
          * @returns {exports}
          */
         enable: function () {
-            var $button = $(this.buttonClass),
-                controls,
+            var controls,
                 property;
 
             this.disabled(false);
-            $button.attr('disabled', false);
+
+            $.async({
+                component: this,
+                selector: this.buttonClass
+            }, function (element) {
+                $(element).attr('disabled', false);
+            });
 
             if (tinyMCE) {
                 controls = tinyMCE.activeEditor.controlManager.controls;
