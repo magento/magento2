@@ -214,8 +214,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $stateMock = $this->getMock('Magento\FrameworkApp\State', ['getAreaCode'], [], '', false);
-        $stateMock->expects($this->any())
+        $this->appStateMock = $this->getMock(
+            'Magento\Framework\App\State',
+            ['getAreaCode', 'isAreaCodeEmulated'],
+            [],
+            '',
+            false
+        );
+        $this->appStateMock->expects($this->any())
             ->method('getAreaCode')
             ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
 
@@ -234,7 +240,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Model\Context',
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
         );
-        $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
+        $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($this->appStateMock));
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
@@ -371,15 +377,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'data' => ['id' => 1]
             ]
         );
-
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $modelReflection = new \ReflectionClass(get_class($this->model));
-        $appStateReflection = $modelReflection->getProperty('appState');
-        $appStateReflection->setAccessible(true);
-        $appStateReflection->setValue($this->model, $this->appStateMock);
     }
 
     public function testGetAttributes()
@@ -861,6 +858,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->afterSave();
     }
 
+    /**
+     * Image cache generation would not be performed if area was emulated
+     */
+    public function testSaveIfAreaEmulated()
+    {
+        $this->appStateMock->expects($this->any())->method('isAreaCodeEmulated')->willReturn(true);
+        $this->imageCache->expects($this->never())
+            ->method('generate')
+            ->with($this->model);
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+    }
+    
     /**
      *  Test for `save` method for duplicated product
      */
