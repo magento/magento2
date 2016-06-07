@@ -16,7 +16,6 @@ define([
         defaults: {
             elementSelector: 'textarea',
             value: '',
-            buttonClass: '.action-wysiwyg',
             $button: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
@@ -38,7 +37,7 @@ define([
 
             $.async({
                 component: this,
-                selector: this.buttonClass
+                selector: 'button'
             }, function (element) {
                 this.$button = $(element);
             }.bind(this));
