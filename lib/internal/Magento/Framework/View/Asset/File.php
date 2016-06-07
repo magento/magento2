@@ -167,18 +167,10 @@ class File implements MergeableInterface
      */
     public function getSourceContentType()
     {
+        if ($this->sourceContentType === null) {
+            $this->sourceContentType = $this->source->getSourceContentType($this);
+        }
         return $this->sourceContentType;
-    }
-
-    /**
-     * Set source content type
-     *
-     * @param string|null $type
-     * @return void
-     */
-    public function setSourceContentType($type)
-    {
-        $this->sourceContentType = $type;
     }
 
     /**
