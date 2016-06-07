@@ -96,8 +96,10 @@ class ScopePool
         $host = $this->getRequest()->getServer('HTTP_HOST');
         $port = $this->getRequest()->getServer('SERVER_PORT');
         $path = $this->getRequest()->getBasePath();
+        $host = ($host == null) ? 'localhost' : $host;
         $urlInfo = $host . $port . trim($path, '/');
         $code = $scopeType . '|' . $scopeCode . '|' . $urlInfo;
+        
         if (!isset($this->_scopes[$code])) {
             $cacheKey = $this->_cacheId . '|' . $code;
             $data = $this->_cache->load($cacheKey);
