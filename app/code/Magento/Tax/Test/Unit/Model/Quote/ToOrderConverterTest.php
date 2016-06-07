@@ -76,12 +76,14 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $appliedTaxes
+     * @param array $expectedAppliedTaxes
      * @param array $itemsAppliedTaxes
      * @param array $itemAppliedTaxesExpected
      * @dataProvider afterConvertDataProvider
      */
     public function testAfterConvert(
         $appliedTaxes,
+        $expectedAppliedTaxes,
         $itemsAppliedTaxes,
         $itemAppliedTaxesExpected
     ) {
@@ -106,7 +108,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
 
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setAppliedTaxes')
-            ->with($appliedTaxes);
+            ->with($expectedAppliedTaxes);
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setConvertingFromQuote')
             ->with(true);
@@ -122,12 +124,14 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $appliedTaxes
+     * @param array $expectedAppliedTaxes
      * @param array $itemsAppliedTaxes
      * @param array $itemAppliedTaxesExpected
      * @dataProvider afterConvertDataProvider
      */
     public function testAfterConvertNullExtensionAttribute(
         $appliedTaxes,
+        $expectedAppliedTaxes,
         $itemsAppliedTaxes,
         $itemAppliedTaxesExpected
     ) {
@@ -156,7 +160,7 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
 
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setAppliedTaxes')
-            ->with($appliedTaxes);
+            ->with($expectedAppliedTaxes);
         $orderExtensionAttributeMock->expects($this->once())
             ->method('setConvertingFromQuote')
             ->with(true);
@@ -189,8 +193,23 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                                 'code' => 'IL',
                                 'title' => 'IL',
                             ]
-                        ]
-                    ]
+                        ],
+                    ],
+                ],
+                'expected_applied_taxes' => [
+                    'IL' => [
+                        'amount' => 0.36,
+                        'percent' => 6,
+                        'extension_attributes' => [
+                            'rates' => [
+                                [
+                                    'percent' => 6,
+                                    'code' => 'IL',
+                                    'title' => 'IL',
+                                ]
+                            ],
+                        ],
+                    ],
                 ],
                 'item_applied_taxes' => [
                     'sequence-1' => [
@@ -198,7 +217,14 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                             'amount' => 0.06,
                             'item_id' => 146,
                             'item_type' => 'product',
-                            'associated_item_id' => null
+                            'associated_item_id' => null,
+                            'rates' => [
+                                    [
+                                        'percent' => 6,
+                                        'code' => 'IL',
+                                        'title' => 'IL',
+                                    ],
+                                ],
                         ],
                     ],
                     'shipping' => [
@@ -206,7 +232,14 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                             'amount' => 0.30,
                             'item_id' => 146,
                             'item_type' => 'shipping',
-                            'associated_item_id' => null
+                            'associated_item_id' => null,
+                            'rates' => [
+                                [
+                                    'percent' => 6,
+                                    'code' => 'IL',
+                                    'title' => 'IL',
+                                ],
+                            ],
                         ]
                     ],
                 ],
@@ -221,6 +254,15 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                                 'item_id' => 146,
                                 'item_type' => 'product',
                                 'associated_item_id' => null,
+                                'extension_attributes' => [
+                                    'rates' => [
+                                        [
+                                            'percent' => 6,
+                                            'code' => 'IL',
+                                            'title' => 'IL',
+                                        ]
+                                    ],
+                                ],
                                 ]
                             ],
 
@@ -235,6 +277,15 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                                 'item_id' => 146,
                                 'item_type' => 'shipping',
                                 'associated_item_id' => null,
+                                'extension_attributes' => [
+                                    'rates' => [
+                                        [
+                                            'percent' => 6,
+                                            'code' => 'IL',
+                                            'title' => 'IL',
+                                        ]
+                                    ],
+                                ],
                                 ]
                             ],
                     ],

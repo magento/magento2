@@ -89,19 +89,6 @@ interface OrderTaxDetailsAppliedTaxInterface extends \Magento\Framework\Api\Exte
     public function setBaseAmount($baseAmount);
 
     /**
-     *
-     * @return \Magento\Tax\Api\Data\AppliedTaxRateInterface[]
-     */
-    public function getRates();
-
-    /**
-     *
-     * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
-     * @return $this
-     */
-    public function setRates($rates);
-
-    /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxExtensionInterface|null

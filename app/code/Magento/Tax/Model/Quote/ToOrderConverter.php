@@ -58,6 +58,11 @@ class ToOrderConverter
             $extensionAttributes = $this->orderExtensionFactory->create();
         }
         if (!empty($taxes)) {
+            foreach ($taxes as $key => $tax) {
+                $tax['extension_attributes']['rates'] = $tax['rates'];
+                unset($tax['rates']);
+                $taxes[$key] = $tax;
+            }
             $extensionAttributes->setAppliedTaxes($taxes);
             $extensionAttributes->setConvertingFromQuote(true);
         }
@@ -71,10 +76,10 @@ class ToOrderConverter
                         $itemAppliedTaxesModified[$key]['type'] = $itemAppliedTax['item_type'];
                         $itemAppliedTaxesModified[$key]['item_id'] = $itemAppliedTax['item_id'];
                         $itemAppliedTaxesModified[$key]['associated_item_id'] = $itemAppliedTax['associated_item_id'];
+                        $itemAppliedTax['extension_attributes']['rates'] = $itemAppliedTax['rates'];
+                        unset($itemAppliedTax['rates']);
                         $itemAppliedTaxesModified[$key]['applied_taxes'][] = $itemAppliedTax;
                     }
-                } elseif (is_array($itemAppliedTaxItem) && empty($itemAppliedTaxItem)) {
-                    $itemAppliedTaxesModified[$key] = [];
                 }
             }
             $extensionAttributes->setItemAppliedTaxes($itemAppliedTaxesModified);

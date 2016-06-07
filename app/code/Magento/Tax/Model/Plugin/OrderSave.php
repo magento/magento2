@@ -78,11 +78,13 @@ class OrderSave
         $ratesIdQuoteItemId = [];
         foreach ($taxesForItems as $taxesArray) {
             foreach ($taxesArray['applied_taxes'] as $rates) {
-                if (count($rates['rates']) == 1) {
+                /** @var \Magento\Tax\Api\Data\AppliedTaxRateInterface $rates */
+                $taxRates = $rates['extension_attributes']->getRates();
+                if (count($taxRates) == 1) {
                     $ratesIdQuoteItemId[$rates['id']][] = [
                         'id' => $taxesArray['item_id'],
                         'percent' => $rates['percent'],
-                        'code' => $rates['rates'][0]['code'],
+                        'code' => $taxRates[0]['code'],
                         'associated_item_id' => $taxesArray['associated_item_id'],
                         'item_type' => $taxesArray['type'],
                         'amount' => $rates['amount'],
@@ -92,7 +94,7 @@ class OrderSave
                     ];
                 } else {
                     $percentSum = 0;
-                    foreach ($rates['rates'] as $rate) {
+                    foreach ($taxRates as $rate) {
                         $realAmount = $rates['amount'] * $rate['percent'] / $rates['percent'];
                         $realBaseAmount = $rates['base_amount'] * $rate['percent'] / $rates['percent'];
                         $ratesIdQuoteItemId[$rates['id']][] = [
@@ -114,7 +116,8 @@ class OrderSave
 
         foreach ($taxes as $row) {
             $id = $row['id'];
-            foreach ($row['rates'] as $tax) {
+            $taxRates = $row['extension_attributes']->getRates();
+            foreach ($taxRates as $tax) {
                 if ($row['percent'] == null) {
                     $baseRealAmount = $row['base_amount'];
                 } else {
