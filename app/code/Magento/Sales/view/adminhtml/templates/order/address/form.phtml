@@ -18,29 +18,7 @@
         <span><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></span>
     </legend>
     <br>
-    <div class="form-inline">
+    <div class="form-inline" data-mage-init='{"Magento_Sales/order/edit/address/form":{}}'>
         <?php echo $block->getForm()->toHtml() ?>
     </div>
 </fieldset>
-<script>
-    /**
-     * Currently Magento App stores both  region_id and region (as text) values.
-     * To prevent missing region (as text) we need to copy it in hidden field.
-     */
-    require([
-        'jquery',
-        'domReady!'
-    ], function ($) {
-        var regionId = $('#region_id'),
-            setRegion = function() {
-                $('#region').val(regionId.filter(':visible').find(':selected').text());
-            };
-
-        if (regionId.is('visible')) {
-            setRegion();
-        }
-
-        regionId.on('change', setRegion);
-        $('#country_id').on('change', setRegion);
-    });
-</script>
