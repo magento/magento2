@@ -302,11 +302,12 @@ class View extends AbstractConfigureBlock
 
     /**
      * Press 'Check out with Braintree PayPal' button.
-     *
-     * @return void
+     * 
+     * @return string
      */
     public function braintreePaypalCheckout()
     {
+        $currentWindow = $this->browser->getCurrentWindow();
         /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
         $miniCart = $this->blockFactory->create(
             '\Magento\Checkout\Test\Block\Cart\Sidebar',
@@ -315,6 +316,7 @@ class View extends AbstractConfigureBlock
 
         $miniCart->openMiniCart();
         $miniCart->clickBraintreePaypalButton();
+        return $currentWindow;
     }
 
     /**
