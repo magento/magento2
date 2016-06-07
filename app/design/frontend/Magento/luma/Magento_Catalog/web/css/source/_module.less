@@ -844,8 +844,10 @@
             }
         }
 
-        td:last-child {
-            border-right: @table__border-width @table__border-style @table__border-color;
+        td {
+            &:last-child {
+                border-right: @table__border-width @table__border-style @table__border-color;
+            }
         }
 
         .product-item-photo {
