@@ -428,7 +428,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     {
         
         // Lets read from db only one time okay.
-        if ($this->SSLOffloadHeader === null){
+        if ($this->SSLOffloadHeader === null) {
 
             /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
                installed MAGETWO-31756 */
@@ -438,7 +438,8 @@ class Request extends \Zend\Http\PhpEnvironment\Request
                     self::XML_PATH_OFFLOADER_HEADER,
                     \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 )
-            );   }
+            );
+        }
 
         return $this->SSLOffloadHeader;
 
