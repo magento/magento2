@@ -12,8 +12,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\State;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
-use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 class CustomerNotification
 {
@@ -28,16 +27,9 @@ class CustomerNotification
     private $notificationStorage;
 
     /**
-     * Cookie Manager
-     *
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @var CustomerRepositoryInterface
      */
-    private $cookieManager;
-
-    /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
+    private $customerRepository;
 
     /**
      * @var State
@@ -49,22 +41,18 @@ class CustomerNotification
      * 
      * @param Session $session
      * @param NotificationStorage $notificationStorage
-     * @param CookieManagerInterface $cookieManager
-     * @param CookieMetadataFactory $cookieMetadataFactory
      * @param State $state
      */
     public function __construct(
         Session $session,
         NotificationStorage $notificationStorage,
-        CookieManagerInterface $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory,
-        State $state
+        State $state,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->session = $session;
         $this->notificationStorage = $notificationStorage;
-        $this->cookieManager = $cookieManager;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->state = $state;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -75,24 +63,17 @@ class CustomerNotification
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
     {
-        if ($this->state->getAreaCode() == Area::AREA_FRONTEND
+        if ($this->state->getAreaCode() == Area::AREA_FRONTEND && $request->isPost()
             && $this->notificationStorage->isExists(
                 NotificationStorage::UPDATE_CUSTOMER_SESSION,
                 $this->session->getCustomerId()
             )
         ) {
-            $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
-            $publicCookieMetadata->setDurationOneYear();
-            $publicCookieMetadata->setPath('/');
-            $publicCookieMetadata->setHttpOnly(false);
-            $this->cookieManager->setPublicCookie(
-                NotificationStorage::UPDATE_CUSTOMER_SESSION,
-                $this->session->getCustomerId(),
-                $publicCookieMetadata
-            );
-
-            $cookieMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
-            $this->cookieManager->deleteCookie(Http::COOKIE_VARY_STRING, $cookieMetadata);
+            $customer = $this->customerRepository->getById($this->session->getCustomerId());
+            $this->session->setCustomerData($customer);
+            $this->session->setCustomerGroupId($customer->getGroupId());
+            $this->session->regenerateId();
+            $this->notificationStorage->remove(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customer->getId());
         }
     }
 }
