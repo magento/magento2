@@ -77,10 +77,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\App\Request\Http
      */
-    private function getModel($uri = null)
+    private function getModel($uri = null, $mockAppConfig = true)
     {
         $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
-        return $testFrameworkObjectManager->getObject(
+        $model = $testFrameworkObjectManager->getObject(
             'Magento\Framework\App\Request\Http',
             [
                 'routeConfig' => $this->_routerListMock,
@@ -90,6 +90,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
                 'uri' => $uri,
             ]
         );
+
+        if($mockAppConfig){
+            $MockAppConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $testFrameworkObjectManager->setBackwardCompatibleProperty($model, 'appConfig', $MockAppConfig );
+        }
+
+        return $model;
     }
 
     public function testGetOriginalPathInfoWithTestUri()
@@ -329,7 +336,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsSecure($isSecure, $serverHttps, $headerOffloadKey, $headerOffloadValue, $configCall)
     {
-        $this->_model = $this->getModel();
+        $this->_model = $this->getModel(null, false);
         $configOffloadHeader = 'Header-From-Proxy';
         $configMock = $this->getMockBuilder('Magento\Framework\App\Config')
             ->disableOriginalConstructor()
@@ -339,10 +346,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn($configOffloadHeader);
-        $this->objectManager->expects($this->exactly($configCall))
-            ->method('get')
-            ->with('Magento\Framework\App\Config')
-            ->will($this->returnValue($configMock));
+        $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
+        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model,"appConfig" ,$configMock);
+        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model,"SSLOffloadHeader" ,null );
 
         $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
         $this->_model->getServer()->set('HTTPS', $serverHttps);
@@ -409,18 +415,18 @@ class HttpTest extends \PHPUnit_Framework_TestCase
          *  ]
          */
         return [
-            'Test 1' => [true, 'on', 'Header-From-Proxy', 'https', 0],
-            'Test 2' => [true, 'off', 'Header-From-Proxy', 'https', 1],
-            'Test 3' => [true, 'any-string', 'Header-From-Proxy', 'https', 0],
-            'Test 4' => [true, 'on', 'Header-From-Proxy', 'http', 0],
-            'Test 5' => [false, 'off', 'Header-From-Proxy', 'http', 1],
-            'Test 6' => [true, 'any-string', 'Header-From-Proxy', 'http', 0],
-            'Test 7' => [true, 'on', 'Header-From-Proxy', 'any-string', 0],
-            'Test 8' => [false, 'off', 'Header-From-Proxy', 'any-string', 1],
-            'Test 9' => [true, 'any-string', 'Header-From-Proxy', 'any-string', 0],
-            'blank HTTPS with proxy set https' => [true, '', 'Header-From-Proxy', 'https', 1],
-            'blank HTTPS with proxy set http' => [false, '', 'Header-From-Proxy', 'http', 1],
-            'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_Header-From-Proxy', 'https', 1],
+            'Test 1' => [true, 'on', 'HEADER_FROM_PROXY', 'https', 0],
+            'Test 2' => [true, 'off', 'HEADER_FROM_PROXY', 'https', 1],
+            'Test 3' => [true, 'any-string', 'HEADER_FROM_PROXY', 'https', 0],
+            'Test 4' => [true, 'on', 'HEADER_FROM_PROXY', 'http', 0],
+            'Test 5' => [false, 'off', 'HEADER_FROM_PROXY', 'http', 1],
+            'Test 6' => [true, 'any-string', 'HEADER_FROM_PROXY', 'http', 0],
+            'Test 7' => [true, 'on', 'HEADER_FROM_PROXY', 'any-string', 0],
+            'Test 8' => [false, 'off', 'HEADER_FROM_PROXY', 'any-string', 1],
+            'Test 9' => [true, 'any-string', 'HEADER_FROM_PROXY', 'any-string', 0],
+            'blank HTTPS with proxy set https' => [true, '', 'HEADER_FROM_PROXY', 'https', 1],
+            'blank HTTPS with proxy set http' => [false, '', 'HEADER_FROM_PROXY', 'http', 1],
+            'HTTPS off with HTTP_ prefixed proxy set to https' => [true, 'off', 'HTTP_HEADER_FROM_PROXY', 'https', 1],
         ];
     }
 }
