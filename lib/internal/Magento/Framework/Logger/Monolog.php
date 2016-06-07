@@ -13,10 +13,10 @@ class Monolog extends Logger
     /**
      * {@inheritdoc}
      */
-    public function __construct($name, array $handlers = array(), array $processors = array())
+    public function __construct($name, array $handlers = [], array $processors = [])
     {
         /**
-         * TODO: This should eliminated once https://github.com/Seldaek/monolog/pull/692 appeared in M2
+         * TODO: This should be eliminated with MAGETWO-53989
          */
         $handlers = array_values($handlers);
 
@@ -26,9 +26,9 @@ class Monolog extends Logger
     /**
      * Adds a log record.
      *
-     * @param  integer $level   The logging level
-     * @param  string  $message The log message
-     * @param  array   $context The log context
+     * @param integer $level The logging level
+     * @param string $message The log message
+     * @param array $context The log context
      * @return Boolean Whether the record has been processed
      */
     public function addRecord($level, $message, array $context = [])
