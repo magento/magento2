@@ -10,7 +10,8 @@
         <referenceContainer name="content">
             <block class="Magento\Backend\Block\Template"
                    name="adminhtml.catalog.product.set.edit.configurable"
-                   template="Magento_ConfigurableProduct::catalog/product/attribute/set/js.phtml"/>
+                   template="Magento_ConfigurableProduct::catalog/product/attribute/set/js.phtml"
+                   after="adminhtml.catalog.product.set.edit.wrapper"/>
         </referenceContainer>
     </body>
 </page>
