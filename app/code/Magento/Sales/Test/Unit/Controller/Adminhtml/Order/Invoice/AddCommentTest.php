@@ -7,10 +7,12 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
  * Class AddCommentTest
  * @package Magento\Sales\Controller\Adminhtml\Order\Invoice
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddCommentTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,11 +35,6 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectManagerMock;
 
     /**
      * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
@@ -80,6 +77,11 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     protected $resultJsonMock;
 
     /**
+     * @var InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceRepository;
+
+    /**
      * SetUp method
      *
      * @return void
@@ -101,10 +103,6 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
         $this->viewMock = $this->getMockBuilder('Magento\Framework\App\View')
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -133,9 +131,6 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->any())
             ->method('getView')
             ->will($this->returnValue($this->viewMock));
-        $contextMock->expects($this->any())
-            ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
         $this->viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -150,26 +145,26 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-
         $this->resultJsonMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-
         $this->resultRawFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\RawFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-
         $this->resultJsonFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\JsonFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-
         $this->commentSenderMock = $this->getMockBuilder('Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
+        $this->invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\AddComment',
             [
@@ -179,6 +174,12 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
                 'resultRawFactory' => $this->resultRawFactoryMock,
                 'resultJsonFactory' => $this->resultJsonFactoryMock
             ]
+        );
+        
+        $objectManager->setBackwardCompatibleProperty(
+            $this->controller,
+            'invoiceRepository',
+            $this->invoiceRepository
         );
     }
 
@@ -218,16 +219,9 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         $invoiceMock->expects($this->once())
             ->method('save');
 
-        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $invoiceRepository->expects($this->any())
+        $this->invoiceRepository->expects($this->once())
             ->method('get')
             ->willReturn($invoiceMock);
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
-            ->willReturn($invoiceRepository);
 
         $commentsBlockMock = $this->getMockBuilder('Magento\Sales\Block\Adminhtml\Order\Invoice\View\Comments')
             ->disableOriginalConstructor()
