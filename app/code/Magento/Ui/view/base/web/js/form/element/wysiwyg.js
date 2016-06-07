@@ -83,8 +83,9 @@ define([
         },
 
         /**
+         * Set disabled property to wysiwyg component
          *
-         * @returns {exports}
+         * @param {Boolean} status
          */
         setDisabled: function (status) {
             var controls,
