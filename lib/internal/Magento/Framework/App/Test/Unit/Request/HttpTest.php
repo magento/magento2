@@ -79,8 +79,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     private function getModel($uri = null, $mockAppConfig = true)
     {
-
-        $model = $this->objectManager->getObject(
+        $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
+        $model = $testFrameworkObjectManager->getObject(
             'Magento\Framework\App\Request\Http',
             [
                 'routeConfig' => $this->_routerListMock,
@@ -93,7 +93,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
         if ($mockAppConfig) {
             $mockConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
-            $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $mockConfig );
+            $testFrameworkObjectManager->setBackwardCompatibleProperty($model, 'appConfig', $mockConfig );
         }
 
         return $model;
@@ -346,9 +346,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn($configOffloadHeader);
-
-        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
-        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'SSLOffloadHeader', null );
+        $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
+        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
+        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model, 'SSLOffloadHeader', null );
 
         $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
         $this->_model->getServer()->set('HTTPS', $serverHttps);
