@@ -68,7 +68,8 @@ class ScopePoolTest extends \PHPUnit_Framework_TestCase
                     'setParams',
                     'getCookie',
                     'isSecure',
-                    'getServer'
+                    'getServer',
+                    'getHttpHost'
                 ]
             )->getMock();
         $reflection = new \ReflectionClass(get_class($this->_object));
