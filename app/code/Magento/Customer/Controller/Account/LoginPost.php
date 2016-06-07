@@ -43,6 +43,16 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     private $scopeConfig;
 
     /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    private $cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     */
+    private $cookieMetadataManager;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
@@ -76,11 +86,43 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     {
         if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
+                \Magento\Framework\App\Config\ScopeConfigInterface::class
             );
         } else {
             return $this->scopeConfig;
         }
+    }
+
+    /**
+     * Retrieve cookie manager
+     *
+     * @deprecated
+     * @return \Magento\Framework\Stdlib\Cookie\PhpCookieManager
+     */
+    private function getCookieManager()
+    {
+        if (!$this->cookieMetadataManager) {
+            $this->cookieMetadataManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class
+            );
+        }
+        return $this->cookieMetadataManager;
+    }
+
+    /**
+     * Retrieve cookie metadata factory
+     *
+     * @deprecated
+     * @return \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    private function getCookieMetadataFactory()
+    {
+        if (!$this->cookieMetadataFactory) {
+            $this->cookieMetadataFactory = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+            );
+        }
+        return $this->cookieMetadataFactory;
     }
 
     /**
@@ -105,6 +147,11 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->session->setCustomerDataAsLoggedIn($customer);
                     $this->session->regenerateId();
+                    if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
+                        $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
+                        $metadata->setPath('/');
+                        $this->getCookieManager()->deleteCookie('mage-cache-sessid', $metadata);
+                    }
                     $redirectUrl = $this->accountRedirect->getRedirectCookie();
                     if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectUrl) {
                         $this->accountRedirect->clearRedirectCookie();

@@ -188,21 +188,7 @@ define([
          */
         init: function() {
             var countryData,
-                privateContent = $.cookieStorage.get('private_content_version'),
-                updateSession = $.cookieStorage.get('update_customer_session');
-            if (updateSession) {
-                mageStorage.post(
-                    options.updateSessionUrl,
-                    JSON.stringify({
-                        'customer_id': updateSession,
-                        'form_key': window.FORM_KEY
-                    })
-                ).done(
-                    function () {
-                        $.cookieStorage.setConf({path: '/', expires: -1}).set('update_customer_session', null);
-                    }
-                );
-            }
+                privateContent = $.cookieStorage.get('private_content_version');
 
             if (_.isEmpty(storage.keys())) {
                 if (!_.isEmpty(privateContent)) {
