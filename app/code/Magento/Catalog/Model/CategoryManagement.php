@@ -22,14 +22,19 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     protected $categoryTree;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\App\ScopeResolverInterface
      */
-    private $storeManager;
+    private $scopeResolver;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     */
+    private $categoriesFactory;
     
     /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param Category\Tree $categoryTree
-     * @param CollectionFactory $categoriesFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoriesFactory
      */
     public function __construct(
         \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
@@ -64,22 +69,22 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
      */
     private function isAdminStore()
     {
-        return $this->getStoreManager()->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE;
+        return $this->getScopeResolver()->getScope()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE;
     }
 
     /**
      * Get store manager for operations with admin code
      *
-     * @return \Magento\Store\Model\StoreManagerInterface
+     * @return \Magento\Framework\App\ScopeResolverInterface
      */
-    private function getStoreManager()
+    private function getScopeResolver()
     {
-        if ($this->storeManager == null) {
-            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Store\Model\StoreManagerInterface::class);
+        if ($this->scopeResolver == null) {
+            $this->scopeResolver = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\ScopeResolverInterface::class);
         }
 
-        return $this->storeManager;
+        return $this->scopeResolver;
     }
 
     /**
