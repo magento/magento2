@@ -17,6 +17,7 @@ define([
             elementSelector: 'textarea',
             value: '',
             buttonClass: '.action-wysiwyg',
+            $button: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
             },
@@ -34,6 +35,13 @@ define([
         initialize: function () {
             this._super()
                 .initNodeListener();
+
+            $.async({
+                component: this,
+                selector: this.buttonClass
+            }, function (element) {
+                this.$button = $(element);
+            }.bind(this));
 
             return this;
         },
@@ -81,13 +89,7 @@ define([
                 property;
 
             this.disabled(true);
-
-            $.async({
-                component: this,
-                selector: this.buttonClass
-            }, function (element) {
-                $(element).attr('disabled', true);
-            });
+            this.$button.attr('disabled', true);
 
             if (tinyMCE) {
                 controls = tinyMCE.activeEditor.controlManager.controls;
@@ -111,13 +113,7 @@ define([
                 property;
 
             this.disabled(false);
-
-            $.async({
-                component: this,
-                selector: this.buttonClass
-            }, function (element) {
-                $(element).attr('disabled', false);
-            });
+            this.$button.attr('disabled', false);
 
             if (tinyMCE) {
                 controls = tinyMCE.activeEditor.controlManager.controls;
