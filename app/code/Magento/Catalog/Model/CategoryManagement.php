@@ -22,6 +22,11 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
     protected $categoryTree;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+    
+    /**
      * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
      * @param Category\Tree $categoryTree
      * @param CollectionFactory $categoriesFactory
@@ -45,11 +50,36 @@ class CategoryManagement implements \Magento\Catalog\Api\CategoryManagementInter
         if ($rootCategoryId !== null) {
             /** @var \Magento\Catalog\Model\Category $category */
             $category = $this->categoryRepository->get($rootCategoryId);
-        } elseif ($this->categoryTree->isAdminStore()) {
+        } elseif ($this->isAdminStore()) {
             $category = $this->getTopLevelCategory();
         }
         $result = $this->categoryTree->getTree($this->categoryTree->getRootNode($category), $depth);
         return $result;
+    }
+
+    /**
+     * Check is request use default scope
+     *
+     * @return bool
+     */
+    private function isAdminStore()
+    {
+        return $this->getStoreManager()->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE;
+    }
+
+    /**
+     * Get store manager for operations with admin code
+     *
+     * @return \Magento\Store\Model\StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        if ($this->storeManager == null) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Store\Model\StoreManagerInterface::class);
+        }
+
+        return $this->storeManager;
     }
 
     /**
