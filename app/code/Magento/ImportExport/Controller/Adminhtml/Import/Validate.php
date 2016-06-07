@@ -48,8 +48,10 @@ class Validate extends ImportResultController
                     $data[$import::FIELD_FIELD_SEPARATOR]
                 );
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $resultBlock->addError($e->getMessage());
             } catch (\Exception $e) {
-                $resultBlock->addError(__($e->getMessage()));
+                $resultBlock->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
             }
             return $resultLayout;
         } elseif ($this->getRequest()->isPost() && empty($_FILES)) {
