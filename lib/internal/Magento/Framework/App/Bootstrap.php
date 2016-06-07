@@ -409,7 +409,8 @@ class Bootstrap
             $mode = $this->server[State::PARAM_MODE];
         } else {
             $deploymentConfig = $this->getObjectManager()->get(DeploymentConfig::class);
-            if (($configMode = $deploymentConfig->get(State::PARAM_MODE)) !== null) {
+            $configMode = $deploymentConfig->get(State::PARAM_MODE);
+            if ($configMode) {
                 $mode = $configMode;
             }
         }
