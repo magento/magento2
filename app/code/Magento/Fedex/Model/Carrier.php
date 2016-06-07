@@ -1260,7 +1260,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $width = $packageParams->getWidth();
         $length = $packageParams->getLength();
         $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LB' : 'KG';
-        $dimensionsUnits = $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM';
         $unitPrice = 0;
         $itemsQty = 0;
         $itemsDesc = [];
@@ -1403,12 +1402,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         // set dimensions
         if ($length || $width || $height) {
-            $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [];
-            $dimenssions = &$requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
-            $dimenssions['Length'] = $length;
-            $dimenssions['Width'] = $width;
-            $dimenssions['Height'] = $height;
-            $dimenssions['Units'] = $dimensionsUnits;
+            $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [
+                'Length' => $length,
+                'Width' => $width,
+                'Height' => $height,
+                'Units' => $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM'
+            ];
         }
 
         return $this->_getAuthDetails() + $requestClient;
