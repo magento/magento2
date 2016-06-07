@@ -24,7 +24,10 @@ define([
             elementTmpl: 'ui/form/element/wysiwyg',
             content:        '',
             showSpinner:    false,
-            loading:        false
+            loading:        false,
+            listens: {
+                disabled: 'setDisabled'
+            }
         },
 
         /**
@@ -83,45 +86,21 @@ define([
          *
          * @returns {exports}
          */
-        disable: function () {
+        setDisabled: function () {
             var controls,
-                property;
+                property,
+                status = this.disabled();
 
-            this.disabled(true);
-            this.$wysiwygEditorButton.attr('disabled', true);
+            this.$wysiwygEditorButton.attr('disabled', status);
 
             if (tinyMCE) {
                 controls = tinyMCE.activeEditor.controlManager.controls;
 
                 for (property in controls) {
-                    controls[property].setDisabled(true);
+                    controls[property].setDisabled(status);
                 }
 
-                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', false);
-            }
-
-            return this;
-        },
-
-        /**
-         *
-         * @returns {exports}
-         */
-        enable: function () {
-            var controls,
-                property;
-
-            this.disabled(false);
-            this.$wysiwygEditorButton.attr('disabled', false);
-
-            if (tinyMCE) {
-                controls = tinyMCE.activeEditor.controlManager.controls;
-
-                for (property in controls) {
-                    controls[property].setDisabled(false);
-                }
-
-                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', true);
+                tinyMCE.activeEditor.getBody().setAttribute('contenteditable', !status);
             }
 
             return this;
