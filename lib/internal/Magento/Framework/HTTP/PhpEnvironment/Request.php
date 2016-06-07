@@ -98,7 +98,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
      *
      * @var string
      */
-    protected $SSLOffloadHeader;
+    protected $sslOffloadHeader;
     
     /**
      * @param CookieReaderInterface $cookieReader
@@ -415,25 +415,23 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             return true;
         }
       
-        return $this->initialRequestSecure($this->getSSLOffloadHeader());
+        return $this->initialRequestSecure($this->SslOffloadHeader());
     }
 
     /***
-     *
-     * Get value of SSL offload http header from configuration -- defaults to X-Forwarded-Proto
+     * Get value of SSL offload http header from configuration - defaults to X-Forwarded-Proto
      *
      * @return string
      */
-    private function getSSLOffloadHeader()
+    private function SslOffloadHeader()
     {
-        
         // Lets read from db only one time okay.
-        if ($this->SSLOffloadHeader === null) {
+        if ($this->sslOffloadHeader === null) {
 
-            /* TODO: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
-               installed MAGETWO-31756 */
+            // @todo: Untangle Config dependence on Scope, so that this class can be instantiated even if app is not
+            // installed MAGETWO-31756
             // Check if a proxy sent a header indicating an initial secure request
-            $this->SSLOffloadHeader = trim(
+            $this->sslOffloadHeader = trim(
                 (string)$this->getAppConfig()->getValue(
                     self::XML_PATH_OFFLOADER_HEADER,
                     \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
@@ -441,15 +439,13 @@ class Request extends \Zend\Http\PhpEnvironment\Request
             );
         }
 
-        return $this->SSLOffloadHeader;
-
+        return $this->sslOffloadHeader;
     }
 
     /**
      * Create an instance of Magento\Framework\App\Config
      *
      * @return \Magento\Framework\App\Config
-     *
      * @deprecated
      */
     private function getAppConfig()
