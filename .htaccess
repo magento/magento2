@@ -277,8 +277,8 @@
         deny from all
     </Files>
     <Files magento_umask>
-            order allow,deny
-            deny from all
+        order allow,deny
+        deny from all
     </Files>
 
 # For 404s and 403s that aren't handled by the application, show plain 404 response
