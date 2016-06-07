@@ -82,7 +82,6 @@ abstract class AbstractResource
                     call_user_func($callback);
                 }
             } catch (\Exception $e) {
-                echo $e;
                 throw $e;
             }
         }

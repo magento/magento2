@@ -122,6 +122,7 @@
         <relation target=":self">
             <rule type="simpleMarkEnable" event="activate-rule"/>
             <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="inContextEnable" event="activate-rule"/>
             <rule type="inContextDisable" event="deactivate-rule"/>
             <rule type="inContextShowMerchantId" event="activate-rule"/>
             <rule type="inContextHideMerchantId" event="deactivate-rule"/>
