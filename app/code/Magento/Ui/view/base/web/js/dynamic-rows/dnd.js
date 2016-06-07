@@ -58,8 +58,12 @@ define([
             recordsCache: [],
             draggableElement: {},
             draggableElementClass: '_dragged',
+            elemPositions: [],
             listens: {
                 '${ $.recordsProvider }:elems': 'setCacheRecords'
+            },
+            modules: {
+                parentComponent: '${ $.recordsProvider }'
             }
         },
 
@@ -192,6 +196,8 @@ define([
 
             drEl.depElement = this.getDepElement(drEl.instance, positionY, this.draggableElement.originRow);
 
+            drEl.instance.remove();
+
             if (drEl.depElement) {
                 depElementCtx = this.getRecord(drEl.depElement.elem[0]);
                 drEl.depElement.elem.removeClass(drEl.depElement.className);
@@ -211,7 +217,6 @@ define([
                 this.body.unbind('mouseup', this.mouseupHandler);
             }
 
-            drEl.instance.remove();
             this.draggableElement = {};
         },
 
@@ -225,11 +230,34 @@ define([
         setPosition: function (depElem, depElementCtx, dragData) {
             var depElemPosition = ~~depElementCtx.position;
 
+            this.cacheElementsPosition();
+
             if (dragData.depElement.insert === 'after') {
                 dragData.instanceCtx.position = depElemPosition + 1;
             } else if (dragData.depElement.insert === 'before') {
                 dragData.instanceCtx.position = depElemPosition;
             }
+
+            this.normalizePositions();
+        },
+
+        /**
+         * Saves elements position from current elements
+         */
+        cacheElementsPosition: function () {
+            this.elemPositions = [];
+            this.parentComponent().elems.each(function (elem) {
+                this.elemPositions.push(elem.position);
+            }, this);
+        },
+
+        /**
+         * Normalize position, uses start elements position
+         */
+        normalizePositions: function () {
+            this.parentComponent().elems.each(function (item, index) {
+                item.position = this.elemPositions[index];
+            }, this);
         },
 
         /**
