@@ -52,6 +52,7 @@ class GeneratedFiles
     public function regenerate()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
+            //TODO: to be removed in scope of MAGETWO-53476
             //clean cache
             $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
             $configPool = new ConfigFilePool();
@@ -59,6 +60,7 @@ class GeneratedFiles
             if ($this->write->isExist($this->write->getRelativePath($envPath))) {
                 $this->saveCacheStatus($envPath);
             }
+            //TODO: Till here
             $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
             $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
             $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
