@@ -116,7 +116,6 @@ class Renderer extends Config\Renderer
         if (!in_array($asset->getContentType(), self::$processingTypes)) {
             return parent::getAssetContentType($asset);
         }
-        $asset->getSourceFile();
         return $asset->getSourceContentType();
     }
 }

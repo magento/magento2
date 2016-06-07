@@ -30,12 +30,4 @@ interface AssetInterface
      * @return string
      */
     public function getSourceContentType();
-
-    /**
-     * Set source content type
-     *
-     * @param string|null $type
-     * @return void
-     */
-    public function setSourceContentType($type);
 }

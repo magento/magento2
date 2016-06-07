@@ -351,7 +351,6 @@ class Renderer implements RendererInterface
                     $this->addDefaultAttributes($this->getAssetContentType($asset), $attributes)
                 );
                 $result .= sprintf($template, $asset->getUrl());
-                $asset->setSourceContentType(null);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->logger->critical($e);
