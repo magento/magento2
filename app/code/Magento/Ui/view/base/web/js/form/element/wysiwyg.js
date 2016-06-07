@@ -86,10 +86,9 @@ define([
          *
          * @returns {exports}
          */
-        setDisabled: function () {
+        setDisabled: function (status) {
             var controls,
-                property,
-                status = this.disabled();
+                property;
 
             this.$wysiwygEditorButton.attr('disabled', status);
 
