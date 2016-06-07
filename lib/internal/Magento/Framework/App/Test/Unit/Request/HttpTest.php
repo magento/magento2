@@ -32,14 +32,19 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $_infoProcessorMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectManager;
+    protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils  | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $converterMock;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManager;
 
     /**
      * @var array
@@ -58,7 +63,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         );
         $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->converterMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
@@ -67,6 +72,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
+
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     public function tearDown()
@@ -77,23 +84,23 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \Magento\Framework\App\Request\Http
      */
-    private function getModel($uri = null, $mockAppConfig = true)
+    private function getModel($uri = null, $appConfigMock = true)
     {
-        $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
-        $model = $testFrameworkObjectManager->getObject(
+
+        $model = $this->objectManager->getObject(
             'Magento\Framework\App\Request\Http',
             [
                 'routeConfig' => $this->_routerListMock,
                 'pathInfoProcessor' => $this->_infoProcessorMock,
-                'objectManager' => $this->objectManager,
+                'objectManager' => $this->objectManagerMock,
                 'converter' => $this->converterMock,
                 'uri' => $uri,
             ]
         );
 
-        if ($mockAppConfig) {
-            $mockConfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
-            $testFrameworkObjectManager->setBackwardCompatibleProperty($model, 'appConfig', $mockConfig );
+        if ($appConfigMock) {
+            $configMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+            $this->objectManager->setBackwardCompatibleProperty($model, 'appConfig', $configMock);
         }
 
         return $model;
@@ -346,9 +353,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(\Magento\Framework\App\Request\Http::XML_PATH_OFFLOADER_HEADER, ScopeConfigInterface::SCOPE_TYPE_DEFAULT)
             ->willReturn($configOffloadHeader);
-        $testFrameworkObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager ($this);
-        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
-        $testFrameworkObjectManager->setBackwardCompatibleProperty($this->_model, 'SSLOffloadHeader', null );
+
+        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'appConfig', $configMock);
+        $this->objectManager->setBackwardCompatibleProperty($this->_model, 'sslOffloadHeader', null);
 
         $this->_model->getServer()->set($headerOffloadKey, $headerOffloadValue);
         $this->_model->getServer()->set('HTTPS', $serverHttps);
