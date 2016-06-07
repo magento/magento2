@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+
 /**
  * \Iterator that aggregates one or more assets and provides a single public file with equivalent behavior
  */
@@ -29,6 +33,11 @@ class Merged implements \Iterator
      * @var \Magento\Framework\View\Asset\Repository
      */
     private $assetRepo;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**
      * @var MergeableInterface[]
@@ -94,7 +103,14 @@ class Merged implements \Iterator
             $this->isInitialized = true;
             try {
                 $mergedAsset = $this->createMergedAsset($this->assets);
-                $this->mergeStrategy->merge($this->assets, $mergedAsset);
+                $isExists = $this->getFilesystem()
+                    ->getDirectoryRead(DirectoryList::STATIC_VIEW)
+                    ->isExist($mergedAsset->getRelativeSourceFilePath());
+
+                if (!$isExists) {
+                    $this->mergeStrategy->merge($this->assets, $mergedAsset);
+                }
+
                 $this->assets = [$mergedAsset];
             } catch (\Exception $e) {
                 $this->logger->critical($e);
@@ -175,5 +191,18 @@ class Merged implements \Iterator
     public static function getRelativeDir()
     {
         return self::CACHE_VIEW_REL . '/merged';
+    }
+
+    /**
+     * @return Filesystem
+     * @deprecated
+     */
+    private function getFilesystem()
+    {
+        if (null === $this->filesystem) {
+            $this->filesystem = ObjectManager::getInstance()->get(Filesystem::class);
+        }
+
+        return $this->filesystem;
     }
 }
