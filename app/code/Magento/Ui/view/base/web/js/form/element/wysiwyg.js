@@ -16,7 +16,7 @@ define([
         defaults: {
             elementSelector: 'textarea',
             value: '',
-            $button: '',
+            $wysiwygEditorButton: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
             },
@@ -39,7 +39,7 @@ define([
                 component: this,
                 selector: 'button'
             }, function (element) {
-                this.$button = $(element);
+                this.$wysiwygEditorButton = $(element);
             }.bind(this));
 
             return this;
@@ -88,7 +88,7 @@ define([
                 property;
 
             this.disabled(true);
-            this.$button.attr('disabled', true);
+            this.$wysiwygEditorButton.attr('disabled', true);
 
             if (tinyMCE) {
                 controls = tinyMCE.activeEditor.controlManager.controls;
@@ -112,7 +112,7 @@ define([
                 property;
 
             this.disabled(false);
-            this.$button.attr('disabled', false);
+            this.$wysiwygEditorButton.attr('disabled', false);
 
             if (tinyMCE) {
                 controls = tinyMCE.activeEditor.controlManager.controls;
