@@ -58,7 +58,7 @@ class Validation
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if ($this->isAgreementEnabled()) {
-            $this->validateAgreements($paymentMethod->getExtensionAttributes()->getAgreementIds());
+            $this->validateAgreements($paymentMethod);
         }
     }
 
@@ -77,17 +77,21 @@ class Validation
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         if ($this->isAgreementEnabled()) {
-            $this->validateAgreements($paymentMethod->getExtensionAttributes()->getAgreementIds());
+            $this->validateAgreements($paymentMethod);
         }
     }
 
     /**
-     * @param int[] $agreements
+     * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return void
      */
-    protected function validateAgreements($agreements)
+    protected function validateAgreements(\Magento\Quote\Api\Data\PaymentInterface $paymentMethod)
     {
+        $agreements = $paymentMethod->getExtensionAttributes() === null
+            ? []
+            : $paymentMethod->getExtensionAttributes()->getAgreementIds();
+
         if (!$this->agreementsValidator->isValid($agreements)) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(
                 __('Please agree to all the terms and conditions before placing the order.')

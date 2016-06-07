@@ -188,7 +188,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals($expectedResult, $result);
         $this->assertTrue($this->import->hasErrors());
-        $this->assertEquals(['Duplicate Row #%1 (duplicates row #%2)'], $this->import->getErrors());
+        $this->assertEquals(['Duplicate Row #3 (duplicates row #2)'], $this->import->getErrors());
     }
 
     /**
