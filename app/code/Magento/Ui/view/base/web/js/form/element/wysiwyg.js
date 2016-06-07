@@ -88,22 +88,18 @@ define([
          * @param {Boolean} status
          */
         setDisabled: function (status) {
-            var controls,
-                property;
-
             this.$wysiwygEditorButton.attr('disabled', status);
 
+            /* eslint-disable no-undef */
             if (tinyMCE) {
-                controls = tinyMCE.activeEditor.controlManager.controls;
-
-                for (property in controls) {
+                _.each(tinyMCE.activeEditor.controlManager.controls, function (property, index, controls) {
                     controls[property].setDisabled(status);
-                }
+                });
 
                 tinyMCE.activeEditor.getBody().setAttribute('contenteditable', !status);
             }
 
-            return this;
+            /* eslint-enable  no-undef*/
         }
     });
 });
