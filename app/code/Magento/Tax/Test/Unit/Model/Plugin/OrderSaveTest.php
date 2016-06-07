@@ -132,7 +132,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         $index = 0;
         $itemTaxes = [];
         foreach ($expectedItemTaxes as $itemTax) {
-            $itemTaxMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Tax\Item')
+            $itemTaxMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Tax\Item::class)
                 ->disableOriginalConstructor()
                 ->setMethods(
                     [
@@ -179,7 +179,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
 
         $orderItemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
-            ->setMethods(['getId', ])
+            ->setMethods(['getId'])
             ->getMock();
         $orderItemMock->expects($this->atLeastOnce())
             ->method('getId')
@@ -235,7 +235,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             );
-
         $orderTaxDetailsApplied->expects($this->at(1))
             ->method('getRates')
             ->willReturn(
@@ -247,8 +246,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             );
-
-
         $orderTaxDetailsApplied->expects($this->at(2))
             ->method('getRates')
             ->willReturn(
@@ -265,7 +262,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             );
-
         $orderTaxDetailsApplied->expects($this->at(3))
             ->method('getRates')
             ->willReturn(
@@ -277,7 +273,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             );
-
         $orderTaxDetailsApplied->expects($this->at(4))
             ->method('getRates')
             ->willReturn(
@@ -294,9 +289,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             );
-
-
-
         $orderTaxDetailsApplied->expects($this->at(5))
             ->method('getRates')
             ->willReturn(
@@ -338,22 +330,22 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
                         'type' => 'product',
                         'associated_item_id' => null,
                         'applied_taxes' => [
-                                [
-                                    'amount' => 0.11,
-                                    'base_amount' => 0.11,
-                                    'percent' => 11,
-                                    'id' => 'ILUS',
-                                    'extension_attributes' => $orderTaxDetailsApplied,
-                                ],
-                                //city tax
-                                [
-                                    'amount' => 0.03,
-                                    'base_amount' => 0.03,
-                                    'percent' => 3.33,
-                                    'id' => 'CityTax',
-                                    'extension_attributes' => $orderTaxDetailsApplied,
-                                ],
+                            [
+                                'amount' => 0.11,
+                                'base_amount' => 0.11,
+                                'percent' => 11,
+                                'id' => 'ILUS',
+                                'extension_attributes' => $orderTaxDetailsApplied,
                             ],
+                            //city tax
+                            [
+                                'amount' => 0.03,
+                                'base_amount' => 0.03,
+                                'percent' => 3.33,
+                                'id' => 'CityTax',
+                                'extension_attributes' => $orderTaxDetailsApplied,
+                            ],
+                        ],
                     ],
                     //shipping tax
                     [

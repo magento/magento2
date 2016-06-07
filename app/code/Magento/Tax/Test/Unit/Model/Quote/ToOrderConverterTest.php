@@ -265,14 +265,13 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                                 ],
                                 ]
                             ],
-
                     ],
                     'shipping' => [
-                            'item_id' => 146,
-                            'type' => 'shipping',
-                            'associated_item_id' => null,
-                            'applied_taxes' => [
-                                [
+                        'item_id' => 146,
+                        'type' => 'shipping',
+                        'associated_item_id' => null,
+                        'applied_taxes' => [
+                            [
                                 'amount' => 0.30,
                                 'item_id' => 146,
                                 'item_type' => 'shipping',
@@ -286,8 +285,8 @@ class ToOrderConverterTest extends \PHPUnit_Framework_TestCase
                                         ]
                                     ],
                                 ],
-                                ]
-                            ],
+                            ]
+                        ],
                     ],
                 ],
             ],
