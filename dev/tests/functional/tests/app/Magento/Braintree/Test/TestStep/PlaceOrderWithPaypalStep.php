@@ -78,8 +78,11 @@ class PlaceOrderWithPaypalStep implements TestStepInterface
         if (isset($this->prices['grandTotal'])) {
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
-        $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
-        $this->checkoutOnepage->getBraintreePaypalBlock()->process();
+        $parentWindow = $this->checkoutOnepage->getPaymentBlock()
+            ->getSelectedPaymentMethodBlock()
+            ->clickContinueToPaypal();
+        $this->checkoutOnepage->getBraintreePaypalBlock()->process($parentWindow);
+        
         $order = $this->fixtureFactory->createByCode(
             'orderInjectable',
             [
