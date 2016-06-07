@@ -44,7 +44,7 @@ class CreditCards extends Block
         foreach ($elements as $row) {
             $number = substr($row->find('./td[@data-th="Card Number"]', Locator::SELECTOR_XPATH)->getText(), -4, 4);
             $deleteButton = $row->find(
-                "./td[contains(text(), '{$number}')]/following-sibling::td[@data-th='Actions']//span[text()='Delete']",
+                "./td[text()[contains(.,'{$number}')]]/following-sibling::td[@data-th='Actions']//span[text()='Delete']",
                 Locator::SELECTOR_XPATH
             );
             $result[$number] = $deleteButton;

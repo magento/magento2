@@ -230,7 +230,7 @@ Packaging.prototype = {
 
     validate: function() {
         var dimensionElements = $("packaging_window").select(
-            'input[name=container_length],input[name=container_width],input[name=container_height]'
+            'input[name=container_length],input[name=container_width],input[name=container_height],input[name=container_girth]:not("._disabled")'
         );
         var callback = null;
         if ( dimensionElements.any(function(element) { return !!element.value; })) {
@@ -543,8 +543,7 @@ Packaging.prototype = {
             return;
         }
 
-        var girthEnabled = (packageSize[0].value == 'LARGE' && (packageContainer[0].value == 'NONRECTANGULAR'
-            || packageContainer[0].value == 'VARIABLE' ));
+        var girthEnabled = packageContainer[0].value == 'NONRECTANGULAR' || packageContainer[0].value == 'VARIABLE';
 
         if (!girthEnabled) {
             packageGirth[0].value='';
