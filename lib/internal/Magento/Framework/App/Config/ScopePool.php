@@ -92,7 +92,7 @@ class ScopePool
     {
         $scopeCode = $this->_getScopeCode($scopeType, $scopeCode);
 
-        //Key by url to support dynamic {{base_url}} and port assignments
+        // Key by url to support dynamic {{base_url}} and port assignments
         $host = $this->getRequest()->getHttpHost();
         $port = $this->getRequest()->getServer('SERVER_PORT');
         $path = $this->getRequest()->getBasePath();
