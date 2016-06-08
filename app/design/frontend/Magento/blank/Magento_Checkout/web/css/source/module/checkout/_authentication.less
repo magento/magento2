@@ -127,6 +127,9 @@
     .authentication-dropdown {
         .lib-css(background-color, @block-auth__dropdown__background-color);
         .lib-css(border, @block-auth__border);
+        -webkit-transform: scale(1,0);
+        -webkit-transform-origin: 0 0;
+        -webkit-transition: -webkit-transform linear .1s, visibility 0s linear .1s;
         position: absolute;
         text-align: left;
         top: 100%;
@@ -138,6 +141,8 @@
 
         &._show {
             .lib-css(z-index, @dropdown-list__z-index);
+            -webkit-transform: scale(1,1);
+            -webkit-transition: -webkit-transform linear .1s, visibility 0s linear 0s;
             transform: scale(1,1);
             transition: transform linear .1s, visibility 0s linear 0s;
             visibility: visible;
