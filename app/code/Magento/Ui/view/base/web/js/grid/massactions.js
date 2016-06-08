@@ -147,7 +147,7 @@ define([
          * @param {Object} data - Selections data.
          */
         defaultCallback: function (action, data) {
-            var itemsType = data.excludeMode && data.excluded.length !== 0 ? 'excluded' : 'selected',
+            var itemsType = data.excludeMode ? 'excluded' : 'selected',
                 selections = {};
 
             selections[itemsType] = data[itemsType];
