@@ -343,6 +343,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $this->quoteRepositoryMock->expects($this->once())->method('get')->willReturn($quoteMock);
         $cartInterfaceMock->expects($this->once())
             ->method('setCustomerGroupId')
@@ -357,7 +358,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())
             ->method('setIsSuperMode')
             ->with(true);
-
         $this->assertEquals($quoteMock, $this->quote->getQuote());
     }
 
