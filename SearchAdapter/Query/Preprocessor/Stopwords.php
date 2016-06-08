@@ -29,39 +29,46 @@ class Stopwords implements PreprocessorInterface
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var LocaleResolver
      */
-    protected $localeResolver;
+    private $localeResolver;
 
     /**
      * @var ReadFactory
      */
-    protected $readFactory;
+    private $readFactory;
 
     /**
      * @var ConfigCache
      */
-    protected $configCache;
+    private $configCache;
 
     /**
      * @var EsConfigInterface
      */
-    protected $esConfig;
+    private $esConfig;
 
     /**
      * @var ModuleDirReader
      */
-    protected $moduleDirReader;
+    private $moduleDirReader;
 
     /**
      * @var string
      */
-    protected $stopwordsModule;
+    private $stopwordsModule;
 
     /**
+     * @var string
+     */
+    private $stopwordsDirectory;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param StoreManagerInterface $storeManager
      * @param LocaleResolver $localeResolver
      * @param ReadFactory $readFactory
@@ -69,6 +76,7 @@ class Stopwords implements PreprocessorInterface
      * @param EsConfigInterface $esConfig
      * @param ModuleDirReader $moduleDirReader
      * @param string $stopwordsModule
+     * @param string $stopwordsDirectory
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -77,7 +85,8 @@ class Stopwords implements PreprocessorInterface
         ConfigCache $configCache,
         EsConfigInterface $esConfig,
         ModuleDirReader $moduleDirReader,
-        $stopwordsModule = ''
+        $stopwordsModule = '',
+        $stopwordsDirectory = ''
     ) {
         $this->storeManager = $storeManager;
         $this->localeResolver = $localeResolver;
@@ -86,6 +95,7 @@ class Stopwords implements PreprocessorInterface
         $this->esConfig = $esConfig;
         $this->moduleDirReader = $moduleDirReader;
         $this->stopwordsModule = $stopwordsModule;
+        $this->stopwordsDirectory = $stopwordsDirectory;
     }
 
     /**
@@ -107,7 +117,8 @@ class Stopwords implements PreprocessorInterface
     protected function getStopwordsList()
     {
         $filename = $this->getStopwordsFile();
-        $fileDir = $this->moduleDirReader->getModuleDir(Dir::MODULE_ETC_DIR, $this->stopwordsModule) . '/stopwords';
+        $fileDir = $this->moduleDirReader->getModuleDir(Dir::MODULE_ETC_DIR, $this->stopwordsModule)
+            . '/' . $this->stopwordsDirectory;
         $source = $this->readFactory->create($fileDir);
         $fileStats = $source->stat($filename);
         if (((time() - $fileStats['mtime']) > self::STOPWORDS_FILE_MODIFICATION_TIME_GAP)

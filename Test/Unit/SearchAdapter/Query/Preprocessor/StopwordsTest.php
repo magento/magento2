@@ -82,7 +82,8 @@ class StopwordsTest extends \PHPUnit_Framework_TestCase
                 'readFactory' => $this->readFactory,
                 'configCache' => $this->configCache,
                 'esConfig' => $this->esConfig,
-                'fileDir' => '',
+                'stopwordsModule' => '',
+                'stopwordsDirectory' => ''
             ]
         );
     }
