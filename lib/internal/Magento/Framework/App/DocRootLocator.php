@@ -43,6 +43,6 @@ class DocRootLocator
     {
         $rootBasePath = $this->request->getServer('DOCUMENT_ROOT');
         $readDirectory = $this->readFactory->create(DirectoryList::ROOT);
-        return strpos($rootBasePath, 'pub') && !$readDirectory->isExist($rootBasePath . 'setup');
+        return (substr($rootBasePath, -strlen('/pub')) === '/pub') && !$readDirectory->isExist($rootBasePath . 'setup');
     }
 }
