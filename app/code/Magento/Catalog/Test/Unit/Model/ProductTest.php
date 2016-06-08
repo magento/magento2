@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 
@@ -213,8 +214,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $stateMock = $this->getMock('Magento\FrameworkApp\State', ['getAreaCode'], [], '', false);
-        $stateMock->expects($this->any())
+        $this->appStateMock = $this->getMock(
+            'Magento\Framework\App\State',
+            ['getAreaCode', 'isAreaCodeEmulated'],
+            [],
+            '',
+            false
+        );
+        $this->appStateMock->expects($this->any())
             ->method('getAreaCode')
             ->will($this->returnValue(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE));
 
@@ -233,7 +240,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Model\Context',
             ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'], [], '', false
         );
-        $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($stateMock));
+        $contextMock->expects($this->any())->method('getAppState')->will($this->returnValue($this->appStateMock));
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
@@ -370,15 +377,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'data' => ['id' => 1]
             ]
         );
-
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $modelReflection = new \ReflectionClass(get_class($this->model));
-        $appStateReflection = $modelReflection->getProperty('appState');
-        $appStateReflection->setAccessible(true);
-        $appStateReflection->setValue($this->model, $this->appStateMock);
     }
 
     public function testGetAttributes()
@@ -661,6 +659,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function getIdentitiesProvider()
     {
+        $extensionAttributesMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStockItem'])
+            ->getMock();
+        $stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesMock->expects($this->any())
+            ->method('getStockItem')
+            ->willReturn($stockItemMock);
+        $stockItemMock->expects($this->any())
+            ->method('getIsInStock')
+            ->willReturn(true);
+
         return [
             'no changes' => [
                 ['catalog_product_1'],
@@ -711,7 +723,53 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 [0 => 'catalog_product_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
-            ]
+            ],
+            'no stock status changes' => [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    'stock_data' => ['is_in_stock' => true],
+                    ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
+                ],
+            ],
+            'no stock status data 1' => [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
+                ],
+            ],
+            'no stock status data 2' => [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    'stock_data' => ['is_in_stock' => true],
+                ],
+            ],
+            'stock status changes' => [
+                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    'stock_data' => ['is_in_stock' => false],
+                    ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
+                ],
+            ],
         ];
     }
 
@@ -800,6 +858,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->afterSave();
     }
 
+    /**
+     * Image cache generation would not be performed if area was emulated
+     */
+    public function testSaveIfAreaEmulated()
+    {
+        $this->appStateMock->expects($this->any())->method('isAreaCodeEmulated')->willReturn(true);
+        $this->imageCache->expects($this->never())
+            ->method('generate')
+            ->with($this->model);
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+    }
+    
     /**
      *  Test for `save` method for duplicated product
      */
