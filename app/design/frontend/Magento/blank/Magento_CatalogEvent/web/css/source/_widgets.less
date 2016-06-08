@@ -47,8 +47,12 @@
                 }
 
                 &.forward {
-                    right: 0;
                     .lib-icon-font-symbol(@icon-next);
+                    right: 0;
+
+                    &:before {
+                        margin-left: -20px;
+                    }
                 }
 
                 &.inactive {

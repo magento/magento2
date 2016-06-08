@@ -270,6 +270,8 @@ class Source extends AbstractEav
         )->where(
             'pvd.attribute_id IN(?)',
             $attrIds
+        )->where(
+            'cpe.entity_id IS NOT NULL'
         );
 
         $statusCond = $connection->quoteInto('=?', ProductStatus::STATUS_ENABLED);
