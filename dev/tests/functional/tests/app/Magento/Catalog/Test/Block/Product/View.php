@@ -173,7 +173,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img--full';
+    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img--full';
 
     /**
      * Full image close selector
@@ -560,7 +560,12 @@ class View extends AbstractConfigureBlock
      */
     public function closeFullImage()
     {
-        $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS)->click();
+        $element = $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS);
+        if (!$element->isVisible()) {
+            $element->hover();
+            $this->waitForElementVisible($this->fullImageClose);
+        }
+        $element->click();
     }
 
     /**

@@ -91,8 +91,14 @@ class ScopePool
     public function getScope($scopeType, $scopeCode = null)
     {
         $scopeCode = $this->_getScopeCode($scopeType, $scopeCode);
-        $baseUrl = $this->getRequest()->getDistroBaseUrl();
-        $code = $scopeType . '|' . $scopeCode . '|' . $baseUrl;
+
+        // Key by url to support dynamic {{base_url}} and port assignments
+        $host = $this->getRequest()->getHttpHost();
+        $port = $this->getRequest()->getServer('SERVER_PORT');
+        $path = $this->getRequest()->getBasePath();
+        $urlInfo = $host . $port . trim($path, '/');
+        $code = $scopeType . '|' . $scopeCode . '|' . $urlInfo;
+
         if (!isset($this->_scopes[$code])) {
             $cacheKey = $this->_cacheId . '|' . $code;
             $data = $this->_cache->load($cacheKey);
