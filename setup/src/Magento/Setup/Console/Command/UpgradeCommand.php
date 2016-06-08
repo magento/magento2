@@ -127,7 +127,8 @@ class UpgradeCommand extends AbstractSetupCommand
 
             $write->delete($pathToCacheStatus);
             if (isset($returnCode) && $returnCode > 0) {
-                $output->writeln('<error> Error occured during upgrade</error>');
+                $message = '<error> Error occured during upgrade. Error code: ' . $returnCode . '</error>';
+                $output->writeln($message);
                 return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
         }
