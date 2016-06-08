@@ -10,6 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 
@@ -658,6 +659,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function getIdentitiesProvider()
     {
+        $extensionAttributesMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getStockItem'])
+            ->getMock();
+        $stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $extensionAttributesMock->expects($this->any())
+            ->method('getStockItem')
+            ->willReturn($stockItemMock);
+        $stockItemMock->expects($this->any())
+            ->method('getIsInStock')
+            ->willReturn(true);
+
         return [
             'no changes' => [
                 ['catalog_product_1'],
@@ -708,7 +723,53 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 [0 => 'catalog_product_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
-            ]
+            ],
+            'no stock status changes' => [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    'stock_data' => ['is_in_stock' => true],
+                    ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
+                ],
+            ],
+            'no stock status data 1' => [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
+                ],
+            ],
+            'no stock status data 2' => [
+                [0 => 'catalog_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    'stock_data' => ['is_in_stock' => true],
+                ],
+            ],
+            'stock status changes' => [
+                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+                [
+                    'id' => 1,
+                    'name' => 'value',
+                    'category_ids' => [1],
+                    'status' => 1,
+                    'stock_data' => ['is_in_stock' => false],
+                    ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
+                ],
+            ],
         ];
     }
 
