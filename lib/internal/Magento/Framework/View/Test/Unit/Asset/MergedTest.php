@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use Magento\Framework\Filesystem;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\Merged;
@@ -22,37 +21,27 @@ class MergedTest extends \PHPUnit_Framework_TestCase
     /**
      * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $logger;
+    private $logger;
 
     /**
      * @var MergeStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $mergeStrategy;
+    private $mergeStrategy;
 
     /**
      * @var MergeableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $assetJsOne;
+    private $assetJsOne;
 
     /**
      * @var MergeableInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $assetJsTwo;
+    private $assetJsTwo;
 
     /**
      * @var AssetRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $assetRepo;
-
-    /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filesystemMock;
-
-    /**
-     * @var Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $directoryReadMock;
+    private $assetRepo;
 
     protected function setUp()
     {
@@ -77,15 +66,6 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->directoryReadMock = $this->getMockBuilder(Filesystem\Directory\ReadInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
-            ->willReturn($this->directoryReadMock);
     }
 
     /**
@@ -144,7 +124,6 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
             'assets' => $assets,
-            'filesystem' => $this->filesystemMock,
         ]);
 
         $mergedAsset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
@@ -179,7 +158,6 @@ class MergedTest extends \PHPUnit_Framework_TestCase
             'mergeStrategy' => $this->mergeStrategy,
             'assetRepo' => $this->assetRepo,
             'assets' => [$this->assetJsOne, $this->assetJsTwo, $assetBroken],
-            'filesystem' => $this->filesystemMock,
         ]);
 
         $this->logger->expects($this->once())->method('critical')->with($this->identicalTo($mergeError));
@@ -187,30 +165,6 @@ class MergedTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [$this->assetJsOne, $this->assetJsTwo, $assetBroken];
         $this->assertIteratorEquals($expectedResult, $merged);
         $this->assertIteratorEquals($expectedResult, $merged); // ensure merging attempt happens only once
-    }
-
-    public function testMergedFileCheckbefore()
-    {
-        /** @var Merged $merged */
-        $merged = (new ObjectManager($this))->getObject(Merged::class, [
-            'logger' => $this->logger,
-            'mergeStrategy' => $this->mergeStrategy,
-            'assetRepo' => $this->assetRepo,
-            'assets' => [$this->assetJsOne, $this->assetJsTwo],
-            'filesystem' => $this->filesystemMock,
-        ]);
-
-        $mergedAsset = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->directoryReadMock->expects($this->once())
-            ->method('isExist')
-            ->willReturn(true);
-        $this->assetRepo->expects($this->once())
-            ->method('createArbitrary')->willReturn($mergedAsset);
-
-        $this->assertIteratorEquals([$mergedAsset], $merged);
     }
 
     /**
