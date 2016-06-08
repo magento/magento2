@@ -15,8 +15,6 @@ define([
 ], function ($, _, Component, Braintree, quote, fullScreenLoader, additionalValidators) {
     'use strict';
 
-    var checkout;
-
     return Component.extend({
         defaults: {
             template: 'Magento_Braintree/payment/paypal',
@@ -33,10 +31,10 @@ define([
 
                 /**
                  * Triggers when widget is loaded
-                 * @param {Object} integration
+                 * @param {Object} checkout
                  */
-                onReady: function (integration) {
-                    checkout = integration;
+                onReady: function (checkout) {
+                    Braintree.checkout = checkout;
                     this.enableButton();
                 },
 
@@ -145,11 +143,35 @@ define([
         },
 
         /**
+         * Update quote billing address
+         * @param {Object}customer
+         * @param {Object}address
+         */
+        setBillingAddress: function (customer, address) {
+            var billingAddress = {
+                street: [address.streetAddress],
+                city: address.locality,
+                regionCode: address.region,
+                postcode: address.postalCode,
+                countryId: address.countryCodeAlpha2,
+                firstname: customer.firstName,
+                lastname: customer.lastName,
+                telephone: customer.phone
+            };
+
+            quote.billingAddress(billingAddress);
+        },
+
+        /**
          * Prepare data to place order
          * @param {Object} data
          */
         beforePlaceOrder: function (data) {
             this.setPaymentMethodNonce(data.nonce);
+
+            if (quote.billingAddress() === null && typeof data.details.billingAddress !== 'undefined') {
+                this.setBillingAddress(data.details, data.details.billingAddress);
+            }
             this.placeOrder();
         },
 
@@ -157,12 +179,12 @@ define([
          * Re-init PayPal Auth Flow
          */
         reInitPayPal: function () {
-            if (!checkout) {
-                return;
+            if (Braintree.checkout) {
+                Braintree.checkout.teardown(function () {
+                    Braintree.checkout = null;
+                });
             }
-            checkout.teardown(function () {
-                checkout = null;
-            });
+
             this.disableButton();
             this.clientConfig.paypal.amount = this.grandTotalAmount;
 
@@ -175,7 +197,7 @@ define([
          */
         payWithPayPal: function () {
             if (additionalValidators.validate()) {
-                checkout.paypal.initAuthFlow();
+                Braintree.checkout.paypal.initAuthFlow();
             }
         },
 
@@ -200,8 +222,7 @@ define([
          * @returns {Object}
          */
         getPayPalConfig: function () {
-            var address = quote.shippingAddress(),
-                totals = quote.totals(),
+            var totals = quote.totals(),
                 config = {};
 
             config.paypal = {
@@ -212,16 +233,6 @@ define([
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
                 enableShippingAddress: true,
-                shippingAddressOverride: {
-                    recipientName: address.firstname + ' ' + address.lastname,
-                    streetAddress: address.street[0],
-                    locality: address.city,
-                    countryCodeAlpha2: address.countryId,
-                    postalCode: address.postcode,
-                    region: address.regionCode,
-                    phone: address.telephone,
-                    editable: this.isAllowOverrideShippingAddress()
-                },
 
                 /**
                  * Triggers on any Braintree error
@@ -238,11 +249,37 @@ define([
                 }
             };
 
+            config.paypal.shippingAddressOverride = this.getShippingAddress();
+
             if (this.getMerchantName()) {
                 config.paypal.displayName = this.getMerchantName();
             }
 
             return config;
+        },
+
+        /**
+         * Get shipping address
+         * @returns {Object}
+         */
+        getShippingAddress: function () {
+            var address = quote.shippingAddress();
+
+            if (address.postcode === null) {
+
+                return {};
+            }
+
+            return {
+                recipientName: address.firstname + ' ' + address.lastname,
+                streetAddress: address.street[0],
+                locality: address.city,
+                countryCodeAlpha2: address.countryId,
+                postalCode: address.postcode,
+                region: address.regionCode,
+                phone: address.telephone,
+                editable: this.isAllowOverrideShippingAddress()
+            };
         },
 
         /**
@@ -279,6 +316,8 @@ define([
          * Disable submit button
          */
         disableButton: function () {
+            // stop any previous shown loaders
+            fullScreenLoader.stopLoader();
             fullScreenLoader.startLoader();
             $('[data-button="place"]').attr('disabled', 'disabled');
         },
