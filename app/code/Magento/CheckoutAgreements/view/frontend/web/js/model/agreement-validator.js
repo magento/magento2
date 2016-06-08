@@ -14,6 +14,8 @@ define(
         var checkoutConfig = window.checkoutConfig,
             agreementsConfig = checkoutConfig ? checkoutConfig.checkoutAgreements : {};
 
+        var agreementsInputPath = '.payment-method._active div.checkout-agreements input';
+
         return {
             /**
              * Validate checkout agreements
@@ -22,6 +24,10 @@ define(
              */
             validate: function() {
                 if (!agreementsConfig.isEnabled) {
+                    return true;
+                }
+
+                if ($(agreementsInputPath).length == 0) {
                     return true;
                 }
 
@@ -36,7 +42,7 @@ define(
                         }
                         errorPlacement.after(error);
                     }
-                }).element('.payment-method._active div.checkout-agreements input');
+                }).element(agreementsInputPath);
             }
         }
     }
