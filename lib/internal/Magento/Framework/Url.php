@@ -232,7 +232,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             'user' => 'setUser',
             'pass' => 'setPassword',
             'path' => 'setPath',
-            'query' => 'setQuery',
+            'query' => '_setQuery',
             'fragment' => 'setFragment',
         ];
 
