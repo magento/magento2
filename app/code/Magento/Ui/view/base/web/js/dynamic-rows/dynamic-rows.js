@@ -164,6 +164,7 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
+            _.bindAll(this, 'processingDeleteRecord');
             this._super()
                 .initDefaultState()
                 .initChildren()
@@ -197,6 +198,29 @@ define([
                 ]);
 
             return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        initElement: function (elem) {
+            this._super();
+            elem.on({
+                'deleteRecord': this.processingDeleteRecord
+            });
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        bubble: function (event) {
+            if (event === 'deleteRecord') {
+                return false;
+            }
+
+            return this._super();
         },
 
         /**
