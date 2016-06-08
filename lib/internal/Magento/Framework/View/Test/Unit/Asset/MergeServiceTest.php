@@ -141,13 +141,13 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
                 $jsAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+                'Magento\Framework\View\Asset\MergeStrategy\FileExists',
             ],
             'css default mode' => [
                 $cssAssets,
                 'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento\Framework\View\Asset\MergeStrategy\Checksum',
+                'Magento\Framework\View\Asset\MergeStrategy\FileExists',
             ],
             'js developer mode' => [
                 $jsAssets,
