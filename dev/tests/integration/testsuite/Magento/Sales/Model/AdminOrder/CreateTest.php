@@ -123,7 +123,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_paid_with_payflowpro.php
+     * @magentoDataFixture Magento/Sales/_files/order.php
      */
     public function testInitFromOrderWithEmptyPaymentDetails()
     {
@@ -136,13 +136,16 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $objectManager->get(Registry::class)
             ->unregister('rule_data');
 
-        $payment = $this->_model->initFromOrder($order)
-            ->getQuote()
-            ->getPayment();
+        $initOrder = $this->_model->initFromOrder($order);
+        $payment = $initOrder->getQuote()->getPayment();
+
+        static::assertEquals($initOrder->getQuote()->getId(), $payment->getData('quote_id'));
+        $payment->unsetData('quote_id');
 
         static::assertEmpty($payment->getMethod());
         static::assertEmpty($payment->getAdditionalInformation());
         static::assertEmpty($payment->getAdditionalData());
+        static::assertEmpty($payment->getData());
     }
 
     /**
