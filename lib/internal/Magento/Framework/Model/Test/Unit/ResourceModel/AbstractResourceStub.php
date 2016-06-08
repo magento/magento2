@@ -6,10 +6,16 @@
 namespace Magento\Framework\Model\Test\Unit\ResourceModel;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 
 class AbstractResourceStub extends AbstractResource
 {
+    /**
+     * @var AdapterInterface
+     */
+    private $connectionAdapter;
+
     /**
      * Resource initialization
      *
@@ -23,11 +29,21 @@ class AbstractResourceStub extends AbstractResource
     /**
      * Get connection
      *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @return AdapterInterface
      */
     protected function getConnection()
     {
-        return null;
+        return $this->connectionAdapter;
+    }
+
+    /**
+     * @param AdapterInterface $adapter
+     *
+     * @return void
+     */
+    public function setConnection(AdapterInterface $adapter)
+    {
+        $this->connectionAdapter = $adapter;
     }
 
     /**
