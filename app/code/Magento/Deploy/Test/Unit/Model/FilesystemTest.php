@@ -153,23 +153,23 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
         $this->shellMock->expects($this->at(0))
             ->method('execute')
-            ->with($staticContentDeployCmd);
+            ->with($setupDiCompileCmd);
         $this->shellMock->expects($this->at(1))
             ->method('execute')
-            ->with($setupDiCompileCmd);
+            ->with($staticContentDeployCmd);
 
         $this->outputMock->expects($this->at(0))
             ->method('writeln')
-            ->with('Starting deployment of static content');
+            ->with('Starting compilation');
         $this->outputMock->expects($this->at(2))
             ->method('writeln')
-            ->with('Deployment of static content complete');
+            ->with('Compilation complete');
         $this->outputMock->expects($this->at(3))
             ->method('writeln')
-            ->with('Starting compilation');
+            ->with('Starting deployment of static content');
         $this->outputMock->expects($this->at(5))
             ->method('writeln')
-            ->with('Compilation complete');
+            ->with('Deployment of static content complete');
 
         $this->filesystem->regenerateStatic($this->outputMock);
     }
