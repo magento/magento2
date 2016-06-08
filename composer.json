@@ -69,7 +69,7 @@
         "squizlabs/php_codesniffer": "1.5.3",
         "phpmd/phpmd": "@stable",
         "pdepend/pdepend": "2.2.2",
-        "fabpot/php-cs-fixer": "~1.2",
+        "friendsofphp/php-cs-fixer": "~1.2",
         "lusitanian/oauth": "~0.3 <=0.7.0",
         "sebastian/phpcpd": "2.0.0"
     },
