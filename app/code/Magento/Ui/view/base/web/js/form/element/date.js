@@ -15,10 +15,6 @@ define([
 
             timeOffset: 0,
 
-            showsTime: false,
-
-            dateFormat: 'MM/dd/y', // ICU Date Format
-            timeFormat: 'HH:mm', // ICU Time Format
             validationParams: {
                 dateFormat: '${ $.outputDateFormat }'
             },
@@ -28,7 +24,7 @@ define([
              * server (ICU Date Format).
              *
              * Used only in date picker mode
-             * (this.showsTime == false).
+             * (this.options.showsTime == false).
              *
              * @type {String}
              */
@@ -39,7 +35,7 @@ define([
              * server (ICU Date Format).
              *
              * Used only in date picker mode
-             * (this.showsTime == false).
+             * (this.options.showsTime == false).
              *
              * @type {String}
              */
@@ -51,7 +47,10 @@ define([
              *
              * @type {String}
              */
-            datetimeFormat: '',
+            pickerDateTimeFormat: '',
+
+            pickerDefaultDateFormat: 'MM/dd/y', // ICU Date Format
+            pickerDefaultTimeFormat: 'h:mm a', // ICU Time Format
 
             elementTmpl: 'ui/form/element/date',
 
@@ -78,13 +77,15 @@ define([
         initConfig: function () {
             this._super();
 
-            utils.extend(this.options, {
-                showsTime: this.showsTime,
-                timeFormat: this.timeFormat,
-                dateFormat: this.dateFormat
-            });
+            if (!this.options.dateFormat) {
+                this.options.dateFormat = this.pickerDefaultDateFormat;
+            }
 
-            this.prepareDatetimeFormats();
+            if (!this.options.timeFormat) {
+                this.options.timeFormat = this.pickerDefaultTimeFormat;
+            }
+
+            this.prepareDateTimeFormats();
 
             return this;
         },
@@ -107,7 +108,7 @@ define([
                 shiftedValue;
 
             if (value) {
-                if (this.showsTime) {
+                if (this.options.showsTime) {
                     shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
                 } else {
                     dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
@@ -115,7 +116,7 @@ define([
                     shiftedValue = moment(value, dateFormat);
                 }
 
-                shiftedValue = shiftedValue.format(this.datetimeFormat);
+                shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
                 shiftedValue = '';
             }
@@ -135,12 +136,11 @@ define([
             var value;
 
             if (shiftedValue) {
-
-                if (this.showsTime) {
-                    value = moment.utc(shiftedValue, this.datetimeFormat);
+                if (this.options.showsTime) {
+                    value = moment.utc(shiftedValue, this.pickerDateTimeFormat);
                     value = value.subtract(this.timeOffset, 'seconds').toISOString();
                 } else {
-                    value = moment(shiftedValue, this.datetimeFormat);
+                    value = moment(shiftedValue, this.pickerDateTimeFormat);
                     value = value.format(this.outputDateFormat);
                 }
             } else {
@@ -156,17 +156,22 @@ define([
          * Prepares and converts all date/time formats to be compatible
          * with moment.js library.
          */
-        prepareDatetimeFormats: function () {
-            this.datetimeFormat = this.dateFormat;
+        prepareDateTimeFormats: function () {
+            this.pickerDateTimeFormat = this.options.dateFormat;
 
-            if (this.showsTime) {
-                this.datetimeFormat += ' ' + this.timeFormat;
+            if (this.options.showsTime) {
+                this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
             }
 
-            this.datetimeFormat = utils.normalizeDate(this.datetimeFormat);
+            this.pickerDateTimeFormat = utils.normalizeDate(this.pickerDateTimeFormat);
+
+            if (this.dateFormat) {
+                this.inputDateFormat = this.dateFormat;
+            }
 
             this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
             this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
+
             this.validationParams.dateFormat = this.outputDateFormat;
         }
     });

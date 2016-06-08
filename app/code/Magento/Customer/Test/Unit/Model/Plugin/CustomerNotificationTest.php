@@ -16,11 +16,8 @@ class CustomerNotificationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Customer\NotificationStorage|\PHPUnit_Framework_MockObject_MockObject */
     protected $notificationStorage;
 
-    /** @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cookieManager;
-
-    /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cookieMetadataFactory;
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $customerRepository;
 
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
     protected $appState;
@@ -42,62 +39,45 @@ class CustomerNotificationTest extends \PHPUnit_Framework_TestCase
         $this->notificationStorage = $this->getMockBuilder('Magento\Customer\Model\Customer\NotificationStorage')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManager = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManagerInterface')
+        $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
             ->getMockForAbstractClass();
-        $this->cookieMetadataFactory = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->abstractAction = $this->getMockBuilder('Magento\Backend\App\AbstractAction')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')->getMockForAbstractClass();
+        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+            ->setMethods(['isPost'])
+            ->getMockForAbstractClass();
         $this->appState = $this->getMockBuilder('Magento\Framework\App\State')->disableOriginalConstructor()->getMock();
         $this->plugin = new CustomerNotification(
             $this->session,
             $this->notificationStorage,
-            $this->cookieManager,
-            $this->cookieMetadataFactory,
-            $this->appState
+            $this->appState,
+            $this->customerRepository
         );
     }
 
     public function testBeforeDispatch()
     {
         $customerId = 1;
+        $customerGroupId =1;
         $this->appState->expects($this->any())
             ->method('getAreaCode')
             ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
+        $this->request->expects($this->any())->method('isPost')->willReturn(true);
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMockForAbstractClass();
+        $customerMock->expects($this->any())->method('getGroupId')->willReturn($customerGroupId);
+        $this->customerRepository->expects($this->any())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
         $this->session->expects($this->any())->method('getCustomerId')->willReturn($customerId);
+        $this->session->expects($this->any())->method('setCustomerData')->with($customerMock);
+        $this->session->expects($this->any())->method('setCustomerGroupId')->with($customerGroupId);
+        $this->session->expects($this->once())->method('regenerateId');
         $this->notificationStorage->expects($this->any())
             ->method('isExists')
             ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId)
             ->willReturn(true);
-
-        $publicCookieMetadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $publicCookieMetadata->expects($this->once())->method('setPath')->with('/');
-        $publicCookieMetadata->expects($this->once())->method('setDurationOneYear');
-        $publicCookieMetadata->expects($this->once())->method('setHttpOnly')->with(false);
-
-        $sensitiveCookieMetadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $sensitiveCookieMetadata->expects($this->once())->method('setPath')->with('/')->willReturnSelf();
-
-        $this->cookieMetadataFactory->expects($this->any())
-            ->method('createPublicCookieMetadata')
-            ->willReturn($publicCookieMetadata);
-        $this->cookieMetadataFactory->expects($this->any())
-            ->method('createSensitiveCookieMetadata')
-            ->willReturn($sensitiveCookieMetadata);
-
-        $this->cookieManager->expects($this->once())
-            ->method('setPublicCookie')
-            ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId, $publicCookieMetadata);
-        $this->cookieManager->expects($this->once())
-            ->method('deleteCookie')
-            ->with(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING, $sensitiveCookieMetadata);
 
         $this->plugin->beforeDispatch($this->abstractAction, $this->request);
     }

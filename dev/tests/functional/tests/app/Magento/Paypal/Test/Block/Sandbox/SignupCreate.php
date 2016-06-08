@@ -19,7 +19,7 @@ class SignupCreate extends Form
      *
      * @var string
      */
-    protected $termsAgree = '#termsAgree';
+    protected $termsAgree = '#termsAgreeLabel span';
 
     /**
      * Continue personal account signup button.
