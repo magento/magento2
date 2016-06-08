@@ -310,22 +310,44 @@ class Helper
         if (!is_array($overwriteOptions)) {
             return $productOptions;
         }
-        
-        foreach ($productOptions as $index => $option) {
-            $optionId = $option['option_id'];
 
-            if (!isset($overwriteOptions[$optionId])) {
-                continue;
+        foreach ($productOptions as $optionIndex => $option) {
+            $optionId = $option['option_id'];
+            $option = $this->overwriteValue($optionId, $option, $overwriteOptions);
+
+            if (isset($option['values']) && isset($overwriteOptions[$optionId]['values'])) {
+                foreach ($option['values'] as $valueIndex => $value) {
+                    $valueId = $value['option_type_id'];
+                    $value = $this->overwriteValue($valueId, $value, $overwriteOptions[$optionId]['values']);
+                    $option['values'][$valueIndex] = $value;
+                }
             }
 
+            $productOptions[$optionIndex] = $option;
+        }
+
+        return $productOptions;
+    }
+
+    /**
+     * Overwrite values of fields to default, if there are option id and field name in array overwriteOptions
+     *
+     * @param int $optionId
+     * @param array $option
+     * @param array $overwriteOptions
+     * @return array
+     */
+    private function overwriteValue($optionId, $option, $overwriteOptions)
+    {
+        if (isset($overwriteOptions[$optionId])) {
             foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
                 if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
-                    $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
+                    $option[$fieldName] = $option['default_' . $fieldName];
                 }
             }
         }
 
-        return $productOptions;
+        return $option;
     }
 
     /**
