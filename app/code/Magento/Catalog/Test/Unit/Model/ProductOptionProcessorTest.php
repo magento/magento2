@@ -78,6 +78,17 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             $this->dataObjectFactory,
             $this->customOptionFactory
         );
+
+        $urlBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option\UrlBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(['getUrl'])
+            ->getMock();
+        $urlBuilder->expects($this->any())->method('getUrl')->willReturn('http://built.url/string/');
+
+        $reflection = new \ReflectionClass(get_class($this->processor));
+        $reflectionProperty = $reflection->getProperty('urlBuilder');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->processor, $urlBuilder);
     }
 
     /**
@@ -186,7 +197,14 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             [
                 'options' => [
                     1 => 'value',
-                    2 => [1, 2],
+                    2 => [
+                        1,
+                        2,
+                        'url' => [
+                            'route' => 'route',
+                            'params' => ['id' => 20, 'key' => '8175c7c36ef69432347e']
+                        ]
+                    ],
                 ],
                 'expected' => 'custom_options',
             ],
