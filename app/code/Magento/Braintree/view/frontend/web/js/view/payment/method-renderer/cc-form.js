@@ -184,10 +184,11 @@ define(
                     /**
                      * Device data initialization
                      *
-                     * @param {Object} braintreeInstance
+                     * @param {Object} checkout
                      */
-                    onReady: function (braintreeInstance) {
-                        this.additionalData['device_data'] = braintreeInstance.deviceData;
+                    onReady: function (checkout) {
+                        braintree.checkout = checkout;
+                        this.additionalData['device_data'] = checkout.deviceData;
                     }
                 };
 

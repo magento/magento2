@@ -161,17 +161,9 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
     }
 
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer_group.php
-     */
-    public function testSaveActionExistingGroupWithEmptyGroupCode()
+    public function testSaveActionCreateNewGroupWithoutCode()
     {
-        $groupId = $this->findGroupIdWithCode(self::CUSTOMER_GROUP_CODE);
-        $originalCode = $this->groupRepository->getById($groupId)->getCode();
-
         $this->getRequest()->setParam('tax_class', self::TAX_CLASS_ID);
-        $this->getRequest()->setParam('id', $groupId);
-        $this->getRequest()->setParam('code', '');
 
         $this->dispatch('backend/customer/group/save');
 
@@ -179,8 +171,6 @@ class GroupTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $this->equalTo(['code is a required field.']),
             MessageInterface::TYPE_ERROR
         );
-        $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_SUCCESS);
-        $this->assertEquals($originalCode, $this->groupRepository->getById($groupId)->getCode());
     }
 
     public function testSaveActionForwardNewCreateNewGroup()
