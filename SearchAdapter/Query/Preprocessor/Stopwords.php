@@ -29,32 +29,32 @@ class Stopwords implements PreprocessorInterface
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    protected $storeManager;
 
     /**
      * @var LocaleResolver
      */
-    private $localeResolver;
+    protected $localeResolver;
 
     /**
      * @var ReadFactory
      */
-    private $readFactory;
+    protected $readFactory;
 
     /**
      * @var ConfigCache
      */
-    private $configCache;
+    protected $configCache;
 
     /**
      * @var EsConfigInterface
      */
-    private $esConfig;
+    protected $esConfig;
 
     /**
      * @var ModuleDirReader
      */
-    private $moduleDirReader;
+    protected $moduleDirReader;
 
     /**
      * @var string
