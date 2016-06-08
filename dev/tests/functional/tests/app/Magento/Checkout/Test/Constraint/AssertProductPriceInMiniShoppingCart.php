@@ -14,12 +14,12 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert that product quantity in  mini shopping cart is equal to expected quantity from data set.
+ * Assert that product price in mini shopping cart equals to expected price from data set.
  */
-class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
+class AssertProductPriceInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that product quantity in mini shopping cart is equal to expected quantity from data set.
+     * Assert that product price in  mini shopping cart is equal to expected price from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -42,11 +42,9 @@ class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
             /** @var FixtureInterface $item */
             $checkoutItem = $item->getData();
 
-            $productsData[$productName] = [
-                'qty' => $checkoutItem['qty'],
-            ];
+            $productsData[$productName] = ['price' => $checkoutItem['price']];
             $miniCartData[$productName] = [
-                'qty' => $cmsIndex->getCartSidebarBlock()->getProductQty($productName),
+                'price' => $cmsIndex->getCartSidebarBlock()->getProductPrice($productName)
             ];
         }
 
@@ -61,6 +59,6 @@ class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Quantity in mini shopping cart equals to expected quantity from data set.';
+        return 'Price in mini shopping cart equals to expected price from data set.';
     }
 }

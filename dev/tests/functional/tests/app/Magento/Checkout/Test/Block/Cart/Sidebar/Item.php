@@ -9,20 +9,20 @@ namespace Magento\Checkout\Test\Block\Cart\Sidebar;
 use Magento\Checkout\Test\Block\Cart\Sidebar;
 
 /**
- * Class MiniCartItem
- * Product item block on mini Cart
+ * Class MiniCartItem.
+ * Product item block on mini Cart.
  */
 class Item extends Sidebar
 {
     /**
-     * Selector for "Remove item" button
+     * Selector for "Remove item" button.
      *
      * @var string
      */
     protected $removeItem = '.action.delete';
 
     /**
-     * Selector for "Edit item" button
+     * Selector for "Edit item" button.
      *
      * @var string
      */
@@ -50,7 +50,7 @@ class Item extends Sidebar
     private $updateButton = 'button.update-cart-item';
 
     /**
-     * Remove product item from mini cart
+     * Remove product item from mini cart.
      *
      * @return void
      */
@@ -65,7 +65,7 @@ class Item extends Sidebar
     }
 
     /**
-     * Click "Edit item" button
+     * Click "Edit item" button.
      *
      * @return void
      */
@@ -86,5 +86,30 @@ class Item extends Sidebar
             $this->_rootElement->find($this->qty)->setValue($checkoutData['qty']);
             $this->_rootElement->find($this->updateButton)->click();
         }
+    }
+
+    /**
+     * Get product quantity.
+     *
+     * @return string
+     */
+    public function getQty()
+    {
+        return $this->_rootElement->find($this->qty)->getValue();
+    }
+
+
+    /**
+     * Get grouped product quantity.
+     *
+     * @return array
+     */
+    public function getGroupedQty()
+    {
+        $result = [];
+        foreach ($this->config['associated_cart_items'] as $productSku => $cartItem) {
+            $result[$productSku] = $cartItem->getQty();
+        }
+        return $result;
     }
 }

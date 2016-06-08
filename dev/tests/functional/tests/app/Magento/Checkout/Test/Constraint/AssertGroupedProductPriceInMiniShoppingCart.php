@@ -14,12 +14,12 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert that product quantity in  mini shopping cart is equal to expected quantity from data set.
+ * Assert that grouped product price in mini shopping cart equals to expected price from data set.
  */
-class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
+class AssertGroupedProductPriceInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that product quantity in mini shopping cart is equal to expected quantity from data set.
+     * Assert that grouped product price in  mini shopping cart is equal to expected price from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -38,16 +38,16 @@ class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
         foreach ($items as $key => $item) {
             /** @var CatalogProductSimple $product */
             $product = $products[$key];
-            $productName = $product->getName();
-            /** @var FixtureInterface $item */
-            $checkoutItem = $item->getData();
+            $associatedProducts = $product->getAssociated()['products'];
+            foreach ($associatedProducts as $product) {
+                $associatedProductName = $product->getName();
+                $checkoutItem = $product->getData();
 
-            $productsData[$productName] = [
-                'qty' => $checkoutItem['qty'],
-            ];
-            $miniCartData[$productName] = [
-                'qty' => $cmsIndex->getCartSidebarBlock()->getProductQty($productName),
-            ];
+                $productsData[$associatedProductName] = ['price' => $checkoutItem['price']];
+                $miniCartData[$associatedProductName] = [
+                    'price' => $cmsIndex->getCartSidebarBlock()->getProductPrice($associatedProductName)
+                ];
+            }
         }
 
         $error = $this->verifyData($productsData, $miniCartData, true);
@@ -61,6 +61,6 @@ class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Quantity in mini shopping cart equals to expected quantity from data set.';
+        return 'Price in mini shopping cart equals to expected price from data set.';
     }
 }
