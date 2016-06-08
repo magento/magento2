@@ -61,7 +61,7 @@ class CheckoutWithPaypalFromMinicartStep implements TestStepInterface
     {
         $product = reset($this->products);
         $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $this->catalogProductView->getViewBlock()->braintreePaypalCheckout();
-        $this->catalogProductView->getBraintreePaypalBlock()->process();
+        $parentWindow = $this->catalogProductView->getViewBlock()->braintreePaypalCheckout();
+        $this->catalogProductView->getBraintreePaypalBlock()->process($parentWindow);
     }
 }

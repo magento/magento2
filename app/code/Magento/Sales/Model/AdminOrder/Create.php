@@ -547,6 +547,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->collectRates();
         }
 
+        $quote->getShippingAddress()->unsCachedItemsAll();
+        $quote->setTotalsCollectedFlag(false);
+
         $this->quoteRepository->save($quote);
 
         return $this;
