@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 
 /**
@@ -55,7 +56,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * @var \Magento\Customer\Model\Session
      */
     protected $customerSession;
-    
+
     /**
      * @var ProductRepositoryInterface
      */
@@ -371,7 +372,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
         $identities = $this->getProduct()->getIdentities();
         $category = $this->_coreRegistry->registry('current_category');
         if ($category) {
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
+            $identities[] = Category::CACHE_TAG . '_' . $category->getId();
         }
         return $identities;
     }
