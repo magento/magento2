@@ -18,15 +18,31 @@ class CartPlugin
     private $checkoutSession;
 
     /**
+     * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping
+     */
+    private $typeMultishipping;
+
+    /**
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
+     */
+    private $addressRepository;
+
+    /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $typeMultishipping
+     * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      */
     public function __construct(
         \Magento\Quote\Api\CartRepositoryInterface $cartRepository,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Multishipping\Model\Checkout\Type\Multishipping $typeMultishipping,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->checkoutSession = $checkoutSession;
+        $this->typeMultishipping = $typeMultishipping;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -42,15 +58,17 @@ class CartPlugin
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->checkoutSession->getQuote();
 
-        // Clear shipping addresses and item assignments after Multishipping flow
+        // Clear shipping addresses and item assignments after MultiShipping flow
         if ($quote->isMultipleShippingAddresses()) {
             foreach ($quote->getAllShippingAddresses() as $address) {
                 $quote->removeAddress($address->getId());
             }
-            $quote->getShippingAddress();
-            $quote->setIsMultiShipping(false);
-            $quote->collectTotals();
 
+            $shippingAddress = $quote->getShippingAddress();
+            $defaultCustomerAddress = $this->addressRepository->getById(
+                $this->typeMultishipping->getCustomerDefaultShippingAddress()
+            );
+            $shippingAddress->importCustomerAddressData($defaultCustomerAddress);
             $this->cartRepository->save($quote);
         }
     }
