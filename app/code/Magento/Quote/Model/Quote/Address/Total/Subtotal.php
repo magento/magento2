@@ -43,6 +43,7 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $baseVirtualAmount = $virtualAmount = 0;
 
         $address = $shippingAssignment->getShipping()->getAddress();
+        $address->setTotalQty(0);
         /**
          * Process address items
          */
