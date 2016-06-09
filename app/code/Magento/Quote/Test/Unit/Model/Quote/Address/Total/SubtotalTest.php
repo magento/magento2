@@ -139,14 +139,13 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
         $total = $this->getMock(
             '\Magento\Quote\Model\Quote\Address\Total',
-            ['setBaseVirtualAmount', 'setVirtualAmount', 'setTotalQty'],
+            ['setBaseVirtualAmount', 'setVirtualAmount'],
             [],
             '',
             false
         );
         $total->expects($this->once())->method('setBaseVirtualAmount')->willReturnSelf();
         $total->expects($this->once())->method('setVirtualAmount')->willReturnSelf();
-        $total->expects($this->once())->method('setTotalQty')->with(0)->willReturnSelf();
 
         $this->subtotalModel->collect($quote, $shippingAssignmentMock, $total);
 
