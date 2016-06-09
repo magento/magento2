@@ -168,6 +168,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\Framework\App\CacheInterface
+     */
+    protected $_cache;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Context $context
@@ -1013,11 +1018,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         }
 
         $cacheLifetime = $this->getData('cache_lifetime');
-        if (is_bool($cacheLifetime)) {
+        if (false === $cacheLifetime || null === $cacheLifetime) {
             return $cacheLifetime;
-        } else {
-            return (int)$cacheLifetime;
         }
+
+        return (int)$cacheLifetime;
     }
 
     /**
