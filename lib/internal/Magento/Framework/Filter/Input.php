@@ -343,13 +343,13 @@ class Input implements \Zend_Filter_Interface
         $filter = $filterData['zend'];
         if (is_string($filter)) {
             $filterClassName = 'Zend_Filter_' . ucfirst($filter);
+            if (!is_a($filterClassName, \Zend_Filter_Interface::class, true)) {
+                throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
+            }
             $filterClassOptions = isset($filterData['args']) ? $filterData['args'] : [];
             $filter = new $filterClassName(...array_values($filterClassOptions));
         }
-        
-        if (!$filter instanceof \Zend_Filter_Interface) {
-            throw new \Exception('Filter is not instance of \Zend_Filter_Interface');
-        }
+
         return $filter;
     }
 }
