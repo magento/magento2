@@ -139,17 +139,4 @@ class RequestValidatorTest extends \PHPUnit_Framework_TestCase
         $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['5', '6']));
         $this->requestValidator->validate();
     }
-
-    /**
-     * @expectedException \Magento\Framework\Webapi\Exception
-     * @expectedExceptionMessage Cannot perform GET operation with store code 'all'
-     */
-    public function testGetMethodAllStoresInvalid()
-    {
-        $this->routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
-        $this->authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
-        $this->storeMock->expects($this->once())->method('getCode')->willReturn('admin');
-        $this->requestMock->expects($this->once())->method('getMethod')->willReturn('get');
-        $this->requestValidator->validate();
-    }
 }
