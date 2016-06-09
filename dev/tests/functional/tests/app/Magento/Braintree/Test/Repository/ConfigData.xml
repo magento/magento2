@@ -191,7 +191,7 @@
             </field>
         </dataset>
         <dataset name="braintree_use_vault">
-            <field name="payment/braintree/braintree_cc_vault_active" xsi:type="array">
+            <field name="payment/braintree_section/braintree/braintree_cc_vault_active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">Yes</item>
@@ -199,7 +199,7 @@
             </field>
         </dataset>
         <dataset name="braintree_use_vault_rollback">
-            <field name="payment/braintree/braintree_cc_vault_active" xsi:type="array">
+            <field name="payment/braintree_section/braintree/braintree_cc_vault_active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
                 <item name="label" xsi:type="string">No</item>
