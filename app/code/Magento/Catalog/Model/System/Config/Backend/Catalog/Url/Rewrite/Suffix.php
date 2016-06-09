@@ -113,6 +113,8 @@ class Suffix extends \Magento\Framework\App\Config\Value
 
     /**
      * Invalidate cache that store old category suffix
+     *
+     * @return void
      */
     protected function invalidateCategoryRelatedCache()
     {
