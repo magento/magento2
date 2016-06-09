@@ -30,6 +30,7 @@
     },
     "suggest": {
         "magento/module-cookie": "100.1.*",
+        "magento/module-sales": "100.1.*",
         "magento/module-catalog-sample-data": "Sample Data version:100.1.*"
     },
     "type": "magento2-module",
