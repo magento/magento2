@@ -12,7 +12,7 @@ define([
     return Abstract.extend({
         defaults: {
             listens: {
-                isConfigurable: 'handlePriceVisibility'
+                isConfigurable: 'handlePriceValue'
             },
             imports: {
                 isConfigurable: '!ns = ${ $.ns }, index = configurable-matrix:isEmpty'
@@ -44,7 +44,12 @@ define([
             return this;
         },
 
-        handlePriceVisibility: function (isConfigurable) {
+        /**
+         * Disable and clear price if product type changed to configurable
+         *
+         * @param {String} isConfigurable
+         */
+        handlePriceValue: function (isConfigurable) {
             if (isConfigurable) {
                 this.disable();
                 this.clear();
