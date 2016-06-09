@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © 2016 Ihor Vansach (ihor@magefan.com). All rights reserved.
+ * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+?>
+<p><?php /* @escapeNotVerified */ echo __('You have logged in and will go to customer account in 5 seconds.') ?></p>
+<form id="loginascustomer" method="post" action="<?php echo $block->getUrl('*/*/post') ?>">
+    <button id="loginascustomer-button" type="submit" class="action save primary" title=""><span> >> </span></button>
+</form>
+<script>
+require([
+	"jquery",
+	"domReady!"
+], function($){
+	setTimeout(function(){
+		$('#loginascustomer-button').click();
+	}, 5000);
+});
+</script>

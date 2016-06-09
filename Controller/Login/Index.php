@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Ihor Vansach (ihor@magefan.com). All rights reserved.
+ * Copyright © 2016 Ihor Vansach (ihor@magefan.com). All rights reserved.
  * See LICENSE.txt for license details (http://opensource.org/licenses/osl-3.0.php).
  *
  * Glory to Ukraine! Glory to the heroes!
@@ -35,7 +35,7 @@ class Index extends \Magento\Framework\App\Action\Action
             __('You are logged in as customer: %1', $login->getCustomer()->getName())
         );
 
-        $this->_redirect('customer/account');
+        $this->_redirect('*/*/proceed');
     }
 
     /**
