@@ -178,6 +178,10 @@ class Helper
         foreach ($useDefaults as $attributeCode => $useDefaultState) {
             if ($useDefaultState) {
                 $product->setData($attributeCode, null);
+                // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
+                if ($product->hasData('use_config_' . $attributeCode)) {
+                    $product->setData('use_config_' . $attributeCode, false);
+                }
             }
         }
 
@@ -215,7 +219,7 @@ class Helper
 
         return $product;
     }
-    
+
     /**
      * Initialize product before saving
      *
