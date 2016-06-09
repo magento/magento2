@@ -10,6 +10,9 @@
         "magento/module-variable": "100.1.*",
         "magento/framework": "100.1.*"
     },
+    "suggest": {
+        "magento/module-theme": "100.1.*"
+    },
     "type": "magento2-module",
     "version": "100.1.0-rc2",
     "license": [

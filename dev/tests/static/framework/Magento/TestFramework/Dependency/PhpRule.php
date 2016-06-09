@@ -8,7 +8,6 @@
 namespace Magento\TestFramework\Dependency;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\TestFramework\Dependency\RuleInterface;
 
 class PhpRule implements RuleInterface
 {
