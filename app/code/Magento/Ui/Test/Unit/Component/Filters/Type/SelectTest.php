@@ -97,14 +97,15 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     /**
      * Run test prepare method
      *
-     * @param string $name
+     * @param array $data
      * @param array $filterData
      * @param array|null $expectedCondition
      * @dataProvider getPrepareDataProvider
      * @return void
      */
-    public function testPrepare($name, $filterData, $expectedCondition)
+    public function testPrepare($data, $filterData, $expectedCondition)
     {
+        $name = $data['name'];
         /** @var UiComponentInterface $uiComponent */
         $uiComponent = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\UiComponentInterface',
@@ -124,13 +125,12 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ->method('addComponentDefinition')
             ->with(Select::NAME, ['extends' => Select::NAME]);
         $this->contextMock->expects($this->any())
-            ->method('getRequestParam')
-            ->with(AbstractFilter::FILTER_VAR)
+            ->method('getFiltersParams')
             ->willReturn($filterData);
         /** @var DataProviderInterface $dataProvider */
         $dataProvider = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
-            [],
+            ['addFilter'],
             '',
             false
         );
@@ -139,9 +139,24 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ->willReturn($dataProvider);
 
         if ($expectedCondition !== null) {
+            $filterMock = $this->getMock('Magento\Framework\Api\Filter');
+            $this->filterBuilderMock->expects($this->any())
+                ->method('setConditionType')
+                ->with($expectedCondition)
+                ->willReturnSelf();
+            $this->filterBuilderMock->expects($this->any())
+                ->method('setField')
+                ->with($name)
+                ->willReturnSelf();
+            $this->filterBuilderMock->expects($this->any())
+                ->method('setValue')
+                ->willReturnSelf();
+            $this->filterBuilderMock->expects($this->any())
+                ->method('create')
+                ->willReturn($filterMock);
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($expectedCondition, $name);
+                ->with($filterMock);
         }
 
         /** @var \Magento\Framework\Data\OptionSourceInterface $selectOptions */
@@ -164,7 +179,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             $this->filterModifierMock,
             $selectOptions,
             [],
-            ['name' => $name]
+            $data
         );
 
         $date->prepare();
@@ -177,14 +192,29 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'test_date',
-                ['test_date' => ''],
-                null,
+                ['name' => 'test_date', 'config' => []],
+                [],
+                null
             ],
             [
-                'test_date',
+                ['name' => 'test_date', 'config' => []],
+                ['test_date' => ''],
+                'eq'
+            ],
+            [
+                ['name' => 'test_date', 'config' => ['dataType' => 'text']],
                 ['test_date' => 'some_value'],
-                ['eq' => 'some_value'],
+                'eq'
+            ],
+            [
+                ['name' => 'test_date', 'config' => ['dataType' => 'select']],
+                ['test_date' => ['some_value1', 'some_value2']],
+                'in'
+            ],
+            [
+                ['name' => 'test_date', 'config' => ['dataType' => 'multiselect']],
+                ['test_date' => 'some_value'],
+                'finset'
             ],
         ];
     }
