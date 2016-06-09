@@ -738,6 +738,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 9,
                         'visible' => true,
                         'group' => 'General',
+                        'is_used_in_grid' => false,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'options_container' => [
                         'type' => 'varchar',
