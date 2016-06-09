@@ -110,7 +110,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         $actualIds = [];
         foreach ($queryResponse as $document) {
-            /** @var \Magento\Framework\Search\Document $document */
+            /** @var \Magento\Framework\Api\Search\Document $document */
             $actualIds[] = $document->getId();
         }
         sort($actualIds);
@@ -405,11 +405,6 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
     {
-        array_walk($rangeFilter, function (&$item) {
-            if (!empty($item)) {
-                $item = gmdate('c', strtotime($item)) . 'Z';
-            }
-        });
         $this->requestBuilder->bind('date.from', $rangeFilter['from']);
         $this->requestBuilder->bind('date.to', $rangeFilter['to']);
         $this->requestBuilder->setRequestName('advanced_search_date_field');
@@ -421,10 +416,10 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     public function dateDataProvider()
     {
         return [
-            [['from' => '2000-01-01', 'to' => '2000-01-01'], 1], //Y-m-d
-            [['from' => '2000-01-01', 'to' => ''], 1],
-            [['from' => '1999-12-31', 'to' => '2000-01-01'], 1],
-            [['from' => '2000-02-01', 'to' => ''], 0],
+            [['from' => '2000-01-01T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1], //Y-m-d
+            [['from' => '2000-01-01T00:00:00Z', 'to' => ''], 1],
+            [['from' => '1999-12-31T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1],
+            [['from' => '2000-02-01T00:00:00Z', 'to' => ''], 0],
         ];
     }
 }

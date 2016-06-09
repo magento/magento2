@@ -133,4 +133,12 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Backend\Model\AdminPathConfig" />
+    <type name="Magento\Framework\View\Page\Config">
+        <arguments>
+            <argument name="isIncludesAvailable" xsi:type="boolean">false</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Menu\Builder">
+        <plugin name="SetupMenuBuilder" type="Magento\Backend\Model\Setup\MenuBuilder" />
+    </type>
 </config>

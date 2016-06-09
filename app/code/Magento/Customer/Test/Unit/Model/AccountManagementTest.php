@@ -1596,4 +1596,100 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->accountManagement->createAccountWithPasswordHash($customerMock, $hash);
     }
+
+    public function testCreateAccountWithPasswordHashWithCustomerAddresses()
+    {
+        $websiteId = 1;
+        $addressId = 2;
+        $customerId = null;
+        $storeId = 1;
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+
+        //Handle store
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        //Handle address - existing and non-existing. Non-Existing should return null when call getId method
+        $existingAddress = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nonExistingAddress = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        //Ensure that existing address is not in use
+        $this->addressRepository
+            ->expects($this->atLeastOnce())
+            ->method("save")
+            ->withConsecutive(
+                array($this->logicalNot($this->identicalTo($existingAddress))),
+                array($this->identicalTo($nonExistingAddress))
+            );
+
+        $existingAddress
+            ->expects($this->any())
+            ->method("getId")
+            ->willReturn($addressId);
+        //Expects that id for existing address should be unset
+        $existingAddress
+            ->expects($this->once())
+            ->method("setId")
+            ->with(null);
+        //Handle Customer calls
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer
+            ->expects($this->atLeastOnce())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $customer
+            ->expects($this->atLeastOnce())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+        $customer
+            ->expects($this->any())
+            ->method("getId")
+            ->willReturn($customerId);
+        //Return Customer from customer repositoryå
+        $this->customerRepository
+            ->expects($this->atLeastOnce())
+            ->method('save')
+            ->willReturn($customer);
+        $this->customerRepository
+            ->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+        $customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+            ->setMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerSecure->expects($this->once())
+            ->method('setRpToken')
+            ->with($hash);
+
+        $customerSecure->expects($this->any())
+            ->method('getPasswordHash')
+            ->willReturn($hash);
+
+        $this->customerRegistry->expects($this->any())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($customerSecure);
+
+        $this->random->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($hash);
+
+        $customer
+            ->expects($this->atLeastOnce())
+            ->method('getAddresses')
+            ->willReturn([$existingAddress, $nonExistingAddress]);
+
+        $this->storeManager
+            ->expects($this->atLeastOnce())
+            ->method('getStore')
+            ->willReturn($store);
+
+        $this->assertSame($customer, $this->accountManagement->createAccountWithPasswordHash($customer, $hash));
+    }
 }
