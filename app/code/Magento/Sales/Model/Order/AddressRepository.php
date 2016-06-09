@@ -91,7 +91,6 @@ class AddressRepository implements \Magento\Sales\Api\OrderAddressRepositoryInte
                 $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
-
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
 
