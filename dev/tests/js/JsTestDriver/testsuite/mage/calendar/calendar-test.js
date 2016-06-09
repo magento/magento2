@@ -58,6 +58,18 @@ CalendarTest.prototype.testWithServerTimezoneOffset = function() {
     assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
     calendar.calendar('destroy');
 };
+CalendarTest.prototype.testWithServerTimezoneShift = function() {
+    /*:DOC += <input type="text" id="calendar" /> */
+    var serverTimezoneOffset = 43200,
+        calendar = $('#calendar').calendar({serverTimezoneOffset: serverTimezoneOffset}),
+        currentDate = new Date();
+
+    setTimeout(function () {
+        currentDate.setTime(currentDate.getTime() + (serverTimezoneOffset + currentDate.getTimezoneOffset() * 60) * 1000);
+        assertEquals(true, currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
+        calendar.calendar('destroy');
+    }, 61000);
+};
 CalendarTest.prototype.testWithoutServerTimezoneOffset = function() {
     /*:DOC += <input type="text" id="calendar" /> */
     var calendar = $('#calendar').calendar(),

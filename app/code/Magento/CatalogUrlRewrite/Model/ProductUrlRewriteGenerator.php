@@ -12,6 +12,7 @@ use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Class ProductUrlRewriteGenerator
@@ -98,6 +99,10 @@ class ProductUrlRewriteGenerator
      */
     public function generate(Product $product)
     {
+        if ($product->getVisibility() == Visibility::VISIBILITY_NOT_VISIBLE) {
+            return [];
+        }
+
         $this->product = $product;
         $storeId = $this->product->getStoreId();
 
