@@ -9,25 +9,23 @@ addons:
     - postfix
 language: php
 php:
-  - 5.5
   - 5.6
   - 7.0
 env:
   global:
     - COMPOSER_BIN_DIR=~/bin
-    - INTEGRATION_SETS=2
+    - INTEGRATION_SETS=3
   matrix:
     - TEST_SUITE=unit
     - TEST_SUITE=integration INTEGRATION_INDEX=1
     - TEST_SUITE=integration INTEGRATION_INDEX=2
+    - TEST_SUITE=integration INTEGRATION_INDEX=3
     - TEST_SUITE=static
 cache:
   apt: true
   directories: $HOME/.composer/cache
 matrix:
   exclude:
-    - php: 5.6
-      env: TEST_SUITE=static
     - php: 7.0
       env: TEST_SUITE=static
 before_install: ./dev/travis/before_install.sh
