@@ -32,16 +32,6 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
     protected $entityMetadata;
 
     /**
-     * @var \Magento\Framework\Search\Document|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $document;
-
-    /**
-     * @var \Magento\Framework\Search\DocumentField|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $documentField;
-
-    /**
      * Instance name
      *
      * @var string
@@ -61,15 +51,7 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 
-        $this->document = $this->getMockBuilder('Magento\Framework\Search\Document')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->documentField = $this->getMockBuilder('\Magento\Framework\Search\DocumentField')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->instanceName = '\Magento\Framework\Search\Document';
+        $this->instanceName = '\Magento\Framework\Api\Search\Document';
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -86,22 +68,6 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        /**
-         * @param string $class
-         *
-         * @return \Magento\Framework\Search\Document|\Magento\Framework\Search\DocumentField|null|
-         *     \PHPUnit_Framework_MockObject_MockObject
-         */
-        $closure = function ($class) {
-            switch ($class) {
-                case 'Magento\Framework\Search\DocumentField':
-                    return $this->documentField;
-                case 'Magento\Framework\Search\Document':
-                    return $this->document;
-            }
-            return null;
-        };
-
         $documents = [
             '_id' => 2,
             '_score' => 1.00,
@@ -113,11 +79,9 @@ class DocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId')
             ->willReturn('_id');
 
-        $this->objectManager->expects($this->exactly(2))
-            ->method('create')
-            ->will($this->returnCallback($closure));
-
         $result = $this->model->create($documents);
         $this->assertInstanceOf($this->instanceName, $result);
+        $this->assertEquals($documents['_id'], $result->getId());
+        $this->assertEquals($documents['_score'], $result->getCustomAttribute('score')->getValue());
     }
 }
