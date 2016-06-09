@@ -24,37 +24,37 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
     /**
      * @var AbstractBlock
      */
-    protected $block;
+    private $block;
 
     /**
      * @var EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $eventManagerMock;
+    private $eventManagerMock;
 
     /**
      * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $scopeConfigMock;
+    private $scopeConfigMock;
 
     /**
      * @var CacheStateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheStateMock;
+    private $cacheStateMock;
 
     /**
      * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cacheMock;
+    private $cacheMock;
 
     /**
      * @var SidResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sidResolverMock;
+    private $sidResolverMock;
 
     /**
      * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sessionMock;
+    private $sessionMock;
 
     /**
      * @return void
