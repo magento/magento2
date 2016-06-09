@@ -78,7 +78,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock = $this->getMockBuilder('Magento\Translation\Model\ResourceModel\StringUtils')
             ->disableOriginalConstructor()
             ->setMethods([])
- 	 	    ->getMock();
+            ->getMock();
         $this->resourceFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->resourceMock);
