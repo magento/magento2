@@ -45,8 +45,8 @@ class Date
     }
 
     /**
-     * Retrieve date value in elasticsearch format (ISO 8601) with Z
-     * Example: 1995-12-31T23:59:59Z
+     * Retrieve date value in elasticsearch format (ISO 8601)
+     * Example: 1995-12-31T23:59:59
      *
      * @param int $storeId
      * @param string|null $date
@@ -59,6 +59,6 @@ class Date
             return null;
         }
         $dateObj = new \DateTime($date, new \DateTimeZone('UTC'));
-        return $dateObj->format('c') . 'Z';
+        return $dateObj->format('c');
     }
 }
