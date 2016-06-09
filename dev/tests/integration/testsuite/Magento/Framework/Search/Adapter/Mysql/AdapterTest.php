@@ -110,7 +110,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         $actualIds = [];
         foreach ($queryResponse as $document) {
-            /** @var \Magento\Framework\Search\Document $document */
+            /** @var \Magento\Framework\Api\Search\Document $document */
             $actualIds[] = $document->getId();
         }
         sort($actualIds);

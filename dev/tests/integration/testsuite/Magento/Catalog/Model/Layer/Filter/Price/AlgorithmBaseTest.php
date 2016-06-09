@@ -67,18 +67,12 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
             ['entityMetadata' => $entityMetadata]
         );
 
-        /** @var \Magento\Framework\Search\Document[] $documents */
+        /** @var \Magento\Framework\Api\Search\Document[] $documents */
         $documents = [];
         foreach ($entityIds as $entityId) {
             $rawDocument = [
-                [
-                    'name' => $idKey,
-                    'value' => $entityId,
-                ],
-                [
-                    'name' => 'score',
-                    'value' => 1,
-                ],
+                $idKey => $entityId,
+                'score' => 1,
             ];
             $documents[] = $documentFactory->create($rawDocument);
         }
