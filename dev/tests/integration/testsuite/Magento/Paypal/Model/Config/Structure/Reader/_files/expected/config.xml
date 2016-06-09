@@ -104,6 +104,7 @@
                         <label>Vault enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/payflowpro_cc_vault/active</config_path>
+                        <attribute type="shared">1</attribute>
                         <requires>
                             <group id="paypal_payflow_api_settings"/>
                         </requires>
