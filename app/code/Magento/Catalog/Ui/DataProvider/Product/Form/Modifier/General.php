@@ -9,6 +9,8 @@ use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for main panel of product page
@@ -24,17 +26,33 @@ class General extends AbstractModifier
      * @var ArrayManager
      */
     protected $arrayManager;
+    
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var CurrencyInterface
+     */
+    protected $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
+     * @param StoreManagerInterface $storeManager
+     * @param CurrencyInterface $localeCurrency
      */
     public function __construct(
         LocatorInterface $locator,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        StoreManagerInterface $storeManager,
+        CurrencyInterface $localeCurrency
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
+        $this->storeManager = $storeManager;
+        $this->localeCurrency = $localeCurrency;
     }
 
     /**
@@ -70,7 +88,7 @@ class General extends AbstractModifier
             $data = $this->arrayManager->replace(
                 $path,
                 $data,
-                $this->formatWeight($this->arrayManager->get($path, $data))
+                $this->formatNumber($this->arrayManager->get($path, $data))
             );
         }
 
@@ -93,7 +111,7 @@ class General extends AbstractModifier
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
                     $this->formatPrice($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
                 $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                    $this->formatNumber((int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY]);
             }
         }
 
@@ -349,5 +367,46 @@ class General extends AbstractModifier
                 'valueUpdate' => 'keyup'
             ]
         );
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
+    }
+
+    /**
+     * Format number according to the locale of the currency and precision of input
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatNumber($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $value = (float)$value;
+        $precision = strlen(substr(strrchr($value, "."), 1));
+        $store = $this->storeManager->getStore();
+        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
+                                                'precision' => $precision]);
+
+        return $value;
     }
 }

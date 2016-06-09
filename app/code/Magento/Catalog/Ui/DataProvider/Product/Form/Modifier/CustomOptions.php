@@ -22,6 +22,7 @@ use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\ActionDelete;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\DataType\Number;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Data provider for "Customizable Options" panel
@@ -113,6 +114,11 @@ class CustomOptions extends AbstractModifier
     protected $urlBuilder;
 
     /**
+     * @var CurrencyInterface
+     */
+    protected $localeCurrency;
+
+    /**
      * @var ArrayManager
      */
     protected $arrayManager;
@@ -128,6 +134,7 @@ class CustomOptions extends AbstractModifier
      * @param ConfigInterface $productOptionsConfig
      * @param ProductOptionsPrice $productOptionsPrice
      * @param UrlInterface $urlBuilder
+     * @param CurrencyInterface $localeCurrency
      * @param ArrayManager $arrayManager
      */
     public function __construct(
@@ -136,6 +143,7 @@ class CustomOptions extends AbstractModifier
         ConfigInterface $productOptionsConfig,
         ProductOptionsPrice $productOptionsPrice,
         UrlInterface $urlBuilder,
+        CurrencyInterface $localeCurrency,
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
@@ -143,6 +151,7 @@ class CustomOptions extends AbstractModifier
         $this->productOptionsConfig = $productOptionsConfig;
         $this->productOptionsPrice = $productOptionsPrice;
         $this->urlBuilder = $urlBuilder;
+        $this->localeCurrency = $localeCurrency;
         $this->arrayManager = $arrayManager;
     }
 
@@ -1068,5 +1077,24 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
     }
 }
