@@ -5,10 +5,13 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Backend\Console\Command\AbstractCacheManageCommand;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -94,5 +97,41 @@ class UpgradeCommand extends AbstractSetupCommand
         if (!$keepGenerated) {
             $output->writeln('<info>Please re-run Magento compile command</info>');
         }
+
+        return $this->enableCaches($objectManager, $output);
+    }
+
+    /**
+     * Enables cache if cachestates exists
+     * TODO: to be removed in scope of MAGETWO-53476
+     *
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @return int
+     */
+    private function enableCaches($objectManager, $output)
+    {
+        $writeFactory = $objectManager->get('Magento\Framework\Filesystem\Directory\WriteFactory');
+        $write = $writeFactory->create(BP);
+        /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
+        $dirList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+
+        $pathToCacheStatus = $write->getRelativePath($dirList->getPath(DirectoryList::VAR_DIR) . '/.cachestates.json');
+
+        if ($write->isExist($pathToCacheStatus)) {
+            $params = array_keys(json_decode($write->readFile($pathToCacheStatus), true));
+            $command = $this->getApplication()->find('cache:enable');
+
+            $arguments = ['command' => 'cache:enable', AbstractCacheManageCommand::INPUT_KEY_TYPES    => $params ];
+            $returnCode = $command->run(new ArrayInput($arguments), $output);
+
+            $write->delete($pathToCacheStatus);
+            if (isset($returnCode) && $returnCode > 0) {
+                $message = '<error> Error occured during upgrade. Error code: ' . $returnCode . '</error>';
+                $output->writeln($message);
+                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            }
+        }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }
