@@ -25,9 +25,6 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (version_compare('5.5.23', phpversion(), '=')) {
-            $this->markTestSkipped('This test fails with Segmentation fault on PHP 5.5.23');
-        }
         $helper = new ObjectManager($this);
 
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
