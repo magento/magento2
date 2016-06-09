@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace testsuite\Magento\GroupedProduct\Pricing\Price;
+namespace Magento\GroupedProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
-use Magento\GroupedProduct\Pricing\Price\FinalPrice;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class FinalPriceTest extends \PHPUnit_Framework_TestCase
@@ -40,14 +39,12 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
         $tierPrice->setCustomerGroupId(\Magento\Customer\Model\GroupManagement::CUST_GROUP_ALL);
         $tierPrice->setValue(5);
 
-
         /** @var $simpleProduct \Magento\Catalog\Api\Data\ProductInterface */
         $simpleProduct = $productRepository->get('simple');
         $simpleProduct->setTierPrices([
             $tierPrice
         ]);
         $productRepository->save($simpleProduct);
-
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('grouped-product');
@@ -63,13 +60,10 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
         $productRepository = Bootstrap::getObjectManager()
             ->get('\Magento\Catalog\Api\ProductRepositoryInterface');
 
-
-
         /** @var $simpleProduct \Magento\Catalog\Api\Data\ProductInterface */
         $simpleProduct = $productRepository->get('simple');
         $simpleProduct->setCustomAttribute('special_price', 6);
         $productRepository->save($simpleProduct);
-
 
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $productRepository->get('grouped-product');
