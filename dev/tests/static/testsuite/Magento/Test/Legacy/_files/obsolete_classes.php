@@ -4223,4 +4223,6 @@ return [
     ['Magento\Braintree\Test\Unit\Observer\ProcessBraintreePaymentTest'],
     ['Magento\Catalog\Model\Webapi\Product\Option\Type\File\Validator'],
     ['Magento\Catalog\Test\Unit\Webapi\Product\Option\Type\File\ValidatorTest'],
+    ['Magento\Framework\Search\Document', 'Magento\Framework\Api\Search\Document'],
+    ['Magento\Framework\Search\DocumentField'],
 ];
