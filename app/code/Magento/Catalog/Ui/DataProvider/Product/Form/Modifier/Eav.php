@@ -30,6 +30,7 @@ use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Class Eav
@@ -162,6 +163,11 @@ class Eav extends AbstractModifier
     private $prevSetAttributes;
 
     /**
+     * @var CurrencyInterface
+     */
+    protected $localeCurrency;
+
+    /**
      * @param LocatorInterface $locator
      * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
@@ -179,6 +185,7 @@ class Eav extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param ScopeOverriddenValue $scopeOverriddenValue
      * @param DataPersistorInterface $dataPersistor
+     * @param CurrencyInterface $localeCurrency
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -201,6 +208,7 @@ class Eav extends AbstractModifier
         ArrayManager $arrayManager,
         ScopeOverriddenValue $scopeOverriddenValue,
         DataPersistorInterface $dataPersistor,
+        CurrencyInterface $localeCurrency,
         $attributesToDisable = [],
         $attributesToEliminate = []
     ) {
@@ -221,6 +229,7 @@ class Eav extends AbstractModifier
         $this->arrayManager = $arrayManager;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
         $this->dataPersistor = $dataPersistor;
+        $this->localeCurrency = $localeCurrency;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
     }
@@ -866,5 +875,24 @@ class Eav extends AbstractModifier
         }
 
         return $attributeGroupCode;
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
     }
 }
