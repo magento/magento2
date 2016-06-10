@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Code;
 
-use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
@@ -45,54 +44,70 @@ class GeneratedFiles
     }
 
     /**
-     * Clean generated code and DI configuration
+     * Clean var/generation, var/di and var/cache
      *
      * @return void
      */
-    public function regenerate()
+    public function cleanGeneratedFiles()
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
+
             //TODO: to be removed in scope of MAGETWO-53476
-            //clean cache
             $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
             $configPool = new ConfigFilePool();
             $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
             if ($this->write->isExist($this->write->getRelativePath($envPath))) {
-                $this->saveCacheStatus($envPath);
+                $this->saveCacheConfiguration($envPath);
+                $this->disableAllCacheTypes($envPath);
             }
             //TODO: Till here
+
             $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
             $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
             $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
 
+            // Clean var/generation dir
             if ($this->write->isDirectory($generationPath)) {
                 $this->write->delete($generationPath);
             }
+
+            // Clean var/di
             if ($this->write->isDirectory($diPath)) {
                 $this->write->delete($diPath);
             }
+
+            // Clean var/cache
             if ($this->write->isDirectory($cachePath)) {
                 $this->write->delete($cachePath);
             }
-            //add to queue
-
             $this->write->delete(self::REGENERATE_FLAG);
+            $this->reEnableCacheTypes($envPath);
         }
     }
 
     /**
-     * Read Cache types from env.php and write to a json file.
+     * Create flag for cleaning up var/generation, var/di and var/cache directories for subsequent
+     * regeneration of this content
+     *
+     * @return void
+     */
+    public function requestRegeneration()
+    {
+        $this->write->touch(self::REGENERATE_FLAG);
+    }
+
+    /**
+     * Read Cache configuration from env.php and write to a json file.
      *
      * @param string $envPath
      * @return void
      */
-    private function saveCacheStatus($envPath)
+    private function saveCacheConfiguration($envPath)
     {
-        $cacheData = include $envPath;
+        $envData = include $envPath;
 
-        if (isset($cacheData['cache_types'])) {
-            $enabledCacheTypes = $cacheData['cache_types'];
-            $enabledCacheTypes = array_filter($enabledCacheTypes, function ($value) {
+        if (isset($envData['cache_types'])) {
+            $enabledCacheTypes = array_filter($envData['cache_types'], function ($value) {
                 return $value;
             });
             if (!empty($enabledCacheTypes)) {
@@ -101,32 +116,69 @@ class GeneratedFiles
                     $this->write->getRelativePath($varDir) . '/.cachestates.json',
                     json_encode($enabledCacheTypes)
                 );
-                $cacheTypes = array_keys($cacheData['cache_types']);
-
-                foreach ($cacheTypes as $cacheType) {
-                    $cacheData['cache_types'][$cacheType] = 0;
-                }
-
-                $formatter = new PhpFormatter();
-                $contents = $formatter->format($cacheData);
-
-                $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
-                if (function_exists('opcache_invalidate')) {
-                    opcache_invalidate(
-                        $this->write->getAbsolutePath($envPath)
-                    );
-                }
             }
         }
     }
 
     /**
-     * Create flag for regeneration of code and di
+     * Disable all cache types by updating env.php.
+     *
+     * @param string $envPath
+     * @return void
+     */
+    private function disableAllCacheTypes($envPath)
+    {
+        $envData = include $envPath;
+
+        if (isset($envData['cache_types'])) {
+            $cacheTypes = array_keys($envData['cache_types']);
+
+            foreach ($cacheTypes as $cacheType) {
+                $envData['cache_types'][$cacheType] = 0;
+            }
+
+            $formatter = new PhpFormatter();
+            $contents = $formatter->format($envData);
+
+            $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
+            if (function_exists('opcache_invalidate')) {
+                opcache_invalidate(
+                    $this->write->getAbsolutePath($envPath)
+                );
+            }
+        }
+    }
+
+    /**
+     * Enables appropriate cache types based on var/.cachestates file settings
+     * TODO: to be removed in scope of MAGETWO-53476
      *
      * @return void
      */
-    public function requestRegeneration()
+    private function reEnableCacheTypes($envPath)
     {
-        $this->write->touch(self::REGENERATE_FLAG);
+        $pathToCacheStatus = $this->write->getRelativePath(
+            $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/.cachestates.json'
+        );
+
+        if ($this->write->isExist($pathToCacheStatus)) {
+            $enabledCacheTypes = array_keys(json_decode($this->write->readFile($pathToCacheStatus), true));
+
+            $envData = include $envPath;
+            foreach ($enabledCacheTypes as $cacheType) {
+                $envData['cache_types'][$cacheType] = 1;
+            }
+
+            $formatter = new PhpFormatter();
+            $contents = $formatter->format($envData);
+
+            $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
+            if (function_exists('opcache_invalidate')) {
+                opcache_invalidate(
+                    $this->write->getAbsolutePath($envPath)
+                );
+            }
+            $this->write->delete($pathToCacheStatus);
+        }
     }
 }
