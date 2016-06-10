@@ -32,6 +32,8 @@ class Transparent extends Payflowpro implements TransparentInterface
 
     const CC_DETAILS = 'cc_details';
 
+    const CC_VAULT_CODE = 'payflowpro_cc_vault';
+
     /**
      * @var string
      */

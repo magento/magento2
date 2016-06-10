@@ -623,7 +623,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setPartner($this->getConfigData('partner'));
         $request->setPwd($this->getConfigData('pwd'));
         $request->setVerbosity($this->getConfigData('verbosity'));
-        $request->setData('BNCODE', $config->getBuildNotationCode());
+        $request->setData('BUTTONSOURCE', $config->getBuildNotationCode());
         $request->setTender(self::TENDER_CC);
 
         return $request;
