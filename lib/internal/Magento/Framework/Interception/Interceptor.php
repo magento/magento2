@@ -71,7 +71,7 @@ trait Interceptor
      */
     public function ___callParent($method, array $arguments)
     {
-        return call_user_func_array(['parent', $method], $arguments);
+        return parent::$method(...array_values($arguments));
     }
 
     /**
@@ -118,13 +118,13 @@ trait Interceptor
         if (isset($pluginInfo[DefinitionInterface::LISTENER_BEFORE])) {
             // Call 'before' listeners
             foreach ($pluginInfo[DefinitionInterface::LISTENER_BEFORE] as $code) {
-                $beforeResult = call_user_func_array(
-                    [$this->pluginList->getPlugin($this->subjectType, $code), 'before'. $capMethod],
-                    array_merge([$this], $arguments)
-                );
+                $pluginInstance = $this->pluginList->getPlugin($this->subjectType, $code);
+                $pluginMethod = 'before' . $capMethod;
+                $beforeResult = $pluginInstance->$pluginMethod($this, ...array_values($arguments));
                 if ($beforeResult) {
                     $arguments = $beforeResult;
                 }
+                unset($pluginInstance, $pluginMethod);
             }
         }
         if (isset($pluginInfo[DefinitionInterface::LISTENER_AROUND])) {
@@ -137,13 +137,13 @@ trait Interceptor
             $next = function () use ($chain, $type, $method, $subject, $code) {
                 return $chain->invokeNext($type, $method, $subject, func_get_args(), $code);
             };
-            $result = call_user_func_array(
-                [$this->pluginList->getPlugin($this->subjectType, $code), 'around' . $capMethod],
-                array_merge([$this, $next], $arguments)
-            );
+            $pluginInstance = $this->pluginList->getPlugin($this->subjectType, $code);
+            $pluginMethod = 'around' . $capMethod;
+            $result = $pluginInstance->$pluginMethod($this, $next, ...array_values($arguments));
+            unset($pluginInstance, $pluginMethod);
         } else {
             // Call original method
-            $result = call_user_func_array(['parent', $method], $arguments);
+            $result = parent::$method(...array_values($arguments));
         }
         if (isset($pluginInfo[DefinitionInterface::LISTENER_AFTER])) {
             // Call 'after' listeners
