@@ -13,7 +13,6 @@ use Magento\Framework\App\Utility\Files;
 
 class DiRule implements RuleInterface
 {
-
     /**
      * Gets alien dependencies information for current module by analyzing file's contents
      *
@@ -35,7 +34,7 @@ class DiRule implements RuleInterface
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = [];
-        foreach ($this->fetchPossibleDependencies($file) as $possibleDependency) {
+        foreach ($this->fetchPossibleDependencies($contents) as $possibleDependency) {
             if (preg_match($pattern, $possibleDependency, $matches)) {
                 $referenceModule = str_replace('_', '\\', $matches['module']);
                 if ($currentModule == $referenceModule) {
@@ -43,7 +42,7 @@ class DiRule implements RuleInterface
                 }
                 $dependenciesInfo[] = [
                     'module' => $referenceModule,
-                    'type' => RuleInterface::TYPE_HARD,
+                    'type' => RuleInterface::TYPE_SOFT,
                     'source' => $matches['class'],
                 ];
             }
@@ -52,14 +51,14 @@ class DiRule implements RuleInterface
     }
 
     /**
-     * @param string $file
+     * @param string $contents
      * @return array
      */
-    private function fetchPossibleDependencies($file)
+    private function fetchPossibleDependencies($contents)
     {
         $possibleDependencies = [];
         $doc = new DOMDocument();
-        $doc->loadXML(file_get_contents($file));
+        $doc->loadXML($contents);
 
         $typeNodes = $doc->getElementsByTagName('type');
         /** @var \DOMElement $type */
