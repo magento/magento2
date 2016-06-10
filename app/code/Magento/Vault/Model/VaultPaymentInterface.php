@@ -13,8 +13,6 @@ use Magento\Payment\Model\MethodInterface;
  */
 interface VaultPaymentInterface extends MethodInterface
 {
-    const CODE = 'vault';
-
     const VAULT_AUTHORIZE_COMMAND = 'vault_authorize';
 
     const VAULT_SALE_COMMAND = 'vault_sale';
@@ -24,17 +22,7 @@ interface VaultPaymentInterface extends MethodInterface
     const CAN_CAPTURE = 'can_capture_vault';
 
     /**
-     * @param string $paymentCode
-     * @param null $storeId
-     *
-     * @return bool
-     */
-    public function isActiveForPayment($paymentCode, $storeId = null);
-
-    /**
-     * @param null $storeId
-     *
      * @return string|null
      */
-    public function getProviderCode($storeId = null);
+    public function getProviderCode();
 }
