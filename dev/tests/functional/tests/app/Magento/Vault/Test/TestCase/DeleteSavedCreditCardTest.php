@@ -83,21 +83,20 @@ class DeleteSavedCreditCardTest extends Injectable
             $this->placeOrder();
         }
         // Delete credit cards from My Account and verify they are not available on checkout
-        foreach($payments as $key => $payment) {
-            if ($key >= 2) {
-                $deletedCard = $this->deleteCreditCardFromMyAccount(
-                    $customer,
-                    $payment['creditCard'],
-                    $payment['creditCardClass']
-                );
-                $this->addToCart($products);
-                $this->proceedToCheckout();
-                $this->fillShippingMethod($shipping);
-                $assertCreditCardNotPresentOnCheckout->processAssert(
-                    $checkoutOnepage,
-                    $deletedCard['deletedCreditCard']
-                );
-            }
+        $paymentsCount = count($payments);
+        for($i = 2; $i < $paymentsCount; $i++) {
+            $deletedCard = $this->deleteCreditCardFromMyAccount(
+                $customer,
+                $payments[$i]['creditCard'],
+                $payments[$i]['creditCardClass']
+            );
+            $this->addToCart($products);
+            $this->proceedToCheckout();
+            $this->fillShippingMethod($shipping);
+            $assertCreditCardNotPresentOnCheckout->processAssert(
+                $checkoutOnepage,
+                $deletedCard['deletedCreditCard']
+            );
         }
     }
 
