@@ -328,7 +328,8 @@ class MultiselectgrouplistElement extends MultiselectElement
     /**
      * {@inheritdoc}
      */
-    public function deselectAll() {
+    public function deselectAll()
+    {
         $options = $this->getSelectedOptions();
 
         /** @var SimpleElement $option */
