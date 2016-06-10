@@ -20,6 +20,8 @@ final class ConfigProvider implements ConfigProviderInterface
 
     const PAYPAL_CODE = 'braintree_paypal';
 
+    const CC_VAULT_CODE = 'braintree_cc_vault';
+
     /**
      * @var ResolverInterface
      */
@@ -88,6 +90,7 @@ final class ConfigProvider implements ConfigProviderInterface
                     'kountMerchantId' => $this->config->getKountMerchantId(),
                     'hasFraudProtection' => $this->config->hasFraudProtection(),
                     'merchantId' => $this->config->getMerchantId(),
+                    'ccVaultCode' => static::CC_VAULT_CODE
                 ],
                 Config::CODE_3DSECURE => [
                     'enabled' => $this->config->isVerify3DSecure(),
