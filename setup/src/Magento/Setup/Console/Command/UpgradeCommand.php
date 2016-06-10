@@ -112,6 +112,7 @@ class UpgradeCommand extends AbstractSetupCommand
     private function enableCaches($objectManager, $output)
     {
         $writeFactory = $objectManager->get('Magento\Framework\Filesystem\Directory\WriteFactory');
+        /** @var \Magento\Framework\Filesystem\Directory\Write $write */
         $write = $writeFactory->create(BP);
         /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
         $dirList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
