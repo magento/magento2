@@ -5,9 +5,14 @@
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\DataObject;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote\Payment;
+
 /**
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated
  */
 class Cc extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -235,6 +240,40 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
             return false;
         }
         return true;
+    }
+
+    /**
+     * Assign data to info model instance
+     *
+     * @param \Magento\Framework\DataObject|mixed $data
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function assignData(\Magento\Framework\DataObject $data)
+    {
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+        if (!is_object($additionalData)) {
+            $additionalData = new DataObject($additionalData ?: []);
+        }
+
+        /** @var DataObject $info */
+        $info = $this->getInfoInstance();
+        $info->addData(
+            [
+                'cc_type' => $additionalData->getCcType(),
+                'cc_owner' => $additionalData->getCcOwner(),
+                'cc_last_4' => substr($additionalData->getCcNumber(), -4),
+                'cc_number' => $additionalData->getCcNumber(),
+                'cc_cid' => $additionalData->getCcCid(),
+                'cc_exp_month' => $additionalData->getCcExpMonth(),
+                'cc_exp_year' => $additionalData->getCcExpYear(),
+                'cc_ss_issue' => $additionalData->getCcSsIssue(),
+                'cc_ss_start_month' => $additionalData->getCcSsStartMonth(),
+                'cc_ss_start_year' => $additionalData->getCcSsStartYear()
+            ]
+        );
+
+        return $this;
     }
 
     /**

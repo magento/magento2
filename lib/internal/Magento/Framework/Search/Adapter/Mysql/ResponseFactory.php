@@ -54,10 +54,9 @@ class ResponseFactory
      */
     public function create($rawResponse)
     {
-        $rawResponse = $this->prepareData($rawResponse);
         $documents = [];
         foreach ($rawResponse['documents'] as $rawDocument) {
-            /** @var \Magento\Framework\Search\Document[] $documents */
+            /** @var \Magento\Framework\Api\Search\Document[] $documents */
             $documents[] = $this->documentFactory->create($rawDocument);
         }
         /** @var \Magento\Framework\Search\Response\Aggregation $aggregations */
@@ -69,52 +68,5 @@ class ResponseFactory
                 'aggregations' => $aggregations
             ]
         );
-    }
-
-    /**
-     * Preparing
-     *
-     * @param array $rawResponse
-     * @return array
-     */
-    private function prepareData(array $rawResponse)
-    {
-        $preparedResponse = [];
-        $preparedResponse['documents'] = $this->prepareDocuments($rawResponse['documents']);
-        $preparedResponse['aggregations'] = $this->prepareAggregations($rawResponse['aggregations']);
-        return $preparedResponse;
-    }
-
-    /**
-     * Prepare Documents
-     *
-     * @param array $rawDocumentList
-     * @return array
-     */
-    private function prepareDocuments(array $rawDocumentList)
-    {
-        $documentList = [];
-        foreach ($rawDocumentList as $document) {
-            $documentFieldList = [];
-            foreach ($document as $name => $values) {
-                $documentFieldList[] = [
-                    'name' => $name,
-                    'value' => $values,
-                ];
-            }
-            $documentList[] = $documentFieldList;
-        }
-        return $documentList;
-    }
-
-    /**
-     * Prepare Aggregations
-     *
-     * @param array $rawAggregations
-     * @return array
-     */
-    private function prepareAggregations(array $rawAggregations)
-    {
-        return $rawAggregations; // Prepare aggregations here
     }
 }
