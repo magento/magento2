@@ -71,6 +71,7 @@ class DefaultItem extends AbstractItem
             'configure_url' => $this->getConfigureUrl(),
             'is_visible_in_site_visibility' => $this->item->getProduct()->isVisibleInSiteVisibility(),
             'product_name' => $this->item->getProduct()->getName(),
+            'product_sku' => $this->item->getProduct()->getSku(),
             'product_url' => $this->getProductUrl(),
             'product_has_url' => $this->hasProductUrl(),
             'product_price' => $this->checkoutHelper->formatPrice($this->item->getCalculationPrice()),
