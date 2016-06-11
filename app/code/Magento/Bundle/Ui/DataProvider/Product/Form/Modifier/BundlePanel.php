@@ -303,6 +303,7 @@ class BundlePanel extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => 'fieldset',
+                                        'collapsible' => true,
                                         'label' => '',
                                         'opened' => true,
                                     ],
