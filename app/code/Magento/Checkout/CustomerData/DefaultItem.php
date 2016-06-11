@@ -75,6 +75,7 @@ class DefaultItem extends AbstractItem
             'product_url' => $this->getProductUrl(),
             'product_has_url' => $this->hasProductUrl(),
             'product_price' => $this->checkoutHelper->formatPrice($this->item->getCalculationPrice()),
+            'product_price_value' => $this->item->getCalculationPrice(),
             'product_image' => [
                 'src' => $imageHelper->getUrl(),
                 'alt' => $imageHelper->getLabel(),
