@@ -85,6 +85,7 @@ class DefaultItemTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('product_url', $itemData);
         $this->assertArrayHasKey('product_has_url', $itemData);
         $this->assertArrayHasKey('product_price', $itemData);
+        $this->assertArrayHasKey('product_price_value', $itemData);
         $this->assertArrayHasKey('product_image', $itemData);
         $this->assertArrayHasKey('canApplyMsrp', $itemData);
     }
