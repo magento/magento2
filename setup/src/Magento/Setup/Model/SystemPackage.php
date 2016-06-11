@@ -204,7 +204,6 @@ class SystemPackage
      */
     private function formatPackages($packages)
     {
-
         $versions = [];
 
         foreach ($packages as $package) {
