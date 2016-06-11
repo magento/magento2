@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4b506e9d5ccb146e8bc9ccd3faeaf326",
-    "content-hash": "55b9016c4626d466c655c75be44479d4",
+    "hash": "4aadd259bcd32c913113b3d9e5002543",
+    "content-hash": "cdd9bfe776bcf1291c819122d3cbc6b1",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -554,20 +554,23 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.1.9",
+            "version": "0.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e"
+                "reference": "29df8c84494e3592cf999d9cbadf15220a003ff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
-                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/29df8c84494e3592cf999d9cbadf15220a003ff1",
+                "reference": "29df8c84494e3592cf999d9cbadf15220a003ff1",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0"
+            },
+            "replace": {
+                "magento-hackathon/magento-composer-installer": "*"
             },
             "require-dev": {
                 "composer/composer": "*@dev",
@@ -626,7 +629,7 @@
                 "composer-installer",
                 "magento"
             ],
-            "time": "2016-05-24 16:22:26"
+            "time": "2016-06-10 16:59:12"
         },
         {
             "name": "magento/zendframework1",
