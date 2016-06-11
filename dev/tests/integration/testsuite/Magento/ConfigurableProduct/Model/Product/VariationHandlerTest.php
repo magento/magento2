@@ -16,20 +16,14 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class VariationHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Object under test
-     *
-     * @var \Magento\ConfigurableProduct\Model\Product\VariationHandler
-     */
-    protected $_model;
+    /** @var \Magento\ConfigurableProduct\Model\Product\VariationHandler */
+    private $_model;
 
-    /**
-     * @var \Magento\Catalog\Model\Product
-     */
-    protected $_product;
+    /** @var \Magento\Catalog\Model\Product */
+    private $_product;
 
     /** @var \Magento\CatalogInventory\Api\StockRegistryInterface */
-    protected $stockRegistry;
+    private $stockRegistry;
 
     protected function setUp()
     {
@@ -68,7 +62,6 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             $this->assertNotNull($product->getPrice());
             $this->assertNotNull($product->getWeight());
             $this->assertEquals('1', $stockItem->getIsInStock());
-
         }
     }
 
