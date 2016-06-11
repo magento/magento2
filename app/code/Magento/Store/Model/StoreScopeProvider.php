@@ -50,11 +50,12 @@ class StoreScopeProvider implements ScopeProviderInterface
         if (isset($entityData[Store::STORE_ID])) {
             $value = $entityData[Store::STORE_ID];
         } else {
-            if ($this->storeManager->hasSingleStore()) {
-                $value = Store::DEFAULT_STORE_ID;
-            } else {
-                $value = (int)$this->storeManager->getStore(true)->getId();
-            }
+//            if ($this->storeManager->hasSingleStore()) {
+//                $value = Store::DEFAULT_STORE_ID;
+//            } else {
+//                $value = (int)$this->storeManager->getStore(true)->getId();
+//            }
+            $value = (int)$this->storeManager->getStore(true)->getId();
         }
 
         $identifier = Store::STORE_ID;
