@@ -300,10 +300,9 @@ class DataGrid extends Grid
             $massActionList = '(' . $this->massActionToggleList . ")[$i]";
             if ($this->_rootElement->find($massActionButton, Locator::SELECTOR_XPATH)->isVisible()) {
                 $this->_rootElement->find($massActionButton, Locator::SELECTOR_XPATH)->click();
-                $massActionElement =
-                    $this->_rootElement->find(sprintf($massActionList, $massActionSelection), Locator::SELECTOR_XPATH);
-                $this->waitForElementVisible($massActionElement);
-                $massActionElement->click();
+                $this->_rootElement
+                    ->find(sprintf($massActionList, $massActionSelection), Locator::SELECTOR_XPATH)
+                    ->click();
                 break;
             }
         }
