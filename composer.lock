@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "03aa0fd88ec1218fac917ab6ddebe520",
-    "content-hash": "4289e5ed7fb777b66c153e0187458241",
+    "hash": "4aadd259bcd32c913113b3d9e5002543",
+    "content-hash": "cdd9bfe776bcf1291c819122d3cbc6b1",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -554,20 +554,23 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.1.9",
+            "version": "0.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e"
+                "reference": "29df8c84494e3592cf999d9cbadf15220a003ff1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
-                "reference": "109eedd74dc94ffe77e71bf91d594f6fa95dd33e",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/29df8c84494e3592cf999d9cbadf15220a003ff1",
+                "reference": "29df8c84494e3592cf999d9cbadf15220a003ff1",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0"
+            },
+            "replace": {
+                "magento-hackathon/magento-composer-installer": "*"
             },
             "require-dev": {
                 "composer/composer": "*@dev",
@@ -626,7 +629,7 @@
                 "composer-installer",
                 "magento"
             ],
-            "time": "2016-05-24 16:22:26"
+            "time": "2016-06-10 16:59:12"
         },
         {
             "name": "magento/zendframework1",
@@ -4446,7 +4449,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~5.5.22|~5.6.0|~7.0.0",
+        "php": "~5.6.0|7.0.2|~7.0.6",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
