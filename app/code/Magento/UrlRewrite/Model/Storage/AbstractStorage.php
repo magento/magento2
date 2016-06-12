@@ -79,13 +79,7 @@ abstract class AbstractStorage implements StorageInterface
             return;
         }
 
-        try {
-            $this->doReplace($urls);
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            throw new \Magento\Framework\Exception\AlreadyExistsException(
-                __('URL key for specified store already exists.')
-            );
-        }
+        $this->doReplace($urls);
     }
 
     /**
