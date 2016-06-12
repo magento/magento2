@@ -112,7 +112,7 @@ class IndexerBuilderTest extends \PHPUnit_Framework_TestCase
         $product->load($product->getId());
         $this->product = $product;
 
-        $this->product->setData('test_attribute', 'test_attribute_value')->save();
+        $this->product->setStoreId(0)->setData('test_attribute', 'test_attribute_value')->save();
         $this->productSecond = clone $this->product;
         $this->productSecond->setId(null)->setUrlKey('product-second')->save();
         $this->productThird = clone $this->product;
