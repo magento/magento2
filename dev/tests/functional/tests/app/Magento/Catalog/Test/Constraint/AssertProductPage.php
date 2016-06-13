@@ -92,7 +92,7 @@ class AssertProductPage extends AbstractAssertForm
         try {
             $actualName = $this->productView->getProductName();
         } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
-            return "Could not found product '{$this->product->getName()}' name on the page.\n" . $e->getMessage();
+            return "Could not find product '{$this->product->getName()}' name on the page.\n" . $e->getMessage();
         }
 
         if ($expectedName == $actualName) {
@@ -162,13 +162,13 @@ class AssertProductPage extends AbstractAssertForm
         try {
             $actualSku = $this->productView->getProductSku();
         } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
-            return "Could not found product {$this->product->getName()}' SKU on the page.\n" . $e->getMessage();
+            return "Could not find product {$this->product->getName()}' SKU on the page.\n" . $e->getMessage();
         }
 
         if ($expectedSku === null || $expectedSku == $actualSku) {
             return null;
         }
-        return "Displayed product sku on Storefront product '{$this->product->getName()}' page is unexpected. "
+        return "Displayed product SKU on Storefront product '{$this->product->getName()}' page is unexpected. "
             . "Actual: {$actualSku}, expected: {$expectedSku}.";
     }
 
