@@ -52,4 +52,15 @@ class SelectVersion extends Form
         $this->waitForElementVisible($this->firstField);
         return parent::fill($fixture, $element);
     }
+
+    /**
+     * Choose 'yes' for upgrade option called 'Other components'
+     *
+     * @return void
+     */
+    public function chooseUpgradeOtherComponents()
+    {
+        $this->_rootElement->find("[for=yesUpdateComponents]", Locator::SELECTOR_CSS)->click();
+        $this->waitForElementVisible("[ng-show='componentsProcessed']");
+    }
 }
