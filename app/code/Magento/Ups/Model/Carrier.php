@@ -772,6 +772,22 @@ XMLRequest;
     }
 
     /**
+     * Map currency alias to currency code
+     *
+     * @param string $code
+     * @return string
+     */
+    private function mapCurrencyCode($code)
+    {
+        $currencyMapping = [
+            'RMB' => 'CNY',
+            'CNH' => 'CNY'
+        ];
+
+        return isset($currencyMapping[$code]) ? $currencyMapping[$code] : $code;
+    }
+
+    /**
      * Prepare shipping rate result based on response
      *
      * @param mixed $xmlResponse
@@ -800,7 +816,6 @@ XMLRequest;
                     ) && !empty($negotiatedArr);
 
                 $allowedCurrencies = $this->_currencyFactory->create()->getConfigAllowCurrencies();
-
                 foreach ($arr as $shipElement) {
                     $code = (string)$shipElement->Service->Code;
                     if (in_array($code, $allowedMethods)) {
@@ -812,7 +827,9 @@ XMLRequest;
 
                         //convert price with Origin country currency code to base currency code
                         $successConversion = true;
-                        $responseCurrencyCode = (string)$shipElement->TotalCharges->CurrencyCode;
+                        $responseCurrencyCode = $this->mapCurrencyCode(
+                            (string)$shipElement->TotalCharges->CurrencyCode
+                        );
                         if ($responseCurrencyCode) {
                             if (in_array($responseCurrencyCode, $allowedCurrencies)) {
                                 $cost = (double)$cost * $this->_getBaseCurrencyRate($responseCurrencyCode);

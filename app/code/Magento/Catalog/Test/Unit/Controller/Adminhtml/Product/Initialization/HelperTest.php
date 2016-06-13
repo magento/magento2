@@ -196,16 +196,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitialize()
     {
-        $this->websiteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($this->websiteId);
-        $this->storeMock->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($this->websiteMock);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->with(true)
-            ->willReturn($this->storeMock);
         $this->customOptionMock->expects($this->once())
             ->method('setProductSku');
         $this->customOptionMock->expects($this->once())
@@ -270,9 +260,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->with(['stock_data'])
             ->willReturn(['stock_data']);
-        $this->storeManagerMock->expects($this->once())
-            ->method('hasSingleStore')
-            ->willReturn(true);
         $this->productMock->expects($this->once())
             ->method('isLockedAttribute')
             ->with('media')
@@ -300,9 +287,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('getSku')
             ->willReturn('sku');
-        $this->productMock->expects($this->once())
-            ->method('setWebsiteIds')
-            ->with([$this->websiteId]);
         $this->productMock->expects($this->any())
             ->method('getOptionsReadOnly')
             ->willReturn(false);
