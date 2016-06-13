@@ -102,9 +102,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->never())
             ->method('getValue');
 
-        $this->assertNull(
-            $this->model->write(['formatted' => false])
-        );
+        $this->model->write(['formatted' => false]);
     }
 
     public function testWriteDisabledByConfig()
@@ -120,8 +118,6 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->with('debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
             ->willReturn(false);
 
-        $this->assertNull(
-            $this->model->write(['formatted' => false])
-        );
+        $this->model->write(['formatted' => false]);
     }
 }
