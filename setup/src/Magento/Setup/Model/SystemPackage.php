@@ -87,6 +87,8 @@ class SystemPackage
         if (!in_array('magento/product-enterprise-edition', $systemPackages)) {
             $result = array_merge($this->getAllowedEnterpriseVersions($currentCE), $result);
         }
+        
+        $result = $this->formatPackages($result);
 
         return $result;
     }
@@ -192,6 +194,44 @@ class SystemPackage
         });
 
         return $enterpriseVersions;
+    }
+
+    /**
+     * Re-formats packages array to merge packages, sort versions and add technical data
+     *
+     * @param array $packages
+     * @return array
+     */
+    private function formatPackages($packages)
+    {
+        $versions = [];
+
+        foreach ($packages as $package) {
+            foreach ($package['versions'] as $version) {
+                $version['package'] = $package['package'];
+
+                if (preg_match('/^[0-9].[0-9].[0-9]$/', $version['id']) || strpos($version['name'], 'current')) {
+                    $version['stable'] = true;
+                } else {
+                    $version['name'] = $version['name'] . ' (unstable version)';
+                    $version['stable'] = false;
+                }
+
+                $versions[] = $version;
+            }
+        }
+
+        usort($versions, function ($versionOne, $versionTwo) {
+            if (version_compare($versionOne['id'], $versionTwo['id'], '==')) {
+                if ($versionOne['package'] === 'magento/product-community-edition') {
+                    return 1;
+                }
+                return 0;
+            }
+            return (version_compare($versionOne['id'], $versionTwo['id'], '<')) ? 1 : -1;
+        });
+
+        return $versions;
     }
 
     /**
