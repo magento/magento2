@@ -304,6 +304,13 @@
                 padding: 0;
             }
 
+            //  Date & Time custom option (Affect Time that goes only after Date)
+            input.datetime-picker {
+                ~ select.datetime-picker {
+                    margin-top: @indent__s;
+                }
+            }
+
             &.required,
             &._required {
                 .legend {
@@ -698,12 +705,6 @@
             .field {
                 .control {
                     width: 80%;
-                    //  Date & Time custom option (Affect Time that goes only after Date)
-                    input.datetime-picker {
-                        ~ select.datetime-picker {
-                            margin-top: @indent__s;
-                        }
-                    }
                 }
             }
         }

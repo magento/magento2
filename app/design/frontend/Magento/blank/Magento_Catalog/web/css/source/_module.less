@@ -242,6 +242,13 @@
                 padding: 0;
             }
 
+            //  Date & Time custom option (Affect Time that goes only after Date)
+            input.datetime-picker {
+                ~ select.datetime-picker {
+                    margin-top: @indent__s;
+                }
+            }
+
             &.required,
             &._required {
                 .legend {
@@ -586,19 +593,6 @@
 
     .product-add-form {
         &:extend(.abs-revert-field-type-desktop all);
-
-        .product-options-wrapper {
-            .field {
-                .control {
-                    //  Date & Time custom option (Affect Time that goes only after Date)
-                    input.datetime-picker {
-                        ~ select.datetime-picker {
-                            margin-top: @indent__s;
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
