@@ -156,23 +156,25 @@ class GeneratedFiles
     private function disableAllCacheTypes()
     {
         $envPath = $this->getEnvPath();
-        $envData = include $envPath;
+        if ($this->write->isWritable($this->write->getRelativePath($envPath))) {
+            $envData = include $envPath;
 
-        if (isset($envData['cache_types'])) {
-            $cacheTypes = array_keys($envData['cache_types']);
+            if (isset($envData['cache_types'])) {
+                $cacheTypes = array_keys($envData['cache_types']);
 
-            foreach ($cacheTypes as $cacheType) {
-                $envData['cache_types'][$cacheType] = 0;
-            }
+                foreach ($cacheTypes as $cacheType) {
+                    $envData['cache_types'][$cacheType] = 0;
+                }
 
-            $formatter = new PhpFormatter();
-            $contents = $formatter->format($envData);
+                $formatter = new PhpFormatter();
+                $contents = $formatter->format($envData);
 
-            $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
-            if (function_exists('opcache_invalidate')) {
-                opcache_invalidate(
-                    $this->write->getAbsolutePath($envPath)
-                );
+                $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
+                if (function_exists('opcache_invalidate')) {
+                    opcache_invalidate(
+                        $this->write->getAbsolutePath($envPath)
+                    );
+                }
             }
         }
     }
