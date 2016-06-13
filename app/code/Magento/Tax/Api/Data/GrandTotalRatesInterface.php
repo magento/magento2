@@ -5,6 +5,10 @@
  */
 namespace Magento\Tax\Api\Data;
 
+/**
+ * Interface GrandTotalRatesInterface
+ * @api
+ */
 interface GrandTotalRatesInterface
 {
     /**

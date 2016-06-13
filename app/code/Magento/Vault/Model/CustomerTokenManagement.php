@@ -6,16 +6,10 @@
 namespace Magento\Vault\Model;
 
 use Magento\Customer\Model\Session;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 class CustomerTokenManagement
 {
-    /**
-     * @var VaultPaymentInterface
-     */
-    private $vaultPayment;
-
     /**
      * @var PaymentTokenManagement
      */
@@ -27,27 +21,16 @@ class CustomerTokenManagement
     private $session;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * CustomerTokenManagement constructor.
-     * @param VaultPaymentInterface $vaultPayment
      * @param PaymentTokenManagement $tokenManagement
      * @param Session $session
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        VaultPaymentInterface $vaultPayment,
         PaymentTokenManagement $tokenManagement,
-        Session $session,
-        StoreManagerInterface $storeManager
+        Session $session
     ) {
-        $this->vaultPayment = $vaultPayment;
         $this->tokenManagement = $tokenManagement;
         $this->session = $session;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -64,13 +47,6 @@ class CustomerTokenManagement
             return $vaultPayments;
         }
 
-        $storeId = $this->storeManager->getStore()->getId();
-        if (!$this->vaultPayment->isActive($storeId)) {
-            return $vaultPayments;
-        }
-
-        $providerCode = $this->vaultPayment->getProviderCode($storeId);
-
-        return $this->tokenManagement->getVisibleAvailableTokens($customerId, $providerCode);
+        return $this->tokenManagement->getVisibleAvailableTokens($customerId);
     }
 }

@@ -5,6 +5,10 @@
  */
 namespace Magento\GiftMessage\Api\Data;
 
+/**
+ * Interface MessageInterface
+ * @api
+ */
 interface MessageInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+

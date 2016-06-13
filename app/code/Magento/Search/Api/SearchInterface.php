@@ -9,6 +9,7 @@ use Magento\Framework\Api\Search\SearchInterface as FrameworkSearchInterface;
 
 /**
  * Search API for all requests
+ * @api
  */
 interface SearchInterface extends FrameworkSearchInterface
 {

@@ -436,12 +436,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     $tagHtml = str_replace($matches[0], '', $tagHtml);
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . htmlspecialchars($matches[1]) . ',' . join(',', $trArr) . ']'
+                        '[' . htmlspecialchars($matches[1]) . ',' . str_replace("\"", "'", join(',', $trArr)) . ']'
                     );
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . join(',', $trArr) . ']'
+                        '[' . str_replace("\"", "'", join(',', $trArr)) . ']'
                     );
                 }
                 $trAttr = $this->_addTranslateAttribute($trAttr);
@@ -603,12 +603,13 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         while (preg_match('#' . self::REGEXP_TOKEN . '#', $this->_content, $matches, PREG_OFFSET_CAPTURE, $next)) {
             $translateProperties = json_encode(
                 [
-                    'shown' => htmlspecialchars($matches[1][0]),
-                    'translated' => htmlspecialchars($matches[2][0]),
+                    'shown' => $matches[1][0],
+                    'translated' => $matches[2][0],
                     'original' => $matches[3][0],
                     'location' => 'Text',
-                    'scope' => htmlspecialchars($matches[4][0]),
-                ]
+                    'scope' => $matches[4][0],
+                ],
+                JSON_HEX_QUOT
             );
 
             $spanHtml = $this->_getDataTranslateSpan(

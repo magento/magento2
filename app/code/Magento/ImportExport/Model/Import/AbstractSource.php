@@ -102,7 +102,7 @@ abstract class AbstractSource implements \SeekableIterator
     {
         $this->_key++;
         $row = $this->_getNextRow();
-        if (false === $row) {
+        if (false === $row || [] === $row) {
             $this->_row = [];
             $this->_key = -1;
         } else {
