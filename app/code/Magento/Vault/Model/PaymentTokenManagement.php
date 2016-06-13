@@ -124,10 +124,9 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * Searches for all visible, non-expired tokens
      *
      * @param int $customerId
-     * @param string $providerCode
      * @return Data\PaymentTokenInterface[]
      */
-    public function getVisibleAvailableTokens($customerId, $providerCode)
+    public function getVisibleAvailableTokens($customerId)
     {
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
             ->setValue($customerId)
@@ -137,9 +136,6 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
             ->create();
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
             ->setValue(1)
-            ->create();
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
-            ->setValue($providerCode)
             ->create();
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
             ->setConditionType('gt')
