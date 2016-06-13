@@ -5,9 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Backend\Console\Command\AbstractCacheManageCommand;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -15,6 +12,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Code\GeneratedFiles;
 
 /**
  * Command for updating installed application after the code base has changed
@@ -34,11 +32,14 @@ class UpgradeCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
-     * Object Manager
-     *
-     * @var ObjectManagerProvider
+     * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManagerProvider;
+    private $objectManager;
+
+    /**
+     * @var GeneratedFiles
+     */
+    private $generatedFiles;
 
     /**
      * Constructor
@@ -49,7 +50,8 @@ class UpgradeCommand extends AbstractSetupCommand
     public function __construct(InstallerFactory $installerFactory, ObjectManagerProvider $objectManagerProvider)
     {
         $this->installerFactory = $installerFactory;
-        $this->objectManagerProvider = $objectManagerProvider;
+        /** @var \Magento\Framework\ObjectManagerInterface objectManager */
+        $this->objectManager = $objectManagerProvider->get();
         parent::__construct();
     }
 
@@ -79,15 +81,14 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
-        $objectManager = $this->objectManagerProvider->get();
+        $this->getGeneratedFiles()->requestRegeneration();
         $areaCode = 'setup';
         /** @var \Magento\Framework\App\State $appState */
-        $appState = $objectManager->get('Magento\Framework\App\State');
+        $appState = $this->objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
         /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-        $configLoader = $objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
-        $objectManager->configure($configLoader->load($areaCode));
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $this->objectManager->configure($configLoader->load($areaCode));
 
         $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
@@ -98,41 +99,20 @@ class UpgradeCommand extends AbstractSetupCommand
             $output->writeln('<info>Please re-run Magento compile command</info>');
         }
 
-        return $this->enableCaches($objectManager, $output);
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**
-     * Enables cache if cachestates exists
-     * TODO: to be removed in scope of MAGETWO-53476
+     * Get deployment config
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @return int
+     * @return GeneratedFiles
+     * @deprecated
      */
-    private function enableCaches($objectManager, $output)
+    private function getGeneratedFiles()
     {
-        $writeFactory = $objectManager->get('Magento\Framework\Filesystem\Directory\WriteFactory');
-        /** @var \Magento\Framework\Filesystem\Directory\Write $write */
-        $write = $writeFactory->create(BP);
-        /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
-        $dirList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
-
-        $pathToCacheStatus = $write->getRelativePath($dirList->getPath(DirectoryList::VAR_DIR) . '/.cachestates.json');
-
-        if ($write->isExist($pathToCacheStatus)) {
-            $params = array_keys(json_decode($write->readFile($pathToCacheStatus), true));
-            $command = $this->getApplication()->find('cache:enable');
-
-            $arguments = ['command' => 'cache:enable', AbstractCacheManageCommand::INPUT_KEY_TYPES    => $params ];
-            $returnCode = $command->run(new ArrayInput($arguments), $output);
-
-            $write->delete($pathToCacheStatus);
-            if (isset($returnCode) && $returnCode > 0) {
-                $message = '<error> Error occured during upgrade. Error code: ' . $returnCode . '</error>';
-                $output->writeln($message);
-                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
-            }
+        if (!($this->generatedFiles instanceof GeneratedFiles)) {
+            return $this->objectManager->get(GeneratedFiles::class);
         }
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return $this->generatedFiles;
     }
 }

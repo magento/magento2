@@ -57,8 +57,8 @@ class GeneratedFiles
             $configPool = new ConfigFilePool();
             $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
             if ($this->write->isExist($this->write->getRelativePath($envPath))) {
-                $this->saveCacheConfiguration($envPath);
-                $this->disableAllCacheTypes($envPath);
+                $this->saveCacheConfiguration();
+                $this->disableAllCacheTypes();
             }
             //TODO: Till here
 
@@ -81,7 +81,7 @@ class GeneratedFiles
                 $this->write->delete($cachePath);
             }
             $this->write->delete(self::REGENERATE_FLAG);
-            $this->reEnableCacheTypes($envPath);
+            $this->reEnableCacheTypes();
         }
     }
 
@@ -97,13 +97,13 @@ class GeneratedFiles
     }
 
     /**
-     * Read Cache configuration from env.php and write to a json file.
+     * Reads Cache configuration from env.php and write to a json file.
      *
-     * @param string $envPath
      * @return void
      */
-    private function saveCacheConfiguration($envPath)
+    public function saveCacheConfiguration()
     {
+        $envPath = $this->GetEnvPath();
         $envData = include $envPath;
 
         if (isset($envData['cache_types'])) {
@@ -121,13 +121,27 @@ class GeneratedFiles
     }
 
     /**
-     * Disable all cache types by updating env.php.
+     * Returns path to env.php file
      *
-     * @param string $envPath
+     * @return string
+     * @throws \Exception
+     */
+    private function GetEnvPath()
+    {
+        $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
+        $configPool = new ConfigFilePool();
+        $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
+        return $envPath;
+    }
+
+    /**
+     * Disables all cache types by updating env.php.
+     *
      * @return void
      */
-    private function disableAllCacheTypes($envPath)
+    private function disableAllCacheTypes()
     {
+        $envPath = $this->GetEnvPath();
         $envData = include $envPath;
 
         if (isset($envData['cache_types'])) {
@@ -155,7 +169,7 @@ class GeneratedFiles
      *
      * @return void
      */
-    private function reEnableCacheTypes($envPath)
+    private function reEnableCacheTypes()
     {
         $pathToCacheStatus = $this->write->getRelativePath(
             $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/.cachestates.json'
@@ -164,6 +178,7 @@ class GeneratedFiles
         if ($this->write->isExist($pathToCacheStatus)) {
             $enabledCacheTypes = array_keys(json_decode($this->write->readFile($pathToCacheStatus), true));
 
+            $envPath = $this->GetEnvPath();
             $envData = include $envPath;
             foreach ($enabledCacheTypes as $cacheType) {
                 $envData['cache_types'][$cacheType] = 1;
@@ -178,7 +193,6 @@ class GeneratedFiles
                     $this->write->getAbsolutePath($envPath)
                 );
             }
-            $this->write->delete($pathToCacheStatus);
         }
     }
 }
