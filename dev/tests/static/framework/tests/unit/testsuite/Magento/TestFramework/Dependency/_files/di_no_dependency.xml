@@ -6,9 +6,4 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="Magento\Some\Config\SchemaLocator\Config" type="Magento\Mtf\Config\SchemaLocator">
-        <arguments>
-            <argument name="schemaPath" xsi:type="string">config.xsd</argument>
-        </arguments>
-    </virtualType>
 </config>

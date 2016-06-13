@@ -16,6 +16,7 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->model = new DiRule();
     }
+
     /**
      * @param string $module
      * @param string $contents
@@ -24,10 +25,16 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDependencyInfo($module, $contents, array $expected)
     {
-        $file = '/some/path/not_di.xml';
-        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'any', $file, $contents));
+        $file = '/some/path/di.xml';
+        $this->assertEquals(
+            $expected,
+            $this->model->getDependencyInfo($module, 'any', $file, $contents)
+        );
     }
 
+    /**
+     * @return array
+     */
     public function getDependencyInfoDataProvider()
     {
         return [
@@ -35,6 +42,37 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
                 'Magento\SomeModule',
                 $this->getFileContent('di_no_dependency.xml'),
                 []
+            ],
+            'Di only in module dependencies' => [
+                'Magento\SomeModule',
+                $this->getFileContent('di_in_module_dependency.xml'),
+                []
+            ],
+            'Di external dependencies' => [
+                'Magento\SomeModule',
+                $this->getFileContent('di_external_dependency.xml'),
+                [
+                    [
+                        'module' => 'Magento\ExternalModule3',
+                        'type' => RuleInterface::TYPE_SOFT,
+                        'source' => 'Magento\ExternalModule3\Some\Another\Class'
+                    ],
+                    [
+                        'module' => 'Magento\ExternalModule1',
+                        'type' => RuleInterface::TYPE_SOFT,
+                        'source' => 'Magento\ExternalModule1\Some\Argument1'
+                    ],
+                    [
+                        'module' => 'Magento\ExternalModule2',
+                        'type' => RuleInterface::TYPE_SOFT,
+                        'source' => 'Magento\ExternalModule2\Some\Argument2'
+                    ],
+                    [
+                        'module' => 'Magento\ExternalModule4',
+                        'type' => RuleInterface::TYPE_SOFT,
+                        'source' => 'Magento\ExternalModule4\Some\Argument3'
+                    ]
+                ]
             ]
         ];
     }
