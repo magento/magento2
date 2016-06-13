@@ -439,6 +439,19 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             )
             ->willReturn($isSetFlag);
 
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataManager->expects($this->once())
+            ->method('getCookie')
+            ->with('mage-cache-sessid')
+            ->willReturn(false);
+
+        $refClass = new \ReflectionClass(Confirm::class);
+        $refProperty = $refClass->getProperty('cookieMetadataManager');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->model, $cookieMetadataManager);
+
         $this->model->execute();
     }
 
