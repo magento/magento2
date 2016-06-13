@@ -27,19 +27,12 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
         $installer->expects($this->at(1))->method('installSchema');
         $installer->expects($this->at(2))->method('installDataFixtures');
         $installerFactory->expects($this->once())->method('create')->willReturn($installer);
-        $writeFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\WriteFactory', [], [], '', false);
-        $directoryList = $this->getMock('\Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $generatedFiles = $this->getMock('\Magento\Framework\Code\GeneratedFiles', [], [], '', false);
-        $generatedFiles->expects($this->once())->method('requestRegeneration');
 
-        $objectManager->expects($this->exactly(3))
+        $objectManager->expects($this->exactly(2))
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\App\State', $state],
-                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
-                ['Magento\Framework\Filesystem\Directory\WriteFactory', $writeFactory],
-                ['Magento\Framework\App\Filesystem\DirectoryList', $directoryList],
-                ['Magento\Framework\Code\GeneratedFiles', $generatedFiles]
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader]
             ]));
 
         $commandTester = new CommandTester(new UpgradeCommand($installerFactory, $objectManagerProvider));

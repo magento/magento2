@@ -53,35 +53,8 @@ class GeneratedFiles
      */
     public function regenerate()
     {
-        if ($this->write->isExist(self::REGENERATE_FLAG)) {
-            //TODO: to be removed in scope of MAGETWO-53476
-            //clean cache
-            $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
-            $configPool = new ConfigFilePool();
-            $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
-            if ($this->write->isExist($this->write->getRelativePath($envPath))) {
-                $this->saveCacheStatus($envPath);
-            }
-            //TODO: Till here
-            $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
-            $generationPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATION));
-            $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::DI));
-
-            if ($this->write->isDirectory($generationPath)) {
-                $this->write->delete($generationPath);
-            }
-            if ($this->write->isDirectory($diPath)) {
-                $this->write->delete($diPath);
-            }
-            if ($this->write->isDirectory($cachePath)) {
-                $this->write->delete($cachePath);
-            }
-            //add to queue
-
-            $this->write->delete(self::REGENERATE_FLAG);
-        }
+        $this->cleanGeneratedFiles();
     }
-
 
     /**
      * Clean var/generation, var/di and var/cache
@@ -92,14 +65,14 @@ class GeneratedFiles
     {
         if ($this->write->isExist(self::REGENERATE_FLAG)) {
 
-            $cacheStatus = [];
+            $enabledCacheTypes = [];
 
             //TODO: to be removed in scope of MAGETWO-53476
             $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
             $configPool = new ConfigFilePool();
             $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
             if ($this->write->isExist($this->write->getRelativePath($envPath))) {
-                $cacheStatus = $this->getCacheStatus();
+                $enabledCacheTypes = $this->getEnabledCacheTypes();
                 $this->disableAllCacheTypes();
             }
             //TODO: Till here
@@ -123,7 +96,7 @@ class GeneratedFiles
                 $this->write->delete($cachePath);
             }
             $this->write->delete(self::REGENERATE_FLAG);
-            $this->restoreCacheStatus($cacheStatus);
+            $this->enableCacheTypes($enabledCacheTypes);
         }
     }
 
@@ -139,66 +112,25 @@ class GeneratedFiles
     }
 
     /**
-     * Read Cache types from env.php and write to a json file.
+     * Reads Cache configuration from env.php and returns indexed array containing all the enabled cache types.
      *
-     * @param string $envPath
-     * @return void
-     *
+     * @return string []
      */
-    private function saveCacheStatus($envPath)
+    private function getEnabledCacheTypes()
     {
-        $cacheData = include $envPath;
-
-        if (isset($cacheData['cache_types'])) {
-            $enabledCacheTypes = $cacheData['cache_types'];
-            $enabledCacheTypes = array_filter($enabledCacheTypes, function ($value) {
-                return $value;
-            });
-            if (!empty($enabledCacheTypes)) {
-                $varDir = $this->directoryList->getPath(DirectoryList::VAR_DIR);
-                $this->write->writeFile(
-                    $this->write->getRelativePath($varDir) . '/.cachestates.json',
-                    json_encode($enabledCacheTypes)
-                );
-                $cacheTypes = array_keys($cacheData['cache_types']);
-
-                foreach ($cacheTypes as $cacheType) {
-                    $cacheData['cache_types'][$cacheType] = 0;
-                }
-
-                $formatter = new PhpFormatter();
-                $contents = $formatter->format($cacheData);
-
-                $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
-                if (function_exists('opcache_invalidate')) {
-                    opcache_invalidate(
-                        $this->write->getAbsolutePath($envPath)
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Reads Cache configuration from env.php and returns the 'cache_types' key data which is the current
-     * cache status.
-     *
-     * @return array
-     */
-    private function getCacheStatus()
-    {
-        $cacheStatus = [];
-        if (empty($envPath)) {
-            $envPath = $this->getEnvPath();
-        }
-
+        $enabledCacheTypes = [];
+        $envPath = $this->getEnvPath();
         if ($this->write->isReadable($this->write->getRelativePath($envPath))) {
             $envData = include $envPath;
             if (isset($envData['cache_types'])) {
                 $cacheStatus = $envData['cache_types'];
+                $enabledCacheTypes = array_filter($cacheStatus, function ($value) {
+                    return $value;
+                });
+                $enabledCacheTypes = array_keys($enabledCacheTypes);
             }
         }
-        return $cacheStatus;
+        return $enabledCacheTypes;
     }
 
 
@@ -246,24 +178,24 @@ class GeneratedFiles
     }
 
     /**
-     * restore the cacache setting in env.php
+     * Enables apppropriate cache types in app/etc/env.php based on the passed in $cacheTypes array
      * TODO: to be removed in scope of MAGETWO-53476
      *
-     * @param array
+     * @param string []
      *
      * @return void
      */
-    private function restoreCacheStatus($cacheStatus)
+    private function enableCacheTypes($cacheTypes)
     {
-        if (empty($cacheStatus)) {
+        if (empty($cacheTypes)) {
             return;
         }
         $envPath = $this->getEnvPath();
         if ($this->write->isReadable($this->write->getRelativePath($envPath))) {
             $envData = include $envPath;
-            foreach ($cacheStatus as $cacheType => $state) {
+            foreach ($cacheTypes as $cacheType) {
                 if (isset($envData['cache_types'][$cacheType])) {
-                    $envData['cache_types'][$cacheType] = $state;
+                    $envData['cache_types'][$cacheType] = 1;
                 }
             }
 

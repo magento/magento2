@@ -10,6 +10,7 @@ use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Console\Command\UninstallCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\Installer;
+use Magento\Framework\Code\GeneratedFiles;
 
 class UninstallCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,6 +18,11 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
      * @var InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $installerFactory;
+
+    /**
+     * @var GeneratedFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $generatedFiles;
 
     /**
      * @var Installer|\PHPUnit_Framework_MockObject_MockObject
@@ -31,8 +37,9 @@ class UninstallCommandTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
+        $this->generatedFiles = $this->getMock('Magento\Framework\Code\GeneratedFiles', [], [], '', false);
         $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
-        $this->command = new UninstallCommand($this->installerFactory);
+        $this->command = new UninstallCommand($this->installerFactory, $this->generatedFiles);
     }
 
     public function testExecuteInteractionYes()
