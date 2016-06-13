@@ -91,7 +91,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->model->write(['formatted' => false]);
     }
 
-    public function testWriteWithDisabledByProduction()
+    public function testWriteDisabledByProduction()
     {
         $this->storeMock->expects($this->once())
             ->method('getCode')
