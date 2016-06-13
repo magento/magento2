@@ -183,13 +183,6 @@ class QuantityValidator
                     \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
                     $result->getMessage()
                 );
-
-                $quoteItem->getQuote()->addErrorInfo(
-                    $result->getQuoteMessageIndex(),
-                    'cataloginventory',
-                    \Magento\CatalogInventory\Helper\Data::ERROR_QTY,
-                    $result->getQuoteMessage()
-                );
             } else {
                 // Delete error from item and its quote, if it was set due to qty lack
                 $this->_removeErrorsFromQuoteAndItem($quoteItem, \Magento\CatalogInventory\Helper\Data::ERROR_QTY);
