@@ -112,12 +112,7 @@ class CustomOptions extends AbstractModifier
      * @var UrlInterface
      */
     protected $urlBuilder;
-
-    /**
-     * @var CurrencyInterface
-     */
-    protected $localeCurrency;
-
+    
     /**
      * @var ArrayManager
      */
@@ -129,12 +124,16 @@ class CustomOptions extends AbstractModifier
     protected $meta = [];
 
     /**
+     * @var CurrencyInterface
+     */
+    private $localeCurrency;
+
+    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param ConfigInterface $productOptionsConfig
      * @param ProductOptionsPrice $productOptionsPrice
      * @param UrlInterface $urlBuilder
-     * @param CurrencyInterface $localeCurrency
      * @param ArrayManager $arrayManager
      */
     public function __construct(
@@ -143,7 +142,6 @@ class CustomOptions extends AbstractModifier
         ConfigInterface $productOptionsConfig,
         ProductOptionsPrice $productOptionsPrice,
         UrlInterface $urlBuilder,
-        CurrencyInterface $localeCurrency,
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
@@ -151,7 +149,6 @@ class CustomOptions extends AbstractModifier
         $this->productOptionsConfig = $productOptionsConfig;
         $this->productOptionsPrice = $productOptionsPrice;
         $this->urlBuilder = $urlBuilder;
-        $this->localeCurrency = $localeCurrency;
         $this->arrayManager = $arrayManager;
     }
 
@@ -1080,6 +1077,21 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+    
+    /**
      * Format price according to the locale of the currency
      *
      * @param mixed $value
@@ -1092,7 +1104,7 @@ class CustomOptions extends AbstractModifier
         }
 
         $store = $this->storeManager->getStore();
-        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
         return $value;

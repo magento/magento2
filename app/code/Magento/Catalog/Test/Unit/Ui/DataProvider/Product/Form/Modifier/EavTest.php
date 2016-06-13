@@ -31,6 +31,7 @@ use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Currency;
 use Magento\Framework\Locale\Currency as CurrencyLocale;
+Use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class EavTest
@@ -156,9 +157,20 @@ class EavTest extends AbstractModifierTest
      */
     protected $currencyLocaleMock;
 
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+    
+    /**
+     * @var Eav
+     */
+    protected $eav;
+
     protected function setUp()
     {
         parent::setUp();
+        $this->objectManager = new ObjectManager($this);
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -265,6 +277,13 @@ class EavTest extends AbstractModifierTest
             ->disableOriginalConstructor()
             ->setMethods(['getCurrency'])
             ->getMock();
+        
+        $this->eav =$this->getModel();
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->eav,
+            'localeCurrency',
+            $this->currencyLocaleMock
+        );
     }
 
     /**
@@ -285,7 +304,6 @@ class EavTest extends AbstractModifierTest
             'attributeGroupRepository' => $this->attributeGroupRepositoryMock,
             'sortOrderBuilder' => $this->sortOrderBuilderMock,
             'attributeRepository' => $this->attributeRepositoryMock,
-            'localeCurrency' => $this->currencyLocaleMock,
         ]);
     }
 
@@ -379,6 +397,6 @@ class EavTest extends AbstractModifierTest
             ->method('getCurrency')
             ->willReturn($this->currencyMock);
 
-        $this->assertEquals($sourceData, $this->getModel()->modifyData([]));
+        $this->assertEquals($sourceData, $this->eav->modifyData([]));
     }
 }
