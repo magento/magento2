@@ -30,29 +30,23 @@ class General extends AbstractModifier
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var CurrencyInterface
      */
-    protected $localeCurrency;
+    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
      * @param ArrayManager $arrayManager
-     * @param StoreManagerInterface $storeManager
-     * @param CurrencyInterface $localeCurrency
      */
     public function __construct(
         LocatorInterface $locator,
-        ArrayManager $arrayManager,
-        StoreManagerInterface $storeManager,
-        CurrencyInterface $localeCurrency
+        ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
         $this->arrayManager = $arrayManager;
-        $this->storeManager = $storeManager;
-        $this->localeCurrency = $localeCurrency;
     }
 
     /**
@@ -370,6 +364,38 @@ class General extends AbstractModifier
     }
 
     /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+
+    /**
+     * The getter function to get the store manager for real application code
+     *
+     * @return \Magento\Store\Model\StoreManagerInterface
+     *
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if ($this->storeManager === null) {
+            $this->storeManager =
+                \Magento\Framework\App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        }
+        return $this->storeManager;
+    }
+
+
+    /**
      * Format price according to the locale of the currency
      *
      * @param mixed $value
@@ -381,8 +407,8 @@ class General extends AbstractModifier
             return null;
         }
 
-        $store = $this->storeManager->getStore();
-        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+        $store = $this->getStoreManager()->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
 
         return $value;
@@ -402,8 +428,8 @@ class General extends AbstractModifier
 
         $value = (float)$value;
         $precision = strlen(substr(strrchr($value, "."), 1));
-        $store = $this->storeManager->getStore();
-        $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+        $store = $this->getStoreManager()->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
         $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL,
                                                 'precision' => $precision]);
 
