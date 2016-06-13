@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Framework\App\ProductMetadataInterface;
+use \Magento\Framework\Api\SimpleDataObjectConverter;
 
 /**
  * REST Swagger schema generator.
@@ -541,8 +542,50 @@ class Generator extends AbstractSchemaGenerator
                     ],
                 ],
             ],
-            $this->definitions
+            $this->snakeCaseDefinitions($this->definitions)
         );
+    }
+
+    /**
+     * Converts definitions' properties array to snake_case.
+     *
+     * @param array $definitions
+     * @return array
+     */
+    private function snakeCaseDefinitions($definitions)
+    {
+        foreach ($definitions as $name => $vals) {
+            if (!empty($vals['properties'])) {
+                $definitions[$name]['properties'] = $this->convertArrayToSnakeCase($vals['properties']);
+            }
+            if (!empty($vals['required'])) {
+                $snakeCaseRequired = [];
+                foreach ($vals['required'] as $requiredProperty) {
+                    $snakeCaseRequired[] = SimpleDataObjectConverter::camelCaseToSnakeCase($requiredProperty);
+                }
+                $definitions[$name]['required'] = $snakeCaseRequired;
+            }
+        }
+        return $definitions;
+    }
+
+    /**
+     * Converts associative array's key names from camelCase to snake_case, recursively.
+     *
+     * @param array $properties
+     * @return array
+     */
+    private function convertArrayToSnakeCase($properties)
+    {
+        foreach ($properties as $name => $value) {
+            $snakeCaseName = SimpleDataObjectConverter::camelCaseToSnakeCase($name);
+            if (is_array($value)) {
+                $value = $this->convertArrayToSnakeCase($value);
+            }
+            unset($properties[$name]);
+            $properties[$snakeCaseName] = $value;
+        }
+        return $properties;
     }
 
     /**

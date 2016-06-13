@@ -23,7 +23,7 @@ class MethodsTest extends \PHPUnit_Framework_TestCase
      */
     public function testPaymentMethod($code, $methodClass)
     {
-        if ($code == \Magento\Vault\Model\VaultPaymentInterface::CODE) {
+        if ($code == 'vault') {
             return;
         }
         Bootstrap::getObjectManager()->configure($this->getTestConfiguration());
