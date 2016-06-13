@@ -88,6 +88,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
                 'design/footer/copyright',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
+            $this->_copyright = str_replace('YYYY', (new \DateTime())->format('Y'), $this->_copyright)
         }
         return __($this->_copyright);
     }
