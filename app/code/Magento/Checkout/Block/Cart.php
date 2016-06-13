@@ -108,20 +108,12 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function hasError()
     {
-        if ($this->getQuote()->getHasError()) {
-            return true;
-        }
-
-        foreach ($this->getQuote()->getItems() as $quoteItem) {
-            if (!empty($quoteItem->getErrorInfos())) {
-                return true;
-            }
-        }
-        return false;
+        return $this->getQuote()->getHasError();
     }
 
     /**
