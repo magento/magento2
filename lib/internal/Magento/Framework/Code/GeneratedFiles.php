@@ -192,8 +192,7 @@ class GeneratedFiles
             $envPath = $this->getEnvPath();
         }
 
-        if ($this->write->isExist($this->write->getRelativePath($envPath) &&
-            $this->write->isReadable($this->write->getRelativePath($envPath)))) {
+        if ($this->write->isReadable($this->write->getRelativePath($envPath))) {
             $envData = include $envPath;
             if (isset($envData['cache_types'])) {
                 $cacheStatus = $envData['cache_types'];
@@ -260,8 +259,7 @@ class GeneratedFiles
             return;
         }
         $envPath = $this->getEnvPath();
-        if ($this->write->isExist($this->write->getRelativePath($envPath) &&
-            $this->write->isReadable($this->write->getRelativePath($envPath)))) {
+        if ($this->write->isReadable($this->write->getRelativePath($envPath))) {
             $envData = include $envPath;
             foreach ($cacheStatus as $cacheType => $state) {
                 if (isset($envData['cache_types'][$cacheType])) {
