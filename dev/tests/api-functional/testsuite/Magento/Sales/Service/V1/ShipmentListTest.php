@@ -43,7 +43,15 @@ class ShipmentListTest extends WebapiAbstract
             'Magento\Framework\Api\FilterBuilder'
         );
 
-        $searchCriteriaBuilder->addFilters([$filterBuilder->setField('shipment_status')->setValue(1)->create()]);
+        $searchCriteriaBuilder->addFilters(
+            [
+                $filterBuilder
+                    ->setField('shipment_status')
+                    ->setValue((string)\Magento\Sales\Model\Order\Shipment::STATUS_NEW)
+                    ->setConditionType('eq')
+                    ->create()
+            ]
+        );
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
         $requestData = ['searchCriteria' => $searchData];
@@ -63,5 +71,7 @@ class ShipmentListTest extends WebapiAbstract
         // TODO Test fails, due to the inability of the framework API to handle data collection
         $this->assertArrayHasKey('items', $result);
         $this->assertCount(1, $result['items']);
+        $this->assertArrayHasKey('search_criteria', $result);
+        $this->assertEquals($searchData, $result['search_criteria']);
     }
 }

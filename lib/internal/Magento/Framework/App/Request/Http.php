@@ -90,6 +90,11 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
     protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
 
     /**
+     * @var string
+     */
+    private $distroBaseUrl;
+
+    /**
      * @param CookieReaderInterface $cookieReader
      * @param StringUtils $converter
      * @param ConfigInterface $routeConfig
@@ -315,6 +320,9 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
      */
     public function getDistroBaseUrl()
     {
+        if ($this->distroBaseUrl) {
+            return $this->distroBaseUrl;
+        }
         $headerHttpHost = $this->getServer('HTTP_HOST');
         $headerHttpHost = $this->converter->cleanString($headerHttpHost);
         $headerScriptName = $this->getServer('SCRIPT_NAME');
@@ -332,7 +340,7 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
                 && (!$secure && $hostArr[1] != 80 || $secure && $hostArr[1] != 443) ? ':' . $hostArr[1] : '';
             $path = $this->getBasePath();
 
-            return $scheme . $host . $port . rtrim($path, '/') . '/';
+            return $this->distroBaseUrl = $scheme . $host . $port . rtrim($path, '/') . '/';
         }
         return 'http://localhost/';
     }
