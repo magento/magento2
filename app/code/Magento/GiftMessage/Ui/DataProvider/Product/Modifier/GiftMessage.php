@@ -13,7 +13,6 @@ use Magento\GiftMessage\Helper\Message;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Field;
-use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
  * Class GiftMessageDataProvider
@@ -58,14 +57,15 @@ class GiftMessage extends AbstractModifier
     public function modifyData(array $data)
     {
         $modelId = $this->locator->getProduct()->getId();
-        $value = Boolean::VALUE_USE_CONFIG;
+        $value = '';
 
         if (isset($data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE])) {
             $value = $data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE];
         }
 
-        if ($value == Boolean::VALUE_USE_CONFIG) {
-            $data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE] = $this->getValueFromConfig();
+        if ('' === $value) {
+            $data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE] =
+                $this->getValueFromConfig();
             $data[$modelId][static::DATA_SOURCE_DEFAULT]['use_config_' . static::FIELD_MESSAGE_AVAILABLE] = '1';
         }
 
@@ -129,8 +129,14 @@ class GiftMessage extends AbstractModifier
                             'data' => [
                                 'config' => [
                                     'dataScope' => static::FIELD_MESSAGE_AVAILABLE,
-                                    'component' => 'Magento_Ui/js/form/element/single-checkbox-use-config',
+                                    'imports' => [
+                                        'disabled' =>
+                                            '${$.parentName}.use_config_'
+                                            . static::FIELD_MESSAGE_AVAILABLE
+                                            . ':checked',
+                                    ],
                                     'additionalClasses' => 'admin__field-x-small',
+                                    'formElement' => Checkbox::NAME,
                                     'componentType' => Field::NAME,
                                     'prefer' => 'toggle',
                                     'valueMap' => [
@@ -153,12 +159,6 @@ class GiftMessage extends AbstractModifier
                                     'valueMap' => [
                                         'false' => '0',
                                         'true' => '1',
-                                    ],
-                                    'exports' => [
-                                        'checked' => '${$.parentName}.' . static::FIELD_MESSAGE_AVAILABLE . ':isUseConfig',
-                                    ],
-                                    'imports' => [
-                                        'disabled' => '${$.parentName}.' . static::FIELD_MESSAGE_AVAILABLE . ':isUseDefault',
                                     ],
                                 ],
                             ],
