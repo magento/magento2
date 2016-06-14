@@ -19,7 +19,7 @@
         </arguments>
     </type>
 
-    <virtualType name="BraintreeAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="customer" xsi:type="string">Magento\Braintree\Gateway\Request\CustomerDataBuilder</item>
@@ -30,7 +30,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeVaultAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeVaultAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="customer" xsi:type="string">Magento\Braintree\Gateway\Request\CustomerDataBuilder</item>
