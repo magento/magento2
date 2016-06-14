@@ -68,7 +68,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'dataHasChangedFor',
                 'isVisibleInSiteVisibility',
                 'getIsChangedWebsites',
-                'getIsChangedCategories'
+                'getIsChangedCategories',
+                'load',
+                'getStoreId'
             ],
             [],
             '',
@@ -114,7 +116,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
-                'expectedReplaceCount'  => 1
+                'expectedProdLoadCount' => 1,
+                'expectedReplaceCount'  => 1,
+
             ],
             'no chnages' => [
                 'isChangedUrlKey'       => false,
@@ -123,6 +127,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 0,
+                'expectedProdLoadCount' => 0,
                 'expectedReplaceCount'  => 0
             ],
             'visibility changed' => [
@@ -132,6 +137,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
+                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 1
             ],
             'websites changed' => [
@@ -141,6 +147,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
+                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 1
             ],
             'categories changed' => [
@@ -150,6 +157,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => true,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
+                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 1
             ],
             'url changed invisible' => [
@@ -159,6 +167,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => false,
                 'expectedDeleteCount'   => 1,
+                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 0
             ],
         ];
@@ -171,6 +180,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
      * @param bool $isChangedCategories
      * @param bool $visibilityResult
      * @param int $expectedDeleteCount
+     * @param int $expectedProdLoadCount
      * @param int $expectedReplaceCount
      *
      * @dataProvider testUrlKeyDataProvider
@@ -182,8 +192,15 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
         $isChangedCategories,
         $visibilityResult,
         $expectedDeleteCount,
+        $expectedProdLoadCount,
         $expectedReplaceCount
     ) {
+        $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(12));
+
+        $this->product->expects($this->exactly($expectedProdLoadCount))
+            ->method('load')
+            ->with($this->product->getId());
+
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')
             ->will($this->returnValueMap(
@@ -205,6 +222,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
             UrlRewrite::ENTITY_ID => $this->product->getId(),
             UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
             UrlRewrite::REDIRECT_TYPE => 0,
+            UrlRewrite::STORE_ID => $this->product->getStoreId()
         ]);
 
         $this->product->expects($this->any())
