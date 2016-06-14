@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,13 +16,17 @@ class RelationPersister
      * @var Relation
      */
     private $relationProcessor;
+
     /**
      * @var LinkFactory
      */
     private $linkFactory;
 
     /**
-     * @inheritDoc
+     * RelationPersister constructor.
+     *
+     * @param Relation $relationProcessor
+     * @param LinkFactory $linkFactory
      */
     public function __construct(Relation $relationProcessor, LinkFactory $linkFactory)
     {
@@ -35,10 +39,11 @@ class RelationPersister
      *
      * @param Link $subject
      * @param \Closure $proceed
-     * @param $parentId
-     * @param $data
-     * @param $typeId
+     * @param int $parentId
+     * @param array $data
+     * @param int $typeId
      * @return Link
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSaveProductLinks(Link $subject, \Closure $proceed, $parentId, $data, $typeId)
     {
@@ -59,7 +64,7 @@ class RelationPersister
      *
      * @param Link $subject
      * @param \Closure $proceed
-     * @param $linkId
+     * @param int $linkId
      * @return Link
      */
     public function aroundDeleteProductLink(Link $subject, \Closure $proceed, $linkId)
