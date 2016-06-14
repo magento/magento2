@@ -13,6 +13,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Monolog\Formatter\FormatterInterface;
+use Monolog\Logger;
 
 /**
  * Class DebugTest
@@ -49,6 +51,11 @@ class DebugTest extends \PHPUnit_Framework_TestCase
      */
     private $storeMock;
 
+    /**
+     * @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $formatter;
+
     protected function setUp()
     {
         $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
@@ -62,10 +69,15 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
+        $this->formatter = $this->getMockBuilder(FormatterInterface::class)
+            ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
+        $this->formatter->expects($this->any())
+            ->method('format')
+            ->willReturn(null);
 
         $this->model = (new ObjectManager($this))->getObject(Debug::class, [
             'filesystem' => $this->filesystemMock,
@@ -73,9 +85,10 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             'scopeConfig' => $this->scopeConfigMock,
             'storeManager' => $this->storeManagerMock
         ]);
+        $this->model->setFormatter($this->formatter);
     }
 
-    public function testWrite()
+    public function testHandle()
     {
         $this->storeMock->expects($this->once())
             ->method('getCode')
@@ -88,10 +101,10 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
             ->willReturn(true);
 
-        $this->model->write(['formatted' => false]);
+        $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
     }
 
-    public function testWriteDisabledByProduction()
+    public function testHandleDisabledByProduction()
     {
         $this->storeMock->expects($this->once())
             ->method('getCode')
@@ -102,10 +115,10 @@ class DebugTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->never())
             ->method('getValue');
 
-        $this->model->write(['formatted' => false]);
+        $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
     }
 
-    public function testWriteDisabledByConfig()
+    public function testHandleDisabledByConfig()
     {
         $this->storeMock->expects($this->once())
             ->method('getCode')
@@ -118,6 +131,19 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
             ->willReturn(false);
 
-        $this->model->write(['formatted' => false]);
+        $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
+    }
+
+    public function testHandleDisabledByLevel()
+    {
+        $this->storeMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn('test_code');
+        $this->stateMock->expects($this->never())
+            ->method('getMode');
+        $this->scopeConfigMock->expects($this->never())
+            ->method('getValue');
+
+        $this->model->handle(['formatted' => false, 'level' => Logger::API]);
     }
 }
