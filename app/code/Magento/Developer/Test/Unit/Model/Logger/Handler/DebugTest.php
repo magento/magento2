@@ -54,7 +54,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
     /**
      * @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $formatter;
+    private $formatterMock;
 
     protected function setUp()
     {
@@ -69,13 +69,13 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->formatter = $this->getMockBuilder(FormatterInterface::class)
+        $this->formatterMock = $this->getMockBuilder(FormatterInterface::class)
             ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->formatter->expects($this->any())
+        $this->formatterMock->expects($this->any())
             ->method('format')
             ->willReturn(null);
 
@@ -85,7 +85,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             'scopeConfig' => $this->scopeConfigMock,
             'storeManager' => $this->storeManagerMock
         ]);
-        $this->model->setFormatter($this->formatter);
+        $this->model->setFormatter($this->formatterMock);
     }
 
     public function testHandle()
