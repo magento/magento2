@@ -329,18 +329,16 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
             ])->disableOriginalConstructor()
             ->getMock();
 
-        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
-        $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
-
-        $this->builder->expects($this->once())->method('attachConditionToCollection')
-            ->with($collection, $this->getConditionsForCollection($collection))
-            ->willReturnSelf();
-        $product = $this->getMock('Magento\Catalog\Api\ProductInterface', ['getId']);
-        $product->expects($this->once())->method('getId')->willReturn('product_id');
-        $collection->expects($this->once())->method('getIterator')->willReturn(new \ArrayIterator([$product]));
+        $product = $this->getMock('Magento\Framework\DataObject\IdentityInterface', ['getIdentities']);
+        $notProduct = $this->getMock('NotProduct', ['getIdentities']);
+        $product->expects($this->once())->method('getIdentities')->willReturn(['product_identity']);
+        $collection->expects($this->once())->method('getIterator')->willReturn(
+            new \ArrayIterator([$product, $notProduct])
+        );
+        $this->productsList->setData('product_collection', $collection);
 
         $this->assertEquals(
-            [\Magento\Catalog\Model\Product::CACHE_TAG . '_' . 'product_id'],
+            ['product_identity'],
             $this->productsList->getIdentities()
         );
     }
