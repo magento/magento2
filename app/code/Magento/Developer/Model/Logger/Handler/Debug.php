@@ -61,7 +61,7 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
 
         return
             parent::isHandling($record)
-            && $this->state->getMode() === State::MODE_DEVELOPER
+            && $this->state->getMode() !== State::MODE_PRODUCTION
             && $this->scopeConfig->getValue('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, $storeCode);
     }
 }
