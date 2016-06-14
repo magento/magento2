@@ -40,12 +40,12 @@ class UpgradeData implements UpgradeDataInterface
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
             $groupName = 'Gift Options';
 
-            if (!$categorySetup->getAttributeGroup(Product::ENTITY, 'Default', $groupName)) {
-                $categorySetup->addAttributeGroup(Product::ENTITY, 'Default', $groupName, 60);
+            $attributeSetId = $categorySetup->getDefaultAttributeSetId(Product::ENTITY);
+            if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
+                $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
             }
 
             $entityTypeId = $categorySetup->getEntityTypeId(Product::ENTITY);
-            $attributeSetId = $categorySetup->getAttributeSetId($entityTypeId, 'Default');
             $attribute = $categorySetup->getAttribute($entityTypeId, 'gift_message_available');
 
             $categorySetup->addAttributeToGroup(
