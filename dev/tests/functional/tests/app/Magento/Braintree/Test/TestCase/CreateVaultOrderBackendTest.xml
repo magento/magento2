@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Vault\Test\TestCase\CreateVaultOrderBackendTest" summary="Create Order from Admin via Braintree with saving Credit Cards">
-        <variation name="CreateVaultOrderBackendTestBraintreeVariation1" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize Only)" ticketId="MAGETWO-47137">
+        <variation name="CreateVaultOrderBackendTestBraintreeVariation1" summary="Checkout with Braintree Credit Card from Admin (Payment Action = Authorize Only)" ticketId="MAGETWO-47137, MAGETWO-47139">
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
