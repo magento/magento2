@@ -81,9 +81,6 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     protected $conditionsHelper;
 
-    /** @var array */
-    private $widgetIdentities;
-
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
@@ -333,19 +330,16 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     public function getIdentities()
     {
-        if ($this->widgetIdentities === null) {
-            $collection = $this->productCollectionFactory->create();
-            $conditions = $this->getConditions();
-            $conditions->collectValidatedAttributes($collection);
-            $this->sqlBuilder->attachConditionToCollection($collection, $conditions);
-            $this->widgetIdentities = [];
-            foreach ($collection as $product) {
-                $this->widgetIdentities[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $product->getId();
+        $identities = [];
+        if ($this->getProductCollection()) {
+            foreach ($this->getProductCollection() as $product) {
+                if ($product instanceof IdentityInterface) {
+                    $identities = array_merge($identities, $product->getIdentities());
+                }
             }
-            $this->widgetIdentities = $this->widgetIdentities ?: [\Magento\Catalog\Model\Product::CACHE_TAG];
         }
 
-        return $this->widgetIdentities;
+        return $identities?: [\Magento\Catalog\Model\Product::CACHE_TAG];
     }
 
     /**
