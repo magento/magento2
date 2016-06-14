@@ -8,12 +8,15 @@
 
 namespace Magento\CatalogWidget\Block\Product;
 
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Widget\Block\BlockInterface;
+
 /**
  * Catalog Products List widget block
  * Class ProductsList
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Widget\Block\BlockInterface
+class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implements BlockInterface, IdentityInterface
 {
     /**
      * Default value for products count that will be shown
@@ -77,6 +80,9 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      * @var \Magento\Widget\Helper\Conditions
      */
     protected $conditionsHelper;
+
+    /** @var array */
+    private $widgetIdentities;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -327,7 +333,19 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
      */
     public function getIdentities()
     {
-        return [\Magento\Catalog\Model\Product::CACHE_TAG];
+        if ($this->widgetIdentities === null) {
+            $collection = $this->productCollectionFactory->create();
+            $conditions = $this->getConditions();
+            $conditions->collectValidatedAttributes($collection);
+            $this->sqlBuilder->attachConditionToCollection($collection, $conditions);
+            $this->widgetIdentities = [];
+            foreach ($collection as $product) {
+                $this->widgetIdentities[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $product->getId();
+            }
+            $this->widgetIdentities = $this->widgetIdentities ?: [\Magento\Catalog\Model\Product::CACHE_TAG];
+        }
+
+        return $this->widgetIdentities;
     }
 
     /**
