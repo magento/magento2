@@ -190,6 +190,11 @@ class View extends AbstractConfigureBlock
     protected $baseImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img';
 
     /**
+     * @var string
+     */
+    protected $galleryLoader = '.fotorama__spinner--show';
+
+    /**
      * Video Container selector
      *
      * @var string
@@ -499,6 +504,7 @@ class View extends AbstractConfigureBlock
      */
     public function isGalleryVisible()
     {
+        $this->waitForElementNotVisible($this->galleryLoader);
         return $this->_rootElement->find($this->mediaGallery)->isVisible();
     }
 
@@ -509,6 +515,7 @@ class View extends AbstractConfigureBlock
      */
     public function isFullImageVisible()
     {
+        $this->waitForElementNotVisible($this->galleryLoader);
         return $this->browser->find($this->fullImage)->isVisible();
     }
 
