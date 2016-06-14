@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -188,11 +187,12 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')
-            ->will($this->returnValueMap([
-                    ['visibility', $isChangedVisibility],
-                    ['url_key', $isChangedUrlKey]
-                ])
-            );
+            ->will($this->returnValueMap(
+                    [
+                        ['visibility', $isChangedVisibility],
+                        ['url_key', $isChangedUrlKey]
+                    ]
+                ));
 
         $this->product->expects($this->any())
             ->method('getIsChangedWebsites')
@@ -207,8 +207,15 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
             UrlRewrite::REDIRECT_TYPE => 0,
         ]);
-        $this->product->expects($this->any())->method('isVisibleInSiteVisibility')->will($this->returnValue($visibilityResult));
-        $this->urlPersist->expects($this->exactly($expectedReplaceCount))->method('replace')->with([3 => 'rewrite']);
+
+        $this->product->expects($this->any())
+            ->method('isVisibleInSiteVisibility')
+            ->will($this->returnValue($visibilityResult));
+
+        $this->urlPersist->expects($this->exactly($expectedReplaceCount))
+            ->method('replace')
+            ->with([3 => 'rewrite']);
+
         $this->model->execute($this->observer);
     }
 }
