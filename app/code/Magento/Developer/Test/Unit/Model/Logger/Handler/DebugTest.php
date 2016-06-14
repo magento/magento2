@@ -85,7 +85,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->willReturn(State::MODE_DEVELOPER);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
+            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
             ->willReturn(true);
 
         $this->model->write(['formatted' => false]);
@@ -115,7 +115,7 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->willReturn(State::MODE_DEVELOPER);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
+            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
             ->willReturn(false);
 
         $this->model->write(['formatted' => false]);
