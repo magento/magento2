@@ -22,17 +22,6 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     private $sitemapFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Sitemap\Model\SitemapFactory
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context
-    ) {
-        parent::__construct($context);
-    }
-
-    /**
      * Delete action
      *
      * @return void

@@ -43,22 +43,18 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-
         $this->sitemapFactoryMock = $this->getMockBuilder(\Magento\Sitemap\Model\SitemapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
-
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -71,19 +67,10 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             [
                 'request' => $this->requestMock,
                 'response' => $this->responseMock,
-                'messageManager' => $this->messageManagerMock
+                'messageManager' => $this->messageManagerMock,
+                'filesystem' => $this->filesystemMock,
+                'sitemapFactory' => $this->sitemapFactoryMock
             ]
-        );
-
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->deleteController,
-            'filesystem',
-            $this->filesystemMock
-        );
-        $objectManagerHelper->setBackwardCompatibleProperty(
-            $this->deleteController,
-            'sitemapFactory',
-            $this->sitemapFactoryMock
         );
     }
 
@@ -118,7 +105,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
 
         $sitemapMock->expects($this->once())->method('load')->with($id)->willThrowException(new \Exception);
         $this->sitemapFactoryMock->expects($this->once())->method('create')->willReturn($sitemapMock);
-
         $this->responseMock->expects($this->once())->method('setRedirect');
         $this->messageManagerMock->expects($this->any())
             ->method('addError');
