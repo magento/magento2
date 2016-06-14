@@ -110,7 +110,7 @@ class Read implements ReadInterface
                 'arguments' => $arguments
             ]
         );
-        $entity = $this->readMain->execute($entity, $identifier, $arguments);
+        $entity = $this->readMain->execute($entity, $identifier);
         $entityData = array_merge($hydrator->extract($entity), $arguments);
         if (isset($entityData[$metadata->getLinkField()])) {
             $entity = $this->readAttributes->execute($entity, $arguments);
