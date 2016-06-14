@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Framework\Setup\ConsoleLogger;
-use Magento\Framework\Code\GeneratedFiles;
 
 class UninstallCommand extends AbstractSetupCommand
 {
@@ -21,17 +20,11 @@ class UninstallCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
-     * @var GeneratedFiles
-     */
-    private $generatedFiles;
-
-    /**
      * @param InstallerFactory $installerFactory
      */
-    public function __construct(InstallerFactory $installerFactory, GeneratedFiles $generatedFiles)
+    public function __construct(InstallerFactory $installerFactory)
     {
         $this->installerFactory = $installerFactory;
-        $this->generatedFiles = $generatedFiles;
         parent::__construct();
     }
 
@@ -56,7 +49,6 @@ class UninstallCommand extends AbstractSetupCommand
         if ($helper->ask($input, $output, $question) || !$input->isInteractive()) {
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->uninstall();
-            $this->generatedFiles->requestRegeneration();
         }
     }
 }
