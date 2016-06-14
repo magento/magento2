@@ -46,10 +46,9 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
 
-        $isChangedWebsites = $product->getIsChangedWebsites();
         if ($product->dataHasChangedFor('url_key')
             || $product->getIsChangedCategories()
-            || $isChangedWebsites
+            || $product->getIsChangedWebsites()
             || $product->dataHasChangedFor('visibility')
         ) {
             $this->urlPersist->deleteByData([
@@ -57,7 +56,7 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                 UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
                 UrlRewrite::REDIRECT_TYPE => 0,
             ]);
-            if (in_array($product->getVisibility(), $product->getVisibleInSiteVisibilities())) {
+            if ($product->isVisibleInSiteVisibility()) {
                 $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }
         }
