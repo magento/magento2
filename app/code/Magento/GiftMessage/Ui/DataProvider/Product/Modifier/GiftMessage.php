@@ -58,13 +58,13 @@ class GiftMessage extends AbstractModifier
     public function modifyData(array $data)
     {
         $modelId = $this->locator->getProduct()->getId();
-        $value = '';
+        $value = Boolean::VALUE_USE_CONFIG;
 
         if (isset($data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE])) {
             $value = $data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE];
         }
 
-        if ($value == Boolean::VALUE_USE_CONFIG || $value === '' || $value === null) {
+        if ($value == Boolean::VALUE_USE_CONFIG) {
             $data[$modelId][static::DATA_SOURCE_DEFAULT][static::FIELD_MESSAGE_AVAILABLE] = $this->getValueFromConfig();
             $data[$modelId][static::DATA_SOURCE_DEFAULT]['use_config_' . static::FIELD_MESSAGE_AVAILABLE] = '1';
         }
