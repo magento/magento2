@@ -181,11 +181,13 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $itemLevelConfig[$itemId] = [];
             $isMessageAvailable = $item->getProduct()->getGiftMessageAvailable();
 
-            if ($isMessageAvailable == Boolean::VALUE_USE_CONFIG || in_array($isMessageAvailable, [null, ''], true)) {
+            if ($isMessageAvailable == Boolean::VALUE_USE_CONFIG) {
                 $itemLevelConfig[$itemId]['is_available'] = (bool)$this->scopeConfiguration->getValue(
                     GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
                     ScopeInterface::SCOPE_STORE
                 );
+            } else {
+                $itemLevelConfig[$itemId]['is_available'] = (bool)$isMessageAvailable;
             }
             $message = $this->itemRepository->get($quote->getId(), $itemId);
             if ($message) {
