@@ -33,7 +33,7 @@ class AssertCustomerNameFrontend extends AbstractConstraint
 
         $customerAccountIndex->open();
         $infoBlock = $customerAccountIndex->getInfoBlock()->getContactInfoContent();
-        $infoBlock = explode("\n", $infoBlock);
+        $infoBlock = explode(PHP_EOL, $infoBlock);
         $nameInDashboard = $infoBlock[0];
         \PHPUnit_Framework_Assert::assertTrue(
             $nameInDashboard == $customerName,

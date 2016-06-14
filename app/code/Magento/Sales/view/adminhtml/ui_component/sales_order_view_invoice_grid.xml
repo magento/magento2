@@ -54,12 +54,12 @@
             </filterSelect>
         </filters>
         <massaction name="listing_massaction">
-            <action name="pdfinvoices_order">
+            <action name="pdfinvoices_order" class="Magento\Sales\Ui\Component\Control\PdfAction">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="type" xsi:type="string">pdfinvoices_order</item>
                         <item name="label" xsi:type="string" translate="true">PDF Invoices</item>
-                        <item name="url" xsi:type="url" path="sales/invoice/pdfinvoices"/>
+                        <item name="pdfAction" xsi:type="string">sales/invoice/pdfinvoices</item>
                     </item>
                 </argument>
             </action>
@@ -144,7 +144,7 @@
                 </item>
             </argument>
         </column>
-        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>

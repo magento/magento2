@@ -27,6 +27,27 @@ class TierPrice extends DataSource
     private $customerGroups;
 
     /**
+     * Repository Factory instance.
+     *
+     * @var RepositoryFactory
+     */
+    private $repositoryFactory;
+
+    /**
+     * Fixture Factory instance.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * Rought fixture field data.
+     *
+     * @var array
+     */
+    private $fixtureData = null;
+
+    /**
      * @constructor
      * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
@@ -40,14 +61,28 @@ class TierPrice extends DataSource
         array $params,
         $data = []
     ) {
+        $this->repositoryFactory = $repositoryFactory;
+        $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
-        if (!isset($data['dataset'])) {
+        $this->fixtureData = $data;
+    }
+
+    /**
+     * Return prepared data set.
+     *
+     * @param string $key [optional]
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getData($key = null)
+    {
+        if (!isset($this->fixtureData['dataset'])) {
             throw new \Exception("Data must be set");
         }
-        $this->data = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
+        $this->data = $this->repositoryFactory->get($this->params['repository'])->get($this->fixtureData['dataset']);
         foreach ($this->data as $key => $item) {
             /** @var CustomerGroup $customerGroup */
-            $customerGroup = $fixtureFactory->createByCode(
+            $customerGroup = $this->fixtureFactory->createByCode(
                 'customerGroup',
                 ['dataset' => $item['customer_group']['dataset']]
             );
@@ -57,6 +92,8 @@ class TierPrice extends DataSource
             $this->data[$key]['customer_group'] = $customerGroup->getCustomerGroupCode();
             $this->customerGroups[$key] = $customerGroup;
         }
+
+        return parent::getData($key);
     }
 
     /**

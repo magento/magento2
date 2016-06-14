@@ -32,9 +32,8 @@ class AssertAddressDeletedFrontend extends AbstractConstraint
         Customer $customer,
         Address $addressToDelete
     ) {
-
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
 

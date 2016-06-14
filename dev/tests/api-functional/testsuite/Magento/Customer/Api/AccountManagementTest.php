@@ -14,6 +14,10 @@ use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Security\Model\Config;
+use Magento\Newsletter\Model\Plugin\CustomerPlugin;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Customer\Model\Data\Customer as CustomerData;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -62,6 +66,9 @@ class AccountManagementTest extends WebapiAbstract
      */
     private $currentCustomerId;
 
+    /** @var  Subscriber */
+    private $subscriber;
+
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
@@ -102,6 +109,7 @@ class AccountManagementTest extends WebapiAbstract
         $this->config = Bootstrap::getObjectManager()->create(
             'Magento\Config\Model\Config'
         );
+        $this->initSubscriber();
 
         if ($this->config->getConfigDataValue(
             Config::XML_PATH_FRONTED_AREA .
@@ -147,6 +155,13 @@ class AccountManagementTest extends WebapiAbstract
         );
         $this->config->save();
         unset($this->accountManagement);
+        unset($this->subscriber);
+    }
+
+    private function initSubscriber() {
+        $this->subscriber = Bootstrap::getObjectManager()->create(
+            'Magento\Newsletter\Model\Subscriber'
+        );
     }
 
     public function testCreateCustomer()
@@ -777,5 +792,46 @@ class AccountManagementTest extends WebapiAbstract
             'region' => ['region' => 'Alabama', 'region_id' => 1, 'region_code' => 'AL'],
             'region_id' => 1,
         ];
+    }
+
+    public function testCreateCustomerWithSubscription()
+    {
+        $customerData = $this->customerHelper->createSampleCustomer(
+            ["extension_attributes" => ["is_subscribed" => true]]
+        );
+
+        $this->assertNotNull($customerData['id']);
+
+        $this->subscriber->loadByCustomerId($customerData['id']);
+
+        $this->assertNotNull($this->subscriber->getId());
+        $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
+    }
+
+    public function testUnsubscribeCustomer()
+    {
+        //Creating customer and subscribe
+        $customerData = $this->customerHelper->createSampleCustomer(
+            ["extension_attributes" => ["is_subscribed" => true]]
+        );
+        $this->assertNotNull($customerData['id']);
+
+        $this->subscriber->loadByCustomerId($customerData['id']);
+        $subscriptionId = $this->subscriber->getId();
+
+        $this->assertNotNull($subscriptionId);
+        $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
+        //Manage customer in order to unsubscribe
+        $this->customerHelper->updateSampleCustomer(
+            array_merge(
+                $customerData,
+                ["extension_attributes" => ["is_subscribed" => false]]
+            ),
+            $customerData["id"]
+        );
+        $this->initSubscriber();
+
+        $this->subscriber->loadByCustomerId($customerData['id']);
+        $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $this->subscriber->getStatus());
     }
 }
