@@ -44,6 +44,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         $productAttributes = $this->productFactory->create()->loadAttributeOptions()->getAttributeOption();
         $attributes = [];
         foreach ($productAttributes as $code => $label) {
+            $excludeAttributes = ['quantity_and_stock_status'];
+            if (!in_array($code, $excludeAttributes))
             $attributes[] = [
                 'value' => 'Magento\CatalogWidget\Model\Rule\Condition\Product|' . $code,
                 'label' => $label,
