@@ -29,8 +29,11 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
                 $statusCode = $data['status'] = $filterManager->stripTags($data['status']);
             }
             $data['label'] = $filterManager->stripTags($data['label']);
-            foreach ($data['store_labels'] as &$label) {
-                $label = $filterManager->stripTags($label);
+            
+            if(isset($data['store_labels']) && is_array($data['store_labels'])) {
+                foreach ($data['store_labels'] as &$label) {
+                    $label = $filterManager->stripTags($label);
+                }
             }
 
             $status = $this->_objectManager->create('Magento\Sales\Model\Order\Status')->load($statusCode);
