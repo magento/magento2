@@ -12,8 +12,6 @@ use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\Data\Form\FormKey;
-use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Configuration provider for GiftMessage rendering on "Checkout cart" page.
@@ -96,11 +94,11 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
         $configuration['giftMessage'] = [];
         $orderLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ORDER,
-            ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         $itemLevelGiftMessageConfiguration = (bool)$this->scopeConfiguration->getValue(
             GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-            ScopeInterface::SCOPE_STORE
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($orderLevelGiftMessageConfiguration) {
             $orderMessages = $this->getOrderLevelGiftMessages();
@@ -180,13 +178,8 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $itemId = $item->getId();
             $itemLevelConfig[$itemId] = [];
             $isMessageAvailable = $item->getProduct()->getGiftMessageAvailable();
-
-            if ($isMessageAvailable == Boolean::VALUE_USE_CONFIG) {
-                $itemLevelConfig[$itemId]['is_available'] = (bool)$this->scopeConfiguration->getValue(
-                    GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS,
-                    ScopeInterface::SCOPE_STORE
-                );
-            } else {
+            // use gift message product setting if it is available
+            if ($isMessageAvailable !== null) {
                 $itemLevelConfig[$itemId]['is_available'] = (bool)$isMessageAvailable;
             }
             $message = $this->itemRepository->get($quote->getId(), $itemId);
