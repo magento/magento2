@@ -114,7 +114,7 @@ class GeneratedFiles
     /**
      * Reads Cache configuration from env.php and returns indexed array containing all the enabled cache types.
      *
-     * @return string []
+     * @return string[]
      */
     private function getEnabledCacheTypes()
     {
