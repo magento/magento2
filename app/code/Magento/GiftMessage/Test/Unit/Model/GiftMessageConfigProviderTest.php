@@ -9,6 +9,7 @@ use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 use Magento\Store\Model\ScopeInterface as Scope;
 use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\UrlInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -151,7 +152,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
         $quoteItemMock->expects($this->once())->method('getId')->willReturn($itemId);
         $quoteItemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
-        $productMock->expects($this->any())->method('getGiftMessageAvailable')->willReturn(false);
+        $productMock->expects($this->any())->method('getGiftMessageAvailable')->willReturn(Boolean::VALUE_USE_CONFIG);
         $this->itemRepositoryMock->expects($this->once())->method('get')->with($quoteId, $itemId)
             ->willReturn($messageMock);
         $quoteMock->expects($this->once())->method('getQuoteCurrencyCode')->willReturn($currencyCode);
@@ -174,7 +175,6 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
                 'orderLevel' => $messageDataMock,
                 'itemLevel' => [
                     $itemId => [
-                        'is_available' => false,
                         'message' => $messageDataMock,
                     ],
                 ]

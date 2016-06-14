@@ -12,6 +12,7 @@ use Magento\Customer\Model\Context as CustomerContext;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\FormatInterface as LocaleFormat;
 use Magento\Framework\Data\Form\FormKey;
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
  * Configuration provider for GiftMessage rendering on "Checkout cart" page.
@@ -179,7 +180,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $itemLevelConfig[$itemId] = [];
             $isMessageAvailable = $item->getProduct()->getGiftMessageAvailable();
             // use gift message product setting if it is available
-            if ($isMessageAvailable !== null) {
+            if ($isMessageAvailable !== null && $isMessageAvailable != Boolean::VALUE_USE_CONFIG) {
                 $itemLevelConfig[$itemId]['is_available'] = (bool)$isMessageAvailable;
             }
             $message = $this->itemRepository->get($quote->getId(), $itemId);
