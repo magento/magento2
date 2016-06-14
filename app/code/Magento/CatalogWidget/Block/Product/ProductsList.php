@@ -339,7 +339,7 @@ class ProductsList extends \Magento\Catalog\Block\Product\AbstractProduct implem
             }
         }
 
-        return $identities?: [\Magento\Catalog\Model\Product::CACHE_TAG];
+        return $identities ?: [\Magento\Catalog\Model\Product::CACHE_TAG];
     }
 
     /**
