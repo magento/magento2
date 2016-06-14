@@ -13,12 +13,12 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- * Class AfterImportDataObserverTest
+ * Class ProductProcessUrlRewriteSavingObserverTest
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
+class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -184,15 +184,14 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
         $expectedDeleteCount,
         $expectedReplaceCount
     ) {
-
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')
             ->will($this->returnValueMap(
-                    [
-                        ['visibility', $isChangedVisibility],
-                        ['url_key', $isChangedUrlKey]
-                    ]
-                ));
+                [
+                    ['visibility', $isChangedVisibility],
+                    ['url_key', $isChangedUrlKey]
+                ]
+            ));
 
         $this->product->expects($this->any())
             ->method('getIsChangedWebsites')
