@@ -184,12 +184,16 @@ class Configurable extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\
             ['le' => $this->getTable('catalog_product_entity')],
             'le.entity_id = l.product_id',
             []
+        )->join(
+            ['cs' => $this->getTable('store')],
+            'cs.website_id = i.website_id',
+            []
         )->where(
             'le.required_options=0'
         )->group(
             ['parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
-        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
+        $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 'cs.store_id', null, true);
         $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
 
         $select->columns(
