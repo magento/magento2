@@ -23,7 +23,7 @@ class CleanCache
      * @var \Magento\Framework\App\CacheInterface
      * @deprecated
      */
-    protected $cache;
+    private $cache;
 
 
     /**
