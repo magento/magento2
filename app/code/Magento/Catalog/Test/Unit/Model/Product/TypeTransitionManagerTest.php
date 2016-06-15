@@ -24,9 +24,6 @@ class TypeTransitionManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (version_compare('5.5.28', phpversion(), '=')) {
-            $this->markTestSkipped('MAGETWO-43290: This test fails with Segmentation fault on PHP 5.5.28');
-        }
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
             ['getTypeId', 'setTypeId', 'setTypeInstance'],
