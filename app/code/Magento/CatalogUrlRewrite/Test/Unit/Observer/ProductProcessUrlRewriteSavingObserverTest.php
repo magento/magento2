@@ -115,7 +115,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
-                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 1,
 
             ],
@@ -126,7 +125,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 0,
-                'expectedProdLoadCount' => 0,
                 'expectedReplaceCount'  => 0
             ],
             'visibility changed' => [
@@ -136,7 +134,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
-                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 1
             ],
             'websites changed' => [
@@ -146,7 +143,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
-                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 1
             ],
             'categories changed' => [
@@ -156,7 +152,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => true,
                 'visibilityResult'      => true,
                 'expectedDeleteCount'   => 1,
-                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 1
             ],
             'url changed invisible' => [
@@ -166,7 +161,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isChangedCategories'   => false,
                 'visibilityResult'      => false,
                 'expectedDeleteCount'   => 1,
-                'expectedProdLoadCount' => 1,
                 'expectedReplaceCount'  => 0
             ],
         ];
@@ -179,7 +173,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
      * @param bool $isChangedCategories
      * @param bool $visibilityResult
      * @param int $expectedDeleteCount
-     * @param int $expectedProdLoadCount
      * @param int $expectedReplaceCount
      *
      * @dataProvider testUrlKeyDataProvider
@@ -191,7 +184,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
         $isChangedCategories,
         $visibilityResult,
         $expectedDeleteCount,
-        $expectedProdLoadCount,
         $expectedReplaceCount
     ) {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(12));
