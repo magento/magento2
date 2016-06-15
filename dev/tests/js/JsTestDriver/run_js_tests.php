@@ -139,29 +139,35 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             kill -9 $LSOF
         fi
 
-        DISPLAY_NUM=99
-        ps -ef | egrep "[X]vfb.*:$DISPLAY_NUM"
-        if [ $? -eq 0 ] ; then
-            pkill Xvfb
+        # Skip Xvfb setup for OS X since there browsers do not support headless display that way
+        if [ "$(uname)" != "Darwin" ]; then
+            DISPLAY_NUM=99
+            ps -ef | egrep "[X]vfb.*:$DISPLAY_NUM"
+            if [ $? -eq 0 ] ; then
+                pkill Xvfb
+            fi
+    
+            XVFB=`which Xvfb`
+            if [ "$?" -eq 1 ];
+            then
+                echo "Xvfb not found."
+                exit 1
+            fi
+    
+            $XVFB :$DISPLAY_NUM -nolisten inet6 -ac &
+            PID_XVFB="$!"        # take the process ID
+            export DISPLAY=:$DISPLAY_NUM   # set display to use that of the Xvfb
         fi
-
-        XVFB=`which Xvfb`
-        if [ "$?" -eq 1 ];
-        then
-            echo "Xvfb not found."
-            exit 1
-        fi
-
-        $XVFB :$DISPLAY_NUM -nolisten inet6 -ac &
-        PID_XVFB="$!"        # take the process ID
-        export DISPLAY=:$DISPLAY_NUM   # set display to use that of the Xvfb
+        
         USER=`whoami`
         SUDO=`which sudo`
 
         # run the tests
         $SUDO -u $USER ' . $command . '
 
-        kill -9 $PID_XVFB    # shut down Xvfb (firefox will shut down cleanly by JsTestDriver)
+        if [ "$(uname)" != "Darwin" ]; then
+            kill -9 $PID_XVFB    # shut down Xvfb (firefox will shut down cleanly by JsTestDriver)
+        fi
         echo "Done."';
 
     fwrite($fh, $shellCommand . PHP_EOL);
