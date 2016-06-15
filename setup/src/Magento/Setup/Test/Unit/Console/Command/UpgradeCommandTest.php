@@ -20,12 +20,6 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
         $state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $state->expects($this->once())->method('setAreaCode')->with('setup');
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $objectManager->expects($this->exactly(2))
-            ->method('get')
-            ->will($this->returnValueMap([
-                ['Magento\Framework\App\State', $state],
-                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
-        ]));
         $objectManager->expects($this->once())->method('configure');
         $state->expects($this->once())->method('setAreaCode')->with('setup');
         $installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
@@ -33,6 +27,14 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
         $installer->expects($this->at(1))->method('installSchema');
         $installer->expects($this->at(2))->method('installDataFixtures');
         $installerFactory->expects($this->once())->method('create')->willReturn($installer);
+
+        $objectManager->expects($this->exactly(2))
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\State', $state],
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader]
+            ]));
+
         $commandTester = new CommandTester(new UpgradeCommand($installerFactory, $objectManagerProvider));
         $commandTester->execute([]);
     }

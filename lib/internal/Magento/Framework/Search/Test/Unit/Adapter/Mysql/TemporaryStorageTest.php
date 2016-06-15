@@ -83,23 +83,23 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
         $documentId = 312432;
         $documentValue = 1.235123;
 
-        $documentField = $this->getMockBuilder('Magento\Framework\Search\DocumentField')
+        $attributeValue = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
             ->disableOriginalConstructor()
             ->getMock();
-        $documentField->expects($this->once())
+        $attributeValue->expects($this->once())
             ->method('getValue')
             ->willReturn($documentValue);
 
-        $document = $this->getMockBuilder('Magento\Framework\Search\Document')
+        $document = $this->getMockBuilder('Magento\Framework\Api\Search\Document')
             ->disableOriginalConstructor()
             ->getMock();
         $document->expects($this->once())
             ->method('getId')
             ->willReturn($documentId);
         $document->expects($this->once())
-            ->method('getField')
+            ->method('getCustomAttribute')
             ->with('score')
-            ->willReturn($documentField);
+            ->willReturn($attributeValue);
 
         $table = $this->createTemporaryTable();
 
