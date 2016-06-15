@@ -22,7 +22,11 @@ require([
     }
 
     function disableFieldEditMode(fieldId) {
-        byId(fieldId).prop('disabled', true);
+        if (byId(fieldId).next().hasClass('addafter')) {
+            byId(fieldId).prop('disabled', true).parent().addClass('_update-attributes-disabled');
+        } else {
+            byId(fieldId).prop('disabled', true);
+        }
 
         if (byId(fieldId + '_hidden').length) {
             byId(fieldId + '_hidden').prop('disabled', true);
@@ -30,7 +34,11 @@ require([
     }
 
     function enableFieldEditMode(fieldId) {
-        byId(fieldId).prop('disabled', false);
+        if (byId(fieldId).parent().hasClass('_update-attributes-disabled')) {
+            byId(fieldId).prop('disabled', false).parent().removeClass('_update-attributes-disabled');
+        } else {
+            byId(fieldId).prop('disabled', false);
+        }
 
         if (byId(fieldId + '_hidden').length) {
             byId(fieldId + '_hidden').prop('disabled', false);

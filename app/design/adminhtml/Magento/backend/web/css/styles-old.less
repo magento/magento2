@@ -862,20 +862,18 @@
 
     input[type="radio"],
     input[type="checkbox"] {
+        .lib-css(appearance, none, 1);
         background: #fff;
-        border: 1px solid #adadad;
         border-radius: 2px;
+        border: 1px solid #adadad;
         cursor: pointer;
         display: inline-block;
-        vertical-align: middle;
-        margin: 0 5px 0 0;
         height: 16px;
-        width: 16px;
+        margin: 0 5px 0 0;
         position: relative;
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
         transition: all 0.1s ease-in;
+        vertical-align: middle;
+        width: 16px;
 
         &:focus {
             border-color: #007bdb;
@@ -1704,10 +1702,6 @@
         .pager input {
             border-width: 1px;
         }
-    }
-
-    .field-price .addon input[type="text"] ~ .addafter strong {
-        font-size: 18px;
     }
 
     .field-weight,

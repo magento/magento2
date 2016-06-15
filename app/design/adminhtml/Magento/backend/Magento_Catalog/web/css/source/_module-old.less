@@ -70,18 +70,79 @@
     .field-msrp,
     .field-cost,
     .field-gift_wrapping_price {
-        .control {
-            .addon > input {
-                padding-left: 23px;
-            }
+        &:not(.field-weight) {
+            .addon {
+                .lib-vendor-prefix-display(inline-flex);
+                .lib-vendor-prefix-flex-direction(row);
+                border: 1px solid #adadad;
+                color: #303030;
+                display: inline-flex;
+                flex-flow: row nowrap;
+                margin: 0 0 35px;
+                position: relative;
+                width: 100%;
+                z-index: 1;
 
-            .addafter {
-                > strong {
-                    left: 5px;
-                    position: absolute;
-                    top: 3px;
+                &._update-attributes-disabled {
+                    background: #f4f4f4;
+                    border-color: #d6d6d6;
+
+                    .addafter {
+                        strong {
+                            opacity: .5;
+                        }
+                    }
                 }
             }
+        }
+
+        ._update-attributes-disabled {
+            .admin__control-text {
+                background: none;
+            }
+        }
+
+        .admin__control-text {
+            .lib-css(appearance, none, 1);
+            .lib-vendor-prefix-flex-basis(auto);
+            .lib-vendor-prefix-flex-grow(1);
+            .lib-vendor-prefix-flex-shrink(1);
+            background: none;
+            border: 0;
+        }
+
+        .control {
+            .admin__control-text {
+                &[disabled] {
+                    background: none;
+                }
+            }
+        }
+
+        .addafter {
+            .lib-vendor-prefix-flex-basis(auto);
+            .lib-vendor-prefix-flex-grow(0);
+            .lib-vendor-prefix-flex-shrink(0);
+            .lib-vendor-prefix-order(0);
+            position: relative;
+            z-index: 0;
+
+            strong {
+                padding-top: 4px;
+                position: relative;
+                vertical-align: top;
+                z-index: 1;
+
+                + strong {
+                    padding-left: 0;
+                }
+            }
+        }
+
+        .attribute-change-checkbox {
+            left: 0;
+            position: absolute;
+            top: 35px;
         }
     }
 
