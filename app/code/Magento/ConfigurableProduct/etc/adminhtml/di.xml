@@ -16,6 +16,9 @@
     <type name="Magento\Catalog\Model\Product\Validator">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Product\Validator\Plugin" sortOrder="50" />
     </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Block\Adminhtml\Order\Create\Sidebar" sortOrder="200"/>
+    </type>
     <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main">
         <arguments>
             <argument name="inputTypeFactory" xsi:type="object">Magento\Catalog\Model\System\Config\Source\InputtypeFactory</argument>

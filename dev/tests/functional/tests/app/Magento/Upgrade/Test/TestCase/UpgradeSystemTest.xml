@@ -17,6 +17,7 @@
             <data name="upgrade/optionsCode" xsi:type="string">No</data>
             <data name="upgrade/optionsMedia" xsi:type="string">No</data>
             <data name="upgrade/optionsDb" xsi:type="string">No</data>
+            <data name="upgrade/otherComponents" xsi:type="string">{otherComponents}</data>
         </variation>
     </testCase>
 </config>

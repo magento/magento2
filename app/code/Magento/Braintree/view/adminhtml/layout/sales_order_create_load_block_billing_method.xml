@@ -13,5 +13,11 @@
                 <argument name="template" xsi:type="string">Magento_Braintree::form/cc.phtml</argument>
             </action>
         </referenceBlock>
+        <referenceBlock name="order.create.billing.method.form">
+            <action method="setMethodFormTemplate">
+                <argument name="method" xsi:type="string">braintree_cc_vault</argument>
+                <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
+            </action>
+        </referenceBlock>
     </body>
 </page>
