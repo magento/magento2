@@ -515,11 +515,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->setShippingMethod($order->getShippingMethod());
         $quote->getShippingAddress()->setShippingDescription($order->getShippingDescription());
 
-        $paymentData = $order->getPayment()->getData();
-        unset($paymentData['cc_type'], $paymentData['cc_last_4']);
-        unset($paymentData['cc_exp_month'], $paymentData['cc_exp_year']);
-        $quote->getPayment()->addData($paymentData);
-
         $orderCouponCode = $order->getCouponCode();
         if ($orderCouponCode) {
             $quote->setCouponCode($orderCouponCode);
@@ -551,6 +546,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
              */
             $this->collectRates();
         }
+
+        $quote->getShippingAddress()->unsCachedItemsAll();
+        $quote->setTotalsCollectedFlag(false);
 
         $this->quoteRepository->save($quote);
 

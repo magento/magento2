@@ -100,7 +100,7 @@ class View
         $collection = $this->productFactory->create()
             ->getCollection()
             ->addCategoryIds()
-            ->addAttributeToSelect(['name', 'url_path', 'url_key'])
+            ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addWebsiteFilter($websiteIds);
         foreach ($collection as $product) {
             $product->setStoreId($storeId);

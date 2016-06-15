@@ -51,6 +51,7 @@ require([
             showHour: false,
             showMinute: false,
             serverTimezoneSeconds: <?php echo (int) $block->getStoreTimestamp(); ?>,
+            serverTimezoneOffset: <?php echo (int) $block->getTimezoneOffsetSeconds(); ?>,
             yearRange: '<?php /* @escapeNotVerified */ echo $block->getYearRange() ?>'
         }
     });
