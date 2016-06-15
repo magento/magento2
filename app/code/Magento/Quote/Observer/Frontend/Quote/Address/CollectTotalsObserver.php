@@ -86,7 +86,7 @@ class CollectTotalsObserver implements ObserverInterface
         $customerCountryCode = $address->getCountryId();
         $customerVatNumber = $address->getVatId();
 
-        if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) { //if we are on any step: before quote shipping address is chosen
+        if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) { //try to get data from customer if quote address is empty
             $customerAddress = $this->getCustomerAddressRepository()->getById($customer->getDefaultShipping());
 
             $customerCountryCode = $customerAddress->getCountryId();
@@ -124,6 +124,4 @@ class CollectTotalsObserver implements ObserverInterface
     {
         return ObjectManager::getInstance()->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
     }
-
-
 }
