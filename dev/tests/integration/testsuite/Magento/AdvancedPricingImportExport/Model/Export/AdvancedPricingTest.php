@@ -59,14 +59,85 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         $csvfile = uniqid('importexport_') . '.csv';
 
+        $this->exportData($csvfile);
+        $this->importData($csvfile);
+
+        while ($index > 0) {
+            $index--;
+            $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
+                ->load($ids[$index])
+                ->getTierPrices();
+            $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
+            $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
+        }
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/price/scope 1
+     * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/product_with_second_website.php
+     */
+    public function testExportMultipleWebsites()
+    {
+        $productRepository = $this->objectManager->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        $index = 0;
+        $ids = [];
+        $origPricingData = [];
+        $skus = ['AdvancedPricingSimple 1', 'AdvancedPricingSimple 2'];
+        while (isset($skus[$index])) {
+            $ids[$index] = $productRepository->get($skus[$index])->getId();
+            $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
+                ->load($ids[$index])
+                ->getTierPrices();
+            $index++;
+        }
+
+        $csvfile = uniqid('importexport_') . '.csv';
+
+        $exportContent = $this->exportData($csvfile);
+        $this->assertContains(
+            '"AdvancedPricingSimple 2",test,"ALL GROUPS",3.0000,5.0000',
+            $exportContent
+        );
+        $this->importData($csvfile);
+
+        while ($index > 0) {
+            $index--;
+            $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
+                ->load($ids[$index])
+                ->getTierPrices();
+            $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
+            $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
+        }
+    }
+
+    /**
+     * @param string $csvFile
+     * @return string
+     */
+    private function exportData($csvFile)
+    {
         $this->model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class,
-                ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
+                ['fileSystem' => $this->fileSystem, 'destination' => $csvFile]
             )
         );
-        $this->assertNotEmpty($this->model->export());
+        $exportContent = $this->model->export();
+        $this->assertNotEmpty($exportContent);
 
+        return $exportContent;
+    }
+
+    /**
+     * @param string $csvFile
+     */
+    private function importData($csvFile)
+    {
         /** @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing $importModel */
         $importModel = $this->objectManager->create(
             \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
@@ -75,7 +146,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
-                'file' => $csvfile,
+                'file' => $csvFile,
                 'directory' => $directory
             ]
         );
@@ -90,18 +161,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $errors->getErrorsCount() == 0,
-            'Advanced Pricing import error, imported from file:' . $csvfile
+            'Advanced Pricing import error, imported from file:' . $csvFile
         );
         $importModel->importData();
-
-        while ($index > 0) {
-            $index--;
-            $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
-                ->load($ids[$index])
-                ->getTierPrices();
-            $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
-            $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
-        }
     }
 
     private function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
