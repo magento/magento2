@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 
 class CollectTotalsObserver implements ObserverInterface
@@ -84,6 +85,14 @@ class CollectTotalsObserver implements ObserverInterface
         }
         $customerCountryCode = $address->getCountryId();
         $customerVatNumber = $address->getVatId();
+
+        if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) { //if we are on any step: before quote shipping address is chosen
+            $customerAddress = $this->getCustomerAddressRepository()->getById($customer->getDefaultShipping());
+
+            $customerCountryCode = $customerAddress->getCountryId();
+            $customerVatNumber = $customerAddress->getVatId();
+        }
+
         $groupId = null;
         if (empty($customerVatNumber) || false == $this->customerVat->isCountryInEU($customerCountryCode)) {
             $groupId = $customer->getId() ? $this->groupManagement->getDefaultGroup(
@@ -105,4 +114,16 @@ class CollectTotalsObserver implements ObserverInterface
             $quote->setCustomer($customer);
         }
     }
+
+    /**
+     * @deprected
+     *
+     * @return \Magento\Customer\Api\AddressRepositoryInterface
+     */
+    private function getCustomerAddressRepository()
+    {
+        return ObjectManager::getInstance()->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
+    }
+
+
 }
