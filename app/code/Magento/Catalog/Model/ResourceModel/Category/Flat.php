@@ -69,7 +69,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
     /**
      * Category collection factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory
      * @deprecated
      */
     protected $_categoryCollectionFactory;
@@ -95,6 +95,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * @param CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
      */
@@ -102,7 +103,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\Flat\CollectionFactory $categoryCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
