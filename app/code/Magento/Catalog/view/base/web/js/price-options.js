@@ -76,7 +76,6 @@ define([
             $(this.options.priceHolderSelector).trigger('updatePrice', changes);
         },
 
-
         /**
          * Helper to fix issue with option nodes:
          *  - you can't place any html in option ->
@@ -174,7 +173,10 @@ define([
                 break;
 
             case 'radio':
-
+                if (element.is(':checked')) {
+                    changes[optionHash] = optionConfig[optionValue] && optionConfig[optionValue].prices || {};
+                }
+                break;
             case 'select-one':
                 changes[optionHash] = optionConfig[optionValue] && optionConfig[optionValue].prices || {};
                 break;
