@@ -69,7 +69,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
                 'isVisibleInSiteVisibility',
                 'getIsChangedWebsites',
                 'getIsChangedCategories',
-                'load',
                 'getStoreId'
             ],
             [],
@@ -196,10 +195,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit_Framework_Test
         $expectedReplaceCount
     ) {
         $this->product->expects($this->any())->method('getStoreId')->will($this->returnValue(12));
-
-        $this->product->expects($this->exactly($expectedProdLoadCount))
-            ->method('load')
-            ->with($this->product->getId());
 
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')

@@ -5,8 +5,11 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Store\Model\StoreScopeProvider;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
@@ -37,13 +40,12 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 
     /**
      * Generate urls for UrlRewrite and save it in storage
-     *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = $observer->getEvent()->getProduct();
 
         if ($product->dataHasChangedFor('url_key')
@@ -58,11 +60,8 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
                 UrlRewrite::STORE_ID => $product->getStoreId()
             ]);
 
-            $savedProduct = clone $product;
-            $savedProduct->load($product->getId());
-
-            if ($savedProduct->isVisibleInSiteVisibility()) {
-                $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($savedProduct));
+            if ($product->isVisibleInSiteVisibility()) {
+                $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
             }
         }
     }
