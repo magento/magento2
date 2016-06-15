@@ -48,7 +48,9 @@ class CleanCache
     public function afterUpdateMview(\Magento\Indexer\Model\Processor $subject)
     {
         $this->eventManager->dispatch('clean_cache_after_reindex', ['object' => $this->context]);
-        $this->getCache()->clean($this->context->getIdentities());
+        if (!empty($this->context->getIdentities())) {
+            $this->getCache()->clean($this->context->getIdentities());
+        }
     }
 
     /**
@@ -61,7 +63,9 @@ class CleanCache
     public function afterReindexAllInvalid(\Magento\Indexer\Model\Processor $subject)
     {
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->context]);
-        $this->getCache()->clean($this->context->getIdentities());
+        if (!empty($this->context->getIdentities())) {
+            $this->getCache()->clean($this->context->getIdentities());
+        }
     }
 
 
