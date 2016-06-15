@@ -86,7 +86,7 @@ class CleanCacheTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo(['object' => $this->contextMock])
             );
 
-        $this->contextMock->expects($this->once())
+        $this->contextMock->expects($this->atLeastOnce())
             ->method('getIdentities')
             ->willReturn($tags);
 
