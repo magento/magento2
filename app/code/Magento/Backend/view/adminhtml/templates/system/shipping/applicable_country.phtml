@@ -37,13 +37,9 @@ CountryModel.prototype = {
             var showMethodElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'showmethod'));
             //var specifErrMsgElement  = $(applyCountryElement.id.replace(/sallowspecific/, 'specificerrmsg'));
             if (specifCountryElement) {
-                if (applyCountryElement.value == 1) {
-
-                   var specifCountryUseDefaultElement  = $(applyCountryElement.id + '_inherit');
-                   //if specific country element selected and use default checkbox not checked
-                   if (!specifCountryUseDefaultElement || !specifCountryUseDefaultElement.checked) {
-                       specifCountryElement.enable();
-                   }
+                if (applyCountryElement.value == 1 && !specifCountryElement.hasAttribute('disabled')) {
+                   //if specific country element selected
+                   specifCountryElement.enable();
                    if (showMethodElement) {
                        this.showElement(showMethodElement.up(1));
                    }
