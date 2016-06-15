@@ -191,19 +191,19 @@
             </field>
         </dataset>
         <dataset name="braintree_use_vault">
-            <field name="payment/vault/vault_payment" xsi:type="array">
+            <field name="payment/braintree_section/braintree/braintree_cc_vault_active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Braintree</item>
-                <item name="value" xsi:type="string">braintree</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
             </field>
         </dataset>
         <dataset name="braintree_use_vault_rollback">
-            <field name="payment/vault/vault_payment" xsi:type="array">
+            <field name="payment/braintree_section/braintree/braintree_cc_vault_active" xsi:type="array">
                 <item name="scope" xsi:type="string">payment</item>
                 <item name="scope_id" xsi:type="number">1</item>
-                <item name="label" xsi:type="string">Select vault provider</item>
-                <item name="value" xsi:type="string">null</item>
+                <item name="label" xsi:type="string">No</item>
+                <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
         <dataset name="braintree_paypal">

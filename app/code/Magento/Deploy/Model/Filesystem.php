@@ -138,10 +138,11 @@ class Filesystem
                 DirectoryList::TMP_MATERIALIZATION_DIR
             ]
         );
-        // Trigger static assets compilation and deployment
-        $this->deployStaticContent($output);
+        
         // Trigger code generation
         $this->compile($output);
+        // Trigger static assets compilation and deployment
+        $this->deployStaticContent($output);
     }
 
     /**

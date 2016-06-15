@@ -118,6 +118,6 @@ class DeployStaticContentCommand extends Command
             'Magento\Deploy\Model\Deployer',
             ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
         );
-        $deployer->deploy($this->objectManagerFactory, $languages);
+        return $deployer->deploy($this->objectManagerFactory, $languages);
     }
 }

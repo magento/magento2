@@ -15,6 +15,11 @@ use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 class Validate extends ImportResultController
 {
     /**
+     * @var Import
+     */
+    private $import;
+
+    /**
      * Validate uploaded files action
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -34,52 +39,19 @@ class Validate extends ImportResultController
             );
 
             /** @var $import \Magento\ImportExport\Model\Import */
-            $import = $this->_objectManager->create('Magento\ImportExport\Model\Import')->setData($data);
-            $source = ImportAdapter::findAdapterFor(
-                $import->uploadSource(),
-                $this->_objectManager->create('Magento\Framework\Filesystem')
-                    ->getDirectoryWrite(DirectoryList::ROOT),
-                $data[$import::FIELD_FIELD_SEPARATOR]
-            );
-            $validationResult = $import->validateSource($source);
-
-            if (!$import->getProcessedRowsCount()) {
-                if (!$import->getErrorAggregator()->getErrorsCount()) {
-                    $resultBlock->addError(__('This file is empty. Please try another one.'));
-                } else {
-                    foreach ($import->getErrorAggregator()->getAllErrors() as $error) {
-                        $resultBlock->addError($error->getErrorMessage(), false);
-                    }
-                }
-            } else {
-                $errorAggregator = $import->getErrorAggregator();
-                if (!$validationResult) {
-                    $resultBlock->addError(
-                        __('Data validation is failed. Please fix errors and re-upload the file..')
-                    );
-                    $this->addErrorMessages($resultBlock, $errorAggregator);
-                } else {
-                    if ($import->isImportAllowed()) {
-                        $resultBlock->addSuccess(
-                            __('File is valid! To start import process press "Import" button'),
-                            true
-                        );
-                    } else {
-                        $resultBlock->addError(
-                            __('The file is valid, but we can\'t import it for some reason.'),
-                            false
-                        );
-                    }
-                }
-                $resultBlock->addNotice(
-                    __(
-                        'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-                        $import->getProcessedRowsCount(),
-                        $import->getProcessedEntitiesCount(),
-                        $errorAggregator->getInvalidRowsCount(),
-                        $errorAggregator->getErrorsCount()
-                    )
+            $import = $this->getImport()->setData($data);
+            try {
+                $source = ImportAdapter::findAdapterFor(
+                    $import->uploadSource(),
+                    $this->_objectManager->create('Magento\Framework\Filesystem')
+                        ->getDirectoryWrite(DirectoryList::ROOT),
+                    $data[$import::FIELD_FIELD_SEPARATOR]
                 );
+                $this->processValidationResult($import->validateSource($source), $resultBlock);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $resultBlock->addError($e->getMessage());
+            } catch (\Exception $e) {
+                $resultBlock->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
             }
             return $resultLayout;
         } elseif ($this->getRequest()->isPost() && empty($_FILES)) {
@@ -91,5 +63,62 @@ class Validate extends ImportResultController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
         return $resultRedirect;
+    }
+
+    /**
+     * @param bool $validationResult
+     * @param ImportResultBlock $resultBlock
+     * @return void
+     */
+    private function processValidationResult($validationResult, $resultBlock)
+    {
+        $import = $this->getImport();
+        if (!$import->getProcessedRowsCount()) {
+            if (!$import->getErrorAggregator()->getErrorsCount()) {
+                $resultBlock->addError(__('This file is empty. Please try another one.'));
+            } else {
+                foreach ($import->getErrorAggregator()->getAllErrors() as $error) {
+                    $resultBlock->addError($error->getErrorMessage());
+                }
+            }
+        } else {
+            $errorAggregator = $import->getErrorAggregator();
+            if (!$validationResult) {
+                $resultBlock->addError(
+                    __('Data validation failed. Please fix the following errors and upload the file again.')
+                );
+                $this->addErrorMessages($resultBlock, $errorAggregator);
+            } else {
+                if ($import->isImportAllowed()) {
+                    $resultBlock->addSuccess(
+                        __('File is valid! To start import process press "Import" button'),
+                        true
+                    );
+                } else {
+                    $resultBlock->addError(__('The file is valid, but we can\'t import it for some reason.'));
+                }
+            }
+            $resultBlock->addNotice(
+                __(
+                    'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
+                    $import->getProcessedRowsCount(),
+                    $import->getProcessedEntitiesCount(),
+                    $errorAggregator->getInvalidRowsCount(),
+                    $errorAggregator->getErrorsCount()
+                )
+            );
+        }
+    }
+
+    /**
+     * @return Import
+     * @deprecated
+     */
+    private function getImport()
+    {
+        if (!$this->import) {
+            $this->import = $this->_objectManager->get(Import::class);
+        }
+        return $this->import;
     }
 }

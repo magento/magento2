@@ -18,15 +18,15 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \Magento\Setup\Model\MarketplaceManager
+     * @var \Magento\Setup\Model\PackagesData
      */
-    private $marketplaceManager;
+    private $packagesData;
 
     public function setUp()
     {
-        $this->marketplaceManager =
-            $this->getMock('Magento\Setup\Model\MarketplaceManager', ['getPackagesForInstall'], [], '', false);
-        $this->controller = new InstallExtensionGrid($this->marketplaceManager);
+        $this->packagesData =
+            $this->getMock('Magento\Setup\Model\PackagesData', ['getPackagesForInstall'], [], '', false);
+        $this->controller = new InstallExtensionGrid($this->packagesData);
     }
 
     /**
@@ -45,7 +45,7 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtensionsAction($extensions)
     {
-        $this->marketplaceManager
+        $this->packagesData
             ->expects($this->once())
             ->method('getPackagesForInstall')
             ->will($this->returnValue($extensions));
