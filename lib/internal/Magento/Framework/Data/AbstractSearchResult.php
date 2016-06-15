@@ -59,9 +59,9 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     protected $entityFactory;
 
     /**
-     * @var \Magento\Framework\DB\Select
-     */
-    protected $select;
+     * @var \Magento\Framework\DB\Query
+    */
+    protected $query;
 
     /**
      * @var \Magento\Framework\Data\SearchResultIteratorFactory
