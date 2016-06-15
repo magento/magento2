@@ -10,9 +10,36 @@ namespace Magento\TestFramework\Dependency;
 use DOMDocument;
 use DOMXPath;
 use Magento\Framework\App\Utility\Files;
+use Magento\TestFramework\Dependency\Virtual\Mapper;
 
 class DiRule implements RuleInterface
 {
+    /**
+     * @var Mapper
+     */
+    private $mapper;
+
+    /**
+     * @param Mapper $mapper
+     */
+    public function __construct(Mapper $mapper)
+    {
+        $this->mapper = $mapper;
+    }
+
+    /**
+     * @var array
+     */
+    private static $tagNameMap = [
+        'type' => 'name',
+        'preference' => [
+            'type',
+            'for'
+        ],
+        'plugin' => 'type',
+        'virtualType' => 'type'
+    ];
+
     /**
      * Gets alien dependencies information for current module by analyzing file's contents
      *
@@ -34,17 +61,19 @@ class DiRule implements RuleInterface
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = [];
-        foreach ($this->fetchPossibleDependencies($contents) as $possibleDependency) {
-            if (preg_match($pattern, $possibleDependency, $matches)) {
-                $referenceModule = str_replace('_', '\\', $matches['module']);
-                if ($currentModule == $referenceModule) {
-                    continue;
+        foreach ($this->fetchPossibleDependencies($contents) as $type => $possibleDependencies) {
+            foreach ($possibleDependencies as $possibleDependency) {
+                if (preg_match($pattern, $possibleDependency, $matches)) {
+                    $referenceModule = str_replace('_', '\\', $matches['module']);
+                    if ($currentModule == $referenceModule) {
+                        continue;
+                    }
+                    $dependenciesInfo[] = [
+                        'module' => $referenceModule,
+                        'type' => $type,
+                        'source' => $matches['class'],
+                    ];
                 }
-                $dependenciesInfo[] = [
-                    'module' => $referenceModule,
-                    'type' => RuleInterface::TYPE_SOFT,
-                    'source' => $matches['class'],
-                ];
             }
         }
         return $dependenciesInfo;
@@ -60,17 +89,25 @@ class DiRule implements RuleInterface
         $doc = new DOMDocument();
         $doc->loadXML($contents);
 
-        $typeNodes = $doc->getElementsByTagName('type');
-        /** @var \DOMElement $type */
-        foreach ($typeNodes as $type) {
-            $possibleDependencies[] = $type->getAttribute('name');
+        foreach (self::$tagNameMap as $tagName => $attributeNames) {
+            if (is_string($attributeNames)) {
+                $attributeNames = [$attributeNames];
+            }
+            $nodes = $doc->getElementsByTagName($tagName);
+            /** @var \DOMElement $type */
+            foreach ($nodes as $node) {
+                foreach ($attributeNames as $attributeName) {
+                    $possibleDependencies[RuleInterface::TYPE_SOFT][] = $node->getAttribute($attributeName);
+                }
+            }
         }
 
         $xpath = new DOMXPath($doc);
-        $textNodes = $xpath->query('//*[contains(text(),\'Magento\')]');
-        /** @var \DOMElement $argument */
+        //$textNodes = $xpath->query('//*[contains(text(),\'Magento\')]');
+        $textNodes = $xpath->query('//*[@xsi:type="object"]');
+        /** @var \DOMElement $node */
         foreach ($textNodes as $node) {
-            $possibleDependencies[] = $node->nodeValue;
+            $possibleDependencies[RuleInterface::TYPE_HARD][] = $node->nodeValue;
         }
         return $possibleDependencies;
     }

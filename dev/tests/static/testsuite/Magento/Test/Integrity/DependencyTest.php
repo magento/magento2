@@ -14,6 +14,7 @@ use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
+use Magento\TestFramework\Dependency\Virtual\Mapper;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -147,6 +148,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
+        (new Mapper())->getTypeByName('test');
         $root = BP;
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
         if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
@@ -222,7 +224,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 self::$_mapLayoutBlocks,
                 self::$_mapLayoutHandles
             ),
-            new DiRule()
+            new DiRule(new Mapper())
         ];
     }
 
