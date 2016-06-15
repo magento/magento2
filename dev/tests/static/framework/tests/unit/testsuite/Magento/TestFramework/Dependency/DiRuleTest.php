@@ -58,18 +58,33 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
                         'source' => 'Magento\ExternalModule3\Some\Another\Class'
                     ],
                     [
-                        'module' => 'Magento\ExternalModule1',
+                        'module' => 'Magento\ExternalModule5',
                         'type' => RuleInterface::TYPE_SOFT,
-                        'source' => 'Magento\ExternalModule1\Some\Argument1'
+                        'source' => 'Magento\ExternalModule5\Some\Another\Class'
                     ],
                     [
-                        'module' => 'Magento\ExternalModule2',
+                        'module' => 'Magento\ExternalModule6',
                         'type' => RuleInterface::TYPE_SOFT,
-                        'source' => 'Magento\ExternalModule2\Some\Argument2'
+                        'source' => 'Magento\ExternalModule6\Some\Plugin\Class'
                     ],
                     [
                         'module' => 'Magento\ExternalModule4',
                         'type' => RuleInterface::TYPE_SOFT,
+                        'source' => 'Magento\ExternalModule4\Some\Argument4',
+                    ],
+                    [
+                        'module' => 'Magento\ExternalModule1',
+                        'type' => RuleInterface::TYPE_HARD,
+                        'source' => 'Magento\ExternalModule1\Some\Argument1'
+                    ],
+                    [
+                        'module' => 'Magento\ExternalModule2',
+                        'type' => RuleInterface::TYPE_HARD,
+                        'source' => 'Magento\ExternalModule2\Some\Argument2'
+                    ],
+                    [
+                        'module' => 'Magento\ExternalModule4',
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\ExternalModule4\Some\Argument3'
                     ]
                 ]
