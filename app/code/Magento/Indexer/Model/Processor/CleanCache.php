@@ -71,7 +71,7 @@ class CleanCache
      * @return \Magento\Framework\App\CacheInterface
      * @deprecated
      */
-    protected function getCache()
+    private function getCache()
     {
         if ($this->cache === null) {
             $this->cache = \Magento\Framework\App\ObjectManager::getInstance()->get(CacheInterface::class);
