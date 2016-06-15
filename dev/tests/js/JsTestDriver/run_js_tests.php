@@ -30,6 +30,8 @@ if (isset($config['Browser'])) {
 } else {
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         $browser = 'C:\Program Files (x86)\Mozilla Firefox\firefox.exe';
+    } elseif (PHP_OS === 'Darwin') {
+        $browser = '/Applications/Firefox.app/Contents/MacOS/firefox';
     } else {
         $browser = exec('which firefox');
     }
