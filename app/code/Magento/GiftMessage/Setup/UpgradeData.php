@@ -49,14 +49,6 @@ class UpgradeData implements UpgradeDataInterface
                 $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
             }
 
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
-
-            $groupName = 'Gift Options';
-
-            if (!$categorySetup->getAttributeGroup(Product::ENTITY, $attributeSetId, $groupName)) {
-                $categorySetup->addAttributeGroup(Product::ENTITY, $attributeSetId, $groupName, 60);
-            }
-
             $categorySetup->addAttributeToGroup(
                 $entityTypeId,
                 $attributeSetId,
