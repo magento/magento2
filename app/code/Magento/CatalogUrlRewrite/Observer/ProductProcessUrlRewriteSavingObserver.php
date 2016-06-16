@@ -6,10 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Framework\EntityManager\HydratorPool;
-use Magento\Store\Model\StoreScopeProvider;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Framework\Event\ObserverInterface;
