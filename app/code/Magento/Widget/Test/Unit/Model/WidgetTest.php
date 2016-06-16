@@ -5,6 +5,9 @@
  */
 namespace Magento\Widget\Test\Unit\Model;
 
+/**
+ * Test class for \Magento\Widget\Model\Widget
+ */
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -147,7 +150,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         $params = [
-            'title' => 'my widget',
+            'title' => 'my "widget"',
             'show_pager' => '1',
             'products_per_page' => '5',
             'products_count' => '10',
@@ -159,6 +162,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->willReturn('encoded-conditions-string');
         $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
+        $this->assertContains('title="my &quot;widget&quot;"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
         $this->assertContains('page_var_name="pasdf"}}', $result);
     }

@@ -84,9 +84,12 @@ class Conditions extends Template implements RendererInterface
         $widget = $this->registry->registry('current_widget_instance');
         if ($widget) {
             $widgetParameters = $widget->getWidgetParameters();
-            if (isset($widgetParameters['conditions'])) {
-                $this->rule->loadPost($widgetParameters);
-            }
+        } elseif($widgetOptions = $this->getLayout()->getBlock('wysiwyg_widget.options')) {
+            $widgetParameters = $widgetOptions->getWidgetValues();
+        }
+
+        if (isset($widgetParameters['conditions'])) {
+            $this->rule->loadPost($widgetParameters);
         }
     }
 

@@ -314,7 +314,7 @@ class Widget
                 }
             }
             if ($value) {
-                $directive .= sprintf(' %s="%s"', $name, $value);
+                $directive .= sprintf(' %s="%s"', $name, htmlspecialchars($value));
             }
         }
 
