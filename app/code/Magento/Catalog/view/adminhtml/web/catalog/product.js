@@ -23,6 +23,7 @@ require([
 
     function disableFieldEditMode(fieldId) {
         var field = byId(fieldId);
+
         field.prop('disabled', true);
 
         if (field.next().hasClass('addafter')) {
@@ -36,6 +37,7 @@ require([
 
     function enableFieldEditMode(fieldId) {
         var field = byId(fieldId);
+
         field.prop('disabled', false);
 
         if (field.parent().hasClass('_update-attributes-disabled')) {
