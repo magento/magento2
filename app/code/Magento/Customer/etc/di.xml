@@ -84,11 +84,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver">
-        <arguments>
-            <argument name="addressRepository" xsi:type="object">Magento\Customer\Model\ResourceModel\AddressRepository</argument>
-        </arguments>
-    </type>
     <type name="Magento\Customer\Model\ResourceModel\Address">
         <arguments>
             <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
