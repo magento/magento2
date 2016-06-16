@@ -81,8 +81,9 @@ class UpgradeSystemTest extends Injectable
             . "(-{$preReleaseVersion}(\\.{$preReleaseVersion})*)?"
             . "(\\+{$buildVersion}(\\.{$buildVersion})*)?{$suffix}/";
 
-        if (preg_match($versionPattern, $version, $out)) {
-            $version = array_shift($out);
+        if (preg_match($versionPattern, $version)) {
+            preg_match("/(.*){$suffix}/", $version, $matches);
+            $version = $matches[1];
         } else {
             $this->fail(
                 "Provided version format does not comply with semantic versioning specification. Got '{$version}'"
