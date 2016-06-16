@@ -5,7 +5,6 @@
  */
 namespace Magento\Quote\Observer\Frontend\Quote\Address;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
 
 class CollectTotalsObserver implements ObserverInterface
@@ -14,6 +13,11 @@ class CollectTotalsObserver implements ObserverInterface
      * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
     private $addressRepository;
+
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
+    private $customerSession;
 
     /**
      * @var \Magento\Customer\Helper\Address
@@ -57,7 +61,8 @@ class CollectTotalsObserver implements ObserverInterface
         VatValidator $vatValidator,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Customer\Model\Session $customerSession
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
@@ -65,6 +70,7 @@ class CollectTotalsObserver implements ObserverInterface
         $this->customerDataFactory = $customerDataFactory;
         $this->groupManagement = $groupManagement;
         $this->addressRepository = $addressRepository;
+        $this->customerSession = $customerSession;
     }
 
     /**
@@ -118,6 +124,7 @@ class CollectTotalsObserver implements ObserverInterface
         if ($groupId) {
             $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
+            $this->customerSession->setCustomerGroupId($groupId);
             $customer->setGroupId($groupId);
             $quote->setCustomer($customer);
         }
