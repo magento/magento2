@@ -81,6 +81,7 @@ class Conditions extends Template implements RendererInterface
      */
     protected function _construct()
     {
+        $widgetParameters = [];
         $widget = $this->registry->registry('current_widget_instance');
         if ($widget) {
             $widgetParameters = $widget->getWidgetParameters();
