@@ -3,8 +3,14 @@
  * See COPYING.txt for license details.
  */
 define(
-    ['ko'],
-    function (ko) {
+    [
+        'ko',
+        'underscore'
+    ],
+    function (
+        ko,
+        _
+    ) {
         'use strict';
         var billingAddress = ko.observable(null);
         var shippingAddress = ko.observable(null);
