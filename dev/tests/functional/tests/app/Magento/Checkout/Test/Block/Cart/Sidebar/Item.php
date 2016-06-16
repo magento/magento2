@@ -40,7 +40,7 @@ class Item extends Sidebar
      *
      * @var string
      */
-    private $qty = 'input.cart-item-qty';
+    protected $qty = 'input.cart-item-qty';
 
     /**
      * CSS selector for update button.
@@ -96,20 +96,5 @@ class Item extends Sidebar
     public function getQty()
     {
         return $this->_rootElement->find($this->qty)->getValue();
-    }
-
-
-    /**
-     * Get grouped product quantity.
-     *
-     * @return array
-     */
-    public function getGroupedQty()
-    {
-        $result = [];
-        foreach ($this->config['associated_cart_items'] as $productSku => $cartItem) {
-            $result[$productSku] = $cartItem->getQty();
-        }
-        return $result;
     }
 }

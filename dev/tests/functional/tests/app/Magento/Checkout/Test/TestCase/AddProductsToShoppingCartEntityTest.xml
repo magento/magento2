@@ -94,9 +94,9 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertGroupedProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductPriceInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertGroupedProductQtyInMiniShoppingCart" />
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation8">
             <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>

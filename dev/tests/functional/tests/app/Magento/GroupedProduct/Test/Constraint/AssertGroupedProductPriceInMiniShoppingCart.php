@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\Constraint;
+namespace Magento\GroupedProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Checkout\Test\Fixture\Cart;
@@ -14,12 +14,12 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert that grouped product price in mini shopping cart equals to expected price from data set.
+ * Assert that grouped product items price in mini shopping cart equals to expected price from data set.
  */
 class AssertGroupedProductPriceInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that grouped product price in  mini shopping cart is equal to expected price from data set.
+     * Assert that grouped product items price in  mini shopping cart is equal to expected price from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -38,16 +38,18 @@ class AssertGroupedProductPriceInMiniShoppingCart extends AbstractAssertForm
         foreach ($items as $key => $item) {
             /** @var CatalogProductSimple $product */
             $product = $products[$key];
-            $associatedProducts = $product->getAssociated()['products'];
-            foreach ($associatedProducts as $product) {
-                $associatedProductName = $product->getName();
-                $checkoutItem = $product->getData();
+            $productName = $product->getName();
+            /** @var FixtureInterface $item */
+            $checkoutItem = $item->getData();
+            /** @var \Magento\GroupedProduct\Test\Block\Cart\Sidebar\Item $cartItem */
+            $cartItem = $cmsIndex->getCartSidebarBlock()->getCartItem($product);
 
-                $productsData[$associatedProductName] = ['price' => $checkoutItem['price']];
-                $miniCartData[$associatedProductName] = [
-                    'price' => $cmsIndex->getCartSidebarBlock()->getProductPrice($associatedProductName)
-                ];
-            }
+            $productsData[$productName] = [
+                'price' => $checkoutItem['price'],
+            ];
+            $miniCartData[$productName] = [
+                'price' => $cartItem->getPrice(),
+            ];
         }
 
         $error = $this->verifyData($productsData, $miniCartData, true);
