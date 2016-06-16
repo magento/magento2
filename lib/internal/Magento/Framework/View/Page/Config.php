@@ -21,6 +21,8 @@ use Magento\Framework\View;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ *
+ * @api
  */
 class Config
 {
