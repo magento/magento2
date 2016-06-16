@@ -20,14 +20,14 @@ class Sidebar extends Block
      *
      * @var string
      */
-    private $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
+    protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
 
     /**
      * Mini cart price selector.
      *
      * @var string
      */
-    private $price = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"minicart-price")]';
+    protected $price = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"minicart-price")]';
 
     /**
      * Mini cart subtotal selector.
@@ -114,8 +114,8 @@ class Sidebar extends Block
     public function openMiniCart()
     {
         $this->waitCounterQty();
-        if (!$this->_rootElement->find($this->cartContent)->isVisible()) {
-            $this->_rootElement->find($this->cartLink)->click();
+        if (!$this->browser->find($this->cartContent)->isVisible()) {
+            $this->browser->find($this->cartLink)->click();
         }
     }
 
@@ -203,6 +203,7 @@ class Sidebar extends Block
     {
         $this->openMiniCart();
         $subtotal = $this->_rootElement->find($this->subtotal)->getText();
+
         return $this->escapeCurrency($subtotal);
     }
 
@@ -215,7 +216,6 @@ class Sidebar extends Block
     public function getCartItem(FixtureInterface $product)
     {
         $this->openMiniCart();
-
         $dataConfig = $product->getDataConfig();
         $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
         $cartItem = null;
@@ -267,10 +267,10 @@ class Sidebar extends Block
      * Escape currency in price.
      *
      * @param string $price
-     * @param string $currency
+     * @param string $currency [optional]
      * @return string
      */
-    protected function escapeCurrency($price, $currency = '$')
+    private function escapeCurrency($price, $currency = '$')
     {
         return str_replace($currency, '', $price);
     }

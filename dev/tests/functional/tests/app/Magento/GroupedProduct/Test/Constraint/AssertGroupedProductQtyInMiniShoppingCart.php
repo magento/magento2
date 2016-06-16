@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Checkout\Test\Constraint;
+namespace Magento\GroupedProduct\Test\Constraint;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Checkout\Test\Fixture\Cart;
@@ -19,7 +19,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class AssertGroupedProductQtyInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that quantity in mini shopping cart is equal to expected quantity from data set.
+     * Assert that grouped product items quantity in mini shopping cart is equal to expected quantity from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -33,7 +33,7 @@ class AssertGroupedProductQtyInMiniShoppingCart extends AbstractAssertForm
         $products = $sourceProducts->getProducts();
         $items = $cart->getItems();
         $productsData = [];
-        $cartData = [];
+        $miniCartData = [];
 
         foreach ($items as $key => $item) {
             /** @var CatalogProductSimple $product */
@@ -41,17 +41,18 @@ class AssertGroupedProductQtyInMiniShoppingCart extends AbstractAssertForm
             $productName = $product->getName();
             /** @var FixtureInterface $item */
             $checkoutItem = $item->getData();
+            /** @var \Magento\GroupedProduct\Test\Block\Cart\Sidebar\Item $cartItem */
             $cartItem = $cmsIndex->getCartSidebarBlock()->getCartItem($product);
 
             $productsData[$productName] = [
                 'qty' => $checkoutItem['qty'],
             ];
-            $cartData[$productName] = [
-                'qty' => $cartItem->getGroupedQty(),
+            $miniCartData[$productName] = [
+                'qty' => $cartItem->getQty(),
             ];
         }
 
-        $error = $this->verifyData($productsData, $cartData, true);
+        $error = $this->verifyData($productsData, $miniCartData, true);
         \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 

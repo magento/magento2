@@ -11,12 +11,12 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractAssertForm;
 
 /**
- * Assert that subtotal in mini shopping cart equals to expected total from data set.
+ * Assert that subtotal in mini shopping cart equals to expected subtotal from data set.
  */
 class AssertSubtotalInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that subtotal in mini shopping cart equals to expected total from data set.
+     * Assert that subtotal in mini shopping cart equals to expected subtotal from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -33,7 +33,7 @@ class AssertSubtotalInMiniShoppingCart extends AbstractAssertForm
         \PHPUnit_Framework_Assert::assertEquals(
             $fixtureSubtotal,
             $miniCartSubtotal,
-            'Subtotal price in the shopping cart is not equal to subtotal price from fixture.'
+            'Subtotal price in mini shopping cart is not equal to subtotal price from fixture.'
         );
     }
 
@@ -44,6 +44,6 @@ class AssertSubtotalInMiniShoppingCart extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Subtotal in the shopping cart equals to expected total from data set.';
+        return 'Subtotal in mini shopping cart equals to expected total from data set.';
     }
 }
