@@ -7,6 +7,7 @@ namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Theme\Model\Data\Design\Config;
 use Magento\Theme\Model\DesignConfigRepository;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,6 +34,11 @@ class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /** @var DesignConfigRepository */
     protected $repository;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $validator;
 
     public function setUp()
     {
@@ -71,10 +77,24 @@ class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->repository = new DesignConfigRepository(
-            $this->configStorage,
-            $this->reinitableConfig,
-            $this->indexerRegistry
+
+        $this->validator = $this->getMock(
+            \Magento\Theme\Model\Design\Config\Validator::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
+        $objectManagerHelper = new ObjectManager($this);
+        $this->repository = $objectManagerHelper->getObject(
+            DesignConfigRepository::class,
+            [
+                'configStorage' => $this->configStorage,
+                'reinitableConfig' => $this->reinitableConfig,
+                'indexerRegistry' => $this->indexerRegistry,
+                'validator' => $this->validator
+            ]
         );
     }
 
@@ -97,6 +117,7 @@ class DesignConfigRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->indexer);
         $this->indexer->expects($this->once())
             ->method('reindexAll');
+        $this->validator->expects($this->once())->method('validate')->with($this->designConfig);
         $this->assertSame($this->designConfig, $this->repository->save($this->designConfig));
     }
 
