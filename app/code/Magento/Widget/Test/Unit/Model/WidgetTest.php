@@ -5,6 +5,8 @@
  */
 namespace Magento\Widget\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -101,7 +103,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Magento_Cms::images/widget_page_link.png', $resultObject->getPlaceholderImage());
 
         $resultParameters = $resultObject->getParameters();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id' ]);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id']);
         $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['anchor_text']);
         $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['template']);
 
@@ -170,10 +172,11 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->method('getRandomString')
             ->willReturn('asdf');
 
-        $reflection = new \ReflectionClass(get_class($this->widget));
-        $reflectionProperty = $reflection->getProperty('mathRandom');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->widget, $mathRandomMock);
+        (new ObjectManager($this))->setBackwardCompatibleProperty(
+            $this->widget,
+            'mathRandom',
+            $mathRandomMock
+        );
 
         $conditions = [
             [
