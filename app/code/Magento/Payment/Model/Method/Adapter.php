@@ -507,8 +507,9 @@ class Adapter implements MethodInterface
             return null;
         }
 
+        /** @var InfoInterface|null $payment */
         $payment = null;
-        if (isset($arguments['payment'])) {
+        if (isset($arguments['payment']) && $arguments['payment'] instanceof InfoInterface) {
             $payment = $arguments['payment'];
             $arguments['payment'] = $this->paymentDataObjectFactory->create($arguments['payment']);
         }
