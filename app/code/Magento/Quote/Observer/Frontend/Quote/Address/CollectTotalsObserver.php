@@ -11,6 +11,11 @@ use Magento\Framework\Event\ObserverInterface;
 class CollectTotalsObserver implements ObserverInterface
 {
     /**
+     * @var \Magento\Customer\Api\Data\AddressInterface[]
+     */
+    private $customerAddresses;
+
+    /**
      * @var \Magento\Customer\Helper\Address
      */
     protected $customerAddressHelper;
@@ -86,8 +91,9 @@ class CollectTotalsObserver implements ObserverInterface
         $customerCountryCode = $address->getCountryId();
         $customerVatNumber = $address->getVatId();
 
-        if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) { //try to get data from customer if quote address is empty
-            $customerAddress = $this->getCustomerAddressRepository()->getById($customer->getDefaultShipping());
+        /** try to get data from customer if quote address needed data is empty */
+        if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) {
+            $customerAddress = $this->getCustomerAddressById($customer->getDefaultShipping());
 
             $customerCountryCode = $customerAddress->getCountryId();
             $customerVatNumber = $customerAddress->getVatId();
@@ -113,6 +119,19 @@ class CollectTotalsObserver implements ObserverInterface
             $customer->setGroupId($groupId);
             $quote->setCustomer($customer);
         }
+    }
+
+    /**
+     * @param int $addressId
+     * @return \Magento\Customer\Api\Data\AddressInterface
+     */
+    private function getCustomerAddressById($addressId)
+    {
+        if (!isset($this->customerAddresses[$addressId])) {
+            $this->customerAddresses[$addressId] = $this->getCustomerAddressRepository()->getById($addressId);
+        }
+
+        return $this->customerAddresses[$addressId];
     }
 
     /**
