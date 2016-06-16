@@ -25,7 +25,6 @@ class CleanCache
      */
     private $cache;
 
-
     /**
      * @param \Magento\Framework\Indexer\CacheContext $context
      * @param \Magento\Framework\Event\Manager $eventManager
@@ -67,7 +66,6 @@ class CleanCache
             $this->getCache()->clean($this->context->getIdentities());
         }
     }
-
 
     /**
      * Get cache interface
