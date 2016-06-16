@@ -22,10 +22,11 @@ require([
     }
 
     function disableFieldEditMode(fieldId) {
-        if (byId(fieldId).next().hasClass('addafter')) {
-            byId(fieldId).prop('disabled', true).parent().addClass('_update-attributes-disabled');
-        } else {
-            byId(fieldId).prop('disabled', true);
+        var field = byId(fieldId);
+        field.prop('disabled', true);
+
+        if (field.next().hasClass('addafter')) {
+            field.parent().addClass('_update-attributes-disabled');
         }
 
         if (byId(fieldId + '_hidden').length) {
@@ -34,10 +35,11 @@ require([
     }
 
     function enableFieldEditMode(fieldId) {
-        if (byId(fieldId).parent().hasClass('_update-attributes-disabled')) {
-            byId(fieldId).prop('disabled', false).parent().removeClass('_update-attributes-disabled');
-        } else {
-            byId(fieldId).prop('disabled', false);
+        var field = byId(fieldId);
+        field.prop('disabled', false);
+
+        if (field.parent().hasClass('_update-attributes-disabled')) {
+            field.parent().removeClass('_update-attributes-disabled');
         }
 
         if (byId(fieldId + '_hidden').length) {
