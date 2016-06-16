@@ -11,9 +11,9 @@ use Magento\Framework\Event\ObserverInterface;
 class CollectTotalsObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Customer\Api\Data\AddressInterface[]
+     * @var \Magento\Customer\Api\AddressRepositoryInterface
      */
-    private $customerAddresses;
+    private $addressRepository;
 
     /**
      * @var \Magento\Customer\Helper\Address
@@ -56,13 +56,15 @@ class CollectTotalsObserver implements ObserverInterface
         \Magento\Customer\Model\Vat $customerVat,
         VatValidator $vatValidator,
         \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerDataFactory,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement
+        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
     ) {
         $this->customerVat = $customerVat;
         $this->customerAddressHelper = $customerAddressHelper;
         $this->vatValidator = $vatValidator;
         $this->customerDataFactory = $customerDataFactory;
         $this->groupManagement = $groupManagement;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -93,7 +95,7 @@ class CollectTotalsObserver implements ObserverInterface
 
         /** try to get data from customer if quote address needed data is empty */
         if (empty($customerCountryCode) && empty($customerVatNumber) && $customer->getDefaultShipping()) {
-            $customerAddress = $this->getCustomerAddressById($customer->getDefaultShipping());
+            $customerAddress = $this->addressRepository->getById($customer->getDefaultShipping());
 
             $customerCountryCode = $customerAddress->getCountryId();
             $customerVatNumber = $customerAddress->getVatId();
@@ -119,28 +121,5 @@ class CollectTotalsObserver implements ObserverInterface
             $customer->setGroupId($groupId);
             $quote->setCustomer($customer);
         }
-    }
-
-    /**
-     * @param int $addressId
-     * @return \Magento\Customer\Api\Data\AddressInterface
-     */
-    private function getCustomerAddressById($addressId)
-    {
-        if (!isset($this->customerAddresses[$addressId])) {
-            $this->customerAddresses[$addressId] = $this->getCustomerAddressRepository()->getById($addressId);
-        }
-
-        return $this->customerAddresses[$addressId];
-    }
-
-    /**
-     * @deprected
-     *
-     * @return \Magento\Customer\Api\AddressRepositoryInterface
-     */
-    private function getCustomerAddressRepository()
-    {
-        return ObjectManager::getInstance()->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
     }
 }
