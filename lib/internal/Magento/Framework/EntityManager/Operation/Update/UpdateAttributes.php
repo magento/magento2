@@ -56,7 +56,7 @@ class UpdateAttributes
         $entityData = array_merge($hydrator->extract($entity), $arguments);
         $actions = $this->attributePool->getActions($entityType, 'update');
         foreach ($actions as $action) {
-            $action->execute($entityType, $entityData, $arguments);
+            $entityData = $action->execute($entityType, $entityData, $arguments);
         }
         $entity = $hydrator->hydrate($entity, $entityData);
         return $entity;

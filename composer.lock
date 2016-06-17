@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4aadd259bcd32c913113b3d9e5002543",
-    "content-hash": "cdd9bfe776bcf1291c819122d3cbc6b1",
+    "hash": "8114045a50044c8b4874d3921e3efb90",
+    "content-hash": "bc7a9b24a0ff7c6684734a215a73c0b3",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -554,16 +554,16 @@
         },
         {
             "name": "magento/magento-composer-installer",
-            "version": "0.1.10",
+            "version": "0.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-composer-installer.git",
-                "reference": "29df8c84494e3592cf999d9cbadf15220a003ff1"
+                "reference": "a12b9577cd9859af67d2365ae38d23ddfc57cf4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/29df8c84494e3592cf999d9cbadf15220a003ff1",
-                "reference": "29df8c84494e3592cf999d9cbadf15220a003ff1",
+                "url": "https://api.github.com/repos/magento/magento-composer-installer/zipball/a12b9577cd9859af67d2365ae38d23ddfc57cf4d",
+                "reference": "a12b9577cd9859af67d2365ae38d23ddfc57cf4d",
                 "shasum": ""
             },
             "require": {
@@ -629,7 +629,7 @@
                 "composer-installer",
                 "magento"
             ],
-            "time": "2016-06-10 16:59:12"
+            "time": "2016-06-15 04:02:25"
         },
         {
             "name": "magento/zendframework1",
@@ -1362,7 +1362,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -4304,16 +4304,16 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
-                "reference": "4670f122fa32a4900003a6802f6b8575f3f0b17e"
+                "reference": "e7238f98c90b99e9b53f3674a91757228663b04d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/4670f122fa32a4900003a6802f6b8575f3f0b17e",
-                "reference": "4670f122fa32a4900003a6802f6b8575f3f0b17e",
+                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/e7238f98c90b99e9b53f3674a91757228663b04d",
+                "reference": "e7238f98c90b99e9b53f3674a91757228663b04d",
                 "shasum": ""
             },
             "require": {
@@ -4349,7 +4349,7 @@
             ],
             "description": "Symfony Stopwatch Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:56:56"
+            "time": "2016-06-06 11:42:41"
         },
         {
             "name": "symfony/yaml",
