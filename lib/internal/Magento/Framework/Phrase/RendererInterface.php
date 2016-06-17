@@ -7,6 +7,11 @@
  */
 namespace Magento\Framework\Phrase;
 
+/**
+ * Translated phrase renderer
+ *
+ * @api
+ */
 interface RendererInterface
 {
     /**

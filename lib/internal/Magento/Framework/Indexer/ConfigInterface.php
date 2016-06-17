@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Indexer;
 
+/**
+ * Indexer(s) configuration
+ *
+ * @api
+ */
 interface ConfigInterface
 {
     /**
