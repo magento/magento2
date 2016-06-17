@@ -15,7 +15,6 @@
     <type name="Magento\ExternalModule3\Some\Another\Class">
         <arguments>
             <argument name="argument1" xsi:type="object">Magento\ExternalModule4\Some\Argument3</argument>
-            <argument name="argument1" xsi:type="const">Magento\ExternalModule4\Some\Argument4::SOME_CONSTANT</argument>
         </arguments>
     </type>
     <type name="Magento\ExternalModule5\Some\Another\Class">

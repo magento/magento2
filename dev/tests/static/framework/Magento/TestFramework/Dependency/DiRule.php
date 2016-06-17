@@ -10,7 +10,7 @@ namespace Magento\TestFramework\Dependency;
 use DOMDocument;
 use DOMXPath;
 use Magento\Framework\App\Utility\Files;
-use Magento\TestFramework\Dependency\Virtual\Mapper;
+use Magento\TestFramework\Dependency\VirtualType\Mapper;
 
 class DiRule implements RuleInterface
 {
@@ -61,8 +61,12 @@ class DiRule implements RuleInterface
         ) . '[_\\\\])[a-zA-Z0-9]+)[a-zA-Z0-9_\\\\]*)\b~';
 
         $dependenciesInfo = [];
+        $scope = $this->mapper->getScopeFromFile($file);
         foreach ($this->fetchPossibleDependencies($contents) as $type => $possibleDependencies) {
             foreach ($possibleDependencies as $possibleDependency) {
+                if (substr_count($possibleDependency, "\\") === 0) {
+                    $possibleDependency = $this->mapper->getType($possibleDependency, $scope);
+                }
                 if (preg_match($pattern, $possibleDependency, $matches)) {
                     $referenceModule = str_replace('_', '\\', $matches['module']);
                     if ($currentModule == $referenceModule) {
@@ -94,7 +98,7 @@ class DiRule implements RuleInterface
                 $attributeNames = [$attributeNames];
             }
             $nodes = $doc->getElementsByTagName($tagName);
-            /** @var \DOMElement $type */
+            /** @var \DOMElement $node */
             foreach ($nodes as $node) {
                 foreach ($attributeNames as $attributeName) {
                     $possibleDependencies[RuleInterface::TYPE_SOFT][] = $node->getAttribute($attributeName);
@@ -103,7 +107,6 @@ class DiRule implements RuleInterface
         }
 
         $xpath = new DOMXPath($doc);
-        //$textNodes = $xpath->query('//*[contains(text(),\'Magento\')]');
         $textNodes = $xpath->query('//*[@xsi:type="object"]');
         /** @var \DOMElement $node */
         foreach ($textNodes as $node) {
