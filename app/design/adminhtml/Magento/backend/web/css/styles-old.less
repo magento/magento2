@@ -3793,8 +3793,12 @@
         border-left: none !important;
     }
 
-    .rule-tree ._has-datepicker + .ui-datepicker-trigger {
-        position: static;
+    .rule-tree {
+        ._has-datepicker {
+            & + .ui-datepicker-trigger {
+                position: static;
+            }
+        }
     }
 
     .rule-param .label {
