@@ -483,7 +483,7 @@ class AdvancedPricing extends AbstractModifier
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
-                                            'validate-number' => true,
+                                            'validate-digits' => true,
                                         ],
                                     ],
                                 ],
