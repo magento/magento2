@@ -778,6 +778,7 @@
         clear: both;
         max-width: 100%;
         overflow-x: auto;
+        position: relative; // Needed for Safari(iOS) to properly render "overflow-x" rule.
 
         .table-comparison > tbody > tr {
             > th,
@@ -790,37 +791,31 @@
     .table-comparison {
         table-layout: fixed;
 
-        .cell.label.remove,
-        .cell.label.product {
-            span {
-                &:extend(.abs-visually-hidden all);
-            }
-        }
-
-        .cell.label,
-        td:last-child {
-            border-right: @table__border-width @table__border-style @table__border-color;
-        }
-
         .cell {
             padding: 15px;
             width: 180px;
 
-            .attribute.value {
-                overflow: hidden;
-                width: 100%;
-            }
-
-            &.product.info,
-            &.product.label {
-                border-bottom: @table__border-width @table__border-style @table__border-color;
-            }
-
             &.label {
+                border-right: @table__border-width @table__border-style @table__border-color;
+
+                &.remove,
+                &.product {
+                    span {
+                        &:extend(.abs-visually-hidden all);
+                    }
+                }
+
                 .attribute.label {
                     display: block;
                     width: 100%;
                     word-wrap: break-word;
+                }
+            }
+
+            &.product {
+                &.info,
+                &.label {
+                    border-bottom: @table__border-width @table__border-style @table__border-color;
                 }
             }
 
@@ -842,6 +837,17 @@
                     &:extend(.abs-remove-button-for-blocks all);
                     margin-right: .6rem;
                 }
+            }
+
+            .attribute.value {
+                overflow: hidden;
+                width: 100%;
+            }
+        }
+
+        td {
+            &:last-child {
+                border-right: @table__border-width @table__border-style @table__border-color;
             }
         }
 
@@ -865,13 +871,15 @@
         .product-addto-links {
             margin-top: 15px;
 
-            .action.split,
-            .action.toggle {
-                .lib-button-s();
-            }
+            .action {
+                &.toggle {
+                    padding: 0;
+                }
 
-            .action.toggle {
-                padding: 0;
+                &.split,
+                &.toggle {
+                    .lib-button-s();
+                }
             }
         }
 
