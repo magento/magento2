@@ -29,7 +29,10 @@ class VariationHandler
     /** @var \Magento\Catalog\Model\ProductFactory */
     protected $productFactory;
 
-    /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface */
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     * @deprecated
+     */
     protected $stockConfiguration;
 
     /**
@@ -168,14 +171,10 @@ class VariationHandler
 
         $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
         $postData['stock_data'] = array_diff_key((array)$parentProduct->getStockData(), array_flip($keysFilter));
-        $postData['stock_data']['manage_stock'] = $postData['quantity_and_stock_status']['qty'] === '' ? 0 : 1;
         if (!isset($postData['stock_data']['is_in_stock'])) {
             $stockStatus = $parentProduct->getQuantityAndStockStatus();
             $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
         }
-        $configDefaultValue = $this->stockConfiguration->getManageStock($product->getStoreId());
-        $postData['stock_data']['use_config_manage_stock'] = $postData['stock_data']['manage_stock'] ==
-        $configDefaultValue ? 1 : 0;
         $postData = $this->processMediaGallery($product, $postData);
         $postData['status'] = isset($postData['status'])
             ? $postData['status']

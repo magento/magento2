@@ -79,11 +79,12 @@ class MergeService
         $isCssMergeEnabled = $this->config->isMergeCssFiles();
         $isJsMergeEnabled = $this->config->isMergeJsFiles();
         if (($isCss && $isCssMergeEnabled) || ($isJs && $isJsMergeEnabled)) {
-            if ($this->state->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
-                $mergeStrategyClass = 'Magento\Framework\View\Asset\MergeStrategy\FileExists';
-            } else {
-                $mergeStrategyClass = 'Magento\Framework\View\Asset\MergeStrategy\Checksum';
+            $mergeStrategyClass = \Magento\Framework\View\Asset\MergeStrategy\FileExists::class;
+
+            if ($this->state->getMode() === \Magento\Framework\App\State::MODE_DEVELOPER) {
+                $mergeStrategyClass = \Magento\Framework\View\Asset\MergeStrategy\Checksum::class;
             }
+
             $mergeStrategy = $this->objectManager->get($mergeStrategyClass);
 
             $assets = $this->objectManager->create(
