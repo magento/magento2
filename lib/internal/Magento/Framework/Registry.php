@@ -7,6 +7,8 @@ namespace Magento\Framework;
 
 /**
  * Registry model. Used to manage values in registry
+ *
+ * @api
  */
 class Registry
 {
