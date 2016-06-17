@@ -5,14 +5,14 @@
 
 'use strict';
 angular.module('create-admin-account', ['ngStorage'])
-    .controller('createAdminAccountController', ['$scope', '$state', '$localStorage', function ($scope, $state, $localStorage) {
+    .controller('createAdminAccountController', ['$scope', '$state', '$localStorage', '$http', function ($scope, $state, $localStorage, $http) {
         $scope.admin = {
             'passwordStatus': {
                 class: 'none',
                 label: 'None'
             }
         };
-        
+
         $scope.passwordStatusChange = function () {
             if (angular.isUndefined($scope.admin.password)) {
                 return;
@@ -40,6 +40,25 @@ angular.module('create-admin-account', ['ngStorage'])
         if ($localStorage.admin) {
             $scope.admin = $localStorage.admin;
         }
+
+        $scope.validateCredentials = function () {
+            var data = {
+                'db': $localStorage.db,
+                'admin': $localStorage.admin,
+                'store': $localStorage.store,
+                'config': $localStorage.config
+            };
+            $http.post('index.php/validate-admin-credentials', data)
+                .success(function (data) {
+                    $scope.validateCredentials.result = data;
+                    if ($scope.validateCredentials.result.success) {
+                        $scope.nextState();
+                    }
+                })
+                .error(function (data) {
+                    $scope.validateCredentials.failed = data;
+                });
+        };
 
         $scope.$on('nextState', function () {
             $localStorage.admin = $scope.admin;

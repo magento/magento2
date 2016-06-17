@@ -162,26 +162,35 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->objectManager, $bootstrap->getObjectManager());
     }
 
-    public function testIsDeveloperMode()
+    /**
+     * @param $modeFromEnvironment
+     * @param $modeFromDeployment
+     * @param $isDeveloper
+     *
+     * @dataProvider testIsDeveloperModeDataProvider
+     */
+    public function testIsDeveloperMode($modeFromEnvironment, $modeFromDeployment, $isDeveloper)
     {
-        $bootstrap = self::createBootstrap();
-        $this->assertFalse($bootstrap->isDeveloperMode());
-        $testParams = [State::PARAM_MODE => State::MODE_DEVELOPER];
+        $testParams = [];
+        if ($modeFromEnvironment) {
+            $testParams[State::PARAM_MODE] = $modeFromEnvironment;
+        }
+        if ($modeFromDeployment) {
+            $this->deploymentConfig->method('get')->willReturn($modeFromDeployment);
+        }
         $bootstrap = self::createBootstrap($testParams);
-        $this->assertTrue($bootstrap->isDeveloperMode());
-        $this->deploymentConfig->expects($this->any())->method('get')->willReturn(State::MODE_DEVELOPER);
-        $bootstrap = self::createBootstrap();
-        $this->assertTrue($bootstrap->isDeveloperMode());
+        $this->assertEquals($isDeveloper, $bootstrap->isDeveloperMode());
     }
 
-    public function testIsDeveloperModeСontradictoryValues()
+    public function testIsDeveloperModeDataProvider()
     {
-        $this->deploymentConfig->expects($this->any())->method('get')->willReturn(State::MODE_PRODUCTION);
-        $bootstrap = self::createBootstrap();
-        $this->assertFalse($bootstrap->isDeveloperMode());
-        $testParams = [State::PARAM_MODE => State::MODE_DEVELOPER];
-        $bootstrap = self::createBootstrap($testParams);
-        $this->assertTrue($bootstrap->isDeveloperMode());
+        return [
+            [null, null, false],
+            [State::MODE_DEVELOPER, State::MODE_PRODUCTION, true],
+            [State::MODE_PRODUCTION, State::MODE_DEVELOPER, false],
+            [null, State::MODE_DEVELOPER, true],
+            [null, State::MODE_PRODUCTION, false]
+        ];
     }
 
     public function testRunNoErrors()
