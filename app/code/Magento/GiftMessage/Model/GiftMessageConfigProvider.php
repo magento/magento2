@@ -152,7 +152,7 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
      */
     protected function isQuoteVirtual()
     {
-        return $this->checkoutSession->loadCustomerQuote()->getQuote()->getIsVirtual();
+        return $this->checkoutSession->getQuote()->getIsVirtual();
     }
 
     /**

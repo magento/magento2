@@ -125,15 +125,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $messageMock = $this->getMockForAbstractClass(
-            'Magento\GiftMessage\Api\Data\MessageInterface',
-            [],
-            '',
-            false,
-            false,
-            false,
-            ['getData']
-        );
+        $messageMock = $this->getMock(\Magento\GiftMessage\Model\Message::class, [], [], '', false);
 
         $this->scopeConfigMock->expects($this->atLeastOnce())->method('getValue')->willReturnMap(
             [
@@ -144,7 +136,6 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuoteId')->willReturn($quoteId);
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($quoteId)->willReturn($messageMock);
-        $this->checkoutSessionMock->expects($this->once())->method('loadCustomerQuote')->willReturnSelf();
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->any())->method('getId')->willReturn($quoteId);
         $quoteMock->expects($this->once())->method('getIsVirtual')->willReturn(false);
