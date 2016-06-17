@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ * Contributor company: iPragmatech solution Pvt Ltd.
+ * Contributor Author : Ajay Kumar
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+
+    <route url="/V1/review/reviews/:productId" method="GET">
+        <service class="Magento\Review\Api\ReviewInterface" method="getReviewsList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/review/mine/post" method="POST">
+        <service class="Magento\Review\Api\ReviewInterface" method="writeReviews"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="customer_id" force="true">%customer_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/review/post" method="POST">
+        <service class="Magento\Review\Api\ReviewInterface" method="writeReviews"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+</routes>
