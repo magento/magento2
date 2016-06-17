@@ -5,6 +5,9 @@
  */
 namespace Magento\TestFramework\Dependency;
 
+use Magento\TestFramework\Dependency\VirtualType\Mapper;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
+
 class DiRuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,9 +15,18 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var Mapper|MockObject
+     */
+    private $mapper;
+
     protected function setUp()
     {
-        $this->model = new DiRule();
+        $this->mapper = $this->getMockBuilder(Mapper::class)
+            ->setMethods(['getType'])
+            ->getMock();
+
+        $this->model = new DiRule($this->mapper);
     }
 
     /**
@@ -25,7 +37,19 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDependencyInfo($module, $contents, array $expected)
     {
-        $file = '/some/path/di.xml';
+        $this->mapper->expects(static::any())
+            ->method('getType')
+            ->will($this->returnCallback(function ($name, $scope) {
+                $map = [
+                    'scope' => [
+                        'someVirtualType1' => 'Magento\AnotherModule\Some\Class1',
+                        'someVirtualType2' => 'Magento\AnotherModule\Some\Class2'
+                    ]
+                ];
+                return isset($map[$scope][$name]) ? $map[$scope][$name] : false;
+            }));
+
+        $file = '/some/path/scope/di.xml';
         $this->assertEquals(
             $expected,
             $this->model->getDependencyInfo($module, 'any', $file, $contents)
@@ -68,11 +92,6 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
                         'source' => 'Magento\ExternalModule6\Some\Plugin\Class'
                     ],
                     [
-                        'module' => 'Magento\ExternalModule4',
-                        'type' => RuleInterface::TYPE_SOFT,
-                        'source' => 'Magento\ExternalModule4\Some\Argument4',
-                    ],
-                    [
                         'module' => 'Magento\ExternalModule1',
                         'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\ExternalModule1\Some\Argument1'
@@ -86,6 +105,22 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
                         'module' => 'Magento\ExternalModule4',
                         'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\ExternalModule4\Some\Argument3'
+                    ]
+                ]
+            ],
+            'Di virtual dependencies' => [
+                'Magento\SomeModule',
+                $this->getFileContent('di_virtual_dependency.xml'),
+                [
+                    [
+                        'module' => 'Magento\AnotherModule',
+                        'type' => 'hard',
+                        'source' => 'Magento\AnotherModule\Some\Class1',
+                    ],
+                    [
+                        'module' => 'Magento\AnotherModule',
+                        'type' => 'hard',
+                        'source' => 'Magento\AnotherModule\Some\Class2',
                     ]
                 ]
             ]
