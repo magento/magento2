@@ -81,6 +81,30 @@ class VaultEnableAssignerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testExecuteNever()
+    {
+        $dataObject = new DataObject(
+            [
+                PaymentInterface::KEY_ADDITIONAL_DATA => []
+            ]
+        );
+        $paymentModel = $this->getMock(InfoInterface::class);
+
+        $paymentModel->expects(static::never())
+            ->method('setAdditionalInformation');
+
+        $observer = $this->getPreparedObserverWithMap(
+            [
+                [AbstractDataAssignObserver::DATA_CODE, $dataObject],
+                [AbstractDataAssignObserver::MODEL_CODE, $paymentModel]
+            ]
+        );
+
+        $vaultEnableAssigner = new VaultEnableAssigner();
+
+        $vaultEnableAssigner->execute($observer);
+    }
+
     /**
      * @param array $returnMap
      * @return \PHPUnit_Framework_MockObject_MockObject|Observer

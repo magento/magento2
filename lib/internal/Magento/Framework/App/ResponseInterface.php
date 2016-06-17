@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * @api
+ */
 interface ResponseInterface
 {
     /**
