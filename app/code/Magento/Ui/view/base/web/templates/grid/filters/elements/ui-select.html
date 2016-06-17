@@ -10,7 +10,7 @@
         class="admin__form-field-label"
         data-bind="attr: {for: uid}
 ">
-    <span data-bind="text: label"></span>
+    <span translate="label"></span>
 </label>
 <!-- /ko -->
 <div
@@ -60,7 +60,7 @@
         <div class="admin__action-multiselect-text"
              data-bind="
                 visible: !hasData(),
-                text: selectedPlaceholders.defaultPlaceholder
+                i18n: selectedPlaceholders.defaultPlaceholder
         ">
         </div>
         <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
@@ -74,11 +74,7 @@
                         tabindex="-1"
                         data-bind="click: $parent.removeSelected.bind($parent, value)
                 ">
-                    <span
-                            class="action-close-text"
-                            data-bind="text: 'Close'
-                    ">
-                    </span>
+                    <span class="action-close-text" translate="'Close'"></span>
                 </button>
             </span>
         <!-- /ko -->
@@ -177,7 +173,7 @@
                     data-action="close-advanced-select"
                     type="button"
                     data-bind="click: outerClick">
-                <span data-bind="text: closeBtnLabel"></span>
+                <span translate="closeBtnLabel"></span>
             </button>
         </div>
         <!-- /ko -->
