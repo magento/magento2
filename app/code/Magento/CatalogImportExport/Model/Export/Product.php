@@ -85,7 +85,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $_indexValueAttributes = [
         'status',
-        'gift_message_available',
     ];
 
     /**
