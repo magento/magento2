@@ -16,6 +16,11 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     protected $dataStorageMock;
 
     /**
+     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $escaperMock;
+
+    /**
      * @var \Magento\Widget\Model\Widget
      */
     protected $widget;
@@ -27,17 +32,24 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataStorageMock = $this->getMockBuilder('Magento\Widget\Model\Config\Data')
+        $this->dataStorageMock = $this->getMockBuilder(\Magento\Widget\Model\Config\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->conditionsHelper = $this->getMockBuilder('\Magento\Widget\Helper\Conditions')
+        $this->conditionsHelper = $this->getMockBuilder(\Magento\Widget\Helper\Conditions::class)
             ->setMethods(['encode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->widget = $objectManagerHelper->getObject(
-            'Magento\Widget\Model\Widget',
-            ['dataStorage' => $this->dataStorageMock, 'conditionsHelper' => $this->conditionsHelper]
+            \Magento\Widget\Model\Widget::class,
+            [
+                'dataStorage' => $this->dataStorageMock,
+                'conditionsHelper' => $this->conditionsHelper,
+                'escaper' => $this->escaperMock,
+            ]
         );
     }
 
@@ -160,6 +172,17 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
         $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
             ->willReturn('encoded-conditions-string');
+        $this->escaperMock->expects($this->atLeastOnce())
+            ->method('escapeQuote')
+            ->willReturnMap([
+                ['my "widget"', false, 'my &quot;widget&quot;'],
+                ['1', false, '1'],
+                ['5', false, '5'],
+                ['10', false, '10'],
+                ['product/widget/content/grid.phtml', false, 'product/widget/content/grid.phtml'],
+                ['encoded-conditions-string', false, 'encoded-conditions-string'],
+            ]);
+
         $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('title="my &quot;widget&quot;"', $result);
