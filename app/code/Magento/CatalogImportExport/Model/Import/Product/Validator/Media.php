@@ -15,6 +15,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
 
     const ADDITIONAL_IMAGES = 'additional_images';
+    
+    const ADDITIONAL_IMAGES_DELIMITER = ',';
 
     /** @var array */
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
@@ -102,7 +104,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     /**
      * @return string
      */
-    protected function getMultipleValueSeparator()
+    private function getMultipleValueSeparator()
     {
         return $this->context->getMultipleValueSeparator();
     }
