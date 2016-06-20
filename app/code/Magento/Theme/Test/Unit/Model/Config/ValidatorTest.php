@@ -37,10 +37,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    //@codingStandardsIgnoreStart
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Incorrect configuration for email_header_template. Template body has a reference to
+     * @expectedExceptionMessage The email_header_template contains an incorrect configuration. The template has a reference to itself. Either remove or change the reference.
      */
+    //@codingStandardsIgnoreEnd
     public function testValidateHasRecursiveReference()
     {
         $fieldConfig = [
