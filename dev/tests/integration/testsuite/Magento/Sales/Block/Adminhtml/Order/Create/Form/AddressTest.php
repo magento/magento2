@@ -24,11 +24,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /**
      * @return int
      */
-    private function getNumberOfCountries()
+    private function getNumberOfCountryOptions()
     {
-        /** @var \Magento\Directory\Api\CountryInformationAcquirerInterface $countryInfo */
-        $countryInfo = $this->_objectManager->create(\Magento\Directory\Api\CountryInformationAcquirerInterface::class);
-        return count($countryInfo->getCountriesInfo());
+        /** @var \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection */
+        $countryCollection = $this->_objectManager->create(
+            \Magento\Directory\Model\ResourceModel\Country\Collection::class
+        );
+        return count($countryCollection->toOptionArray());
     }
 
     protected function setUp()
@@ -192,7 +194,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Data\Form\Element\Select $countryIdField */
         $countryIdField = $fieldset->getElements()->searchById('country_id');
-        $this->assertSelectCount('option', $this->getNumberOfCountries(), $countryIdField->getElementHtml());
+        $this->assertSelectCount('option', $this->getNumberOfCountryOptions(), $countryIdField->getElementHtml());
     }
 
     /**
