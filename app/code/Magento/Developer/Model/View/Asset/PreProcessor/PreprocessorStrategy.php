@@ -5,6 +5,10 @@
  */
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Deploy\Model\Mode;
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\PreProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Developer\Model\Config\Source\WorkflowType;
@@ -32,6 +36,11 @@ class PreprocessorStrategy implements PreProcessorInterface
     private $scopeConfig;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * Constructor
      *
      * @param AlternativeSourceInterface $alternativeSource
@@ -56,10 +65,34 @@ class PreprocessorStrategy implements PreProcessorInterface
      */
     public function process(PreProcessor\Chain $chain)
     {
-        if (WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH)) {
+        $isClientSideCompilation =
+            $this->getState()->getMode() !== State::MODE_PRODUCTION
+            && WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
+
+        if ($isClientSideCompilation) {
             $this->frontendCompilation->process($chain);
         } else {
             $this->alternativeSource->process($chain);
         }
+    }
+
+    /**
+     * @return State
+     * @deprecated
+     */
+    private function getState()
+    {
+        if (null === $this->state) {
+            /**
+             * TODO: Fix this in scope of MAGETWO-54595
+             *
+             * @var ObjectManagerFactory $objectManagerFactory
+             */
+            $objectManagerFactory = ObjectManager::getInstance()->get(ObjectManagerFactory::class);
+
+            $this->state = $objectManagerFactory->create([])->create(State::class);
+        }
+
+        return $this->state;
     }
 }
