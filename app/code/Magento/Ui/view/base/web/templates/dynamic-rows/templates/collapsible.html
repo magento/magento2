@@ -33,9 +33,9 @@
                 <td css="$parents[1].setClasses(elem)" if="elem.template">
                     <div class="fieldset-wrapper admin__collapsible-block-wrapper"
                          collapsible="openClass: '_show', closeOnOuter: false, opened: elem.opened()">
-                        <div class="fieldset-wrapper-title" click="elem.toggleOpened">
+                        <div class="fieldset-wrapper-title">
 
-                            <div class="admin__collapsible-title" data-role="collapsible-title">
+                            <div class="admin__collapsible-title" data-role="collapsible-title" click="elem.toggleOpened">
                                 <render args="name: $parents[1].dndConfig.template, data: $parents[1].dnd"
                                         if="$parents[1].dndConfig.enabled" />
 
