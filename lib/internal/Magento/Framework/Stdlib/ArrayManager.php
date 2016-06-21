@@ -7,6 +7,8 @@ namespace Magento\Framework\Stdlib;
 
 /**
  * Provides methods for nested array manipulations
+ *
+ * @api
  */
 class ArrayManager
 {
