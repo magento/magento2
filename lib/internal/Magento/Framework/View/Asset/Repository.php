@@ -13,6 +13,8 @@ use Magento\Framework\Filesystem;
 /**
  * A repository service for view assets
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @api
  */
 class Repository
 {
