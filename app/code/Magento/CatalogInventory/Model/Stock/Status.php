@@ -99,7 +99,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
      */
     public function getStockId()
     {
-        return $this->getData(self::KEY_WEBSITE_ID);
+        return $this->getData(self::KEY_STOCK_ID);
     }
 
     /**
