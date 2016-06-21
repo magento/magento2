@@ -180,9 +180,6 @@ define([
 
                 }
 
-            if (this.name === 'product_form.product_form.related.related.related') {
-                debugger;
-            }
             this.on('recordData', this.checkDefaultState.bind(this));
 
             return this;
@@ -236,7 +233,8 @@ define([
                 dataScope,
                 elemDataScope;
 
-            if (state && !this.defaultState.length) {
+            if (state && !this.initialState) {
+                this.initialState = true;
                 this.defaultState = utils.copy(this.recordData());
 
                 changed = this.findChangedElems(this.elems());
@@ -253,7 +251,8 @@ define([
         },
 
         getDefaultState: function () {
-            if (!this.defaultState.length) {
+            if (!this.initialState) {
+                this.initialState = true;
                 this.defaultState = utils.copy(this.recordData());
             }
         },
@@ -332,17 +331,14 @@ define([
          * Checks whether component's state is default or not
          */
         checkDefaultState: function () {
-            if (this.name === 'product_form.product_form.related.related.related') {
-                debugger;
-            }
-
             if (
-                !this.defaultState.length &&
+                !this.initialState &&
                 _.isArray(this.recordData()) &&
                 !this.recordData().filter(function (data) {
                     return !data.initialize;
                 }).length
             ) {
+                this.initialState = true;
                 this.defaultState = utils.copy(this.recordData().filter(function (data) {
                     return data.initialize;
                 }));
@@ -350,6 +346,13 @@ define([
                 this.defaultState.forEach(function(data){
                     delete data.initialize;
                 })
+            } else if ( !this.initialState &&
+                _.isArray(this.recordData()) &&
+                this.recordData().filter(function (data) {
+                    return !data.initialize;
+                }).length
+            ) {
+                this.initialState = true;
             }
             this.changed(!compareArrays(this.defaultState, this.recordData()));
         },
@@ -421,6 +424,7 @@ define([
                     _.extend(data, {
                         label: cell.config.label,
                         name: cell.name,
+                        required: cell.required,
                         columnsHeaderClasses: cell.config.columnsHeaderClasses
                     });
 
