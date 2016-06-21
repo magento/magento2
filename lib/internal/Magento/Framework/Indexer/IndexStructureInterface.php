@@ -7,6 +7,11 @@ namespace Magento\Framework\Indexer;
 
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Indexer structure (schema) handler
+ *
+ * @api
+ */
 interface IndexStructureInterface
 {
     /**
