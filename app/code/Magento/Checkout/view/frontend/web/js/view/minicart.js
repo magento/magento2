@@ -98,6 +98,10 @@ define([
                 self.isLoading(true);
             });
 
+            if (cartData().websiteId !== window.checkout.websiteId) {
+                customerData.reload(['cart'], false);
+            }
+
             return this._super();
         },
         isLoading: ko.observable(false),
