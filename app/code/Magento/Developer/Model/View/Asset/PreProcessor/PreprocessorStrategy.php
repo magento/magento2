@@ -6,7 +6,6 @@
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Deploy\Model\Mode;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\PreProcessor;
