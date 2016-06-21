@@ -21,7 +21,7 @@ class CreateAdmin extends Form
      *
      * @var string
      */
-    protected $next = "[ng-click*='next']";
+    protected $next = "[ng-click*='validateCredentials']";
 
     /**
      * First field selector
