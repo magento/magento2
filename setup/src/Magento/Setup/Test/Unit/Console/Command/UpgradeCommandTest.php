@@ -28,21 +28,11 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
         $installer->expects($this->at(2))->method('installDataFixtures');
         $installerFactory->expects($this->once())->method('create')->willReturn($installer);
 
-        $pathToCacheStatus = '/path/to/cachefile';
-        $writeFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\WriteFactory', [], [], '', false);
-        $write = $this->getMock('\Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-        $write->expects($this->once())->method('isExist')->with('/path/to/cachefile')->willReturn(false);
-        $write->expects($this->once())->method('getRelativePath')->willReturn($pathToCacheStatus);
-
-        $writeFactory->expects($this->once())->method('create')->willReturn($write);
-        $directoryList = $this->getMock('\Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
-        $objectManager->expects($this->exactly(4))
+        $objectManager->expects($this->exactly(2))
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\App\State', $state],
-                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
-                ['Magento\Framework\Filesystem\Directory\WriteFactory', $writeFactory],
-                ['Magento\Framework\App\Filesystem\DirectoryList', $directoryList],
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader]
             ]));
 
         $commandTester = new CommandTester(new UpgradeCommand($installerFactory, $objectManagerProvider));
