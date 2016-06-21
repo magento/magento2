@@ -116,6 +116,7 @@ define([
             showSpinner: true,
             isDifferedFromDefault: false,
             defaultState: [],
+            changed: false,
             isDefaultState: true,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
@@ -141,10 +142,10 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault parsePagesData checkDefaultState',
+                recordData: 'setDifferedFromDefault parsePagesData',
                 currentPage: 'changePage',
                 elems: 'checkSpinner',
-                isDefaultState: 'updateTrigger'
+                changed: 'updateTrigger'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
@@ -164,14 +165,25 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
-            _.bindAll(this, 'processingDeleteRecord');
+            _.bindAll(this, 'processingDeleteRecord', 'onChildrenUpdate');
             this._super()
-                .initDefaultState()
                 .initChildren()
                 .initDnd()
                 .setColumnsHeaderListener()
                 .initDefaultRecord()
                 .checkSpinner();
+
+                if (_.isArray(this.recordData())) {
+                    this.recordData.each(function (data, index) {
+                        this.source.set(this.dataScope + '.' + this.index + '.' + index + '.initialize', true);
+                    }, this);
+
+                }
+
+            if (this.name === 'product_form.product_form.related.related.related') {
+                debugger;
+            }
+            this.on('recordData', this.checkDefaultState.bind(this));
 
             return this;
         },
@@ -194,7 +206,7 @@ define([
                     'labels',
                     'showSpinner',
                     'isDifferedFromDefault',
-                    'isDefaultState'
+                    'changed'
                 ]);
 
             return this;
@@ -206,10 +218,76 @@ define([
         initElement: function (elem) {
             this._super();
             elem.on({
-                'deleteRecord': this.processingDeleteRecord
+                'deleteRecord': function(index, id){
+                    this.getDefaultState();
+                    this.processingDeleteRecord(index, id);
+                    this.changed(!compareArrays(this.defaultState, this.recordData()));
+                }.bind(this),
+                'update': function (state) {
+                    this.onChildrenUpdate(state);
+                }.bind(this)
             });
 
             return this;
+        },
+
+        onChildrenUpdate: function (state) {
+            var changed,
+                dataScope,
+                elemDataScope;
+
+            if (state && !this.defaultState.length) {
+                this.defaultState = utils.copy(this.recordData());
+
+                changed = this.findChangedElems(this.elems());
+                dataScope = this.elems()[0].dataScope.split('.');
+                dataScope.splice(dataScope.length - 1, 1);
+
+                changed.forEach(function (elem) {
+                    elemDataScope = elem.dataScope.split('.');
+                    elemDataScope.splice(0, dataScope.length);
+
+                    this.setValueByPath(this.defaultState, elemDataScope, elem.initialValue);
+                }, this);
+            }
+        },
+
+        getDefaultState: function () {
+            if (!this.defaultState.length) {
+                this.defaultState = utils.copy(this.recordData());
+            }
+        },
+
+        setValueByPath: function (obj, path, value) {
+            var prop;
+
+            if (_.isString(path)) {
+                path = path.split('.');
+            }
+
+            if (path.length - 1) {
+                prop = obj[path[0]];
+                path.splice(0,1);
+
+                this.setValueByPath(prop, path , value);
+            } else if (path.length) {
+                obj[path[0]] = value;
+            }
+
+        },
+
+        findChangedElems: function (array, changed) {
+            changed = changed || [];
+
+            array.forEach(function (elem) {
+                if (_.isFunction(elem.elems)) {
+                    this.findChangedElems(elem.elems(), changed)
+                } else if (elem.hasChanged()) {
+                    changed.push(elem);
+                }
+            }, this);
+
+            return changed;
         },
 
         /**
@@ -254,33 +332,26 @@ define([
          * Checks whether component's state is default or not
          */
         checkDefaultState: function () {
-            var result = true,
-                recordsData = utils.copy(this.recordData()),
-                currentData = this.deleteProperty ?
-                    _.filter(recordsData, function (elem) {
-                        return elem[this.deleteProperty] !== this.deleteValue;
-                    }, this) : recordsData;
-
-            if (_.isArray(this.defaultState)) {
-                result = compareArrays(this.defaultState, currentData);
+            if (this.name === 'product_form.product_form.related.related.related') {
+                debugger;
             }
 
-            this.isDefaultState(result);
-        },
+            if (
+                !this.defaultState.length &&
+                _.isArray(this.recordData()) &&
+                !this.recordData().filter(function (data) {
+                    return !data.initialize;
+                }).length
+            ) {
+                this.defaultState = utils.copy(this.recordData().filter(function (data) {
+                    return data.initialize;
+                }));
 
-        /**
-         * Inits default component state
-         *
-         * @param {Array} data
-         *
-         * @returns Chainable.
-         */
-        initDefaultState: function (data) {
-            var defaultState = data || utils.copy(this.recordData());
-
-            this.defaultState = defaultState;
-
-            return this;
+                this.defaultState.forEach(function(data){
+                    delete data.initialize;
+                })
+            }
+            this.changed(!compareArrays(this.defaultState, this.recordData()));
         },
 
         /**
@@ -289,14 +360,14 @@ define([
          * @param {Boolean} val
          */
         updateTrigger: function (val) {
-            this.trigger('update', !val);
+            this.trigger('update', val);
         },
 
         /**
          * Returns component state
          */
         hasChanged: function () {
-            return !this.isDefaultState();
+            return this.changed();
         },
 
         /**
@@ -451,7 +522,7 @@ define([
          */
         getRecordCount: function () {
             return _.filter(this.recordData(), function (record) {
-                return record[this.deleteProperty] !== this.deleteValue;
+                return record && record[this.deleteProperty] !== this.deleteValue;
             }, this).length;
         },
 
@@ -504,6 +575,8 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
+            this.getDefaultState()
+
             if (page === 1 && !this.recordData().length) {
                 return false;
             }

@@ -22,7 +22,7 @@ define([
             identificationDRProperty: 'id',
             listens: {
                 'insertData': 'processingInsertData',
-                'recordData': 'initElements setToInsertData checkDefaultState'
+                'recordData': 'initElements setToInsertData'
             },
             mappingSettings: {
                 enabled: true,
