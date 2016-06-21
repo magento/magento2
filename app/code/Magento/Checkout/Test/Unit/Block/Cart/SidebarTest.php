@@ -123,6 +123,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
+        $websiteId = 100;
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
         $shoppingCartUrl = 'http://url.com/cart';
@@ -139,7 +140,8 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
             'removeItemUrl' => $removeItemUrl,
             'imageTemplate' => $imageTemplate,
             'baseUrl' => $baseUrl,
-            'minicartMaxItemsVisible' => 3
+            'minicartMaxItemsVisible' => 3,
+            'websiteId' => 100
         ];
 
         $valueMap = [
@@ -166,6 +168,13 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
                 \Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn(3);
+
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+
+        $storeMock = $this->getMock(\Magento\Store\Model\System\Store::class, ['getWebsiteId'], [], '', false);
+        $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
+        $quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
