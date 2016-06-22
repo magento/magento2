@@ -157,6 +157,7 @@ class ReviewManagement implements \Magento\Review\Api\ReviewInterface
         }
         return $reviewArray;
     }
+    
     /**
      * Added review item.
      * @param int $productId
