@@ -469,7 +469,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $this->build();
         if (!isset($this->_renderElementCache[$name]) || !$useCache) {
             if ($this->displayElement($name)) {
-                $this->_renderElementCache[$name] = $this->renderNonCachedElement($name, $useCache);
+                $this->_renderElementCache[$name] = $this->renderNonCachedElement($name);
             } else {
                 return $this->_renderElementCache[$name] = '';
             }
@@ -508,7 +508,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @return string
      * @throws \Exception
      */
-    public function renderNonCachedElement($name, $useCache = true)
+    public function renderNonCachedElement($name)
     {
         $result = '';
         try {
@@ -517,7 +517,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             } elseif ($this->isBlock($name)) {
                 $result = $this->_renderBlock($name);
             } else {
-                $result = $this->_renderContainer($name, $useCache);
+                $result = $this->_renderContainer($name);
             }
         } catch (\Exception $e) {
             if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
@@ -561,12 +561,12 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * @param string $name
      * @return string
      */
-    protected function _renderContainer($name, $useCache = true)
+    protected function _renderContainer($name)
     {
         $html = '';
         $children = $this->getChildNames($name);
         foreach ($children as $child) {
-            $html .= $this->renderElement($child, $useCache);
+            $html .= $this->renderElement($child);
         }
         if ($html == '' || !$this->structure->getAttribute($name, Element::CONTAINER_OPT_HTML_TAG)) {
             return $html;
