@@ -216,9 +216,7 @@ define([
             this._super();
             elem.on({
                 'deleteRecord': function(index, id){
-                    this.getDefaultState();
-                    this.processingDeleteRecord(index, id);
-                    this.changed(!compareArrays(this.defaultState, this.recordData()));
+                    this.deleteHandler(index, id);
                 }.bind(this),
                 'update': function (state) {
                     this.onChildrenUpdate(state);
@@ -226,6 +224,16 @@ define([
             });
 
             return this;
+        },
+
+        deleteHandler: function (index, id) {
+            this.getDefaultState();
+            this.processingDeleteRecord(index, id);
+            this.changed(!compareArrays(this.defaultState, this.arrFilter(this.relatedData)));
+        },
+
+        compare: function(ar1, ar2) {
+          return compareArrays(ar1, ar2)
         },
 
         onChildrenUpdate: function (state) {
@@ -253,7 +261,7 @@ define([
         getDefaultState: function () {
             if (!this.initialState) {
                 this.initialState = true;
-                this.defaultState = utils.copy(this.recordData());
+                this.defaultState = utils.copy(this.arrFilter(this.recordData()));
             }
         },
 
@@ -354,7 +362,29 @@ define([
             ) {
                 this.initialState = true;
             }
-            this.changed(!compareArrays(this.defaultState, this.recordData()));
+            this.changed(!compareArrays(this.defaultState, this.arrFilter(this.relatedData)));
+        },
+
+        arrFilter: function (data) {
+            var prop;
+
+            data.forEach(function (elem) {
+                for (prop in elem) {
+                    if (_.isArray(elem[prop])) {
+                        elem[prop] = _.filter(elem[prop], function (elemProp) {
+                            return elemProp[this.deleteProperty] !== this.deleteValue;
+                        }, this);
+
+                        elem[prop].forEach(function (elemProp) {
+                            if (_.isArray(elemProp)) {
+                                elem[prop] = this.arrFilter(elemProp);
+                            }
+                        }, this)
+                    }
+                }
+            }, this);
+
+            return data;
         },
 
         /**
