@@ -39,6 +39,15 @@ class Fs extends AbstractRollback
         );
 
         if (!$filesInfo['writable']) {
+            if (!empty($filesInfo['writableMeta'])) {
+                throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
+                    new \Magento\Framework\Phrase(
+                        'You need write permissions for: %1',
+                        [implode(', ', $filesInfo['writableMeta'])]
+                    )
+                );
+            }
+
             throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
                 new \Magento\Framework\Phrase('Unable to make rollback because not all files are writable')
             );

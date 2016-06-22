@@ -87,10 +87,12 @@ class Helper
         $info = [];
         if ($infoOptions & self::INFO_READABLE) {
             $info['readable'] = true;
+            $info['readableMeta'] = [];
         }
 
         if ($infoOptions & self::INFO_WRITABLE) {
             $info['writable'] = true;
+            $info['writableMeta'] = [];
         }
 
         if ($infoOptions & self::INFO_SIZE) {
@@ -111,10 +113,12 @@ class Helper
 
             if ($infoOptions & self::INFO_WRITABLE && !$item->isWritable()) {
                 $info['writable'] = false;
+                $info['writableMeta'][] = $item->getPathname();
             }
 
             if ($infoOptions & self::INFO_READABLE && !$item->isReadable()) {
                 $info['readable'] = false;
+                $info['readableMeta'][] = $item->getPathname();
             }
 
             if ($infoOptions & self::INFO_SIZE && !$item->isDir()) {
