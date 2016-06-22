@@ -112,6 +112,7 @@ define([
          * Helper to fix backend behavior:
          *  - if default qty large than 1 then backend multiply price in config
          *
+         * @deprecated
          * @private
          */
         _applyQtyFix: function applyQtyFix() {
