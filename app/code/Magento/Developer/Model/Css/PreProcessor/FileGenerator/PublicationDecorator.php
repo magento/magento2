@@ -6,7 +6,6 @@
 namespace Magento\Developer\Model\Css\PreProcessor\FileGenerator;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\State;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
@@ -93,7 +92,7 @@ class PublicationDecorator extends RelatedGenerator
     private function getState()
     {
         if (null === $this->state) {
-            $this->state = ObjectManager::getInstance()->get(ObjectManagerFactory::class)->create(State::class);
+            $this->state = ObjectManager::getInstance()->get(State::class);
         }
 
         return $this->state;

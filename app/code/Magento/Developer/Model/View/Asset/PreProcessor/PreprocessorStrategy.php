@@ -7,7 +7,6 @@ namespace Magento\Developer\Model\View\Asset\PreProcessor;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\PreProcessor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -83,7 +82,7 @@ class PreprocessorStrategy implements PreProcessorInterface
     private function getState()
     {
         if (null === $this->state) {
-            $this->state = ObjectManager::getInstance()->get(ObjectManagerFactory::class)->create(State::class);
+            $this->state = ObjectManager::getInstance()->get(State::class);
         }
 
         return $this->state;
