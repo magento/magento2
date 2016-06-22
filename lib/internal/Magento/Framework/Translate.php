@@ -255,7 +255,9 @@ class Translate implements \Magento\Framework\TranslateInterface
         $allModulesExceptCurrent = array_diff($this->_moduleList->getNames(), [$currentModule]);
 
         $this->loadModuleTranslationByModulesList($allModulesExceptCurrent);
-        $this->loadModuleTranslationByModulesList([$currentModule]);
+        if ($currentModule !== null) {
+            $this->loadModuleTranslationByModulesList([$currentModule]);
+        }
         return $this;
     }
 
