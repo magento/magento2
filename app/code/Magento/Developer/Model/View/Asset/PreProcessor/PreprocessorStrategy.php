@@ -5,6 +5,7 @@
  */
 namespace Magento\Developer\Model\View\Asset\PreProcessor;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\State;
@@ -65,7 +66,7 @@ class PreprocessorStrategy implements PreProcessorInterface
     public function process(PreProcessor\Chain $chain)
     {
         $isClientSideCompilation =
-            $this->getState()->getMode() !== State::MODE_PRODUCTION
+            $this->getAppMode() !== State::MODE_PRODUCTION
             && WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
 
         if ($isClientSideCompilation) {
@@ -82,16 +83,22 @@ class PreprocessorStrategy implements PreProcessorInterface
     private function getState()
     {
         if (null === $this->state) {
-            /**
-             * TODO: Fix this in scope of MAGETWO-54595
-             *
-             * @var ObjectManagerFactory $objectManagerFactory
-             */
-            $objectManagerFactory = ObjectManager::getInstance()->get(ObjectManagerFactory::class);
-
-            $this->state = $objectManagerFactory->create([])->create(State::class);
+            $this->state = ObjectManager::getInstance()->get(ObjectManagerFactory::class)->create(State::class);
         }
 
         return $this->state;
+    }
+
+    /**
+     * TODO: Fix this in scope of MAGETWO-54595
+     *
+     * @return string
+     * @deprecated
+     */
+    private function getAppMode()
+    {
+        return $this->getState() === State::MODE_DEFAULT
+            ? ObjectManager::getInstance()->get(DeploymentConfig::class)->get(State::PARAM_MODE)
+            : $this->getState()->getMode();
     }
 }
