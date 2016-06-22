@@ -18,5 +18,5 @@ function __()
         $argc = $argc[0];
     }
 
-    return (string)new \Magento\Framework\Phrase($text, $argc);
+    return new \Magento\Framework\Phrase($text, $argc);
 }
