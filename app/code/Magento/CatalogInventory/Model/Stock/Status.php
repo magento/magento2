@@ -78,6 +78,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @return int
      */
@@ -128,6 +129,7 @@ class Status extends AbstractExtensibleModel implements StockStatusInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param int $productId
      * @return $this
