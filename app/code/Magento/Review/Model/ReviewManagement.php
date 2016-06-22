@@ -63,59 +63,56 @@ class ReviewManagement implements \Magento\Review\Api\ReviewInterface
      * @var string
      */
     protected $_aggregateTable;
+
     /**
      * Core date model
      *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
+
     /**
      * Rating model
      *
      * @var \Magento\Review\Model\RatingFactory
      */
     protected $_ratingFactory;
+
     /**
      * Review model
      *
      * @var \Magento\Review\Model\ReviewFactory
      */
     protected $_reviewFactory;
+
     /**
      * Rating resource model
      *
      * @var \Magento\Review\Model\ResourceModel\Rating\Option
      */
     protected $_ratingOptions;
-    /**
-     * Cache of deleted rating data
-     *
-     * @var array
-     */
-    private $_deleteCache = [];
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     *
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Magento\Review\Model\RatingFactory $ratingFactory
+     * @param \Magento\Review\Model\ReviewFactory $reviewFactory
+     * @param \Magento\Review\Model\ResourceModel\Review\CollectionFactory
+     * $collectionFactory
+     * @param Rating\Option $ratingOptions
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Model\ResourceModel\Review\CollectionFactory
         $collectionFactory,
-        Rating\Option $ratingOptions,
-        $connectionName = null
-
+        Rating\Option $ratingOptions
     ) {
-
         $this->_date = $date;
         $this->_reviewsColFactory = $collectionFactory;
         $this->_ratingFactory = $ratingFactory;
         $this->_reviewFactory = $reviewFactory;
         $this->_ratingOptions = $ratingOptions;
-
     }
 
     /**
@@ -160,6 +157,18 @@ class ReviewManagement implements \Magento\Review\Api\ReviewInterface
         }
         return $reviewArray;
     }
+    /**
+     * Added review item.
+     * @param int $productId
+     * @param string $title
+     * @param string $nickname
+     * @param string $detail
+     * @param int $ratingValue
+     * @param int $customerId
+     * @param int $storeId
+     * @return boolean
+     *
+     */
 
     public function writeReviews(
         $productId,
@@ -167,8 +176,8 @@ class ReviewManagement implements \Magento\Review\Api\ReviewInterface
         $title,
         $detail,
         $ratingValue,
-        $customer_id = null,
-        $store_id = 1
+        $customerId = null,
+        $storeId = 1
     ) {
 
         $data = [
@@ -189,20 +198,21 @@ class ReviewManagement implements \Magento\Review\Api\ReviewInterface
             $validate = $review->validate();
             if ($validate === true) {
                 try {
-                    $review->setEntityId($review
-                        ->getEntityIdByCode(Review::ENTITY_PRODUCT_CODE))
-                        ->setEntityPkValue($product->getId())
-                        ->setStatusId(Review::STATUS_PENDING)
-                        ->setCustomerId($customer_id)
-                        ->setStoreId($store_id)
-                        ->setStores([$store_id])
-                        ->save();
+                    $review->setEntityId(
+                        $review->getEntityIdByCode(Review::ENTITY_PRODUCT_CODE)
+                    )
+                    ->setEntityPkValue($product->getId())
+                    ->setStatusId(Review::STATUS_PENDING)
+                    ->setCustomerId($customerId)
+                    ->setStoreId($storeId)
+                    ->setStores([$storeId])
+                    ->save();
 
                     foreach ($rating as $ratingId => $optionId) {
                         $this->_ratingFactory->create()
                             ->setRatingId($ratingId)
                             ->setReviewId($review->getId())
-                            ->setCustomerId($customer_id)
+                            ->setCustomerId($customerId)
                             ->addOptionVote($optionId, $product->getId());
                     }
 

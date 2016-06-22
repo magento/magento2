@@ -23,8 +23,8 @@ interface ReviewInterface
      * @param string $nickname
      * @param string $detail
      * @param int $ratingValue
-     * @param int $customer_id
-     * @param int $store_id
+     * @param int $customerId
+     * @param int $storeId
      * @return boolean
      *
      */
@@ -34,7 +34,7 @@ interface ReviewInterface
         $title,
         $detail,
         $ratingValue,
-        $customer_id = null,
-        $store_id = 1
+        $customerId = null,
+        $storeId = 1
     );
 }
