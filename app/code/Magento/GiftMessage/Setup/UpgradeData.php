@@ -68,16 +68,6 @@ class UpgradeData implements UpgradeDataInterface
             );
         }
 
-        if (version_compare($context->getVersion(), '2.1.0', '<')) {
-
-            $categorySetup->updateAttribute(
-                $entityTypeId,
-                $attribute['attribute_id'],
-                'source_model',
-                'Magento\Catalog\Model\Product\Attribute\Source\Boolean'
-            );
-        }
-
         $setup->endSetup();
     }
 }
