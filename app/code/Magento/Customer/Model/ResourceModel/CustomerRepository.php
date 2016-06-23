@@ -235,11 +235,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setFailuresNum($customerSecure->getFailuresNum());
             $customerModel->setFirstFailure($customerSecure->getFirstFailure());
             $customerModel->setLockExpires($customerSecure->getLockExpires());
-        } elseif ($passwordHash !== null) {
+        } elseif ($passwordHash) {
             $customerModel->setPasswordHash($passwordHash);
         }
 
-        if ($customerModel->getId() && $passwordHash !== null) {
+        if ($passwordHash && $customerModel->getId()) {
             $this->customerRegistry->remove($customerModel->getId());
         }
     }
