@@ -11,7 +11,7 @@ define([
     'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
     'mage/translate'
-], function ($, Component, validator, vaultEnabler, $t) {
+], function ($, Component, validator, VaultEnabler, $t) {
     'use strict';
 
     return Component.extend({
@@ -33,8 +33,8 @@ define([
          */
         initialize: function () {
             this._super();
-            this.vaultEnabler = vaultEnabler();
-            this.vaultEnabler.setPaymentCode(this.getCode());
+            this.vaultEnabler = new VaultEnabler();
+            this.vaultEnabler.setPaymentCode(this.getVaultCode());
 
             return this;
         },
@@ -150,6 +150,13 @@ define([
             if (this.validateCardType()) {
                 $(this.getSelector('submit')).trigger('click');
             }
+        },
+
+        /**
+         * @returns {String}
+         */
+        getVaultCode: function () {
+            return window.checkoutConfig.payment[this.getCode()].ccVaultCode;
         }
     });
 });
