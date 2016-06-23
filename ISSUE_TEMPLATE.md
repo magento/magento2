@@ -8,8 +8,7 @@
 2. 
 
 ### Steps to reproduce
-<!--- Provide a set of unambiguous steps to -->
-<!--- reproduce this bug include code to reproduce, if relevant -->
+<!--- Provide a set of unambiguous steps to reproduce this bug include code, if relevant  -->
 1. 
 2. 
 3. 
