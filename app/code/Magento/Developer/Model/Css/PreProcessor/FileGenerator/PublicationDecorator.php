@@ -106,7 +106,7 @@ class PublicationDecorator extends RelatedGenerator
      */
     private function getAppMode()
     {
-        return $this->getState() === State::MODE_DEFAULT
+        return $this->getState()->getMode() === State::MODE_DEFAULT
             ? ObjectManager::getInstance()->get(DeploymentConfig::class)->get(State::PARAM_MODE)
             : $this->getState()->getMode();
     }

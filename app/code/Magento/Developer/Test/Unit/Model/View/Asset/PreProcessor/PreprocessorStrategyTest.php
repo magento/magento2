@@ -5,6 +5,7 @@
  */
 namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
@@ -47,6 +48,16 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
     private $stateMock;
 
     /**
+     * @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $objectMangerMock;
+
+    /**
+     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -59,6 +70,12 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
         $this->stateMock = $this->getMockBuilder(State::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectMangerMock = $this->getMockBuilder(\Magento\Framework\App\ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -86,7 +103,7 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
             ->with($chainMock);
         $this->alternativeSourceMock->expects(self::never())
             ->method('process');
-        $this->stateMock->expects($this->once())
+        $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
 
@@ -109,6 +126,15 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEFAULT);
+        $this->objectMangerMock->expects($this->once())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($this->deploymentConfigMock);
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->willReturn(State::MODE_DEFAULT);
+
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectMangerMock);
 
         $this->preprocessorStrategy->process($chainMock);
     }
@@ -129,7 +155,7 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
             ->with($chainMock);
         $this->frontendCompilationMock->expects(self::never())
             ->method('process');
-        $this->stateMock->expects($this->once())
+        $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
             ->willReturn(State::MODE_PRODUCTION);
 
