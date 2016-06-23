@@ -16,6 +16,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
+use Magento\TestFramework\Inspection\Exception;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -132,8 +133,9 @@ class Deployer
      * @param bool $isCss
      * @param bool $isLess
      * @param bool $isImages
-     * @param bool $isHtml
      * @param bool $isFonts
+     * @param bool $isHtml
+     * @param bool $isMisc
      * @param bool $isHtmlMinify
      */
     public function __construct(
@@ -216,13 +218,14 @@ class Deployer
      * Populate all static view files for specified root path and list of languages
      *
      * @param ObjectManagerFactory $omFactory
-     * @param array $locales
+     * @param array $areasArg
+     * @param array $localesArg
      * @param array $themesArg
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $themesArg = [])
+    public function deploy(ObjectManagerFactory $omFactory, array $areasArg, array $localesArg, array $themesArg)
     {
 
         $this->omFactory = $omFactory;
@@ -230,25 +233,36 @@ class Deployer
         if ($this->isDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
-        $langList = implode(', ', $locales);
-        $this->output->writeln("Requested languages: {$langList}");
+
+        $areaList = implode(', ', $areasArg);
+        $this->output->writeln("Requested areas: {$areaList}");
+
+        $localeList = implode(', ', $localesArg);
+        $this->output->writeln("Requested languages: {$localeList}");
+
+        $themeList = implode(', ', $themesArg);
+        $this->output->writeln("Requested themes: {$themeList}");
+        
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
-        list($areas, $appFiles) = $this->collectAppFiles($locales);
-        foreach ($areas as $area => $themes) {
+        list($areas, $appFiles) = $this->collectAppFiles($localesArg);
+        foreach ($areasArg as $area) {
             $this->emulateApplicationArea($area);
-            foreach ($locales as $locale) {
+            foreach ($localesArg as $locale) {
                 $this->emulateApplicationLocale($locale, $area);
-                foreach ($themes as $themePath) {
-                    if (count($themesArg) && !in_array($themePath, $themesArg)) {
-                        continue;
-                    }
+                foreach ($themesArg as $themePath) {
+
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
 
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
-                    $design->setDesignTheme($themePath, $area);
+                    try {
+                        $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+                        $design->setDesignTheme($themePath, $area);
+                    } catch (\LogicException $e) {
+                        continue;
+                    }
+
                     $assetRepo = $this->objectManager->create(
                         'Magento\Framework\View\Asset\Repository',
                         [

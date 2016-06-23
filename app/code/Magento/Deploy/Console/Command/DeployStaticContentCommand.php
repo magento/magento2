@@ -27,9 +27,14 @@ class DeployStaticContentCommand extends Command
     const DRY_RUN_OPTION = 'dry-run';
 
     /**
-     * Key for languages parameter
+     * Key for language parameter
      */
-    const LANGUAGE_OPTION = 'languages';
+    const LANGUAGE_OPTION = 'language';
+
+    /**
+     * Key for exclude language parameter
+     */
+    const EXCLUDE_LANGUAGE_OPTION = 'exclude-language';
 
     /**
      * Key for javascript option
@@ -72,9 +77,24 @@ class DeployStaticContentCommand extends Command
     const HTML_MINIFY_OPTION = 'no-html-minify';
 
     /**
-     * Key for themes option
+     * Key for theme option
      */
-    const THEMES_OPTION = 'themes';
+    const THEME_OPTION = 'theme';
+
+    /**
+     * Key for exclude theme option
+     */
+    const EXCLUDE_THEME_OPTION = 'exclude-theme';
+
+    /**
+     * Key for area option
+     */
+    const AREA_OPTION = 'area';
+
+    /**
+     * Key for exclude area option
+     */
+    const EXCLUDE_AREA_OPTION = 'exclude-area';
 
     /**
      * @var Locale
@@ -131,106 +151,221 @@ class DeployStaticContentCommand extends Command
                 ),
                 new InputOption(
                     self::JAVASCRIPT_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, no JavaScript will be deployed.'
                 ),
                 new InputOption(
                     self::CSS_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, no CSS will be deployed.'
                 ),
                 new InputOption(
                     self::LESS_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, no LESS will be deployed.'
                 ),
                 new InputOption(
                     self::IMAGES_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, no images will be deployed.'
                 ),
                 new InputOption(
                     self::FONTS_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, no font files will be deployed.'
                 ),
                 new InputOption(
                     self::HTML_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, no html files will be deployed.'
                 ),
                 new InputOption(
                     self::MISC_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, no miscellaneous files will be deployed.'
                 ),
                 new InputOption(
                     self::HTML_MINIFY_OPTION,
-                    '',
+                    null,
                     InputOption::VALUE_NONE,
                     'If specified, just html will not be minified and actually deployed.'
                 ),
                 new InputOption(
-                    self::THEMES_OPTION,
+                    self::THEME_OPTION,
                     '-t',
-                    InputOption::VALUE_IS_ARRAY + InputOption::VALUE_OPTIONAL,
-                    'If specified, just specific themes will be actually deployed.'
+                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                    'If specified, just specific theme(s) will be actually deployed.',
+                    ['all']
                 ),
-                new InputArgument(
+                new InputOption(
+                    self::EXCLUDE_THEME_OPTION,
+                    '-et',
+                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                    'If specified, exclude specific theme(s) from deployment.',
+                    ['none']
+                ),
+                new InputOption(
                     self::LANGUAGE_OPTION,
-                    InputArgument::IS_ARRAY,
-                    'List of languages you want the tool populate files for.',
-                    ['en_US']
+                    '-l',
+                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                    'List of locales you want the tool populate files for.',
+                    ['all']
+                ),
+                new InputOption(
+                    self::EXCLUDE_LANGUAGE_OPTION,
+                    '-el',
+                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                    'List of locales you do not want the tool populate files for.',
+                    ['none']
+                ),
+                new InputOption(
+                    self::AREA_OPTION,
+                    '-a',
+                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                    'List of areas you want the tool populate files for.',
+                    ['all']
+                ),
+                new InputOption(
+                    self::EXCLUDE_AREA_OPTION,
+                    '-ea',
+                    InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                    'List of areas you do not want the tool populate files for.',
+                    ['none']
                 ),
             ]);
 
         parent::configure();
+
     }
 
     /**
      * {@inheritdoc}
+     * @throws \InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+
         $options = $input->getOptions();
 
-        $languages = $input->getArgument(self::LANGUAGE_OPTION);
-        foreach ($languages as $lang) {
+        $excludeAreas = $input->getOption(self::EXCLUDE_AREA_OPTION);
 
-            if (!$this->validator->isValid($lang)) {
-                throw new \InvalidArgumentException(
-                    $lang . ' argument has invalid value, please run info:language:list for list of available locales'
-                );
-            }
+        $areas = $input->getOption(self::AREA_OPTION);
+
+        if ($excludeAreas[0] != 'none' && $areas[0] != 'all') {
+            throw new \InvalidArgumentException(
+                '--area (-a) and --exclude-area (-ea) cannot be used at the same time'
+            );
+        }
+
+        $excludeLanguages = $input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
+
+        $languages = $input->getOption(self::LANGUAGE_OPTION);
+
+        if ($excludeLanguages[0] != 'none' && $languages[0] != 'all') {
+            throw new \InvalidArgumentException(
+                '--language (-l) and --exclude-language (-el) cannot be used at the same time'
+            );
+        }
+
+        $excludeThemes = $input->getOption(self::EXCLUDE_THEME_OPTION);
+
+        $themes = $input->getOption(self::THEME_OPTION);
+
+        if ($excludeThemes[0] != 'none' && $themes[0] != 'all') {
+            throw new \InvalidArgumentException(
+                '--theme (-t) and --exclude-theme (-et) cannot be used at the same time'
+            );
         }
 
         // run the deployment logic
         $filesUtil = $this->objectManager->create(Files::class);
 
+        $mageAreas = [];
         $mageThemes = [];
+        $mageLanguages = ['en_US'];
+
         $files = $filesUtil->getStaticPreProcessingFiles();
         foreach ($files as $info) {
-            list(, $themePath) = $info;
+            list($area, $themePath, $locale) = $info;
+
             if ($themePath && !in_array($themePath, $mageThemes)) {
                 $mageThemes[] = $themePath;
             }
+            if ($locale && !in_array($locale, $mageLanguages)) {
+                $mageLanguages[] = $locale;
+            }
+            if ($area && !in_array($area, $mageAreas)) {
+                $mageAreas[] = $area;
+            }
         }
 
-        $themes = $input->getOption(self::THEMES_OPTION);
+        if ($languages[0] != 'all') {
+            foreach ($languages as $locale) {
+                if (!$this->validator->isValid($locale)) {
+                    throw new \InvalidArgumentException(
+                        $locale . ' argument has invalid value, please run info:language:list for list of available locales'
+                    );
+                }
+            }
+        }
 
-        foreach ($themes as $theme) {
+        $deployLanguages = [];
+        foreach ($mageLanguages as $locale) {
+            if ($languages[0] != 'all' && in_array($locale, $languages)) {
+                $deployLanguages[] = $locale;
+            } elseif ($excludeLanguages[0] != 'none' && in_array($locale, $excludeLanguages)) {
+                continue;
+            } elseif ($languages[0] == 'all' && $excludeLanguages[0] == 'none') {
+                $deployLanguages[] = $locale;
+            }
+        }
 
-            if ($theme != 'all' && !in_array($theme, $mageThemes)) {
-                throw new \InvalidArgumentException(
-                    $theme . ' argument has invalid value, avalilable areas are: ' . implode(', ', $mageThemes)
-                );
+        if ($themes[0] != 'all') {
+            foreach ($themes as $theme) {
+                if (!in_array($theme, $mageThemes)) {
+                    throw new \InvalidArgumentException(
+                        $theme . ' argument has invalid value, avalilable themes are: ' . implode(', ', $mageThemes)
+                    );
+                }
+            }
+        }
+
+        $deployThemes = [];
+        foreach ($mageThemes as $theme) {
+            if ($themes[0] != 'all' && in_array($theme, $themes)) {
+                $deployThemes[] = $theme;
+            } elseif ($excludeThemes[0] != 'none' && in_array($theme, $excludeThemes)) {
+                continue;
+            } elseif ($themes[0] == 'all' && $excludeThemes[0] == 'none') {
+                $deployThemes[] = $theme;
+            }
+        }
+
+        if ($areas[0] != 'all') {
+            foreach ($areas as $area) {
+                if (!in_array($area, $mageAreas)) {
+                    throw new \InvalidArgumentException(
+                        $area . ' argument has invalid value, avalilable areas are: ' . implode(', ', $mageAreas)
+                    );
+                }
+            }
+        }
+
+        $deployAreas = [];
+        foreach ($mageAreas as $area) {
+            if ($areas[0] != 'all' && in_array($area, $areas)) {
+                $deployAreas[] = $area;
+            } elseif ($excludeAreas[0] != 'none' && in_array($area, $excludeAreas)) {
+                continue;
+            } elseif ($areas[0] == 'all' && $excludeAreas[0] == 'none') {
+                $deployAreas[] = $area;
             }
         }
 
@@ -251,6 +386,6 @@ class DeployStaticContentCommand extends Command
             ]
         );
 
-        $deployer->deploy($this->objectManagerFactory, $languages, $themes);
+        $deployer->deploy($this->objectManagerFactory, $deployAreas, $deployLanguages, $deployThemes);
     }
 }
