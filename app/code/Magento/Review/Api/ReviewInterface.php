@@ -26,8 +26,9 @@ interface ReviewInterface
      * @param int $customerId
      * @param int $storeId
      * @return boolean
+     *
      */
-     public function writeReviews(
+    public function writeReviews(
         $productId,
         $nickname,
         $title,
@@ -35,5 +36,5 @@ interface ReviewInterface
         $ratingValue,
         $customerId = null,
         $storeId = 1
-     );
+    );
 }
