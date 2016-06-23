@@ -17,10 +17,16 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $resolver;
 
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $metadataPoolMock;
+
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->resolver = new \Magento\Framework\EntityManager\TypeResolver();
+        $this->metadataPoolMock = $this->getMock('\Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
+        $this->resolver = new \Magento\Framework\EntityManager\TypeResolver($this->metadataPoolMock);
     }
 
     /**
@@ -31,6 +37,13 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     public function testResolve($dataObject, $interfaceName)
     {
         $customerDataObject = $this->objectManager->getObject($dataObject);
+        $this->metadataPoolMock->expects($this->any())
+            ->method('hasConfiguration')
+            ->willReturnMap(
+                [
+                   [$interfaceName, true]
+                ]
+            );
         $this->assertEquals($interfaceName, $this->resolver->resolve($customerDataObject));
     }
 

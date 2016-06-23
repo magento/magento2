@@ -7,6 +7,8 @@ namespace Magento\Framework\Stdlib;
 
 /**
  * Utility methods for the boolean data type
+ *
+ * @api
  */
 class BooleanUtils
 {

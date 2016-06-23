@@ -15,6 +15,7 @@ define([
     return {
         apiClient: null,
         config: {},
+        checkout: null,
 
         /**
          * Get Braintree api client

@@ -6,6 +6,7 @@
 namespace Magento\Framework\Model\Test\Unit\ResourceModel;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class AbstractResourceTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,5 +105,97 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             [[$dataObject, 'not_serialized_string', null], 'i am string'],
             [[$dataObject, 'serialized_boolean_false', null], false]
         ];
+    }
+    
+    public function testCommitZeroLevel()
+    {
+        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
+        $connection = $this->getMock(AdapterInterface::class);
+        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
+        $closureExpectation = $this->getMockBuilder(DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $abstractResource = new AbstractResourceStub();
+        $abstractResource->setConnection($connection);
+        $abstractResource->addCommitCallback(
+            function () use ($closureExpectation) {
+                $closureExpectation->setData(1);
+            }
+        );
+
+        $abstractResource->addCommitCallback(
+            function () use ($closureExpectation) {
+                $closureExpectation->getData();
+            }
+        );
+
+        $connection->expects(static::once())
+            ->method('commit');
+        $connection->expects(static::once())
+            ->method('getTransactionLevel')
+            ->willReturn(0);
+        $closureExpectation->expects(static::once())
+            ->method('setData')
+            ->with(1);
+        $closureExpectation->expects(static::once())
+            ->method('getData');
+
+        $abstractResource->commit();
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCommitZeroLevelCallbackException()
+    {
+        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
+        $connection = $this->getMock(AdapterInterface::class);
+
+        $abstractResource = new AbstractResourceStub();
+        $abstractResource->setConnection($connection);
+        $abstractResource->addCommitCallback(
+            function () {
+                throw new \Exception();
+            }
+        );
+
+        $connection->expects(static::once())
+            ->method('commit');
+        $connection->expects(static::once())
+            ->method('getTransactionLevel')
+            ->willReturn(0);
+
+        $abstractResource->commit();
+    }
+    
+    public function testCommitNotCompletedTransaction()
+    {
+        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
+        $connection = $this->getMock(AdapterInterface::class);
+        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
+        $closureExpectation = $this->getMockBuilder(DataObject::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $abstractResource = new AbstractResourceStub();
+        $abstractResource->setConnection($connection);
+        $abstractResource->addCommitCallback(
+            function () use ($closureExpectation) {
+                $closureExpectation->setData(1);
+            }
+        );
+
+        $connection->expects(static::once())
+            ->method('commit');
+        $connection->expects(static::once())
+            ->method('getTransactionLevel')
+            ->willReturn(1);
+
+        $closureExpectation->expects(static::never())
+            ->method('setData')
+            ->with(1);
+
+        $abstractResource->commit();
     }
 }

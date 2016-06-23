@@ -185,55 +185,50 @@ class ObjectManager
      */
     protected function getBuilder($className, array $arguments)
     {
-        $objectFactory = $this->_testObject->getMock('Magento\Framework\Api\ObjectFactory', [], [], '', false);
-
         if (!isset($arguments['objectFactory'])) {
+            $objectFactory = $this->_testObject->getMock('Magento\Framework\Api\ObjectFactory', [], [], '', false);
+
+            $objectFactory->expects($this->_testObject->any())
+                ->method('populateWithArray')
+                ->will($this->_testObject->returnSelf());
+            $objectFactory->expects($this->_testObject->any())
+                ->method('populate')
+                ->will($this->_testObject->returnSelf());
+            $objectFactory->expects($this->_testObject->any())
+                ->method('create')
+                ->will($this->_testObject->returnCallback(
+                    function ($className, $arguments) {
+                        $reflectionClass = new \ReflectionClass($className);
+                        $constructorMethod = $reflectionClass->getConstructor();
+                        $parameters = $constructorMethod->getParameters();
+                        $args = [];
+                        foreach ($parameters as $parameter) {
+                            $parameterName = $parameter->getName();
+                            if (isset($arguments[$parameterName])) {
+                                $args[] = $arguments[$parameterName];
+                            } else {
+                                if ($parameter->isArray()) {
+                                    $args[] = [];
+                                } elseif ($parameter->allowsNull()) {
+                                    $args[] = null;
+                                } else {
+                                    $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
+                                    $args[] = $mock;
+                                }
+                            }
+                        }
+                        return new $className(...array_values($args));
+                    }
+                ));
+
             $arguments['objectFactory'] = $objectFactory;
         }
 
-        $constructArguments = $this->getConstructArguments($className, $arguments);
-        $reflectionClass = new \ReflectionClass($className);
-        $builderObject = $reflectionClass->newInstanceArgs($constructArguments);
-
-        $objectFactory->expects($this->_testObject->any())
-            ->method('populateWithArray')
-            ->will($this->_testObject->returnSelf());
-        $objectFactory->expects($this->_testObject->any())
-            ->method('populate')
-            ->will($this->_testObject->returnSelf());
-        $objectFactory->expects($this->_testObject->any())
-            ->method('create')
-            ->will($this->_testObject->returnCallback(
-                function ($className, $arguments) {
-                    $reflectionClass = new \ReflectionClass($className);
-                    $constructorMethod = $reflectionClass->getConstructor();
-                    $parameters = $constructorMethod->getParameters();
-                    $args = [];
-                    foreach ($parameters as $parameter) {
-                        $parameterName = $parameter->getName();
-                        if (isset($arguments[$parameterName])) {
-                            $args[] = $arguments[$parameterName];
-                        } else {
-                            if ($parameter->isArray()) {
-                                $args[] = [];
-                            } elseif ($parameter->allowsNull()) {
-                                $args[] = null;
-                            } else {
-                                $mock = $this->_getMockWithoutConstructorCall($parameter->getClass()->getName());
-                                $args[] = $mock;
-                            }
-                        }
-                    }
-
-                    return $reflectionClass->newInstanceArgs($args);
-                }
-            ));
-
-        return $builderObject;
+        return new $className(...array_values($this->getConstructArguments($className, $arguments)));
     }
 
     /**
-     * Retrieve list of arguments that used for new object instance creation
+     * Retrieve associative array of arguments that used for new object instance creation
      *
      * @param string $className
      * @param array $arguments
