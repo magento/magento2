@@ -8,18 +8,17 @@ namespace Magento\Paypal\Model;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory;
+use Magento\Payment\Model\Method\Online\GatewayInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
+use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface;
-use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Model\Quote;
-use Magento\Sales\Model\Order\Payment;
-use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Magento\Payment\Model\Method\ConfigInterface;
-use Magento\Paypal\Model\Config;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
  * Payflow Pro payment gateway model
@@ -623,7 +622,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setPartner($this->getConfigData('partner'));
         $request->setPwd($this->getConfigData('pwd'));
         $request->setVerbosity($this->getConfigData('verbosity'));
-        $request->setData('BNCODE', $config->getBuildNotationCode());
+        $request->setData('BUTTONSOURCE', $config->getBuildNotationCode());
         $request->setTender(self::TENDER_CC);
 
         return $request;
@@ -859,6 +858,36 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
         $request->setCustref($orderIncrementId)
             ->setInvnum($orderIncrementId)
             ->setComment1($orderIncrementId);
+    }
+
+    /**
+     * Assign data to info model instance
+     *
+     * @param array|DataObject $data
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function assignData(DataObject $data)
+    {
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data_' . $this->getCode(),
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
+        $this->_eventManager->dispatch(
+            'payment_method_assign_data',
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
+        return $this;
     }
 
     /**

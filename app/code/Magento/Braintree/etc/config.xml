@@ -60,6 +60,10 @@
                 <privateInfoKeys>processorResponseCode,processorResponseText,paymentId</privateInfoKeys>
                 <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
             </braintree_paypal>
+            <braintree_cc_vault>
+                <model>BraintreeCreditCardVaultFacade</model>
+                <title>Stored Cards (Braintree)</title>
+            </braintree_cc_vault>
         </payment>
     </default>
 </config>

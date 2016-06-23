@@ -182,20 +182,32 @@ class DataObjectHelper
                     = 'get' . \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToUpperCamelCase(
                         $extensionAttributeKey
                     );
-                $extensionAttributeType = $this->methodsMapProcessor->getMethodReturnType(
+                $methodReturnType = $this->methodsMapProcessor->getMethodReturnType(
                     $returnType,
                     $extensionAttributeGetterMethodName
                 );
-                if ($this->typeProcessor->isArrayType($extensionAttributeType)) {
-                    $extensionAttributeType = $this->typeProcessor->getArrayItemType($extensionAttributeType);
-                }
-                if (!$this->typeProcessor->isTypeSimple($extensionAttributeType)) {
-                    $value[$extensionAttributeKey] = $this->objectFactory->create(
-                        $extensionAttributeType,
-                        ['data' => $extensionAttributeValue]
-                    );
-                } else {
+                $extensionAttributeType = $this->typeProcessor->isArrayType($methodReturnType)
+                    ? $this->typeProcessor->getArrayItemType($methodReturnType)
+                    : $methodReturnType;
+                if ($this->typeProcessor->isTypeSimple($extensionAttributeType)) {
                     $value[$extensionAttributeKey] = $extensionAttributeValue;
+                } else {
+                    if ($this->typeProcessor->isArrayType($methodReturnType)) {
+                        foreach ($extensionAttributeValue as $key => $extensionAttributeArrayValue) {
+                            $extensionAttribute = $this->objectFactory->create($extensionAttributeType, []);
+                            $this->populateWithArray(
+                                $extensionAttribute,
+                                $extensionAttributeArrayValue,
+                                $extensionAttributeType
+                            );
+                            $value[$extensionAttributeKey][$key] = $extensionAttribute;
+                        }
+                    } else {
+                        $value[$extensionAttributeKey] = $this->objectFactory->create(
+                            $extensionAttributeType,
+                            ['data' => $extensionAttributeValue]
+                        );
+                    }
                 }
             }
             $object = $this->extensionFactory->create(get_class($dataObject), ['data' => $value]);

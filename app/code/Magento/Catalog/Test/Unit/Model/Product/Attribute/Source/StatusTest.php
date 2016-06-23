@@ -8,6 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class StatusTest extends \PHPUnit_Framework_TestCase
@@ -26,6 +27,11 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendAttributeModel;
+
+    /**
+     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entity;
 
     protected function setUp()
     {
@@ -53,6 +59,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
                 'getBackend',
                 'getId',
                 'isScopeGlobal',
+                'getEntity',
             ],
             [],
             '',
@@ -78,6 +85,11 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->backendAttributeModel->expects($this->any())->method('getTable')
             ->will($this->returnValue('table_name'));
+
+        $this->entity = $this->getMockBuilder(AbstractEntity::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLinkField'])
+            ->getMockForAbstractClass();
     }
 
     public function testAddValueSortToCollectionGlobal()
@@ -86,6 +98,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->collection->expects($this->once())->method('order')->with('attribute_code_t.value asc')
             ->will($this->returnSelf());
+
+        $this->attributeModel->expects($this->once())->method('getEntity')->willReturn($this->entity);
+        $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
 
         $this->status->setAttribute($this->attributeModel);
         $this->status->addValueSortToCollection($this->collection);
@@ -104,6 +119,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $this->collection->expects($this->any())->method('getCheckSql')
             ->will($this->returnValue('check_sql'));
+
+        $this->attributeModel->expects($this->any())->method('getEntity')->willReturn($this->entity);
+        $this->entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
 
         $this->status->setAttribute($this->attributeModel);
         $this->status->addValueSortToCollection($this->collection);
