@@ -25,14 +25,12 @@ class WishlistManagement implements WishlistManagementInterface
      * @var CollectionFactory
      */
     protected $_wishlistCollectionFactory;
-
     /**
      * Wishlist item collection
      *
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_itemCollection;
-
     /**
      * @var WishlistRepository
      */
@@ -50,8 +48,6 @@ class WishlistManagement implements WishlistManagementInterface
      * @var Item
      */
     protected $_itemFactory;
-
-
     /**
      * @param CollectionFactory $wishlistCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -75,9 +71,8 @@ class WishlistManagement implements WishlistManagementInterface
 
     /**
      * Get wishlist collection
-     * @deprecated
-     * @param $customerId
-     * @return WishlistData
+     * @param int $customerId
+     * @return array WishlistData
      */
     public function getWishlistForCustomer($customerId)
     {
@@ -114,11 +109,12 @@ class WishlistManagement implements WishlistManagementInterface
      * @return array|bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function addWishlistForCustomer($customerId, $productId)
+    public function addWishlistForCustomer($customerId , $productId)
     {
         if ($productId == null) {
-            throw new LocalizedException(__
-            ('Invalid product, Please select a valid product'));
+            throw new LocalizedException(
+                __('Invalid product, Please select a valid product')
+            );
         }
         try {
             $product = $this->_productRepository->getById($productId);
@@ -126,10 +122,10 @@ class WishlistManagement implements WishlistManagementInterface
             $product = null;
         }
         try {
-            $wishlist = $this->_wishlistRepository->create()->loadByCustomerId
-            ($customerId, true);
+            $wishlist = $this->_wishlistRepository->create()
+                ->loadByCustomerId($customerId, true);
             $wishlist->addNewItem($product);
-            $returnData = $wishlist->save();
+            $wishlist->save();
         } catch (NoSuchEntityException $e) {
 
         }
@@ -143,12 +139,13 @@ class WishlistManagement implements WishlistManagementInterface
      * @return bool|\Magento\Wishlist\Api\status
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteWishlistForCustomer($customerId, $wishlistItemId)
+    public function deleteWishlistForCustomer($customerId , $wishlistItemId)
     {
 
         if ($wishlistItemId == null) {
-            throw new LocalizedException(__
-            ('Invalid wishlist item, Please select a valid item'));
+            throw new LocalizedException(
+                __('Invalid wishlist item, Please select a valid item')
+            );
         }
         $item = $this->_itemFactory->create()->load($wishlistItemId);
         if (!$item->getId()) {
