@@ -180,7 +180,12 @@ class RulePool
                                         'optionalParams' => ['locale']
                                     ]),
                                 $this->simpleFactory
-                                    ->create(['pattern' => "<theme_dir>/web"])
+                                    ->create(['pattern' => "<theme_dir>/web"]),
+                                $this->simpleFactory
+                                    ->create([
+                                        'pattern' => "<theme_preprocessed_dir>",
+                                        'optionalParams' => ['theme_preprocessed_dir']
+                                    ]),
                             ]
                         )]
                     ),

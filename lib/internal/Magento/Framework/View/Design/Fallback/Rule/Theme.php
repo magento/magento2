@@ -8,6 +8,8 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Fallback Rule Theme
@@ -29,6 +31,11 @@ class Theme implements RuleInterface
      * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
+
+    /**
+     * @var DirectoryList
+     */
+    private $directoryList;
 
     /**
      * Constructors
@@ -66,10 +73,35 @@ class Theme implements RuleInterface
                     ComponentRegistrar::THEME,
                     $theme->getFullPath()
                 );
+
+                if (empty($params['theme_preprocessed_dir'])
+                    && isset($params['file'])
+                    && pathinfo($params['file'], PATHINFO_EXTENSION) === 'css'
+                ) {
+                    $params['theme_preprocessed_dir'] = $this->getDirectoryList()
+                        ->getPath(DirectoryList::TMP_MATERIALIZATION_DIR)
+                        . '/source/' . $theme->getArea() . '/' . $theme->getCode()
+                        . (isset($params['locale']) ? '/' . $params['locale'] : '');
+                }
+                
                 $result = array_merge($result, $this->rule->getPatternDirs($params));
             }
             $theme = $theme->getParentTheme();
         }
         return $result;
+    }
+
+    /**
+     * Get DirectoryList instance
+     * @return DirectoryList
+     *
+     * @deprecated
+     */
+    private function getDirectoryList()
+    {
+        if (null === $this->directoryList) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+        return $this->directoryList;
     }
 }
