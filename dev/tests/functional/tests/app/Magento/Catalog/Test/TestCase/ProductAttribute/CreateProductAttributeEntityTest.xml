@@ -174,6 +174,12 @@
             <data name="productAttribute/data/frontend_input" xsi:type="string">Fixed Product Tax</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">attr_fpt_code_%isolation%</data>
             <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Fixed_Product_Tax_Storeview</data>
+            <data name="attributeValue" xsi:type="array">
+                <item name="country" xsi:type="string">United States</item>
+                <item name="tax" xsi:type="string">10</item>
+                <item name="website" xsi:type="string">All Websites USD</item>
+                <item name="state" xsi:type="string">*</item>
+            </data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
