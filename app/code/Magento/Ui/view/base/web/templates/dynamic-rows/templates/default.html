@@ -24,11 +24,11 @@
                     <tr>
                         <th if="dndConfig.enabled"/>
                         <th repeat="foreach: labels, item: '$label'"
-                            text="$label().label"
+                            attr="{'data-name': name}"
                             css="setClasses($label())"
                             visible="$label().visible"
-                            disable="$label().disabled"
-                            attr="{'data-name': name}"/>
+                            disable="$label().disabled">
+                            <span text="$label().label"/>
                         </th>
                     </tr>
                 </thead>

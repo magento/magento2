@@ -51,10 +51,10 @@
 
                         <th repeat="foreach: labels, item: '$label'"
                             class="data-grid-th"
-                            text="$label().label"
                             visible="$label().visible"
                             disable="$label().disabled"
                             css="setClasses($label())">
+                            <span text="$label().label"/>
                         </th>
                     </tr>
                 </thead>

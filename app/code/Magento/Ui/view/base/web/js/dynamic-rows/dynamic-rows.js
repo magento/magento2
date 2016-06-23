@@ -117,7 +117,6 @@ define([
             isDifferedFromDefault: false,
             defaultState: [],
             changed: false,
-            isDefaultState: true,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
                 name: '${ $.name }_dnd',
@@ -151,7 +150,7 @@ define([
                 dnd: '${ $.dndConfig.name }'
             },
             pages: 1,
-            pageSize: 20,
+            pageSize: 5,
             relatedData: [],
             currentPage: 1,
             startIndex: 0
@@ -165,22 +164,46 @@ define([
          * @returns {Object} Chainable.
          */
         initialize: function () {
-            _.bindAll(this, 'processingDeleteRecord', 'onChildrenUpdate');
+            _.bindAll(this,
+                'processingDeleteRecord',
+                'onChildrenUpdate',
+                'checkDefaultState',
+                'renderColumnsHeader'
+            );
+
             this._super()
                 .initChildren()
                 .initDnd()
-                .setColumnsHeaderListener()
                 .initDefaultRecord()
+                .setInitialProperty()
+                .setColumnsHeaderListener()
                 .checkSpinner();
 
-                if (_.isArray(this.recordData())) {
-                    this.recordData.each(function (data, index) {
-                        this.source.set(this.dataScope + '.' + this.index + '.' + index + '.initialize', true);
-                    }, this);
+            this.on('recordData', this.checkDefaultState);
 
-                }
+            return this;
+        },
 
-            this.on('recordData', this.checkDefaultState.bind(this));
+        /**
+         * @inheritdoc
+         */
+        bubble: function (event) {
+            if (event === 'deleteRecord' || event === 'update') {
+                return false;
+            }
+
+            return this._super();
+        },
+
+        /**
+         * Inits DND module
+         *
+         * @returns {Object} Chainable.
+         */
+        initDnd: function () {
+            if (this.dndConfig.enabled) {
+                layout([this.dndConfig]);
+            }
 
             return this;
         },
@@ -215,7 +238,7 @@ define([
         initElement: function (elem) {
             this._super();
             elem.on({
-                'deleteRecord': function(index, id){
+                'deleteRecord': function (index, id) {
                     this.deleteHandler(index, id);
                 }.bind(this),
                 'update': function (state) {
@@ -226,45 +249,77 @@ define([
             return this;
         },
 
+        /**
+         * Handler for deleteRecord event
+         *
+         * @param {Number|String} index - element index
+         * @param {Number|String} id
+         */
         deleteHandler: function (index, id) {
-            this.getDefaultState();
+            this.setDefaultState();
             this.processingDeleteRecord(index, id);
-            this.changed(!compareArrays(this.defaultState, this.arrFilter(this.relatedData)));
+            this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
         },
 
-        compare: function(ar1, ar2) {
-          return compareArrays(ar1, ar2)
+        /**
+         * Set initial property to records data
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialProperty: function () {
+            if (_.isArray(this.recordData())) {
+                this.recordData.each(function (data, index) {
+                    this.source.set(this.dataScope + '.' + this.index + '.' + index + '.initialize', true);
+                }, this);
+            }
+
+            return this;
         },
 
+        /**
+         * Handler for update event
+         *
+         * @param {Boolean} state
+         */
         onChildrenUpdate: function (state) {
             var changed,
                 dataScope,
-                elemDataScope;
+                changedElemDataScope;
 
-            if (state && !this.initialState) {
-                this.initialState = true;
-                this.defaultState = utils.copy(this.recordData());
-
-                changed = this.findChangedElems(this.elems());
+            if (state && !this.hasInitialState) {
+                this.setDefaultState();
+                changed = this.getChangedElems(this.elems());
                 dataScope = this.elems()[0].dataScope.split('.');
                 dataScope.splice(dataScope.length - 1, 1);
-
                 changed.forEach(function (elem) {
-                    elemDataScope = elem.dataScope.split('.');
-                    elemDataScope.splice(0, dataScope.length);
-
-                    this.setValueByPath(this.defaultState, elemDataScope, elem.initialValue);
+                    changedElemDataScope = elem.dataScope.split('.');
+                    changedElemDataScope.splice(0, dataScope.length);
+                    this.setValueByPath(this.defaultState, changedElemDataScope, elem.initialValue);
                 }, this);
             }
+
+            this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
         },
 
-        getDefaultState: function () {
-            if (!this.initialState) {
-                this.initialState = true;
-                this.defaultState = utils.copy(this.arrFilter(this.recordData()));
+        /**
+         * Set default dynamic-rows state
+         *
+         * @param {Array} data - defaultState data
+         */
+        setDefaultState: function (data) {
+            if (!this.hasInitialState) {
+                this.hasInitialState = true;
+                this.defaultState = data ? data : utils.copy(this.arrayFilter(this.recordData()));
             }
         },
 
+        /**
+         * Sets value to object by string path
+         *
+         * @param {Object} obj
+         * @param {Array|String} path
+         * @param {*} value
+         */
         setValueByPath: function (obj, path, value) {
             var prop;
 
@@ -274,51 +329,32 @@ define([
 
             if (path.length - 1) {
                 prop = obj[path[0]];
-                path.splice(0,1);
-
-                this.setValueByPath(prop, path , value);
+                path.splice(0, 1);
+                this.setValueByPath(prop, path, value);
             } else if (path.length) {
                 obj[path[0]] = value;
             }
-
         },
 
-        findChangedElems: function (array, changed) {
+        /**
+         * Returns elements which changed self state
+         *
+         * @param {Array} array - data array
+         * @param {Array} changed - array with changed elements
+         * @returns {Array} changed - array with changed elements
+         */
+        getChangedElems: function (array, changed) {
             changed = changed || [];
 
             array.forEach(function (elem) {
                 if (_.isFunction(elem.elems)) {
-                    this.findChangedElems(elem.elems(), changed)
+                    this.getChangedElems(elem.elems(), changed);
                 } else if (elem.hasChanged()) {
                     changed.push(elem);
                 }
             }, this);
 
             return changed;
-        },
-
-        /**
-         * @inheritdoc
-         */
-        bubble: function (event) {
-            if (event === 'deleteRecord') {
-                return false;
-            }
-
-            return this._super();
-        },
-
-        /**
-         * Inits DND module
-         *
-         * @returns {Object} Chainable.
-         */
-        initDnd: function () {
-            if (this.dndConfig.enabled) {
-                layout([this.dndConfig]);
-            }
-
-            return this;
         },
 
         /**
@@ -329,7 +365,11 @@ define([
          */
         setColumnsHeaderListener: function () {
             if (this.columnsHeaderAfterRender) {
-                this.on('recordData', this.renderColumnsHeader.bind(this));
+                this.on('recordData', this.renderColumnsHeader);
+
+                if (_.isArray(this.recordData()) && this.recordData().length) {
+                    this.renderColumnsHeader();
+                }
             }
 
             return this;
@@ -339,35 +379,37 @@ define([
          * Checks whether component's state is default or not
          */
         checkDefaultState: function () {
-            if (
-                !this.initialState &&
-                _.isArray(this.recordData()) &&
-                !this.recordData().filter(function (data) {
+            var isRecordDataArray = _.isArray(this.recordData()),
+                initialize,
+                hasNotDefaultRecords = isRecordDataArray ? !!this.recordData().filter(function (data) {
                     return !data.initialize;
-                }).length
-            ) {
-                this.initialState = true;
-                this.defaultState = utils.copy(this.recordData().filter(function (data) {
-                    return data.initialize;
-                }));
+                }).length : false;
 
-                this.defaultState.forEach(function(data){
+            if (!this.hasInitialState && isRecordDataArray && !hasNotDefaultRecords) {
+                this.hasInitialState = true;
+                this.defaultState = utils.copy(this.recordData().filter(function (data) {
+                    initialize = data.initialize;
                     delete data.initialize;
-                })
-            } else if ( !this.initialState &&
-                _.isArray(this.recordData()) &&
-                this.recordData().filter(function (data) {
-                    return !data.initialize;
-                }).length
-            ) {
-                this.initialState = true;
+
+                    return initialize;
+                }));
+            } else if (!this.hasInitialState && isRecordDataArray && hasNotDefaultRecords) {
+                this.hasInitialState = true;
             }
-            this.changed(!compareArrays(this.defaultState, this.arrFilter(this.relatedData)));
+
+            this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
         },
 
-        arrFilter: function (data) {
+        /**
+         * Filters out deleted items from array
+         *
+         * @param {Array} data
+         * @returns {Array} filtered array
+         */
+        arrayFilter: function (data) {
             var prop;
 
+            /*eslint-disable no-loop-func*/
             data.forEach(function (elem) {
                 for (prop in elem) {
                     if (_.isArray(elem[prop])) {
@@ -377,12 +419,14 @@ define([
 
                         elem[prop].forEach(function (elemProp) {
                             if (_.isArray(elemProp)) {
-                                elem[prop] = this.arrFilter(elemProp);
+                                elem[prop] = this.arrayFilter(elemProp);
                             }
-                        }, this)
+                        }, this);
                     }
                 }
             }, this);
+
+            /*eslint-enable no-loop-func*/
 
             return data;
         },
@@ -449,12 +493,11 @@ define([
             if (!this.labels().length) {
                 _.each(this.childTemplate.children, function (cell) {
                     data = this.createHeaderTemplate(cell.config);
-
                     cell.config.labelVisible = false;
                     _.extend(data, {
                         label: cell.config.label,
                         name: cell.name,
-                        required: cell.required,
+                        required: !!cell.config.validation,
                         columnsHeaderClasses: cell.config.columnsHeaderClasses
                     });
 
@@ -609,7 +652,7 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
-            this.getDefaultState()
+            this.setDefaultState();
 
             if (page === 1 && !this.recordData().length) {
                 return false;

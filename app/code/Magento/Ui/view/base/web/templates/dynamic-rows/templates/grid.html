@@ -40,10 +40,10 @@
 
                     <th repeat="foreach: labels, item: '$label'"
                         class="data-grid-th"
-                        text="$label().label"
                         visible="$label().visible"
                         disable="$label().disabled"
                         css="$label().columnsHeaderClasses">
+                        <span text="$label().label"/>
                     </th>
                 </tr>
                 </thead>
