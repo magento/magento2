@@ -30,7 +30,7 @@ interface WishlistManagementInterface
      * @return array
      *
      */
-    public function addWishlistForCustomer($customerId,$productId);
+    public function addWishlistForCustomer($customerId, $productId);
 
     /**
      * Return Added wishlist item.
@@ -40,6 +40,5 @@ interface WishlistManagementInterface
      * @return status
      *
      */
-    public function deleteWishlistForCustomer($customerId,$wishlistItemId);
+    public function deleteWishlistForCustomer($customerId, $wishlistItemId);
 }
-

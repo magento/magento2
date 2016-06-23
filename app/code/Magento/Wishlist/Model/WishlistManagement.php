@@ -25,12 +25,13 @@ class WishlistManagement implements WishlistManagementInterface
      * @var CollectionFactory
      */
     protected $_wishlistCollectionFactory;
+    
     /**
      * Wishlist item collection
-     *
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_itemCollection;
+    
     /**
      * @var WishlistRepository
      */
@@ -40,14 +41,17 @@ class WishlistManagement implements WishlistManagementInterface
      * @var ProductRepository
      */
     protected $_productRepository;
+    
     /**
      * @var WishlistFactory
      */
     protected $_wishlistFactory;
+
     /**
      * @var Item
      */
     protected $_itemFactory;
+    
     /**
      * @param CollectionFactory $wishlistCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -108,8 +112,9 @@ class WishlistManagement implements WishlistManagementInterface
      * @param int $productIdId
      * @return array|bool
      * @throws \Magento\Framework\Exception\LocalizedException
+     * 
      */
-    public function addWishlistForCustomer($customerId , $productId)
+    public function addWishlistForCustomer($customerId, $productId)
     {
         if ($productId == null) {
             throw new LocalizedException(
@@ -138,8 +143,9 @@ class WishlistManagement implements WishlistManagementInterface
      * @param int $productIdId
      * @return bool|\Magento\Wishlist\Api\status
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
      */
-    public function deleteWishlistForCustomer($customerId , $wishlistItemId)
+    public function deleteWishlistForCustomer($customerId, $wishlistItemId)
     {
 
         if ($wishlistItemId == null) {
