@@ -52,7 +52,7 @@
                 <tfoot>
                     <tr>
                         <td attr="{'colspan': element.getColumnsCount()}"
-                            visible="element.addButton">
+                            visible="element.addButton || pages() > 1">
                             <button if="element.addButton"
                                     attr="{disabled: disabled, 'data-action': 'add_new_row'}"
                                     type="button"
@@ -60,7 +60,7 @@
                                 <span text="addButtonLabel"/>
                             </button>
 
-                            <div class="admin__control-table-pagination" visible="!!element.getRecordCount() && (pages() > 1)">
+                            <div class="admin__control-table-pagination" visible="!!element.getRecordCount() && pages() > 1">
                                 <div class="admin__data-grid-pager">
                                     <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
                                     <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">

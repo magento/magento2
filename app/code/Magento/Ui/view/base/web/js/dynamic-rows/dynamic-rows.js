@@ -385,7 +385,7 @@ define([
                     return !data.initialize;
                 }).length : false;
 
-            if (!this.hasInitialState && isRecordDataArray && !hasNotDefaultRecords) {
+            if (!this.hasInitialState && isRecordDataArray && hasNotDefaultRecords) {
                 this.hasInitialState = true;
                 this.defaultState = utils.copy(this.recordData().filter(function (data) {
                     initialize = data.initialize;
@@ -393,11 +393,12 @@ define([
 
                     return initialize;
                 }));
+
+                this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
             } else if (!this.hasInitialState && isRecordDataArray && hasNotDefaultRecords) {
                 this.hasInitialState = true;
             }
 
-            this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
         },
 
         /**

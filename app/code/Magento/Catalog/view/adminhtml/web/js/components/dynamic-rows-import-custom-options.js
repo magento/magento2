@@ -91,7 +91,13 @@ define([
         processingAddChild: function (ctx, index, prop) {
             if (ctx && !_.isNumber(ctx['option_id'])) {
                 ctx['option_id'] = ++maxId;
+            } else if (!ctx) {
+                this.showSpinner(true);
+                this.addChild(ctx, index, prop);
+
+                return;
             }
+
             this._super(ctx, index, prop);
         },
 
