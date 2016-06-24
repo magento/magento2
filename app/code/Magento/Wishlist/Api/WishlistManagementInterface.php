@@ -37,7 +37,7 @@ interface WishlistManagementInterface
      *
      * @param int $customerId
      * @param int $wishlistId
-     * @return status
+     * @return array
      *
      */
     public function deleteWishlistForCustomer($customerId, $wishlistItemId);

@@ -8,12 +8,12 @@
 
 namespace Magento\Wishlist\Model;
 
+use Exception;
 use Magento\Wishlist\Api\WishlistManagementInterface;
 use Magento\Wishlist\Controller\WishlistProvider;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Defines the implementaiton class of the \Magento\Wishlist\Api\WishlistManagementInterface
@@ -26,13 +26,13 @@ class WishlistManagement implements
      * @var CollectionFactory
      */
     protected $_wishlistCollectionFactory;
-    
+
     /**
      * Wishlist item collection
      * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $_itemCollection;
-    
+
     /**
      * @var WishlistRepository
      */
@@ -42,7 +42,7 @@ class WishlistManagement implements
      * @var ProductRepository
      */
     protected $_productRepository;
-    
+
     /**
      * @var WishlistFactory
      */
@@ -52,7 +52,7 @@ class WishlistManagement implements
      * @var Item
      */
     protected $_itemFactory;
-    
+
     /**
      * @param CollectionFactory $wishlistCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -61,8 +61,7 @@ class WishlistManagement implements
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory
-        $wishlistCollectionFactory,
+        \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory $wishlistCollectionFactory,
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Wishlist\Model\ItemFactory $itemFactory
@@ -81,7 +80,13 @@ class WishlistManagement implements
     public function getWishlistForCustomer($customerId)
     {
         if (empty($customerId) || !isset($customerId) || $customerId == "") {
-            throw new InputException(__('Id required'));
+            $message = __('Id required');
+            $status = false;
+            $response[] = [
+                "message" => $message,
+                "status"  => $status
+            ];
+            return $response;
         } else {
             $collection =
                 $this->_wishlistCollectionFactory->create()
@@ -111,53 +116,72 @@ class WishlistManagement implements
      * @param int $customerId
      * @param int $productIdId
      * @return array|bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * 
+     *
      */
     public function addWishlistForCustomer($customerId, $productId)
     {
         if ($productId == null) {
-            throw new LocalizedException(
-                __('Invalid product, Please select a valid product')
-            );
+            $message = __('Invalid product, Please select a valid product');
+            $status = false;
+            $response[] = [
+                "message" => $message,
+                "status"  => $status
+            ];
+            return $response;
         }
         try {
             $product = $this->_productRepository->getById($productId);
-        } catch (NoSuchEntityException $e) {
-            $product = null;
+        } catch (Exception $e) {
+            return false;
         }
         try {
-            $wishlist = $this->_wishlistRepository->create()
+            $wishlist = $this->_wishlistFactory->create()
                 ->loadByCustomerId($customerId, true);
             $wishlist->addNewItem($product);
             $wishlist->save();
-        } catch (NoSuchEntityException $e) {
-
+        } catch (Exception $e) {
+            return false;
         }
-        return true;
+        $message = __('Item added to wishlist.');
+        $status = true;
+        $response[] = [
+            "message" => $message,
+            "status"  => $status
+        ];
+        return $response;
     }
 
     /**
      * Delete wishlist item for customer
      * @param int $customerId
      * @param int $productIdId
-     * @return bool|\Magento\Wishlist\Api\status
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return array
      *
      */
     public function deleteWishlistForCustomer($customerId, $wishlistItemId)
     {
 
+        $message = null;
+        $status = null;
         if ($wishlistItemId == null) {
-            throw new LocalizedException(
-                __('Invalid wishlist item, Please select a valid item')
-            );
+            $message = __('Invalid wishlist item, Please select a valid item');
+            $status = false;
+            $response[] = [
+                "message" => $message,
+                "status"  => $status
+            ];
+            return $response;
         }
         $item = $this->_itemFactory->create()->load($wishlistItemId);
         if (!$item->getId()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('The requested Wish List Item doesn\'t exist.')
-            );
+            $message = __('The requested Wish List Item doesn\'t exist .');
+            $status = false;
+
+            $response[] = [
+                "message" => $message,
+                "status"  => $status
+            ];
+            return $response;
         }
         $wishlistId = $item->getWishlistId();
         $wishlist = $this->_wishlistFactory->create();
@@ -168,21 +192,36 @@ class WishlistManagement implements
             $wishlist->loadByCustomerId($customerId, true);
         }
         if (!$wishlist) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('The requested Wish List doesn\'t exist.')
-            );
+            $message = __('The requested Wish List Item doesn\'t exist .');
+            $status = false;
+            $response[] = [
+                "message" => $message,
+                "status"  => $status
+            ];
+            return $response;
         }
         if (!$wishlist->getId() || $wishlist->getCustomerId() != $customerId) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('The requested Wish List doesn\'t exist.')
-            );
+            $message = __('The requested Wish List Item doesn\'t exist .');
+            $status = false;
+            $response[] = [
+                "message" => $message,
+                "status"  => $status
+            ];
+            return $response;
         }
         try {
             $item->delete();
             $wishlist->save();
-        } catch (\Exception $e) {
-
+        } catch (Exception $e) {
+            return false;
         }
-        return true;
+
+        $message = __(' Item has been removed from wishlist .');
+        $status = true;
+        $response[] = [
+            "message" => $message,
+            "status"  => $status
+        ];
+        return $response;
     }
 }
