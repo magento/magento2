@@ -61,14 +61,13 @@ class WishlistManagement implements
      * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
-        CollectionFactory $wishlistCollectionFactory,
-        WishlistFactory $wishlistFactory,
-        \Magento\Wishlist\Model\WishlistFactory $wishlistRepository,
+        \Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory
+        $wishlistCollectionFactory,
+        \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Wishlist\Model\ItemFactory $itemFactory
     ) {
         $this->_wishlistCollectionFactory = $wishlistCollectionFactory;
-        $this->_wishlistRepository = $wishlistRepository;
         $this->_productRepository = $productRepository;
         $this->_wishlistFactory = $wishlistFactory;
         $this->_itemFactory = $itemFactory;
