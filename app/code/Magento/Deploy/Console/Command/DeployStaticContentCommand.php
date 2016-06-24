@@ -27,14 +27,14 @@ class DeployStaticContentCommand extends Command
     const DRY_RUN_OPTION = 'dry-run';
 
     /**
-     * Key for language parameter
+     * Key for languages parameter
      */
-    const LANGUAGE_OPTION = 'language';
+    const LANGUAGE_OPTION = 'languages';
 
     /**
-     * Key for exclude language parameter
+     * Key for exclude languages parameter
      */
-    const EXCLUDE_LANGUAGE_OPTION = 'exclude-language';
+    const EXCLUDE_LANGUAGE_OPTION = 'exclude-languages';
 
     /**
      * Key for javascript option
@@ -215,14 +215,14 @@ class DeployStaticContentCommand extends Command
                     self::LANGUAGE_OPTION,
                     '-l',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'List of locales you want the tool populate files for.',
+                    'List of languages you want the tool populate files for.',
                     ['all']
                 ),
                 new InputOption(
                     self::EXCLUDE_LANGUAGE_OPTION,
                     '-el',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                    'List of locales you do not want the tool populate files for.',
+                    'List of langiages you do not want the tool populate files for.',
                     ['none']
                 ),
                 new InputOption(
@@ -282,6 +282,16 @@ class DeployStaticContentCommand extends Command
             throw new \InvalidArgumentException(
                 '--theme (-t) and --exclude-theme (-et) cannot be used at the same time'
             );
+        }
+
+        $languages = $input->getArgument(self::LANGUAGE_OPTION);
+        foreach ($languages as $lang) {
+
+            if (!$this->validator->isValid($lang)) {
+                throw new \InvalidArgumentException(
+                    $lang . ' argument has invalid value, please run info:language:list for list of available locales'
+                );
+            }
         }
 
         // run the deployment logic
@@ -385,11 +395,7 @@ class DeployStaticContentCommand extends Command
                 'isHtmlMinify' => $options[self::HTML_MINIFY_OPTION]
             ]
         );
-<<<<<<< HEAD
 
-        $deployer->deploy($this->objectManagerFactory, $deployAreas, $deployLanguages, $deployThemes);
-=======
-        return $deployer->deploy($this->objectManagerFactory, $languages);
->>>>>>> develop
+        return $deployer->deploy($this->objectManagerFactory, $languages, $deployAreas, $deployLanguages, $deployThemes);
     }
 }

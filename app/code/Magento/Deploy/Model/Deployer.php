@@ -16,7 +16,6 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
-use Magento\TestFramework\Inspection\Exception;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -218,19 +217,15 @@ class Deployer
      * Populate all static view files for specified root path and list of languages
      *
      * @param ObjectManagerFactory $omFactory
-<<<<<<< HEAD
+     * @param array $locales
      * @param array $areasArg
      * @param array $localesArg
      * @param array $themesArg
-     * @return void
-=======
-     * @param array $locales
      * @return int
->>>>>>> develop
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $areasArg, array $localesArg, array $themesArg)
+    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $areasArg = [], array $localesArg = [], array $themesArg = [])
     {
 
         $this->omFactory = $omFactory;
@@ -242,8 +237,8 @@ class Deployer
         $areaList = implode(', ', $areasArg);
         $this->output->writeln("Requested areas: {$areaList}");
 
-        $localeList = implode(', ', $localesArg);
-        $this->output->writeln("Requested languages: {$localeList}");
+        $langList = implode(', ', $localesArg);
+        $this->output->writeln("Requested languages: {$langList}");
 
         $themeList = implode(', ', $themesArg);
         $this->output->writeln("Requested themes: {$themeList}");
@@ -259,6 +254,7 @@ class Deployer
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
+
                     /** @var \Magento\Theme\Model\View\Design $design */
                     try {
                         $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
@@ -288,6 +284,7 @@ class Deployer
                         ]
                     );
                     $fileManager->createRequireJsConfigAsset();
+
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
 
@@ -321,23 +318,12 @@ class Deployer
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
                         }
                     }
-<<<<<<< HEAD
                     if (!$this->isJavaScript) {
                         if ($this->jsTranslationConfig->dictionaryEnabled()) {
-                            $this->deployFile(
-                                $this->jsTranslationConfig->getDictionaryFileName(),
-                                $area,
-                                $themePath,
-                                $locale,
-                                null
-                            );
+                            $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
+                            $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
                         }
                         $fileManager->clearBundleJsPool();
-=======
-                    if ($this->jsTranslationConfig->dictionaryEnabled()) {
-                        $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
-                        $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
->>>>>>> develop
                     }
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
