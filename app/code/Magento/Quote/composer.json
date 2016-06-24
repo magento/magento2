@@ -20,7 +20,7 @@
         "magento/framework": "100.2.*"
     },
     "suggest": {
-        "magento/module-webapi": "100.1.*"
+        "magento/module-webapi": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
