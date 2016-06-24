@@ -190,7 +190,13 @@ class Deployer
         $path = $filePath;
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-        $check = ($this->isJavaScript || $this->isCss || $this->isLess || $this->isHtml || $this->isImages || $this->isFonts || $this->isMisc);
+        $check = ($this->isJavaScript 
+            || $this->isCss 
+            || $this->isLess 
+            || $this->isHtml 
+            || $this->isImages 
+            || $this->isFonts 
+            || $this->isMisc);
 
         if ($check && $filePath != '.') {
             if ($this->isJavaScript && in_array($ext, $this->fileExtensionsJs)) {
@@ -225,7 +231,8 @@ class Deployer
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $locales, array $areasArg = [], array $localesArg = [], array $themesArg = [])
+    public function deploy(ObjectManagerFactory $omFactory, array $locales, 
+        array $areasArg = [], array $localesArg = [], array $themesArg = [])
     {
 
         $this->omFactory = $omFactory;
@@ -312,7 +319,6 @@ class Deployer
                         }
 
                         $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, null);
-
                         
                         if ($compiledFile !== '') {
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
