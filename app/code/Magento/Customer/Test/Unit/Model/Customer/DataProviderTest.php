@@ -883,6 +883,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                     'sortOrder' => 'sort_order',
                                     'required' => 'is_required',
                                     'visible' => 'is_visible',
+                                    'validation' => [
+                                        'max_file_size' => $maxFileSize,
+                                        'file_extensions' => 'ext1, eXt2 ',
+                                    ],
                                     'label' => __('frontend_label'),
                                 ],
                             ],

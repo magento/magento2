@@ -94,10 +94,6 @@ class File extends AbstractData
      */
     public function extractValue(\Magento\Framework\App\RequestInterface $request)
     {
-        if ($this->getIsAjaxRequest()) {
-            return false;
-        }
-
         $extend = $this->_getRequestValue($request);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
@@ -126,8 +122,13 @@ class File extends AbstractData
                     }
                 }
             } else if (isset($extend[0]['file']) && !empty($extend[0]['file'])) {
-                // This case is required by file uploader UI component
-                $value = $extend[0];
+                /**
+                 * This case is required by file uploader UI component
+                 *
+                 * $extend[0]['file'] - uses for AJAX validation
+                 * $extend[0] - uses for POST request
+                 */
+                $value = $this->getIsAjaxRequest() ? $extend[0]['file'] : $extend[0];
             } else {
                 $value = [];
             }

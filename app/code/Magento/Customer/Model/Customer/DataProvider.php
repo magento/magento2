@@ -346,6 +346,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'sortOrder' => $config['sortOrder'],
                 'required' => $config['required'],
                 'visible' => $config['visible'],
+                'validation' => $config['validation'],
             ];
         }
     }

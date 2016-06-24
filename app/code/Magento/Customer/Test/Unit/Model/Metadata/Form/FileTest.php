@@ -62,7 +62,7 @@ class FileTest extends AbstractFormTestCase
      * @param string $delete
      * @dataProvider extractValueNoRequestScopeDataProvider
      */
-    public function testExtractValueNoRequestScope($expected, $attributeCode = '', $isAjax = false, $delete = '')
+    public function testExtractValueNoRequestScope($expected, $attributeCode = '', $delete = '')
     {
         $value = 'value';
 
@@ -87,7 +87,7 @@ class FileTest extends AbstractFormTestCase
 
         $model = $this->initialize([
             'value' => $value,
-            'isAjax' => $isAjax,
+            'isAjax' => false,
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
 
@@ -100,11 +100,10 @@ class FileTest extends AbstractFormTestCase
     public function extractValueNoRequestScopeDataProvider()
     {
         return [
-            'ajax' => [false, '', true],
             'no_file' => [[]],
-            'delete' => [['delete' => true], '', false, true],
-            'file_delete' => [['attributeCodeValue', 'delete' => true], 'attributeCode', false, true],
-            'file_!delete' => [['attributeCodeValue'], 'attributeCode', false, false]
+            'delete' => [['delete' => true], '', true],
+            'file_delete' => [['attributeCodeValue', 'delete' => true], 'attributeCode', true],
+            'file_!delete' => [['attributeCodeValue'], 'attributeCode', false]
         ];
     }
 

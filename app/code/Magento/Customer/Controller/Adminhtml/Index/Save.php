@@ -73,7 +73,9 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
         $formData = $metadataForm->extractData($this->getRequest(), $scope);
 
         // Initialize additional attributes
-        $requestData = $this->getRequest()->getPostValue($scope);
+        /** @var \Magento\Framework\DataObject $object */
+        $object = $this->_objectFactory->create(['data' => $this->getRequest()->getPostValue()]);
+        $requestData = $object->getData($scope);
         foreach ($additionalAttributes as $attributeCode) {
             $formData[$attributeCode] = isset($requestData[$attributeCode]) ? $requestData[$attributeCode] : false;
         }
