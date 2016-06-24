@@ -16,9 +16,10 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Defines the implementaiton class of the WishlistManagementInterface
+ * Defines the implementaiton class of the \Magento\Wishlist\Api\WishlistManagementInterface
  */
-class WishlistManagement implements WishlistManagementInterface
+class WishlistManagement implements
+    \Magento\Wishlist\Api\WishlistManagementInterface
 {
 
     /**
