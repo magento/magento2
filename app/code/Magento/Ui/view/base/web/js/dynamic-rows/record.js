@@ -36,6 +36,8 @@ define([
         },
 
         initialize: function () {
+            var self = this;
+
             this._super();
 
             registry.async(this.name + '.' + this.positionProvider)(function(component){
