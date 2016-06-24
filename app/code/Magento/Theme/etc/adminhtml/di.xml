@@ -33,4 +33,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Theme\Model\Design\Config\Validator">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="header" xsi:type="string">email_header_template</item>
+                <item name="footer" xsi:type="string">email_footer_template</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
