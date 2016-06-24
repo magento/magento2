@@ -108,4 +108,16 @@ class Search extends Block
             }
         );
     }
+
+    /**
+     * Click on suggested text.
+     *
+     * @param string $text
+     * @return void
+     */
+    public function clickSuggestedText($text)
+    {
+        $searchAutocomplete = sprintf($this->searchAutocomplete, $text);
+        $this->_rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->click();
+    }
 }
