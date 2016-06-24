@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class QueryResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Document[]
+     * @var \Magento\Framework\Api\Search\Document[]
      */
     private $documents = [];
 
@@ -29,7 +29,7 @@ class QueryResponseTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectManager($this);
 
         for ($count = 0; $count < 5; $count++) {
-            $document = $this->getMockBuilder('Magento\Framework\Search\Document')
+            $document = $this->getMockBuilder('Magento\Framework\Api\Search\Document')
                 ->disableOriginalConstructor()
                 ->getMock();
 
