@@ -35,18 +35,6 @@ class ConfiguredPrice extends CatalogFinalPrice implements ConfiguredPriceInterf
     }
 
     /**
-     * Get Price Amount object
-     *
-     * @return AmountInterface
-     */
-    public function getAmount()
-    {
-        // Reset amount
-        $this->amount = null;
-        return parent::getAmount();
-    }
-
-    /**
      * Calculate configured price
      *
      * @return float

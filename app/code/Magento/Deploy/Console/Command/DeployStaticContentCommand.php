@@ -385,7 +385,11 @@ class DeployStaticContentCommand extends Command
                 'isHtmlMinify' => $options[self::HTML_MINIFY_OPTION]
             ]
         );
+<<<<<<< HEAD
 
         $deployer->deploy($this->objectManagerFactory, $deployAreas, $deployLanguages, $deployThemes);
+=======
+        return $deployer->deploy($this->objectManagerFactory, $languages);
+>>>>>>> develop
     }
 }

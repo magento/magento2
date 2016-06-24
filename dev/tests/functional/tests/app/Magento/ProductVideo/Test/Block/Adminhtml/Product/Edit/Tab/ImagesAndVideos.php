@@ -15,6 +15,13 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class ImagesAndVideos extends Tab
 {
     /**
+     * Order Id of first video
+     *
+     * @var int
+     */
+    private $firstVideoId = 0;
+
+    /**
      * Add video button CSS locator.
      *
      * @var string
@@ -189,7 +196,7 @@ class ImagesAndVideos extends Tab
     protected function getImageSelector($id)
     {
         ++$id;
-        return $this->imageItem . ':nth-child(' . $id . ') .draggable-handle';
+        return $this->imageItem . ':nth-child(' . $id . ') .product-image-wrapper';
     }
 
     /**
@@ -221,7 +228,17 @@ class ImagesAndVideos extends Tab
      */
     public function clickFirstVideo()
     {
-        $this->_rootElement->find($this->getImageSelector(0))->click();
+        $this->_rootElement->find($this->getImageSelector($this->firstVideoId))->click();
         return $this;
+    }
+
+    /**
+     * Delete first video in a product
+     *
+     * @return void
+     */
+    public function deleteFirstVideo()
+    {
+        $this->deleteVideo($this->firstVideoId);
     }
 }

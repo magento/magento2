@@ -218,10 +218,15 @@ class Deployer
      * Populate all static view files for specified root path and list of languages
      *
      * @param ObjectManagerFactory $omFactory
+<<<<<<< HEAD
      * @param array $areasArg
      * @param array $localesArg
      * @param array $themesArg
      * @return void
+=======
+     * @param array $locales
+     * @return int
+>>>>>>> develop
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -254,7 +259,6 @@ class Deployer
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
-
                     /** @var \Magento\Theme\Model\View\Design $design */
                     try {
                         $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
@@ -284,7 +288,6 @@ class Deployer
                         ]
                     );
                     $fileManager->createRequireJsConfigAsset();
-
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
 
@@ -318,6 +321,7 @@ class Deployer
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
                         }
                     }
+<<<<<<< HEAD
                     if (!$this->isJavaScript) {
                         if ($this->jsTranslationConfig->dictionaryEnabled()) {
                             $this->deployFile(
@@ -329,6 +333,11 @@ class Deployer
                             );
                         }
                         $fileManager->clearBundleJsPool();
+=======
+                    if ($this->jsTranslationConfig->dictionaryEnabled()) {
+                        $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
+                        $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
+>>>>>>> develop
                     }
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
@@ -354,6 +363,11 @@ class Deployer
                 $this->versionStorage->save($version);
             }
         }
+        if ($this->errorCount > 0) {
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

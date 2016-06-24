@@ -58,8 +58,9 @@
         <arguments>
             <argument name="patterns" xsi:type="array">
                 <item name="i18n_translation" xsi:type="string"><![CDATA[~i18n\:\s*(["'])(.*?)(?<!\\)\1~]]></item>
-                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\((['"])(.+?)\1\)~</item>
-                <item name="mage_translation_static" xsi:type="string">~\$t\((["'])(.+?)\1\)~</item>
+                <item name="translate_wrapping" xsi:type="string"><![CDATA[~translate\=("')([^\'].*?)\'\"~]]></item>
+                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\((?s)[^'"]*?(['"])(.+?)\1(?s).*?\)~</item>
+                <item name="mage_translation_static" xsi:type="string">~\$t\((?s)[^'"]*?(["'])(.+?)\1(?s).*?\)~</item>
             </argument>
         </arguments>
     </type>
@@ -81,7 +82,7 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="uninstall_language" xsi:type="object">Magento\Translation\Console\Command\UninstallLanguageCommand</item>

@@ -69,6 +69,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $areaResolverMock;
 
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeMock;
+
     protected function setUp()
     {
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
@@ -79,8 +84,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $this->remoteAsset = $this->getMock('\Magento\Framework\View\Asset\Remote', [], [], '', false);
         $this->title = $this->getMock('Magento\Framework\View\Page\Title', [], [], '', false);
-        $locale = $this->getMockForAbstractClass('Magento\Framework\Locale\ResolverInterface', [], '', false);
-        $locale->expects($this->any())
+        $this->localeMock = $this->getMockForAbstractClass('Magento\Framework\Locale\ResolverInterface', [], '', false);
+        $this->localeMock->expects($this->any())
             ->method('getLocale')
             ->willReturn(Resolver::DEFAULT_LOCALE);
         $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
@@ -91,7 +96,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'pageAssets' => $this->pageAssets,
                     'scopeConfig' => $this->scopeConfig,
                     'favicon' => $this->favicon,
-                    'localeResolver' => $locale,
+                    'localeResolver' => $this->localeMock
                 ]
             );
 
@@ -133,8 +138,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'keywords' => null,
             'robots' => null,
             'name' => 'test_value',
+            'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
         ];
         $this->model->setMetadata('name', 'test_value');
+        $this->model->setMetadata('html_encoded', '<title><span class="test">Test</span></title>');
         $this->assertEquals($expectedMetadata, $this->model->getMetadata());
     }
 
@@ -147,7 +154,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testContentTypeEmpty()
     {
+        $expectedData = null;
+        $this->assertEquals($expectedData, $this->model->getContentType());
+    }
+
+    public function testContentTypeAuto()
+    {
         $expectedData = 'default_media_type; charset=default_charset';
+        $this->model->setContentType('auto');
         $this->scopeConfig->expects($this->at(0))->method('getValue')->with('design/head/default_media_type', 'store')
             ->will($this->returnValue('default_media_type'));
         $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/default_charset', 'store')
@@ -489,16 +503,43 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->model->getDefaultFavicon();
     }
 
-    public function testGetIncludes()
+    /**
+     * @param bool $isAvailable
+     * @param string $result
+     * @dataProvider getIncludesDataProvider
+     */
+    public function testGetIncludes($isAvailable, $result)
     {
-        $xml = '
-            <script type="text/javascript">
-                Fieldset.addToPrefix(1);
-            </script>
-            ';
-        $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/includes', 'store')->will(
-            $this->returnValue($xml)
-        );
-        $this->assertEquals($xml, $this->model->getIncludes());
+        $model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+            ->getObject(
+                'Magento\Framework\View\Page\Config',
+                [
+                    'assetRepo' => $this->assetRepo,
+                    'pageAssets' => $this->pageAssets,
+                    'scopeConfig' => $this->scopeConfig,
+                    'favicon' => $this->favicon,
+                    'localeResolver' => $this->localeMock,
+                    'isIncludesAvailable' => $isAvailable
+                ]
+            );
+
+        $this->scopeConfig->expects($isAvailable ? $this->once() : $this->never())
+            ->method('getValue')
+            ->with('design/head/includes', 'store')
+            ->willReturn($result);
+        $this->assertEquals($result, $model->getIncludes());
+    }
+
+    public function getIncludesDataProvider()
+    {
+        return [
+            [
+                true,
+                '<script type="text/javascript">
+                    Fieldset.addToPrefix(1);
+                </script>'
+            ],
+            [false, null]
+        ];
     }
 }

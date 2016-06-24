@@ -3,15 +3,17 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
@@ -19,8 +21,6 @@ use Magento\Setup\Module\Di\App\Task\OperationException;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to run compile in single-tenant mode
@@ -107,8 +107,10 @@ class DiCompileCommand extends Command
     private function checkEnvironment()
     {
         $messages = [];
-        if (!$this->deploymentConfig->isAvailable()) {
-            $messages[] = 'You cannot run this command because the Magento application is not installed.';
+        $config = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_MODULES);
+        if (!$config) {
+            $messages[] = 'You cannot run this command because modules are not enabled. You can enable modules by'
+             . ' running the \'module:enable --all\' command.';
         }
 
         return $messages;
@@ -124,7 +126,8 @@ class DiCompileCommand extends Command
             foreach ($errors as $line) {
                 $output->writeln($line);
             }
-            return;
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
@@ -197,6 +200,8 @@ class DiCompileCommand extends Command
             $output->writeln('<info>Generated code and dependency injection configuration successfully.</info>');
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+            // we must have an exit code higher than zero to indicate something was wrong
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 

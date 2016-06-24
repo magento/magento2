@@ -515,11 +515,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->setShippingMethod($order->getShippingMethod());
         $quote->getShippingAddress()->setShippingDescription($order->getShippingDescription());
 
-        $paymentData = $order->getPayment()->getData();
-        unset($paymentData['cc_type'], $paymentData['cc_last_4']);
-        unset($paymentData['cc_exp_month'], $paymentData['cc_exp_year']);
-        $quote->getPayment()->addData($paymentData);
-
         $orderCouponCode = $order->getCouponCode();
         if ($orderCouponCode) {
             $quote->setCouponCode($orderCouponCode);
@@ -551,6 +546,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
              */
             $this->collectRates();
         }
+
+        $quote->getShippingAddress()->unsCachedItemsAll();
+        $quote->setTotalsCollectedFlag(false);
 
         $this->quoteRepository->save($quote);
 
@@ -931,6 +929,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->quoteRepository->save($this->getCustomerCart());
         }
 
+        $this->recollectCart();
+
         return $this;
     }
 
@@ -951,8 +951,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $cart = $this->getCustomerCart();
                 if ($cart) {
                     $cart->removeItem($itemId);
-                    $cart->collectTotals();
-                    $this->quoteRepository->save($cart);
+                    $this->_needCollectCart = true;
                 }
                 break;
             case 'wishlist':
@@ -1732,6 +1731,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 ->setMiddlename($customerBillingAddressDataObject->getMiddlename())
                 ->setPrefix($customerBillingAddressDataObject->getPrefix())
                 ->setStoreId($store->getId())
+                ->setWebsiteId($store->getWebsiteId())
                 ->setEmail($this->_getNewCustomerEmail());
             $customer = $this->_validateCustomerData($customer);
         }

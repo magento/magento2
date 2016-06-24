@@ -48,26 +48,30 @@
         text-decoration: line-through;
     }
 
-    .price-tier_price {
-        .price-including-tax + .price-excluding-tax {
-            &:before {
-                content: "(" attr(data-label) ": ";
+    .prices-tier {
+        .price-container {
+            .price-including-tax {
+                + .price-excluding-tax {
+                    &:before {
+                        content: '(' attr(data-label) ': ';
+                    }
+
+                    &:last-child:after {
+                        content: ')';
+                    }
+                }
             }
 
-            &:last-child:after {
-                content: ")";
-            }
-        }
+            .weee[data-label] {
+                display: inline;
 
-        .weee[data-label] {
-            display: inline;
+                .price {
+                    .lib-font-size(11);
+                }
 
-            .price {
-                .lib-font-size(11);
-            }
-
-            &:before {
-                content: " +" attr(data-label) ": ";
+                &:before {
+                    content: ' +' attr(data-label) ': ';
+                }
             }
         }
     }
@@ -83,9 +87,9 @@
     .category {
         &-image {
             .image {
-                max-width: 100%;
-                height: auto;
                 display: block;
+                height: auto;
+                max-width: 100%;
             }
         }
 
@@ -106,23 +110,23 @@
         }
 
         &-wrapper {
-            height: 0;
             display: block;
+            height: 0;
+            overflow: hidden;
             position: relative;
             z-index: 1;
-            overflow: hidden;
         }
 
         &-photo {
-            display: block;
-            position: absolute;
-            top: 0;
             bottom: 0;
-            left: 0;
-            right: 0;
-            margin: auto;
+            display: block;
             height: auto;
+            left: 0;
+            margin: auto;
             max-width: 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
     }
 
@@ -177,8 +181,8 @@
     .product-info-main {
         .page-title-wrapper {
             .page-title {
-                margin-bottom: @indent__s;
                 line-height: @line-height__base;
+                margin-bottom: @indent__s;
             }
         }
 
@@ -267,7 +271,7 @@
             }
 
             .price-notice {
-              &:extend(.abs-adjustment-incl-excl-tax all);
+                &:extend(.abs-adjustment-incl-excl-tax all);
             }
         }
     }
@@ -279,8 +283,8 @@
             .weee + .price-excluding-tax,
             .weee {
                 .lib-font-size(12);
-                margin-bottom: @indent__xs;
                 line-height: 14px;
+                margin-bottom: @indent__xs;
 
                 .price {
                     .lib-font-size(12);
@@ -315,7 +319,7 @@
         .special-price {
             .price-label {
                 &:after {
-                    content: ": ";
+                    content: ': ';
                 }
             }
         }
@@ -329,9 +333,9 @@
 
             .input-text.qty {
                 @tocart-input-size: @button__line-height__l + 28px;
-                width: @tocart-input-size + 2px;
                 height: @tocart-input-size + 2px;
                 text-align: center;
+                width: @tocart-input-size + 2px;
             }
 
             .actions {
@@ -359,7 +363,7 @@
         margin: @indent__s 0;
         padding: @indent__s (.75 * @indent__base);
 
-        .price-tier_price {
+        .price-container {
             display: inline-block;
         }
 
@@ -400,8 +404,8 @@
                     width: auto;
 
                     .product-item-photo {
-                        position: absolute;
                         left: 0;
+                        position: absolute;
                         top: 0;
                     }
                 }
@@ -518,15 +522,15 @@
 
     .block.related {
         .action.select {
-            margin: @indent__xs 0;
             display: block;
+            margin: @indent__xs 0;
         }
     }
 
     .compare,
     .product-addto-links .action.tocompare,
     .product-item-actions .actions-secondary > .action.tocompare,
-    [class*="block-compare"] {
+    [class*='block-compare'] {
         display: none;
     }
 }
@@ -567,11 +571,11 @@
             .product-item {
                 &-info {
                     .product-item-photo {
-                        position: relative;
-                        left: auto;
-                        top: auto;
                         float: left;
+                        left: auto;
                         margin: 0 @indent__s @indent__s 0;
+                        position: relative;
+                        top: auto;
                     }
                 }
 
@@ -602,9 +606,9 @@
                 &-info {
                     .product-item-photo {
                         float: none;
+                        left: 0;
                         margin: 0;
                         position: absolute;
-                        left: 0;
                         top: 0;
                     }
                 }
@@ -692,12 +696,12 @@
         }
 
         .cell {
-            width: 140px;
             padding: 15px;
+            width: 140px;
 
             .attribute.value {
-                width: 100%;
                 overflow: hidden;
+                width: 100%;
             }
 
             &.product.info,
@@ -716,8 +720,8 @@
             &.attribute {
                 .lib-font-size(13);
                 img {
-                    max-width: 100%;
                     height: auto;
+                    max-width: 100%;
                 }
             }
         }
@@ -726,6 +730,7 @@
             display: block;
             margin: 0 auto 15px;
         }
+
         .product-image-photo {
             margin-left: 0;
         }
@@ -752,8 +757,8 @@
         }
 
         .cell.remove {
-            padding-top: 0;
             padding-bottom: 0;
+            padding-top: 0;
             text-align: right;
 
             .action.delete {
@@ -797,8 +802,8 @@
         .action {
             &.delete {
                 &:extend(.abs-remove-button-for-blocks all);
-                position: absolute;
                 left: -6px;
+                position: absolute;
                 top: 0;
             }
 

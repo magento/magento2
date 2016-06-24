@@ -30,6 +30,7 @@ use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Class Eav
@@ -160,6 +161,11 @@ class Eav extends AbstractModifier
      * @var array
      */
     private $prevSetAttributes;
+
+    /**
+     * @var CurrencyInterface
+     */
+    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
@@ -354,7 +360,7 @@ class Eav extends AbstractModifier
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
                     if ($attribute->getFrontendInput() === 'price' && is_scalar($attributeValue)) {
-                        $attributeValue = number_format((float)$attributeValue, 2);
+                        $attributeValue = $this->formatPrice($attributeValue);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
                 }
@@ -373,6 +379,7 @@ class Eav extends AbstractModifier
     private function resolvePersistentData(array $data)
     {
         $persistentData = (array)$this->dataPersistor->get('catalog_product');
+        $this->dataPersistor->clear('catalog_product');
         $productId = $this->locator->getProduct()->getId();
 
         if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
@@ -865,5 +872,39 @@ class Eav extends AbstractModifier
         }
 
         return $attributeGroupCode;
+    }
+
+    /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
     }
 }
