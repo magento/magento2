@@ -401,6 +401,24 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectMock->expects($this->exactly(2))
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['customer', null, $postValue['customer']],
+                    ['address/' . $addressId, null, $postValue['address'][$addressId]],
+                ]
+            );
+
+        $this->objectFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->with(['data' => $postValue])
+            ->willReturn($objectMock);
+
         $customerFormMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form')
             ->disableOriginalConstructor()
             ->getMock();
@@ -691,6 +709,24 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectMock->expects($this->exactly(2))
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['customer', null, $postValue['customer']],
+                    ['address/' . $addressId, null, $postValue['address'][$addressId]],
+                ]
+            );
+
+        $this->objectFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->with(['data' => $postValue])
+            ->willReturn($objectMock);
+
         $customerFormMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form')
             ->disableOriginalConstructor()
             ->getMock();
@@ -909,6 +945,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectMock->expects($this->once())
+            ->method('getData')
+            ->with('customer')
+            ->willReturn($postValue['customer']);
+
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['data' => $postValue])
+            ->willReturn($objectMock);
+
         $customerFormMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form')
             ->disableOriginalConstructor()
             ->getMock();
@@ -1045,6 +1095,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectMock->expects($this->once())
+            ->method('getData')
+            ->with('customer')
+            ->willReturn($postValue['customer']);
+
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['data' => $postValue])
+            ->willReturn($objectMock);
+
         /** @var Form|\PHPUnit_Framework_MockObject_MockObject $formMock */
         $customerFormMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form')
             ->disableOriginalConstructor()
@@ -1180,6 +1244,20 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                     ['address', null, null],
                 ]
             );
+
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectMock->expects($this->once())
+            ->method('getData')
+            ->with('customer')
+            ->willReturn($postValue['customer']);
+
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['data' => $postValue])
+            ->willReturn($objectMock);
 
         $customerFormMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form')
             ->disableOriginalConstructor()
