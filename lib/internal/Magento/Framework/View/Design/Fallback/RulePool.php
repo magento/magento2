@@ -183,8 +183,8 @@ class RulePool
                                     ->create(['pattern' => "<theme_dir>/web"]),
                                 $this->simpleFactory
                                     ->create([
-                                        'pattern' => "<theme_preprocessed_dir>",
-                                        'optionalParams' => ['theme_preprocessed_dir']
+                                        'pattern' => "<theme_pubstatic_dir>",
+                                        'optionalParams' => ['theme_pubstatic_dir']
                                     ]),
                             ]
                         )]
