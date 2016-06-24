@@ -205,7 +205,7 @@ class Deployer
                 return true;
             } elseif ($this->isLess && in_array($ext, $this->fileExtensionsLess)) {
                 return true;
-            } elseif ($this->isHtml && in_array($ext, $this->fileExtensionsJs)) {
+            } elseif ($this->isHtml && in_array($ext, $this->fileExtensionsHtml)) {
                 return true;
             } elseif ($this->isImages && in_array($ext, $this->fileExtensionsImages)) {
                 return true;
@@ -249,6 +249,8 @@ class Deployer
 
         $themeList = implode(', ', $themesArg);
         $this->output->writeln("Requested themes: {$themeList}");
+
+        $locales = null;
         
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
         list($areas, $appFiles) = $this->collectAppFiles($localesArg);

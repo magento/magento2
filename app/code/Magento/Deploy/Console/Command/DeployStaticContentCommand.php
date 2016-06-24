@@ -29,12 +29,17 @@ class DeployStaticContentCommand extends Command
     /**
      * Key for languages parameter
      */
-    const LANGUAGE_OPTION = 'languages';
+    const LANGUAGES_OPTION = 'languages';
+
+    /**
+     * Key for languages parameter
+     */
+    const LANGUAGE_OPTION = 'language';
 
     /**
      * Key for exclude languages parameter
      */
-    const EXCLUDE_LANGUAGE_OPTION = 'exclude-languages';
+    const EXCLUDE_LANGUAGE_OPTION = 'exclude-language';
 
     /**
      * Key for javascript option
@@ -224,6 +229,12 @@ class DeployStaticContentCommand extends Command
                     'List of areas you do not want the tool populate files for.',
                     ['none']
                 ),
+                new InputArgument(
+                    self::LANGUAGES_OPTION,
+                    InputArgument::IS_ARRAY,
+                    'List of languages you want the tool populate files for.',
+                    ['en_US']
+                ),
             ]);
 
         parent::configure();
@@ -232,48 +243,184 @@ class DeployStaticContentCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @param $magentoAreas array
      * @param $areasInclude array
      * @param $areasExclude array
      * @throws \InvalidArgumentException
      */
-    private function checkAreasInput($areasInclude, $areasExclude)
+    private function checkAreasInput($magentoAreas, $areasInclude, $areasExclude)
     {
         if ($areasInclude[0] != 'all' && $areasExclude[0] != 'none') {
             throw new \InvalidArgumentException(
                 '--area (-a) and --exclude-area (-ea) cannot be used at the same time'
             );
         }
+
+        if ($areasInclude[0] != 'all') {
+            foreach ($areasInclude as $area) {
+                if (!in_array($area, $magentoAreas)) {
+                    throw new \InvalidArgumentException(
+                        $area . 
+                        ' argument has invalid value, avalilable areas are: ' . implode(', ', $magentoAreas)
+                    );
+                }
+            }
+        }
+
+        if ($areasExclude[0] != 'none') {
+            foreach ($areasExclude as $area) {
+                if (!in_array($area, $magentoAreas)) {
+                    throw new \InvalidArgumentException(
+                        $area . 
+                        ' argument has invalid value, avalilable areas are: ' . implode(', ', $magentoAreas)
+                    );
+                }
+            }
+        }
     }
 
     /**
      * {@inheritdoc}
+     * @param $magentoLanguages array
      * @param $languagesInclude array
      * @param $languagesExclude array
      * @throws \InvalidArgumentException
      */
-    private function checkLanguagesInput($languagesInclude, $languagesExclude)
+    private function checkLanguagesInput($magentoLanguages, $languagesInclude, $languagesExclude)
     {
         if ($languagesInclude[0] != 'all' && $languagesExclude[0] != 'none') {
             throw new \InvalidArgumentException(
                 '--language (-l) and --exclude-language (-el) cannot be used at the same time'
             );
         }
+
+        if ($languagesInclude[0] != 'all') {
+            foreach ($languagedInclude as $language) {
+                if (!in_array($language, $magentoLanguages)) {
+                    throw new \InvalidArgumentException(
+                        $language . 
+                        ' argument has invalid value, avalilable languages are: ' . implode(', ', $magentoLanguages)
+                    );
+                }
+            }
+        }
+
+        if ($languagesExclude[0] != 'none') {
+            foreach ($languagesExclude as $language) {
+                if (!in_array($language, $magentoLanguages)) {
+                    throw new \InvalidArgumentException(
+                        $language . 
+                        ' argument has invalid value, avalilable languages are: ' . implode(', ', $magentoLanguages)
+                    );
+                }
+            }
+        }
     }
 
     /**
      * {@inheritdoc}
+     * @param $magentoThemes array
      * @param $themesInclude array
      * @param $themesExclude array
      * @throws \InvalidArgumentException
      */
-    private function checkThemesInput($themesInclude, $themesExclude)
+    private function checkThemesInput($magentoThemes, $themesInclude, $themesExclude)
     {
         if ($themesInclude[0] != 'all' && $themesExclude[0] != 'none') {
             throw new \InvalidArgumentException(
                 '--theme (-t) and --exclude-theme (-et) cannot be used at the same time'
             );
         }
+
+        if ($themesInclude[0] != 'all') {
+            foreach ($themesInclude as $theme) {
+                if (!in_array($theme, $magentoThemes)) {
+                    throw new \InvalidArgumentException(
+                        $theme . 
+                        ' argument has invalid value, avalilable themes are: ' . implode(', ', $magentoThemes)
+                    );
+                }
+            }
+        }
+
+        if ($themesExclude[0] != 'none') {
+            foreach ($themesExclude as $theme) {
+                if (!in_array($theme, $magentoThemes)) {
+                    throw new \InvalidArgumentException(
+                        $theme . 
+                        ' argument has invalid value, avalilable themes are: ' . implode(', ', $magentoThemes)
+                    );
+                }
+            }
+        }
     }
+
+    /**
+     * {@inheritdoc}
+     * @param $magentoAreas array
+     * @param $areasInclude array
+     * @param $areasExclude array
+     * @return array
+     */
+    private function getDeployAreas($magentoAreas, $areasInclude, $areasExclude)
+    {
+        $deployAreas = [];
+        foreach ($magentoAreas as $area) {
+            if ($areasInclude[0] != 'all' && in_array($area, $areasInclude)) {
+                $deployAreas[] = $area;
+            } elseif ($areasExclude[0] != 'none' && in_array($area, $areasExclude)) {
+                continue;
+            } elseif ($areasInclude[0] == 'all' && $areasExclude[0] == 'none') {
+                $deployAreas[] = $area;
+            }
+        }
+        return $deployAreas;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @param $magentoLanguages array
+     * @param $languagesInclude array
+     * @param $languagesExclude array
+     * @return array
+     */
+    private function getDeployLanguages($magentoLanguages, $languagesInclude, $languagesExclude)
+    {
+        $deployLanguages = [];
+        foreach ($magentoLanguages as $locale) {
+            if ($languagesInclude[0] != 'all' && in_array($locale, $languagesInclude)) {
+                $deployLanguages[] = $locale;
+            } elseif ($languagesExclude[0] != 'none' && in_array($locale, $languagesExclude)) {
+                continue;
+            } elseif ($languagesInclude[0] == 'all' || $languagesExclude[0] == 'none') {
+                $deployLanguages[] = $locale;
+            }
+        }
+        return $deployLanguages;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @param $magentoThemes array
+     * @param $themesInclude array
+     * @param $themesExclude array
+     * @return array
+     */
+    private function getDeployThemes($magentoThemes, $themesInclude, $themesExclude)
+    {
+        $deployThemes = [];
+        foreach ($magentoThemes as $theme) {
+            if ($themesInclude[0] != 'all' && in_array($theme, $themesInclude)) {
+                $deployThemes[] = $theme;
+            } elseif ($themesExclude[0] != 'none' && in_array($theme, $themesExclude)) {
+                continue;
+            } elseif ($themesInclude[0] == 'all' || $themesExclude[0] == 'none') {
+                $deployThemes[] = $theme;
+            }
+        }
+        return $deployThemes;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -284,7 +431,7 @@ class DeployStaticContentCommand extends Command
 
         $options = $input->getOptions();
 
-        $languages = $input->getArgument(self::LANGUAGE_OPTION);
+        $languages = $input->getArgument(self::LANGUAGES_OPTION);
         if ($languages[0] != 'all') {
             foreach ($languages as $lang) {
 
@@ -297,95 +444,42 @@ class DeployStaticContentCommand extends Command
             }
         }
 
-        $areasInclude = $input->getOption(self::AREA_OPTION);
-        $areasExclude = $input->getOption(self::EXCLUDE_AREA_OPTION);
-        $this->checkAreasInput($areasInclude, $areasExclude);
-
-        $languagesInclude = $input->getOption(self::LANGUAGE_OPTION);
-        $languagesExclude = $input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
-        $this->checkLangugesInput($languagesInclude, $languagesExclude);
-
-        $themesInclude = $input->getOption(self::THEME_OPTION);
-        $themesExclude = $input->getOption(self::EXCLUDE_THEME_OPTION);
-        $this->checkThemesInput($themesInclude, $themesExclude);
-
         // run the deployment logic
         $filesUtil = $this->objectManager->create(Files::class);
 
-        $mageAreas = [];
-        $mageThemes = [];
-        $mageLanguages = ['en_US'];
+        $magentoAreas = [];
+        $magentoThemes = [];
+        $magentoLanguages = ['en_US'];
 
         $files = $filesUtil->getStaticPreProcessingFiles();
         foreach ($files as $info) {
             list($area, $themePath, $locale) = $info;
-
-            if ($area && !in_array($area, $mageAreas)) {
-                $mageAreas[] = $area;
+            if ($area && !in_array($area, $magentoAreas)) {
+                $magentoAreas[] = $area;
             }
-            if ($locale && !in_array($locale, $mageLanguages)) {
-                $mageLanguages[] = $locale;
+            if ($locale && !in_array($locale, $magentoLanguages)) {
+                $magentoLanguages[] = $locale;
             }
-            if ($themePath && !in_array($themePath, $mageThemes)) {
-                $mageThemes[] = $themePath;
-            }
-        }
-
-        if ($areasInclude[0] != 'all') {
-            foreach ($areasInclude as $area) {
-                if (!in_array($area, $mageAreas)) {
-                    throw new \InvalidArgumentException(
-                        $area . 
-                        ' argument has invalid value, avalilable areas are: ' . implode(', ', $mageAreas)
-                    );
-                }
+            if ($themePath && !in_array($themePath, $magentoThemes)) {
+                $magentoThemes[] = $themePath;
             }
         }
 
-        $deployAreas = [];
-        foreach ($mageAreas as $area) {
-            if ($areasInclude[0] != 'all' && in_array($area, $areasInclude)) {
-                $deployAreas[] = $area;
-            } elseif ($areasExclude[0] != 'none' && in_array($area, $areasExclude)) {
-                continue;
-            } elseif ($areasInclude[0] == 'all' && $areasExclude[0] == 'none') {
-                $deployAreas[] = $area;
-            }
-        }
+        $areasInclude = $input->getOption(self::AREA_OPTION);
+        $areasExclude = $input->getOption(self::EXCLUDE_AREA_OPTION);
+        $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
+        $deployAreas = $this->getDeployAreas($magentoAreas, $areasInclude, $areasExclude);
 
-        $deployLanguages = [];
-        foreach ($mageLanguages as $locale) {
-            if ($languagesInclude[0] != 'all' && in_array($locale, $languagesInclude)) {
-                $deployLanguages[] = $locale;
-            } elseif ($languagesExclude[0] != 'none' && in_array($locale, $languagesExclude)) {
-                continue;
-            } elseif ($languagesInclude[0] == 'all' && $languagesExclude[0] == 'none') {
-                $deployLanguages[] = $locale;
-            }
-        }
+        $languagesInclude = $input->getOption(self::LANGUAGE_OPTION);
+        $languagesExclude = $input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
+        $this->checkLanguagesInput($magentoLanguages, $languagesInclude, $languagesExclude);
+        $deployLanguages = $this->getDeployLanguages($magentoLanguages, $languagesInclude, $languagesExclude);
 
-        if ($themesInclude[0] != 'all') {
-            foreach ($themesInclude as $theme) {
-                if (!in_array($theme, $mageThemes)) {
-                    throw new \InvalidArgumentException(
-                        $theme . 
-                        ' argument has invalid value, avalilable themes are: ' . implode(', ', $mageThemes)
-                    );
-                }
-            }
-        }
-
-        $deployThemes = [];
-        foreach ($mageThemes as $theme) {
-            if ($themesInclude[0] != 'all' && in_array($theme, $themesInclude)) {
-                $deployThemes[] = $theme;
-            } elseif ($themesExclude[0] != 'none' && in_array($theme, $themesExclude)) {
-                continue;
-            } elseif ($themesInclude[0] == 'all' && $themesExclude[0] == 'none') {
-                $deployThemes[] = $theme;
-            }
-        }
-
+        $themesInclude = $input->getOption(self::THEME_OPTION);
+        $themesExclude = $input->getOption(self::EXCLUDE_THEME_OPTION);
+        $this->checkThemesInput($magentoThemes, $themesInclude, $themesExclude);
+        $deployThemes = $this->getDeployThemes($magentoThemes, $themesInclude, $themesExclude);
+        
         $deployer = $this->objectManager->create(
             'Magento\Deploy\Model\Deployer',
             [
