@@ -395,6 +395,8 @@ define([
                 }));
 
                 this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
+            } else if (this.hasInitialState) {
+                this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
             }
         },
 
