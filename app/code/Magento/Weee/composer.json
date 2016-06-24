@@ -18,7 +18,7 @@
         "magento/module-ui": "100.2.*"
     },
     "suggest": {
-        "magento/module-bundle": "100.1.*"
+        "magento/module-bundle": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
