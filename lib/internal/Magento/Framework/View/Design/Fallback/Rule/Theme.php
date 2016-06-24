@@ -74,21 +74,34 @@ class Theme implements RuleInterface
                     $theme->getFullPath()
                 );
 
-                if (empty($params['theme_preprocessed_dir'])
-                    && isset($params['file'])
-                    && pathinfo($params['file'], PATHINFO_EXTENSION) === 'css'
-                ) {
-                    $params['theme_preprocessed_dir'] = $this->getDirectoryList()
-                        ->getPath(DirectoryList::TMP_MATERIALIZATION_DIR)
-                        . '/source/' . $theme->getArea() . '/' . $theme->getCode()
-                        . (isset($params['locale']) ? '/' . $params['locale'] : '');
-                }
-                
+                $params = $this->getThemePubStaticDir($theme, $params);
                 $result = array_merge($result, $this->rule->getPatternDirs($params));
             }
             $theme = $theme->getParentTheme();
         }
         return $result;
+    }
+
+    /**
+     * Get dir of Theme that contains published static view files
+     *
+     * @param ThemeInterface $theme
+     * @param array $params
+     * @return array
+     */
+    private function getThemePubStaticDir(ThemeInterface $theme, $params = [])
+    {
+        if (empty($params['theme_pubstatic_dir'])
+            && isset($params['file'])
+            && pathinfo($params['file'], PATHINFO_EXTENSION) === 'css'
+        ) {
+            $params['theme_pubstatic_dir'] = $this->getDirectoryList()
+                    ->getPath(DirectoryList::STATIC_VIEW)
+                . '/' . $theme->getArea() . '/' . $theme->getCode()
+                . (isset($params['locale']) ? '/' . $params['locale'] : '');
+        }
+
+        return $params;
     }
 
     /**
@@ -102,6 +115,7 @@ class Theme implements RuleInterface
         if (null === $this->directoryList) {
             $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
         }
+
         return $this->directoryList;
     }
 }

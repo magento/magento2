@@ -79,15 +79,15 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
         $this->directoryListMock->expects($this->atLeastOnce())
             ->method('getPath')
-            ->with(DirectoryList::TMP_MATERIALIZATION_DIR)
-            ->willReturn('/var/view_processed');
+            ->with(DirectoryList::STATIC_VIEW)
+            ->willReturn('/pub/static');
 
         $ruleDirsMap = [
             [
                 [
                     'file' => 'test.css',
                     'theme_dir' => '/path/to/current/theme',
-                    'theme_preprocessed_dir' => '/var/view_processed/source/frontend/luma'
+                    'theme_pubstatic_dir' => '/pub/static/frontend/luma'
                 ],
                 ['package/current_theme/path/one', 'package/current_theme/path/two'],
             ],
@@ -95,7 +95,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 [
                     'file' => 'test.css',
                     'theme_dir' => '/path/to/parent/theme',
-                    'theme_preprocessed_dir' => '/var/view_processed/source/frontend/luma'
+                    'theme_pubstatic_dir' => '/pub/static/frontend/luma'
                 ],
                 ['package/parent_theme/path/one', 'package/parent_theme/path/two']
             ],
