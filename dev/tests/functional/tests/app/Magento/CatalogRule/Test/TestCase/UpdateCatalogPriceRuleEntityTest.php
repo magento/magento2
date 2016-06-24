@@ -58,7 +58,7 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
         // Preconditions
         $catalogPriceRuleOriginal->persist();
 
-        if ($customer != null) {
+        if ($customer !== null) {
             $customer->persist();
         }
 
