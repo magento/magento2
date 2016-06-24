@@ -349,7 +349,7 @@ define([
             array.forEach(function (elem) {
                 if (_.isFunction(elem.elems)) {
                     this.getChangedElems(elem.elems(), changed);
-                } else if (elem.hasChanged()) {
+                } else if (elem.hasOwnProperty('hasChanged') && elem.hasChanged()) {
                     changed.push(elem);
                 }
             }, this);
@@ -395,10 +395,7 @@ define([
                 }));
 
                 this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
-            } else if (!this.hasInitialState && isRecordDataArray && hasNotDefaultRecords) {
-                this.hasInitialState = true;
             }
-
         },
 
         /**

@@ -5,8 +5,9 @@
 
 define([
     'underscore',
-    'uiCollection'
-], function (_, uiCollection) {
+    'uiCollection',
+    'uiRegistry'
+], function (_, uiCollection, registry) {
     'use strict';
 
     return uiCollection.extend({
@@ -32,6 +33,23 @@ define([
             modules: {
                 parentComponent: '${ $.parentName }'
             }
+        },
+
+        initialize: function () {
+            this._super();
+
+            registry.async(this.name + '.' + this.positionProvider)(function(component){
+                component.hasChanged = function () {
+                    return this.value().toString() != this.initialValue.toString();
+                };
+
+                if (!component.initialValue) {
+                    component.initialValue = self.parentComponent().maxPosition;
+                    component.bubble('update', component.hasChanged());
+                }
+            });
+
+            return this;
         },
 
         /**
