@@ -349,7 +349,7 @@ define([
             array.forEach(function (elem) {
                 if (_.isFunction(elem.elems)) {
                     this.getChangedElems(elem.elems(), changed);
-                } else if (elem.hasOwnProperty('hasChanged') && elem.hasChanged()) {
+                } else if (_.isFunction(elem.hasChanged) && elem.hasChanged()) {
                     changed.push(elem);
                 }
             }, this);
