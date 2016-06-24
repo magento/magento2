@@ -10,6 +10,9 @@ namespace Magento\Framework\Exception;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\Renderer\Placeholder;
 
+/**
+ * @api
+ */
 class LocalizedException extends \Exception
 {
     /**

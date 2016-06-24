@@ -10,6 +10,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection as GroupCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
@@ -28,6 +29,9 @@ use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Api\Data\AttributeGroupInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\Currency;
+use Magento\Framework\Locale\Currency as CurrencyLocale;
+Use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class EavTest
@@ -138,9 +142,35 @@ class EavTest extends AbstractModifierTest
      */
     private $eavAttributeMock;
 
+    /**
+     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeMock;
+
+    /**
+     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $currencyMock;
+
+    /**
+     * @var CurrencyLocale|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $currencyLocaleMock;
+
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+    
+    /**
+     * @var Eav
+     */
+    protected $eav;
+
     protected function setUp()
     {
         parent::setUp();
+        $this->objectManager = new ObjectManager($this);
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -236,6 +266,24 @@ class EavTest extends AbstractModifierTest
             ->willReturn([
                 $this->attributeMock,
             ]);
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->setMethods(['load', 'getId', 'getConfig', 'getBaseCurrencyCode'])
+            ->getMockForAbstractClass();
+        $this->currencyMock = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['toCurrency'])
+            ->getMock();
+        $this->currencyLocaleMock = $this->getMockBuilder(CurrencyLocale::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCurrency'])
+            ->getMock();
+        
+        $this->eav =$this->getModel();
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->eav,
+            'localeCurrency',
+            $this->currencyLocaleMock
+        );
     }
 
     /**
@@ -255,7 +303,7 @@ class EavTest extends AbstractModifierTest
             'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
             'attributeGroupRepository' => $this->attributeGroupRepositoryMock,
             'sortOrderBuilder' => $this->sortOrderBuilderMock,
-            'attributeRepository' => $this->attributeRepositoryMock
+            'attributeRepository' => $this->attributeRepositoryMock,
         ]);
     }
 
@@ -336,6 +384,19 @@ class EavTest extends AbstractModifierTest
             ->method('getItems')
             ->willReturn([$this->eavAttributeMock]);
 
-        $this->assertEquals($sourceData, $this->getModel()->modifyData([]));
+        $this->storeMock->expects(($this->once()))
+            ->method('getBaseCurrencyCode')
+            ->willReturn('en_US');
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->currencyMock->expects($this->once())
+            ->method('toCurrency')
+            ->willReturn('19.99');
+        $this->currencyLocaleMock->expects($this->once())
+            ->method('getCurrency')
+            ->willReturn($this->currencyMock);
+
+        $this->assertEquals($sourceData, $this->eav->modifyData([]));
     }
 }

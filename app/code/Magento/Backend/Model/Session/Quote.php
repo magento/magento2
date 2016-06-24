@@ -150,15 +150,17 @@ class Quote extends \Magento\Framework\Session\SessionManager
      */
     public function getQuote()
     {
-        $cartManagement = $this->getCartManagement();
-
         if ($this->_quote === null) {
+            $this->_quote = $this->quoteFactory->create();
             if ($this->getStoreId()) {
                 if (!$this->getQuoteId()) {
-                    $this->setQuoteId($cartManagement->createEmptyCart());
-                    $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
                     $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId());
                     $this->_quote->setIsActive(false);
+                    $this->_quote->setStoreId($this->getStoreId());
+                    
+                    $this->quoteRepository->save($this->_quote);
+                    $this->setQuoteId($this->_quote->getId());
+                    $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
                 } else {
                     $this->_quote = $this->quoteRepository->get($this->getQuoteId(), [$this->getStoreId()]);
                     $this->_quote->setStoreId($this->getStoreId());
@@ -167,6 +169,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                 if ($this->getCustomerId() && $this->getCustomerId() != $this->_quote->getCustomerId()) {
                     $customer = $this->customerRepository->getById($this->getCustomerId());
                     $this->_quote->assignCustomer($customer);
+                    $this->quoteRepository->save($this->_quote);
                 }
             }
             $this->_quote->setIgnoreOldQty(true);
@@ -174,18 +177,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
         }
 
         return $this->_quote;
-    }
-
-    /**
-     * @return CartManagementInterface
-     * @deprecated
-     */
-    private function getCartManagement()
-    {
-        if ($this->cartManagement === null) {
-            $this->cartManagement = ObjectManager::getInstance()->get(CartManagementInterface::class);
-        }
-        return $this->cartManagement;
     }
 
     /**
