@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Eav\Test\Unit\Setup\AttributeConfiguration\Provider;
+
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\AttributeConfiguration\InvalidConfigurationException;
 use Magento\Eav\Setup\AttributeConfiguration\Provider\ScopeProvider;

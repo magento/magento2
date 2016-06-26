@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Eav\Test\Unit\Model\AttributeConfiguration\FrontendInputType;
+namespace Magento\Eav\Test\Unit\Setup\AttributeConfiguration\Provider;
 
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator;
 use Magento\Eav\Setup\AttributeConfiguration\Provider\FrontendInputUiProvider;

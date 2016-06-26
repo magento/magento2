@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Eav\Test\Unit\Model\AttributeConfiguration;
+namespace Magento\Eav\Test\Unit\Setup\AttributeConfiguration;
 
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Eav\Setup\AttributeConfiguration\Provider\ProviderInterface;

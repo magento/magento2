@@ -25,6 +25,7 @@ class CustomerConfigurationTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ProviderInterface $inputTypeProviderMock */
         $inputTypeProviderMock = $this->getMockBuilder(ProviderInterface::class)
                                       ->setMethods(['resolve'])
                                       ->getMockForAbstractClass();
