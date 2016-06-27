@@ -16,20 +16,6 @@ use Magento\Mtf\Fixture\FixtureInterface;
 class Sidebar extends Block
 {
     /**
-     * Quantity input selector.
-     *
-     * @var string
-     */
-    protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
-
-    /**
-     * Mini cart price selector.
-     *
-     * @var string
-     */
-    protected $price = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"minicart-price")]';
-
-    /**
      * Mini cart subtotal selector.
      *
      * @var string
@@ -169,32 +155,6 @@ class Sidebar extends Block
     }
 
     /**
-     * Get product quantity.
-     *
-     * @param string $productName
-     * @return string
-     */
-    public function getProductQty($productName)
-    {
-        $this->openMiniCart();
-        $productQty = sprintf($this->qty, $productName);
-        return $this->_rootElement->find($productQty, Locator::SELECTOR_XPATH)->getValue();
-    }
-
-    /**
-     * Get product price.
-     *
-     * @param string $productName
-     * @return string
-     */
-    public function getProductPrice($productName)
-    {
-        $this->openMiniCart();
-        $price = $this->_rootElement->find(sprintf($this->price, $productName), Locator::SELECTOR_XPATH)->getText();
-        return $this->escapeCurrency($price);
-    }
-
-    /**
      * Get subtotal.
      *
      * @return string
@@ -270,7 +230,7 @@ class Sidebar extends Block
      * @param string $currency [optional]
      * @return string
      */
-    private function escapeCurrency($price, $currency = '$')
+    protected function escapeCurrency($price, $currency = '$')
     {
         return str_replace($currency, '', $price);
     }

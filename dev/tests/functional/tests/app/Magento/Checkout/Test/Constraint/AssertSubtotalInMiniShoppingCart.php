@@ -20,14 +20,11 @@ class AssertSubtotalInMiniShoppingCart extends AbstractAssertForm
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
-     * @param boolean $requireReload [optional]
      * @return void
      */
-    public function processAssert(CmsIndex $cmsIndex, Cart $cart, $requireReload = true)
+    public function processAssert(CmsIndex $cmsIndex, Cart $cart)
     {
-        if ($requireReload) {
-            $cmsIndex->open();
-        }
+        $cmsIndex->open();
         $fixtureSubtotal = number_format($cart->getSubtotal(), 2);
         $miniCartSubtotal = $cmsIndex->getCartSidebarBlock()->getSubtotal();
         \PHPUnit_Framework_Assert::assertEquals(

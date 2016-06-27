@@ -16,7 +16,7 @@ use Magento\Mtf\Fixture\FixtureInterface;
 /**
  * Assert that product price in mini shopping cart equals to expected price from data set.
  */
-class AssertProductPriceInMiniShoppingCart extends AbstractAssertForm
+class AssertProductDataInMiniShoppingCart extends AbstractAssertForm
 {
     /**
      * Assert that product price in  mini shopping cart is equal to expected price from data set.
@@ -41,10 +41,17 @@ class AssertProductPriceInMiniShoppingCart extends AbstractAssertForm
             $productName = $product->getName();
             /** @var FixtureInterface $item */
             $checkoutItem = $item->getData();
+            $cartItem = $cmsIndex->getCartSidebarBlock()->getCartItem($product);
 
-            $productsData[$productName] = ['price' => $checkoutItem['price']];
-            $miniCartData[$productName] = [
-                'price' => $cmsIndex->getCartSidebarBlock()->getProductPrice($productName)
+            $productsData[$productName]['price'] = ['price' => $checkoutItem['price']];
+            $miniCartData[$productName]['price'] = [
+                'price' => $cartItem->getPrice()
+            ];
+            $productsData[$productName]['qty'] = [
+                'qty' => $checkoutItem['qty'],
+            ];
+            $miniCartData[$productName]['qty'] = [
+                'qty' => $cartItem->getQty(),
             ];
         }
 

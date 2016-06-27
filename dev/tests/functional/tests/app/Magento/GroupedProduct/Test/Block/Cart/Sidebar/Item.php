@@ -14,20 +14,6 @@ use Magento\Checkout\Test\Block\Cart\Sidebar\Item as ProductItem;
 class Item extends ProductItem
 {
     /**
-     * Quantity input selector.
-     *
-     * @var string
-     */
-    protected $qty = '//*[div/div/input[@data-cart-item-id=\'%s\']]/*/following-sibling::*//*[contains(@class,"item-qty")]';
-
-    /**
-     * Mini cart price selector.
-     *
-     * @var string
-     */
-    protected $price = '//*[div/div/input[@data-cart-item-id=\'%s\']]/*/following-sibling::*//*[contains(@class,"minicart-price")]';
-
-    /**
      * Remove grouped product item from mini cart.
      *
      * @return void
@@ -49,8 +35,8 @@ class Item extends ProductItem
     {
         $result = [];
         foreach ($this->config['associated_cart_items'] as $productName => $cartItem) {
-            /** @var ProductItem $productItem */
-            $result[$productName] = parent::getProductPrice($productName);
+            /** @var ProductItem $cartItem */
+            $result[$productName] = $cartItem->getPrice();
         }
 
         return $result;
@@ -65,8 +51,8 @@ class Item extends ProductItem
     {
         $result = [];
         foreach ($this->config['associated_cart_items'] as $productName => $cartItem) {
-            /** @var ProductItem $productItem */
-            $result[$productName] = parent::getProductQty($productName);
+            /** @var ProductItem $cartItem */
+            $result[$productName] = $cartItem->getQty();
         }
 
         return $result;
