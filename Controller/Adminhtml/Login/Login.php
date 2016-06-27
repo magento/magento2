@@ -39,9 +39,12 @@ class Login extends \Magento\Backend\App\Action
         $user = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
         $login->generate($user->getId());
 
-        $redirectUrl = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
-            ->getStore($customer->getStoreId())
-            ->getUrl('loginascustomer/login/index', ['secret' => $login->getSecret(), '_nosid' => true]);
+        $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')
+            ->getStore($customer->getStoreId());
+        $url = $this->_objectManager->get('Magento\Framework\Url')
+            ->setScope($store);
+
+        $redirectUrl = $url->getUrl('loginascustomer/login/index', ['secret' => $login->getSecret(), '_nosid' => true]);
 
         $this->getResponse()->setRedirect($redirectUrl);
     }
