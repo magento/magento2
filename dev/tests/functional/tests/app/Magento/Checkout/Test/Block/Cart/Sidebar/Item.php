@@ -9,7 +9,6 @@ namespace Magento\Checkout\Test\Block\Cart\Sidebar;
 use Magento\Checkout\Test\Block\Cart\Sidebar;
 
 /**
- * Class MiniCartItem.
  * Product item block on mini Cart.
  */
 class Item extends Sidebar
@@ -41,6 +40,13 @@ class Item extends Sidebar
      * @var string
      */
     protected $qty = 'input.cart-item-qty';
+
+    /**
+     * CSS selector for price field.
+     *
+     * @var string
+     */
+    protected $price = '.product .price';
 
     /**
      * CSS selector for update button.
@@ -96,5 +102,17 @@ class Item extends Sidebar
     public function getQty()
     {
         return $this->_rootElement->find($this->qty)->getValue();
+    }
+
+    /**
+     * Get product price.
+     *
+     * @return string
+     */
+    public function getPrice()
+    {
+        $this->openMiniCart();
+        $price = $this->_rootElement->find($this->price)->getText();
+        return parent::escapeCurrency($price);
     }
 }

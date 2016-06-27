@@ -16,9 +16,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation2">
             <data name="productsData" xsi:type="string">bundleProduct::bundle_fixed_product</data>
@@ -29,9 +28,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation3">
             <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option</data>
@@ -42,9 +40,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation4">
             <data name="productsData" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
@@ -55,9 +52,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
             <data name="productsData" xsi:type="string">configurableProduct::default</data>
@@ -68,9 +64,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation6">
             <data name="productsData" xsi:type="string">downloadableProduct::with_two_separately_links</data>
@@ -81,9 +76,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation7">
             <data name="productsData" xsi:type="string">groupedProduct::three_simple_products</data>
@@ -94,9 +88,8 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartItemsOptions" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertGrandTotalInShoppingCart" />
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductPriceInMiniShoppingCart" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertProductDataInMiniShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInMiniShoppingCart" />
-            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductQtyInMiniShoppingCart" />
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation8">
             <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
