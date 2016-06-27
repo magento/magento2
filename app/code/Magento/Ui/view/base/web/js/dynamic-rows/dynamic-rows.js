@@ -141,7 +141,7 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault parsePagesData',
+                recordData: 'setDifferedFromDefault parsePagesData setRecordDataToCache',
                 currentPage: 'changePage',
                 elems: 'checkSpinner',
                 changed: 'updateTrigger'
@@ -153,7 +153,13 @@ define([
             pageSize: 5,
             relatedData: [],
             currentPage: 1,
+            recordDataCache: [],
             startIndex: 0
+        },
+
+        setRecordDataToCache: function (data) {
+           this.recordDataCache = this.recordDataCache && data.length > this.recordDataCache.length ?
+                data : this.recordDataCache;
         },
 
         /**
@@ -307,9 +313,11 @@ define([
          * @param {Array} data - defaultState data
          */
         setDefaultState: function (data) {
+            var componentData = this.recordData().length ? this.recordData() : this.recordDataCache;
+
             if (!this.hasInitialState) {
                 this.hasInitialState = true;
-                this.defaultState = data ? data : utils.copy(this.arrayFilter(this.recordData()));
+                this.defaultState = data ? data : utils.copy(this.arrayFilter(componentData));
             }
         },
 
@@ -574,7 +582,7 @@ define([
 
             this.relatedData = this.deleteProperty ?
                 _.filter(data, function (elem) {
-                    return elem[this.deleteProperty] !== this.deleteValue;
+                    return elem && elem[this.deleteProperty] !== this.deleteValue;
                 }, this) : data;
 
             pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
