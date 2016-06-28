@@ -148,82 +148,97 @@ class DeployStaticContentCommand extends Command
         $this->setName('setup:static-content:deploy')
             ->setDescription('Deploys static view files')
             ->setDefinition([
-                new InputOption(self::DRY_RUN_OPTION,
+                new InputOption(
+                    self::DRY_RUN_OPTION,
                     '-d',
                     InputOption::VALUE_NONE,
                     'If specified, then no files will be actually deployed.'
                 ),
-                new InputOption(self::JAVASCRIPT_OPTION,
+                new InputOption(
+                    self::JAVASCRIPT_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no JavaScript will be deployed.'
                 ),
-                new InputOption(self::CSS_OPTION,
+                new InputOption(
+                    self::CSS_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no CSS will be deployed.'
                 ),
-                new InputOption(self::LESS_OPTION,
+                new InputOption(
+                    self::LESS_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no LESS will be deployed.'
                 ),
-                new InputOption(self::IMAGES_OPTION,
+                new InputOption(
+                    self::IMAGES_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no images will be deployed.'
                 ),
-                new InputOption(self::FONTS_OPTION,
+                new InputOption(
+                    self::FONTS_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no font files will be deployed.'
                 ),
-                new InputOption(self::HTML_OPTION,
+                new InputOption(
+                    self::HTML_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no html files will be deployed.'
                 ),
-                new InputOption(self::MISC_OPTION,
+                new InputOption(
+                    self::MISC_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, no miscellaneous files will be deployed.'
                 ),
-                new InputOption(self::HTML_MINIFY_OPTION,
+                new InputOption(
+                    self::HTML_MINIFY_OPTION,
                     null,
                     InputOption::VALUE_NONE,
                     'If specified, just html will not be minified and actually deployed.'
                 ),
-                new InputOption(self::THEME_OPTION,
+                new InputOption(
+                    self::THEME_OPTION,
                     '-t',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'If specified, just specific theme(s) will be actually deployed.',
                     ['all']
                 ),
-                new InputOption(self::EXCLUDE_THEME_OPTION,
+                new InputOption(
+                    self::EXCLUDE_THEME_OPTION,
                     '-et',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'If specified, exclude specific theme(s) from deployment.',
                     ['none']
                 ),
-                new InputOption(self::LANGUAGE_OPTION,
+                new InputOption(
+                    self::LANGUAGE_OPTION,
                     '-l',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of languages you want the tool populate files for.',
                     ['all']
                 ),
-                new InputOption(self::EXCLUDE_LANGUAGE_OPTION,
+                new InputOption(
+                    self::EXCLUDE_LANGUAGE_OPTION,
                     '-el',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of langiages you do not want the tool populate files for.',
                     ['none']
                 ),
-                new InputOption(self::AREA_OPTION,
+                new InputOption(
+                    self::AREA_OPTION,
                     '-a',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of areas you want the tool populate files for.',
                     ['all']
                 ),
-                new InputOption(self::EXCLUDE_AREA_OPTION,
+                new InputOption(
+                    self::EXCLUDE_AREA_OPTION,
                     '-ea',
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of areas you do not want the tool populate files for.',
@@ -260,7 +275,7 @@ class DeployStaticContentCommand extends Command
             foreach ($areasInclude as $area) {
                 if (!in_array($area, $magentoAreas)) {
                     throw new \InvalidArgumentException(
-                        $area . 
+                        $area .
                         ' argument has invalid value, avalilable areas are: ' . implode(', ', $magentoAreas)
                     );
                 }
@@ -271,7 +286,7 @@ class DeployStaticContentCommand extends Command
             foreach ($areasExclude as $area) {
                 if (!in_array($area, $magentoAreas)) {
                     throw new \InvalidArgumentException(
-                        $area . 
+                        $area .
                         ' argument has invalid value, avalilable areas are: ' . implode(', ', $magentoAreas)
                     );
                 }
@@ -295,10 +310,10 @@ class DeployStaticContentCommand extends Command
         }
 
         if ($languagesInclude[0] != 'all') {
-            foreach ($languagedInclude as $language) {
+            foreach ($languagesInclude as $language) {
                 if (!in_array($language, $magentoLanguages)) {
                     throw new \InvalidArgumentException(
-                        $language . 
+                        $language .
                         ' argument has invalid value, avalilable languages are: ' . implode(', ', $magentoLanguages)
                     );
                 }
@@ -309,7 +324,7 @@ class DeployStaticContentCommand extends Command
             foreach ($languagesExclude as $language) {
                 if (!in_array($language, $magentoLanguages)) {
                     throw new \InvalidArgumentException(
-                        $language . 
+                        $language .
                         ' argument has invalid value, avalilable languages are: ' . implode(', ', $magentoLanguages)
                     );
                 }
@@ -336,7 +351,7 @@ class DeployStaticContentCommand extends Command
             foreach ($themesInclude as $theme) {
                 if (!in_array($theme, $magentoThemes)) {
                     throw new \InvalidArgumentException(
-                        $theme . 
+                        $theme .
                         ' argument has invalid value, avalilable themes are: ' . implode(', ', $magentoThemes)
                     );
                 }
@@ -347,7 +362,7 @@ class DeployStaticContentCommand extends Command
             foreach ($themesExclude as $theme) {
                 if (!in_array($theme, $magentoThemes)) {
                     throw new \InvalidArgumentException(
-                        $theme . 
+                        $theme .
                         ' argument has invalid value, avalilable themes are: ' . implode(', ', $magentoThemes)
                     );
                 }
@@ -421,7 +436,6 @@ class DeployStaticContentCommand extends Command
         return $deployThemes;
     }
 
-
     /**
      * {@inheritdoc}
      * @throws \InvalidArgumentException
@@ -437,7 +451,7 @@ class DeployStaticContentCommand extends Command
 
                 if (!$this->validator->isValid($lang)) {
                     throw new \InvalidArgumentException(
-                        $lang . 
+                        $lang .
                         ' argument has invalid value, please run info:language:list for list of available locales'
                     );
                 }
@@ -452,16 +466,18 @@ class DeployStaticContentCommand extends Command
         $magentoLanguages = ['en_US'];
 
         $files = $filesUtil->getStaticPreProcessingFiles();
-        foreach ($files as $info) {
-            list($area, $themePath, $locale) = $info;
-            if ($area && !in_array($area, $magentoAreas)) {
-                $magentoAreas[] = $area;
-            }
-            if ($locale && !in_array($locale, $magentoLanguages)) {
-                $magentoLanguages[] = $locale;
-            }
-            if ($themePath && !in_array($themePath, $magentoThemes)) {
-                $magentoThemes[] = $themePath;
+        if (is_array($files)) {
+            foreach ($files as $info) {
+                list($area, $themePath, $locale) = $info;
+                if ($area && !in_array($area, $magentoAreas)) {
+                    $magentoAreas[] = $area;
+                }
+                if ($locale && !in_array($locale, $magentoLanguages)) {
+                    $magentoLanguages[] = $locale;
+                }
+                if ($themePath && !in_array($themePath, $magentoThemes)) {
+                    $magentoThemes[] = $themePath;
+                }
             }
         }
 
@@ -497,7 +513,12 @@ class DeployStaticContentCommand extends Command
             ]
         );
 
-        return $deployer->deploy($this->objectManagerFactory, $languages, 
-            $deployAreas, $deployLanguages, $deployThemes);
+        return $deployer->deploy(
+            $this->objectManagerFactory,
+            $languages,
+            $deployAreas,
+            $deployLanguages,
+            $deployThemes
+        );
     }
 }
