@@ -135,7 +135,7 @@ class Content extends \Magento\Backend\Block\Widget
                 try {
                     $fileHandler = $directory->stat($this->_mediaConfig->getMediaPath($image['file']));
                     $image['size'] = $fileHandler['size'];
-                } catch(\Magento\Framework\Exception\FileSystemException $e) {
+                } catch (\Magento\Framework\Exception\FileSystemException $e) {
                     $image['size'] = 0;
                 }
             }
