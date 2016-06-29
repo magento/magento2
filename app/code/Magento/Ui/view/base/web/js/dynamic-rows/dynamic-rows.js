@@ -116,6 +116,9 @@ define([
             showSpinner: true,
             isDifferedFromDefault: false,
             defaultState: [],
+            defaultPagesState: {},
+            pagesChanged: {},
+            hasInitialPagesState: {},
             changed: false,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
@@ -158,7 +161,7 @@ define([
         },
 
         setRecordDataToCache: function (data) {
-           this.recordDataCache = this.recordDataCache && data.length > this.recordDataCache.length ?
+            this.recordDataCache = this.recordDataCache && data.length > this.recordDataCache.length ?
                 data : this.recordDataCache;
         },
 
@@ -264,7 +267,8 @@ define([
         deleteHandler: function (index, id) {
             this.setDefaultState();
             this.processingDeleteRecord(index, id);
-            this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
+            this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.changed(_.some(this.pagesChanged));
         },
 
         /**
@@ -292,7 +296,7 @@ define([
                 dataScope,
                 changedElemDataScope;
 
-            if (state && !this.hasInitialState) {
+            if (state && !this.hasInitialPagesState[this.currentPage()]) {
                 this.setDefaultState();
                 changed = this.getChangedElems(this.elems());
                 dataScope = this.elems()[0].dataScope.split('.');
@@ -300,11 +304,17 @@ define([
                 changed.forEach(function (elem) {
                     changedElemDataScope = elem.dataScope.split('.');
                     changedElemDataScope.splice(0, dataScope.length);
-                    this.setValueByPath(this.defaultState, changedElemDataScope, elem.initialValue);
+                    changedElemDataScope[0] = (parseInt(changedElemDataScope[0], 10) - this.pageSize * (this.currentPage() - 1)).toString();
+                    this.setValueByPath(this.defaultPagesState[this.currentPage()], changedElemDataScope, elem.initialValue);
                 }, this);
             }
 
-            this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
+            this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+            this.changed(_.some(this.pagesChanged));
+        },
+
+        compare: function (a1,a2) {
+            return compareArrays(a1,a2)
         },
 
         /**
@@ -313,11 +323,11 @@ define([
          * @param {Array} data - defaultState data
          */
         setDefaultState: function (data) {
-            var componentData = this.recordData().length ? this.recordData() : this.recordDataCache;
+            var componentData = this.getChildItems().length ? this.getChildItems() : this.recordDataCache;
 
-            if (!this.hasInitialState) {
-                this.hasInitialState = true;
-                this.defaultState = data ? data : utils.copy(this.arrayFilter(componentData));
+            if (!this.hasInitialPagesState[this.currentPage()]) {
+                this.hasInitialPagesState[this.currentPage()] = true;
+                this.defaultPagesState[this.currentPage()] = data ? data : utils.copy(this.arrayFilter(componentData));
             }
         },
 
@@ -393,18 +403,19 @@ define([
                     return !data.initialize;
                 }).length : false;
 
-            if (!this.hasInitialState && isRecordDataArray && hasNotDefaultRecords) {
-                this.hasInitialState = true;
-                this.defaultState = utils.copy(this.recordData().filter(function (data) {
+            if (!this.hasInitialPagesState[this.currentPage()] && isRecordDataArray && hasNotDefaultRecords) {
+                this.hasInitialPagesState[this.currentPage()] = true;
+                this.defaultPagesState[this.currentPage()] = utils.copy(this.getChildItems().filter(function (data) {
                     initialize = data.initialize;
                     delete data.initialize;
 
                     return initialize;
                 }));
 
-                this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
-            } else if (this.hasInitialState) {
-                this.changed(!compareArrays(this.defaultState, this.arrayFilter(this.relatedData)));
+                this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
+                this.changed(_.some(this.pagesChanged));
+            } else if (this.hasInitialPagesState[this.currentPage()]) {
+                this.changed(_.some(this.pagesChanged));
             }
         },
 
@@ -660,8 +671,6 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
-            this.setDefaultState();
-
             if (page === 1 && !this.recordData().length) {
                 return false;
             }
