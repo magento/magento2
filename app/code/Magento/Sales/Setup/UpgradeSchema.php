@@ -55,9 +55,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $installer->endSetup();
         }
         if (version_compare($context->getVersion(), '2.0.7', '<')) {
-            $connection = $installer->getConnection();
             $this->addColumnBaseGrandTotal($installer);
-            $this->addIndexBaseGrandTotal($connection, $installer);
+            $this->addIndexBaseGrandTotal($installer);
         }
     }
 
@@ -84,12 +83,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
     }
 
     /**
-     * @param AdapterInterface $connection
      * @param SchemaSetupInterface $installer
      * @return void
      */
-    private function addIndexBaseGrandTotal(AdapterInterface $connection, SchemaSetupInterface $installer)
+    private function addIndexBaseGrandTotal(SchemaSetupInterface $installer)
     {
+        $connection = $installer->getConnection();
         $connection->addIndex(
             $installer->getTable('sales_invoice_grid'),
             $installer->getIdxName('sales_invoice_grid', ['base_grand_total']),
