@@ -389,7 +389,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
             $store
         );
         if ($fileName) {
-            $uploadDir = \Magento\Config\Model\Config\Backend\Email\Logo::UPLOAD_DIR;
+            $uploadDir = \Magento\Email\Model\Design\Backend\Logo::UPLOAD_DIR;
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
             if ($mediaDirectory->isFile($uploadDir . '/' . $fileName)) {
                 return $this->storeManager->getStore()->getBaseUrl(
