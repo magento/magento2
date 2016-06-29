@@ -41,6 +41,6 @@ class AssertSubtotalInMiniShoppingCart extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Subtotal in mini shopping cart equals to expected total from data set.';
+        return 'Subtotal in mini shopping cart equals to expected subtotal from data set.';
     }
 }
