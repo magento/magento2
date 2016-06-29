@@ -9,7 +9,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Debug
@@ -27,29 +26,21 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
     private $scopeConfig;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param DriverInterface $filesystem
      * @param State $state
      * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
      * @param string $filePath
      */
     public function __construct(
         DriverInterface $filesystem,
         State $state,
         ScopeConfigInterface $scopeConfig,
-        StoreManagerInterface $storeManager,
         $filePath = null
     ) {
         parent::__construct($filesystem, $filePath);
 
         $this->state = $state;
         $this->scopeConfig = $scopeConfig;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -57,11 +48,9 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
      */
     public function isHandling(array $record)
     {
-        $storeCode = $this->storeManager->getStore()->getCode();
-
         return
             parent::isHandling($record)
             && $this->state->getMode() !== State::MODE_PRODUCTION
-            && $this->scopeConfig->getValue('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, $storeCode);
+            && $this->scopeConfig->getValue('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE);
     }
 }
