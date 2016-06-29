@@ -25,6 +25,13 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
     protected $configStorage;
 
     /**
+     * Design config validator
+     *
+     * @var \Magento\Theme\Model\Design\Config\Validator
+     */
+    private $validator;
+
+    /**
      * @param ConfigStorage $configStorage
      * @param ReinitableConfigInterface $reinitableConfig
      * @param IndexerRegistry $indexerRegistry
@@ -37,6 +44,23 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         $this->reinitableConfig = $reinitableConfig;
         $this->indexerRegistry = $indexerRegistry;
         $this->configStorage = $configStorage;
+    }
+
+    /**
+     * Get config validator
+     *
+     * @return Design\Config\Validator
+     *
+     * @deprecated
+     */
+    private function getValidator()
+    {
+        if (null === $this->validator) {
+            $this->validator =\Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Theme\Model\Design\Config\Validator::class
+            );
+        }
+        return $this->validator;
     }
 
     /**
@@ -57,6 +81,8 @@ class DesignConfigRepository implements DesignConfigRepositoryInterface
         ) {
             throw new LocalizedException(__('Can not save empty config'));
         }
+
+        $this->getValidator()->validate($designConfig);
 
         $this->configStorage->save($designConfig);
         $this->reinitableConfig->reinit();

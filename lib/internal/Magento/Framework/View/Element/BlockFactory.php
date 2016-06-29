@@ -9,6 +9,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class BlockFactory
+ *
+ * @api
  */
 class BlockFactory
 {
