@@ -17,6 +17,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 {
     public function testBlockInstantiation()
     {
+        echo "++++ starting test 2.0-MIKE testBlockInstantiation()" . "\n";
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($module, $class, $area) {
@@ -42,6 +43,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 try {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
                 } catch (\Exception $e) {
+                    echo "Unable to instantiate class: " . $class;
                     throw new \Exception("Unable to instantiate '{$class}'", 0, $e);
                 }
             },
