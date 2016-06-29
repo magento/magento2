@@ -14,12 +14,12 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Assert that product price in mini shopping cart equals to expected price from data set.
+ * Assert that product price and qty in mini shopping cart equal to expected price from data set.
  */
 class AssertProductDataInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that product price in  mini shopping cart is equal to expected price from data set.
+     * Assert that product price and qty in  mini shopping cart are equal to expected price from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -66,6 +66,6 @@ class AssertProductDataInMiniShoppingCart extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Price in mini shopping cart equals to expected price from data set.';
+        return 'Price and qty in mini shopping cart equals to expected price from data set.';
     }
 }

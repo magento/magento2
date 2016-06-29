@@ -111,7 +111,6 @@ class Item extends Sidebar
      */
     public function getPrice()
     {
-        $this->openMiniCart();
         $price = $this->_rootElement->find($this->price)->getText();
         return parent::escapeCurrency($price);
     }
