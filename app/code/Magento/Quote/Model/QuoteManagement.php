@@ -536,6 +536,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($shippingAddress);
             $shipping->setCustomerAddressData($shippingAddress);
+            $shipping->setCustomerAddressId($shippingAddress->getId());
         }
 
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
@@ -550,6 +551,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($billingAddress);
             $billing->setCustomerAddressData($billingAddress);
+            $billing->setCustomerAddressId($billingAddress->getId());
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);
