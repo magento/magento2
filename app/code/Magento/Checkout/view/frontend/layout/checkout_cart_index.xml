@@ -190,6 +190,11 @@
                         <arguments>
                             <argument name="type" xsi:type="string">crosssell</argument>
                         </arguments>
+                        <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="crosssell.product.addto" as="addto">
+                            <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
+                                   name="crosssell.product.addto.compare" as="compare"
+                                   template="Magento_Catalog::product/list/addto/compare.phtml"/>
+                        </block>
                     </block>
                 </container>
                 <container name="checkout.cart.noitems" as="no-items">
