@@ -74,7 +74,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                 'unsigned' => true,
                 'nullable' => true,
-                'default' => '0.0000',
                 'length' => '12,4',
                 'comment' => 'Base Grand Total',
                 'after' => 'grand_total'
