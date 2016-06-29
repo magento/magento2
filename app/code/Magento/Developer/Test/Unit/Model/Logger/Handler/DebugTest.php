@@ -10,9 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
 
@@ -42,16 +40,6 @@ class DebugTest extends \PHPUnit_Framework_TestCase
     private $scopeConfigMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeManagerMock;
-
-    /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $storeMock;
-
-    /**
      * @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $formatterMock;
@@ -65,16 +53,9 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
         $this->formatterMock = $this->getMockBuilder(FormatterInterface::class)
             ->getMockForAbstractClass();
 
-        $this->storeManagerMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
         $this->formatterMock->expects($this->any())
             ->method('format')
             ->willReturn(null);
@@ -83,22 +64,18 @@ class DebugTest extends \PHPUnit_Framework_TestCase
             'filesystem' => $this->filesystemMock,
             'state' => $this->stateMock,
             'scopeConfig' => $this->scopeConfigMock,
-            'storeManager' => $this->storeManagerMock
         ]);
         $this->model->setFormatter($this->formatterMock);
     }
 
     public function testHandle()
     {
-        $this->storeMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('test_code');
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
+            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, null)
             ->willReturn(true);
 
         $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
@@ -106,9 +83,6 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleDisabledByProduction()
     {
-        $this->storeMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('test_code');
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_PRODUCTION);
@@ -120,15 +94,12 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleDisabledByConfig()
     {
-        $this->storeMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('test_code');
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, 'test_code')
+            ->with('dev/debug/debug_logging', ScopeInterface::SCOPE_STORE, null)
             ->willReturn(false);
 
         $this->model->handle(['formatted' => false, 'level' => Logger::DEBUG]);
@@ -136,9 +107,6 @@ class DebugTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleDisabledByLevel()
     {
-        $this->storeMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn('test_code');
         $this->stateMock->expects($this->never())
             ->method('getMode');
         $this->scopeConfigMock->expects($this->never())
