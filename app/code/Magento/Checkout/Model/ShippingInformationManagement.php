@@ -134,6 +134,10 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $carrierCode = $addressInformation->getShippingCarrierCode();
         $methodCode = $addressInformation->getShippingMethodCode();
 
+        if (!$address->getCustomerAddressId()) {
+            $address->setCustomerAddressId(null);
+        }
+
         if (!$address->getCountryId()) {
             throw new StateException(__('Shipping address is not set'));
         }
