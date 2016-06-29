@@ -15,8 +15,10 @@ return [
     'Magento\Config\Block\System\Config\Form',
     'Magento\Config\Block\System\Config\Tabs',
     'Magento\Review\Block\Form',
+    'Magento\Braintree\Block\Form',
+    'Magento\Braintree\Block\Payment',
     // Fails because of dependence on registry
     'Magento\Reminder\Block\Adminhtml\Reminder\Edit\Tab\Customers',
     'Magento\LayeredNavigation\Block\Navigation',
-    'Magento\LayeredNavigation\Block\Navigation\State',
+    'Magento\LayeredNavigation\Block\Navigation\State'
 ];

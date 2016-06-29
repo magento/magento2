@@ -17,18 +17,18 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 {
     public function testBlockInstantiation()
     {
-        echo "++++ starting test 2.0-MIKE testBlockInstantiation()" . "\n";
+        $this->ech("++++ starting test 2.0-MIKE testBlockInstantiation()" . "\n");
 
         // TODO: extreme debugging
-        if (true) {
-            echo "++++ bypassing entire test!";
+        if (false) {
+            $this->ech("++++ bypassing entire test!");
             return;
         }
 
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($module, $class, $area) {
-                echo "Module: " . $module . ", Class: " . $class . ", Area: " . $area . "\n";
+                $this->ech("Module: " . $module . ", Class: " . $class . ", Area: " . $area . "\n");
                 $this->assertNotEmpty($module);
                 $this->assertTrue(class_exists($class), "Block class: {$class}");
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -50,12 +50,19 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 try {
                     \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
                 } catch (\Exception $e) {
-                    echo "Unable to instantiate class: " . $class;
+                    $this->ech("Unable to instantiate class: " . $class);
                     throw new \Exception("Unable to instantiate '{$class}'", 0, $e);
                 }
             },
             $this->allBlocksDataProvider()
         );
+    }
+
+    // TODO: echo out the message
+    private function ech($msg) {
+        echo $msg;
+        ob_flush();
+        flush();
     }
 
     /**
@@ -88,6 +95,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             }
             return $templateBlocks;
         } catch (\Exception $e) {
+            $this->ech("Corrupted data provider. Last know block: " . $blockClass);
             trigger_error(
                 "Corrupted data provider. Last known block instantiation attempt: '{$blockClass}'." .
                 " Exception: {$e}",
