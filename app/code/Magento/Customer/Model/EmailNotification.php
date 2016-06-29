@@ -268,8 +268,7 @@ class EmailNotification implements EmailNotificationInterface
     {
         if ($customer->getWebsiteId() != 0 && empty($defaultStoreId)) {
             $storeIds = $this->storeManager->getWebsite($customer->getWebsiteId())->getStoreIds();
-            reset($storeIds);
-            $defaultStoreId = current($storeIds);
+            $defaultStoreId = reset($storeIds);
         }
         return $defaultStoreId;
     }
@@ -282,9 +281,9 @@ class EmailNotification implements EmailNotificationInterface
      */
     public function passwordReminder(CustomerInterface $customer)
     {
-        $storeId = $this->storeManager->getStore()->getId();
+        $storeId = $this->getWebsiteStoreId($customer);
         if (!$storeId) {
-            $storeId = $this->getWebsiteStoreId($customer);
+            $storeId = $this->storeManager->getStore()->getId();
         }
 
         $customerEmailData = $this->getFullCustomerObject($customer);
