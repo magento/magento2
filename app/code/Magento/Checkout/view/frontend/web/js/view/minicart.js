@@ -108,6 +108,13 @@ define([
         initSidebar: initSidebar,
 
         /**
+         * Close mini shopping cart.
+         */
+        closeMinicart: function () {
+            $('[data-block="minicart"]').find('[data-role="dropdownDialog"]').dropdownDialog('close');
+        },
+
+        /**
          * @return {Boolean}
          */
         closeSidebar: function () {
