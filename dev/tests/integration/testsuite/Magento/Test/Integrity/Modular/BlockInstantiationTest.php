@@ -17,7 +17,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 {
     public function testBlockInstantiation()
     {
-        $this->ech("++++ starting test 2.0-MIKE testBlockInstantiation()" . "\n");
+        $this->ech("++++ starting test 2.0-MIKE testBlockInstantiation()");
 
         // TODO: used for extreme debugging
         if (false) {
@@ -28,7 +28,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             function ($module, $class, $area) {
-                $this->ech("Module: " . $module . ", Class: " . $class . ", Area: " . $area . "\n");
+                $this->ech("Module: " . $module . ", Class: " . $class . ", Area: " . $area);
                 $this->assertNotEmpty($module);
                 $this->assertTrue(class_exists($class), "Block class: {$class}");
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -60,7 +60,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 
     // TODO: echo out the message
     private function ech($msg) {
-        echo $msg;
+        echo $msg . "\n";
         ob_flush();
         flush();
     }
@@ -86,8 +86,9 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             $templateBlocks = [];
             $blockMods = \Magento\Framework\App\Utility\Classes::collectModuleClasses('Block');
             foreach ($blockMods as $blockClass => $module) {
-                //$this->ech("++>> module: " . $module . ", blockClass: " . $blockClass . "\n");
+                //$this->ech("++>> module: " . $module . ", blockClass: " . $blockClass);
                 if (in_array($module, $eeSkippedModules)) {
+                    $this->ech("++>> skipping module: " . $module);
                     continue;
                 }
                 if (!isset($enabledModules[$module]) || isset($skipBlocks[$blockClass])) {
