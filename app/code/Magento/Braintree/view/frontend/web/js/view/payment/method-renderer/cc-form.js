@@ -133,7 +133,7 @@ define(
              * @param {Boolean} isActive
              */
             onActiveChange: function (isActive) {
-                if (!isActive || this.isSingleUse()) {
+                if (!isActive) {
                     return;
                 }
 
@@ -318,14 +318,6 @@ define(
                 });
 
                 return false;
-            },
-
-            /**
-             * Check if Braintree configured without PayPal
-             * @returns {Boolean}
-             */
-            isSingleUse: function () {
-                return window.checkoutConfig.payment[this.getCode()].isSingleUse;
             }
         });
     }
