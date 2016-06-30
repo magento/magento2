@@ -184,7 +184,6 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 //        $result[] = "Magento_Newsletter";
 //        $result[] = "Magento_OfflinePayments";
 //        $result[] = "Magento_OfflineShipping";
-
 //        $result[] = "Magento_PageCache";
 //        $result[] = "Magento_Payment";
 //        $result[] = "Magento_Paypal";
@@ -193,17 +192,17 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $result[] = "Magento_ProductAlert";
         $result[] = "Magento_ProductVideo";
 
-        $result[] = "Magento_Quote";
-        $result[] = "Magento_Reports";
-        $result[] = "Magento_RequireJs";
-        $result[] = "Magento_Review";
-        $result[] = "Magento_Rss";
-        $result[] = "Magento_Rule";
-        $result[] = "Magento_Sales";
-        $result[] = "Magento_SalesRule";
-        $result[] = "Magento_SalesSequence";
-        $result[] = "Magento_SampleData";
-        $result[] = "Magento_Search";
+//        $result[] = "Magento_Quote";
+//        $result[] = "Magento_Reports";
+//        $result[] = "Magento_RequireJs";
+//        $result[] = "Magento_Review";
+//        $result[] = "Magento_Rss";
+//        $result[] = "Magento_Rule";
+//        $result[] = "Magento_Sales";
+//        $result[] = "Magento_SalesRule";
+//        $result[] = "Magento_SalesSequence";
+//        $result[] = "Magento_SampleData";
+//        $result[] = "Magento_Search";
 
         $result[] = "Magento_SendFriend";   // Magento\SendFriend\Block\Send
         $result[] = "Magento_Shipping";
