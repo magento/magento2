@@ -185,11 +185,12 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 //        $result[] = "Magento_OfflinePayments";
 //        $result[] = "Magento_OfflineShipping";
 
-        $result[] = "Magento_PageCache";
-        $result[] = "Magento_Payment";
-        $result[] = "Magento_Paypal";
-        $result[] = "Magento_Persistent";
-        $result[] = "Magento_ProductAlert";
+//        $result[] = "Magento_PageCache";
+//        $result[] = "Magento_Payment";
+//        $result[] = "Magento_Paypal";
+//        $result[] = "Magento_Persistent";
+//        $result[] = "Magento_ProductAlert";
+
         $result[] = "Magento_ProductVideo";
         $result[] = "Magento_Quote";
         $result[] = "Magento_Reports";
@@ -203,14 +204,15 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $result[] = "Magento_SampleData";
         $result[] = "Magento_Search";
         $result[] = "Magento_SendFriend";   // Magento\SendFriend\Block\Send
-        $result[] = "Magento_Shipping";
-        $result[] = "Magento_Sitemap";
-        $result[] = "Magento_Store";
-        $result[] = "Magento_Swagger";
-        $result[] = "Magento_Swatches";
+
+//        $result[] = "Magento_Shipping";
+//        $result[] = "Magento_Sitemap";
+//        $result[] = "Magento_Store";
+//        $result[] = "Magento_Swagger";
+//        $result[] = "Magento_Swatches";
+
 //        $result[] = "Magento_Tax";    // Magento\Tax\Block\Adminhtml\Rule
 //        $result[] = "Magento_TaxImportExport";
-
 //        $result[] = "Magento_TestModule1";
 //        $result[] = "Magento_TestModule2";
 //        $result[] = "Magento_TestModule3";
@@ -219,7 +221,6 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 //        $result[] = "Magento_TestModuleIntegrationFromConfig";
 //        $result[] = "Magento_TestModuleJoinDirectives";
 //        $result[] = "Magento_TestModuleMSC";
-
 //        $result[] = "Magento_Theme";
 //        $result[] = "Magento_Translation";
 //        $result[] = "Magento_Ui";
