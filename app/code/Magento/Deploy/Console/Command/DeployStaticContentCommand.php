@@ -15,6 +15,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\State;
 
 /**
  * Deploy static content command
@@ -50,6 +52,9 @@ class DeployStaticContentCommand extends Command
      *
      */
     private $objectManager;
+
+    /** @var \Magento\Framework\App\State */
+    private $appState;
 
     /**
      * Inject dependencies
@@ -95,10 +100,31 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
+     * @return \Magento\Framework\App\State
+     * @deprecated
+     */
+    private function getAppState()
+    {
+        if (null === $this->appState) {
+            $this->appState = $this->objectManager->get('Magento\Framework\App\State');
+        }
+        return $this->appState;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
+            throw new LocalizedException(
+                __(
+                    "Deploy static content is applicable only for production mode.\n"
+                    . "Please use command 'bin/magento deploy:mode:set production' for set up production mode."
+                )
+            );
+        }
+
         $options = $input->getOptions();
 
         $languages = $input->getArgument(self::LANGUAGE_OPTION);
