@@ -189,9 +189,10 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 //        $result[] = "Magento_Payment";
 //        $result[] = "Magento_Paypal";
 //        $result[] = "Magento_Persistent";
-//        $result[] = "Magento_ProductAlert";
 
+        $result[] = "Magento_ProductAlert";
         $result[] = "Magento_ProductVideo";
+
         $result[] = "Magento_Quote";
         $result[] = "Magento_Reports";
         $result[] = "Magento_RequireJs";
@@ -203,14 +204,14 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $result[] = "Magento_SalesSequence";
         $result[] = "Magento_SampleData";
         $result[] = "Magento_Search";
-        $result[] = "Magento_SendFriend";   // Magento\SendFriend\Block\Send
 
-//        $result[] = "Magento_Shipping";
+        $result[] = "Magento_SendFriend";   // Magento\SendFriend\Block\Send
+        $result[] = "Magento_Shipping";
+
 //        $result[] = "Magento_Sitemap";
 //        $result[] = "Magento_Store";
 //        $result[] = "Magento_Swagger";
 //        $result[] = "Magento_Swatches";
-
 //        $result[] = "Magento_Tax";    // Magento\Tax\Block\Adminhtml\Rule
 //        $result[] = "Magento_TaxImportExport";
 //        $result[] = "Magento_TestModule1";
