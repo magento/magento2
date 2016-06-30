@@ -19,7 +19,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
     {
         $this->ech("++++ starting test 2.0-MIKE testBlockInstantiation()" . "\n");
 
-        // TODO: extreme debugging
+        // TODO: used for extreme debugging
         if (false) {
             $this->ech("++++ bypassing entire test!");
             return;
@@ -84,6 +84,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             $templateBlocks = [];
             $blockMods = \Magento\Framework\App\Utility\Classes::collectModuleClasses('Block');
             foreach ($blockMods as $blockClass => $module) {
+                $this->ech("++>> module: " . $module . ", blockClass: " . $blockClass);
                 if (!isset($enabledModules[$module]) || isset($skipBlocks[$blockClass])) {
                     continue;
                 }
