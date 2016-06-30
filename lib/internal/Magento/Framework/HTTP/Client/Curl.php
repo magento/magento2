@@ -380,7 +380,7 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
         //$this->curlOption(CURLOPT_HEADER, 1);
         $this->curlOption(CURLOPT_RETURNTRANSFER, 1);
         $this->curlOption(CURLOPT_HEADERFUNCTION, [$this, 'parseHeaders']);
-        $this->curlOption(CURLOPT_SSLVERSION, $this::$sslVersion);
+        $this->curlOption(CURLOPT_SSLVERSION, self::$sslVersion);
 
         if (count($this->_curlUserOptions)) {
             foreach ($this->_curlUserOptions as $k => $v) {
