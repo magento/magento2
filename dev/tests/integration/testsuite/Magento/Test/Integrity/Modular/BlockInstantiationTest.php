@@ -190,7 +190,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 //        $result[] = "Magento_Persistent";
 
         $result[] = "Magento_ProductAlert";
-        $result[] = "Magento_ProductVideo";
+//        $result[] = "Magento_ProductVideo";
 
 //        $result[] = "Magento_Quote";
 //        $result[] = "Magento_Reports";
@@ -206,7 +206,6 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 
         $result[] = "Magento_SendFriend";   // Magento\SendFriend\Block\Send
 //        $result[] = "Magento_Shipping";
-
 //        $result[] = "Magento_Sitemap";
 //        $result[] = "Magento_Store";
 //        $result[] = "Magento_Swagger";
