@@ -70,7 +70,7 @@ class Sidebar extends AbstractCart
             'imageTemplate' => $this->getImageHtmlTemplate(),
             'baseUrl' => $this->getBaseUrl(),
             'minicartMaxItemsVisible' => $this->getMiniCartMaxItemsCount(),
-            'websiteId' => $this->getQuote()->getStore()->getWebsiteId()
+            'websiteId' => $this->_storeManager->getStore()->getWebsiteId()
         ];
     }
 
