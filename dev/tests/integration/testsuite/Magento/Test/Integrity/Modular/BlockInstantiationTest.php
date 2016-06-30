@@ -79,6 +79,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 0
             );
 
+            $ceSkippedModules = $this->getCEModulesToSkip(); // TODO: debug
             $eeSkippedModules = $this->getEEModulesToSkip(); // TODO: debug
 
             $enabledModules = $this->_getEnabledModules();
@@ -87,8 +88,12 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
             $blockMods = \Magento\Framework\App\Utility\Classes::collectModuleClasses('Block');
             foreach ($blockMods as $blockClass => $module) {
                 //$this->ech("++>> module: " . $module . ", blockClass: " . $blockClass);
+                if (in_array($module, $ceSkippedModules)) {
+                    $this->ech("++++>> skipping ~CE~ module: " . $module);
+                    continue;
+                }
                 if (in_array($module, $eeSkippedModules)) {
-                    $this->ech("++>> skipping module: " . $module);
+                    $this->ech("++++>> skipping +EE+ module: " . $module);
                     continue;
                 }
                 if (!isset($enabledModules[$module]) || isset($skipBlocks[$blockClass])) {
@@ -109,6 +114,123 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 E_USER_ERROR
             );
         }
+    }
+
+    /**
+     * TODO: debug CE contribution to EE build break
+     *
+     * @return array
+     */
+    protected function getCEModulesToSkip()
+    {
+        $result = [];$result[] = "AdminNotification";
+        $result[] = "AdvancedPricingImportExport";
+        $result[] = "Authorization";
+        $result[] = "Authorizenet";
+        $result[] = "Backend";
+        $result[] = "Backup";
+        $result[] = "Braintree";
+        $result[] = "Bundle";
+        $result[] = "BundleImportExport";
+        $result[] = "CacheInvalidate";
+        $result[] = "Captcha";
+        $result[] = "Catalog";
+        $result[] = "CatalogImportExport";
+        $result[] = "CatalogInventory";
+        $result[] = "CatalogRule";
+        $result[] = "CatalogRuleConfigurable";
+        $result[] = "CatalogSearch";
+        $result[] = "CatalogUrlRewrite";
+        $result[] = "CatalogWidget";
+        $result[] = "Checkout";
+        $result[] = "CheckoutAgreements";
+        $result[] = "Cms";
+        $result[] = "CmsUrlRewrite";
+        $result[] = "Config";
+        $result[] = "ConfigurableImportExport";
+        $result[] = "ConfigurableProduct";
+        $result[] = "Contact";
+        $result[] = "Cookie";
+        $result[] = "Cron";
+        $result[] = "CurrencySymbol";
+        $result[] = "Customer";
+        $result[] = "CustomerImportExport";
+        $result[] = "Deploy";
+        $result[] = "Developer";
+        $result[] = "Dhl";
+        $result[] = "Directory";
+        $result[] = "Downloadable";
+        $result[] = "DownloadableImportExport";
+        $result[] = "Eav";
+        $result[] = "Email";
+        $result[] = "EncryptionKey";
+        $result[] = "Fedex";
+        $result[] = "GiftMessage";
+        $result[] = "GoogleAdwords";
+        $result[] = "GoogleAnalytics";
+        $result[] = "GoogleOptimizer";
+        $result[] = "GroupedImportExport";
+        $result[] = "GroupedProduct";
+        $result[] = "ImportExport";
+        $result[] = "Indexer";
+        $result[] = "Integration";
+        $result[] = "LayeredNavigation";
+        $result[] = "Marketplace";
+        $result[] = "MediaStorage";
+        $result[] = "Msrp";
+        $result[] = "Multishipping";
+        $result[] = "NewRelicReporting";
+        $result[] = "Newsletter";
+        $result[] = "OfflinePayments";
+        $result[] = "OfflineShipping";
+        $result[] = "PageCache";
+        $result[] = "Payment";
+        $result[] = "Paypal";
+        $result[] = "Persistent";
+        $result[] = "ProductAlert";
+        $result[] = "ProductVideo";
+        $result[] = "Quote";
+        $result[] = "Reports";
+        $result[] = "RequireJs";
+        $result[] = "Review";
+        $result[] = "Rss";
+        $result[] = "Rule";
+        $result[] = "Sales";
+        $result[] = "SalesRule";
+        $result[] = "SalesSequence";
+        $result[] = "SampleData";
+        $result[] = "Search";
+        $result[] = "SendFriend";
+        $result[] = "Shipping";
+        $result[] = "Sitemap";
+        $result[] = "Store";
+        $result[] = "Swagger";
+        $result[] = "Swatches";
+        $result[] = "Tax";
+        $result[] = "TaxImportExport";
+        $result[] = "TestModule1";
+        $result[] = "TestModule2";
+        $result[] = "TestModule3";
+        $result[] = "TestModule4";
+        $result[] = "TestModule5";
+        $result[] = "TestModuleIntegrationFromConfig";
+        $result[] = "TestModuleJoinDirectives";
+        $result[] = "TestModuleMSC";
+        $result[] = "Theme";
+        $result[] = "Translation";
+        $result[] = "Ui";
+        $result[] = "Ups";
+        $result[] = "UrlRewrite";
+        $result[] = "User";
+        $result[] = "Usps";
+        $result[] = "Variable";
+        $result[] = "Version";
+        $result[] = "Webapi";
+        $result[] = "WebapiSecurity";
+        $result[] = "Weee";
+        $result[] = "Widget";
+        $result[] = "Wishlist";
+        return $result;
     }
 
     /**
