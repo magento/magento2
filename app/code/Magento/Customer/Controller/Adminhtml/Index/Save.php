@@ -41,6 +41,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 CustomerInterface::DEFAULT_SHIPPING,
                 'confirmation',
                 'sendemail_store_id',
+                'extension_attributes',
             ];
 
             $customerData = $this->_extractData(
@@ -106,6 +107,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             if ($frontendInput != 'boolean' && $filteredData[$attributeCode] === false) {
                 unset($filteredData[$attributeCode]);
             }
+        }
+
+        if (empty($filteredData['extension_attributes'])) {
+            unset($filteredData['extension_attributes']);
         }
 
         return $filteredData;
