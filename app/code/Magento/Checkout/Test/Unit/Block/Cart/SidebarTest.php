@@ -158,7 +158,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->urlBuilderMock->expects($this->exactly(4))
             ->method('getUrl')
             ->willReturnMap($valueMap);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getBaseUrl')->willReturn($baseUrl);
         $this->imageHelper->expects($this->once())->method('getFrame')->willReturn(false);
 
@@ -168,13 +168,8 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
                 \Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn(3);
-
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
-        $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
-
-        $storeMock = $this->getMock(\Magento\Store\Model\System\Store::class, ['getWebsiteId'], [], '', false);
+        
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
-        $quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }
