@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Backup\Filesystem\Rollback;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Rollback worker for rolling back via local filesystem
  *
@@ -12,6 +14,11 @@ namespace Magento\Framework\Backup\Filesystem\Rollback;
  */
 class Fs extends AbstractRollback
 {
+    /**
+     * @var \Magento\Framework\Backup\Filesystem\Helper
+     */
+    private $fsHelper;
+
     /**
      * Files rollback implementation via local filesystem
      *
@@ -30,7 +37,7 @@ class Fs extends AbstractRollback
             );
         }
 
-        $fsHelper = new \Magento\Framework\Backup\Filesystem\Helper();
+        $fsHelper = $this->getFsHelper();
 
         $filesInfo = $fsHelper->getInfo(
             $this->_snapshot->getRootDir(),
@@ -67,5 +74,18 @@ class Fs extends AbstractRollback
 
         $fsHelper->rm($this->_snapshot->getRootDir(), $this->_snapshot->getIgnorePaths());
         $archiver->unpack($snapshotPath, $this->_snapshot->getRootDir());
+    }
+
+    /**
+     * @return \Magento\Framework\Backup\Filesystem\Helper
+     * @deprecated
+     */
+    private function getFsHelper()
+    {
+        if (!$this->fsHelper) {
+            $this->fsHelper = ObjectManager::getInstance()->get(\Magento\Framework\Backup\Filesystem\Helper::class);
+        }
+
+        return $this->fsHelper;
     }
 }
