@@ -202,14 +202,13 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $result[] = "Magento_SalesSequence";
         $result[] = "Magento_SampleData";
         $result[] = "Magento_Search";
-
-//        $result[] = "Magento_SendFriend";
+        $result[] = "Magento_SendFriend";   // Magento\SendFriend\Block\Send
         $result[] = "Magento_Shipping";
         $result[] = "Magento_Sitemap";
         $result[] = "Magento_Store";
         $result[] = "Magento_Swagger";
         $result[] = "Magento_Swatches";
-//        $result[] = "Magento_Tax";
+//        $result[] = "Magento_Tax";    // Magento\Tax\Block\Adminhtml\Rule
 //        $result[] = "Magento_TaxImportExport";
         $result[] = "Magento_TestModule1";
         $result[] = "Magento_TestModule2";
