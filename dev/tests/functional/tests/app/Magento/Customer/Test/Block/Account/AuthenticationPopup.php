@@ -18,7 +18,7 @@ class AuthenticationPopup extends Form
      *
      * @var string
      */
-    protected $login = '[name="send"]';
+    private $login = '[name="send"]';
 
     /**
      * Selector for loading mask element.
