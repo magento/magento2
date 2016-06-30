@@ -25,5 +25,6 @@ return [
     'Magento\ProductAlert\Block\Email\Price',
     'Magento\ProductAlert\Block\Email\Stock',
     'Magento\ProductAlert\Block\Product\View',
-    'Magento\ProductAlert\Block\Product\View\Price'
+    'Magento\ProductAlert\Block\Product\View\Price',
+    'Magento\ProductAlert\Block\Product\View\Stock'
 ];
