@@ -45,21 +45,31 @@ class SelectCheckoutMethodStep implements TestStepInterface
     protected $logoutCustomerOnFrontend;
 
     /**
+     * Proceed to checkout from current page without reloading.
+     *
+     * @var ClickProceedToCheckoutStep
+     */
+    private $clickProceedToCheckoutStep;
+
+    /**
      * @constructor
      * @param CheckoutOnepage $checkoutOnepage
      * @param Customer $customer
      * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend
+     * @param ClickProceedToCheckoutStep $clickProceedToCheckoutStep
      * @param string $checkoutMethod
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         Customer $customer,
         LogoutCustomerOnFrontendStep $logoutCustomerOnFrontend,
+        ClickProceedToCheckoutStep $clickProceedToCheckoutStep,
         $checkoutMethod
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->customer = $customer;
         $this->logoutCustomerOnFrontend = $logoutCustomerOnFrontend;
+        $this->clickProceedToCheckoutStep = $clickProceedToCheckoutStep;
         $this->checkoutMethod = $checkoutMethod;
     }
 
@@ -71,7 +81,12 @@ class SelectCheckoutMethodStep implements TestStepInterface
     public function run()
     {
         if ($this->checkoutMethod === 'login') {
-            $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
+            if ($this->checkoutOnepage->getAuthenticationPopupBlock()->isVisible()) {
+                $this->checkoutOnepage->getAuthenticationPopupBlock()->loginCustomer($this->customer);
+                $this->clickProceedToCheckoutStep->run();
+            } else {
+                $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
+            }
         }
     }
 

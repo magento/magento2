@@ -7,6 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="CheckoutOnepage" mca="checkout" module="Magento_Checkout">
+        <block name="authenticationPopupBlock" class="Magento\Customer\Test\Block\Account\AuthenticationPopup" locator=".block-authentication" strategy="css selector" />
         <block name="loginBlock" class="Magento\Checkout\Test\Block\Onepage\Login" locator="[data-role='email-with-possible-login']" strategy="css selector" />
         <block name="shippingBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping" locator="#checkout-step-shipping" strategy="css selector" />
         <block name="shippingMethodBlock" class="Magento\Checkout\Test\Block\Onepage\Shipping\Method" locator="#checkout-step-shipping_method" strategy="css selector" />
