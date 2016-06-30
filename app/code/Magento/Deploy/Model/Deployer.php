@@ -17,6 +17,7 @@ use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\View\Asset\ConfigInterface;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -73,6 +74,9 @@ class Deployer
      * @var AlternativeSourceInterface[]
      */
     private $alternativeSources;
+
+    /** @var ConfigInterface */
+    private $assetConfig;
 
     /**
      * Constructor
@@ -183,23 +187,26 @@ class Deployer
                         $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                         $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
                     }
-                    $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
         }
-        $this->output->writeln('=== Minify templates ===');
-        $this->count = 0;
-        foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
-            $this->htmlMinifier->minify($template);
-            if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $this->output->writeln($template . " minified\n");
-            } else {
-                $this->output->write('.');
+
+        if ($this->getAssetConfig()->isMinifyHtml()) {
+            $this->output->writeln('=== Minify templates ===');
+            $this->count = 0;
+            foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
+                $this->htmlMinifier->minify($template);
+                if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                    $this->output->writeln($template . " minified\n");
+                } else {
+                    $this->output->write('.');
+                }
+                $this->count++;
             }
-            $this->count++;
         }
+
         $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
         $version = (new \DateTime())->getTimestamp();
         $this->output->writeln("New version of deployed files: {$version}");
@@ -267,7 +274,6 @@ class Deployer
         $this->assetPublisher = $this->objectManager->create('Magento\Framework\App\View\Asset\Publisher');
         $this->htmlMinifier = $this->objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
         $this->bundleManager = $this->objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');
-
     }
 
     /**
@@ -370,6 +376,19 @@ class Deployer
             $ancestorThemeFullPath[] = $ancestor->getFullPath();
         }
         return $ancestorThemeFullPath;
+    }
+
+    /**
+     * @return \Magento\Framework\View\Asset\ConfigInterface
+     * @deprecated
+     */
+    private function getAssetConfig()
+    {
+        if (null === $this->assetConfig) {
+            $this->assetConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\View\Asset\ConfigInterface');
+        }
+        return $this->assetConfig;
     }
 
     /**

@@ -26,7 +26,7 @@ class Bundle
      */
     protected $assetsContent = [];
 
-    /** @var  Bundle\Config */
+    /** @var Bundle\ConfigInterface */
     protected $bundleConfig;
 
     /**
@@ -261,6 +261,7 @@ class Bundle
             $assetsParts = reset($parts);
             $context = reset($assetsParts['assets'])->getContext();
             $bundlePath = empty($bundlePath) ? $context->getPath() . Manager::BUNDLE_PATH : $bundlePath;
+            $dir->delete($context->getPath() . DIRECTORY_SEPARATOR . Manager::BUNDLE_JS_DIR);
             $this->fillContent($parts, $context);
         }
 
