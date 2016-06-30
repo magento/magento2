@@ -49,7 +49,7 @@ class SelectCheckoutMethodStep implements TestStepInterface
      *
      * @var ClickProceedToCheckoutStep
      */
-    protected $clickProceedToCheckoutStep;
+    private $clickProceedToCheckoutStep;
 
     /**
      * @constructor
@@ -81,8 +81,8 @@ class SelectCheckoutMethodStep implements TestStepInterface
     public function run()
     {
         if ($this->checkoutMethod === 'login') {
-            if ($this->checkoutOnepage->getLoginPopupBlock()->isVisible()) {
-                $this->checkoutOnepage->getLoginPopupBlock()->loginCustomer($this->customer);
+            if ($this->checkoutOnepage->getAuthenticationPopupBlock()->isVisible()) {
+                $this->checkoutOnepage->getAuthenticationPopupBlock()->loginCustomer($this->customer);
                 $this->clickProceedToCheckoutStep->run();
             } else {
                 $this->checkoutOnepage->getLoginBlock()->loginCustomer($this->customer);
