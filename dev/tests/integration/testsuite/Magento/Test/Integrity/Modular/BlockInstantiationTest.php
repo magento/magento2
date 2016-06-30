@@ -189,9 +189,9 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
 //        $result[] = "Magento_Paypal";
 //        $result[] = "Magento_Persistent";
 
-        $result[] = "Magento_ProductAlert";
-//        $result[] = "Magento_ProductVideo";
+//        $result[] = "Magento_ProductAlert";
 
+//        $result[] = "Magento_ProductVideo";
 //        $result[] = "Magento_Quote";
 //        $result[] = "Magento_Reports";
 //        $result[] = "Magento_RequireJs";
