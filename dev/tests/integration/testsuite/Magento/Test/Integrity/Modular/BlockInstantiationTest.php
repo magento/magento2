@@ -210,14 +210,15 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
         $result[] = "Magento_Swatches";
 //        $result[] = "Magento_Tax";    // Magento\Tax\Block\Adminhtml\Rule
 //        $result[] = "Magento_TaxImportExport";
-        $result[] = "Magento_TestModule1";
-        $result[] = "Magento_TestModule2";
-        $result[] = "Magento_TestModule3";
-        $result[] = "Magento_TestModule4";
-        $result[] = "Magento_TestModule5";
-        $result[] = "Magento_TestModuleIntegrationFromConfig";
-        $result[] = "Magento_TestModuleJoinDirectives";
-        $result[] = "Magento_TestModuleMSC";
+
+//        $result[] = "Magento_TestModule1";
+//        $result[] = "Magento_TestModule2";
+//        $result[] = "Magento_TestModule3";
+//        $result[] = "Magento_TestModule4";
+//        $result[] = "Magento_TestModule5";
+//        $result[] = "Magento_TestModuleIntegrationFromConfig";
+//        $result[] = "Magento_TestModuleJoinDirectives";
+//        $result[] = "Magento_TestModuleMSC";
 
 //        $result[] = "Magento_Theme";
 //        $result[] = "Magento_Translation";
