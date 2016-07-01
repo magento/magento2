@@ -50,6 +50,30 @@ class Deployer
     /** @var bool */
     private $isDryRun;
 
+    /** @var bool */
+    private $isJavaScript;
+
+    /** @var bool */
+    private $isCss;
+
+    /** @var bool */
+    private $isLess;
+
+    /** @var bool */
+    private $isImages;
+
+    /** @var bool */
+    private $isFonts;
+
+    /** @var bool */
+    private $isHtml;
+
+    /** @var bool */
+    private $isMisc;
+
+    /** @var bool */
+    private $isHtmlMinify;
+
     /** @var int */
     private $count;
 
@@ -74,6 +98,27 @@ class Deployer
      */
     private $alternativeSources;
 
+    /** @var array **/
+    private $fileExtensionsJs = ['js', 'map'];
+
+    /** @var array **/
+    private $fileExtensionsCss = ['css'];
+
+    /** @var array **/
+    private $fileExtensionsLess = ['less'];
+
+    /** @var array **/
+    private $fileExtensionsHtml = ['html', 'htm'];
+
+    /** @var array **/
+    private $fileExtensionsImages = ['jpg', 'jpeg', 'gif', 'png', 'ico', 'svg'];
+
+    /** @var array **/
+    private $fileExtensionsFonts = ['eot', 'svg', 'ttf', 'woff', 'woff2'];
+
+    /** @var array **/
+    private $fileExtensionsMisc = ['md', 'txt', 'jbf', 'csv', 'json', 'txt', 'htc', 'swf', 'LICENSE', ''];
+
     /**
      * Constructor
      *
@@ -83,6 +128,14 @@ class Deployer
      * @param JsTranslationConfig $jsTranslationConfig
      * @param AlternativeSourceInterface[] $alternativeSources
      * @param bool $isDryRun
+     * @param bool $isJavaScript
+     * @param bool $isCss
+     * @param bool $isLess
+     * @param bool $isImages
+     * @param bool $isFonts
+     * @param bool $isHtml
+     * @param bool $isMisc
+     * @param bool $isHtmlMinify
      */
     public function __construct(
         Files $filesUtil,
@@ -90,12 +143,28 @@ class Deployer
         Version\StorageInterface $versionStorage,
         JsTranslationConfig $jsTranslationConfig,
         array $alternativeSources,
-        $isDryRun = false
+        $isDryRun = false,
+        $isJavaScript = false,
+        $isCss = false,
+        $isLess = false,
+        $isImages = false,
+        $isFonts = false,
+        $isHtml = false,
+        $isMisc = false,
+        $isHtmlMinify = false
     ) {
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
         $this->isDryRun = $isDryRun;
+        $this->isJavaScript = $isJavaScript;
+        $this->isCss = $isCss;
+        $this->isLess = $isLess;
+        $this->isImages = $isImages;
+        $this->isFonts = $isFonts;
+        $this->isHtml = $isHtml;
+        $this->isMisc = $isMisc;
+        $this->isHtmlMinify = $isHtmlMinify;
         $this->jsTranslationConfig = $jsTranslationConfig;
         $this->parentTheme = [];
 
@@ -105,6 +174,49 @@ class Deployer
             $alternativeSources
         );
         $this->alternativeSources = $alternativeSources;
+
+    }
+
+    /**
+     * Check if skip flag is affecting file by extension
+     *
+     * @param string $filePath
+     * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function checkSkip($filePath)
+    {
+        $path = $filePath;
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+        $check = ($this->isJavaScript
+            || $this->isCss
+            || $this->isLess
+            || $this->isHtml
+            || $this->isImages
+            || $this->isFonts
+            || $this->isMisc);
+
+        if ($check && $filePath != '.') {
+            if ($this->isJavaScript && in_array($ext, $this->fileExtensionsJs)) {
+                return true;
+            } elseif ($this->isCss && in_array($ext, $this->fileExtensionsCss)) {
+                return true;
+            } elseif ($this->isLess && in_array($ext, $this->fileExtensionsLess)) {
+                return true;
+            } elseif ($this->isHtml && in_array($ext, $this->fileExtensionsHtml)) {
+                return true;
+            } elseif ($this->isImages && in_array($ext, $this->fileExtensionsImages)) {
+                return true;
+            } elseif ($this->isFonts && in_array($ext, $this->fileExtensionsFonts)) {
+                return true;
+            } elseif ($this->isMisc && in_array($ext, $this->fileExtensionsMisc)) {
+                return true;
+            }
+
+            return false;
+        }
     }
 
     /**
@@ -112,31 +224,55 @@ class Deployer
      *
      * @param ObjectManagerFactory $omFactory
      * @param array $locales
+     * @param array $areasArg
+     * @param array $localesArg
+     * @param array $themesArg
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $locales)
+    public function deploy(ObjectManagerFactory $omFactory, array $locales,
+            array $areasArg = [], array $localesArg = [], array $themesArg = []
+        )
     {
+
         $this->omFactory = $omFactory;
+
         if ($this->isDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
-        $langList = implode(', ', $locales);
+
+        $areaList = implode(', ', $areasArg);
+        $this->output->writeln("Requested areas: {$areaList}");
+
+        $langList = implode(', ', $localesArg);
         $this->output->writeln("Requested languages: {$langList}");
+
+        $themeList = implode(', ', $themesArg);
+        $this->output->writeln("Requested themes: {$themeList}");
+
+        $locales = null;
+        
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
-        list($areas, $appFiles) = $this->collectAppFiles($locales);
-        foreach ($areas as $area => $themes) {
+        list($areas, $appFiles) = $this->collectAppFiles($localesArg);
+        foreach ($areasArg as $area) {
             $this->emulateApplicationArea($area);
-            foreach ($locales as $locale) {
+            foreach ($localesArg as $locale) {
                 $this->emulateApplicationLocale($locale, $area);
-                foreach ($themes as $themePath) {
+                foreach ($themesArg as $themePath) {
+
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
+
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
-                    $design->setDesignTheme($themePath, $area);
+                    try {
+                        $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+                        $design->setDesignTheme($themePath, $area);
+                    } catch (\LogicException $e) {
+                        continue;
+                    }
+
                     $assetRepo = $this->objectManager->create(
                         'Magento\Framework\View\Asset\Repository',
                         [
@@ -158,8 +294,14 @@ class Deployer
                         ]
                     );
                     $fileManager->createRequireJsConfigAsset();
+
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
+
+                        if ($this->checkSkip($filePath)) {
+                            continue;
+                        }
+
                         if (($fileArea == $area || $fileArea == 'base') &&
                             ($fileTheme == '' || $fileTheme == $themePath ||
                                 in_array(
@@ -174,37 +316,47 @@ class Deployer
                         }
                     }
                     foreach ($libFiles as $filePath) {
+
+                        if ($this->checkSkip($filePath)) {
+                            continue;
+                        }
+
                         $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, null);
+                        
                         if ($compiledFile !== '') {
                             $this->deployFile($compiledFile, $area, $themePath, $locale, null);
                         }
                     }
-                    if ($this->jsTranslationConfig->dictionaryEnabled()) {
-                        $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
-                        $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
+                    if (!$this->isJavaScript) {
+                        if ($this->jsTranslationConfig->dictionaryEnabled()) {
+                            $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
+                            $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
+                        }
+                        $fileManager->clearBundleJsPool();
                     }
-                    $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
             }
         }
-        $this->output->writeln('=== Minify templates ===');
-        $this->count = 0;
-        foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
-            $this->htmlMinifier->minify($template);
-            if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                $this->output->writeln($template . " minified\n");
-            } else {
-                $this->output->write('.');
+        if (!$this->isHtmlMinify) {
+            $this->output->writeln('=== Minify templates ===');
+            $this->count = 0;
+            foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
+                $this->htmlMinifier->minify($template);
+                if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                    $this->output->writeln($template . " minified\n");
+                } else {
+                    $this->output->write('.');
+                }
+                $this->count++;
             }
-            $this->count++;
-        }
-        $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
-        $version = (new \DateTime())->getTimestamp();
-        $this->output->writeln("New version of deployed files: {$version}");
-        if (!$this->isDryRun) {
-            $this->versionStorage->save($version);
+            $this->output->writeln("\nSuccessful: {$this->count} files modified\n---\n");
+            $version = (new \DateTime())->getTimestamp();
+            $this->output->writeln("New version of deployed files: {$version}");
+            if (!$this->isDryRun) {
+                $this->versionStorage->save($version);
+            }
         }
         if ($this->errorCount > 0) {
             // we must have an exit code higher than zero to indicate something was wrong
