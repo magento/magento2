@@ -11,7 +11,6 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Customer\Model\Customer\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
@@ -46,6 +45,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     protected $sessionMock;
 
     /**
+     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileProcessorFactory;
+
+    /**
+     * @var \Magento\Customer\Model\FileProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileProcessor;
+
+    /**
      * Set up
      *
      * @return void
@@ -70,6 +79,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Magento\Framework\Session\SessionManagerInterface')
             ->setMethods(['getCustomerFormData', 'unsCustomerFormData'])
             ->getMockForAbstractClass();
+
+        $this->fileProcessor = $this->getMockBuilder('Magento\Customer\Model\FileProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->fileProcessorFactory = $this->getMockBuilder('Magento\Customer\Model\FileProcessorFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
     }
 
     /**
@@ -93,6 +111,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'customerCollectionFactory' => $this->getCustomerCollectionFactoryMock(),
                 'eavConfig' => $this->getEavConfigMock()
             ]
+        );
+
+        $helper->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
         );
 
         $meta = $dataProvider->getMeta();
@@ -420,6 +444,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerFormData')
             ->willReturn(null);
 
+        $helper->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
+
         $this->assertEquals(
             [
                 '' => [
@@ -550,6 +580,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->sessionMock->expects($this->once())
             ->method('unsCustomerFormData');
 
+        $helper->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
+
         $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
     }
 
@@ -631,22 +667,22 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerFormData')
             ->willReturn([]);
 
-        $fileProcessorMock = $this->getMockBuilder('Magento\Customer\Model\FileProcessor')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fileProcessorMock->expects($this->once())
-            ->method('setEntityType')
-            ->with()
-            ->willReturnSelf();
-        $fileProcessorMock->expects($this->once())
+        $this->fileProcessorFactory->expects($this->any())
+            ->method('create')
+            ->with([
+                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            ])
+            ->willReturn($this->fileProcessor);
+
+        $this->fileProcessor->expects($this->once())
             ->method('isExist')
             ->with($filename)
             ->willReturn(true);
-        $fileProcessorMock->expects($this->once())
+        $this->fileProcessor->expects($this->once())
             ->method('getStat')
             ->with($filename)
             ->willReturn(['size' => 1]);
-        $fileProcessorMock->expects($this->once())
+        $this->fileProcessor->expects($this->once())
             ->method('getViewUrl')
             ->with('/filename.ext1', 'image')
             ->willReturn($viewUrl);
@@ -672,8 +708,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager->setBackwardCompatibleProperty(
             $dataProvider,
-            'fileProcessor',
-            $fileProcessorMock
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
         );
 
         $this->assertEquals($expectedData, $dataProvider->getData());
@@ -765,6 +801,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             $this->sessionMock
         );
 
+        $objectManager->setBackwardCompatibleProperty(
+            $dataProvider,
+            'fileProcessorFactory',
+            $this->fileProcessorFactory
+        );
+
         $this->assertEquals($expectedData, $dataProvider->getData());
     }
 
@@ -814,6 +856,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $typeCustomerMock->expects($this->once())
             ->method('getAttributeCollection')
             ->willReturn([$attributeMock]);
+        $typeCustomerMock->expects($this->once())
+            ->method('getEntityTypeCode')
+            ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
         $typeAddressMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
             ->disableOriginalConstructor()
@@ -849,6 +894,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'file_extensions' => 'ext1, eXt2 ', // Added spaces and upper-cases
             ]);
 
+        $this->fileProcessorFactory->expects($this->any())
+            ->method('create')
+            ->with([
+                'entityTypeCode' => CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            ])
+            ->willReturn($this->fileProcessor);
+
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
             '\Magento\Customer\Model\Customer\DataProvider',
@@ -859,6 +911,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'eavValidationRules' => $this->eavValidationRulesMock,
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
                 'eavConfig' => $this->eavConfigMock,
+                'fileProcessorFactory' => $this->fileProcessorFactory,
             ]
         );
 
@@ -878,7 +931,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                     'maxFileSize' => $maxFileSize,
                                     'allowedExtensions' => $allowedExtension,
                                     'uploaderConfig' => [
-                                        'url' => 'customer/file/upload',
+                                        'url' => 'customer/file/customer_upload',
                                     ],
                                     'sortOrder' => 'sort_order',
                                     'required' => 'is_required',

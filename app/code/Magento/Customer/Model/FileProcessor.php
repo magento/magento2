@@ -44,61 +44,36 @@ class FileProcessor
     private $urlEncoder;
 
     /**
+     * @var string
+     */
+    private $entityTypeCode;
+
+    /**
      * @var array
      */
     private $allowedExtensions = [];
-
-    /**
-     * @var string
-     */
-    private $entityType;
 
     /**
      * @param Filesystem $filesystem
      * @param UploaderFactory $uploaderFactory
      * @param UrlInterface $urlBuilder
      * @param EncoderInterface $urlEncoder
+     * @param string $entityTypeCode
+     * @param array $allowedExtensions
      */
     public function __construct(
         Filesystem $filesystem,
         UploaderFactory $uploaderFactory,
         UrlInterface $urlBuilder,
-        EncoderInterface $urlEncoder
+        EncoderInterface $urlEncoder,
+        $entityTypeCode,
+        array $allowedExtensions = []
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
         $this->urlBuilder = $urlBuilder;
         $this->urlEncoder = $urlEncoder;
-    }
-
-    /**
-     * Set current entity type
-     *
-     * @param string $entityType
-     */
-    public function setEntityType($entityType)
-    {
-        $this->entityType = $entityType;
-    }
-
-    /**
-     * Retrieve allowed extensions
-     *
-     * @return string[]
-     */
-    public function getAllowedExtensions()
-    {
-        return $this->allowedExtensions;
-    }
-
-    /**
-     * Set allowed extensions
-     *
-     * @param string[] $allowedExtensions
-     * @return void
-     */
-    public function setAllowedExtensions(array $allowedExtensions)
-    {
+        $this->entityTypeCode = $entityTypeCode;
         $this->allowedExtensions = $allowedExtensions;
     }
 
@@ -110,7 +85,7 @@ class FileProcessor
      */
     public function getBase64EncodedData($fileName)
     {
-        $filePath = $this->entityType . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
 
         $fileContent = $this->mediaDirectory->readFile($filePath);
 
@@ -126,7 +101,7 @@ class FileProcessor
      */
     public function getStat($fileName)
     {
-        $filePath = $this->entityType . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
 
         $result = $this->mediaDirectory->stat($filePath);
         return $result;
@@ -140,7 +115,7 @@ class FileProcessor
      */
     public function isExist($fileName)
     {
-        $filePath = $this->entityType . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
 
         $result = $this->mediaDirectory->isExist($filePath);
         return $result;
@@ -157,13 +132,13 @@ class FileProcessor
     {
         $viewUrl = '';
 
-        if ($this->entityType == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $filePath = $this->entityType . '/' . ltrim($filePath, '/');
+        if ($this->entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
+            $filePath = $this->entityTypeCode . '/' . ltrim($filePath, '/');
             $viewUrl = $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA])
                 . $this->mediaDirectory->getRelativePath($filePath);
         }
 
-        if ($this->entityType == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
+        if ($this->entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
             $viewUrl = $this->urlBuilder->getUrl(
                 'customer/index/viewfile',
                 [$type => $this->urlEncoder->encode(ltrim($filePath, '/'))]
@@ -187,16 +162,17 @@ class FileProcessor
         $uploader->setFilesDispersion(false);
         $uploader->setFilenamesCaseSensitivity(false);
         $uploader->setAllowRenameFiles(true);
-        $uploader->setAllowedExtensions($this->getAllowedExtensions());
+        $uploader->setAllowedExtensions($this->allowedExtensions);
 
         $path = $this->mediaDirectory->getAbsolutePath(
-            $this->entityType . '/' . self::TMP_DIR
+            $this->entityTypeCode . '/' . self::TMP_DIR
         );
-        $result = $uploader->save($path);
 
+        $result = $uploader->save($path);
         if (!$result) {
             throw new LocalizedException(__('File can not be saved to the destination folder.'));
         }
+
         return $result;
     }
 
@@ -212,7 +188,7 @@ class FileProcessor
         $fileName = ltrim($fileName, '/');
 
         $dispersionPath = Uploader::getDispretionPath($fileName);
-        $destinationPath = $this->entityType . $dispersionPath;
+        $destinationPath = $this->entityTypeCode . $dispersionPath;
 
         if (!$this->mediaDirectory->create($destinationPath)) {
             throw new LocalizedException(
@@ -232,7 +208,7 @@ class FileProcessor
 
         try {
             $this->mediaDirectory->renameFile(
-                $this->entityType . '/' . self::TMP_DIR . '/' . $fileName,
+                $this->entityTypeCode . '/' . self::TMP_DIR . '/' . $fileName,
                 $destinationPath . '/' . $destinationFileName
             );
         } catch (\Exception $e) {
@@ -253,7 +229,7 @@ class FileProcessor
      */
     public function removeUploadedFile($fileName)
     {
-        $filePath = $this->entityType . '/' . ltrim($fileName, '/');
+        $filePath = $this->entityTypeCode . '/' . ltrim($fileName, '/');
 
         $result = $this->mediaDirectory->delete($filePath);
         return $result;

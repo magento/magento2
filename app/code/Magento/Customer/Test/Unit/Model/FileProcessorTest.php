@@ -33,11 +33,6 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
     private $urlEncoder;
 
     /**
-     * @var FileProcessor
-     */
-    private $model;
-
-    /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mediaDirectory;
@@ -65,37 +60,21 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
             ->getMockForAbstractClass();
+    }
 
-        $this->model = new FileProcessor(
+    private function getModel($entityTypeCode, array $allowedExtensions = [])
+    {
+        $model = new FileProcessor(
             $this->filesystem,
             $this->uploaderFactory,
             $this->urlBuilder,
-            $this->urlEncoder
+            $this->urlEncoder,
+            $entityTypeCode,
+            $allowedExtensions
         );
+        return $model;
     }
 
-    public function testGetAllowedExtensions()
-    {
-        $result = $this->model->getAllowedExtensions();
-
-        $this->assertTrue(is_array($result));
-        $this->assertEmpty($result);
-    }
-
-    public function testSetAllowedExtensions()
-    {
-        $allowedExtensions = [
-            'ext1',
-            'ext2',
-        ];
-
-        $this->model->setAllowedExtensions($allowedExtensions);
-
-        $result = $this->model->getAllowedExtensions();
-
-        $this->assertTrue(is_array($result));
-        $this->assertEquals($allowedExtensions, $result);
-    }
 
     public function testGetStat()
     {
@@ -106,8 +85,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . $fileName)
             ->willReturn(['size' => 1]);
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $result = $this->model->getStat($fileName);
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $result = $model->getStat($fileName);
 
         $this->assertTrue(is_array($result));
         $this->assertArrayHasKey('size', $result);
@@ -123,8 +102,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . $fileName)
             ->willReturn(true);
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->assertTrue($this->model->isExist($fileName));
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $this->assertTrue($model->isExist($fileName));
     }
 
     public function testGetViewUrlCustomer()
@@ -144,14 +123,13 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with('customer/index/viewfile', ['image' => $encodedFilePath])
             ->willReturn($fileUrl);
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->assertEquals($fileUrl, $this->model->getViewUrl($filePath, 'image'));
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $this->assertEquals($fileUrl, $model->getViewUrl($filePath, 'image'));
     }
 
     public function testGetViewUrlCustomerAddress()
     {
         $filePath = 'filename.ext1';
-        $encodedFilePath = 'encodedfilenameext1';
 
         $baseUrl = 'baseUrl';
         $relativeUrl = 'relativeUrl';
@@ -166,8 +144,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS . '/' . $filePath)
             ->willReturn($relativeUrl);
 
-        $this->model->setEntityType(AddressMetadataInterface::ENTITY_TYPE_ADDRESS);
-        $this->assertEquals($baseUrl . $relativeUrl, $this->model->getViewUrl($filePath, 'image'));
+        $model = $this->getModel(AddressMetadataInterface::ENTITY_TYPE_ADDRESS);
+        $this->assertEquals($baseUrl . $relativeUrl, $model->getViewUrl($filePath, 'image'));
     }
 
     public function testRemoveUploadedFile()
@@ -179,8 +157,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . $fileName)
             ->willReturn(true);
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->assertTrue($this->model->removeUploadedFile($fileName));
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $this->assertTrue($model->removeUploadedFile($fileName));
     }
 
     public function testSaveTemporaryFile()
@@ -233,9 +211,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR)
             ->willReturn($absolutePath);
 
-        $this->model->setAllowedExtensions($allowedExtensions);
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $result = $this->model->saveTemporaryFile('customer[' . $attributeCode . ']');
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $allowedExtensions);
+        $result = $model->saveTemporaryFile('customer[' . $attributeCode . ']');
 
         $this->assertEquals($expectedResult, $result);
     }
@@ -289,9 +266,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR)
             ->willReturn($absolutePath);
 
-        $this->model->setAllowedExtensions($allowedExtensions);
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->model->saveTemporaryFile('customer[' . $attributeCode . ']');
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $allowedExtensions);
+        $model->saveTemporaryFile('customer[' . $attributeCode . ']');
     }
 
     /**
@@ -309,8 +285,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($destinationPath)
             ->willReturn(false);
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->model->moveTemporaryFile($filePath);
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $model->moveTemporaryFile($filePath);
     }
 
     /**
@@ -332,8 +308,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($destinationPath)
             ->willReturn(false);
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->model->moveTemporaryFile($filePath);
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $model->moveTemporaryFile($filePath);
     }
 
     public function testMoveTemporaryFile()
@@ -363,8 +339,8 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($path, $newPath)
             ->willReturn(true);
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->assertEquals('/f/i' . $filePath, $this->model->moveTemporaryFile($filePath));
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $this->assertEquals('/f/i' . $filePath, $model->moveTemporaryFile($filePath));
     }
 
     /**
@@ -398,7 +374,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($path, $newPath)
             ->willThrowException(new \Exception('Exception.'));
 
-        $this->model->setEntityType(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
-        $this->model->moveTemporaryFile($filePath);
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $model->moveTemporaryFile($filePath);
     }
 }
