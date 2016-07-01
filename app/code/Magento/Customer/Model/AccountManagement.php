@@ -920,6 +920,7 @@ class AccountManagement implements AccountManagementInterface
         $transport = $this->transportBuilder->setTemplateIdentifier($templateId)
             ->setTemplateOptions(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->setTemplateVars($templateParams)
+            ->setScopeId($storeId)
             ->setFrom($this->scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId))
             ->addTo($customer->getEmail(), $this->customerViewHelper->getCustomerName($customer))
             ->getTransport();
