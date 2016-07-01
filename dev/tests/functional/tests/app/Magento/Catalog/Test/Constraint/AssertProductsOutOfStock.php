@@ -11,35 +11,27 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertProductsOutOfStock
+ * Assert that all products have Out of Stock status.
  */
 class AssertProductsOutOfStock extends AbstractConstraint
 {
     /**
-     * Text value for checking Stock Availability
-     */
-    const STOCK_AVAILABILITY = 'out of stock';
-
-    /**
-     * Assert that Out of Stock status is displayed on product page
+     * Assert that all products have Out of Stock status.
      *
      * @param CatalogProductView $catalogProductView
      * @param BrowserInterface $browser
+     * @param AssertProductOutOfStock $assertProductOutOfStock
      * @param array $products
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         BrowserInterface $browser,
+        AssertProductOutOfStock $assertProductOutOfStock,
         array $products
     ) {
         foreach ($products as $product) {
-            $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-            \PHPUnit_Framework_Assert::assertEquals(
-                self::STOCK_AVAILABILITY,
-                $catalogProductView->getViewBlock()->stockAvailability(),
-                'Control \'' . self::STOCK_AVAILABILITY . '\' is not visible.'
-            );
+            $assertProductOutOfStock->processAssert($catalogProductView, $browser, $product);
         }
     }
 
@@ -50,6 +42,6 @@ class AssertProductsOutOfStock extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Out of stock control is visible.';
+        return 'All products have Out of Stock status.';
     }
 }
