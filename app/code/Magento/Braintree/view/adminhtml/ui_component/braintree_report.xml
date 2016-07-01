@@ -133,7 +133,7 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterDate name="createdAt" class="Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange">
+            <filterRange name="createdAt" class="Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="provider" xsi:type="string">${ $.parentName }</item>
@@ -148,7 +148,7 @@
                         <item name="label" xsi:type="string" translate="true">Created At</item>
                     </item>
                 </argument>
-            </filterDate>
+            </filterRange>
         </filters>
     </container>
     <columns name="braintree_report_columns">
