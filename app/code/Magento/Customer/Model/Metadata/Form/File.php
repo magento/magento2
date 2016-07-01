@@ -8,6 +8,7 @@
 namespace Magento\Customer\Model\Metadata\Form;
 
 use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\UploaderFactory;
@@ -53,6 +54,11 @@ class File extends AbstractData
      * @var FileProcessor
      */
     protected $fileProcessor;
+
+    /**
+     * @var FileProcessorFactory
+     */
+    protected $fileProcessorFactory;
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -210,8 +216,6 @@ class File extends AbstractData
             return true;
         }
 
-        $this->getFileProcessor()->setEntityType($this->_entityTypeCode);
-
         // This case is required for file uploader UI component
         $temporaryFile = FileProcessor::TMP_DIR . '/' . pathinfo($filename)['basename'];
         if ($this->getFileProcessor()->isExist($temporaryFile)) {
@@ -272,8 +276,6 @@ class File extends AbstractData
         if ($this->getIsAjaxRequest()) {
             return $this;
         }
-
-        $this->getFileProcessor()->setEntityType($this->_entityTypeCode);
 
         // Remove outdated file (in the case of file uploader UI component)
         if (empty($value) && !empty($this->_value)) {
@@ -384,8 +386,26 @@ class File extends AbstractData
     protected function getFileProcessor()
     {
         if ($this->fileProcessor === null) {
-            $this->fileProcessor = ObjectManager::getInstance()->get('Magento\Customer\Model\FileProcessor');
+            $this->fileProcessor = $this->getFileProcessorFactory()->create([
+                'entityTypeCode' => $this->_entityTypeCode,
+            ]);
         }
         return $this->fileProcessor;
+    }
+
+    /**
+     * Get FileProcessorFactory instance
+     *
+     * @return FileProcessorFactory
+     *
+     * @deprecated
+     */
+    protected function getFileProcessorFactory()
+    {
+        if ($this->fileProcessorFactory === null) {
+            $this->fileProcessorFactory = ObjectManager::getInstance()
+                ->get('Magento\Customer\Model\FileProcessorFactory');
+        }
+        return $this->fileProcessorFactory;
     }
 }

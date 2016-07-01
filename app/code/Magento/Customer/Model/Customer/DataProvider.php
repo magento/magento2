@@ -5,8 +5,11 @@
  */
 namespace Magento\Customer\Model\Customer;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\FileProcessor;
+use Magento\Customer\Model\FileProcessorFactory;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -14,7 +17,6 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
@@ -90,9 +92,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $session;
 
     /**
-     * @var FileProcessor
+     * @var FileProcessorFactory
      */
-    private $fileProcessor;
+    private $fileProcessorFactory;
 
     /**
      * File types allowed for file_uploader UI component
@@ -112,7 +114,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param CustomerCollectionFactory $customerCollectionFactory
      * @param Config $eavConfig
      * @param FilterPool $filterPool
-     * @param FileProcessor $fileProcessor
+     * @param FileProcessorFactory $fileProcessorFactory
      * @param array $meta
      * @param array $data
      */
@@ -124,7 +126,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         CustomerCollectionFactory $customerCollectionFactory,
         Config $eavConfig,
         FilterPool $filterPool,
-        FileProcessor $fileProcessor = null,
+        FileProcessorFactory $fileProcessorFactory = null,
         array $meta = [],
         array $data = []
     ) {
@@ -134,7 +136,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->collection->addAttributeToSelect('*');
         $this->eavConfig = $eavConfig;
         $this->filterPool = $filterPool;
-        $this->fileProcessor = $fileProcessor ?: $this->getFileProcessor();
+        $this->fileProcessorFactory = $fileProcessorFactory ?: $this->getFileProcessorFactory();
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $this->eavConfig->getEntityType('customer')
         );
@@ -225,26 +227,32 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Retrieve array of values required by file uploader UI component
      *
-     * @param string $entityType
+     * @param Type $entityType
      * @param Attribute $attribute
      * @param array $customerData
      * @return array
      */
-    private function getFileUploaderData($entityType, Attribute $attribute, array $customerData)
-    {
+    private function getFileUploaderData(
+        Type $entityType,
+        Attribute $attribute,
+        array $customerData
+    ) {
         $attributeCode = $attribute->getAttributeCode();
 
         $file = isset($customerData[$attributeCode])
             ? $customerData[$attributeCode]
             : '';
 
-        $this->getFileProcessor()->setEntityType($entityType->getEntityTypeCode());
+        /** @var FileProcessor $fileProcessor */
+        $fileProcessor = $this->getFileProcessorFactory()->create([
+            'entityTypeCode' => $entityType->getEntityTypeCode(),
+        ]);
 
         if (!empty($file)
-            && $this->getFileProcessor()->isExist($file)
+            && $fileProcessor->isExist($file)
         ) {
-            $stat = $this->getFileProcessor()->getStat($file);
-            $viewUrl = $this->getFileProcessor()->getViewUrl($file, $attribute->getFrontendInput());
+            $stat = $fileProcessor->getStat($file);
+            $viewUrl = $fileProcessor->getViewUrl($file, $attribute->getFrontendInput());
         }
 
         $fileName = $file;
@@ -302,7 +310,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
             $meta[$code]['arguments']['data']['config']['componentType'] = Field::NAME;
 
-            $this->overrideFileUploaderMetadata($attribute, $meta[$code]['arguments']['data']['config']);
+            $this->overrideFileUploaderMetadata($entityType, $attribute, $meta[$code]['arguments']['data']['config']);
         }
         return $meta;
     }
@@ -312,12 +320,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * Overrides metadata for attributes with frontend_input equal to 'image' or 'file'.
      *
+     * @param Type $entityType
      * @param AbstractAttribute $attribute
      * @param array $config
-     * @return void
      */
-    private function overrideFileUploaderMetadata(AbstractAttribute $attribute, array &$config)
-    {
+    private function overrideFileUploaderMetadata(
+        Type $entityType,
+        AbstractAttribute $attribute,
+        array &$config
+    ) {
         if (in_array($attribute->getFrontendInput(), $this->fileUploaderTypes)) {
             $maxFileSize = self::MAX_FILE_SIZE;
 
@@ -334,21 +345,58 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             $allowedExtensions = implode(' ', $allowedExtensions);
 
+            $entityTypeCode = $entityType->getEntityTypeCode();
+            $url = $this->getFileUploadUrl($entityTypeCode);
+
             $config = [
                 'formElement' => 'fileUploader',
                 'componentType' => 'fileUploader',
                 'maxFileSize' => $maxFileSize,
                 'allowedExtensions' => $allowedExtensions,
                 'uploaderConfig' => [
-                    'url' => 'customer/file/upload',
+                    'url' => $url,
                 ],
-                'label' => $config['label'],
-                'sortOrder' => $config['sortOrder'],
-                'required' => $config['required'],
-                'visible' => $config['visible'],
-                'validation' => $config['validation'],
+                'label' => $this->getMetadataValue($config, 'label'),
+                'sortOrder' => $this->getMetadataValue($config, 'sortOrder'),
+                'required' => $this->getMetadataValue($config, 'required'),
+                'visible' => $this->getMetadataValue($config, 'visible'),
+                'validation' => $this->getMetadataValue($config, 'validation'),
             ];
         }
+    }
+
+    /**
+     * Retrieve metadata value
+     *
+     * @param array $config
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    private function getMetadataValue($config, $name, $default = null)
+    {
+        $value = isset($config[$name]) ? $config[$name] : $default;
+        return $value;
+    }
+
+    /**
+     * Retrieve URL to file upload
+     *
+     * @param string $entityTypeCode
+     * @return string
+     */
+    private function getFileUploadUrl($entityTypeCode)
+    {
+        $url = '';
+
+        if ($entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
+            $url = 'customer/file/customer_upload';
+        }
+        if ($entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
+            $url = 'customer/file/address_upload';
+        }
+
+        return $url;
     }
 
     /**
@@ -396,17 +444,18 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Get FileProcessor instance
+     * Get FileProcessorFactory instance
      *
-     * @return FileProcessor
+     * @return FileProcessorFactory
      *
      * @deprecated
      */
-    private function getFileProcessor()
+    private function getFileProcessorFactory()
     {
-        if ($this->fileProcessor === null) {
-            $this->fileProcessor = ObjectManager::getInstance()->get('Magento\Customer\Model\FileProcessor');
+        if ($this->fileProcessorFactory === null) {
+            $this->fileProcessorFactory = ObjectManager::getInstance()
+                ->get('Magento\Customer\Model\FileProcessorFactory');
         }
-        return $this->fileProcessor;
+        return $this->fileProcessorFactory;
     }
 }
