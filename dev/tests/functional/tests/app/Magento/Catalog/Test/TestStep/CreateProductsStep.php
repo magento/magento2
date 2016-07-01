@@ -76,6 +76,6 @@ class CreateProductsStep implements TestStepInterface
             }
         }
 
-        return ['products' => $products];
+        return ['products' => $products, 'product' => $products[0]];
     }
 }
