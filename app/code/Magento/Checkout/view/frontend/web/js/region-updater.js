@@ -122,8 +122,13 @@ define([
 
                 this.options.form = $(this.options.form);
 
-                this.options.form && this.options.form.data('validation') && this.options.form.validation('clearError',
+                this.options.form && this.options.form.data('validator') && this.options.form.validation('clearError',
                     this.options.regionListId, this.options.regionInputId, this.options.postcodeId);
+
+                // Clean up errors on region & zip fix
+                $(this.options.regionInputId).removeClass('mage-error').parent().find('[generated]').remove();
+                $(this.options.regionListId).removeClass('mage-error').parent().find('[generated]').remove();
+                $(this.options.postcodeId).removeClass('mage-error').parent().find('[generated]').remove();
             }
         },
         /**
@@ -182,11 +187,12 @@ define([
                     if (!this.options.optionalRegionAllowed) {
                         regionInput.attr('disabled', 'disabled');
                     }
+                    requiredLabel.removeClass('required');
+                    regionInput.removeClass('required-entry')
                 }
 
                 regionList.removeClass('required-entry').hide();
                 regionInput.show();
-                requiredLabel.removeClass('required');
                 label.attr('for', regionInput.attr('id'));
             }
 
