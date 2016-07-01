@@ -472,18 +472,22 @@ class Socket implements \Magento\Framework\HTTP\ClientInterface
         $isPost = $method == "POST";
 
         $appendHeaders = [];
-        $paramsStr = false;
+        $body = false;
         if ($isPost && count($params)) {
-            $paramsStr = http_build_query($params);
-            $appendHeaders['Content-type'] = 'application/x-www-form-urlencoded';
-            $appendHeaders['Content-length'] = strlen($paramsStr);
+            $isQuery = is_object($params) || is_array($params);
+            $body = $isQuery ? http_build_query($params) : $params;
+
+            if ($isQuery) {
+                $appendHeaders['Content-type'] = 'application/x-www-form-urlencoded';
+            }
+            $appendHeaders['Content-length'] = strlen($body);
         }
 
         $out = "{$method} {$uri} HTTP/1.1{$crlf}";
         $out .= $this->headersToString($appendHeaders);
         $out .= $crlf;
-        if ($paramsStr) {
-            $out .= $paramsStr . $crlf;
+        if ($body) {
+            $out .= $body . $crlf;
         }
 
         fwrite($this->_sock, $out);

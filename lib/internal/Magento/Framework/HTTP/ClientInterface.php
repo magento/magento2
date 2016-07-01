@@ -99,7 +99,7 @@ interface ClientInterface
      * Make POST request
      *
      * @param string $uri full uri
-     * @param array $params POST fields array
+     * @param array|string $params POST fields array, or POST body
      * @return void
      */
     public function post($uri, $params);
