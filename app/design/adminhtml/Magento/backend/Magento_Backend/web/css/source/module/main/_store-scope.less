@@ -7,7 +7,7 @@
     &.admin__fieldset {
         padding: 0;
 
-        .admin__field {
+        > .admin__field {
             margin-left: -@temp_gutter;
         }
     }
@@ -20,6 +20,16 @@
 
         .admin__field-label {
             text-align: left;
+        }
+    }
+
+    [class*='field-website_label'] {
+        .admin__field-label {
+            text-align: right;
+        }
+
+        .admin__field-tooltip {
+            margin: -.2rem 0 0 -@indent__m;
         }
     }
 }

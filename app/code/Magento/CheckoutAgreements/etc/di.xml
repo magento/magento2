@@ -18,4 +18,5 @@
     <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
         <plugin name="validate-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation"/>
     </type>
+    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\CheckoutAgreements\Model\AgreementsValidator" />
 </config>

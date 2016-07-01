@@ -60,7 +60,7 @@
             <data name="cacheTags" xsi:type="array">
                 <item name="0" xsi:type="string">FPC</item>
             </data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertCacheIsRefreshableAndInvalidated" />
+            <constraint name="Magento\PageCache\Test\Constraint\AssertCacheIsRefreshableAndInvalidated" />
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAdvancedSearchProductByAttribute" />
         </variation>
     </testCase>

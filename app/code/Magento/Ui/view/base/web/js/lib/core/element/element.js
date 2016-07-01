@@ -503,10 +503,11 @@ define([
 
         /**
          * Destroys current instance along with all of its' children.
+         * @param {Boolean} skipUpdate - skip collection update when element to be destroyed.
          */
-        destroy: function () {
+        destroy: function (skipUpdate) {
             this._dropHandlers()
-                ._clearRefs();
+                ._clearRefs(skipUpdate);
         },
 
         /**
@@ -531,14 +532,15 @@ define([
          * Removes all references to current instance and
          * calls 'destroy' method on all of its' children.
          * @private
+         * @param {Boolean} skipUpdate - skip collection update when element to be destroyed.
          *
          * @returns {Element} Chainable.
          */
-        _clearRefs: function () {
+        _clearRefs: function (skipUpdate) {
             registry.remove(this.name);
 
             this.containers.forEach(function (parent) {
-                parent.removeChild(this);
+                parent.removeChild(this, skipUpdate);
             }, this);
 
             return this;

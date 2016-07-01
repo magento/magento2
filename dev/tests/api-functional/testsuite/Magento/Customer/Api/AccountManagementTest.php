@@ -14,6 +14,10 @@ use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Security\Model\Config;
+use Magento\Newsletter\Model\Plugin\CustomerPlugin;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Customer\Model\Data\Customer as CustomerData;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -62,6 +66,9 @@ class AccountManagementTest extends WebapiAbstract
      */
     private $currentCustomerId;
 
+    /** @var  Subscriber */
+    private $subscriber;
+
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
      */
@@ -102,6 +109,7 @@ class AccountManagementTest extends WebapiAbstract
         $this->config = Bootstrap::getObjectManager()->create(
             'Magento\Config\Model\Config'
         );
+        $this->initSubscriber();
 
         if ($this->config->getConfigDataValue(
             Config::XML_PATH_FRONTED_AREA .
@@ -147,6 +155,13 @@ class AccountManagementTest extends WebapiAbstract
         );
         $this->config->save();
         unset($this->accountManagement);
+        unset($this->subscriber);
+    }
+
+    private function initSubscriber() {
+        $this->subscriber = Bootstrap::getObjectManager()->create(
+            'Magento\Newsletter\Model\Subscriber'
+        );
     }
 
     public function testCreateCustomer()
@@ -181,12 +196,7 @@ class AccountManagementTest extends WebapiAbstract
         } catch (\Exception $e) {
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
                 $expectedException = new InputException();
-                $expectedException->addError(
-                    __(
-                        InputException::INVALID_FIELD_VALUE,
-                        ['fieldName' => 'email', 'value' => $invalidEmail]
-                    )
-                );
+                $expectedException->addError(__('"Email" is not a valid email address.'));
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
@@ -198,11 +208,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => InputException::INVALID_FIELD_VALUE,
-                    'parameters' => [
-                        'fieldName' => 'email',
-                        'value' => $invalidEmail,
-                    ],
+                    'message' => '"Email" is not a valid email address.',
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }
@@ -360,16 +366,16 @@ class AccountManagementTest extends WebapiAbstract
             $this->assertEquals(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST, $e->getCode());
             $exceptionData = $this->processRestExceptionResult($e);
             $expectedExceptionData = [
-                'message' => InputException::DEFAULT_MESSAGE,
+                'message' => 'One or more input exceptions have occurred.',
                 'errors' => [
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'email',
                         ],
                     ],
                     [
-                        'message' => InputException::REQUIRED_FIELD,
+                        'message' => '%fieldName is a required field.',
                         'parameters' => [
                             'fieldName' => 'template',
                         ]
@@ -438,7 +444,7 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -447,7 +453,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
@@ -531,7 +537,7 @@ class AccountManagementTest extends WebapiAbstract
             if (TESTS_WEB_API_ADAPTER == self::ADAPTER_REST) {
                 $errorObj = $this->processRestExceptionResult($e);
                 $this->assertEquals(
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     $errorObj['message']
                 );
                 $this->assertEquals($expectedErrorParameters, $errorObj['parameters']);
@@ -540,7 +546,7 @@ class AccountManagementTest extends WebapiAbstract
                 $this->assertInstanceOf('SoapFault', $e);
                 $this->checkSoapFault(
                     $e,
-                    NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
+                    'No such entity with %fieldName = %fieldValue, %field2Name = %field2Value',
                     'env:Sender',
                     $expectedErrorParameters
                 );
@@ -571,8 +577,9 @@ class AccountManagementTest extends WebapiAbstract
         $requestData = ['customer' => $customerData];
         $validationResponse = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertFalse($validationResponse['valid']);
-        $this->assertEquals('Please enter a first name.', $validationResponse['messages'][0]);
-        $this->assertEquals('Please enter a last name.', $validationResponse['messages'][1]);
+
+        $this->assertEquals('The value of attribute "firstname" must be set', $validationResponse['messages'][0]);
+        $this->assertEquals('The value of attribute "lastname" must be set', $validationResponse['messages'][1]);
     }
 
     public function testIsReadonly()
@@ -785,5 +792,46 @@ class AccountManagementTest extends WebapiAbstract
             'region' => ['region' => 'Alabama', 'region_id' => 1, 'region_code' => 'AL'],
             'region_id' => 1,
         ];
+    }
+
+    public function testCreateCustomerWithSubscription()
+    {
+        $customerData = $this->customerHelper->createSampleCustomer(
+            ["extension_attributes" => ["is_subscribed" => true]]
+        );
+
+        $this->assertNotNull($customerData['id']);
+
+        $this->subscriber->loadByCustomerId($customerData['id']);
+
+        $this->assertNotNull($this->subscriber->getId());
+        $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
+    }
+
+    public function testUnsubscribeCustomer()
+    {
+        //Creating customer and subscribe
+        $customerData = $this->customerHelper->createSampleCustomer(
+            ["extension_attributes" => ["is_subscribed" => true]]
+        );
+        $this->assertNotNull($customerData['id']);
+
+        $this->subscriber->loadByCustomerId($customerData['id']);
+        $subscriptionId = $this->subscriber->getId();
+
+        $this->assertNotNull($subscriptionId);
+        $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
+        //Manage customer in order to unsubscribe
+        $this->customerHelper->updateSampleCustomer(
+            array_merge(
+                $customerData,
+                ["extension_attributes" => ["is_subscribed" => false]]
+            ),
+            $customerData["id"]
+        );
+        $this->initSubscriber();
+
+        $this->subscriber->loadByCustomerId($customerData['id']);
+        $this->assertEquals(Subscriber::STATUS_UNSUBSCRIBED, $this->subscriber->getStatus());
     }
 }

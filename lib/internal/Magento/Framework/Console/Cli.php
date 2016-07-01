@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Console;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Composer\ComposerJsonFinder;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -14,6 +16,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Console\CompilerPreparation;
+use \Magento\Framework\App\ProductMetadata;
 
 /**
  * Magento 2 CLI Application. This is the hood for all command line tools supported by Magento
@@ -29,8 +32,12 @@ class Cli extends SymfonyApplication
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
     /**
-     * @var \Zend\ServiceManager\ServiceManager
+     * Cli exit codes
      */
+    const RETURN_SUCCESS = 0;
+    const RETURN_FAILURE = 1;
+
+    /** @var \Zend\ServiceManager\ServiceManager */
     private $serviceManager;
 
     /**
@@ -39,27 +46,6 @@ class Cli extends SymfonyApplication
      * @var \Exception
      */
     private $initException;
-
-    /**
-     * Process an error happened during initialization of commands, if any
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     * @throws \Exception
-     */
-    public function doRun(InputInterface $input, OutputInterface $output)
-    {
-        $exitCode = parent::doRun($input, $output);
-        if ($this->initException) {
-            $output->writeln(
-                "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
-                . "By default, they are: var/cache, var/di, var/generation, and var/page_cache.</error>"
-            );
-            throw $this->initException;
-        }
-        return $exitCode;
-    }
 
     /**
      * @param string $name  application name
@@ -87,7 +73,35 @@ class Cli extends SymfonyApplication
             $compilerPreparation = new CompilerPreparation($this->serviceManager, new ArgvInput(), new File());
             $compilerPreparation->handleCompilerEnvironment();
         }
+
+        if ($version == 'UNKNOWN') {
+            $directoryList      = new DirectoryList(BP);
+            $composerJsonFinder = new ComposerJsonFinder($directoryList);
+            $productMetadata    = new ProductMetadata($composerJsonFinder);
+            $version = $productMetadata->getVersion();
+        }
         parent::__construct($name, $version);
+    }
+
+    /**
+     * Process an error happened during initialization of commands, if any
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws \Exception
+     */
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $exitCode = parent::doRun($input, $output);
+        if ($this->initException) {
+            $output->writeln(
+                "<error>We're sorry, an error occurred. Try clearing the cache and code generation directories. "
+                . "By default, they are: var/cache, var/di, var/generation, and var/page_cache.</error>"
+            );
+            throw $this->initException;
+        }
+        return $exitCode;
     }
 
     /**
@@ -122,8 +136,8 @@ class Cli extends SymfonyApplication
             }
 
             if ($objectManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
-                /** @var \Magento\Framework\Console\CommandList $commandList */
-                $commandList = $objectManager->create('Magento\Framework\Console\CommandList');
+                /** @var \Magento\Framework\Console\CommandListInterface */
+                $commandList = $objectManager->create(\Magento\Framework\Console\CommandListInterface::class);
                 $commands = array_merge($commands, $commandList->getCommands());
             }
 

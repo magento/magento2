@@ -8,6 +8,7 @@
 
 namespace Magento\Framework\Mview;
 
+use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 
 /**
@@ -228,11 +229,8 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
                     $subscriptionInstance->remove();
                 }
 
-                // Drop changelog table
-                $this->getChangelog()->drop();
-
                 // Update view state
-                $this->getState()->setVersionId(null)->setMode(View\StateInterface::MODE_DISABLED)->save();
+                $this->getState()->setMode(View\StateInterface::MODE_DISABLED)->save();
             } catch (\Exception $e) {
                 throw $e;
             }
@@ -249,10 +247,12 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
      */
     public function update()
     {
-        if ($this->getState()->getMode() == View\StateInterface::MODE_ENABLED &&
-            $this->getState()->getStatus() == View\StateInterface::STATUS_IDLE
-        ) {
-            $currentVersionId = $this->getChangelog()->getVersion();
+        if ($this->getState()->getStatus() == View\StateInterface::STATUS_IDLE) {
+            try {
+                $currentVersionId = $this->getChangelog()->getVersion();
+            } catch (ChangelogTableNotExistsException $e) {
+                return;
+            }
             $lastVersionId = $this->getState()->getVersionId();
             $ids = $this->getChangelog()->getList($lastVersionId, $currentVersionId);
             if ($ids) {
@@ -261,13 +261,15 @@ class View extends \Magento\Framework\DataObject implements ViewInterface
                 try {
                     $action->execute($ids);
                     $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() ==
-                        View\StateInterface::STATUS_SUSPENDED ? View\StateInterface::STATUS_SUSPENDED : View\StateInterface::STATUS_IDLE;
+                    $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
+                        ? View\StateInterface::STATUS_SUSPENDED
+                        : View\StateInterface::STATUS_IDLE;
                     $this->getState()->setVersionId($currentVersionId)->setStatus($statusToRestore)->save();
                 } catch (\Exception $exception) {
                     $this->getState()->loadByView($this->getId());
-                    $statusToRestore = $this->getState()->getStatus() ==
-                        View\StateInterface::STATUS_SUSPENDED ? View\StateInterface::STATUS_SUSPENDED : View\StateInterface::STATUS_IDLE;
+                    $statusToRestore = $this->getState()->getStatus() == View\StateInterface::STATUS_SUSPENDED
+                        ? View\StateInterface::STATUS_SUSPENDED
+                        : View\StateInterface::STATUS_IDLE;
                     $this->getState()->setStatus($statusToRestore)->save();
                     throw $exception;
                 }

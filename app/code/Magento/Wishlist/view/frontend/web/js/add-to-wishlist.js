@@ -23,6 +23,7 @@ define([
         },
         _bind: function() {
             var options = this.options,
+                dataUpdateFunc = '_updateWishlistData',
                 changeCustomOption = 'change ' + options.customOptionsInfo,
                 changeQty = 'change ' + options.qtyInfo,
                 events = {};
@@ -35,12 +36,14 @@ define([
                 options.productType = [];
             }
 
-            events[changeCustomOption] = '_updateWishlistData';
-            events[changeQty] = '_updateWishlistData';
-            options.productType.forEach(function (type) {
-                events['change ' + options[type + 'Info']] = '_updateWishlistData';
-            });
+            events[changeCustomOption] = dataUpdateFunc;
+            events[changeQty] = dataUpdateFunc;
 
+            for (var key in options.productType) {
+                if (options.productType.hasOwnProperty(key) && options.productType[key] + 'Info' in options) {
+                    events['change ' + options[options.productType[key] + 'Info']] = dataUpdateFunc;
+                }
+            }
             this._on(events);
         },
         _updateWishlistData: function(event) {
