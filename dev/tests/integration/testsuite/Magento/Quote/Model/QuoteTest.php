@@ -97,10 +97,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         $quote->updateCustomerData($customerDataUpdated);
         $customer = $quote->getCustomer();
         $expected = $this->changeEmailInCustomerData('test@example.com', $expected);
-        ksort($expected);
         $actual = $this->convertToArray($customer);
-        ksort($actual);
-        $this->assertEquals($expected, $actual);
+        foreach ($expected as $item) {
+            $this->assertContains($item, $actual);
+        }
         $this->assertEquals('test@example.com', $quote->getCustomerEmail());
     }
 

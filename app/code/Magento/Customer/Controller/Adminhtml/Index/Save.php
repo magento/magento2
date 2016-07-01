@@ -34,6 +34,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 CustomerInterface::DEFAULT_SHIPPING,
                 'confirmation',
                 'sendemail_store_id',
+                'extension_attributes',
             ];
 
             $customerData = $this->_extractData(
@@ -90,6 +91,10 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             ) {
                 unset($formData[$attributeCode]);
             }
+        }
+
+        if (empty($formData['extension_attributes'])) {
+            unset($formData['extension_attributes']);
         }
 
         $result = $metadataForm->compactData($formData);
