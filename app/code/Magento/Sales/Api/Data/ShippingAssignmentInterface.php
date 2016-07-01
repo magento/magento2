@@ -9,6 +9,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Interface ShippingAssignmentInterface
+ * @api
  */
 interface ShippingAssignmentInterface extends ExtensibleDataInterface
 {

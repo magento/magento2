@@ -10,7 +10,8 @@ use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
- * Create handler for catalog product gallery.
+ * Create handler for catalog product gallery
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandler implements ExtensionInterface
@@ -85,7 +86,6 @@ class CreateHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $entityType
      * @param object $product
      * @param array $arguments
      * @return object
@@ -94,7 +94,7 @@ class CreateHandler implements ExtensionInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute($entityType, $product, $arguments = [])
+    public function execute($product, $arguments = [])
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
 

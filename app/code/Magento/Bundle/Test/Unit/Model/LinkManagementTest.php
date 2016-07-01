@@ -1048,7 +1048,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
 
         $this->optionCollection->expects($this->any())->method('appendSelections')
-            ->with($this->equalTo([]))
+            ->with($this->equalTo([]), true)
             ->will($this->returnValue([$this->option]));
     }
 }

@@ -239,7 +239,7 @@ class Sftp extends AbstractIo
         $currentWorkingDir = $this->pwd();
         $result = [];
         foreach ($list as $name) {
-            $result[] = ['text' => $name, 'id' => "{$currentWorkingDir}{$name}"];
+            $result[] = ['text' => $name, 'id' => "{$currentWorkingDir}/{$name}"];
         }
         return $result;
     }

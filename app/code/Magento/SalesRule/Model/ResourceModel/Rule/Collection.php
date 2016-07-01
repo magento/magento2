@@ -39,8 +39,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier
-     * @param array $associatedEntitiesMap
      * @param mixed $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      */
@@ -50,15 +48,12 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
-        \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier $dateApplier,
-        array $associatedEntitiesMap = [],
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
-        $this->_associatedEntitiesMap = $associatedEntitiesMap;
-        $this->dateApplier = $dateApplier;
+        $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
     }
 
     /**
@@ -242,7 +237,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
                 []
             );
 
-            $this->dateApplier->applyDate($this->getSelect(), $now);
+            $this->getDateApplier()->applyDate($this->getSelect(), $now);
 
             $this->addIsActiveFilter();
 
@@ -320,5 +315,33 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
             );
         }
         return $this;
+    }
+
+    /**
+     * @return array
+     * @deprecated
+     */
+    private function getAssociatedEntitiesMap()
+    {
+        if (!$this->_associatedEntitiesMap) {
+            $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap')
+                ->getData();
+        }
+        return $this->_associatedEntitiesMap;
+    }
+
+    /**
+     * @return DateApplier
+     * @deprecated
+     */
+    private function getDateApplier()
+    {
+        if (null === $this->dateApplier) {
+            $this->dateApplier = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\SalesRule\Model\ResourceModel\Rule\DateApplier::class);
+        }
+
+        return $this->dateApplier;
     }
 }

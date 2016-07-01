@@ -81,8 +81,7 @@
                             <td class="col col-method">
                                 <!-- ko ifnot: method.error_message -->
                                 <!-- ko if: $parent.rates().length == 1 -->
-                                <input name="shipping_method"
-                                       class="radio"
+                                <input class="radio"
                                        type="radio"
                                        data-bind="attr: {
                                                     checked: $parent.rates().length == 1,
@@ -92,7 +91,7 @@
                                                  }" />
                                 <!-- /ko -->
                                 <!--ko ifnot: ($parent.rates().length == 1)-->
-                                <input name="shipping_method" type="radio"
+                                <input type="radio"
                                        data-bind="
                                                 value: method.carrier_code + '_' + method.method_code,
                                                 checked: $parent.isSelected,
@@ -125,7 +124,7 @@
                                     <div data-bind="text: method.error_message"></div>
                                 </div>
                                 <span class="no-display">
-                                    <input name="shipping_method" type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
+                                    <input type="radio" data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"/>
                                 </span>
                             </td>
                         </tr>

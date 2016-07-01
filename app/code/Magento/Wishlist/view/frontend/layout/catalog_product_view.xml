@@ -15,6 +15,22 @@
                     </argument>
                 </arguments>
             </block>
+            <referenceBlock name="product.info.addto">
+                <block class="Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist" name="view.addto.wishlist" after="view.addto.requisition"
+                       template="Magento_Wishlist::catalog/product/view/addto/wishlist.phtml" />
+            </referenceBlock>
+        </referenceContainer>
+        <referenceContainer name="content.aside">
+            <referenceBlock name="related.product.addto">
+                <block class="Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist"
+                       name="related.product.addto.wishlist" as="wishlist" before="compare"
+                       template="Magento_Wishlist::catalog/product/list/addto/wishlist.phtml"/>
+            </referenceBlock>
+            <referenceBlock name="upsell.product.addto">
+                <block class="Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist"
+                       name="upsell.product.addto.wishlist" as="wishlist" before="compare"
+                       template="Magento_Wishlist::catalog/product/list/addto/wishlist.phtml"/>
+            </referenceBlock>
         </referenceContainer>
     </body>
 </page>

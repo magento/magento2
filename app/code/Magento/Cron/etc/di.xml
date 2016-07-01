@@ -29,7 +29,7 @@
             <argument name="shell" xsi:type="object">shellBackground</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="cronCommand" xsi:type="object">Magento\Cron\Console\Command\CronCommand</item>

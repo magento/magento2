@@ -78,7 +78,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::never())
             ->method('getExtensionAttributes');
 
-        $entity = $this->saveHandler->execute('Entity', $product);
+        $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
     }
 
@@ -123,7 +123,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->optionRepository->expects(static::never())
             ->method('deleteById');
 
-        $entity = $this->saveHandler->execute('Entity', $product);
+        $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
     }
 
@@ -191,7 +191,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('saveProducts')
             ->with($product, $configurableProductLinks);
 
-        $entity = $this->saveHandler->execute('Entity', $product);
+        $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
     }
 

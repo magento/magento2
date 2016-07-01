@@ -18,8 +18,6 @@
 @product-name-link__text-decoration__visited: @link__hover__text-decoration;
 
 //
-
-//
 //  Common
 //  _____________________________________________
 
@@ -46,13 +44,13 @@
 
             &-name {
                 &:extend(.abs-product-link all);
+                -moz-hyphens: auto;
+                -ms-hyphens: auto;
+                -webkit-hyphens: auto;
                 display: block;
+                hyphens: auto;
                 margin: @indent__xs 0;
                 word-wrap: break-word;
-                -webkit-hyphens: auto;
-                   -moz-hyphens: auto;
-                    -ms-hyphens: auto;
-                        hyphens: auto;
             }
 
             &-info {
@@ -387,11 +385,11 @@
             }
             
             .product-item {
-                margin-left: calc(~"(100% - 4 * 23.233%) / 3");
+                margin-left: calc(~'(100% - 4 * 23.233%) / 3');
                 padding: 0;
                 width: 23.233%;
 
-                &:nth-child(4n+1) {
+                &:nth-child(4n + 1) {
                     margin-left: 0;
                 }
             }
@@ -418,7 +416,7 @@
                         margin-left: 1%;
                     }
 
-                    &:nth-child(3n+1) {
+                    &:nth-child(3n + 1) {
                         margin-left: 0;
                     }
                 }

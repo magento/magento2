@@ -148,7 +148,6 @@ class OrderCreateTest extends WebapiAbstract
      */
     public function testOrderCreate()
     {
-        $this->markTestSkipped('MAGETWO-44643');
         $order = $this->prepareOrder();
 
         $serviceInfo = [

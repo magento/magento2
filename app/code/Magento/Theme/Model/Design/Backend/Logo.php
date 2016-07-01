@@ -21,7 +21,7 @@ class Logo extends Image
      */
     protected function _getUploadDir()
     {
-        return $this->_mediaDirectory->getRelativePath($this->_appendScopeInfo(self::UPLOAD_DIR));
+        return $this->_mediaDirectory->getRelativePath($this->_appendScopeInfo(static::UPLOAD_DIR));
     }
 
     /**

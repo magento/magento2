@@ -85,7 +85,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $_indexValueAttributes = [
         'status',
-        'gift_message_available',
     ];
 
     /**
@@ -919,7 +918,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                 $additionalAttributes[$fieldName] = $fieldName .
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
                             }
-                            $data[$itemId][$storeId][$fieldName] = $attrValue;
+                            $data[$itemId][$storeId][$fieldName] = htmlspecialchars_decode($attrValue);
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
@@ -934,6 +933,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
 
                 if (!empty($additionalAttributes)) {
+                    $additionalAttributes = array_map('htmlspecialchars_decode', $additionalAttributes);
                     $data[$itemId][$storeId][self::COL_ADDITIONAL_ATTRIBUTES] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalAttributes);
                 } else {

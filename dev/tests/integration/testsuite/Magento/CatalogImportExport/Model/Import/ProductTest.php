@@ -14,6 +14,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
@@ -888,6 +890,70 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testProductPositionInCategory()
+    {
+        /* @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+        $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
+        $collection->addNameToResult()->load();
+        /** @var Category $category */
+        $category = $collection->getItemByColumnValue('name', 'Category 1');
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+
+        $categoryProducts = [];
+        $i = 51;
+        foreach (['simple1', 'simple2', 'simple3'] as $sku) {
+            $categoryProducts[$productRepository->get($sku)->getId()] = $i++;
+        }
+        $category->setPostedProducts($categoryProducts);
+        $category->save();
+
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Filesystem::class
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        /** @var \Magento\Framework\App\ResourceConnection $resourceConnection */
+        $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Framework\App\ResourceConnection::class
+        );
+        $tableName = $resourceConnection->getTableName('catalog_category_product');
+        $select = $resourceConnection->getConnection()->select()->from($tableName)
+            ->where('category_id = ?', $category->getId());
+        $items = $resourceConnection->getConnection()->fetchAll($select);
+        $this->assertCount(3, $items);
+        foreach ($items as $item) {
+            $this->assertGreaterThan(50, $item['position']);
+        }
+    }
+
+    /**
      * @return array
      */
     public function categoryTestDataProvider()
@@ -1007,7 +1073,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == $errorsCount);
         if ($errorsCount >= 1) {
             $this->assertEquals(
-            "Specified url key already exists",
+            "Specified URL key already exists",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
             );
         }

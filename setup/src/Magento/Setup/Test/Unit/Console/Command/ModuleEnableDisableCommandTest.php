@@ -9,6 +9,9 @@ use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,6 +44,11 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $deploymentConfigMock;
 
+    /**
+     * @var \Magento\Framework\Code\GeneratedFiles|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $generatedFiles;
+
     protected function setUp()
     {
         $this->objectManagerProviderMock = $this->getMock(
@@ -59,6 +67,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->cleanupFilesMock = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->fullModuleListMock = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->generatedFiles = $this->getMock('\Magento\Framework\Code\GeneratedFiles', [], [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
@@ -164,7 +173,6 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $isEnable
      * @param string $expectedMessage
-     * @param bool $isInstalled
      *
      * @dataProvider executeAllDataProvider
      */
@@ -318,6 +326,9 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $deploymentConfigProperty = new \ReflectionProperty($class, 'deploymentConfig');
         $deploymentConfigProperty->setAccessible(true);
         $deploymentConfigProperty->setValue($command, $this->deploymentConfigMock);
+        $deploymentConfigProperty = new \ReflectionProperty($class, 'generatedFiles');
+        $deploymentConfigProperty->setAccessible(true);
+        $deploymentConfigProperty->setValue($command, $this->generatedFiles);
         return new CommandTester($command);
     }
 }
