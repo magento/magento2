@@ -387,15 +387,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     private function getFileUploadUrl($entityTypeCode)
     {
-        $url = '';
+        switch ($entityTypeCode) {
+            case CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER:
+                $url = 'customer/file/customer_upload';
+                break;
 
-        if ($entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
-            $url = 'customer/file/customer_upload';
-        }
-        if ($entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $url = 'customer/file/address_upload';
-        }
+            case AddressMetadataInterface::ENTITY_TYPE_ADDRESS:
+                $url = 'customer/file/address_upload';
+                break;
 
+            default:
+                $url = '';
+                break;
+        }
         return $url;
     }
 
