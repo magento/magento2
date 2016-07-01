@@ -7,7 +7,9 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Backup;
+
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class to work with filesystem backups
@@ -59,6 +61,16 @@ class Filesystem extends AbstractBackup
     protected $_ftpPath;
 
     /**
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Ftp
+     */
+    protected $rollBackFtp;
+
+    /**
+     * @var \Magento\Framework\Backup\Filesystem\Rollback\Fs
+     */
+    protected $rollBackFs;
+
+    /**
      * Implementation Rollback functionality for Filesystem
      *
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -71,11 +83,7 @@ class Filesystem extends AbstractBackup
         set_time_limit(0);
         ignore_user_abort(true);
 
-        $rollbackWorker = $this->_useFtp ? new \Magento\Framework\Backup\Filesystem\Rollback\Ftp(
-            $this
-        ) : new \Magento\Framework\Backup\Filesystem\Rollback\Fs(
-            $this
-        );
+        $rollbackWorker = $this->_useFtp ? $this->getRollBackFtp() : $this->getRollBackFs();
         $rollbackWorker->run();
 
         $this->_lastOperationSucceed = true;
@@ -298,5 +306,37 @@ class Filesystem extends AbstractBackup
     {
         $tmpName = '~tmp-' . microtime(true) . '.tar';
         return $this->getBackupsDir() . '/' . $tmpName;
+    }
+
+    /**
+     * @return \Magento\Framework\Backup\Filesystem\Rollback\Ftp
+     * @deprecated
+     */
+    protected function getRollBackFtp()
+    {
+        if (!$this->rollBackFtp) {
+            $this->rollBackFtp = ObjectManager::getInstance()->create(
+                \Magento\Framework\Backup\Filesystem\Rollback\Ftp::class,
+                [$this]
+            );
+        }
+
+        return $this->rollBackFtp;
+    }
+
+    /**
+     * @return \Magento\Framework\Backup\Filesystem\Rollback\Fs
+     * @deprecated
+     */
+    protected function getRollBackFs()
+    {
+        if (!$this->rollBackFs) {
+            $this->rollBackFs = ObjectManager::getInstance()->create(
+                \Magento\Framework\Backup\Filesystem\Rollback\Fs::class,
+                [$this]
+            );
+        }
+
+        return $this->rollBackFs;
     }
 }
