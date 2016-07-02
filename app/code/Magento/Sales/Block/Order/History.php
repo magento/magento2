@@ -35,14 +35,14 @@ class History extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         array $data = []
@@ -71,11 +71,8 @@ class History extends \Magento\Framework\View\Element\Template
             return false;
         }
         if (!$this->orders) {
-            $this->orders = $this->_orderCollectionFactory->create()->addFieldToSelect(
+            $this->orders = $this->_orderCollectionFactory->create($customerId)->addFieldToSelect(
                 '*'
-            )->addFieldToFilter(
-                'customer_id',
-                $customerId
             )->addFieldToFilter(
                 'status',
                 ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()]
