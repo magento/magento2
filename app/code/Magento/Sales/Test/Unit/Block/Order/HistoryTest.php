@@ -95,13 +95,9 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $orderCollection->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->with('customer_id', $this->equalTo($customerId))
-            ->will($this->returnSelf());
-        $orderCollection->expects($this->at(2))
-            ->method('addFieldToFilter')
             ->with('status', $this->equalTo(['in' => $statuses]))
             ->will($this->returnSelf());
-        $orderCollection->expects($this->at(3))
+        $orderCollection->expects($this->at(2))
             ->method('setOrder')
             ->with('created_at', 'desc')
             ->will($this->returnSelf());
