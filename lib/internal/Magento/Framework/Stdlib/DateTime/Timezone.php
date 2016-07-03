@@ -211,9 +211,9 @@ class Timezone implements TimezoneInterface
         $timezone = $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType, $scope);
         $currentTimezone = @date_default_timezone_get();
         @date_default_timezone_set($timezone);
-        $date = date('Y-m-d H:i:s');
+        $ts = time();
         @date_default_timezone_set($currentTimezone);
-        return strtotime($date);
+        return $ts;
     }
 
     /**
