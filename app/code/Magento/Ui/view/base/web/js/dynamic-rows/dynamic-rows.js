@@ -252,6 +252,9 @@ define([
                 }.bind(this),
                 'update': function (state) {
                     this.onChildrenUpdate(state);
+                }.bind(this),
+                'addChild': function () {
+                    this.setDefaultState();
                 }.bind(this)
             });
 
@@ -323,11 +326,22 @@ define([
          * @param {Array} data - defaultState data
          */
         setDefaultState: function (data) {
-            var componentData = this.getChildItems().length ? this.getChildItems() : this.recordDataCache;
+            var componentData,
+                childItems;
 
             if (!this.hasInitialPagesState[this.currentPage()]) {
+                childItems = this.getChildItems();
+                componentData = childItems.length ?
+                    utils.copy(childItems) :
+                    utils.copy(this.getChildItems(this.recordDataCache));
+                componentData.forEach(function (dataObj) {
+                    if (dataObj.hasOwnProperty('initialize')) {
+                        delete dataObj.initialize;
+                    }
+                });
+
                 this.hasInitialPagesState[this.currentPage()] = true;
-                this.defaultPagesState[this.currentPage()] = data ? data : utils.copy(this.arrayFilter(componentData));
+                this.defaultPagesState[this.currentPage()] = data ? data : this.arrayFilter(componentData);
             }
         },
 
@@ -349,7 +363,7 @@ define([
                 prop = obj[path[0]];
                 path.splice(0, 1);
                 this.setValueByPath(prop, path, value);
-            } else if (path.length) {
+            } else if (path.length && obj) {
                 obj[path[0]] = value;
             }
         },
@@ -415,6 +429,7 @@ define([
                 this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
                 this.changed(_.some(this.pagesChanged));
             } else if (this.hasInitialPagesState[this.currentPage()]) {
+                this.pagesChanged[this.currentPage()] = !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
                 this.changed(_.some(this.pagesChanged));
             }
         },
@@ -605,10 +620,15 @@ define([
          *
          * @returns {Array} data
          */
-        getChildItems: function () {
+        getChildItems: function (data, page) {
+            var dataRecord = data || this.relatedData,
+                startIndex;
+
             this.startIndex = (~~this.currentPage() - 1) * this.pageSize;
 
-            return this.relatedData.slice(this.startIndex, this.startIndex + this.pageSize);
+            startIndex = page || this.startIndex;
+
+            return dataRecord.slice(startIndex, this.startIndex + this.pageSize);
         },
 
         /**
@@ -639,6 +659,10 @@ define([
          * @param {Number|String} prop - additional property to element
          */
         processingAddChild: function (ctx, index, prop) {
+            console.log('3', this.name);
+
+            this.bubble('addChild', false);
+
             if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
                 this.clear();
                 this.pages(this.pages() + 1);
