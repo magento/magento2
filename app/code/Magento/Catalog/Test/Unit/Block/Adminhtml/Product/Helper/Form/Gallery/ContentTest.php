@@ -126,7 +126,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $this->content->setElement($this->galleryMock);
         $this->galleryMock->expects($this->once())->method('getImages')->willReturn($images);
-        $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')->willReturn($this->readMock);
+        $this->fileSystemMock->expects($this->exactly(2))->method('getDirectoryRead')->willReturn($this->readMock);
 
         $this->mediaConfigMock->expects($this->any())->method('getMediaUrl')->willReturnMap($url);
         $this->mediaConfigMock->expects($this->any())->method('getMediaPath')->willReturnMap($mediaPath);
