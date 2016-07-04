@@ -1,0 +1,22 @@
+{
+    "name": "magento/framework-bulk",
+    "description": "N/A",
+    "type": "magento2-library",
+    "version": "100.2.0-dev",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "php": "~5.6.0|7.0.2|~7.0.6",
+        "magento/framework": "100.2.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\Bulk\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+}
