@@ -1299,7 +1299,7 @@ class Config extends AbstractConfig
     public function getWppPeCcTypesAsOptionArray()
     {
         return $this->_cctypeFactory->create()->setAllowedTypes(
-            ['VI', 'MC', 'SM', 'SO', 'OT', 'AE']
+            ['VI', 'MC', 'SM', 'SO', 'AE']
         )->toOptionArray();
     }
 
