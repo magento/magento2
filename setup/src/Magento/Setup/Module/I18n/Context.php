@@ -111,6 +111,9 @@ class Context
             default:
                 throw new \InvalidArgumentException(sprintf('Invalid context given: "%s".', $type));
         }
+        if (!$path) {
+            $path = BP;
+        }
         return $path . '/' . self::LOCALE_DIRECTORY . '/';
     }
 }
