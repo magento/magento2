@@ -5,10 +5,8 @@
 
 define([
     'Magento_Ui/js/form/components/button',
-    'uiRegistry',
-    'uiLayout',
-    'mageUtils'
-], function (Button, registry, layout, utils) {
+    'uiRegistry'
+], function (Button, registry) {
     'use strict';
 
     return Button.extend({
