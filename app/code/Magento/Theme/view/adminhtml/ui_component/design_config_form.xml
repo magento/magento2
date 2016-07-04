@@ -308,8 +308,8 @@
                         <item name="title" xsi:type="string">Reset To Defaults</item>
                         <item name="formElement" xsi:type="string">button</item>
                         <item name="dataScope" xsi:type="string">reset_to_defaults</item>
-                        <item name="component" xsi:type="string">Magento_Theme/js/form/component/robots_reset_button</item>
-                        <item name="template" xsi:type="string">Magento_Theme/form/button_field</item>
+                        <item name="component" xsi:type="string">Magento_Theme/js/form/component/robots-reset-button</item>
+                        <item name="template" xsi:type="string">Magento_Theme/form/button-field</item>
                         <item name="notice" xsi:type="string" translate="true">This action will delete your custom instructions and reset robots.txt file to system's default settings.</item>
                     </item>
                 </argument>
