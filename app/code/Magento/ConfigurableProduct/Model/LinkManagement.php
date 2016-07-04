@@ -72,7 +72,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             foreach ($child->getAttributes() as $attribute) {
                 $attrCode = $attribute->getAttributeCode();
                 $value = $child->getDataUsingMethod($attrCode) ?: $child->getData($attrCode);
-                if (null !== $value && $attrCode != 'entity_id') {
+                if (null !== $value) {
                     $attributes[$attrCode] = $value;
                 }
             }
