@@ -31,6 +31,9 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
      */
     private $attributeValueFactoryMock;
 
+    /** @var \Magento\Framework\Phrase\RendererInterface */
+    private $defaultRenderer;
+
     /**
      * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -45,6 +48,7 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->defaultRenderer = Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
             ->getMock();
     }
@@ -139,5 +143,13 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function tearDown()
+    {
+        \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }
 }
