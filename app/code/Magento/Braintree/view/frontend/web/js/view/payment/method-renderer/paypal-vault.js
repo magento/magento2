@@ -6,48 +6,39 @@
 /*global define*/
 define([
     'jquery',
+    'underscore',
     'Magento_Vault/js/view/payment/method-renderer/vault',
     'Magento_Ui/js/model/messageList',
     'Magento_Checkout/js/model/full-screen-loader'
-], function ($, VaultComponent, globalMessageList, fullScreenLoader) {
+], function ($, _, VaultComponent, globalMessageList, fullScreenLoader) {
     'use strict';
 
     return VaultComponent.extend({
         defaults: {
-            template: 'Magento_Vault/payment/form',
-            modules: {
-                hostedFields: '${ $.parentName }.braintree'
-            }
+            template: 'Magento_Braintree/payment/paypal/vault',
+            additionalData: {}
         },
 
         /**
-         * Get last 4 digits of card
+         * Get PayPal payer email
          * @returns {String}
          */
-        getMaskedCard: function () {
-            return this.details.maskedCC;
+        getPayerEmail: function () {
+            return this.details.payerEmail;
         },
 
         /**
-         * Get expiration date
+         * Get type of payment
          * @returns {String}
          */
-        getExpirationDate: function () {
-            return this.details.expirationDate;
-        },
-
-        /**
-         * Get card type
-         * @returns {String}
-         */
-        getCardType: function () {
-            return this.details.type;
+        getPaymentIcon: function () {
+            return window.checkoutConfig.payment['braintree_paypal'].paymentIcon;
         },
 
         /**
          * Place order
          */
-        placeOrder: function () {
+        beforePlaceOrder: function () {
             this.getPaymentMethodNonce();
         },
 
@@ -63,12 +54,8 @@ define([
             })
                 .done(function (response) {
                     fullScreenLoader.stopLoader();
-                    self.hostedFields(function (formComponent) {
-                        formComponent.setPaymentMethodNonce(response.paymentMethodNonce);
-                        formComponent.additionalData['public_hash'] = self.publicHash;
-                        formComponent.code = self.code;
-                        formComponent.placeOrder();
-                    });
+                    self.additionalData['payment_method_nonce'] = response.paymentMethodNonce;
+                    self.placeOrder();
                 })
                 .fail(function (response) {
                     var error = JSON.parse(response.responseText);
@@ -78,6 +65,23 @@ define([
                         message: error.message
                     });
                 });
+        },
+
+        /**
+         * Get payment method data
+         * @returns {Object}
+         */
+        getData: function () {
+            var data = {
+                'method': this.code,
+                'additional_data': {
+                    'public_hash': this.publicHash
+                }
+            };
+
+            data['additional_data'] = _.extend(data['additional_data'], this.additionalData);
+
+            return data;
         }
     });
 });
