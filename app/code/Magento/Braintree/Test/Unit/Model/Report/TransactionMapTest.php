@@ -12,6 +12,7 @@ use Magento\Braintree\Model\Report\Row\TransactionMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -32,7 +33,12 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
     private $attributeValueFactoryMock;
 
     /**
-     * @var \Magento\Framework\Phrase\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $defaultRenderer;
+
+    /**
+     * @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $rendererMock;
 
@@ -45,7 +51,8 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\RendererInterface')
+        $this->defaultRenderer = Phrase::getRenderer();
+        $this->rendererMock = $this->getMockBuilder(RendererInterface::class)
             ->getMock();
     }
 
@@ -139,5 +146,13 @@ class TransactionMapTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown()
+    {
+        Phrase::setRenderer($this->defaultRenderer);
     }
 }
