@@ -38,12 +38,12 @@ interface OperationInterface
     public function setOperationId($id);
 
     /**
-     * @return UuidInterface
+     * @return string
      */
     public function getBulkId();
 
     /**
-     * @param UuidInterface $bulkId
+     * @param string $bulkId
      * @return $this
      */
     public function setBulkId($bulkId);

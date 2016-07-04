@@ -13,17 +13,17 @@ use Magento\Bulk\Api\Data\OperationInterface;
 interface BulkManagementInterface
 {
     /**
-     * @param UuidInterface $bulkId
+     * @param string $bulkId
      * @param OperationInterface[] $operations
      * @param string $description
      * @param int $userId
      * @return boolean
      */
-    public function scheduleBulk(UuidInterface $bulkId, array $operations, $description, $userId = null);
+    public function scheduleBulk($bulkId, array $operations, $description, $userId = null);
     
     /**
-     * @param UuidInterface $bulkId
+     * @param string $bulkId
      * @return boolean
      */
-    public function deleteBulk(UuidInterface $bulkId);
+    public function deleteBulk($bulkId);
 }

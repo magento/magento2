@@ -5,10 +5,13 @@
  */
 namespace Magento\Bulk\Api;
 
+/**
+ * Interface BulkStatusInterface
+ */
 interface BulkStatusInterface
 {
     /**
-     * @param \Magento\Bulk\Api\Data\UuidInterface $bulkId
+     * @param string $bulkId
      * @param int|null $failureType
      * @return \Magento\Bulk\Api\Data\OperationInterface[]
      */
@@ -16,17 +19,17 @@ interface BulkStatusInterface
 
     /**
      * @param int $userId
-     * @return \Magento\Bulk\Api\Data\UuidInterface[]
+     * @return string[]
      */
     public function getBulksByUser($userId);
 
     /**
      * Computational status based on statuses of belonging operations
      *
-     * @param \Magento\Bulk\Api\UuidInterface $bulkId
+     * @param string $bulkId
      * @return int NOT_STARTED | IN_PROGRESS_SUCCESS | IN_PROGRESS_FAILED | FINISHED_SUCCESFULLY | FINISHED_WITH_FAILURE
      * FINISHED_SUCCESFULLY - all operations are handled succesfully
      * FINISHED_WITH_FAILURE - some operations are handled with failure
      */
-    public function getBulkStatus(\Magento\Bulk\Api\UuidInterface $bulkId);
+    public function getBulkStatus($bulkId);
 }
