@@ -146,7 +146,7 @@ class Content extends \Magento\Backend\Block\Widget
                 try {
                     $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
                     $image['size'] = $fileHandler['size'];
-                }   catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('image');
                     $fileHandler = $staticDir->stat(
                         $this->getAssetRepo()->createAsset($this->getImageHelper()->getPlaceholder('image'))->getPath()
@@ -250,7 +250,6 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return \Magento\Catalog\Helper\Image
-     *
      * @deprecated
      */
     private function getImageHelper()
@@ -264,7 +263,6 @@ class Content extends \Magento\Backend\Block\Widget
 
     /**
      * @return \Magento\Framework\View\Asset\Repository
-     * 
      * @deprecated
      */
     private function getAssetRepo()
