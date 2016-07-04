@@ -17,8 +17,9 @@ define([
         },
 
         /**
-         * @param {String} json
          * @private
+         * @param {String} json
+         * @return {String}
          */
         _parseJson: function (json) {
             return JSON.parse(json);
