@@ -72,13 +72,9 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
     public function testEscapeUrl()
     {
         $data = 'http://example.com/search?term=this+%26+that&view=list';
-        $expected = 'http%3A%2F%2Fexample.com%2Fsearch%3Fterm%3Dthis%2B%2526%2Bthat%26view%3Dlist';
+        $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
         $this->assertEquals($expected, $this->_escaper->escapeUrl($data));
-
-        $data = $expected;
-        $expected =
-            'http%253A%252F%252Fexample.com%252Fsearch%253Fterm%253Dthis%252B%252526%252Bthat%2526view%253Dlist';
-        $this->assertEquals($expected, $this->_escaper->escapeUrl($data));
+        $this->assertEquals($expected, $this->_escaper->escapeUrl($expected));
     }
 
     /**

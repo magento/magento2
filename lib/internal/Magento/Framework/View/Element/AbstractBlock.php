@@ -906,7 +906,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function escapeXssInUrl($data)
     {
-        return $this->_escaper->escapeUrl($data);
+        return $this->_escaper->escapeXssInUrl($data);
     }
 
     /**
@@ -920,7 +920,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function escapeQuote($data, $addSlashes = false)
     {
-        return $this->_escaper->escapeHtml($data);
+        return $this->_escaper->escapeQuote($data, $addSlashes);
     }
 
     /**
@@ -932,7 +932,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
-        return $this->_escaper->escapeJs($data);
+        return $this->_escaper->escapeJsQuote($data, $quote);
     }
 
     /**
