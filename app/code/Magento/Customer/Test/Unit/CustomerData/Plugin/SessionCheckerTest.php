@@ -32,12 +32,7 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $session;
-
-    /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $response;
+    protected $sessionManager;
 
     public function setUp()
     {
@@ -50,27 +45,33 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->metadata = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadata')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->session = $this->getMockBuilder('Magento\Customer\Model\Session')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->response = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+        $this->sessionManager = $this->getMockBuilder('Magento\Framework\Session\SessionManager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->plugin = new SessionChecker($this->cookieManager, $this->metadataFactory, $this->session);
+        $this->plugin = new SessionChecker($this->cookieManager, $this->metadataFactory);
     }
 
     /**
      * @param bool $result
      * @param string $callCount
      * @return void
-     * @dataProvider testAfterIsLoggedInDataProvider
+     * @dataProvider testBeforeStartDataProvider
      */
-    public function testBeforeSendVary($result, $callCount)
+    public function testBeforeStart($result, $callCount)
     {
-        $this->session->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn($result);
+        $phpSessionCookieName = 'PHPSESSID';
+        $frontendSessionCookieName = 'mage-cache-sessid';
+        $this->sessionManager->expects($this->once())
+            ->method('getName')
+            ->willReturn($phpSessionCookieName);
+        $this->cookieManager->expects($this->exactly(2))
+            ->method('getCookie')
+            ->withConsecutive(
+                [$phpSessionCookieName],
+                [$frontendSessionCookieName]
+            )
+            ->willReturnOnConsecutiveCalls(false, $result);
 
         $this->metadataFactory->expects($this->{$callCount}())
             ->method('createCookieMetadata')
@@ -81,14 +82,15 @@ class SessionCheckerTest extends \PHPUnit_Framework_TestCase
         $this->cookieManager->expects($this->{$callCount}())
             ->method('deleteCookie')
             ->with('mage-cache-sessid', $this->metadata);
-        $this->plugin->beforeSendVary($this->response);
+
+        $this->plugin->beforeStart($this->sessionManager);
     }
 
-    public function testAfterIsLoggedInDataProvider()
+    public function testBeforeStartDataProvider()
     {
         return [
-            [false, 'once'],
-            [true, 'never']
+            [true, 'once'],
+            [false, 'never']
         ];
     }
 }

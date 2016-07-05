@@ -5,14 +5,28 @@
  */
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\App\PageCache\Identifier;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class IdentifierTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
+    /** Test value for cache vary string */
+    const VARY = '123';
+
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
+
+    /** @var Context */
+    private $contextMock;
+
+    /** @var HttpRequest */
+    private $requestMock;
+
+    /** @var Identifier */
+    private $model;
 
     /**
      * @return \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -20,79 +34,85 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-    }
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-    /**
-     * @param string $uri
-     * @param string|null $vary
-     * @return \Magento\Framework\App\Request\Http
-     */
-    protected function getRequestMock($uri, $vary = null)
-    {
-        $requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
-        $requestMock->expects($this->once())
-            ->method('isSecure')
-            ->willReturn(false);
-        $requestMock->expects($this->once())
-            ->method('getRequestUri')
-            ->willReturn($uri);
-        $requestMock->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING))
-            ->willReturn($vary);
-        return $requestMock;
-    }
-
-    /**
-     * @param int $getVeryStringCalledTimes
-     * @param string|null $vary
-     * @return \Magento\Framework\App\Http\Context
-     */
-    protected function getContextMock($getVeryStringCalledTimes, $vary)
-    {
-        $contextMock = $this->getMock('\Magento\Framework\App\Http\Context', [], [], '', false);
-        $contextMock->expects($this->exactly($getVeryStringCalledTimes))
-            ->method('getVaryString')
-            ->willReturn($vary);
-        return $contextMock;
-    }
-
-    /**
-     * @param string $uri
-     * @param string|null $varyStringCookie
-     * @param string|null $varyStringContext
-     * @param string $expected
-     * @dataProvider dataProvider
-     */
-    public function testGetValue($uri, $varyStringCookie, $varyStringContext, $expected)
-    {
-        $request = $this->getRequestMock($uri, $varyStringCookie);
-        $context = $this->getContextMock($varyStringCookie ? 0 : 1, $varyStringContext);
-
-        $model = $this->objectManager->getObject(
-            '\Magento\Framework\App\PageCache\Identifier',
+        $this->requestMock = $this->getMockBuilder(HttpRequest::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model = $this->objectManager->getObject(
+            Identifier::class,
             [
-                'request' => $request,
-                'context' => $context,
+                'request' => $this->requestMock,
+                'context' => $this->contextMock,
             ]
         );
-        $this->assertEquals($expected, $model->getValue());
+    }
+
+    public function testSecureDifferentiator()
+    {
+        $this->requestMock->expects($this->at(0))
+            ->method('isSecure')
+            ->willReturn(true);
+        $this->requestMock->expects($this->at(3))
+            ->method('isSecure')
+            ->willReturn(false);
+        $this->requestMock->method('getUriString')
+            ->willReturn('http://example.com/path/');
+        $this->contextMock->method('getVaryString')->willReturn(self::VARY);
+
+        $valueWithSecureRequest = $this->model->getValue();
+        $valueWithInsecureRequest = $this->model->getValue();
+        $this->assertNotEquals($valueWithSecureRequest, $valueWithInsecureRequest);
+    }
+
+    public function testDomainDifferentiator()
+    {
+        $this->requestMock->method('isSecure')->willReturn(true);
+        $this->requestMock->expects($this->at(1))
+            ->method('getUriString')
+            ->willReturn('http://example.com/path/');
+        $this->requestMock->expects($this->at(4))
+            ->method('getUriString')
+            ->willReturn('http://example.net/path/');
+        $this->contextMock->method('getVaryString')->willReturn(self::VARY);
+
+        $valueDomain1 = $this->model->getValue();
+        $valueDomain2 = $this->model->getValue();
+        $this->assertNotEquals($valueDomain1, $valueDomain2);
+    }
+
+    public function testPathDifferentiator()
+    {
+        $this->requestMock->method('isSecure')->willReturn(true);
+        $this->requestMock->expects($this->at(1))
+            ->method('getUriString')
+            ->willReturn('http://example.com/path/');
+        $this->requestMock->expects($this->at(4))
+            ->method('getUriString')
+            ->willReturn('http://example.com/path1/');
+        $this->contextMock->method('getVaryString')->willReturn(self::VARY);
+
+        $valuePath1 = $this->model->getValue();
+        $valuePath2 = $this->model->getValue();
+        $this->assertNotEquals($valuePath1, $valuePath2);
     }
 
     /**
-     * @return array
+     * @param $cookieExists
+     *
+     * @dataProvider trueFalseDataProvider
      */
-    public function dataProvider()
+    public function testVaryStringSource($cookieExists)
     {
-        $uri = 'http://domain.com/customer';
-        $vary = 1;
-        $data = [false, $uri, $vary];
-        ksort($data);
-        $expected = md5(serialize($data));
+        $this->requestMock->method('get')->willReturn($cookieExists ? 'vary-string-from-cookie' : null);
+        $this->contextMock->expects($cookieExists ? $this->never() : $this->once())->method('getVaryString');
+        $this->model->getValue();
+    }
 
-        return [
-            [$uri, $vary, null, $expected],
-            [$uri, null, $vary, $expected]
-        ];
+    public function trueFalseDataProvider()
+    {
+        return [[true], [false]];
     }
 }
