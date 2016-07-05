@@ -173,7 +173,7 @@ class View extends AbstractConfigureBlock
      *
      * @var string
      */
-    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img--full';
+    protected $fullImage = '[data-gallery-role="gallery"] img.fotorama__img--full';
 
     /**
      * Full image close selector
@@ -188,6 +188,11 @@ class View extends AbstractConfigureBlock
      * @var string
      */
     protected $baseImage = '[data-gallery-role="gallery"] img.fotorama__img.fotorama__img';
+
+    /**
+     * @var string
+     */
+    protected $galleryLoader = '.fotorama__spinner--show';
 
     /**
      * Video Container selector
@@ -302,11 +307,12 @@ class View extends AbstractConfigureBlock
 
     /**
      * Press 'Check out with Braintree PayPal' button.
-     *
-     * @return void
+     * 
+     * @return string
      */
     public function braintreePaypalCheckout()
     {
+        $currentWindow = $this->browser->getCurrentWindow();
         /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
         $miniCart = $this->blockFactory->create(
             '\Magento\Checkout\Test\Block\Cart\Sidebar',
@@ -315,6 +321,7 @@ class View extends AbstractConfigureBlock
 
         $miniCart->openMiniCart();
         $miniCart->clickBraintreePaypalButton();
+        return $currentWindow;
     }
 
     /**
@@ -497,6 +504,7 @@ class View extends AbstractConfigureBlock
      */
     public function isGalleryVisible()
     {
+        $this->waitForElementNotVisible($this->galleryLoader);
         return $this->_rootElement->find($this->mediaGallery)->isVisible();
     }
 
@@ -507,6 +515,7 @@ class View extends AbstractConfigureBlock
      */
     public function isFullImageVisible()
     {
+        $this->waitForElementNotVisible($this->galleryLoader);
         return $this->browser->find($this->fullImage)->isVisible();
     }
 
@@ -558,7 +567,12 @@ class View extends AbstractConfigureBlock
      */
     public function closeFullImage()
     {
-        $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS)->click();
+        $element = $this->browser->find($this->fullImageClose, Locator::SELECTOR_CSS);
+        if (!$element->isVisible()) {
+            $element->hover();
+            $this->waitForElementVisible($this->fullImageClose);
+        }
+        $element->click();
     }
 
     /**

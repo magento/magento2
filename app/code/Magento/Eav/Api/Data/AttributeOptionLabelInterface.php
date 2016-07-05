@@ -6,6 +6,10 @@
  */
 namespace Magento\Eav\Api\Data;
 
+/**
+ * Interface AttributeOptionLabelInterface
+ * @api
+ */
 interface AttributeOptionLabelInterface
 {
     const LABEL = 'label';

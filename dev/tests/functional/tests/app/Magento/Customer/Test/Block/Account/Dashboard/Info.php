@@ -9,48 +9,54 @@ namespace Magento\Customer\Test\Block\Account\Dashboard;
 use Magento\Mtf\Block\Block;
 
 /**
- * Class Info
- * Main block on customer account page
+ * Main block on customer account page.
  */
 class Info extends Block
 {
     /**
-     * Css selector for Contact Information Edit Link
+     * Css selector for Contact Information Edit Link.
      *
      * @var string
      */
     protected $contactInfoEditLink = '.block-dashboard-info .box-information .action.edit';
 
     /**
-     * Css selector for Contact Information Change Password Link
+     * Css selector for Contact Information box content.
+     *
+     * @var string
+     */
+    protected $contactInfoBoxContent = '.box.box-information .box-content';
+
+    /**
+     * Css selector for Contact Information Change Password Link.
      *
      * @var string
      */
     protected $contactInfoChangePasswordLink = '.block-dashboard-info .box-information .action.change-password';
 
     /**
-     * Css selector for Contact Information Change Email Link
+     * Css selector for Contact Information Change Email Link.
      *
      * @var string
      */
     protected $contactInfoChangeEmailLink = '.form-edit-account .fieldset.info .checkbox#change-email';
 
     /**
-     * Css selector for Contact Information Change Password Checkbox
+     * Css selector for Contact Information Change Password Checkbox.
      *
      * @var string
      */
     protected $contactInfoChangePasswordCheckbox = '.form-edit-account .fieldset.info .checkbox#change-password';
 
     /**
-     * Dashboard Welcome block locator
+     * Dashboard Welcome block locator.
      *
      * @var string
      */
     protected $dashboardWelcome = '.block-dashboard-welcome .block-title';
 
     /**
-     * Click on Contact Information Edit Link
+     * Click on Contact Information Edit Link.
      *
      * @return void
      */
@@ -61,7 +67,7 @@ class Info extends Block
     }
 
     /**
-     * Click on Contact Information Edit Link
+     * Click on Contact Information Edit Link.
      *
      * @return void
      */
@@ -71,7 +77,7 @@ class Info extends Block
     }
 
     /**
-     * Get welcome text
+     * Get welcome text.
      *
      * @return string
      */
@@ -81,7 +87,7 @@ class Info extends Block
     }
 
     /**
-     * Click on Change Email checkbox
+     * Click on Change Email checkbox.
      *
      * @return void
      */
@@ -91,12 +97,22 @@ class Info extends Block
     }
 
     /**
-     * Click on Change Password checkbox
+     * Click on Change Password checkbox.
      *
      * @return void
      */
     public function checkChangePassword()
     {
         $this->_rootElement->find($this->contactInfoChangePasswordCheckbox)->click();
+    }
+
+    /**
+     * Get Contact Information block content.
+     *
+     * @return string
+     */
+    public function getContactInfoContent()
+    {
+        return $this->_rootElement->find($this->contactInfoBoxContent)->getText();
     }
 }

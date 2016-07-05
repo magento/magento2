@@ -10,6 +10,8 @@ use Magento\Framework\App;
 
 /**
  * Page title
+ *
+ * @api
  */
 class Title
 {

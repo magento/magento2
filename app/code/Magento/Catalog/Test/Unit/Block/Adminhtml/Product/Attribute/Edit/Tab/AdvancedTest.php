@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
+use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
+
 class AdvancedTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,6 +44,11 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystem;
 
+    /**
+     * @var PropertyLocker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $propertyLocker;
+
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -51,6 +58,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->eavData = $this->getMock('Magento\Eav\Helper\Data', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->propertyLocker = $this->getMock(PropertyLocker::class, [], [], '', false);
 
         $this->block = $objectManager->getObject(
             'Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced',
@@ -60,7 +68,8 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
                 'localeDate' => $this->localeDate,
                 'yesNo' => $this->yesNo,
                 'eavData' => $this->eavData,
-                'filesystem' => $this->filesystem
+                'filesystem' => $this->filesystem,
+                'propertyLocker' => $this->propertyLocker,
             ]
         );
     }
@@ -93,6 +102,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $this->yesNo->expects($this->any())->method('toOptionArray')->willReturn(['yes', 'no']);
         $this->filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($directoryReadInterface);
         $directoryReadInterface->expects($this->any())->method('getRelativePath')->willReturn('relative_path');
+        $this->propertyLocker->expects($this->once())->method('lock')->with($form);
 
         $this->block->setData(['action' => 'save']);
         $this->block->toHtml();
