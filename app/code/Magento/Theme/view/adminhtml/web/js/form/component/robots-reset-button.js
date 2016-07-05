@@ -13,7 +13,7 @@ define([
         defaults: {
             customInstructionField: '${ $.parentName }.custom_instructions',
             label: '',
-            buttonTpl: 'ui/form/element/button'
+            buttonTpl: 'Magento_Theme/form/element/button'
         },
 
         /**
