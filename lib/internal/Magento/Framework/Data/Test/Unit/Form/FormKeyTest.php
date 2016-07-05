@@ -38,7 +38,7 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
         $methods = ['setData', 'getData'];
         $this->sessionMock = $this->getMock('Magento\Framework\Session\SessionManager', $methods, [], '', false);
         $this->escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
-        $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
+        $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
         $this->formKey = new FormKey(
             $this->mathRandomMock,
             $this->sessionMock,
