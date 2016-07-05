@@ -144,6 +144,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $modelProperty->setAccessible(true);
         $modelProperty->setValue($model, $this->urlModifier);
 
+        $zendEscaper = new \Magento\Framework\ZendEscaper();
+        $escaper = new \Magento\Framework\Escaper();
+        $objectManager->setBackwardCompatibleProperty($escaper, 'zendEscaper', $zendEscaper);
+        $objectManager->setBackwardCompatibleProperty($model, 'escaper', $escaper);
+
         return $model;
     }
 
@@ -273,7 +278,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
-        $this->assertEquals('catalog/product/view', $model->getUrl('catalog/product/view'));
+        $this->assertEquals('catalog%2Fproduct%2Fview', $model->getUrl('catalog/product/view'));
     }
 
     public function testGetUrlIdempotentSetRouteName()
@@ -289,7 +294,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
-        $this->assertEquals('/product/view/', $model->getUrl('catalog/product/view'));
+        $this->assertEquals('%2Fproduct%2Fview%2F', $model->getUrl('catalog/product/view'));
     }
 
     public function testGetUrlRouteHasParams()
@@ -306,7 +311,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
-        $this->assertEquals('/index/index/foo/bar/', $model->getUrl('catalog'));
+        $this->assertEquals('%2Findex%2Findex%2Ffoo%2Fbar%2F', $model->getUrl('catalog'));
     }
 
     public function testGetUrlRouteUseRewrite()
@@ -331,19 +336,27 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
 
-        $this->assertEquals('/catalog/product/view/', $model->getUrl('catalog', ['_use_rewrite' => 1]));
+        $this->assertEquals('%2Fcatalog%2Fproduct%2Fview%2F', $model->getUrl('catalog', ['_use_rewrite' => 1]));
     }
 
     public function getUrlDataProvider()
     {
         return [
             'string query' => [
-                'foo=bar', 'foo=bar', 'http://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor',
+                'foo=bar',
+                'foo=bar',
+                'http%3A%2F%2Flocalhost%2Findex.php%2Fcatalog%2Fproduct%2Fview%2Fid%2F100%2F%3Ffoo%3Dbar%23anchor',
             ],
             'array query' => [
-                ['foo' => 'bar'], 'foo=bar', 'http://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor',
+                ['foo' => 'bar'],
+                'foo=bar',
+                'http%3A%2F%2Flocalhost%2Findex.php%2Fcatalog%2Fproduct%2Fview%2Fid%2F100%2F%3Ffoo%3Dbar%23anchor',
             ],
-            'without query' => [false, '', 'http://localhost/index.php/catalog/product/view/id/100/#anchor'],
+            'without query' => [
+                false,
+                '',
+                'http%3A%2F%2Flocalhost%2Findex.php%2Fcatalog%2Fproduct%2Fview%2Fid%2F100%2F%23anchor'
+            ],
         ];
     }
 
@@ -380,7 +393,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $routeConfigMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue('catalog'));
 
         $url = $model->getUrl('*/*/*/key/value');
-        $this->assertEquals('http://localhost/index.php/catalog/product/view/key/value/', $url);
+        $this->assertEquals('http%3A%2F%2Flocalhost%2Findex.php%2Fcatalog%2Fproduct%2Fview%2Fkey%2Fvalue%2F', $url);
     }
 
     public function testGetDirectUrl()
@@ -414,14 +427,14 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $requestMock->expects($this->once())->method('isDirectAccessFrontendName')->will($this->returnValue(true));
 
         $url = $model->getDirectUrl('direct-url');
-        $this->assertEquals('http://localhost/index.php/direct-url', $url);
+        $this->assertEquals('http%3A%2F%2Flocalhost%2Findex.php%2Fdirect-url', $url);
     }
 
     /**
      * @param string $url
      * @dataProvider getRebuiltUrlDataProvider
      */
-    public function testGetRebuiltUrl($url)
+    public function testGetRebuiltUrl($inputUrl, $outputUrl)
     {
         $requestMock = $this->getRequestMock();
         $model = $this->getUrlModel([
@@ -436,7 +449,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->queryParamsResolverMock->expects($this->once())->method('getQuery')
             ->will($this->returnValue('query=123'));
 
-        $this->assertEquals($url, $model->getRebuiltUrl($url));
+        $this->assertEquals($outputUrl, $model->getRebuiltUrl($inputUrl));
     }
 
     public function testGetRedirectUrl()
@@ -489,9 +502,18 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function getRebuiltUrlDataProvider()
     {
         return [
-            'with port' => ['https://example.com:88/index.php/catalog/index/view?query=123#hash'],
-            'without port' => ['https://example.com/index.php/catalog/index/view?query=123#hash'],
-            'http' => ['http://example.com/index.php/catalog/index/view?query=123#hash']
+            'with port' => [
+                'https://example.com:88/index.php/catalog/index/view?query=123#hash',
+                'https%3A%2F%2Fexample.com%3A88%2Findex.php%2Fcatalog%2Findex%2Fview%3Fquery%3D123%23hash'
+            ],
+            'without port' => [
+                'https://example.com/index.php/catalog/index/view?query=123#hash',
+                'https%3A%2F%2Fexample.com%2Findex.php%2Fcatalog%2Findex%2Fview%3Fquery%3D123%23hash'
+            ],
+            'http' => [
+                'http://example.com/index.php/catalog/index/view?query=123#hash',
+                'http%3A%2F%2Fexample.com%2Findex.php%2Fcatalog%2Findex%2Fview%3Fquery%3D123%23hash'
+            ]
         ];
     }
 
