@@ -49,15 +49,25 @@ class Escaper
             if (is_array($allowedTags) and !empty($allowedTags)) {
                 $allowed = implode('|', $allowedTags);
                 $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
-                $result = htmlspecialchars($result, self::HTMLSPECIALCHARS_FLAG, 'UTF-8', false);
+                $result = htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
                 $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
             } else {
-                $result = htmlspecialchars($data, self::HTMLSPECIALCHARS_FLAG, 'UTF-8', false);
+                $result = htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
             }
         } else {
             $result = $data;
         }
         return $result;
+    }
+
+    /**
+     * Escape a string for the HTML Attribute context.
+     *
+     * @param string $data
+     * @return string
+     */
+    public function escapeHtmlAttr($data) {
+        return $this->zendEscaper->escapeHtmlAttr($data);
     }
 
     /**
@@ -68,7 +78,7 @@ class Escaper
      */
     public function escapeUrl($data)
     {
-        return $this->getZendEscaper()->escapeUrl($data);
+        return htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
     }
 
     /**
