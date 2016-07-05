@@ -82,7 +82,6 @@
             .addon {
                 .lib-vendor-prefix-display(inline-flex);
                 .lib-vendor-prefix-flex-direction(row);
-                border: 1px solid #adadad;
                 color: #303030;
                 display: inline-flex;
                 flex-flow: row nowrap;
@@ -100,6 +99,28 @@
                             opacity: .5;
                         }
                     }
+                }
+
+                input[type="text"] {
+                    border: solid #adadad;
+                    border-width: 1px 1px 1px 0;
+
+                    &[disabled] {
+                        + .addafter {
+                            border-color: #d0d0d0;
+                        }
+
+                        &.mage-error {
+                            + .addafter {
+                                border-color: #eb8d8d !important;
+                            }
+                        }
+                    }
+                }
+
+                .addafter {
+                    border: solid #adadad;
+                    border-width: 1px 0 1px 1px;
                 }
             }
         }
