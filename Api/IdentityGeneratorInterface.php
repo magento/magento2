@@ -5,20 +5,20 @@
  */
 namespace Magento\Framework\Bulk\Api;
 
-use Magento\Framework\Bulk\Api\Data\UuidInterface;
+use Magento\Framework\Bulk\Api\Data\IdentityInterface;
 /**
  * Interface UuidInterface
  */
 interface IdentityGeneratorInterface
 {
     /**
-     * @return UuidInterface
+     * @return string
      **/
     public function generateId();
     
     /**
      * @param string $data
-     * @return UuidInterface
+     * @return string
      **/
     public function generateIdForData($data);
 }

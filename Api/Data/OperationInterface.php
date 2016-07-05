@@ -14,7 +14,7 @@ interface OperationInterface
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     const OPERATION_ID = 'operation_id';
-    const BULK_ID = 'bulk_id';
+    const BULK_ID = 'bulk_uuid';
     const TOPIC = 'topic';
     const SERIALIZED_DATA = 'serialized_data';
     const STATUS = 'status';

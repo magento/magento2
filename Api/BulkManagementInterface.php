@@ -6,7 +6,7 @@
 namespace Magento\Framework\Bulk\Api;
 
 use Magento\Framework\Bulk\Api\Data\OperationInterface;
-use Magento\Framework\Bulk\Api\Data\UuidInterface;
+use Magento\Framework\Bulk\Api\Data\IdentityInterface;
 
 /**
  * Interface BulkManagementInterface
@@ -14,22 +14,17 @@ use Magento\Framework\Bulk\Api\Data\UuidInterface;
 interface BulkManagementInterface
 {
     /**
-     * @param UuidInterface $bulkId
+     * @param string $bulkUuid
      * @param OperationInterface[] $operations
      * @param string $description
      * @param int $userId
      * @return boolean
      */
-    public function scheduleBulk(
-        \Magento\Framework\Bulk\Api\Data\UuidInterface $bulkId, 
-        array $operations, 
-        $description, 
-        $userId = null
-    );
+    public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null);
     
     /**
-     * @param UuidInterface $bulkId
+     * @param string $bulkId
      * @return boolean
      */
-    public function deleteBulk(\Magento\Framework\Bulk\Api\Data\UuidInterface $bulkId);
+    public function deleteBulk($bulkId);
 }

@@ -6,6 +6,7 @@
 namespace Magento\Framework\Bulk;
 
 use Magento\Framework\Bulk\Api\IdentityGeneratorInterface;
+use \Ramsey\Uuid\Uuid;
 
 /**
  * Class IdentityService
@@ -13,11 +14,35 @@ use Magento\Framework\Bulk\Api\IdentityGeneratorInterface;
 class IdentityService implements IdentityGeneratorInterface
 {
     /**
+     * @var \Ramsey\Uuid\UuidFactoryInterface
+     */
+    private $uuidFactory;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * IdentityService constructor.
+     * @param \Ramsey\Uuid\UuidFactoryInterface $uuidFactory
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     */
+    public function __construct(
+        \Ramsey\Uuid\UuidFactoryInterface $uuidFactory,
+        \Magento\Framework\ObjectManagerInterface $objectManager
+    ) {
+        $this->uuidFactory = $uuidFactory;
+        $this->objectManager = $objectManager;
+    }
+
+    /**
      * @inheritDoc
      */
     public function generateId()
     {
-        return Uuid::uuid4();
+        $uuid = $this->uuidFactory->uuid4();
+        return $uuid->toString();
     }
 
     /**
@@ -25,6 +50,7 @@ class IdentityService implements IdentityGeneratorInterface
      */
     public function generateIdForData($data)
     {
-        return Uuid::uuid3(Uuid::NAMESPACE_DNS, $data);
+        $uuid = $this->uuidFactory->uuid3(Uuid::NAMESPACE_DNS, $data);
+        return $uuid->toString();
     }
 }

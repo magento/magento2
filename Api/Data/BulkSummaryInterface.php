@@ -13,7 +13,7 @@ interface BulkSummaryInterface
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const BULK_ID = 'bulk_id';
+    const BULK_ID = 'uuid';
     const DESCRIPTION = 'description';
     const START_TIME = 'start_time';
     /**#@-*/
@@ -24,10 +24,10 @@ interface BulkSummaryInterface
     public function getBulkId();
 
     /**
-     * @param string $bulkId
+     * @param string $bulkUiId
      * @return $this
      */
-    public function setBulkId($bulkId);
+    public function setBulkId($bulkUiId);
 
     /**
      * @return string
