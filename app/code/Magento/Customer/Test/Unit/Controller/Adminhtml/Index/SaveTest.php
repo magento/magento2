@@ -311,11 +311,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $dataToCompact = [
             'entity_id' => $customerId,
             'code' => 'value',
+            'coolness' => false,
             'disable_auto_group_change' => 'false',
             CustomerInterface::DEFAULT_BILLING => false,
             CustomerInterface::DEFAULT_SHIPPING => false,
             'confirmation' => false,
             'sendemail_store_id' => false,
+            'extension_attributes' => false,
         ];
         $addressFilteredData = [
             'entity_id' => $addressId,
@@ -331,6 +333,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => 'true',
             'default_shipping' => 'true',
             'code' => 'value',
+            'coolness' => false,
             'region' => 'region',
             'region_id' => 'region_id',
         ];
@@ -637,11 +640,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'disable_auto_group_change' => 'false',
         ];
         $dataToCompact = [
+            'coolness' => false,
             'disable_auto_group_change' => 'false',
             CustomerInterface::DEFAULT_BILLING => false,
             CustomerInterface::DEFAULT_SHIPPING => false,
             'confirmation' => false,
             'sendemail_store_id' => false,
+            'extension_attributes' => false,
         ];
         $addressFilteredData = [
             'entity_id' => $addressId,
@@ -657,6 +662,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'default_billing' => 'false',
             'default_shipping' => 'false',
             'code' => 'value',
+            'coolness' => false,
             'region' => 'region',
             'region_id' => 'region_id',
         ];
@@ -911,11 +917,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'disable_auto_group_change' => 'false',
         ];
         $dataToCompact = [
+            'coolness' => false,
             'disable_auto_group_change' => 'false',
             CustomerInterface::DEFAULT_BILLING => false,
             CustomerInterface::DEFAULT_SHIPPING => false,
             'confirmation' => false,
             'sendemail_store_id' => false,
+            'extension_attributes' => false,
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
@@ -1061,11 +1069,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'disable_auto_group_change' => 'false',
         ];
         $dataToCompact = [
+            'coolness' => false,
             'disable_auto_group_change' => 'false',
             CustomerInterface::DEFAULT_BILLING => false,
             CustomerInterface::DEFAULT_SHIPPING => false,
             'confirmation' => false,
             'sendemail_store_id' => false,
+            'extension_attributes' => false,
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
@@ -1211,11 +1221,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             'disable_auto_group_change' => 'false',
         ];
         $dataToCompact = [
+            'coolness' => false,
             'disable_auto_group_change' => 'false',
             CustomerInterface::DEFAULT_BILLING => false,
             CustomerInterface::DEFAULT_SHIPPING => false,
             'confirmation' => false,
             'sendemail_store_id' => false,
+            'extension_attributes' => false,
         ];
 
         /** @var AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject $customerFormMock */
