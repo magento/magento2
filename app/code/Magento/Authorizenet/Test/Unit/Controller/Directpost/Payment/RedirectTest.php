@@ -8,7 +8,6 @@ namespace Magento\Authorizenet\Test\Unit\Controller\Directpost\Payment;
 use Magento\Authorizenet\Controller\Directpost\Payment\Redirect;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ViewInterface;
-use Magento\Framework\Escaper;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Block\Transparent\Iframe;
@@ -35,11 +34,6 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     private $coreRegistry;
 
     /**
-     * @var Escaper|MockObject
-     */
-    private $escaper;
-
-    /**
      * @var Redirect
      */
     private $controller;
@@ -57,21 +51,11 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['register'])
             ->getMock();
 
-        $this->escaper = static::getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['escapeXssInUrl'])
-            ->getMock();
-
         $this->controller = $objectManager->getObject(Redirect::class, [
             'request' => $this->request,
             'view' => $this->view,
             'coreRegistry' => $this->coreRegistry
         ]);
-
-        $refClass = new \ReflectionClass(Redirect::class);
-        $refProperty = $refClass->getProperty('escaper');
-        $refProperty->setAccessible(true);
-        $refProperty->setValue($this->controller, $this->escaper);
     }
 
     /**
@@ -87,14 +71,9 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
             ->method('getParams')
             ->willReturn($params);
 
-        $this->escaper->expects(static::once())
-            ->method('escapeXssInUrl')
-            ->with($url)
-            ->willReturn($url);
-
         $this->coreRegistry->expects(static::once())
             ->method('register')
-            ->with(Iframe::REGISTRY_KEY, $params);
+            ->with(Iframe::REGISTRY_KEY, []);
 
         $this->view->expects(static::once())
             ->method('addPageLayoutHandles');

@@ -69,15 +69,14 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = Files::init()->getPathToSource();
         $basePath = str_replace('\\', '/', $basePath);
 
-
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
         $this->_generationDir = $this->_tmpDir . '/generation';
         if (!file_exists($this->_generationDir)) {
-            mkdir($this->_generationDir, 0770, true);
+            mkdir($this->_generationDir, 0777, true);
         }
         $this->_compilationDir = $this->_tmpDir . '/di';
         if (!file_exists($this->_compilationDir)) {
-            mkdir($this->_compilationDir, 0770, true);
+            mkdir($this->_compilationDir, 0777, true);
         }
 
         $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile-multi-tenant --generation=%s --di=%s';

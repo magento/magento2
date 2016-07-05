@@ -531,15 +531,21 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     {
         $existingPrices = $this->_connection->fetchAssoc(
             $this->_connection->select()->from(
-                $this->_connection->getTableName($table),
+                ['t' => $this->_connection->getTableName($table)],
                 ['value_id', 'entity_id', 'all_groups', 'customer_group_id']
+            )
+            ->joinInner(
+                ['e' => $this->_connection->getTableName('catalog_product_entity')],
+                't.entity_id = e.entity_id',
+                ['e.sku']
+            )
+            ->where(
+                $this->_connection->quoteInto('e.sku IN (?)', array_keys($prices))
             )
         );
         foreach ($existingPrices as $existingPrice) {
-            foreach ($this->_oldSkus as $sku => $productId) {
-                if ($existingPrice['entity_id'] == $productId && isset($prices[$sku])) {
-                    $this->incrementCounterUpdated($prices[$sku], $existingPrice);
-                }
+            if (isset($prices[$existingPrice['sku']])) {
+                $this->incrementCounterUpdated($prices[$existingPrice['sku']], $existingPrice);
             }
         }
 
