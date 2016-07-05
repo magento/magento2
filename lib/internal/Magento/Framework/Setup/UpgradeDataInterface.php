@@ -7,6 +7,8 @@ namespace Magento\Framework\Setup;
 
 /**
  * Interface for data upgrades of a module
+ *
+ * @api
  */
 interface UpgradeDataInterface
 {

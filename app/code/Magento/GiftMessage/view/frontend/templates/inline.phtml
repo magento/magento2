@@ -8,8 +8,7 @@
 
 ?>
 <?php $_giftMessage = false; ?>
-<?php switch ($block->getCheckoutType()): ?>
-<?php case 'onepage_checkout': ?>
+<?php switch ($block->getCheckoutType()): case 'onepage_checkout': ?>
     <fieldset class="fieldset gift-message">
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Do you have any gift items in your order?'); ?></span></legend><br>
 
