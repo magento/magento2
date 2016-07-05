@@ -64,7 +64,9 @@ class Quote extends AbstractDb
         $select = parent::_getLoadSelect($field, $value, $object);
         $storeIds = $object->getSharedStoreIds();
         if ($storeIds) {
-            $select->where('store_id IN (?)', $storeIds);
+            if ($storeIds != ['*']) {
+                $select->where('store_id IN (?)', $storeIds);
+            }
         } else {
             /**
              * For empty result

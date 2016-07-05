@@ -391,6 +391,7 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
                     <item name="source" xsi:type="string">address</item>
                     <item name="customEntry" xsi:type="string">region</item>
                     <item name="validation" xsi:type="array">
