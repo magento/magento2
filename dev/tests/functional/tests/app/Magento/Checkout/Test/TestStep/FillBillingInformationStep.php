@@ -76,6 +76,7 @@ class FillBillingInformationStep implements TestStepInterface
 
         if ($this->billingAddress) {
             $selectedPaymentMethod = $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock();
+            $selectedPaymentMethod->getBillingBlock()->unsetSameAsShippingCheckboxValue();
             $selectedPaymentMethod->getBillingBlock()->fillBilling($this->billingAddress);
         }
     }
