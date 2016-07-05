@@ -526,28 +526,27 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @test
-     */
-    public function connectPortThrow()
+    public function testConfigValidation()
     {
-        $arguments = [
-            'config' => ['host' => 'localhost'],
-        ];
-        $subject = (new ObjectManager($this))->getObject(Mysql::class, $arguments);
+        $subject = (new ObjectManager($this))->getObject(
+            Mysql::class,
+            [
+                'config' => ['host' => 'localhost'],
+            ]
+        );
+
         $this->assertInstanceOf(Mysql::class, $subject);
+    }
 
-        $arguments = [
-            'config' => ['host' => 'localhost', 'port' => '33390'],
-        ];
-
-        try {
-            (new ObjectManager($this))->getObject(Mysql::class, $arguments);
-            $this->fail('an expected exception was not thrown');
-        } catch (\InvalidArgumentException $e) {
-            $expected = 'MySQL adapter: Port must be configured within host (like \'localhost:33390\') ' .
-                        'parameter, not within port';
-            $this->assertSame($expected, $e->getMessage());
-        }
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Port must be configured within host (like 'localhost:33390') parameter, not within port
+     */
+    public function testConfigValidationByPortWithException()
+    {
+        (new ObjectManager($this))->getObject(
+            Mysql::class,
+            ['config' => ['host' => 'localhost', 'port' => '33390']]
+        );
     }
 }
