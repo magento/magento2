@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Bulk\Api;
+namespace Magento\Framework\Bulk\Api;
 
 /**
  * Interface OperationManagementInterface

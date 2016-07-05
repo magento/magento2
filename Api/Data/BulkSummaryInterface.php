@@ -3,8 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Bulk\Api\Data;
+namespace Magento\Framework\Bulk\Api\Data;
 
+/**
+ * Interface BulkSummaryInterface
+ */
 interface BulkSummaryInterface
 {
     /**#@+
