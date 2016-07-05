@@ -3867,10 +3867,6 @@
         padding-top: 13px;
     }
 
-    // jstree
-    .jstree-default .disabled > a {
-        color: #a29c94;
-    }
     //
     //  debug.less (end)
     //  --------------------------------------
@@ -4712,6 +4708,20 @@
         .col-request_path {
             &:extend(.ellipsis all);
             &:extend(.col-150-max all);
+        }
+    }
+}
+
+.content-category-tree {
+    clear: both;
+
+    .jstree-default {
+        margin-bottom: 3rem;
+
+        .disabled {
+            > a {
+                color: #a29c94;
+            }
         }
     }
 }
