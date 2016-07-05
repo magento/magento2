@@ -174,6 +174,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private $urlModifier;
 
     /**
+     * @var \Magento\Framework\Escaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
@@ -214,6 +219,20 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->routeParamsPreprocessor = $routeParamsPreprocessor;
         $this->_scopeType = $scopeType;
         parent::__construct($data);
+    }
+
+    /**
+     * @param void
+     * @return Escaper
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper === null) {
+            $this->escaper =
+                \Magento\Framework\App\ObjectManager::getInstance()
+                    ->get(\Magento\Framework\Escaper::class);
+        }
+        return $this->escaper;
     }
 
     /**
@@ -988,11 +1007,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function escape($value)
     {
-        $value = str_replace('"', '%22', $value);
-        $value = str_replace("'", '%27', $value);
-        $value = str_replace('>', '%3E', $value);
-        $value = str_replace('<', '%3C', $value);
-        return $value;
+        return $this->getEscaper()->escapeUrl($value);
     }
 
     /**
