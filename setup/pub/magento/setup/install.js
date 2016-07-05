@@ -86,6 +86,9 @@ angular.module('install', ['ngStorage'])
                         $scope.isSampleDataError = true;
                     }
                 }
+            }, function (response) {
+                $scope.displayFailure();
+                $scope.log =  $scope.log + response.statusText + '<br>';
             });
             progress.get(function () {
                 $scope.checkProgress();
@@ -99,6 +102,7 @@ angular.module('install', ['ngStorage'])
         $scope.displayFailure = function () {
             $scope.isFailed = true;
             $scope.isDisabled = false;
+            $scope.isInProgress = false;
             $rootScope.isMenuEnabled = true;
         };
     }])
@@ -107,8 +111,8 @@ angular.module('install', ['ngStorage'])
             get: function (callback) {
                 $http.post('index.php/install/progress').then(callback);
             },
-            post: function (data, callback) {
-                $http.post('index.php/install/start', data).success(callback);
+            post: function (data, success, failure) {
+                $http.post('index.php/install/start', data).then(success, failure);
             }
         };
     }]);
