@@ -373,4 +373,19 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
+
+    /**
+     * Retrieve attribute visibility
+     *
+     * @param string $code
+     * @return bool
+     */
+    public function isAttributeVisible($code)
+    {
+        $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);
+        if ($attributeMetadata) {
+            return $attributeMetadata->isVisible();
+        }
+        return false;
+    }
 }
