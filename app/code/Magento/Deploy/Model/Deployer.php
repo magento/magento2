@@ -223,19 +223,19 @@ class Deployer
      * Populate all static view files for specified root path and list of languages
      *
      * @param ObjectManagerFactory $omFactory
-     * @param array $locales
-     * @param array $areasArg
      * @param array $localesArg
+     * @param array $areasArg
      * @param array $themesArg
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function deploy(ObjectManagerFactory $omFactory, array $locales,
-            array $areasArg = [], array $localesArg = [], array $themesArg = []
-        )
-    {
-
+    public function deploy(
+        ObjectManagerFactory $omFactory,
+        array $localesArg,
+        array $areasArg = [],
+        array $themesArg = []
+    ) {
         $this->omFactory = $omFactory;
 
         if ($this->isDryRun) {
@@ -251,10 +251,8 @@ class Deployer
         $themeList = implode(', ', $themesArg);
         $this->output->writeln("Requested themes: {$themeList}");
 
-        $locales = null;
-        
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
-        list($areas, $appFiles) = $this->collectAppFiles($localesArg);
+        $appFiles = $this->collectAppFiles($localesArg);
         foreach ($areasArg as $area) {
             $this->emulateApplicationArea($area);
             foreach ($localesArg as $locale) {
@@ -368,21 +366,17 @@ class Deployer
     /**
      * Accumulate all static view files in the application and record all found areas, themes and languages
      *
-     * Returns an array of areas and files with meta information
+     * Returns an array of files with meta information
      *
      * @param array $requestedLocales
      * @return array
      */
     private function collectAppFiles($requestedLocales)
     {
-        $areas = [];
         $locales = [];
         $files = $this->filesUtil->getStaticPreProcessingFiles();
         foreach ($files as $info) {
-            list($area, $themePath, $locale) = $info;
-            if ($themePath) {
-                $areas[$area][$themePath] = $themePath;
-            }
+            list(, , $locale) = $info;
             if ($locale) {
                 $locales[$locale] = $locale;
             }
@@ -398,7 +392,7 @@ class Deployer
             );
         }
 
-        return [$areas, $files];
+        return $files;
     }
 
     /**
