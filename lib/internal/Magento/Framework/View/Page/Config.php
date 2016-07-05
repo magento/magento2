@@ -21,6 +21,8 @@ use Magento\Framework\View;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ *
+ * @api
  */
 class Config
 {
@@ -123,6 +125,11 @@ class Config
     private $areaResolver;
 
     /**
+     * @var bool
+     */
+    private $isIncludesAvailable;
+
+    /**
      * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
      *
      * @return \Magento\Framework\App\State
@@ -145,6 +152,7 @@ class Config
      * @param \Magento\Framework\View\Page\FaviconInterface $favicon
      * @param Title $title
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param bool $isIncludesAvailable
      */
     public function __construct(
         View\Asset\Repository $assetRepo,
@@ -152,7 +160,8 @@ class Config
         App\Config\ScopeConfigInterface $scopeConfig,
         View\Page\FaviconInterface $favicon,
         Title $title,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $isIncludesAvailable = true
     ) {
         $this->assetRepo = $assetRepo;
         $this->pageAssets = $pageAssets;
@@ -160,6 +169,7 @@ class Config
         $this->favicon = $favicon;
         $this->title = $title;
         $this->localeResolver = $localeResolver;
+        $this->isIncludesAvailable = $isIncludesAvailable;
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
@@ -216,7 +226,7 @@ class Config
     public function setMetadata($name, $content)
     {
         $this->build();
-        $this->metadata[$name] = $content;
+        $this->metadata[$name] = htmlentities($content);
     }
 
     /**
@@ -245,7 +255,7 @@ class Config
     public function getContentType()
     {
         $this->build();
-        if (empty($this->metadata['content_type'])) {
+        if (strtolower($this->metadata['content_type']) === 'auto') {
             $this->metadata['content_type'] = $this->getMediaType() . '; charset=' . $this->getCharset();
         }
         return $this->metadata['content_type'];
@@ -555,7 +565,7 @@ class Config
      */
     public function getIncludes()
     {
-        if (empty($this->includes)) {
+        if (empty($this->includes) && $this->isIncludesAvailable) {
             $this->includes = $this->scopeConfig->getValue(
                 'design/head/includes',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE

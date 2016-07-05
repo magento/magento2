@@ -260,7 +260,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->model->load(1);
         $this->assertFalse($this->model->isCanDelete());
         $this->model->setId(100);
-        $this->assertTrue($this->model->isCanDelete());
+        $this->assertFalse($this->model->isCanDelete());
     }
 
     public function testGetCurrentUrl()
@@ -372,7 +372,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      *
      * @param bool $expected
      * @param array $serverValues
-     * @magentoConfigFixture current_store web/secure/offloader_header SSL_OFFLOADED
+     * @magentoConfigFixture current_store web/secure/offloader_header X_FORWARDED_PROTO
      * @magentoConfigFixture current_store web/secure/base_url https://example.com:80
      */
     public function testIsCurrentlySecure($expected, $serverValues)
@@ -391,8 +391,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [true, ['HTTPS' => 'on']],
-            [true, ['SSL_OFFLOADED' => 'https']],
-            [true, ['HTTP_SSL_OFFLOADED' => 'https']],
+            [true, ['X_FORWARDED_PROTO' => 'https']],
+            [true, ['HTTP_X_FORWARDED_PROTO' => 'https']],
             [true, ['HTTPS' => 'on', 'SERVER_PORT' => 80]],
             [false, ['SERVER_PORT' => 80]],
             [false, []],

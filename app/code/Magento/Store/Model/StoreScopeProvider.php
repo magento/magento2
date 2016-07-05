@@ -43,6 +43,7 @@ class StoreScopeProvider implements ScopeProviderInterface
      * @param string $entityType
      * @param array $entityData
      * @return \Magento\Framework\Model\Entity\ScopeInterface
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getContext($entityType, $entityData = [])
     {
@@ -54,9 +55,6 @@ class StoreScopeProvider implements ScopeProviderInterface
 
         $identifier = Store::STORE_ID;
         $fallback = null;
-        if ($value == 1) {
-            $value = 0;
-        }
         if ($value != Store::DEFAULT_STORE_ID) {
             $fallback = $this->scopeFactory->create($identifier, Store::DEFAULT_STORE_ID);
         }

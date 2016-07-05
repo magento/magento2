@@ -67,7 +67,7 @@ define(
             isFormPopUpVisible: formPopUpState.isVisible,
             isFormInline: addressList().length == 0,
             isNewAddressAdded: ko.observable(false),
-            saveInAddressBook: true,
+            saveInAddressBook: 1,
             quoteIsVirtual: quote.isVirtual(),
 
             /**
@@ -75,9 +75,11 @@ define(
              */
             initialize: function () {
                 var self = this,
-                    hasNewAddress;
+                    hasNewAddress,
+                    fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
 
                 this._super();
+                shippingRatesValidator.initFields(fieldsetName);
 
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep(
@@ -131,15 +133,6 @@ define(
             },
 
             /**
-             * @param {Object} element
-             */
-            initElement: function (element) {
-                if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
-                }
-            },
-
-            /**
              * @return {*}
              */
             getPopUp: function () {
@@ -190,7 +183,8 @@ define(
 
                 if (!this.source.get('params.invalid')) {
                     addressData = this.source.get('shippingAddress');
-                    addressData.save_in_address_book = this.saveInAddressBook;
+                    // if user clicked the checkbox, its value is true or false. Need to convert.
+                    addressData.save_in_address_book = this.saveInAddressBook ? 1 : 0;
 
                     // New address must be selected as a shipping address
                     newShippingAddress = createShippingAddress(addressData);
@@ -248,7 +242,7 @@ define(
                     emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
-                    this.errorValidationMessage('Please specify a shipping method.');
+                    this.errorValidationMessage($.mage.__('Please specify a shipping method.'));
 
                     return false;
                 }
@@ -296,7 +290,7 @@ define(
                     }
 
                     if (customer.isLoggedIn()) {
-                        shippingAddress.save_in_address_book = true;
+                        shippingAddress.save_in_address_book = 1;
                     }
                     selectShippingAddress(shippingAddress);
                 }

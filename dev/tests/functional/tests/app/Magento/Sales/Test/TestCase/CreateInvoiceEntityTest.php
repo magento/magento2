@@ -64,12 +64,7 @@ class CreateInvoiceEntityTest extends Injectable
             ['order' => $order, 'data' => $data]
         )->run();
 
-        return [
-            'ids' => [
-                'invoiceIds' => $result['invoiceIds'],
-                'shipmentIds' => isset($result['shipmentIds']) ? $result['shipmentIds'] : null,
-            ]
-        ];
+        return $result;
     }
 
     /**

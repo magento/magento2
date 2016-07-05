@@ -36,12 +36,13 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetActiveThrowsExceptionIfQuoteIsNotAllowedForCurrentUserContext()
     {
         // Quote without customer ID
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', ['getCustomerId'], [], '', false);
         $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->userContextMock->expects($this->any())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContextMock->expects($this->any())->method('getUserId')->willReturn(1);
+        $quoteMock->expects($this->exactly(2))->method('getCustomerId')->willReturn(2);
         $this->authorization->afterGetActive($quoteRepositoryMock, $quoteMock);
     }
 
@@ -62,11 +63,12 @@ class AuthorizationTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetActiveForCustomerThrowsExceptionIfQuoteIsNotAllowedForCurrentUserContext()
     {
         // Quote without customer ID
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', ['getCustomerId'], [], '', false);
         $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->userContextMock->expects($this->any())->method('getUserType')->willReturn(
             UserContextInterface::USER_TYPE_CUSTOMER
         );
+        $quoteMock->expects($this->exactly(2))->method('getCustomerId')->willReturn(2);
         $this->userContextMock->expects($this->any())->method('getUserId')->willReturn(1);
         $this->authorization->afterGetActive($quoteRepositoryMock, $quoteMock);
     }

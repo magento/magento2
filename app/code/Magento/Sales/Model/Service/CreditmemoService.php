@@ -139,6 +139,7 @@ class CreditmemoService implements \Magento\Sales\Api\CreditmemoManagementInterf
         $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
 
         foreach ($creditmemo->getAllItems() as $item) {
+            $item->setCreditMemo($creditmemo);
             if ($item->getQty() > 0) {
                 $item->register();
             } else {

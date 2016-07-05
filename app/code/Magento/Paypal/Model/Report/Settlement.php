@@ -8,6 +8,7 @@
 
 namespace Magento\Paypal\Model\Report;
 
+use DateTime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DirectoryList;
 
@@ -163,6 +164,20 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
+     * Columns with DateTime data type
+     * 
+     * @var array
+     */
+    private $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
+
+    /**
+     * Columns with amount type
+     *
+     * @var array
+     */
+    private $amountColumns = ['gross_transaction_amount', 'fee_amount'];
+
+    /**
     * @param \Magento\Framework\Model\Context $context
     * @param \Magento\Framework\Registry $registry
     * @param \Magento\Framework\Filesystem $filesystem
@@ -249,7 +264,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
                 // Set last modified date, this value will be overwritten during parsing
                 if (isset($attributes['mtime'])) {
-                    $lastModified = new \DateTime($attributes['mtime']);
+                    $date = new \DateTime();
+                    $lastModified = $date->setTimestamp($attributes['mtime']);
                     $this->setReportLastModified(
                         $lastModified->format('Y-m-d H:i:s')
                     );
@@ -324,7 +340,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         $rowMap = $this->_csvColumns[$format]['rowmap'];
 
         $flippedSectionColumns = array_flip($sectionColumns);
-        $stream = $this->_tmpDirectory->openFile($localCsv);
+        $stream = $this->_tmpDirectory->openFile($localCsv, 'r');
         while ($line = $stream->readCsv()) {
             if (empty($line)) {
                 // The line was empty, so skip it.
@@ -360,11 +376,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                     break;
                 case 'SB':
                     // Section body.
-                    $bodyItem = [];
-                    for ($i = 1; $i < count($line); $i++) {
-                        $bodyItem[$rowMap[$flippedSectionColumns[$i]]] = $line[$i];
-                    }
-                    $this->_rows[] = $bodyItem;
+                    $this->_rows[] = $this->getBodyItems($line, $flippedSectionColumns, $rowMap);
                     break;
                 case 'SC':
                     // Section records count.
@@ -383,6 +395,57 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
             }
         }
         return $this;
+    }
+
+    /**
+     * Parse columns from line of csv file
+     *
+     * @param array $line
+     * @param array $sectionColumns
+     * @param array $rowMap
+     * @return array
+     */
+    private function getBodyItems(array $line, array $sectionColumns, array $rowMap)
+    {
+        $bodyItem = [];
+        for ($i = 1, $count = count($line); $i < $count; $i++) {
+            if(isset($rowMap[$sectionColumns[$i]])) {
+                if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
+                    $line[$i] = $this->formatDateTimeColumns($line[$i]);
+                }
+                if (in_array($rowMap[$sectionColumns[$i]], $this->amountColumns)) {
+                    $line[$i] = $this->formatAmountColumn($line[$i]);
+                }
+                $bodyItem[$rowMap[$sectionColumns[$i]]] = $line[$i];
+            }
+        }
+        return $bodyItem;
+    }
+
+    /**
+     * Format date columns in UTC
+     * 
+     * @param string $lineItem
+     * @return string
+     */
+    private function formatDateTimeColumns($lineItem)
+    {
+        /** @var DateTime $date */
+        $date = new DateTime($lineItem, new \DateTimeZone('UTC'));
+        return $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+    }
+
+    /**
+     * Format amount columns
+     *
+     * PayPal api returns amounts in cents, hence the values need to be divided by 100
+     *
+     * @param string $lineItem
+     * @return float
+     */
+    private function formatAmountColumn($lineItem)
+    {
+        return intval($lineItem) / 100;
     }
 
     /**

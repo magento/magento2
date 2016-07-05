@@ -31,6 +31,7 @@ use Magento\Mtf\TestCase\Scenario;
  * 16. Place order.
  *
  * @group Order_Management_(CS)
+ * @ZephyrId MAGETWO-48127, MAGETWO-48091
  */
 class CreateVaultOrderBackendTest extends Scenario
 {

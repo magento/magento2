@@ -29,13 +29,12 @@ class ReadHandler implements ExtensionInterface
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity, $arguments = [])
+    public function execute($entity, $arguments = [])
     {
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
         if ($entity->getTypeId() != \Magento\Bundle\Model\Product\Type::TYPE_CODE) {

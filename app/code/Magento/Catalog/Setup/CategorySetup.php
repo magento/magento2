@@ -14,7 +14,6 @@ use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Catalog\Model\Product\Type;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class CategorySetup extends EavSetup
 {
@@ -598,7 +597,7 @@ class CategorySetup extends EavSetup
                         'filterable' => true,
                         'comparable' => true,
                         'visible_in_advanced_search' => true,
-                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL, Configurable::TYPE_CODE]),
+                        'apply_to' => implode(',', [Type::TYPE_SIMPLE, Type::TYPE_VIRTUAL]),
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => true,
@@ -739,6 +738,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 9,
                         'visible' => true,
                         'group' => 'General',
+                        'is_used_in_grid' => false,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'options_container' => [
                         'type' => 'varchar',

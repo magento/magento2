@@ -11,6 +11,7 @@ use Magento\Quote\Model\Quote;
  * Shopping cart interface
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @deprecated
  */
 interface CartInterface
 {
