@@ -55,7 +55,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->preprocessor = $this->getMockBuilder('Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms')
+        $this->preprocessor = $this->getMockBuilder('Magento\Search\Adapter\Query\Preprocessor\Synonyms')
             ->setMethods(['process'])
             ->disableOriginalConstructor()
             ->getMock();

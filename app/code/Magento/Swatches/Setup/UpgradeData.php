@@ -43,14 +43,15 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
-            $eavSetup = $this->eavSetupFactory->create();
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
+            $attributeSetId = $eavSetup->getDefaultAttributeSetId(Product::ENTITY);
             $groupId = (int)$eavSetup->getAttributeGroupByCode(
                 Product::ENTITY,
-                'Default',
+                $attributeSetId,
                 'image-management',
                 'attribute_group_id'
             );
-            $eavSetup->addAttributeToGroup(Product::ENTITY, 'Default', $groupId, 'swatch_image');
+            $eavSetup->addAttributeToGroup(Product::ENTITY, $attributeSetId, $groupId, 'swatch_image');
         }
 
         $setup->endSetup();

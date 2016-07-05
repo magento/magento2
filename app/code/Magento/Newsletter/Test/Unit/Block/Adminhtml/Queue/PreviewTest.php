@@ -62,6 +62,12 @@ class PreviewTest extends \PHPUnit_Framework_TestCase
         $appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $context->expects($this->once())->method('getAppState')->will($this->returnValue($appState));
 
+        $backendSession = $this->getMockBuilder('Magento\Backend\Model\Session')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $context->expects($this->once())->method('getBackendSession')->willReturn($backendSession);
+
         $templateFactory = $this->getMock('Magento\Newsletter\Model\TemplateFactory', ['create'], [], '', false);
         $this->template = $this->getMock('Magento\Newsletter\Model\Template', [], [], '', false);
         $templateFactory->expects($this->once())->method('create')->will($this->returnValue($this->template));

@@ -40,4 +40,22 @@ class ProductExtension extends \Magento\Framework\Api\AbstractSimpleObject imple
         $this->setData('complex_object_attribute', $complexObjectAttribute);
         return $this;
     }
+
+    /**
+     * @return \Magento\Bundle\Api\Data\BundleOptionInterface|null
+     */
+    public function getComplexObjectAttributeWithTypeDeclaration()
+    {
+        return $this->_get('complex_object_attribute_with_type_declaration');
+    }
+
+    /**
+     * @param \Magento\Bundle\Api\Data\BundleOptionInterface $complexObjectAttributeWithTypeDeclaration
+     * @return $this
+     */
+    public function setComplexObjectAttributeWithTypeDeclaration(\Magento\Bundle\Api\Data\BundleOptionInterface $complexObjectAttributeWithTypeDeclaration)
+    {
+        $this->setData('complex_object_attribute_with_type_declaration', $complexObjectAttributeWithTypeDeclaration);
+        return $this;
+    }
 }

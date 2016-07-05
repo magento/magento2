@@ -9,8 +9,10 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
 use Magento\Braintree\Model\Adminhtml\Source\CcType;
 use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Form\Cc;
+use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Config;
 use Magento\Vault\Model\VaultPaymentInterface;
 
@@ -36,9 +38,9 @@ class Form extends Cc
     protected $ccType;
 
     /**
-     * @var VaultPaymentInterface
+     * @var Data
      */
-    protected $vaultService;
+    private $paymentDataHelper;
 
     /**
      * @param Context $context
@@ -46,7 +48,6 @@ class Form extends Cc
      * @param Quote $sessionQuote
      * @param GatewayConfig $gatewayConfig
      * @param CcType $ccType
-     * @param VaultPaymentInterface $vaultService
      * @param array $data
      */
     public function __construct(
@@ -55,14 +56,12 @@ class Form extends Cc
         Quote $sessionQuote,
         GatewayConfig $gatewayConfig,
         CcType $ccType,
-        VaultPaymentInterface $vaultService,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
         $this->sessionQuote = $sessionQuote;
         $this->gatewayConfig = $gatewayConfig;
         $this->ccType = $ccType;
-        $this->vaultService = $vaultService;
     }
 
     /**
@@ -91,7 +90,9 @@ class Form extends Cc
      */
     public function isVaultEnabled()
     {
-        return $this->vaultService->isActiveForPayment(ConfigProvider::CODE);
+        $storeId = $this->_storeManager->getStore()->getId();
+        $vaultPayment = $this->getVaultPayment();
+        return $vaultPayment->isActive($storeId);
     }
 
     /**
@@ -122,5 +123,27 @@ class Form extends Cc
             $filtered = array_intersect_key($filtered, $availableTypes);
         }
         return $filtered;
+    }
+
+    /**
+     * Get configured vault payment for Braintree
+     * @return VaultPaymentInterface
+     */
+    private function getVaultPayment()
+    {
+        return $this->getPaymentDataHelper()->getMethodInstance(ConfigProvider::CC_VAULT_CODE);
+    }
+
+    /**
+     * Get payment data helper instance
+     * @return Data
+     * @deprecated
+     */
+    private function getPaymentDataHelper()
+    {
+        if ($this->paymentDataHelper === null) {
+            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        }
+        return $this->paymentDataHelper;
     }
 }

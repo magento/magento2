@@ -192,6 +192,7 @@ class View extends \Magento\Framework\App\Action\Action
             if ($layoutUpdates && is_array($layoutUpdates)) {
                 foreach ($layoutUpdates as $layoutUpdate) {
                     $page->addUpdate($layoutUpdate);
+                    $page->addPageLayoutHandles(['layout_update' => md5($layoutUpdate)]);
                 }
             }
 

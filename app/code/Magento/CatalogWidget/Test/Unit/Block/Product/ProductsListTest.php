@@ -261,20 +261,9 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
 
-        $conditions = $this->getMockBuilder('\Magento\Rule\Model\Condition\Combine')
-            ->setMethods(['collectValidatedAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $conditions->expects($this->once())->method('collectValidatedAttributes')
-            ->with($collection)
-            ->willReturnSelf();
-
         $this->builder->expects($this->once())->method('attachConditionToCollection')
-            ->with($collection, $conditions)
+            ->with($collection, $this->getConditionsForCollection($collection))
             ->willReturnSelf();
-
-        $this->rule->expects($this->once())->method('loadPost')->willReturnSelf();
-        $this->rule->expects($this->once())->method('getConditions')->willReturn($conditions);
 
         if ($productsPerPage) {
             $this->productsList->setData('products_per_page', $productsPerPage);
@@ -333,7 +322,44 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdentities()
     {
-        $this->assertEquals([\Magento\Catalog\Model\Product::CACHE_TAG], $this->productsList->getIdentities());
+        $collection = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Collection')
+            ->setMethods([
+                'addAttributeToSelect',
+                'getIterator',
+            ])->disableOriginalConstructor()
+            ->getMock();
+
+        $product = $this->getMock('Magento\Framework\DataObject\IdentityInterface', ['getIdentities']);
+        $notProduct = $this->getMock('NotProduct', ['getIdentities']);
+        $product->expects($this->once())->method('getIdentities')->willReturn(['product_identity']);
+        $collection->expects($this->once())->method('getIterator')->willReturn(
+            new \ArrayIterator([$product, $notProduct])
+        );
+        $this->productsList->setData('product_collection', $collection);
+
+        $this->assertEquals(
+            ['product_identity'],
+            $this->productsList->getIdentities()
+        );
+    }
+
+    /**
+     * @param $collection
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getConditionsForCollection($collection)
+    {
+        $conditions = $this->getMockBuilder('\Magento\Rule\Model\Condition\Combine')
+            ->setMethods(['collectValidatedAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $conditions->expects($this->once())->method('collectValidatedAttributes')
+            ->with($collection)
+            ->willReturnSelf();
+
+        $this->rule->expects($this->once())->method('loadPost')->willReturnSelf();
+        $this->rule->expects($this->once())->method('getConditions')->willReturn($conditions);
+        return $conditions;
     }
 
     public function testGetTitle()

@@ -60,7 +60,8 @@ $currencySymbol = $block->getCurrencySymbol();
     }
 </script>
 <script>
-    require(['jquery'], function ($) {
+    require(['jquery', 'mage/apply/main'], function ($, main) {
+        main.apply();
         $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=step-wizard-dialog]').applyBindings();
         $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=product-variations-matrix]').applyBindings();
     })

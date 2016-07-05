@@ -17,8 +17,14 @@
                         <argument name="zone" xsi:type="string">item_view</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="product/view/addtocart.phtml"/>
-                <block class="Magento\Wishlist\Block\Item\Configure" name="product.info.addto.bundle" as="addto" template="item/configure/addto.phtml"/>
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="product/view/addtocart.phtml" />
+                <block class="Magento\Catalog\Block\Product\View" name="product.info.addto.bundle" as="addto" after="product.info.addtocart.bundle"
+                       template="Magento_Catalog::product/view/addto.phtml" cacheable="false">
+                    <block class="Magento\Wishlist\Block\Item\Configure" name="view.addto.wishlist.bundle" after="view.addto.requisition"
+                           template="item/configure/addto/wishlist.phtml" />
+                    <block class="Magento\Catalog\Block\Product\View\Addto\Compare" name="view.addto.compare.bundle" after="view.addto.wishlist"
+                           template="Magento_Catalog::product/view/addto/compare.phtml" />
+                </block>
             </block>
         </referenceBlock>
         <referenceBlock name="product.info.options.wrapper">

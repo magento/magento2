@@ -163,14 +163,11 @@ class Helper
         } else {
             $productOptions = [];
         }
+
         $product->addData($productData);
 
         if ($wasLockedMedia) {
             $product->lockAttribute('media');
-        }
-
-        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
-            $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
         }
 
         /**
@@ -181,6 +178,10 @@ class Helper
         foreach ($useDefaults as $attributeCode => $useDefaultState) {
             if ($useDefaultState) {
                 $product->setData($attributeCode, null);
+                // UI component sends value even if field is disabled, so 'Use Config Settings' must be reset to false
+                if ($product->hasData('use_config_' . $attributeCode)) {
+                    $product->setData('use_config_' . $attributeCode, false);
+                }
             }
         }
 
@@ -218,7 +219,7 @@ class Helper
 
         return $product;
     }
-    
+
     /**
      * Initialize product before saving
      *
@@ -307,20 +308,28 @@ class Helper
     public function mergeProductOptions($productOptions, $overwriteOptions)
     {
         if (!is_array($productOptions)) {
-            $productOptions = [];
-        }
-        if (is_array($overwriteOptions)) {
-            $options = array_replace_recursive($productOptions, $overwriteOptions);
-            array_walk_recursive($options, function (&$item) {
-                if ($item === "") {
-                    $item = null;
-                }
-            });
-        } else {
-            $options = $productOptions;
+            return [];
         }
 
-        return $options;
+        if (!is_array($overwriteOptions)) {
+            return $productOptions;
+        }
+
+        foreach ($productOptions as $index => $option) {
+            $optionId = $option['option_id'];
+
+            if (!isset($overwriteOptions[$optionId])) {
+                continue;
+            }
+
+            foreach ($overwriteOptions[$optionId] as $fieldName => $overwrite) {
+                if ($overwrite && isset($option[$fieldName]) && isset($option['default_' . $fieldName])) {
+                    $productOptions[$index][$fieldName] = $option['default_' . $fieldName];
+                }
+            }
+        }
+
+        return $productOptions;
     }
 
     /**

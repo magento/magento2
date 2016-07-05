@@ -6,6 +6,10 @@
  */
 namespace Magento\Eav\Api\Data;
 
+/**
+ * Interface AttributeValidationRuleInterface
+ * @api
+ */
 interface AttributeValidationRuleInterface extends \Magento\Framework\DataObject\KeyValueObjectInterface
 {
 }

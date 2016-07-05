@@ -7,6 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,13 +30,20 @@ class UpgradeCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
+     * @var \Magento\Setup\Model\ObjectManagerProvider;
+     */
+    private $objectManagerProvider;
+
+    /**
      * Constructor
      *
      * @param InstallerFactory $installerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(InstallerFactory $installerFactory)
+    public function __construct(InstallerFactory $installerFactory, ObjectManagerProvider $objectManagerProvider)
     {
         $this->installerFactory = $installerFactory;
+        $this->objectManagerProvider = $objectManagerProvider;
         parent::__construct();
     }
 
@@ -65,6 +73,16 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $areaCode = 'setup';
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = $this->objectManagerProvider->get();
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $objectManager->configure($configLoader->load($areaCode));
+
         $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
         $installer = $this->installerFactory->create(new ConsoleLogger($output));
         $installer->updateModulesSequence($keepGenerated);
@@ -73,5 +91,7 @@ class UpgradeCommand extends AbstractSetupCommand
         if (!$keepGenerated) {
             $output->writeln('<info>Please re-run Magento compile command</info>');
         }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

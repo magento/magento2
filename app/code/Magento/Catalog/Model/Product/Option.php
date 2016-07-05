@@ -63,6 +63,11 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     protected $optionRepository;
 
+    /**
+     * Option type percent
+     */
+    protected static $typePercent = 'percent';
+
     /**#@+
      * Constants
      */
@@ -424,7 +429,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == 'percent') {
+        if ($flag && $this->getPriceType() == self::$typePercent) {
             $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
             $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             return $price;
@@ -562,7 +567,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     public function getProductSku()
     {
         $productSku = $this->_getData(self::KEY_PRODUCT_SKU);
-        if (!$productSku) {
+        if (!$productSku && $this->getProduct()) {
             $productSku = $this->getProduct()->getSku();
         }
         return $productSku;
@@ -825,6 +830,21 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     public function getExtensionAttributes()
     {
         return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * Return regular price.
+     *
+     * @return float|int
+     */
+    public function getRegularPrice()
+    {
+        if ($this->getPriceType() == self::$typePercent) {
+            $basePrice = $this->getProduct()->getPriceInfo()->getPrice('regular_price')->getAmount()->getValue();
+            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            return $price;
+        }
+        return $this->_getData(self::KEY_PRICE);
     }
 
     /**

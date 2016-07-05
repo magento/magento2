@@ -29,6 +29,13 @@ define([
         options: globalOptions,
 
         /**
+         * @private
+         */
+        _init: function initPriceBundle() {
+            $(this.options.optionsSelector, this.element).trigger('change');
+        },
+
+        /**
          * Widget creating method.
          * Triggered once.
          * @private
@@ -68,7 +75,6 @@ define([
             }
             $(this.options.priceHolderSelector).trigger('updatePrice', changes);
         },
-
 
         /**
          * Helper to fix issue with option nodes:
@@ -167,7 +173,10 @@ define([
                 break;
 
             case 'radio':
-
+                if (element.is(':checked')) {
+                    changes[optionHash] = optionConfig[optionValue] && optionConfig[optionValue].prices || {};
+                }
+                break;
             case 'select-one':
                 changes[optionHash] = optionConfig[optionValue] && optionConfig[optionValue].prices || {};
                 break;

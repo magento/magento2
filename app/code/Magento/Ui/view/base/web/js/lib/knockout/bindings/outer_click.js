@@ -93,13 +93,22 @@ define([
          */
         init: function (element, valueAccessor) {
             var config = buildConfig(valueAccessor()),
-                outerClick = onOuterClick.bind(null, element, config);
+                outerClick = onOuterClick.bind(null, element, config),
+                isTouchDevice = typeof document.ontouchstart !== 'undefined';
 
-            $(document).on('click', outerClick);
+            if (isTouchDevice) {
+                $(document).on('touchstart', outerClick);
 
-            ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-                $(document).off('click', outerClick);
-            });
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(document).off('touchstart', outerClick);
+                });
+            } else {
+                $(document).on('click', outerClick);
+
+                ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                    $(document).off('click', outerClick);
+                });
+            }
         }
     };
 

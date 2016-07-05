@@ -53,13 +53,17 @@ class UpdateRow
             if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP' || $column['IDENTITY']) {
                 continue;
             }
+
             if (isset($data[strtolower($column['COLUMN_NAME'])])) {
                 $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
+            } elseif (!empty($column['NULLABLE'])) {
+                $output[strtolower($column['COLUMN_NAME'])] = null;
             }
         }
         if (empty($data[$metadata->getIdentifierField()])) {
             $output[$metadata->getIdentifierField()] = $metadata->generateIdentifier();
         }
+
         return $output;
     }
 

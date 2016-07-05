@@ -29,6 +29,13 @@ class History extends Block
     protected $capturedAmount = '//div[@class="note-list-comment"][contains(text(), "Captured amount of")]';
 
     /**
+     * Refunded Amount.
+     *
+     * @var string
+     */
+    protected $refundedAmount = '//div[@class="note-list-comment"][contains(text(), "We refunded")]';
+
+    /**
      * Note list locator.
      *
      * @var string
@@ -58,6 +65,22 @@ class History extends Block
         $captureComments = $this->_rootElement->getElements($this->capturedAmount, Locator::SELECTOR_XPATH);
         foreach ($captureComments as $captureComment) {
             $result[] = $captureComment->getText();
+        }
+        return $result;
+    }
+
+    /**
+     * Get the refunded amount from the comments history.
+     *
+     * @return array
+     */
+    public function getRefundedAmount()
+    {
+        $result = [];
+        $this->waitCommentsHistory();
+        $refundedComments = $this->_rootElement->getElements($this->refundedAmount, Locator::SELECTOR_XPATH);
+        foreach ($refundedComments as $refundedComment) {
+            $result[] = $refundedComment->getText();
         }
         return $result;
     }
