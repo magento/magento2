@@ -36,8 +36,8 @@ return [
         ],
     ],
     'entity_behaviorModel_with_invalid_value' => [
-        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="test" behaviorModel="6-66" />' .
-        '</config>',
+        '<?xml version="1.0"?><config><entity name="test_name" label="test_label" model="test" ' .
+        'behaviorModel="6-66" /></config>',
         [
             "Element 'entity', attribute 'behaviorModel': [facet 'pattern'] The value '6-66' is not accepted by " .
             "the pattern '[A-Za-z_0-9\\\\\\\\]+'.\nLine: 1\n",
