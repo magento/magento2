@@ -51,7 +51,7 @@ define(
                 type: 'DN',
                 pattern: '^(3(0[0-5]|095|6|[8-9]))\\d*$',
                 gaps: [4, 10],
-                lengths: [14, 16],
+                lengths: [14, 16, 17, 18, 19],
                 code: {
                     name: 'CVV',
                     size: 3
@@ -62,7 +62,7 @@ define(
                 type: 'DI',
                 pattern: '^(6011(0|[2-4]|74|7[7-9]|8[6-9]|9)|6(4[4-9]|5))\\d*$',
                 gaps: [4, 8, 12],
-                lengths: [16, 19],
+                lengths: [16, 17, 18, 19],
                 code: {
                     name: 'CID',
                     size: 3
@@ -73,7 +73,7 @@ define(
                 type: 'JCB',
                 pattern: '^((2|21|213|2131\\d*)|(1|18|180|1800\\d*)|(3|35\\d*))$',
                 gaps: [4, 8, 12],
-                lengths: [16, 19],
+                lengths: [16, 17, 18, 19],
                 code: {
                     name: 'CVV',
                     size: 3
