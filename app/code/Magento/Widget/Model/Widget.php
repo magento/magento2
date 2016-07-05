@@ -313,13 +313,13 @@ class Widget
                     $value = $parameters[$name]->getValue();
                 }
             }
-            if ($value) {
+
+            if (isset($value)) {
                 $directive .= sprintf(' %s="%s"', $name, $value);
             }
         }
 
         $directive .= $this->getWidgetPageVarName($params);
-
         $directive .= '}}';
 
         if ($asIs) {
