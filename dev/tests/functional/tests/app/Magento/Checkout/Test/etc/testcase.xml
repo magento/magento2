@@ -19,6 +19,7 @@
         <step name="fillShippingMethod" module="Magento_Checkout" next="selectPaymentMethod"/>
         <step name="selectPaymentMethod" module="Magento_Checkout" next="fillBillingInformation"/>
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder"/>
-        <step name="placeOrder" module="Magento_Checkout"/>
+        <step name="placeOrder" module="Magento_Checkout" next="clickCreateAccount"/>
+        <step name="clickCreateAccount" module="Magento_Checkout"/>
     </scenario>
 </config>
