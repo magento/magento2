@@ -8,8 +8,29 @@ namespace Magento\Framework;
 /**
  * Magento escape methods
  */
-class Escaper extends \Zend\Escaper\Escaper
+class Escaper
 {
+    const HTMLSPECIALCHARS_FLAG = ENT_QUOTES | ENT_SUBSTITUTE;
+
+    /**
+     * @var \Zend\Escaper\Escaper
+     */
+    private $zendEscaper;
+
+    /**
+     * @param void
+     * @return \Magento\Framework\Escaper
+     */
+    private function getZendEscaper()
+    {
+        if ($this->zendEscaper === null) {
+            $this->zendEscaper =
+                \Magento\Framework\App\ObjectManager::getInstance()
+                    ->get(\Magento\Framework\ZendEscaper::class);
+        }
+        return $this->zendEscaper;
+    }
+
     /**
      * Escape html entities
      *
@@ -28,10 +49,10 @@ class Escaper extends \Zend\Escaper\Escaper
             if (is_array($allowedTags) and !empty($allowedTags)) {
                 $allowed = implode('|', $allowedTags);
                 $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
-                $result = htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
+                $result = htmlspecialchars($result, self::HTMLSPECIALCHARS_FLAG, 'UTF-8', false);
                 $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
             } else {
-                $result = htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+                $result = htmlspecialchars($data, self::HTMLSPECIALCHARS_FLAG, 'UTF-8', false);
             }
         } else {
             $result = $data;
@@ -47,7 +68,26 @@ class Escaper extends \Zend\Escaper\Escaper
      */
     public function escapeUrl($data)
     {
-        return htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+        return $this->getZendEscaper()->escapeUrl($data);
+    }
+
+    /**
+     * Escapes data for the Javascript context
+     *
+     * @param string|array $data
+     * @return array|string
+     */
+    public function escapeJs($data)
+    {
+        if (is_array($data)) {
+            $result = [];
+            foreach ($data as $item) {
+                $result[] = $this->getZendEscaper()->escapeJs($item);
+            }
+        } else {
+            $result = $this->getZendEscaper()->escapeJs($data);
+        }
+        return $result;
     }
 
     /**
@@ -56,6 +96,8 @@ class Escaper extends \Zend\Escaper\Escaper
      * @param string|array $data
      * @param string $quote
      * @return string|array
+     *
+     * @deprecated
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -76,6 +118,8 @@ class Escaper extends \Zend\Escaper\Escaper
      *
      * @param string $data
      * @return string
+     *
+     * @deprecated
      */
     public function escapeXssInUrl($data)
     {
@@ -93,6 +137,8 @@ class Escaper extends \Zend\Escaper\Escaper
      * @param string $data
      * @param bool $addSlashes
      * @return string
+     *
+     * @deprecated
      */
     public function escapeQuote($data, $addSlashes = false)
     {
