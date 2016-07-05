@@ -39,9 +39,9 @@ class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->paymentDataObject = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $this->paymentDataObject = $this->getMock(PaymentDataObjectInterface::class);
 
-        $this->paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $this->paymentInfo = $this->getMock(InfoInterface::class);
 
         $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()

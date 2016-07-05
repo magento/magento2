@@ -7,6 +7,7 @@ namespace Magento\Braintree\Gateway\Response\PayPal;
 
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
@@ -34,6 +35,10 @@ class VaultDetailsHandler implements HandlerInterface
      */
     private $subjectReader;
 
+    /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
 
     /**
      * Constructor
@@ -41,15 +46,18 @@ class VaultDetailsHandler implements HandlerInterface
      * @param PaymentTokenInterfaceFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param SubjectReader $subjectReader
+     * @param DateTimeFactory $dateTimeFactory
      */
     public function __construct(
         PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
-        SubjectReader $subjectReader
+        SubjectReader $subjectReader,
+        DateTimeFactory $dateTimeFactory
     ) {
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->subjectReader = $subjectReader;
+        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
@@ -100,7 +108,7 @@ class VaultDetailsHandler implements HandlerInterface
      */
     private function getExpirationDate()
     {
-        $expDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $expDate = $this->dateTimeFactory->create('now', new \DateTimeZone('UTC'));
         $expDate->add(new \DateInterval('P1Y'));
         return $expDate->format('Y-m-d 00:00:00');
     }
