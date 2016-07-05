@@ -12,6 +12,7 @@ angular.module('install', ['ngStorage'])
         $scope.isDisabled = false;
         $scope.isSampleDataError = false;
         $scope.isShowCleanUpBox = false;
+        $scope.log = '';
         $scope.toggleConsole = function () {
             $scope.isConsole = $scope.isConsole === false;
         };
@@ -29,7 +30,9 @@ angular.module('install', ['ngStorage'])
                 response.data.console.forEach(function (message) {
                     log = log + message + '<br>';
                 });
-                $scope.log = $sce.trustAsHtml(log);
+                if ($scope.isFailed === false) {
+                    $scope.log = $sce.trustAsHtml($scope.log.toString() + log);
+                }
 
                 if (response.data.success) {
                     $scope.progress = response.data.progress;
@@ -88,7 +91,7 @@ angular.module('install', ['ngStorage'])
                 }
             }, function (response) {
                 $scope.displayFailure();
-                $scope.log =  $scope.log + response.statusText + '<br>';
+                $scope.log = $sce.trustAsHtml($scope.log.toString() + '[Error] ' + response.statusText);
             });
             progress.get(function () {
                 $scope.checkProgress();
