@@ -107,6 +107,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         }
 
         if ($addressModel === null) {
+            /** @var \Magento\Customer\Model\Address $addressModel */
             $addressModel = $this->addressFactory->create();
             $addressModel->updateData($address);
             $addressModel->setCustomer($customerModel);
