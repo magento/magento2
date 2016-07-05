@@ -211,7 +211,7 @@ class DeployStaticContentCommand extends Command
                 ),
                 new InputOption(
                     self::EXCLUDE_THEME_OPTION,
-                    '-et',
+                    null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'If specified, exclude specific theme(s) from deployment.',
                     ['none']
@@ -225,7 +225,7 @@ class DeployStaticContentCommand extends Command
                 ),
                 new InputOption(
                     self::EXCLUDE_LANGUAGE_OPTION,
-                    '-el',
+                    null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of langiages you do not want the tool populate files for.',
                     ['none']
@@ -239,7 +239,7 @@ class DeployStaticContentCommand extends Command
                 ),
                 new InputOption(
                     self::EXCLUDE_AREA_OPTION,
-                    '-ea',
+                    null,
                     InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                     'List of areas you do not want the tool populate files for.',
                     ['none']
@@ -267,7 +267,7 @@ class DeployStaticContentCommand extends Command
     {
         if ($areasInclude[0] != 'all' && $areasExclude[0] != 'none') {
             throw new \InvalidArgumentException(
-                '--area (-a) and --exclude-area (-ea) cannot be used at the same time'
+                '--area (-a) and --exclude-area cannot be used at the same time'
             );
         }
 
@@ -314,7 +314,7 @@ class DeployStaticContentCommand extends Command
 
         if ($languagesInclude[0] != 'all' && $languagesExclude[0] != 'none') {
             throw new \InvalidArgumentException(
-                '--language (-l) and --exclude-language (-el) cannot be used at the same time'
+                '--language (-l) and --exclude-language cannot be used at the same time'
             );
         }
 
@@ -352,7 +352,7 @@ class DeployStaticContentCommand extends Command
     {
         if ($themesInclude[0] != 'all' && $themesExclude[0] != 'none') {
             throw new \InvalidArgumentException(
-                '--theme (-t) and --exclude-theme (-et) cannot be used at the same time'
+                '--theme (-t) and --exclude-theme cannot be used at the same time'
             );
         }
 
@@ -386,21 +386,18 @@ class DeployStaticContentCommand extends Command
      * @param $excludedEntities array
      * @return array
      */
-    private function getDeployedEntities($entities, $includedEntities, $excludedEntities)
+    private function getDeployableEntities($entities, $includedEntities, $excludedEntities)
     {
-        if ($includedEntities[0] == 'all' && $excludedEntities[0] == 'none') {
-            return $entities;
-        }
-        $deployedEntities = [];
-        foreach ($entities as $entity) {
-            if ($includedEntities[0] != 'all' && in_array($entity, $includedEntities)) {
-                $deployedEntities[] = $entity;
-            } elseif ($excludedEntities[0] != 'none' && in_array($entity, $excludedEntities)) {
-                continue;
-            }
+        $deployableEntities = [];
+        if ($includedEntities[0] === 'all' && $excludedEntities[0] === 'none') {
+            $deployableEntities = $entities;
+        } elseif ($excludedEntities[0] !== 'none') {
+            $deployableEntities =  array_diff($entities, $excludedEntities);
+        } elseif ($includedEntities[0] !== 'all') {
+            $deployableEntities =  array_intersect($entities, $includedEntities);
         }
 
-        return $deployedEntities;
+        return $deployableEntities;
     }
 
     /**
@@ -414,10 +411,13 @@ class DeployStaticContentCommand extends Command
         $magentoAreas = [];
         $magentoThemes = [];
         $magentoLanguages = $input->getArgument(self::LANGUAGES_ARGUMENT);
-
+        $areaThemeMap = [];
         $files = $filesUtil->getStaticPreProcessingFiles();
         foreach ($files as $info) {
             list($area, $themePath, $locale) = $info;
+            if ($themePath) {
+                $areaThemeMap[$area][$themePath] = $themePath;
+            }
             if ($themePath && $area && !in_array($area, $magentoAreas)) {
                 $magentoAreas[] = $area;
             }
@@ -432,17 +432,29 @@ class DeployStaticContentCommand extends Command
         $areasInclude = $input->getOption(self::AREA_OPTION);
         $areasExclude = $input->getOption(self::EXCLUDE_AREA_OPTION);
         $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
-        $deployAreas = $this->getDeployedEntities($magentoAreas, $areasInclude, $areasExclude);
+        $deployableAreas = $this->getDeployableEntities($magentoAreas, $areasInclude, $areasExclude);
 
         $languagesInclude = $input->getOption(self::LANGUAGE_OPTION);
         $languagesExclude = $input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
         $this->checkLanguagesInput($magentoLanguages, $languagesInclude, $languagesExclude);
-        $deployLanguages = $this->getDeployedEntities($magentoLanguages, $languagesInclude, $languagesExclude);
+        $deployableLanguages = $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude);
 
         $themesInclude = $input->getOption(self::THEME_OPTION);
         $themesExclude = $input->getOption(self::EXCLUDE_THEME_OPTION);
         $this->checkThemesInput($magentoThemes, $themesInclude, $themesExclude);
-        $deployThemes = $this->getDeployedEntities($magentoThemes, $themesInclude, $themesExclude);
+        $deployableThemes = $this->getDeployableEntities($magentoThemes, $themesInclude, $themesExclude);
+
+        $deployableAreaThemeMap = [];
+        $requestedThemes = [];
+        foreach ($areaThemeMap as $area => $themes) {
+            if (in_array($area, $deployableAreas) && $themes = array_intersect($themes, $deployableThemes)) {
+                $deployableAreaThemeMap[$area] = $themes;
+                $requestedThemes += $themes;
+            }
+        }
+        $output->writeln("Requested languages: " . implode(', ', $deployableLanguages));
+        $output->writeln("Requested areas: " . implode(', ', array_keys($deployableAreaThemeMap)));
+        $output->writeln("Requested themes: " . implode(', ', $requestedThemes));
 
         $options = $input->getOptions();
         $deployer = $this->objectManager->create(
@@ -464,9 +476,8 @@ class DeployStaticContentCommand extends Command
 
         return $deployer->deploy(
             $this->objectManagerFactory,
-            $deployLanguages,
-            $deployAreas,
-            $deployThemes
+            $deployableLanguages,
+            $deployableAreaThemeMap
         );
     }
 }

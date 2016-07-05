@@ -223,41 +223,27 @@ class Deployer
      * Populate all static view files for specified root path and list of languages
      *
      * @param ObjectManagerFactory $omFactory
-     * @param array $localesArg
-     * @param array $areasArg
-     * @param array $themesArg
+     * @param array $deployableLanguages
+     * @param array $deployableAreaThemeMap
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function deploy(
-        ObjectManagerFactory $omFactory,
-        array $localesArg,
-        array $areasArg = [],
-        array $themesArg = []
-    ) {
+    public function deploy(ObjectManagerFactory $omFactory, array $deployableLanguages, array $deployableAreaThemeMap)
+    {
         $this->omFactory = $omFactory;
 
         if ($this->isDryRun) {
             $this->output->writeln('Dry run. Nothing will be recorded to the target directory.');
         }
-
-        $areaList = implode(', ', $areasArg);
-        $this->output->writeln("Requested areas: {$areaList}");
-
-        $langList = implode(', ', $localesArg);
-        $this->output->writeln("Requested languages: {$langList}");
-
-        $themeList = implode(', ', $themesArg);
-        $this->output->writeln("Requested themes: {$themeList}");
-
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
-        $appFiles = $this->collectAppFiles($localesArg);
-        foreach ($areasArg as $area) {
+        $appFiles = $this->filesUtil->getStaticPreProcessingFiles();
+
+        foreach ($deployableAreaThemeMap as $area => $themes) {
             $this->emulateApplicationArea($area);
-            foreach ($localesArg as $locale) {
+            foreach ($deployableLanguages as $locale) {
                 $this->emulateApplicationLocale($locale, $area);
-                foreach ($themesArg as $themePath) {
+                foreach ($themes as $themePath) {
 
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
@@ -361,38 +347,6 @@ class Deployer
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
-    }
-
-    /**
-     * Accumulate all static view files in the application and record all found areas, themes and languages
-     *
-     * Returns an array of files with meta information
-     *
-     * @param array $requestedLocales
-     * @return array
-     */
-    private function collectAppFiles($requestedLocales)
-    {
-        $locales = [];
-        $files = $this->filesUtil->getStaticPreProcessingFiles();
-        foreach ($files as $info) {
-            list(, , $locale) = $info;
-            if ($locale) {
-                $locales[$locale] = $locale;
-            }
-        }
-        foreach ($requestedLocales as $locale) {
-            unset($locales[$locale]);
-        }
-        if (!empty($locales)) {
-            $langList = implode(', ', $locales);
-            $this->output->writeln(
-                "WARNING: there were files for the following languages detected in the file system: {$langList}."
-                . ' These languages were not requested, so the files will not be populated.'
-            );
-        }
-
-        return $files;
     }
 
     /**
