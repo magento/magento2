@@ -406,7 +406,6 @@
                                                                     </item>
                                                                 </item>
                                                             </item>
-
                                                         </item>
                                                     </item>
                                                     <item name="itemsAfter" xsi:type="array">
@@ -443,6 +442,5 @@
             </block>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>
-        <move element="logo" destination="checkout.header.wrapper"/>
     </body>
 </page>
