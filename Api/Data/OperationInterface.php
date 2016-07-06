@@ -21,6 +21,15 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     const RESULT_MESSAGE = 'result_message';
     const ERROR_CODE = 'error_code';
     /**#@-*/
+
+    /**#@+
+     * Status types
+     */
+    const STATUS_TYPE_OPEN = 0;
+    const STATUS_TYPE_COMPLETE = 1;
+    const STATUS_TYPE_RETRIABLY_FAILED = 2;
+    const STATUS_TYPE_NOT_RETRIABLY_FAILED = 3;
+    /**#@-*/
     
     /**
      * Operation id

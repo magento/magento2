@@ -18,7 +18,17 @@ interface BulkSummaryInterface extends \Magento\Framework\Api\ExtensibleDataInte
     const START_TIME = 'start_time';
     const USER_ID = 'user_id';
     /**#@-*/
-    
+
+    /**#@+
+     * Bulk statuses constants
+     */
+    const NOT_STARTED = 0;
+    const IN_PROGRESS_SUCCESS = 1;
+    const IN_PROGRESS_FAILED = 2;
+    const FINISHED_SUCCESSFULLY = 3;
+    const FINISHED_WITH_FAILURE = 4;
+    /**#@-*/
+
     /**
      * @return string
      */
