@@ -67,7 +67,7 @@ class Escaper
      * @return string
      */
     public function escapeHtmlAttr($data) {
-        return $this->zendEscaper->escapeHtmlAttr($data);
+        return $this->getZendEscaper()->escapeHtmlAttr($data);
     }
 
     /**
