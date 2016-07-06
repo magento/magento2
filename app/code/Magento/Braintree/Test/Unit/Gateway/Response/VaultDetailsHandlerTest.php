@@ -162,6 +162,9 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->paymentToken->expects(static::once())
             ->method('setExpiresAt')
             ->with('2022-01-01 00:00:00');
+        $this->paymentToken->expects(static::once())
+            ->method('setType')
+            ->with('card');
 
         $this->paymentHandler->handle($subject, $response);
         $this->assertSame($this->paymentToken, $this->payment->getExtensionAttributes()->getVaultPaymentToken());
