@@ -8,7 +8,7 @@ namespace Magento\Framework\Bulk\Api\Data;
 /**
  * Interface BulkSummaryInterface
  */
-interface BulkSummaryInterface
+interface BulkSummaryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -62,4 +62,21 @@ interface BulkSummaryInterface
      * @return $this
      */
     public function setUserId($userId);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Framework\Bulk\Api\Data\BulkSummaryExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Framework\Bulk\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Framework\Bulk\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
+    );
 }

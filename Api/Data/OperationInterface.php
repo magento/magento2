@@ -8,7 +8,7 @@ namespace Magento\Framework\Bulk\Api\Data;
 /**
  * Interface OperationInterface
  */
-interface OperationInterface
+interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -35,18 +35,18 @@ interface OperationInterface
      * @param int $id
      * @return $this
      */
-    public function setOperationId($id);
+    public function setId($id);
 
     /**
      * @return string
      */
-    public function getBulkId();
+    public function getBulkUuid();
 
     /**
      * @param string $bulkId
      * @return $this
      */
-    public function setBulkId($bulkId);
+    public function setBulkUuid($bulkId);
 
     /**
      * @return string Message Queue Topic
@@ -102,5 +102,22 @@ interface OperationInterface
      * @return $this
      */
     public function setErrorCode($errorCode);
+
+    /**
+     * Retrieve existing extension attributes object.
+     *
+     * @return \Magento\Framework\Bulk\Api\Data\OperationExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Framework\Bulk\Api\Data\OperationExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Framework\Bulk\Api\Data\OperationExtensionInterface $extensionAttributes
+    );
 
 }
