@@ -1007,7 +1007,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function escape($value)
     {
-        return $this->getEscaper()->escapeUrl($value);
+        $value = str_replace('"', '%22', $value);
+        $value = str_replace("'", '%27', $value);
+        $value = str_replace('>', '%3E', $value);
+        $value = str_replace('<', '%3C', $value);
+        return $value;
     }
 
     /**
