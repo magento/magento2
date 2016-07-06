@@ -229,8 +229,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
-        $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
         $this->assertContains('page_var_name="pasdf"}}', $result);
-        $this->assertContains('products_count="0"', $result);
+        $this->assertContains('products_count=""', $result);
     }
 }
