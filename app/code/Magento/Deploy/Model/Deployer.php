@@ -142,7 +142,7 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+                    $design = $this->objectManager->get('Magento\Theme\Model\View\Design');
                     $design->setDesignTheme($themePath, $area);
                     $assetRepo = $this->objectManager->create(
                         'Magento\Framework\View\Asset\Repository',
