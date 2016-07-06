@@ -5,23 +5,22 @@
 define([
     'jquery'
 ], function ($) {
-    "use strict";
+    'use strict';
 
     /**
      * Currently Magento App stores both  region_id and region (as text) values.
      * To prevent missing region (as text) we need to copy it in hidden field.
      * @param {Array} config
-     * @param {string} element
+     * @param {String} element
      */
     return function (config, element) {
         var form = $(element),
             regionId = form.find('#region_id'),
+
             /**
              * Set region callback
-             *
-             * @return void
              */
-            setRegion = function() {
+            setRegion = function () {
                 form.find('#region').val(regionId.filter(':visible').find(':selected').text());
             };
 
