@@ -13,9 +13,9 @@ interface OperationInterface
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    const OPERATION_ID = 'operation_id';
+    const ID = 'id';
     const BULK_ID = 'bulk_uuid';
-    const TOPIC = 'topic';
+    const TOPIC_NAME = 'topic_name';
     const SERIALIZED_DATA = 'serialized_data';
     const STATUS = 'status';
     const RESULT_MESSAGE = 'result_message';
@@ -27,7 +27,7 @@ interface OperationInterface
      *
      * @return int
      */
-    public function getOperationId();
+    public function getId();
 
     /**
      * Set operation id
@@ -51,13 +51,13 @@ interface OperationInterface
     /**
      * @return string Message Queue Topic
      */
-    public function getTopic();
+    public function getTopicName();
 
     /**
      * @param string $topic
      * @return $this
      */
-    public function setTopic($topic);
+    public function setTopicName($topic);
 
     /**
      * @return string Serialized Data
