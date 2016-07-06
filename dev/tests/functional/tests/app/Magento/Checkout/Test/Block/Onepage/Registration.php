@@ -19,15 +19,16 @@ class Registration extends Block
      *
      * @var string
      */
-    protected $createAccountButton = '//form[contains(@data-bind, "createAccount")]/input';
+    protected $createAccountButton = '[data-bind*="createAccount"] input';
 
     /**
-     * Click 'Create an Account' button.
+     * Click 'Create an Account' button and wait until button will be not visible.
      *
      * @return void
      */
-    public function clickCreateAccountButton()
+    public function createAccount()
     {
-        $this->_rootElement->find($this->createAccountButton, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find($this->createAccountButton, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementNotVisible($this->createAccountButton, Locator::SELECTOR_CSS);
     }
 }

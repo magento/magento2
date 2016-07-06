@@ -10,9 +10,9 @@ use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Click 'Create an Account' button.
+ * Create customer account on checkout one page success after place order.
  */
-class ClickCreateAccountStep implements TestStepInterface
+class CreateCustomerAccountStep implements TestStepInterface
 {
     /**
      * Checkout one page success.
@@ -26,7 +26,7 @@ class ClickCreateAccountStep implements TestStepInterface
      *
      * @var string
      */
-    protected $checkoutMethod;
+    private $checkoutMethod;
 
     /**
      * @constructor
@@ -40,14 +40,14 @@ class ClickCreateAccountStep implements TestStepInterface
     }
 
     /**
-     * Click 'Create an Account' button.
+     * Create customer account.
      *
      * @return void
      */
     public function run()
     {
         if ($this->checkoutMethod === 'register') {
-            $this->checkoutOnepageSuccess->getRegistrationBlock()->clickCreateAccountButton();
+            $this->checkoutOnepageSuccess->getRegistrationBlock()->createAccount();
         }
     }
 }
