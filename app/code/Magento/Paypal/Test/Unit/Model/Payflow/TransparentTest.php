@@ -417,6 +417,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $paymentTokenMock->expects(static::once())
             ->method('setExpiresAt')
             ->with('2018-01-01 00:00:00');
+        $paymentTokenMock->expects(static::once())
+            ->method('setType')
+            ->with('card');
 
         $this->paymentMock->expects(static::once())
             ->method('getExtensionAttributes')

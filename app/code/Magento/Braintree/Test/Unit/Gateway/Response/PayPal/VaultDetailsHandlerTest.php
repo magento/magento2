@@ -184,6 +184,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         static::assertEquals($transaction->paypalDetails->token, $paymentToken->getGatewayToken());
         static::assertEquals($transaction->paypalDetails->payerEmail, $tokenDetails['payerEmail']);
         static::assertEquals($expirationDate, $paymentToken->getExpiresAt());
+        static::assertEquals($paymentToken->getType(), 'token');
     }
 
     /**

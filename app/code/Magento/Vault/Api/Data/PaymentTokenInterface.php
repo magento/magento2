@@ -61,6 +61,16 @@ interface PaymentTokenInterface
     const IS_VISIBLE = 'is_visible';
 
     /**
+     * Card type
+     */
+    const CARD_TYPE = 'card';
+
+    /**
+     * Token type
+     */
+    const TOKEN_TYPE = 'token';
+
+    /**
      * Gets the entity ID.
      *
      * @return int|null Entity ID.
