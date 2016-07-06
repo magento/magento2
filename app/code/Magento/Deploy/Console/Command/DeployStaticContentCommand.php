@@ -22,6 +22,11 @@ use Magento\Framework\Validator\Locale;
 class DeployStaticContentCommand extends Command
 {
     /**
+     * Default language value
+     */
+    const DEFAULT_LANGUAGE_VALUE = 'en_US';
+
+    /**
      * Key for dry-run option
      */
     const DRY_RUN_OPTION = 'dry-run';
@@ -247,8 +252,7 @@ class DeployStaticContentCommand extends Command
                 new InputArgument(
                     self::LANGUAGES_ARGUMENT,
                     InputArgument::IS_ARRAY,
-                    'List of languages you want the tool populate files for.',
-                    ['en_US']
+                    'List of languages you want the tool populate files for.'
                 ),
             ]);
 
@@ -410,7 +414,7 @@ class DeployStaticContentCommand extends Command
 
         $magentoAreas = [];
         $magentoThemes = [];
-        $magentoLanguages = $input->getArgument(self::LANGUAGES_ARGUMENT);
+        $magentoLanguages = [self::DEFAULT_LANGUAGE_VALUE];
         $areaThemeMap = [];
         $files = $filesUtil->getStaticPreProcessingFiles();
         foreach ($files as $info) {
@@ -434,7 +438,7 @@ class DeployStaticContentCommand extends Command
         $this->checkAreasInput($magentoAreas, $areasInclude, $areasExclude);
         $deployableAreas = $this->getDeployableEntities($magentoAreas, $areasInclude, $areasExclude);
 
-        $languagesInclude = $input->getOption(self::LANGUAGE_OPTION);
+        $languagesInclude = $input->getArgument(self::LANGUAGES_ARGUMENT) ?: $input->getOption(self::LANGUAGE_OPTION);
         $languagesExclude = $input->getOption(self::EXCLUDE_LANGUAGE_OPTION);
         $this->checkLanguagesInput($magentoLanguages, $languagesInclude, $languagesExclude);
         $deployableLanguages = $this->getDeployableEntities($magentoLanguages, $languagesInclude, $languagesExclude);
