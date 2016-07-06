@@ -16,6 +16,7 @@ interface BulkSummaryInterface
     const BULK_ID = 'uuid';
     const DESCRIPTION = 'description';
     const START_TIME = 'start_time';
+    const USER_ID = 'user_id';
     /**#@-*/
     
     /**
@@ -24,10 +25,10 @@ interface BulkSummaryInterface
     public function getBulkId();
 
     /**
-     * @param string $bulkUiId
+     * @param string $bulkUuid
      * @return $this
      */
-    public function setBulkId($bulkUiId);
+    public function setBulkId($bulkUuid);
 
     /**
      * @return string
@@ -50,4 +51,15 @@ interface BulkSummaryInterface
      * @return $this
      */
     public function setStartTime($timestamp);
+
+    /**
+     * @return int
+     */
+    public function getUserId();
+
+    /**
+     * @param int $userId
+     * @return $this
+     */
+    public function setUserId($userId);
 }
