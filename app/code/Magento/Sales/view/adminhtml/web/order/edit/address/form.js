@@ -6,13 +6,12 @@ define([
     'jquery'
 ], function ($) {
     "use strict";
+
     /**
      * Currently Magento App stores both  region_id and region (as text) values.
      * To prevent missing region (as text) we need to copy it in hidden field.
-     * @param Array config
-     * @param string element
-     *
-     * @return void
+     * @param {Array} config
+     * @param {string} element
      */
     return function (config, element) {
         var form = $(element),
