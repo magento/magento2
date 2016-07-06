@@ -5,18 +5,24 @@
  */
 namespace Magento\Vault\Block;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\View\Element\Template;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 
+/**
+ * Class CreditCards
+ */
 class CreditCards extends Template
 {
     /**
      * @var CustomerTokenManagement
      */
-    private $customerTokenManagement;
+    protected $customerTokenManagement;
+
+    /**
+     * @var array
+     */
+    private $customerTokens;
 
     /**
      * CreditCards constructor.
@@ -38,7 +44,14 @@ class CreditCards extends Template
      */
     public function getPaymentTokens()
     {
-        return $this->customerTokenManagement->getCustomerSessionTokens();
+        $tokens = [];
+        /** @var PaymentTokenInterface $token */
+        foreach ($this->getCustomerTokens() as $token) {
+            if ($token->getType() === PaymentTokenInterface::CARD_TYPE) {
+                $tokens[] = $token;
+            }
+        };
+        return $tokens;
     }
 
     /**
@@ -55,5 +68,26 @@ class CreditCards extends Template
         }
 
         return '';
+    }
+
+    /**
+     * Checks if customer tokens exists
+     * @return bool
+     */
+    public function isExistsCustomerTokens()
+    {
+        return !empty($this->getCustomerTokens());
+    }
+
+    /**
+     * Get customer session tokens
+     * @return PaymentTokenInterface[]
+     */
+    private function getCustomerTokens()
+    {
+        if (empty($this->customerTokens)) {
+            $this->customerTokens = $this->customerTokenManagement->getCustomerSessionTokens();
+        }
+        return $this->customerTokens;
     }
 }

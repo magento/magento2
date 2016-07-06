@@ -11,7 +11,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
  * Interface CardRendererInterface
  * @api
  */
-interface CardRendererInterface extends TokenRendererInterface
+interface CardRendererInterface extends TokenRendererInterface, IconRendererInterface
 {
     /**
      * @return string
@@ -22,21 +22,6 @@ interface CardRendererInterface extends TokenRendererInterface
      * @return string
      */
     public function getExpDate();
-
-    /**
-     * @return string
-     */
-    public function getIconUrl();
-
-    /**
-     * @return int
-     */
-    public function getIconHeight();
-
-    /**
-     * @return int
-     */
-    public function getIconWidth();
 
     /**
      * @return PaymentTokenInterface
