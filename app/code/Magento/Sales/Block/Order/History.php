@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Block\Order;
 
+use \Magento\Framework\App\ObjectManager;
+use \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
+
 /**
  * Sales order history block
  */
@@ -34,15 +37,20 @@ class History extends \Magento\Framework\View\Element\Template
     protected $orders;
 
     /**
+     * @var CollectionFactoryInterface
+     */
+    private $orderCollectionFactory;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface $orderCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface $orderCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Sales\Model\Order\Config $orderConfig,
         array $data = []
@@ -63,6 +71,19 @@ class History extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * @return CollectionFactoryInterface
+     *
+     * @deprecated
+     */
+    private function getOrderCollectionFactory()
+    {
+        if ($this->orderCollectionFactory === null) {
+            $this->orderCollectionFactory = ObjectManager::getInstance()->get(CollectionFactoryInterface::class);
+        }
+        return $this->orderCollectionFactory;
+    }
+
+    /**
      * @return bool|\Magento\Sales\Model\ResourceModel\Order\Collection
      */
     public function getOrders()
@@ -71,7 +92,7 @@ class History extends \Magento\Framework\View\Element\Template
             return false;
         }
         if (!$this->orders) {
-            $this->orders = $this->_orderCollectionFactory->create($customerId)->addFieldToSelect(
+            $this->orders = $this->getOrderCollectionFactory()->create($customerId)->addFieldToSelect(
                 '*'
             )->addFieldToFilter(
                 'status',
