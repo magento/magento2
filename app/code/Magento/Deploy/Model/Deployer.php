@@ -17,6 +17,7 @@ use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -75,6 +76,11 @@ class Deployer
     private $alternativeSources;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
      * @param Files $filesUtil
@@ -126,6 +132,7 @@ class Deployer
         $this->output->writeln("Requested languages: {$langList}");
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
         list($areas, $appFiles) = $this->collectAppFiles($locales);
+        //print_r($appFiles); die();
         foreach ($areas as $area => $themes) {
             $this->emulateApplicationArea($area);
             foreach ($locales as $locale) {
@@ -159,20 +166,21 @@ class Deployer
                     );
                     $fileManager->createRequireJsConfigAsset();
                     foreach ($appFiles as $info) {
-                        list($fileArea, $fileTheme, , $module, $filePath) = $info;
+                        list($fileArea, $fileTheme, , $module, $filePath, $fullPath) = $info;
                         if (($fileArea == $area || $fileArea == 'base') &&
                             ($fileTheme == '' || $fileTheme == $themePath ||
                                 in_array(
                                     $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
                                     $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
-                        ) {
-                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module);
+                        ) {;
+                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module, $fullPath);
                             if ($compiledFile !== '') {
-                                $this->deployFile($compiledFile, $area, $themePath, $locale, $module);
+                                $this->deployFile($compiledFile, $area, $themePath, $locale, $module, $fullPath);
                             }
                         }
                     }
+
                     foreach ($libFiles as $filePath) {
                         $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, null);
                         if ($compiledFile !== '') {
@@ -296,6 +304,7 @@ class Deployer
      * @param string $themePath
      * @param string $locale
      * @param string $module
+     * @param string $fullPath
      * @return string
      * @throws \InvalidArgumentException
      * @throws LocalizedException
@@ -303,7 +312,7 @@ class Deployer
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function deployFile($filePath, $area, $themePath, $locale, $module)
+    private function deployFile($filePath, $area, $themePath, $locale, $module, $fullPath = null)
     {
         $compiledFile = '';
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
@@ -343,7 +352,15 @@ class Deployer
             }
             $this->count++;
         } catch (ContentProcessorException $exception) {
-            throw $exception;
+            //throw $exception;
+            $pathInfo = ($fullPath) ? $fullPath : $filePath;
+            $errorMessage =  __('Compilation from source: ') . $pathInfo
+                . PHP_EOL . $exception->getMessage();
+            $this->errorCount++;
+            $this->output->write(PHP_EOL. PHP_EOL . $errorMessage . PHP_EOL, true);
+
+            $logger = $this->getLogger();
+            $logger->critical($errorMessage);
         } catch (\Exception $exception) {
             $this->output->write('.');
             $this->verboseLog($exception->getTraceAsString());
@@ -383,5 +400,17 @@ class Deployer
         if ($this->output->isVerbose()) {
             $this->output->writeln($message);
         }
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    private function getLogger()
+    {
+        if (!$this->logger) {
+            $this->logger = $this->objectManager->get(LoggerInterface::class);
+        }
+
+        return $this->logger;
     }
 }
