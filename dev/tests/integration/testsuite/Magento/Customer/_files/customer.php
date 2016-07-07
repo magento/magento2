@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 use Magento\Customer\Model\CustomerRegistry;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -11,7 +10,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $repository = $objectManager->create('Magento\Customer\Api\CustomerRepositoryInterface');
 $customer = $objectManager->create('Magento\Customer\Model\Customer');
 /** @var CustomerRegistry $customerRegistry */
-$customerRegistry = $objectManager->create(CustomerRegistry::class);
+$customerRegistry = $objectManager->get(CustomerRegistry::class);
 /** @var Magento\Customer\Model\Customer $customer */
 $customer->setWebsiteId(1)
     ->setId(1)
@@ -32,5 +31,4 @@ $customer->setWebsiteId(1)
 
 $customer->isObjectNew(true);
 $customer->save();
-$customerRegistry->remove($customer->getId()); 
-
+$customerRegistry->remove($customer->getId());

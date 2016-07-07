@@ -15,7 +15,7 @@ $customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Customer\Model\Address');
 /** @var CustomerRegistry $customerRegistry */
 $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(CustomerRegistry::class);
+    ->get(CustomerRegistry::class);
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     [
@@ -34,5 +34,6 @@ $customerAddress->setData(
 )->setCustomerId(
     1
 );
+
 $customerAddress->save();
-$customerRegistry->remove($customerAddress->getCustomerId()); 
+$customerRegistry->remove($customerAddress->getCustomerId());

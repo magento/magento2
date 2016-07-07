@@ -9,7 +9,7 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = $objectManager->create(\Magento\Customer\Model\Address::class);
 /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
-$customerRegistry = $objectManager->create(\Magento\Customer\Model\CustomerRegistry::class);
+$customerRegistry = $objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     [
