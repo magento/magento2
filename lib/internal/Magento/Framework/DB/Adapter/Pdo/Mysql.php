@@ -330,7 +330,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         if (isset($this->_config['port'])) {
-            throw new \Zend_Db_Adapter_Exception('Port must be configured within host parameter');
+            throw new \Zend_Db_Adapter_Exception('Port must be configured within host parameter (like localhost:3306');
         }
 
         unset($this->_config['port']);
