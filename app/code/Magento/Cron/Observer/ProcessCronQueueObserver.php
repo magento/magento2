@@ -106,15 +106,21 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $phpExecutableFinder;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param ScheduleFactory $scheduleFactory
+     * @param \Magento\Cron\Model\ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param ConfigInterface $config
+     * @param \Magento\Cron\Model\ConfigInterface $config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Console\Request $request
      * @param \Magento\Framework\ShellInterface $shell
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      * @param \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -125,7 +131,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\App\Console\Request $request,
         \Magento\Framework\ShellInterface $shell,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
+        \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -136,6 +143,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->_shell = $shell;
         $this->timezone = $timezone;
         $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
+        $this->logger = $logger;
     }
 
     /**
@@ -196,6 +204,15 @@ class ProcessCronQueueObserver implements ObserverInterface
                     }
                 } catch (\Exception $e) {
                     $schedule->setMessages($e->getMessage());
+                    if ($schedule->getStatus() === Schedule::STATUS_ERROR) {
+                        $this->logger->critical($e);
+                    }
+                    if ($schedule->getStatus() === Schedule::STATUS_MISSED) {
+                        $this->logger->info(
+                            $schedule->getMessages() . ' Schedule Id: ' . $schedule->getScheduleId()
+                            . ' Job Code: ' . $schedule->getJobCode()
+                        );
+                    }
                 }
                 $schedule->save();
             }
