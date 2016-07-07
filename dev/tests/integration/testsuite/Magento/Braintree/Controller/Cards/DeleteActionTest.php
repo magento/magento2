@@ -16,7 +16,6 @@ use Zend\Http\Request;
  */
 class DeleteActionTest extends AbstractController
 {
-
     /**
      * @covers \Magento\Vault\Controller\Cards\DeleteAction::execute
      * @magentoDataFixture Magento/Braintree/_files/paypal_vault_token.php

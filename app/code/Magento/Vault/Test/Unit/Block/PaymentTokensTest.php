@@ -7,15 +7,15 @@ namespace Magento\Vault\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Block\Token;
+use Magento\Vault\Block\PaymentTokens;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\PaymentToken;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class TokenTest
+ * Class PaymentTokensTest
  */
-class TokenTest extends \PHPUnit_Framework_TestCase
+class PaymentTokensTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var CustomerTokenManagement|MockObject
@@ -23,7 +23,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     private $tokenManagement;
 
     /**
-     * @var Token
+     * @var PaymentTokens
      */
     private $block;
 
@@ -41,13 +41,13 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCustomerSessionTokens'])
             ->getMock();
 
-        $this->block = $this->objectManager->getObject(Token::class, [
+        $this->block = $this->objectManager->getObject(PaymentTokens::class, [
             'customerTokenManagement' => $this->tokenManagement
         ]);
     }
 
     /**
-     * @covers \Magento\Vault\Block\Token::getPaymentTokens
+     * @covers \Magento\Vault\Block\PaymentTokens::getPaymentTokens
      */
     public function testGetPaymentTokens()
     {

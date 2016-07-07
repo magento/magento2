@@ -11,7 +11,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Block\Token;
+use Magento\Vault\Block\PaymentTokens;
 
 /**
  * Class VaultTokenRendererTest
@@ -19,7 +19,7 @@ use Magento\Vault\Block\Token;
 class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Token
+     * @var PaymentTokens
      */
     private $tokenBlock;
 
@@ -34,7 +34,7 @@ class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
         $bootstrap->loadArea(Area::AREA_FRONTEND);
         $this->objectManager = Bootstrap::getObjectManager();
         
-        $this->tokenBlock = $this->objectManager->get(Token::class);
+        $this->tokenBlock = $this->objectManager->get(PaymentTokens::class);
     }
 
     /**
