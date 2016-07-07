@@ -202,12 +202,6 @@ class AssertCategoryPage extends AbstractConstraint
     {
         $errorMessage = [];
 
-        if (!$this->categoryViewPage->getTopToolbar()->isVisible()) {
-            $errorMessage[] =
-                'Top toolbar is expected on category page, but not displayed. Skipped verifying display settings.';
-            return $errorMessage;
-        }
-
         //TODO: verify display_mode
 
         if (isset($categoryData['default_sort_by'])) {
