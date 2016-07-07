@@ -40,11 +40,10 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
         parent::collect($quote, $shippingAssignment, $total);
-        $total->setTotalQty(0);
-
         $baseVirtualAmount = $virtualAmount = 0;
 
         $address = $shippingAssignment->getShipping()->getAddress();
+        $address->setTotalQty(0);
         /**
          * Process address items
          */
