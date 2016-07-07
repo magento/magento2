@@ -119,7 +119,7 @@ class BookTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressHtml()
     {
         $expected = "John Smith<br/>\nCompanyName<br />\nGreen str, 67<br />\n\n\n\nCityM,  Alabama, 75477<br/>" .
-            "\nUnited States<br/>\nT: 3468676\n\n";
+            "\nUnited States<br/>\nT: <a href=\"tel:3468676\">3468676</a>\n\n";
         $address = Bootstrap::getObjectManager()->get('Magento\Customer\Api\AddressRepositoryInterface')->getById(1);
         $html = $this->_block->getAddressHtml($address);
         $this->assertEquals($expected, $html);
