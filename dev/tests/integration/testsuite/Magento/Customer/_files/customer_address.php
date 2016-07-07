@@ -8,6 +8,8 @@
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = $objectManager->create(\Magento\Customer\Model\Address::class);
+/** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+$customerRegistry = $objectManager->create(\Magento\Customer\Model\CustomerRegistry::class);
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     [
@@ -36,3 +38,4 @@ $customerAddress = $addressRepository->save($customerAddress);
 /** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
 $addressRegistry = $objectManager->get(\Magento\Customer\Model\AddressRegistry::class);
 $addressRegistry->remove($customerAddress->getId());
+$customerRegistry->remove($customerAddress->getCustomerId());

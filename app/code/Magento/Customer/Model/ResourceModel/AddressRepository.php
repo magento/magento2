@@ -121,7 +121,6 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
         $addressModel->save();
         // Clean up the customer registry since the Address save has a
         // side effect on customer : \Magento\Customer\Model\ResourceModel\Address::_afterSave
-        $this->customerRegistry->remove($address->getCustomerId());
         $this->addressRegistry->push($addressModel);
         $customerModel->getAddressesCollection()->clear();
 
@@ -234,7 +233,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
     {
         $address = $this->addressRegistry->retrieve($addressId);
         $customerModel = $this->customerRegistry->retrieve($address->getCustomerId());
-        $customerModel->getAddressesCollection()->clear();
+        $customerModel->getAddressesCollection()->removeItemByKey($addressId);
         $this->addressResource->delete($address);
         $this->addressRegistry->remove($addressId);
         return true;
