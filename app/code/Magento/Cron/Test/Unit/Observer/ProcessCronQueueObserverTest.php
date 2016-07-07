@@ -73,6 +73,11 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     protected $observer;
 
     /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
+
+    /**
      * Prepare parameters
      */
     protected function setUp()
@@ -105,6 +110,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(
             ['execute']
         )->getMock();
+        $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
 
@@ -131,7 +137,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->_request,
             $this->_shell,
             $this->timezone,
-            $phpExecutableFinderFactory
+            $phpExecutableFinderFactory,
+            $this->loggerMock
         );
     }
 
@@ -320,11 +327,17 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
      * @param mixed $cronJobObject
      * @param string $exceptionMessage
      * @param int $saveCalls
+     * @param \Exception $exception
      *
      * @dataProvider dispatchExceptionInCallbackDataProvider
      */
-    public function testDispatchExceptionInCallback($cronJobType, $cronJobObject, $exceptionMessage, $saveCalls)
-    {
+    public function testDispatchExceptionInCallback(
+        $cronJobType,
+        $cronJobObject,
+        $exceptionMessage,
+        $saveCalls,
+        $exception
+    ) {
         $jobConfig = [
             'test_group' => [
                 'test_job1' => ['instance' => $cronJobType, 'method' => 'execute'],
@@ -332,9 +345,11 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
-        $schedule = $this->getMockBuilder('Magento\Cron\Model\Schedule')
-            ->setMethods(['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup'])
-            ->disableOriginalConstructor()->getMock();
+        $schedule = $this->getMockBuilder(
+            'Magento\Cron\Model\Schedule'
+        )->setMethods(
+            ['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup', 'getStatus']
+        )->disableOriginalConstructor()->getMock();
         $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue('-1 day'));
         $schedule->expects($this->once())->method('tryLockJob')->will($this->returnValue(true));
@@ -343,7 +358,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(\Magento\Cron\Model\Schedule::STATUS_ERROR))
             ->will($this->returnSelf());
         $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
+        $schedule->expects($this->once())->method('getStatus')->willReturn(Schedule::STATUS_ERROR);
         $schedule->expects($this->exactly($saveCalls))->method('save');
+
+        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
         $this->_collection->addItem($schedule);
 
@@ -375,13 +393,15 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
                 'Not_Existed_Class',
                 '',
                 'Invalid callback: Not_Existed_Class::execute can\'t be called',
-                1
+                1,
+                new \Exception(__('Invalid callback: Not_Existed_Class::execute can\'t be called'))
             ],
             'exception in execution' => [
                 'CronJobException',
                 new \Magento\Cron\Test\Unit\Model\CronJobException(),
                 'Test exception',
-                2
+                2,
+                new \Exception(__('Test exception'))
             ],
         ];
     }
