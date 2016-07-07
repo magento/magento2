@@ -132,7 +132,6 @@ class Deployer
         $this->output->writeln("Requested languages: {$langList}");
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
         list($areas, $appFiles) = $this->collectAppFiles($locales);
-        //print_r($appFiles); die();
         foreach ($areas as $area => $themes) {
             $this->emulateApplicationArea($area);
             foreach ($locales as $locale) {
