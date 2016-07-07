@@ -138,18 +138,18 @@ class Content extends \Magento\Backend\Block\Widget
             is_array($value['images']) &&
             count($value['images'])
         ) {
-            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-            $staticDir = $this->_filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);            
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
                 $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
                 try {
                     $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
                     $image['size'] = $fileHandler['size'];
-                } catch (\Exception $e) {
-                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('image');
+                } catch (\Magento\Framework\Exception\FileSystemException $e) {
+                    $staticDir = $this->_filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
+                    $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('thumbnail');
                     $fileHandler = $staticDir->stat(
-                        $this->getAssetRepo()->createAsset($this->getImageHelper()->getPlaceholder('image'))->getPath()
+                        $this->getAssetRepo()->createAsset($this->getImageHelper()->getPlaceholder('thumbnail'))->getPath()
                     );
                     $image['size'] = $fileHandler['size'];
                     $this->_logger->warning($e);
