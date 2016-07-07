@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -187,7 +187,7 @@
         "magento/language-nl_nl": "100.0.5",
         "magento/language-pt_br": "100.0.5",
         "magento/language-zh_hans_cn": "100.0.5",
-        "magento/framework": "100.0.8",
+        "magento/framework": "100.0.9",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "colinmollenhour/cache-backend-redis": "1.8",
         "components/jquery": "1.11.0",

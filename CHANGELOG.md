@@ -1,3 +1,8 @@
+2.0.7
+=============
+* GitHub requests:
+    * [#2984](https://github.com/magento/magento2/issues/2984) -- Payment config settings not decrypted when used?
+
 2.0.6
 =============
 * Functional fixes:
