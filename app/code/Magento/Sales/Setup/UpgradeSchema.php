@@ -54,7 +54,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             $installer->endSetup();
         }
-        if (version_compare($context->getVersion(), '2.0.7', '<')) {
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
             $this->addColumnBaseGrandTotal($installer);
             $this->addIndexBaseGrandTotal($installer);
         }
