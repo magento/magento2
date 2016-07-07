@@ -403,6 +403,7 @@ class Deployer
 
     /**
      * @return LoggerInterface
+     * @deprecated 
      */
     private function getLogger()
     {
