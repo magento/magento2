@@ -10,33 +10,41 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 
 /**
- * Class CreditCards
+ * Class PaymentTokens
  */
-class CreditCards extends Template
+class PaymentTokens extends Template
 {
     /**
-     * @var CustomerTokenManagement
-     */
-    protected $customerTokenManagement;
-
-    /**
-     * @var array
+     * @var PaymentTokenInterface[]
      */
     private $customerTokens;
 
     /**
-     * CreditCards constructor.
+     * @var CustomerTokenManagement
+     */
+    private $customerTokenManagement;
+
+    /**
+     * @var string
+     */
+    private $tokenType;
+
+    /**
+     * PaymentTokens constructor.
      * @param Template\Context $context
      * @param CustomerTokenManagement $customerTokenManagement
+     * @param string $tokenType
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         CustomerTokenManagement $customerTokenManagement,
+        $tokenType = PaymentTokenInterface::TOKEN_TYPE,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->customerTokenManagement = $customerTokenManagement;
+        $this->tokenType = $tokenType;
     }
 
     /**
@@ -47,7 +55,7 @@ class CreditCards extends Template
         $tokens = [];
         /** @var PaymentTokenInterface $token */
         foreach ($this->getCustomerTokens() as $token) {
-            if ($token->getType() === PaymentTokenInterface::CARD_TYPE) {
+            if ($token->getType() === $this->tokenType) {
                 $tokens[] = $token;
             }
         };
