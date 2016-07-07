@@ -40,9 +40,8 @@ class ComposerFactory
      */
     public function create()
     {
-        if (!getenv('COMPOSER_HOME')) {
-            putenv('COMPOSER_HOME=' . $this->directoryList->getPath(DirectoryList::COMPOSER_HOME));
-        }
+        putenv('COMPOSER_HOME=' . $this->directoryList->getPath(DirectoryList::COMPOSER_HOME));
+
         return \Composer\Factory::create(
             new BufferIO(),
             $this->composerJsonFinder->findComposerJson()
