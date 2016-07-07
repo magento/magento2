@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Wishlist\Block\Catalog\Product\View\Addto\Wishlist */
+?>
+<?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+    <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getUpdateParams(); ?>' class="action towishlist updated" data-action="add-to-wishlist">
+        <span><?php /* @escapeNotVerified */ echo __('Update Wish List') ?></span>
+    </a>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "addToWishlist": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
+        }
+    }
+</script>

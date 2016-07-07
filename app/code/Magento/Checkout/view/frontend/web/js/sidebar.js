@@ -19,7 +19,9 @@ define([
     $.widget('mage.sidebar', {
         options: {
             isRecursive: true,
-            maxItemsVisible: 3
+            minicart: {
+                maxItemsVisible: 3
+            }
         },
         scrollHeight: 0,
 
@@ -54,7 +56,7 @@ define([
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
-                if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
+                if (!customer().firstname && cart().isGuestCheckoutAllowed === false) {
                     // set URL for redirect on successful login/registration. It's postprocessed on backend.
                     $.cookie('login_redirect', this.options.url.checkout);
                     if (this.options.url.isRedirectRequired) {
@@ -240,10 +242,11 @@ define([
         _calcHeight: function () {
             var self = this,
                 height = 0,
-                counter = this.options.maxItemsVisible,
+                counter = this.options.minicart.maxItemsVisible,
                 target = $(this.options.minicart.list),
                 outerHeight;
 
+            self.scrollHeight = 0;
             target.children().each(function () {
 
                 if ($(this).find('.options').length > 0) {
@@ -257,7 +260,7 @@ define([
                 self.scrollHeight += outerHeight;
             });
 
-            target.height(height);
+            target.parent().height(height);
         }
     });
 

@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\View\Element;
 
+/**
+ * @api
+ */
 class FormKey extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**

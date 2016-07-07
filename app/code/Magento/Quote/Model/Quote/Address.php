@@ -564,8 +564,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function getAllItems()
     {
         // We calculate item list once and cache it in three arrays - all items
-        $cachedItems = 'all';
-        $key = 'cached_items_' . $cachedItems;
+        $key = 'cached_items_all';
         if (!$this->hasData($key)) {
             $quoteItems = $this->getQuote()->getItemsCollection();
             $addressItems = $this->getItemsCollection();
