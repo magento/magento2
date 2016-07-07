@@ -6,11 +6,16 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Customer\Model\CustomerRegistry;
+
 require 'customer_address.php';
 
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Customer\Model\Address');
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(CustomerRegistry::class);
 $customerAddress->isObjectNew(true);
 $customerAddress->setData(
     [
@@ -30,3 +35,4 @@ $customerAddress->setData(
     1
 );
 $customerAddress->save();
+$customerRegistry->remove($customerAddress->getCustomerId()); 
