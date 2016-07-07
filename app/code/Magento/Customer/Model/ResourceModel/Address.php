@@ -7,6 +7,9 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\App\ObjectManager;
+
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
@@ -110,19 +113,28 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
+     * @deprecated
+     * @return CustomerRegistry
+     */
+    private function getCustomerRegistry()
+    {
+        return ObjectManager::getInstance()->get(CustomerRegistry::class);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function _afterDelete(\Magento\Framework\DataObject $address)
     {
         if ($address->getId()) {
-            $customer = $this->customerRepository->getById($address->getCustomerId());
+            $customer = $this->getCustomerRegistry()->retrieve($address->getCustomerId());
             if ($customer->getDefaultBilling() == $address->getId()) {
                 $customer->setDefaultBilling(null);
             }
             if ($customer->getDefaultShipping() == $address->getId()) {
                 $customer->setDefaultShipping(null);
             }
-            $this->customerRepository->save($customer);
+            $customer->save();
         }
         return parent::_afterDelete($address);
     }

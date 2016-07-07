@@ -281,6 +281,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
+        $this->customerRegistry->expects($this->once())
+            ->method("remove")
+            ->with($customerId);
         $address->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId)

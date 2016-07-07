@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Controller\Address\FormPost;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Customer\Model\Session;
@@ -19,6 +20,7 @@ use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
@@ -418,17 +420,29 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $newRegion,
         $newRegionCode
     ) {
+        $customerRegistryMock = $this->getMockBuilder(CustomerRegistry::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager->expects($this->atLeastOnce())
+            ->method("get")
+            ->with(CustomerRegistry::class)
+            ->willReturn($customerRegistryMock);
+        ObjectManager::setInstance($this->objectManager);
+        $customerRegistryMock->expects($this->once())
+            ->method("remove");
         $existingAddressData = [
             'country_id' => $countryId,
             'region_id' => $regionId,
             'region' => $region,
             'region_code' => $regionCode,
+            'customer_id' => $customerId
         ];
         $newAddressData = [
             'country_id' => $countryId,
             'region_id' => $newRegionId,
             'region' => $newRegion,
             'region_code' => $newRegionCode,
+            'customer_id' => $customerId
         ];
 
         $url = 'success_url';
@@ -466,7 +480,6 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $this->addressData->expects($this->any())
             ->method('getRegion')
             ->willReturn($this->regionData);
-
         $this->regionData->expects($this->once())
             ->method('getRegionCode')
             ->willReturn($regionCode);
@@ -525,7 +538,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $this->session->expects($this->atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $this->addressData->expects($this->once())
+        $this->addressData->expects($this->any())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
