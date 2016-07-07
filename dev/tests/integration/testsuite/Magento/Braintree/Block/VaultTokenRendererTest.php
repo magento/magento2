@@ -38,7 +38,7 @@ class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Vault\Block\CreditCards::getPaymentTokens
+     * @covers \Magento\Vault\Block\PaymentTokens::getPaymentTokens
      * @magentoDataFixture Magento/Braintree/_files/paypal_vault_token.php
      */
     public function testGetPaymentTokens()
