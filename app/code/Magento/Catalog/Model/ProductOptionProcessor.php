@@ -25,6 +25,11 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     protected $customOptionFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     */
+    private $urlBuilder;
+
+    /**
      * @param DataObjectFactory $objectFactory
      * @param CustomOptionFactory $customOptionFactory
      */
@@ -84,6 +89,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
             $data = [];
             foreach ($options as $optionId => $optionValue) {
                 if (is_array($optionValue)) {
+                    $optionValue = $this->processFileOptionValue($optionValue);
                     $optionValue = implode(',', $optionValue);
                 }
 
@@ -97,5 +103,39 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
         }
 
         return [];
+    }
+
+    /**
+     * Returns option value with file built URL
+     *
+     * @param array $optionValue
+     * @return array
+     */
+    private function processFileOptionValue(array $optionValue)
+    {
+        if (array_key_exists('url', $optionValue) &&
+            array_key_exists('route', $optionValue['url']) &&
+            array_key_exists('params', $optionValue['url'])
+        ) {
+            $optionValue['url'] = $this->getUrlBuilder()->getUrl(
+                $optionValue['url']['route'],
+                $optionValue['url']['params']
+            );
+        }
+        return $optionValue;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
+     *
+     * @deprecated
+     */
+    private function getUrlBuilder()
+    {
+        if ($this->urlBuilder === null) {
+            $this->urlBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Catalog\Model\Product\Option\UrlBuilder');
+        }
+        return $this->urlBuilder;
     }
 }
