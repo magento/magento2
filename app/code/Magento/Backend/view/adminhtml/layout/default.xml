@@ -9,6 +9,7 @@
     <head>
         <title>Magento Admin</title>
         <meta name="viewport" content="width=1024"/>
+        <meta name="format-detection" content="telephone=no"/>
         <link src="requirejs/require.js"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
