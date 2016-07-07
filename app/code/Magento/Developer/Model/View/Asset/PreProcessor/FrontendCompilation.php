@@ -107,7 +107,7 @@ class FrontendCompilation implements PreProcessorInterface
      */
     private function processContent($path, $content, $module, FallbackContext $context)
     {
-        $sourceType = '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION)) . '$#';
+        $sourceType = '#\.' . preg_quote(pathinfo($path, PATHINFO_EXTENSION), '#') . '$#';
 
         foreach ($this->alternativeSource->getAlternativesExtensionsNames() as $name) {
             $asset = $this->assetBuilder->setArea($context->getAreaCode())
