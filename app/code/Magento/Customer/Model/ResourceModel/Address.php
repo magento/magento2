@@ -7,7 +7,8 @@
  */
 namespace Magento\Customer\Model\ResourceModel;
 
-use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Controller\Adminhtml\Group\Delete;
+use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
 use Magento\Framework\App\ObjectManager;
 
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
@@ -114,28 +115,21 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @deprecated
-     * @return CustomerRegistry
+     * @return DeleteRelation
      */
-    private function getCustomerRegistry()
+    private function getDeleteRelation()
     {
-        return ObjectManager::getInstance()->get(CustomerRegistry::class);
+        return ObjectManager::getInstance()->get(DeleteRelation::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Magento\Customer\Model\Address $address
      */
     protected function _afterDelete(\Magento\Framework\DataObject $address)
     {
-        if ($address->getId()) {
-            $customer = $this->getCustomerRegistry()->retrieve($address->getCustomerId());
-            if ($customer->getDefaultBilling() == $address->getId()) {
-                $customer->setDefaultBilling(null);
-            }
-            if ($customer->getDefaultShipping() == $address->getId()) {
-                $customer->setDefaultShipping(null);
-            }
-            $customer->save();
-        }
+        $customer = $this->customerRepository->getById($address->getCustomerId());
+
+        $this->getDeleteRelation()->deleteRelation($address, $customer);
         return parent::_afterDelete($address);
     }
 }
