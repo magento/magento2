@@ -159,7 +159,7 @@ define(
                         if (customer.isLoggedIn() && !this.customerHasAddresses) {
                             this.saveInAddressBook(1);
                         }
-                        addressData.save_in_address_book = this.saveInAddressBook();
+                        addressData.save_in_address_book = this.saveInAddressBook() ? 1 : 0;
                         newBillingAddress = createBillingAddress(addressData);
 
                         // New address must be selected as a billing address

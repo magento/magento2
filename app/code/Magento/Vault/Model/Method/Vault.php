@@ -21,7 +21,6 @@ use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Block\Form;
-use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
@@ -33,6 +32,16 @@ use Magento\Vault\Model\VaultPaymentInterface;
 final class Vault implements VaultPaymentInterface
 {
     const TOKEN_METADATA_KEY = 'token_metadata';
+
+    /**
+     * @var string
+     */
+    private static $activeKey = 'active';
+
+    /**
+     * @var string
+     */
+    private static $titleKey = 'title';
 
     /**
      * @var ConfigFactoryInterface
@@ -85,6 +94,11 @@ final class Vault implements VaultPaymentInterface
     private $paymentExtensionFactory;
 
     /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * Constructor
      *
      * @param ConfigInterface $config
@@ -96,6 +110,7 @@ final class Vault implements VaultPaymentInterface
      * @param Command\CommandManagerPoolInterface $commandManagerPool
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
+     * @param string $code
      */
     public function __construct(
         ConfigInterface $config,
@@ -106,7 +121,8 @@ final class Vault implements VaultPaymentInterface
         ValueHandlerPoolInterface $valueHandlerPool,
         Command\CommandManagerPoolInterface $commandManagerPool,
         PaymentTokenManagementInterface $tokenManagement,
-        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
+        OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
+        $code
     ) {
         $this->config = $config;
         $this->configFactory = $configFactory;
@@ -117,6 +133,7 @@ final class Vault implements VaultPaymentInterface
         $this->commandManagerPool = $commandManagerPool;
         $this->tokenManagement = $tokenManagement;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
+        $this->code = $code;
     }
 
     /**
@@ -124,23 +141,6 @@ final class Vault implements VaultPaymentInterface
      */
     private function getVaultProvider()
     {
-        if ($this->vaultProvider instanceof NullPaymentProvider) {
-            $providerCode = $this->config->getValue(VaultProvidersMap::VALUE_CODE, $this->getStore());
-
-            if ($providerCode !== null) {
-                $providerConfig = $this->configFactory->create($providerCode);
-
-                /** @var MethodInterface $vaultProvider */
-                $vaultProvider = $this->objectManager->get($providerConfig->getValue('model'));
-
-                if (
-                    $vaultProvider
-                    && $vaultProvider->isActive($this->getStore())
-                ) {
-                    $this->vaultProvider = $vaultProvider;
-                }
-            }
-        }
         return $this->vaultProvider;
     }
 
@@ -164,7 +164,7 @@ final class Vault implements VaultPaymentInterface
      */
     public function getCode()
     {
-        return static::CODE;
+        return $this->code;
     }
 
     /**
@@ -180,7 +180,7 @@ final class Vault implements VaultPaymentInterface
      */
     public function getTitle()
     {
-        return 'Stored Cards';
+        return $this->getConfiguredValue(self::$titleKey);
     }
 
     /**
@@ -584,7 +584,8 @@ final class Vault implements VaultPaymentInterface
      */
     public function isActive($storeId = null)
     {
-        return $this->getVaultProvider()->isActive($storeId);
+        return $this->getVaultProvider()->isActive($storeId)
+            && $this->config->getValue(self::$activeKey, $this->getStore() ?: $storeId);
     }
 
     /**
@@ -604,23 +605,10 @@ final class Vault implements VaultPaymentInterface
     }
 
     /**
-     * @param null $storeId
-     * @return string|null
+     * @inheritdoc
      */
-    public function getProviderCode($storeId = null)
+    public function getProviderCode()
     {
-        return $this->config->getValue(VaultProvidersMap::VALUE_CODE, $this->getStore() ?: $storeId);
-    }
-
-    /**
-     * @param string $paymentCode
-     * @param null $storeId
-     *
-     * @return bool
-     */
-    public function isActiveForPayment($paymentCode, $storeId = null)
-    {
-        return $this->getProviderCode($this->getStore() ?: $storeId) === $paymentCode
-        && $this->isActive($this->getStore() ?: $storeId);
+        return $this->getVaultProvider()->getCode();
     }
 }

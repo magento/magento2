@@ -6,6 +6,10 @@
  */
 namespace Magento\Catalog\Api;
 
+/**
+ * Interface AttributeSetFinderInterface
+ * @api
+ */
 interface AttributeSetFinderInterface
 {
     /**

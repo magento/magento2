@@ -289,8 +289,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         ];
 
         $modelClassName = \Magento\CatalogImportExport\Model\Import\Product\Option::class;
-        $class = new \ReflectionClass($modelClassName);
-        $this->model = $class->newInstanceArgs($modelClassArgs);
+        $this->model = new $modelClassName(...array_values($modelClassArgs));
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
         $this->modelMock = $this->getMockBuilder($modelClassName)
             ->setConstructorArgs($modelClassArgs)

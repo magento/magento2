@@ -90,7 +90,7 @@ class DeleteCreditCardFromMyAccountStep implements TestStepInterface
     public function run()
     {
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $this->customer]
         )->run();
         $this->customerAccountIndex->getAccountMenuBlock()->openMenuItem('My Credit Cards');
