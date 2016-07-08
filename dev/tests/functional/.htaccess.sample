@@ -1,0 +1,5 @@
+## Allow access  to website.sh
+    <Files website.php>
+         order allow,deny
+         allow from all
+    </Files>
