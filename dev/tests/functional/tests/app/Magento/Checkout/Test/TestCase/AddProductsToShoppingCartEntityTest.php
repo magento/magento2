@@ -85,7 +85,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Run test add products to shopping cart
      *
-     * @param string $productsData
+     * @param array $productsData
      * @param array $cart
      * @return array
      */
@@ -104,7 +104,7 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Create products
      *
-     * @param string $productList
+     * @param array $productList
      * @return array
      */
     protected function prepareProducts($productList)

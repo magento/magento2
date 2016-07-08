@@ -65,7 +65,7 @@ class DeleteProductFromMiniShoppingCartTest extends Injectable
     /**
      * Run test add products to shopping cart
      *
-     * @param string $products
+     * @param array $products
      * @param int $deletedProductIndex
      * @return array
      */
@@ -89,7 +89,7 @@ class DeleteProductFromMiniShoppingCartTest extends Injectable
     /**
      * Create products
      *
-     * @param string $productList
+     * @param array $productList
      * @return InjectableFixture[]
      */
     protected function prepareProducts($productList)
