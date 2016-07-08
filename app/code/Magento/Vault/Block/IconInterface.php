@@ -6,9 +6,9 @@
 namespace Magento\Vault\Block;
 
 /**
- * Interface IconRendererInterface
+ * Interface IconInterface
  */
-interface IconRendererInterface
+interface IconInterface
 {
     /**
      * Get url to icon

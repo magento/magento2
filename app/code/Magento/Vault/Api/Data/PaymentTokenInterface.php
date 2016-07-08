@@ -63,12 +63,12 @@ interface PaymentTokenInterface
     /**
      * Card type
      */
-    const CARD_TYPE = 'card';
+    const TYPE_CREDIT_CARD = 'card';
 
     /**
      * Token type
      */
-    const TOKEN_TYPE = 'token';
+    const TYPE_ACCOUNT = 'token';
 
     /**
      * Gets the entity ID.

@@ -52,10 +52,10 @@ class PaymentTokensTest extends \PHPUnit_Framework_TestCase
     public function testGetPaymentTokens()
     {
         $cardToken = $this->objectManager->getObject(PaymentToken::class, [
-            'data' => [PaymentTokenInterface::TYPE => PaymentTokenInterface::CARD_TYPE]
+            'data' => [PaymentTokenInterface::TYPE => PaymentTokenInterface::TYPE_CREDIT_CARD]
         ]);
         $token = $this->objectManager->getObject(PaymentToken::class, [
-            'data' => [PaymentTokenInterface::TYPE => PaymentTokenInterface::TOKEN_TYPE]
+            'data' => [PaymentTokenInterface::TYPE => PaymentTokenInterface::TYPE_ACCOUNT]
         ]);
         $this->tokenManagement->expects(static::once())
             ->method('getCustomerSessionTokens')
@@ -66,6 +66,6 @@ class PaymentTokensTest extends \PHPUnit_Framework_TestCase
 
         /** @var PaymentTokenInterface $actualToken */
         $actualToken = array_pop($actual);
-        static::assertEquals(PaymentTokenInterface::TOKEN_TYPE, $actualToken->getType());
+        static::assertEquals(PaymentTokenInterface::TYPE_ACCOUNT, $actualToken->getType());
     }
 }

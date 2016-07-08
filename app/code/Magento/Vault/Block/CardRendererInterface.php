@@ -5,13 +5,11 @@
  */
 namespace Magento\Vault\Block;
 
-use Magento\Vault\Api\Data\PaymentTokenInterface;
-
 /**
  * Interface CardRendererInterface
  * @api
  */
-interface CardRendererInterface extends TokenRendererInterface, IconRendererInterface
+interface CardRendererInterface extends TokenRendererInterface, IconInterface
 {
     /**
      * @return string
@@ -22,9 +20,4 @@ interface CardRendererInterface extends TokenRendererInterface, IconRendererInte
      * @return string
      */
     public function getExpDate();
-
-    /**
-     * @return PaymentTokenInterface
-     */
-    public function getToken();
 }
