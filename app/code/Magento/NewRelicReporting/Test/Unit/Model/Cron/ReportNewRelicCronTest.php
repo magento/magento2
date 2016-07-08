@@ -53,11 +53,6 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
     protected $deploymentsModel;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $logger;
-
-    /**
      * Setup
      *
      * @return void
@@ -100,8 +95,6 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setDeployment'])
             ->getMock();
-        $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
-            ->getMock();
 
         $this->cronEventFactory->expects($this->any())
             ->method('create')
@@ -115,8 +108,7 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
             $this->collect,
             $this->counter,
             $this->cronEventFactory,
-            $this->deploymentsFactory,
-            $this->logger
+            $this->deploymentsFactory
         );
     }
 
@@ -181,65 +173,6 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->cronEventModel->expects($this->once())
             ->method('sendRequest');
-
-        $this->deploymentsModel->expects($this->any())
-            ->method('setDeployment');
-
-        $this->assertSame(
-            $this->model,
-            $this->model->report()
-        );
-    }
-
-    /**
-     * Test case when module is enabled and request is failed
-     *
-     * @return void
-     */
-    public function testReportNewRelicCronRequestFailed()
-    {
-        $testModuleData = [
-            'changes' => [
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'enabled'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'disabled'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'installed'],
-                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'uninstalled'],
-            ],
-            'enabled' => 1,
-            'disabled' => 1,
-            'installed' => 1,
-        ];
-
-        $this->config->expects($this->once())
-            ->method('isNewRelicEnabled')
-            ->willReturn(true);
-        $this->collect->expects($this->once())
-            ->method('getModuleData')
-            ->willReturn($testModuleData);
-        $this->counter->expects($this->once())
-            ->method('getAllProductsCount');
-        $this->counter->expects($this->once())
-            ->method('getConfigurableCount');
-        $this->counter->expects($this->once())
-            ->method('getActiveCatalogSize');
-        $this->counter->expects($this->once())
-            ->method('getCategoryCount');
-        $this->counter->expects($this->once())
-            ->method('getWebsiteCount');
-        $this->counter->expects($this->once())
-            ->method('getStoreViewsCount');
-        $this->counter->expects($this->once())
-            ->method('getCustomerCount');
-        $this->cronEventModel->expects($this->once())
-            ->method('addData')
-            ->willReturnSelf();
-        $this->cronEventModel->expects($this->once())
-            ->method('sendRequest');
-
-        $this->cronEventModel->expects($this->once())->method('sendRequest')->willThrowException(
-            new \Exception()
-        );
-        $this->logger->expects($this->once())->method('critical');
 
         $this->deploymentsModel->expects($this->any())
             ->method('setDeployment');

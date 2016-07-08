@@ -12,7 +12,6 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Eav"/>
             <module name="Magento_Widget"/>
-            <module name="Magento_Cron"/>
         </sequence>
     </module>
 </config>
