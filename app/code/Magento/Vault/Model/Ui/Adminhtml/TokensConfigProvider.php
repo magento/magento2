@@ -11,9 +11,13 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\OrderRepository;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
+use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
@@ -66,6 +70,16 @@ final class TokensConfigProvider
     private $paymentDataHelper;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var PaymentTokenManagementInterface
+     */
+    private $paymentTokenManagement;
+
+    /**
      * Constructor
      *
      * @param SessionManagerInterface $session
@@ -103,9 +117,6 @@ final class TokensConfigProvider
         $result = [];
 
         $customerId = $this->session->getCustomerId();
-        if (!$customerId) {
-            return $result;
-        }
 
         $vaultPayment = $this->getVaultPayment($vaultPaymentCode);
         if ($vaultPayment === null) {
@@ -118,9 +129,15 @@ final class TokensConfigProvider
             return $result;
         }
 
-        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
-            ->setValue($customerId)
-            ->create();
+        if ($customerId) {
+            $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
+                ->setValue($customerId)
+                ->create();
+        } else {
+            $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::ENTITY_ID)
+                ->setValue($this->getPaymentTokenEntityId())
+                ->create();
+        }
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
             ->setValue($vaultProviderCode)
             ->create();
@@ -173,6 +190,32 @@ final class TokensConfigProvider
     }
 
     /**
+     * Returns payment token entity id by order payment id
+     * @return int|null
+     */
+    private function getPaymentTokenEntityId()
+    {
+        return $this->getPaymentTokenManagement()
+            ->getByPaymentId($this->getOrderPaymentEntityId())
+            ->getEntityId();
+    }
+
+    /**
+     * Returns order payment entity id
+     * Using 'getReordered' for Reorder action
+     * Using 'getOrder' for Edit action
+     * @return int|null
+     */
+    private function getOrderPaymentEntityId()
+    {
+        $orderId = $this->session->getReordered()
+            ?: $this->session->getOrder()->getEntityId();
+        $order = $this->getOrderRepository()->get($orderId);
+
+        return $order->getPayment()->getEntityId();
+    }
+
+    /**
      * Get payment data helper instance
      * @return Data
      * @deprecated
@@ -183,5 +226,35 @@ final class TokensConfigProvider
             $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
         }
         return $this->paymentDataHelper;
+    }
+
+    /**
+     * Returns order repository instance
+     * @return OrderRepositoryInterface
+     * @deprecated
+     */
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = ObjectManager::getInstance()
+                ->get(OrderRepository::class);
+        }
+
+        return $this->orderRepository;
+    }
+
+    /**
+     * Returns payment token management instance
+     * @return PaymentTokenManagementInterface
+     * @deprecated
+     */
+    private function getPaymentTokenManagement()
+    {
+        if ($this->paymentTokenManagement === null) {
+            $this->paymentTokenManagement = ObjectManager::getInstance()
+                ->get(PaymentTokenManagement::class);
+        }
+
+        return $this->paymentTokenManagement;
     }
 }
