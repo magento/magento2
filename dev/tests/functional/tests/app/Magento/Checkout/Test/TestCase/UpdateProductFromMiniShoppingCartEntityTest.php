@@ -78,7 +78,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     /**
      * Update product from mini shopping cart.
      *
-     * @param string $originalProduct
+     * @param array $originalProduct
      * @param array $checkoutData
      * @return array
      */
@@ -110,7 +110,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
     /**
      * Create product.
      *
-     * @param string $product
+     * @param array $product
      * @param array $data [optional]
      * @return FixtureInterface
      */
