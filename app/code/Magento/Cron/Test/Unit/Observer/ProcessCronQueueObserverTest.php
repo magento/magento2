@@ -7,6 +7,7 @@ namespace Magento\Cron\Test\Unit\Observer;
 
 use Magento\Cron\Model\Schedule;
 use Magento\Cron\Observer\ProcessCronQueueObserver as ProcessCronQueueObserver;
+use Magento\Framework\App\State;
 
 /**
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
@@ -78,6 +79,11 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     protected $loggerMock;
 
     /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $appStateMock;
+
+    /**
      * Prepare parameters
      */
     protected function setUp()
@@ -112,6 +118,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         )->getMock();
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
 
+        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
 
         $this->timezone = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
@@ -138,7 +148,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->_shell,
             $this->timezone,
             $phpExecutableFinderFactory,
-            $this->loggerMock
+            $this->loggerMock,
+            $this->appStateMock
         );
     }
 
@@ -233,6 +244,9 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     public function testDispatchExceptionTooLate()
     {
         $exceptionMessage = 'Too late for the schedule';
+        $scheduleId = 42;
+        $jobCode = 'test_job1';
+        $exception = $exceptionMessage . ' Schedule Id: ' . $scheduleId . ' Job Code: ' . $jobCode;
 
         $lastRun = time() + 10000000;
         $this->_cache->expects($this->any())->method('load')->will($this->returnValue($lastRun));
@@ -241,9 +255,20 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         $schedule = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->setMethods(
-            ['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup']
+            [
+                'getJobCode',
+                'tryLockJob',
+                'getScheduledAt',
+                'save',
+                'setStatus',
+                'setMessages',
+                '__wakeup',
+                'getStatus',
+                'getMessages',
+                'getScheduleId',
+            ]
         )->disableOriginalConstructor()->getMock();
-        $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
+        $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue($jobCode));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue('-1 day'));
         $schedule->expects($this->once())->method('tryLockJob')->will($this->returnValue(true));
         $schedule->expects(
@@ -256,7 +281,14 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
         $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
+        $schedule->expects($this->any())->method('getStatus')->willReturn(Schedule::STATUS_MISSED);
+        $schedule->expects($this->once())->method('getMessages')->willReturn($exceptionMessage);
+        $schedule->expects($this->once())->method('getScheduleId')->willReturn($scheduleId);
         $schedule->expects($this->once())->method('save');
+
+        $this->appStateMock->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
+
+        $this->loggerMock->expects($this->once())->method('info')->with($exception);
 
         $this->_collection->addItem($schedule);
 
@@ -281,11 +313,12 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     public function testDispatchExceptionNoCallback()
     {
         $exceptionMessage = 'No callbacks found';
+        $exception = new \Exception(__($exceptionMessage));
 
         $schedule = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->setMethods(
-            ['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup']
+            ['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup', 'getStatus']
         )->disableOriginalConstructor()->getMock();
         $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue('-1 day'));
@@ -300,9 +333,12 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
         $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
+        $schedule->expects($this->any())->method('getStatus')->willReturn(Schedule::STATUS_ERROR);
         $schedule->expects($this->once())->method('save');
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
         $this->_collection->addItem($schedule);
+
+        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
         $jobConfig = ['test_group' => ['test_job1' => ['instance' => 'Some_Class']]];
 
@@ -358,7 +394,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo(\Magento\Cron\Model\Schedule::STATUS_ERROR))
             ->will($this->returnSelf());
         $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
-        $schedule->expects($this->once())->method('getStatus')->willReturn(Schedule::STATUS_ERROR);
+        $schedule->expects($this->any())->method('getStatus')->willReturn(Schedule::STATUS_ERROR);
         $schedule->expects($this->exactly($saveCalls))->method('save');
 
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
