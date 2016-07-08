@@ -456,3 +456,4 @@ Pagination,Pagination
 "Anchor Text for Next","Anchor Text for Next"
 "Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used.","Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used."
 "Theme Name","Theme Name"
+"Deployment config file %1 is not writable.","Deployment config file %1 is not writable."

@@ -330,9 +330,6 @@ define([
                                 description: data.description
                             }
                         });
-                    }
-
-                    if (playerData.oldVideoId !== playerData.newVideoId) {
                         this._loadRemotePreview(data.thumbnail);
                     }
                     self._onlyVideoPlayer = true;
