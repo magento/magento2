@@ -18,7 +18,6 @@ class FetchReports
      * @param \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory
     ) {
         $this->_settlementFactory = $settlementFactory;
