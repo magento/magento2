@@ -6,11 +6,14 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
+use Magento\Mtf\Config\DataInterface;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Create new simple product via curl.
@@ -89,9 +92,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Catalog' => 2,
             'Search' => 3,
             'Catalog, Search' => 4
-        ],
-        'website_ids' => [
-            'Main Website' => 1
         ],
         'status' => [
             'No' => 2,
@@ -182,7 +182,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'use_config_manage_stock' => 'No',
             'min_sale_qty' => 1,
             'use_config_min_sale_qty' => 1,
-            'max_sale_qty' => 10000 ,
+            'max_sale_qty' => 10000,
             'use_config_max_sale_qty' => 1,
             'enable_qty_increments' => 'No',
             'use_config_enable_qty_increments' => 'No',
@@ -195,6 +195,28 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @var array
      */
     protected $selectOptions = ['drop_down', 'radio', 'checkbox', 'multiple'];
+
+    /**
+     * Fixture Factory instance.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * @constructor
+     * @param DataInterface $configuration
+     * @param EventManagerInterface $eventManager
+     * @param FixtureFactory $fixtureFactory
+     */
+    public function __construct(
+        DataInterface $configuration,
+        EventManagerInterface $eventManager,
+        FixtureFactory $fixtureFactory
+    ) {
+        parent::__construct($configuration, $eventManager);
+        $this->fixtureFactory = $fixtureFactory;
+    }
 
     /**
      * Post request for creating simple product.
@@ -415,12 +437,12 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function prepareWebsites()
     {
         if (!empty($this->fields['product']['website_ids'])) {
-            foreach ($this->fields['product']['website_ids'] as $key => $website) {
-                $website = isset($this->mappingData['website_ids'][$website])
-                    ? $this->mappingData['website_ids'][$website]
-                    : $website;
-                $this->fields['product']['website_ids'][$key] = $website;
+            foreach ($this->fixture->getDataFieldConfig('website_ids')['source']->getWebsites() as $key => $website) {
+                $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
             }
+        } else {
+            $website = $this->fixtureFactory->createByCode('website', ['default']);
+            $this->fields['product']['website_ids'][] = $website->getWebsiteId();
         }
     }
 
