@@ -25,7 +25,7 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $connection = $setup->getConnection();
             $connection->update($setup->getTable(InstallSchema::PAYMENT_TOKEN_TABLE), [
-                PaymentTokenInterface::TYPE => PaymentTokenInterface::CARD_TYPE
+                PaymentTokenInterface::TYPE => PaymentTokenInterface::TYPE_CREDIT_CARD
             ]);
         }
         $setup->endSetup();

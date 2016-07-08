@@ -27,7 +27,7 @@ $paymentToken = $objectManager->create(PaymentToken::class);
 $paymentToken
     ->setCustomerId($customer->getId())
     ->setPaymentMethodCode(ConfigProvider::PAYPAL_CODE)
-    ->setType(PaymentToken::TOKEN_TYPE)
+    ->setType(PaymentToken::TYPE_ACCOUNT)
     ->setGatewayToken('mx29vk')
     ->setPublicHash($encryptor->hash($customer->getId()))
     ->setTokenDetails(json_encode(['payerEmail' => 'john.doe@example.com']))

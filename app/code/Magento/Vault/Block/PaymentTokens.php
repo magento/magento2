@@ -39,7 +39,7 @@ class PaymentTokens extends Template
     public function __construct(
         Template\Context $context,
         CustomerTokenManagement $customerTokenManagement,
-        $tokenType = PaymentTokenInterface::TOKEN_TYPE,
+        $tokenType = PaymentTokenInterface::TYPE_ACCOUNT,
         array $data = []
     ) {
         parent::__construct($context, $data);

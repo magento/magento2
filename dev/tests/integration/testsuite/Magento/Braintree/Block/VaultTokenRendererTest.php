@@ -61,6 +61,6 @@ class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
         static::assertTrue($vaultToken->getIsVisible());
         static::assertEquals($token, $vaultToken->getGatewayToken());
         static::assertEquals(ConfigProvider::PAYPAL_CODE, $vaultToken->getPaymentMethodCode());
-        static::assertEquals(PaymentTokenInterface::TOKEN_TYPE, $vaultToken->getType());
+        static::assertEquals(PaymentTokenInterface::TYPE_ACCOUNT, $vaultToken->getType());
     }
 }
