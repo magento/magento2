@@ -184,7 +184,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Admin is a required field in the each row
+     * @expectedExceptionMessage Admin is a required field in each row
      */
     public function testBeforeSaveWithFailedValidation()
     {
