@@ -1340,7 +1340,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Return Password Confirmation
+     * Return Password
      *
      * @return string
      */
