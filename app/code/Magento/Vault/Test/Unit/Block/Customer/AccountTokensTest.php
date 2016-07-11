@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Test\Unit\Block;
+namespace Magento\Vault\Test\Unit\Block\Customer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
