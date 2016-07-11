@@ -8,7 +8,6 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Model\Address as CustomerAddressModel;
-use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\ResourceModel\Address\Collection;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
