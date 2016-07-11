@@ -7,7 +7,9 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ConfigurableResource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -238,35 +240,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function loadOptions()
     {
-        $usedProducts = $this->getProductType()->getUsedProducts($this->getProduct());
-        if ($usedProducts) {
-            foreach ($this->_items as $item) {
-                $values = [];
+        /** @var ConfigurableResource $configurableResource */
+        $configurableResource = ObjectManager::getInstance()->get(ConfigurableResource::class);
+        foreach ($this->_items as $item) {
+            $values = [];
 
-                $productAttribute = $item->getProductAttribute();
-                if (!$productAttribute instanceof AbstractAttribute) {
-                    continue;
-                }
-                $itemId = $item->getId();
-                $options = $this->getIncludedOptions($usedProducts, $productAttribute);
-                foreach ($options as $option) {
-                    foreach ($usedProducts as $associatedProduct) {
-                        $attributeCodeValue = $associatedProduct->getData($productAttribute->getAttributeCode());
-                        if (!empty($option['value']) && $option['value'] == $attributeCodeValue) {
-                                $values[$itemId . ':' . $option['value']] = [
-                                    'value_index' => $option['value'],
-                                    'label' => $option['label'],
-                                    'product_super_attribute_id' => $itemId,
-                                    'default_label' => $option['label'],
-                                    'store_label' => $option['label'],
-                                    'use_default_value' => true,
-                                ];
-                        }
-                    }
-                }
-                $values = array_values($values);
-                $item->setOptions($values);
+            $productAttribute = $item->getProductAttribute();
+
+            $itemId = $item->getId();
+            $options = $configurableResource->getAttributeOptions($productAttribute, $this->getProduct()->getId());
+            foreach ($options as $option) {
+                $values[$itemId . ':' . $option['value_index']] = [
+                    'value_index' => $option['value_index'],
+                    'label' => $option['option_title'],
+                    'product_super_attribute_id' => $itemId,
+                ];
             }
+            $values = array_values($values);
+            $item->setOptions($values);
         }
     }
 

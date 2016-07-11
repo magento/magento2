@@ -7,6 +7,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
+use Magento\Store\Model\Store;
+
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -151,66 +153,84 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getConfigurableOptions($product, $attributes)
     {
         $attributesOptionsData = [];
+        $productId = $product->getId();
         foreach ($attributes as $superAttribute) {
-            $select = $this->getConnection()->select()->from(
-                ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
-                [
-                    'sku' => 'entity.sku',
-                    'product_id' => 'super_attribute.product_id',
-                    'attribute_code' => 'attribute.attribute_code',
-                    'option_title' => 'option_value.value',
-                    'super_attribute_label' => 'attribute_label.value',
-                ]
-            )->joinInner(
-                ['product_link' => $this->getTable('catalog_product_super_link')],
-                'product_link.parent_id = super_attribute.product_id',
-                []
-            )->joinInner(
-                ['attribute' => $this->getTable('eav_attribute')],
-                'attribute.attribute_id = super_attribute.attribute_id',
-                []
-            )->joinInner(
-                ['entity' => $this->getTable('catalog_product_entity')],
-                'entity.entity_id = product_link.product_id',
-                []
-            )->joinInner(
-                ['entity_value' => $superAttribute->getBackendTable()],
-                implode(
-                    ' AND ',
-                    [
-                        'entity_value.attribute_id = super_attribute.attribute_id',
-                        'entity_value.store_id = 0',
-                        'entity_value.entity_id = product_link.product_id'
-                    ]
-                ),
-                []
-            )->joinLeft(
-                ['option_value' => $this->getTable('eav_attribute_option_value')],
-                implode(
-                    ' AND ',
-                    [
-                        'option_value.option_id = entity_value.value',
-                        'option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                    ]
-                ),
-                []
-            )->joinLeft(
-                ['attribute_label' => $this->getTable('catalog_product_super_attribute_label')],
-                implode(
-                    ' AND ',
-                    [
-                        'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
-                        'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
-                    ]
-                ),
-                []
-            )->where(
-                'super_attribute.product_id = ?',
-                $product->getId()
-            );
-
-            $attributesOptionsData[$superAttribute->getAttributeId()] = $this->getConnection()->fetchAll($select);
+            $attributeId = $superAttribute->getAttributeId();
+            $attributesOptionsData[$attributeId] = $this->getAttributeOptions($superAttribute, $productId);
         }
         return $attributesOptionsData;
+    }
+
+    /**
+     * Load options for attribute
+     *
+     * @param $superAttribute
+     * @param $productId
+     * @return array
+     */
+    public function getAttributeOptions($superAttribute, $productId)
+    {
+        $select = $this->getConnection()->select()->from(
+            ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
+            [
+                'sku' => 'entity.sku',
+                'product_id' => 'super_attribute.product_id',
+                'attribute_code' => 'attribute.attribute_code',
+                'value_index' => 'entity_value.value',
+                'option_title' => 'option_value.value',
+                'super_attribute_label' => 'attribute_label.value',
+            ]
+        )->joinInner(
+            ['product_link' => $this->getTable('catalog_product_super_link')],
+            'product_link.parent_id = super_attribute.product_id',
+            []
+        )->joinInner(
+            ['attribute' => $this->getTable('eav_attribute')],
+            'attribute.attribute_id = super_attribute.attribute_id',
+            []
+        )->joinInner(
+            ['entity' => $this->getTable('catalog_product_entity')],
+            'entity.entity_id = product_link.product_id',
+            []
+        )->joinInner(
+            ['entity_value' => $superAttribute->getBackendTable()],
+            implode(
+                ' AND ',
+                [
+                    'entity_value.attribute_id = super_attribute.attribute_id',
+                    'entity_value.store_id = 0',
+                    'entity_value.entity_id = product_link.product_id',
+                ]
+            ),
+            []
+        )->joinLeft(
+            ['option_value' => $this->getTable('eav_attribute_option_value')],
+            implode(
+                ' AND ',
+                [
+                    'option_value.option_id = entity_value.value',
+                    'option_value.store_id = ' . Store::DEFAULT_STORE_ID
+                ]
+            ),
+            []
+        )->joinLeft(
+            ['attribute_label' => $this->getTable('catalog_product_super_attribute_label')],
+            implode(
+                ' AND ',
+                [
+                    'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
+                    'attribute_label.store_id = ' . Store::DEFAULT_STORE_ID
+                ]
+            ),
+            []
+        )->where(
+            'super_attribute.product_id = ?',
+            $productId
+        )->where(
+            'attribute.attribute_id = ?',
+            $superAttribute->getAttributeId()
+        )->group('value_index');
+
+        return $this->getConnection()->fetchAll($select);
     }
 }
