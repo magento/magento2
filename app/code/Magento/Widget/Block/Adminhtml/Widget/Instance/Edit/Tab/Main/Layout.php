@@ -154,31 +154,31 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
     protected function _getDisplayOnOptions()
     {
         $options = [];
-        $options[] = ['value' => '', 'label' => $this->escapeJsQuote(__('-- Please Select --'))];
+        $options[] = ['value' => '', 'label' => $this->escapeHtmlAttr(__('-- Please Select --'))];
         $options[] = [
             'label' => __('Categories'),
             'value' => [
-                ['value' => 'anchor_categories', 'label' => $this->escapeJsQuote(__('Anchor Categories'))],
-                ['value' => 'notanchor_categories', 'label' => $this->escapeJsQuote(__('Non-Anchor Categories'))],
+                ['value' => 'anchor_categories', 'label' => $this->escapeHtmlAttr(__('Anchor Categories'))],
+                ['value' => 'notanchor_categories', 'label' => $this->escapeHtmlAttr(__('Non-Anchor Categories'))],
             ],
         ];
         foreach ($this->_productType->getTypes() as $typeId => $type) {
             $productsOptions[] = [
                 'value' => $typeId . '_products',
-                'label' => $this->escapeJsQuote($type['label']),
+                'label' => $this->escapeHtmlAttr($type['label']),
             ];
         }
         array_unshift(
             $productsOptions,
-            ['value' => 'all_products', 'label' => $this->escapeJsQuote(__('All Product Types'))]
+            ['value' => 'all_products', 'label' => $this->escapeHtmlAttr(__('All Product Types'))]
         );
-        $options[] = ['label' => $this->escapeJsQuote(__('Products')), 'value' => $productsOptions];
+        $options[] = ['label' => $this->escapeHtmlAttr(__('Products')), 'value' => $productsOptions];
         $options[] = [
-            'label' => $this->escapeJsQuote(__('Generic Pages')),
+            'label' => $this->escapeHtmlAttr(__('Generic Pages')),
             'value' => [
-                ['value' => 'all_pages', 'label' => $this->escapeJsQuote(__('All Pages'))],
-                ['value' => 'pages', 'label' => $this->escapeJsQuote(__('Specified Page'))],
-                ['value' => 'page_layouts', 'label' => $this->escapeJsQuote(__('Page Layouts'))],
+                ['value' => 'all_pages', 'label' => $this->escapeHtmlAttr(__('All Pages'))],
+                ['value' => 'pages', 'label' => $this->escapeHtmlAttr(__('Specified Page'))],
+                ['value' => 'page_layouts', 'label' => $this->escapeHtmlAttr(__('Page Layouts'))],
             ],
         ];
         return $options;
@@ -316,7 +316,7 @@ class Layout extends \Magento\Backend\Block\Template implements \Magento\Framewo
             'Magento\Backend\Block\Widget\Button'
         )->setData(
             [
-                'label' => $this->escapeJsQuote(__('Remove Layout Update')),
+                'label' => $this->escapeHtmlAttr(__('Remove Layout Update')),
                 'onclick' => 'WidgetInstance.removePageGroup(this)',
                 'class' => 'action-delete',
             ]

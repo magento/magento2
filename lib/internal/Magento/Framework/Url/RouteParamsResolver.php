@@ -32,6 +32,11 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
     protected $queryParamsResolver;
 
     /**
+     * @var \Magento\Framework\ZendEscaper
+     */
+    private $escaper;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param array $data
@@ -88,10 +93,17 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
                     if (array_key_exists($key, $data) || $this->getRouteParam($key)) {
                         continue;
                     }
-                    $data[$key] = $value;
+                    $data[$this->getEscaper()->escapeUrl($key)] = $this->getEscaper()->escapeUrl($value);
                 }
                 foreach ($this->request->getQuery() as $key => $value) {
-                    $this->queryParamsResolver->setQueryParam($key, $value);
+//                    $this->queryParamsResolver->setQueryParam(
+//                        $this->getEscaper()->escapeUrl($key),
+//                        $this->getEscaper()->escapeUrl($value)
+//                    );
+                    $this->queryParamsResolver->setQueryParam(
+                        $key,
+                        $value
+                    );
                 }
             }
             unset($data['_current']);
@@ -102,7 +114,11 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
         }
 
         foreach ($data as $key => $value) {
-            $this->setRouteParam($key, $value);
+            if ($key == 'key') {
+                $this->setRouteParam($key, $value);
+            } else {
+                $this->setRouteParam($this->getEscaper()->escapeUrl($key), $this->getEscaper()->escapeUrl($value));
+            }
         }
 
         return $this;
@@ -136,5 +152,19 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
     public function getRouteParam($key)
     {
         return $this->getData('route_params', $key);
+    }
+
+    /**
+     * @param void
+     * @return Escaper
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper === null) {
+            $this->escaper =
+                \Magento\Framework\App\ObjectManager::getInstance()
+                    ->get(\Magento\Framework\ZendEscaper::class);
+        }
+        return $this->escaper;
     }
 }
