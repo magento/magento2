@@ -58,7 +58,7 @@ class MoveRecentlyViewedProductsOnOrderPageTest extends Injectable
      * Runs Move Recently Viewed Products On Order Page.
      *
      * @param Customer $customer
-     * @param string $products
+     * @param array $products
      * @return array
      */
     public function test(Customer $customer, $products)
