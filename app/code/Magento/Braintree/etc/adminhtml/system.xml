@@ -238,6 +238,36 @@
                             <config_path>payment/braintree/verify_specific_countries</config_path>
                         </field>
                     </group>
+                    <group id="braintree_dynamic_descriptor" translate="label" showInDefault="1" showInWebsite="1" sortOrder="50">
+                        <label>Dynamic Descriptors</label>
+                        <comment><![CDATA[Dynamic descriptors are sent on a per-transaction basis and define what will appear on your customers credit card statements for a specific purchase.
+                            The clearer the description of your product, the less likely customers will issue chargebacks due to confusion or non-recognition.
+                            Dynamic descriptors are not enabled on all accounts by default. If you receive a validation error of 92203 or if your dynamic descriptors are not displaying as expected,
+                            please <a href="mailto:support@getbraintree.com">Braintree Support</a>.]]></comment>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Name</label>
+                            <config_path>payment/braintree/descriptor_name</config_path>
+                            <comment>
+                                The value in the business name field of a customer's statement. Company name/DBA section must be either 3, 7 or 12 characters
+                                and the product descriptor can be up to 18, 14, or 9 characters respectively (with an * in between for a total descriptor name of 22 characters).
+                            </comment>
+                        </field>
+                        <field id="phone" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Phone</label>
+                            <config_path>payment/braintree/descriptor_phone</config_path>
+                            <comment>
+                                The value in the phone number field of a customer's statement. Phone must be 10-14 characters and can only contain numbers, dashes, parentheses and periods.
+                            </comment>
+                        </field>
+                        <field id="url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>URL</label>
+                            <config_path>payment/braintree/descriptor_url</config_path>
+                            <comment>
+                                The value in the URL/web address field of a customer's statement. The URL must be 13 characters or shorter.
+                            </comment>
+                        </field>
+                    </group>
                 </group>
             </group>
         </section>
