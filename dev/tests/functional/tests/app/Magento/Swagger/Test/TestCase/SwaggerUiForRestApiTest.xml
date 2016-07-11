@@ -9,13 +9,11 @@
     <testCase name="Magento\Swagger\Test\TestCase\SwaggerUiForRestApiTest" summary="Swagger ui for REST API" ticketId="MAGETWO-41381">
         <variation name="SwaggerTestVariation1" summary="Swagger ui for catalogProductRepositoryV1">
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
-            <data name="serviceName" xsi:type="string">catalogProductRepositoryV1</data>
+            <data name="serviceName" xsi:type="string">quoteGuestCartManagementV1</data>
             <data name="endpoints" xsi:type="array">
-                <item name="0" xsi:type="string">GetListGet</item>
-                <item name="1" xsi:type="string">SavePost</item>
-                <item name="2" xsi:type="string">DeleteByIdDelete</item>
-                <item name="3" xsi:type="string">GetGet</item>
-                <item name="4" xsi:type="string">SavePut</item>
+                <item name="0" xsi:type="string">AssignCustomerPut</item>
+                <item name="1" xsi:type="string">CreateEmptyCartPost</item>
+                <item name="2" xsi:type="string">PlaceOrderPut</item>
             </data>
             <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage" />
             <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage" />
@@ -26,9 +24,9 @@
             <data name="serviceName" xsi:type="string">customerAccountManagementV1</data>
             <data name="endpoints" xsi:type="array">
                 <item name="0" xsi:type="string">CreateAccountPost</item>
-                <item name="1" xsi:type="string">ActivateByIdPut</item>
-                <item name="2" xsi:type="string">GetConfirmationStatusGet</item>
-                <item name="3" xsi:type="string">ResendConfirmationPost</item>
+                <item name="1" xsi:type="string">ValidateResetPasswordLinkTokenGet</item>
+                <item name="2" xsi:type="string">InitiatePasswordResetPut</item>
+                <item name="3" xsi:type="string">IsEmailAvailablePost</item>
             </data>
             <constraint name="Magento\Swagger\Test\Constraint\AssertSwaggerSectionLoadOnPage" />
             <constraint name="Magento\Swagger\Test\Constraint\AssertApiInfoTitleOnPage" />
