@@ -10,7 +10,7 @@ namespace Magento\Payment\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Config;
-use Magento\Payment\Model\Method\Adapter;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -131,10 +131,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetActiveMethods($isActive)
     {
-        $adapter = $this->getMockBuilder(Adapter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setStore', 'getConfigData'])
-            ->getMock();
+        $adapter = $this->getMock(MethodInterface::class);
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
             ->with('payment', ScopeInterface::SCOPE_STORE, null)
