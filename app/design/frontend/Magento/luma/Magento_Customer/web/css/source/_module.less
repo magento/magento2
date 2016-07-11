@@ -232,6 +232,7 @@
 
             .input-text {
                 .lib-vendor-prefix-order(0);
+                z-index: 2;
             }
         }
     }
@@ -253,35 +254,35 @@
             z-index: -1;
         }
 
-        .password-strength-meter-0 & {
+        .password-none & {
             &:before {
                 background-color: @_password-default;
                 width: 100%;
             }
         }
 
-        .password-strength-meter-1 & {
+        .password-weak & {
             &:before {
                 background-color: @_password-weak;
                 width: 25%;
             }
         }
 
-        .password-strength-meter-2 & {
+        .password-medium & {
             &:before {
                 background-color: @_password-medium;
                 width: 50%;
             }
         }
 
-        .password-strength-meter-3 & {
+        .password-strong & {
             &:before {
                 background-color: @_password-strong;
                 width: 75%;
             }
         }
 
-        .password-strength-meter-4 & {
+        .password-very-strong & {
             &:before {
                 background-color: @_password-very-strong;
                 width: 100%;
