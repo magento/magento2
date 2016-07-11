@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Address;
 
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
@@ -43,8 +42,11 @@ class DeleteRelationTest extends \PHPUnit_Framework_TestCase
         $addressModel = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customerModel */
-        $customerModel = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
+        /** @var \Magento\Customer\Model\Customer | \PHPUnit_Framework_MockObject_MockObject $customerModel */
+        $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getDefaultBilling', 'getDefaultShipping', 'getId'])
+            ->getMock();
 
         $addressResource = $this->getMockForAbstractClass(
             'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
