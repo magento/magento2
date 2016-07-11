@@ -10,7 +10,9 @@
     <!-- ko text: currentBillingAddress().street --><!-- /ko --><br/>
     <!-- ko text: currentBillingAddress().city --><!-- /ko -->, <!-- ko text: currentBillingAddress().region --><!-- /ko --> <!-- ko text: currentBillingAddress().postcode --><!-- /ko --><br/>
     <!-- ko text: getCountryName(currentBillingAddress().countryId) --><!-- /ko --><br/>
-    <!-- ko text: currentBillingAddress().telephone --><!-- /ko --><br/>
+    <!-- ko if: (currentBillingAddress().telephone) -->
+    <a data-bind="text: currentBillingAddress().telephone, attr: {'href': 'tel:' + currentBillingAddress().telephone}"></a>
+    <!-- /ko --><br/>
     <button type="button"
             class="action action-edit-address"
             data-bind="visible: !isAddressSameAsShipping(), click: editAddress">

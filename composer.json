@@ -41,7 +41,7 @@
         "oyejorge/less.php": "~1.7.0",
         "pelago/emogrifier": "0.1.1",
         "tubalmartin/cssmin": "2.4.8-p4",
-        "magento/magento-composer-installer": "*",
+        "magento/magento-composer-installer": ">=0.1.11",
         "braintree/braintree_php": "3.7.0",
         "symfony/console": "~2.3 <2.7",
         "symfony/event-dispatcher": "~2.1",
