@@ -351,7 +351,6 @@ class Deployer
             }
             $this->count++;
         } catch (ContentProcessorException $exception) {
-            //throw $exception;
             $pathInfo = ($fullPath) ? $fullPath : $filePath;
             $errorMessage =  __('Compilation from source: ') . $pathInfo
                 . PHP_EOL . $exception->getMessage();
