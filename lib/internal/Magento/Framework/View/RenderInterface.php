@@ -7,6 +7,8 @@ namespace Magento\Framework\View;
 
 /**
  * Interface RenderInterface
+ *
+ * @api
  */
 interface RenderInterface
 {
