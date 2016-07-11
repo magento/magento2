@@ -12,7 +12,6 @@ angular.module('install', ['ngStorage'])
         $scope.isDisabled = false;
         $scope.isSampleDataError = false;
         $scope.isShowCleanUpBox = false;
-        $scope.log = '';
         $scope.toggleConsole = function () {
             $scope.isConsole = $scope.isConsole === false;
         };
@@ -30,9 +29,7 @@ angular.module('install', ['ngStorage'])
                 response.data.console.forEach(function (message) {
                     log = log + message + '<br>';
                 });
-                if ($scope.isFailed === false) {
-                    $scope.log = $sce.trustAsHtml($scope.log.toString() + log);
-                }
+                $scope.log = $sce.trustAsHtml(log);
 
                 if (response.data.success) {
                     $scope.progress = response.data.progress;
@@ -89,9 +86,6 @@ angular.module('install', ['ngStorage'])
                         $scope.isSampleDataError = true;
                     }
                 }
-            }, function (response) {
-                $scope.displayFailure();
-                $scope.log = $sce.trustAsHtml($scope.log.toString() + '[Error] ' + response.statusText);
             });
             progress.get(function () {
                 $scope.checkProgress();
@@ -105,7 +99,6 @@ angular.module('install', ['ngStorage'])
         $scope.displayFailure = function () {
             $scope.isFailed = true;
             $scope.isDisabled = false;
-            $scope.isInProgress = false;
             $rootScope.isMenuEnabled = true;
         };
     }])
@@ -114,8 +107,8 @@ angular.module('install', ['ngStorage'])
             get: function (callback) {
                 $http.post('index.php/install/progress').then(callback);
             },
-            post: function (data, success, failure) {
-                $http.post('index.php/install/start', data).then(success, failure);
+            post: function (data, callback) {
+                $http.post('index.php/install/start', data).success(callback);
             }
         };
     }]);
