@@ -110,7 +110,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
      */
     private function isCategorySuffixChanged()
     {
-        return  $this->isValueChanged()
+        return $this->isValueChanged()
             && ($this->getPath() == CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX);
     }
 
