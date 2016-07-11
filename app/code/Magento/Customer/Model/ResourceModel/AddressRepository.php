@@ -8,6 +8,7 @@
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Model\Address as CustomerAddressModel;
+use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Address\Collection;
 use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteriaInterface;
@@ -133,10 +134,10 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param Address $address
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function updateAddressCollection(Customer $customer, CustomerAddressModel $address)
+    private function updateAddressCollection(CustomerModel $customer, CustomerAddressModel $address)
     {
-        $customer->getAddressCollection()->removeItemByKey($address->getId());
-        $customer->getAddressCollection()->addItem($address);
+        $customer->getAddressesCollection()->removeItemByKey($address->getId());
+        $customer->getAddressesCollection()->addItem($address);
     }
 
     /**
