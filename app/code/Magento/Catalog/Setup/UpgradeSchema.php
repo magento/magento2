@@ -298,7 +298,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
                 'nullable' => false,
                 'default' => '0.00',
-                'length' => '3,2',
+                'length' => '5,2',
                 'comment' => 'Percentage value',
                 'after' => 'value'
             ]
