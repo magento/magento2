@@ -7,6 +7,7 @@ namespace Magento\Vault\Block;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Block\Customer\IconInterface;
 
 /**
  * Class AbstractTokenRenderer

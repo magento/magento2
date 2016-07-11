@@ -3,16 +3,17 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Block;
+namespace Magento\Vault\Block\Customer;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Block\TokenRendererInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 
 /**
  * Class PaymentTokens
  */
-class PaymentTokens extends Template
+abstract class PaymentTokens extends Template
 {
     /**
      * @var PaymentTokenInterface[]
@@ -25,27 +26,25 @@ class PaymentTokens extends Template
     private $customerTokenManagement;
 
     /**
-     * @var string
-     */
-    private $tokenType;
-
-    /**
      * PaymentTokens constructor.
      * @param Template\Context $context
      * @param CustomerTokenManagement $customerTokenManagement
-     * @param string $tokenType
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         CustomerTokenManagement $customerTokenManagement,
-        $tokenType = PaymentTokenInterface::TYPE_ACCOUNT,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->customerTokenManagement = $customerTokenManagement;
-        $this->tokenType = $tokenType;
     }
+
+    /**
+     * Get type of token
+     * @return string
+     */
+    abstract function getType();
 
     /**
      * @return PaymentTokenInterface[]
@@ -55,7 +54,7 @@ class PaymentTokens extends Template
         $tokens = [];
         /** @var PaymentTokenInterface $token */
         foreach ($this->getCustomerTokens() as $token) {
-            if ($token->getType() === $this->tokenType) {
+            if ($token->getType() === $this->getType()) {
                 $tokens[] = $token;
             }
         };
