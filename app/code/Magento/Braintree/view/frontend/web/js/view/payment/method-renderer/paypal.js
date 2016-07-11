@@ -36,6 +36,7 @@ define([
                 onReady: function (checkout) {
                     Braintree.checkout = checkout;
                     this.enableButton();
+                    Braintree.onReady();
                 },
 
                 /**
