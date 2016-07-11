@@ -24,9 +24,9 @@
         </variation>
         <variation name="DeleteProductsFromWishlistOnFrontendTestVariation3">
             <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
-            <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
-            <data name="products/0" xsi:type="string">catalogProductSimple::default</data>
-            <data name="products/0" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="products/1" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
+            <data name="products/2" xsi:type="string">catalogProductSimple::default</data>
+            <data name="products/3" xsi:type="string">catalogProductVirtual::product_50_dollar</data>
             <data name="removedProductsIndex" xsi:type="array">
                 <item name="0" xsi:type="string">1</item>
                 <item name="1" xsi:type="string">2</item>
