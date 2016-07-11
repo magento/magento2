@@ -5,30 +5,10 @@
  */
 namespace Magento\TestFramework\Dependency;
 
-use Magento\TestFramework\Dependency\VirtualType\Mapper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
 
 class DiRuleTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var DiRule
-     */
-    protected $model;
-
-    /**
-     * @var Mapper|MockObject
-     */
-    private $mapper;
-
-    protected function setUp()
-    {
-        $this->mapper = $this->getMockBuilder(Mapper::class)
-            ->setMethods(['getType'])
-            ->getMock();
-
-        $this->model = new DiRule($this->mapper);
-    }
-
     /**
      * @param string $module
      * @param string $contents
@@ -37,22 +17,22 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDependencyInfo($module, $contents, array $expected)
     {
-        $this->mapper->expects(static::any())
-            ->method('getType')
-            ->will($this->returnCallback(function ($name, $scope) {
-                $map = [
+
+        $diRule = new DiRule(
+            new VirtualTypeMapper(
+                [
                     'scope' => [
                         'someVirtualType1' => 'Magento\AnotherModule\Some\Class1',
                         'someVirtualType2' => 'Magento\AnotherModule\Some\Class2'
                     ]
-                ];
-                return isset($map[$scope][$name]) ? $map[$scope][$name] : false;
-            }));
+                ]
+            )
+        );
 
         $file = '/some/path/scope/di.xml';
-        $this->assertEquals(
+        static::assertEquals(
             $expected,
-            $this->model->getDependencyInfo($module, 'any', $file, $contents)
+            $diRule->getDependencyInfo($module, null, $file, $contents)
         );
     }
 
@@ -114,12 +94,12 @@ class DiRuleTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'module' => 'Magento\AnotherModule',
-                        'type' => 'hard',
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\AnotherModule\Some\Class1',
                     ],
                     [
                         'module' => 'Magento\AnotherModule',
-                        'type' => 'hard',
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\AnotherModule\Some\Class2',
                     ]
                 ]
