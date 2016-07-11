@@ -188,7 +188,7 @@
             <field name="header_logo_width">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Image Width</item>
+                        <item name="label" xsi:type="string" translate="true">Logo Attribute Width</item>
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_width</item>
@@ -201,7 +201,7 @@
             <field name="header_logo_height">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Logo Image Height</item>
+                        <item name="label" xsi:type="string" translate="true">Logo Attribute Height</item>
                         <item name="dataType" xsi:type="string">number</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_height</item>
