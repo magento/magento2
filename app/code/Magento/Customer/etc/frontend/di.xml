@@ -60,4 +60,14 @@
     <type name="Magento\Framework\Session\SessionManager">
         <plugin name="session_checker" type="Magento\Customer\CustomerData\Plugin\SessionChecker" />
     </type>
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="customerSessionUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
