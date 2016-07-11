@@ -68,6 +68,7 @@ define(
                      */
                     onReady: function (checkout) {
                         braintree.checkout = checkout;
+                        braintree.onReady();
                     },
 
                     /**
@@ -198,6 +199,7 @@ define(
                     onReady: function (checkout) {
                         braintree.checkout = checkout;
                         this.additionalData['device_data'] = checkout.deviceData;
+                        braintree.onReady();
                     }
                 };
 
