@@ -441,7 +441,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
             }
         } else {
-            $website = $this->fixtureFactory->createByCode('website', ['default']);
+            $website = $this->fixtureFactory->createByCode('website', ['dataset' => 'default']);
             $this->fields['product']['website_ids'][] = $website->getWebsiteId();
         }
     }
