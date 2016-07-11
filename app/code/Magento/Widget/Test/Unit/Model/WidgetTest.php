@@ -5,6 +5,8 @@
  */
 namespace Magento\Widget\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -101,7 +103,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Magento_Cms::images/widget_page_link.png', $resultObject->getPlaceholderImage());
 
         $resultParameters = $resultObject->getParameters();
-        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id' ]);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id']);
         $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['anchor_text']);
         $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['template']);
 
@@ -161,5 +163,47 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
         $this->assertContains('page_var_name="pasdf"}}', $result);
+    }
+
+    public function testGetWidgetDeclarationWithZeroValueParam()
+    {
+        $mathRandomMock = $this->getMock('\Magento\Framework\Math\Random', ['getRandomString'], [], '', false);
+        $mathRandomMock->expects($this->any())
+            ->method('getRandomString')
+            ->willReturn('asdf');
+
+        (new ObjectManager($this))->setBackwardCompatibleProperty(
+            $this->widget,
+            'mathRandom',
+            $mathRandomMock
+        );
+
+        $conditions = [
+            [
+                'type' => 'Magento\CatalogWidget\Model\Rule\Condition\Combine',
+                'aggregator' => 'all',
+                'value' => '1',
+                'new_child' => ''
+            ]
+        ];
+        $params = [
+            'title' => 'my widget',
+            'show_pager' => '1',
+            'products_per_page' => '5',
+            'products_count' => '0',
+            'template' => 'product/widget/content/grid.phtml',
+            'conditions' => $conditions
+        ];
+
+        $this->conditionsHelper->expects($this->once())
+            ->method('encode')
+            ->with($conditions)
+            ->willReturn('encoded-conditions-string');
+
+        $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
+        $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
+        $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
+        $this->assertContains('page_var_name="pasdf"}}', $result);
+        $this->assertContains('products_count="0"', $result);
     }
 }
