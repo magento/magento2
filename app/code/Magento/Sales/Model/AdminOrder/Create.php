@@ -515,11 +515,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->setShippingMethod($order->getShippingMethod());
         $quote->getShippingAddress()->setShippingDescription($order->getShippingDescription());
 
-        $paymentData = $order->getPayment()->getData();
-        unset($paymentData['cc_type'], $paymentData['cc_last_4']);
-        unset($paymentData['cc_exp_month'], $paymentData['cc_exp_year']);
-        $quote->getPayment()->addData($paymentData);
-
         $orderCouponCode = $order->getCouponCode();
         if ($orderCouponCode) {
             $quote->setCouponCode($orderCouponCode);
@@ -1744,9 +1739,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if ($this->getBillingAddress()->getSaveInAddressBook()) {
             $this->_prepareCustomerAddress($this->getQuote()->getCustomer(), $this->getBillingAddress());
+            $address = $this->getBillingAddress()->setCustomerId($this->getQuote()->getCustomer()->getId());
+            $this->setBillingAddress($address);
         }
         if (!$this->getQuote()->isVirtual() && $this->getShippingAddress()->getSaveInAddressBook()) {
             $this->_prepareCustomerAddress($this->getQuote()->getCustomer(), $this->getShippingAddress());
+            $address = $this->getShippingAddress()->setCustomerId($this->getQuote()->getCustomer()->getId());
+            $this->setShippingAddress($address);
         }
         $this->getQuote()->updateCustomerData($this->getQuote()->getCustomer());
 
