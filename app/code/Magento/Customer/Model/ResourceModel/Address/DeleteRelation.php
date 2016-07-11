@@ -21,7 +21,7 @@ class DeleteRelation
      */
     public function deleteRelation(
         \Magento\Framework\Model\AbstractModel $address,
-        \Magento\Customer\Api\Data\CustomerInterface $customer
+        \Magento\Customer\Model\Customer $customer
     ) {
         $toUpdate = $this->getDataToUpdate($address, $customer);
 
@@ -43,7 +43,7 @@ class DeleteRelation
      */
     private function getDataToUpdate(
         \Magento\Framework\Model\AbstractModel $address,
-        \Magento\Customer\Api\Data\CustomerInterface $customer
+        \Magento\Customer\Model\Customer $customer
     ) {
         $toUpdate = [];
         if ($address->getId()) {
