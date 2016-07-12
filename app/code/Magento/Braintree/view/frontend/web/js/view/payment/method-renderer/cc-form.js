@@ -62,10 +62,21 @@ define(
                     },
 
                     /**
-                     * Triggers on any Braintree error
+                     * Device data initialization
+                     *
+                     * @param {Object} checkout
                      */
-                    onError: function () {
-                        this.paymentMethodNonce = null;
+                    onReady: function (checkout) {
+                        braintree.checkout = checkout;
+                    },
+
+                    /**
+                     * Triggers on any Braintree error
+                     * @param {Object} response
+                     */
+                    onError: function (response) {
+                        braintree.showError($t('Payment ' + this.getTitle() + ' can\'t be initialized'));
+                        throw response.message;
                     },
 
                     /**
@@ -90,7 +101,7 @@ define(
                 this._super()
                     .observe(['active']);
                 this.validatorManager.initialize();
-                this.initBraintree();
+                this.initClientConfig();
 
                 return this;
             },
@@ -122,11 +133,11 @@ define(
              * @param {Boolean} isActive
              */
             onActiveChange: function (isActive) {
-                if (!isActive || this.isSingleUse()) {
+                if (!isActive) {
                     return;
                 }
 
-                this.reInitBraintree();
+                this.initBraintree();
             },
 
             /**
@@ -146,17 +157,9 @@ define(
             },
 
             /**
-             * Create Braintree configuration
+             * Init Braintree configuration
              */
             initBraintree: function () {
-                this.initClientConfig();
-                braintree.config = _.extend(braintree.config, this.clientConfig);
-            },
-
-            /**
-             * Re-init Braintree configuration
-             */
-            reInitBraintree: function () {
                 var intervalId = setInterval(function () {
                     // stop loader when frame will be loaded
                     if ($('#braintree-hosted-field-number').length) {
@@ -164,6 +167,12 @@ define(
                         fullScreenLoader.stopLoader();
                     }
                 }, 500);
+
+                if (braintree.checkout) {
+                    braintree.checkout.teardown(function () {
+                        braintree.checkout = null;
+                    });
+                }
 
                 fullScreenLoader.startLoader();
                 braintree.setConfig(this.clientConfig);
@@ -309,14 +318,6 @@ define(
                 });
 
                 return false;
-            },
-
-            /**
-             * Check if Braintree configured without PayPal
-             * @returns {Boolean}
-             */
-            isSingleUse: function () {
-                return window.checkoutConfig.payment[this.getCode()].isSingleUse;
             }
         });
     }
