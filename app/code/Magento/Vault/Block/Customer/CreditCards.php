@@ -15,7 +15,7 @@ class CreditCards extends PaymentTokens
     /**
      * @inheritdoc
      */
-    function getType()
+    public function getType()
     {
         return CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD;
     }

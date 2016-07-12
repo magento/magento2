@@ -372,7 +372,7 @@ define([
          */
         disableButton: function () {
             // stop any previous shown loaders
-            fullScreenLoader.stopLoader();
+            fullScreenLoader.stopLoader(true);
             fullScreenLoader.startLoader();
             $('[data-button="place"]').attr('disabled', 'disabled');
         },
