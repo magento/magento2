@@ -16,7 +16,7 @@ $payerEmail = $block->escapeHtml($block->getPayerEmail());
         <img src="<?php /* @noEscape */ echo $block->getIconUrl(); ?>"
              width="<?php /* @noEscape */ echo $block->getIconWidth(); ?>"
              height="<?php /* @noEscape */ echo $block->getIconHeight(); ?>"
-             alt=""
+             alt="<?php echo $block->escapeHtml(__('PayPal Logo')); ?>"
         >
         <span><?php /* @noEscape */ echo $payerEmail; ?></span>
     </td>

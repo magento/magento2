@@ -102,7 +102,7 @@
         position: relative;
 
         .lib-icon-image(
-            @_icon-image: '@{baseDir}Magento_Braintree/images/paypal-email.png',
+            @_icon-image: '@{baseDir}Magento_Braintree/images/paypal-small.png',
             @_icon-image-position: before,
             @_icon-image-width: @braintree-paypal-icon__width,
             @_icon-image-height: @braintree-paypal-icon__height
@@ -136,6 +136,16 @@
         img {
             margin: 0;
             width: 114px;
+        }
+    }
+
+    .payment-method {
+        .payment-method-content {
+            .actions-toolbar {
+                &.braintree-paypal-actions {
+                    margin-left: 0;
+                }
+            }
         }
     }
 
