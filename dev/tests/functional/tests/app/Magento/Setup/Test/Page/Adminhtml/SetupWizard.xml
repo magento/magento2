@@ -15,5 +15,7 @@
         <block name="createBackup" class="Magento\Setup\Test\Block\CreateBackup" locator="body" strategy="css selector"/>
         <block name="systemUpgrade" class="Magento\Setup\Test\Block\SystemUpgrade" locator="body" strategy="css selector"/>
         <block name="successMessage" class="Magento\Setup\Test\Block\SuccessMessage" locator="body" strategy="css selector"/>
+        <block name="modules" class="Magento\Setup\Test\Block\Modules" locator="body" strategy="css selector"/>
+        <block name="modulesGrid" class="Magento\Setup\Test\Block\Modules\Grid" locator="body" strategy="css selector"/>
     </page>
 </config>
