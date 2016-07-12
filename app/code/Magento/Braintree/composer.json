@@ -17,6 +17,7 @@
         "magento/module-quote": "100.2.*",
         "magento/module-paypal": "100.2.*",
         "magento/module-theme": "100.2.*",
+        "magento/module-ui": "100.2.*",
         "braintree/braintree_php": "3.7.0"
     },
     "suggest": {
