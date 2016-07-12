@@ -22,7 +22,7 @@ class Escaper
      * @param array $allowedTags
      * @return string|array
      */
-    public function escapeHtml($data, $allowedTags = [])
+    public function escapeHtml($data, $allowedTags = null)
     {
         if (is_array($data)) {
             $result = [];
