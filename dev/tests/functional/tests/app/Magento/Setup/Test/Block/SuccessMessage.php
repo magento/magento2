@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Upgrade\Test\Block;
+namespace Magento\Setup\Test\Block;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;

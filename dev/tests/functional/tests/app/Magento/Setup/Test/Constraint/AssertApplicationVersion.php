@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Upgrade\Test\Constraint;
+namespace Magento\Setup\Test\Constraint;
 
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Constraint\AbstractConstraint;
