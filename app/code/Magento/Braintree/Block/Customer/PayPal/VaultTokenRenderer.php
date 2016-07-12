@@ -24,7 +24,7 @@ class VaultTokenRenderer extends AbstractTokenRenderer
     public function __construct(
         Template\Context $context,
         Config $config,
-        array $data
+        array $data = []
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
