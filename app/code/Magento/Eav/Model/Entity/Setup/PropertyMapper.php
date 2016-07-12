@@ -22,6 +22,7 @@ class PropertyMapper extends PropertyMapperAbstract
     public function map(array $input, $entityTypeId)
     {
         return [
+            'attribute_model' => $this->_getValue($input, 'attribute_model'),
             'backend_model' => $this->_getValue($input, 'backend'),
             'backend_type' => $this->_getValue($input, 'type', 'varchar'),
             'backend_table' => $this->_getValue($input, 'table'),
