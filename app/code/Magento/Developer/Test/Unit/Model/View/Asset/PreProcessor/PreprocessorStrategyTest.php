@@ -75,9 +75,6 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
         $this->objectMangerMock = $this->getMockBuilder(\Magento\Framework\App\ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->preprocessorStrategy = (new ObjectManager($this))->getObject(PreprocessorStrategy::class, [
             'alternativeSource' => $this->alternativeSourceMock,
@@ -125,13 +122,6 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
             ->method('process');
         $this->stateMock->expects($this->once())
             ->method('getMode')
-            ->willReturn(State::MODE_DEFAULT);
-        $this->objectMangerMock->expects($this->once())
-            ->method('get')
-            ->with(DeploymentConfig::class)
-            ->willReturn($this->deploymentConfigMock);
-        $this->deploymentConfigMock->expects($this->once())
-            ->method('get')
             ->willReturn(State::MODE_DEFAULT);
 
         \Magento\Framework\App\ObjectManager::setInstance($this->objectMangerMock);
