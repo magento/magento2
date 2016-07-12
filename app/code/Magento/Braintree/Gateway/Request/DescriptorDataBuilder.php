@@ -34,6 +34,7 @@ class DescriptorDataBuilder implements BuilderInterface
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function build(array $buildSubject)
     {
