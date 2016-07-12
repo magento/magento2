@@ -194,5 +194,30 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
+
+        <dataset name="custom_allowed_country">
+            <field name="general/country/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="array">
+                    <item name="Albania" xsi:type="string">AL</item>
+                    <item name="United States" xsi:type="string">US</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="custom_allowed_country_rollback">
+            <field name="general/country/allow" xsi:type="array">
+                <item name="scope" xsi:type="string">default</item>
+                <item name="scope_id" xsi:type="number">0</item>
+                <item name="value" xsi:type="array">
+                    <item name="Antarctica" xsi:type="string">AQ</item>
+                    <item name="Canada" xsi:type="string">CA</item>
+                    <item name="France" xsi:type="string">FR</item>
+                    <item name="Italy" xsi:type="string">IT</item>
+                    <item name="Ukraine" xsi:type="string">UA</item>
+                    <item name="United States" xsi:type="string">US</item>
+                </item>
+            </field>
+        </dataset>
     </repository>
 </config>
