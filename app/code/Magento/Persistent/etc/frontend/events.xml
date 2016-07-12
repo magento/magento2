@@ -60,4 +60,7 @@
     <event name="update_customer_cookies">
         <observer name="persistent" instance="Magento\Persistent\Observer\UpdateCustomerCookiesObserver" />
     </event>
+    <event name="persistent_session_expired">
+        <observer name="refresh_customer_data" instance="Magento\Persistent\Observer\RefreshCustomerData" />
+    </event>
 </config>
