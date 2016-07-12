@@ -9,14 +9,17 @@ return [
         'disabled=""/></resources></acl></config>',
         [
             "Element 'resource', attribute 'disabled': '' is not a valid value of the atomic" .
-            " type 'xs:boolean'.\nLine: 1\n"],
+            " type 'xs:boolean'.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
+        ],
     ],
     'disabled_attribute_wrong_type_value' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
         'disabled="notBool"/></resources></acl></config>',
         [
             "Element 'resource', attribute 'disabled': 'notBool' is not a valid value of the atomic type " .
-            "'xs:boolean'.\nLine: 1\n"
+            "'xs:boolean'.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'double_acl' => [
@@ -59,7 +62,8 @@ return [
             "'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
             "the value was either invalid or " .
-            "something strange happend.\nLine: 1\n"
+            "something strange happend.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'notvalid_id_attribute_value_regexp2' => [
@@ -71,7 +75,8 @@ return [
             "Element 'resource', attribute 'id': 'Test_value::show_toolbar' is not a valid value of the atomic type " .
             "'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
-            "the value was either invalid or something strange happend.\nLine: 1\n"
+            "the value was either invalid or something strange happend.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'notvalid_id_attribute_value_regexp3' => [
@@ -83,7 +88,8 @@ return [
             "Element 'resource', attribute 'id': 'M@#$%^*_Value::show_toolbar' " .
             "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': Warning: No precomputed value available, " .
-            "the value was either invalid or something strange happend.\nLine: 1\n"
+            "the value was either invalid or something strange happend.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'notvalid_id_attribute_value_regexp4' => [
@@ -96,7 +102,8 @@ return [
             "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend.\nLine: 1\n"
+            "or something strange happend.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'notvalid_id_attribute_value_regexp5' => [
@@ -109,7 +116,8 @@ return [
             "is not a valid value of the atomic type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend.\nLine: 1\n"
+            "or something strange happend.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'notvalid_id_attribute_value_regexp6' => [
@@ -122,7 +130,8 @@ return [
             "type 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend.\nLine: 1\n"
+            "or something strange happend.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'notvalid_id_attribute_value_regexp7' => [
@@ -134,7 +143,8 @@ return [
             " 'typeId'.\nLine: 1\n",
             "Element 'resource', attribute 'id': " .
             "Warning: No precomputed value available, the value was either invalid " .
-            "or something strange happend.\nLine: 1\n"
+            "or something strange happend.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
         ],
     ],
     'sortOrder_attribute_empty_value' => [
@@ -153,7 +163,10 @@ return [
     'with_not_allowed_attribute' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
         'someatrrname="some value"/></resources></acl></config>',
-        ["Element 'resource', attribute 'someatrrname': The attribute 'someatrrname' is not allowed.\nLine: 1\n"],
+        [
+            "Element 'resource', attribute 'someatrrname': The attribute 'someatrrname' is not allowed.\nLine: 1\n",
+            "Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n",
+        ],
     ],
     'with_two_same_id' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
