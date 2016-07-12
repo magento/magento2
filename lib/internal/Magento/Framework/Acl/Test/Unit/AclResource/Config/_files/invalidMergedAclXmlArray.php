@@ -6,14 +6,14 @@
 return [
     'disabled_attribute_empty_value' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
-        'disabled=""/></resources></acl></config>',
+        'disabled="" title="test"/></resources></acl></config>',
         [
             "Element 'resource', attribute 'disabled': '' is not a valid value of the atomic" .
             " type 'xs:boolean'.\nLine: 1\n"],
     ],
     'disabled_attribute_wrong_type_value' => [
         '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
-        'disabled="notBool"/></resources></acl></config>',
+        'disabled="notBool"  title="test"/></resources></acl></config>',
         [
             "Element 'resource', attribute 'disabled': 'notBool' is not a valid value of the atomic type " .
             "'xs:boolean'.\nLine: 1\n"
@@ -49,7 +49,7 @@ return [
         ],
     ],
     'notvalid_id_attribute_value_regexp1' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="test_Value::show_toolbar"/>' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="test_Value::show_toolbar" title="test"/>' .
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'test_Value::show_toolbar' is " .
@@ -63,7 +63,7 @@ return [
         ],
     ],
     'notvalid_id_attribute_value_regexp2' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="Test_value::show_toolbar"/>' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="Test_value::show_toolbar" title="test"/>' .
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_value::show_toolbar' is not " .
@@ -75,7 +75,7 @@ return [
         ],
     ],
     'notvalid_id_attribute_value_regexp3' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="M@#$%^*_Value::show_toolbar"/>' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="M@#$%^*_Value::show_toolbar" title="test"/>' .
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'M@#$%^*_Value::show_toolbar' is not " .
@@ -87,7 +87,7 @@ return [
         ],
     ],
     'notvalid_id_attribute_value_regexp4' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="_Value::show_toolbar"/>' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="_Value::show_toolbar" title="test"/>' .
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value '_Value::show_toolbar' is not " .
@@ -100,7 +100,7 @@ return [
         ],
     ],
     'notvalid_id_attribute_value_regexp5' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="Value_::show_toolbar"/></resources>' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="Value_::show_toolbar" title="test"/></resources>' .
         '</acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Value_::show_toolbar' is not " .
@@ -113,7 +113,7 @@ return [
         ],
     ],
     'notvalid_id_attribute_value_regexp6' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="Test_value:show_toolbar"/>' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="Test_value:show_toolbar" title="test"/>' .
         '</resources></acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_value:show_toolbar' is not " .
@@ -126,7 +126,8 @@ return [
         ],
     ],
     'notvalid_id_attribute_value_regexp7' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::"/></resources>' . '</acl></config>',
+        '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::" title="test"/></resources>' .
+        '</acl></config>',
         [
             "Element 'resource', attribute 'id': [facet 'pattern'] The value 'Test_Value::' is not accepted by " .
             "the pattern '([A-Z]+[a-zA-Z0-9]{1,}){1,}_[A-Z]+[A-Z0-9a-z]{1,}::[A-Za-z_0-9]{1,}'.\nLine: 1\n",
@@ -146,12 +147,12 @@ return [
         ],
     ],
     'sortOrder_attribute_wrong_type_value' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar"  ' .
         'title="Lorem ipsum" sortOrder=""/></resources></acl></config>',
         ["Element 'resource', attribute 'sortOrder': '' is not a valid value of the atomic type 'xs:int'.\nLine: 1\n"],
     ],
     'with_not_allowed_attribute' => [
-        '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" ' .
+        '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" title="test" ' .
         'someatrrname="some value"/></resources></acl></config>',
         ["Element 'resource', attribute 'someatrrname': The attribute 'someatrrname' is not allowed.\nLine: 1\n"],
     ],
@@ -175,5 +176,10 @@ return [
     'without_resource' => [
         '<?xml version="1.0"?><config><acl/></config>',
         ["Element 'acl': Missing child element(s). Expected is ( resources ).\nLine: 1\n"],
-    ]
+    ],
+    'without_title' => [
+        '<?xml version="1.0"?><config><acl><resources><resource id="Test_Value::show_toolbar" />' .
+        '</resources></acl></config>',
+        ["Element 'resource': The attribute 'title' is required but missing.\nLine: 1\n"],
+    ],
 ];
