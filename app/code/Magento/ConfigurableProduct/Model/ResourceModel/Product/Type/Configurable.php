@@ -7,7 +7,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
-use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ScopeResolverInterface;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -17,6 +18,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
      */
     protected $_catalogProductRelation;
+
+    /** @var ScopeResolverInterface  */
+    private $scopeResolver;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -170,6 +174,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getAttributeOptions($superAttribute, $productId)
     {
+        $scope  = $this->getScopeResolver()->getScope();
         $select = $this->getConnection()->select()->from(
             ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
             [
@@ -209,7 +214,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     'option_value.option_id = entity_value.value',
-                    'option_value.store_id = ' . Store::DEFAULT_STORE_ID
+                    'option_value.store_id = ' . $scope->getId()
                 ]
             ),
             []
@@ -219,7 +224,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
-                    'attribute_label.store_id = ' . Store::DEFAULT_STORE_ID
+                    'attribute_label.store_id = ' . $scope->getId()
                 ]
             ),
             []
@@ -229,8 +234,19 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'attribute.attribute_id = ?',
             $superAttribute->getAttributeId()
-        )->group('value_index');
+        );
 
         return $this->getConnection()->fetchAll($select);
+    }
+
+    /**
+     * @return ScopeResolverInterface
+     */
+    private function getScopeResolver()
+    {
+        if (!$this->scopeResolver instanceof ScopeResolverInterface) {
+            $this->scopeResolver = ObjectManager::getInstance()->get(ScopeResolverInterface::class);
+        }
+        return $this->scopeResolver;
     }
 }
