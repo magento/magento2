@@ -65,7 +65,7 @@ class PreprocessorStrategy implements PreProcessorInterface
     public function process(PreProcessor\Chain $chain)
     {
         $isClientSideCompilation =
-            $this->getAppMode() !== State::MODE_PRODUCTION
+            $this->getState()->getMode() !== State::MODE_PRODUCTION
             && WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
 
         if ($isClientSideCompilation) {
@@ -84,20 +84,6 @@ class PreprocessorStrategy implements PreProcessorInterface
         if (null === $this->state) {
             $this->state = ObjectManager::getInstance()->get(State::class);
         }
-
         return $this->state;
-    }
-
-    /**
-     * TODO: Fix this in scope of MAGETWO-54595
-     *
-     * @return string
-     * @deprecated
-     */
-    private function getAppMode()
-    {
-        return $this->getState()->getMode() === State::MODE_DEFAULT
-            ? ObjectManager::getInstance()->get(DeploymentConfig::class)->get(State::PARAM_MODE)
-            : $this->getState()->getMode();
     }
 }

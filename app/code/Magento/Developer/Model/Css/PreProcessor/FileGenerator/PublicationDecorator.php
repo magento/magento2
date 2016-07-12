@@ -75,7 +75,7 @@ class PublicationDecorator extends RelatedGenerator
     {
         $relatedAsset = parent::generateRelatedFile($relatedFileId, $asset);
         $isClientSideCompilation =
-            $this->getAppMode() !== State::MODE_PRODUCTION
+            $this->getState()->getMode() !== State::MODE_PRODUCTION
             && WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
 
         if ($this->hasRelatedPublishing || $isClientSideCompilation) {
@@ -96,18 +96,5 @@ class PublicationDecorator extends RelatedGenerator
         }
 
         return $this->state;
-    }
-
-    /**
-     * TODO: Fix this in scope of MAGETWO-54595
-     *
-     * @return string
-     * @deprecated
-     */
-    private function getAppMode()
-    {
-        return $this->getState()->getMode() === State::MODE_DEFAULT
-            ? ObjectManager::getInstance()->get(DeploymentConfig::class)->get(State::PARAM_MODE)
-            : $this->getState()->getMode();
     }
 }
