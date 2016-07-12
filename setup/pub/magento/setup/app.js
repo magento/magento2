@@ -19,6 +19,7 @@ var app = angular.module(
         'install',
         'success',
         'component-grid',
+        'extension-grid',
         'install-extension-grid',
         'create-backup',
         'complete-backup',
