@@ -465,7 +465,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $abstractModelMock->setIdFieldName('id');
         $abstractModelMock->setData(
             [
-                'id'    => 12345,
+                'id'    => 0,
                 'name'  => 'Test Name',
                 'value' => 'Test Value'
             ]
@@ -473,7 +473,7 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
         $abstractModelMock->afterLoad();
         $this->assertEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $newData = ['value' => 'Test Value New'];
-        $this->_model->expects($this->once())->method('_prepareDataForTable')->will($this->returnValue($newData));
+        $this->_model->expects($this->atLeastOnce())->method('_prepareDataForTable')->will($this->returnValue($newData));
         $abstractModelMock->addData($newData);
         $this->assertNotEquals($abstractModelMock->getData(), $abstractModelMock->getStoredData());
         $abstractModelMock->isObjectNew(false);
@@ -484,7 +484,23 @@ class AbstractDbTest extends \PHPUnit_Framework_TestCase
                 $newData,
                 'idFieldName'
             );
-
+        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $select->expects($this->once())
+            ->method('from')
+            ->with('tableName')
+            ->willReturnSelf();
+        $connectionMock->expects($this->once())
+            ->method('select')
+            ->willReturn($select);
+        $select->expects($this->once())
+            ->method('reset')
+            ->with(\Magento\Framework\DB\Select::WHERE);
+        $select->expects($this->exactly(2))
+            ->method('where')
+            ->withConsecutive(['uniqueField IS NULL'], ['idFieldName!=?', 0]);
+        $this->_model->addUniqueField(['field' => 'uniqueField']);
         $this->_model->save($abstractModelMock);
     }
 

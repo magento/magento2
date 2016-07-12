@@ -99,6 +99,7 @@ class CreditmemoRepository implements \Magento\Sales\Api\CreditmemoRepositoryInt
                 $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
+        $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
         return $searchResult;

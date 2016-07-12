@@ -7,6 +7,7 @@ namespace Magento\Downloadable\Api\Data;
 
 /**
  * @codeCoverageIgnore
+ * @api
  */
 interface LinkInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

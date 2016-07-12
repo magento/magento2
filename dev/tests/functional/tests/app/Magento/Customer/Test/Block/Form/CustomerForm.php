@@ -10,6 +10,7 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Mtf\Client\Locator;
 
 /**
  * Customer account edit form.
@@ -80,5 +81,33 @@ class CustomerForm extends Form
         }
 
         return $messages;
+    }
+
+    /**
+     * Get Customer first name from field.
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        $mapping = $this->dataMapping();
+        return $this->_rootElement->find(
+            $mapping['firstname']['selector'],
+            $mapping['firstname']['strategy']
+        )->getValue();
+    }
+
+    /**
+     * Get Customer last name from field.
+     *
+     * @return string
+     */
+    public function getLastName()
+    {
+        $mapping = $this->dataMapping();
+        return $this->_rootElement->find(
+            $mapping['lastname']['selector'],
+            $mapping['lastname']['strategy']
+        )->getValue();
     }
 }
