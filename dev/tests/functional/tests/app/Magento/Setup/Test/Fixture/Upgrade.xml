@@ -7,11 +7,11 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
     <fixture name="upgrade"
-             module="Magento_Upgrade"
+             module="Magento_Setup"
              type="virtual"
              entity_type="upgrade"
-             handler_interface="Magento\Upgrade\Test\Handler\Upgrade\UpgradeInterface"
-             class="Magento\Upgrade\Test\Fixture\Upgrade">
+             handler_interface="Magento\Setup\Test\Handler\Upgrade\UpgradeInterface"
+             class="Magento\Setup\Test\Fixture\Upgrade">
         <field name="upgradeVersion" />
         <field name="publicKey" />
         <field name="privateKey" />
