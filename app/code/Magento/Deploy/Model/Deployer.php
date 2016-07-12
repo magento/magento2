@@ -6,8 +6,6 @@
 
 namespace Magento\Deploy\Model;
 
-use Magento\Framework\App\State;
-use Magento\Config\Model\Config;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
