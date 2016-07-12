@@ -152,7 +152,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $zendEscaper = new \Magento\Framework\ZendEscaper();
         $escaper = new \Magento\Framework\Escaper();
-        $objectManager->setBackwardCompatibleProperty($escaper, 'zendEscaper', $zendEscaper);
+        $objectManager->setBackwardCompatibleProperty($escaper, 'escaper', $zendEscaper);
         $objectManager->setBackwardCompatibleProperty($model, 'escaper', $escaper);
 
         return $model;
