@@ -1,0 +1,8 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Setup\Test\TestCase\DisableModuleEntityTest" summary="Disable Module" ticketId="MAGETWO-43202">
+        <variation name="variation1">
+            <data name="description" xsi:type="string">Disable Module</data>
+
+        </variation>
+    </testCase>
+</config>
