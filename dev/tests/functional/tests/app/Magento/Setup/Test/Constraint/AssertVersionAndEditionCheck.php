@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Upgrade\Test\Constraint;
+namespace Magento\Setup\Test\Constraint;
 
-use Magento\Upgrade\Test\Page\Adminhtml\SetupWizard;
+use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**

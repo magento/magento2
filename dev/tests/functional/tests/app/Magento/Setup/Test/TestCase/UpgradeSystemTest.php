@@ -4,16 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Upgrade\Test\TestCase;
+namespace Magento\Setup\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Upgrade\Test\Page\Adminhtml\SetupWizard;
+use Magento\Setup\Test\Fixture\Upgrade;
+use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Upgrade\Test\Constraint\AssertSuccessfulReadinessCheck;
-use Magento\Upgrade\Test\Constraint\AssertVersionAndEditionCheck;
-use Magento\Upgrade\Test\Constraint\AssertSuccessMessage;
-use Magento\Upgrade\Test\Constraint\AssertApplicationVersion;
+use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
+use Magento\Setup\Test\Constraint\AssertVersionAndEditionCheck;
+use Magento\Setup\Test\Constraint\AssertSuccessMessage;
+use Magento\Setup\Test\Constraint\AssertApplicationVersion;
 
 class UpgradeSystemTest extends Injectable
 {
@@ -62,13 +63,13 @@ class UpgradeSystemTest extends Injectable
         $upgrade = []
     ) {
         // Create fixture
-        $upgradeFixture = $fixtureFactory->create('Magento\Upgrade\Test\Fixture\Upgrade', ['data' => $upgrade]);
+        $upgradeFixture = $fixtureFactory->create(Upgrade::class, ['data' => $upgrade]);
         $createBackupConfig = array_intersect_key(
             $upgrade,
             ['optionsCode' => '', 'optionsMedia' => '', 'optionsDb' => '']
         );
         $createBackupFixture = $fixtureFactory->create(
-            'Magento\Upgrade\Test\Fixture\Upgrade',
+            Upgrade::class,
             ['data' => $createBackupConfig]
         );
         $version = $upgrade['upgradeVersion'];
