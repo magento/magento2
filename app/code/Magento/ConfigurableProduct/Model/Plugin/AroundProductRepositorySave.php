@@ -144,6 +144,7 @@ class AroundProductRepositorySave
         }
 
         $configurableProductTypeResource->saveProducts($product, $linkIds);
+        $product->getTypeInstance()->resetConfigurableAttributes($product);
         return $this;
     }
 

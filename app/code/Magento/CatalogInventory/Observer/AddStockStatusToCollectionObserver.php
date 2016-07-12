@@ -33,10 +33,10 @@ class AddStockStatusToCollectionObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(EventObserver $observer)
     {
-        $productCollection = $observer->getEvent()->getCollection();
-        $this->stockHelper->addStockStatusToProducts($productCollection);
+        return ;
     }
 }

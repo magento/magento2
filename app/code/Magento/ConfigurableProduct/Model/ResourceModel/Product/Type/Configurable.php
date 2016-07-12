@@ -56,7 +56,12 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         $old = [];
         if (!$mainProduct->getIsDuplicate()) {
-            $old = $mainProduct->getTypeInstance()->getUsedProductIds($mainProduct);
+            $old = $this->getConnection()
+                ->select()
+                ->from($this->getMainTable(), ['product_id'])
+                ->where('parent_id = ?', $mainProductId)
+                ->query()
+                ->fetchAll(\Zend_Db::FETCH_COLUMN);
         }
 
         $insert = array_diff($productIds, $old);

@@ -62,4 +62,7 @@
             <argument name="reservedAttributeList" xsi:type="object">Magento\Catalog\Model\Product\ReservedAttributeList\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Entity\AbstractEntity">
+        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
+    </type>
 </config>

@@ -60,6 +60,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
                 'getTypeInstance',
                 'getStore',
                 'getCustomOption',
+                'hasFinalPrice'
             ])
             ->getMock();
         $this->saleableItem->expects($this->once())
