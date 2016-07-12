@@ -57,7 +57,7 @@
             <div class="primary">
                 <button data-button="paypal-place" data-role="review-save"
                         type="submit"
-                        data-bind="attr: {title: $t('Place Order')}, enable: (isActive()), click: placeOrder"
+                        data-bind="attr: {id: getCode() + '_continue_to', title: $t('Place Order')}, enable: (isActive()), click: placeOrder"
                         class="action primary checkout"
                         disabled>
                     <span translate="'Place Order'"></span>
@@ -68,7 +68,7 @@
             <div class="primary">
                 <button data-button="place" data-role="review-save"
                         type="submit"
-                        data-bind="attr: {title: $t(getButtonTitle())}, enable: (isActive()), click: payWithPayPal"
+                        data-bind="attr: {id: getCode() + '_pay_with', title: $t(getButtonTitle())}, enable: (isActive()), click: payWithPayPal"
                         class="action primary checkout"
                         disabled>
                     <span translate="getButtonTitle()"></span>

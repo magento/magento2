@@ -40,10 +40,4 @@
             </argument>
         </arguments>
     </virtualType>
-
-    <virtualType name="VaultCreditCards" type="Magento\Vault\Block\PaymentTokens">
-        <arguments>
-            <argument name="tokenType" xsi:type="const">Magento\Vault\Api\Data\PaymentTokenInterface::TYPE_CREDIT_CARD</argument>
-        </arguments>
-    </virtualType>
 </config>

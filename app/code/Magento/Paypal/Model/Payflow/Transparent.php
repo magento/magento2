@@ -214,7 +214,6 @@ class Transparent extends Payflowpro implements TransparentInterface
         $paymentToken->setExpiresAt(
             $this->getExpirationDate($payment)
         );
-        $paymentToken->setType(PaymentTokenInterface::TYPE_CREDIT_CARD);
 
         $this->getPaymentExtensionAttributes($payment)->setVaultPaymentToken($paymentToken);
     }

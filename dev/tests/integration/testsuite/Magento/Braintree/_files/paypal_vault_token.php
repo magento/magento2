@@ -7,6 +7,7 @@
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Config\Model\Config;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Vault\Model\AccountPaymentTokenFactory;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenRepository;
 
@@ -27,7 +28,7 @@ $paymentToken = $objectManager->create(PaymentToken::class);
 $paymentToken
     ->setCustomerId($customer->getId())
     ->setPaymentMethodCode(ConfigProvider::PAYPAL_CODE)
-    ->setType(PaymentToken::TYPE_ACCOUNT)
+    ->setType(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT)
     ->setGatewayToken('mx29vk')
     ->setPublicHash($encryptor->hash($customer->getId()))
     ->setTokenDetails(json_encode(['payerEmail' => 'john.doe@example.com']))

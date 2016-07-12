@@ -7,18 +7,18 @@ namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
+use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
 use Magento\Framework\DataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
-use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Vault\Model\CreditCardTokenFactory;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Braintree\Gateway\Config\Config;
 
 /**
  * VaultDetailsHandler Test
@@ -40,7 +40,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private $payment;
 
     /**
-     * @var \Magento\Vault\Api\Data\PaymentTokenInterfaceFactory|MockObject
+     * @var CreditCardTokenFactory|MockObject
      */
     private $paymentTokenFactory;
 
@@ -72,7 +72,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->paymentToken = $this->getMock(PaymentTokenInterface::class);
-        $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenInterfaceFactory::class)
+        $this->paymentTokenFactory = $this->getMockBuilder(CreditCardTokenFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -162,9 +162,6 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         $this->paymentToken->expects(static::once())
             ->method('setExpiresAt')
             ->with('2022-01-01 00:00:00');
-        $this->paymentToken->expects(static::once())
-            ->method('setType')
-            ->with('card');
 
         $this->paymentHandler->handle($subject, $response);
         $this->assertSame($this->paymentToken, $this->payment->getExtensionAttributes()->getVaultPaymentToken());

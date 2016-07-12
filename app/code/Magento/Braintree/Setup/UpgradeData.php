@@ -3,13 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Setup;
+namespace Magento\Braintree\Setup;
 
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CreditCardTokenFactory;
+use Magento\Vault\Setup\InstallSchema;
 
 /**
  * Class UpgradeData
@@ -27,7 +29,7 @@ class UpgradeData implements UpgradeDataInterface
             $connection = $setup->getConnection();
             $connection->update($setup->getTable(InstallSchema::PAYMENT_TOKEN_TABLE), [
                 PaymentTokenInterface::TYPE => CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD
-            ], PaymentTokenInterface::TYPE . ' = ""');
+            ], ['payment_method_code = ?' => ConfigProvider::CODE]);
         }
         $setup->endSetup();
     }

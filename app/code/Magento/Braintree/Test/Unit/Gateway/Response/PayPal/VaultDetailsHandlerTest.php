@@ -10,15 +10,16 @@ use Braintree\Transaction\PayPalDetails;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Gateway\Response\PayPal\VaultDetailsHandler;
 use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Vault\Model\AccountPaymentTokenFactory;
 use Magento\Vault\Model\PaymentToken;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class VaultDetailsHandlerTest
@@ -44,7 +45,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private $paymentInfo;
 
     /**
-     * @var PaymentTokenInterfaceFactory|MockObject
+     * @var AccountPaymentTokenFactory|MockObject
      */
     private $paymentTokenFactory;
 
@@ -91,7 +92,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->paymentToken = $objectManager->getObject(PaymentToken::class);
 
-        $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenInterfaceFactory::class)
+        $this->paymentTokenFactory = $this->getMockBuilder(AccountPaymentTokenFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -184,7 +185,6 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         static::assertEquals($transaction->paypalDetails->token, $paymentToken->getGatewayToken());
         static::assertEquals($transaction->paypalDetails->payerEmail, $tokenDetails['payerEmail']);
         static::assertEquals($expirationDate, $paymentToken->getExpiresAt());
-        static::assertEquals($paymentToken->getType(), 'token');
     }
 
     /**

@@ -96,7 +96,6 @@ class VaultDetailsHandler implements HandlerInterface
         $paymentToken = $this->paymentTokenFactory->create();
         $paymentToken->setGatewayToken($token);
         $paymentToken->setExpiresAt($this->getExpirationDate($transaction));
-        $paymentToken->setType(PaymentTokenInterface::TYPE_CREDIT_CARD);
 
         $paymentToken->setTokenDetails($this->convertDetailsToJSON([
             'type' => $this->getCreditCardType($transaction->creditCardDetails->cardType),

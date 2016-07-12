@@ -99,7 +99,6 @@ class VaultDetailsHandler implements HandlerInterface
             'payerEmail' => $transaction->paypalDetails->payerEmail
         ]);
         $paymentToken->setTokenDetails($details);
-        $paymentToken->setType(PaymentTokenInterface::TYPE_ACCOUNT);
 
         return $paymentToken;
     }
