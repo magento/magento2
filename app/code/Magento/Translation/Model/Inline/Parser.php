@@ -559,16 +559,19 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 
                 $tagBodyMatch = [];
                 preg_match($tagRegExpBody, $content, $tagBodyMatch, PREG_OFFSET_CAPTURE);
-                $tagBodyOpenStartPosition = $tagBodyMatch[0][1];
+                if (!empty($tagBodyMatch)) {
+                    $tagBodyOpenStartPosition = $tagBodyMatch[0][1];
 
-                if (array_key_exists($tagName, $this->_allowedTagsGlobal)
-                    && $tagBodyOpenStartPosition > $tagMatch[0][1]
-                ) {
-                    $tagHtmlHead = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
-                    $headTranslateTags .= substr($tagHtmlHead, strlen($tagHtml));
-                } else {
-                    $tagHtml = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+                    if (array_key_exists($tagName, $this->_allowedTagsGlobal)
+                        && $tagBodyOpenStartPosition > $tagMatch[0][1]
+                    ) {
+                        $tagHtmlHead = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+                        $headTranslateTags .= substr($tagHtmlHead, strlen($tagHtml));
+                    } else {
+                        $tagHtml = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+                    }
                 }
+
                 $tagClosurePos = $tagMatch[0][1] + strlen($tagHtml);
                 $content = substr_replace($content, $tagHtml, $tagMatch[0][1], $tagLength);
             }
