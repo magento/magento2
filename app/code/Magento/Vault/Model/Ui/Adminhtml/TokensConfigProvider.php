@@ -204,7 +204,7 @@ final class TokensConfigProvider
      * Returns order payment entity id
      * Using 'getReordered' for Reorder action
      * Using 'getOrder' for Edit action
-     * @return int|null
+     * @return int
      */
     private function getOrderPaymentEntityId()
     {
@@ -212,7 +212,7 @@ final class TokensConfigProvider
             ?: $this->session->getOrder()->getEntityId();
         $order = $this->getOrderRepository()->get($orderId);
 
-        return $order->getPayment()->getEntityId();
+        return (int) $order->getPayment()->getEntityId();
     }
 
     /**
