@@ -6,14 +6,11 @@
 
 namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Config\DataInterface;
-use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
  * Create new simple product via curl.
@@ -195,28 +192,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @var array
      */
     protected $selectOptions = ['drop_down', 'radio', 'checkbox', 'multiple'];
-
-    /**
-     * Fixture Factory instance.
-     *
-     * @var FixtureFactory
-     */
-    private $fixtureFactory;
-
-    /**
-     * @constructor
-     * @param DataInterface $configuration
-     * @param EventManagerInterface $eventManager
-     * @param FixtureFactory $fixtureFactory
-     */
-    public function __construct(
-        DataInterface $configuration,
-        EventManagerInterface $eventManager,
-        FixtureFactory $fixtureFactory
-    ) {
-        parent::__construct($configuration, $eventManager);
-        $this->fixtureFactory = $fixtureFactory;
-    }
 
     /**
      * Post request for creating simple product.
@@ -441,7 +416,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
                 $this->fields['product']['website_ids'][$key] = $website->getWebsiteId();
             }
         } else {
-            $website = $this->fixtureFactory->createByCode('website', ['dataset' => 'default']);
+            $website = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
+                ->create(\Magento\Store\Test\Fixture\Website::class, ['dataset' => 'default']);
             $this->fields['product']['website_ids'][] = $website->getWebsiteId();
         }
     }
