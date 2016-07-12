@@ -69,6 +69,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $escaperMock = $this->getMock(\Magento\Framework\ZendEscaper::class, [], [], '', false);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $objectManager->setBackwardCompatibleProperty($this->routeParamsResolverMock, 'escaper', $escaperMock);
+
         $this->routeParamsPreprocessorMock = $this->getMockForAbstractClass(
             'Magento\Framework\Url\RouteParamsPreprocessorInterface',
             [],

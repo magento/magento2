@@ -1008,25 +1008,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         $query = $this->_getQuery();
         if ($query) {
-            $queryParams = explode('&', $query);
-            foreach ($queryParams as $key => $value) {
-//                $parts = explode('=', $value);
-//                if (count($parts) == 1) {
-//                    $queryParams[$key] = $this->getEscaper()->escapeUrl($value);
-//                } else {
-//                    $value = implode(
-//                        '=',
-//                        [
-//                            $this->getEscaper()->escapeUrl($parts[0]),
-//                            $this->getEscaper()->escapeUrl($parts[1])
-//                        ]
-//                    );
-//                    unset($queryParams[$key]);
-//                    $queryParams[$key] = $value;
-//                }
-            }
-            $query = implode('&', $queryParams);
-            $this->addQueryParams($query, !empty($routeParams['_current']));
             $url .= '?' . $query;
         }
 
