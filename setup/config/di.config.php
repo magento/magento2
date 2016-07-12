@@ -30,6 +30,7 @@ return [
             'Magento\Setup\Controller\Success',
             'Magento\Setup\Controller\Modules',
             'Magento\Setup\Controller\ComponentGrid',
+            'Magento\Setup\Controller\ExtensionGrid',
             'Magento\Setup\Controller\StartUpdater',
             'Magento\Setup\Controller\UpdaterSuccess',
             'Magento\Setup\Controller\BackupActionItems',

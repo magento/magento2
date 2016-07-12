@@ -296,7 +296,7 @@ class PackagesData
      */
     public function getPackagesForInstall()
     {
-        $actualInstallackages = [];
+        $actualInstallPackages = [];
         $installPackagesInfo = $this->syncPackagesForInstall();
 
         try {
@@ -314,11 +314,11 @@ class PackagesData
                 ) {
                     $package['metapackage'] =
                         isset($metaPackageByPackage[$package['name']]) ? $metaPackageByPackage[$package['name']] : '';
-                    $actualInstallackages[$package['name']] = $package;
-                    $actualInstallackages[$package['name']]['version'] = $package['versions'][0];
+                    $actualInstallPackages[$package['name']] = $package;
+                    $actualInstallPackages[$package['name']]['version'] = $package['versions'][0];
                 }
             }
-            $installPackagesInfo['packages'] = $actualInstallackages;
+            $installPackagesInfo['packages'] = $actualInstallPackages;
             return $installPackagesInfo;
         } catch (\Exception $e) {
             throw new \RuntimeException('Error in getting new packages to install');
