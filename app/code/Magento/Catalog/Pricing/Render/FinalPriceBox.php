@@ -118,4 +118,14 @@ class FinalPriceBox extends BasePriceBox
         && $minimalPriceAValue
         && $minimalPriceAValue < $finalPriceValue;
     }
+
+    /**
+     * Get Key for caching block content
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page': '');
+    }
 }
