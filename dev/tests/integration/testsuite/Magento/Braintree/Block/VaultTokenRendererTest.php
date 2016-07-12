@@ -11,7 +11,8 @@ use Magento\Framework\App\Area;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Block\PaymentTokens;
+use Magento\Vault\Block\Customer\AccountTokens;
+use Magento\Vault\Model\AccountPaymentTokenFactory;
 
 /**
  * Class VaultTokenRendererTest
@@ -19,7 +20,7 @@ use Magento\Vault\Block\PaymentTokens;
 class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PaymentTokens
+     * @var AccountTokens
      */
     private $tokenBlock;
 
@@ -34,11 +35,11 @@ class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
         $bootstrap->loadArea(Area::AREA_FRONTEND);
         $this->objectManager = Bootstrap::getObjectManager();
         
-        $this->tokenBlock = $this->objectManager->get(PaymentTokens::class);
+        $this->tokenBlock = $this->objectManager->get(AccountTokens::class);
     }
 
     /**
-     * @covers \Magento\Vault\Block\PaymentTokens::getPaymentTokens
+     * @covers \Magento\Vault\Block\Customer\AccountTokens::getPaymentTokens
      * @magentoDataFixture Magento/Braintree/_files/paypal_vault_token.php
      */
     public function testGetPaymentTokens()
@@ -61,6 +62,6 @@ class VaultTokenRendererTest extends \PHPUnit_Framework_TestCase
         static::assertTrue($vaultToken->getIsVisible());
         static::assertEquals($token, $vaultToken->getGatewayToken());
         static::assertEquals(ConfigProvider::PAYPAL_CODE, $vaultToken->getPaymentMethodCode());
-        static::assertEquals(PaymentTokenInterface::TYPE_ACCOUNT, $vaultToken->getType());
+        static::assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $vaultToken->getType());
     }
 }

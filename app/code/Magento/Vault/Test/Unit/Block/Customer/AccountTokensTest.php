@@ -3,19 +3,21 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Test\Unit\Block;
+namespace Magento\Vault\Test\Unit\Block\Customer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Block\PaymentTokens;
+use Magento\Vault\Block\Customer\AccountTokens;
+use Magento\Vault\Model\AccountPaymentTokenFactory;
+use Magento\Vault\Model\CreditCardTokenFactory;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\PaymentToken;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class PaymentTokensTest
+ * Class AccountTokensTest
  */
-class PaymentTokensTest extends \PHPUnit_Framework_TestCase
+class AccountTokensTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var CustomerTokenManagement|MockObject
@@ -23,7 +25,7 @@ class PaymentTokensTest extends \PHPUnit_Framework_TestCase
     private $tokenManagement;
 
     /**
-     * @var PaymentTokens
+     * @var AccountTokens
      */
     private $block;
 
@@ -41,21 +43,21 @@ class PaymentTokensTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCustomerSessionTokens'])
             ->getMock();
 
-        $this->block = $this->objectManager->getObject(PaymentTokens::class, [
+        $this->block = $this->objectManager->getObject(AccountTokens::class, [
             'customerTokenManagement' => $this->tokenManagement
         ]);
     }
 
     /**
-     * @covers \Magento\Vault\Block\PaymentTokens::getPaymentTokens
+     * @covers \Magento\Vault\Block\Customer\AccountTokens::getPaymentTokens
      */
     public function testGetPaymentTokens()
     {
         $cardToken = $this->objectManager->getObject(PaymentToken::class, [
-            'data' => [PaymentTokenInterface::TYPE => PaymentTokenInterface::TYPE_CREDIT_CARD]
+            'data' => [PaymentTokenInterface::TYPE => CreditCardTokenFactory::TOKEN_TYPE_CREDIT_CARD]
         ]);
         $token = $this->objectManager->getObject(PaymentToken::class, [
-            'data' => [PaymentTokenInterface::TYPE => PaymentTokenInterface::TYPE_ACCOUNT]
+            'data' => [PaymentTokenInterface::TYPE => AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT]
         ]);
         $this->tokenManagement->expects(static::once())
             ->method('getCustomerSessionTokens')
@@ -66,6 +68,6 @@ class PaymentTokensTest extends \PHPUnit_Framework_TestCase
 
         /** @var PaymentTokenInterface $actualToken */
         $actualToken = array_pop($actual);
-        static::assertEquals(PaymentTokenInterface::TYPE_ACCOUNT, $actualToken->getType());
+        static::assertEquals(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT, $actualToken->getType());
     }
 }

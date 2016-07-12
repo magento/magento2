@@ -5,6 +5,8 @@
  */
 namespace Magento\Vault\Block;
 
+use Magento\Vault\Block\Customer\IconInterface;
+
 /**
  * Interface CardRendererInterface
  * @api
