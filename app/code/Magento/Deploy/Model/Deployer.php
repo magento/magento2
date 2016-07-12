@@ -6,8 +6,6 @@
 
 namespace Magento\Deploy\Model;
 
-use Magento\Developer\Model\Config\Source\WorkflowType;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 use Magento\Config\Model\Config;
 use Magento\Framework\Exception\LocalizedException;
@@ -79,21 +77,6 @@ class Deployer
     private $alternativeSources;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var State
-     */
-    private $state;
-
-    /**
-     * @var Config\Factory
-     */
-    private $configFactory;
-
-    /**
      * Constructor
      *
      * @param Files $filesUtil
@@ -124,63 +107,6 @@ class Deployer
             $alternativeSources
         );
         $this->alternativeSources = $alternativeSources;
-    }
-
-    /**
-     * @return Config\Factory
-     */
-    private function getConfigFactory()
-    {
-        if ($this->configFactory === null) {
-            $this->configFactory = $this->objectManager->get(Config\Factory::class);
-        }
-        return $this->configFactory;
-    }
-
-    /**
-     * Return ScopeConfig instance
-     *
-     * @return ScopeConfigInterface
-     * @deprecated
-     */
-    private function getScopeConfig()
-    {
-        if ($this->scopeConfig === null) {
-            $this->scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
-        }
-        return $this->scopeConfig;
-    }
-
-    /**
-     * Enable server side compilation of static files for production mode
-     *
-     * @throws \Exception
-     */
-    private function ensureServerSideCompilationForProduction()
-    {
-        if ($this->getScopeConfig()->getValue(WorkflowType::CONFIG_NAME_PATH)
-            == WorkflowType::CLIENT_SIDE_COMPILATION
-            && $this->getState()->getMode() == State::MODE_PRODUCTION) {
-
-            /** @var Config $config */
-            $config = $this->getConfigFactory()->create();
-            $config->setDataByPath(WorkflowType::CONFIG_NAME_PATH, WorkflowType::SERVER_SIDE_COMPILATION);
-            $config->save();
-        }
-    }
-
-    /**
-     * Return State instance
-     *
-     * @return State
-     * @deprecated
-     */
-    private function getState()
-    {
-        if ($this->state === null) {
-            $this->state = $this->objectManager->get(State::class);
-        }
-        return $this->state;
     }
 
     /**
@@ -333,18 +259,14 @@ class Deployer
      */
     private function emulateApplicationArea($areaCode)
     {
-        $this->objectManager = $this->omFactory->create([]
-//            [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
-        );
+        $this->objectManager = $this->omFactory->create([]);
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
-        $this->ensureServerSideCompilationForProduction();
         $this->assetRepo = $this->objectManager->get('Magento\Framework\View\Asset\Repository');
         $this->assetPublisher = $this->objectManager->create('Magento\Framework\App\View\Asset\Publisher');
         $this->htmlMinifier = $this->objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
         $this->bundleManager = $this->objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');
-
     }
 
     /**
