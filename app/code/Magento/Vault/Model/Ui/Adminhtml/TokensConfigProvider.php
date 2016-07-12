@@ -8,6 +8,8 @@ namespace Magento\Vault\Model\Ui\Adminhtml;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Payment\Helper\Data;
@@ -134,9 +136,15 @@ final class TokensConfigProvider
                 ->setValue($customerId)
                 ->create();
         } else {
-            $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::ENTITY_ID)
-                ->setValue($this->getPaymentTokenEntityId())
-                ->create();
+            try {
+                $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::ENTITY_ID)
+                    ->setValue($this->getPaymentTokenEntityId())
+                    ->create();
+            } catch (InputException $e) {
+                return $result;
+            } catch (NoSuchEntityException $e) {
+                return $result;
+            }
         }
         $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
             ->setValue($vaultProviderCode)
@@ -153,6 +161,7 @@ final class TokensConfigProvider
                 )->format('Y-m-d 00:00:00')
             )
             ->create();
+
         $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
             ->create();
 
