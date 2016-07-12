@@ -15,7 +15,7 @@ class AccountTokens extends PaymentTokens
     /**
      * @inheritdoc
      */
-    function getType()
+    public function getType()
     {
         return AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT;
     }
