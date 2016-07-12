@@ -78,8 +78,7 @@
                                 </xs:simpleType>
                                 <xs:simpleType>
                                     <xs:restriction base="xs:string">
-                                        <xs:minLength value="1"/>
-                                        <xs:pattern value="[a-z]+[a-z_]+[a-z]+"/>
+                                        <xs:pattern value="[a-z]+_?[a-z]+"/>
                                     </xs:restriction>
                                 </xs:simpleType>
                             </xs:union>
