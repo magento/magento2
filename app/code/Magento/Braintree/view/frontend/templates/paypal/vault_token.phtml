@@ -12,10 +12,11 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 $payerEmail = $block->escapeHtml($block->getPayerEmail());
 ?>
 <tr>
-    <td data-th="<?php echo $block->escapeHtml(__('Token')); ?>" class="col">
+    <td data-th="<?php echo $block->escapeHtml(__('PayPal Account')); ?>" class="col paypal-account">
         <img src="<?php /* @noEscape */ echo $block->getIconUrl(); ?>"
              width="<?php /* @noEscape */ echo $block->getIconWidth(); ?>"
              height="<?php /* @noEscape */ echo $block->getIconHeight(); ?>"
+             alt="<?php echo $block->escapeHtml(__('PayPal Logo')); ?>"
         >
         <span><?php /* @noEscape */ echo $payerEmail; ?></span>
     </td>

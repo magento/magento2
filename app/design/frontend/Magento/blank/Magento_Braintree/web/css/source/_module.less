@@ -13,6 +13,11 @@
 @braintree-focus__color: @color-blue2;
 @braintree-success__color: @color-dark-green1;
 
+@braintree-paypal-icon__height: 16px;
+@braintree-paypal-icon__width: 16px;
+@braintree-paypal-account__padding-right: 50px;
+@braintree-paypal-account__padding-vertical: 15px;
+
 //
 //  Common
 //  _____________________________________________
@@ -92,6 +97,39 @@
         text-align: center;
     }
 
+    .braintree-paypal-account {
+        padding: @braintree-paypal-account__padding-vertical 0 @braintree-paypal-account__padding-vertical @braintree-paypal-account__padding-right;
+        position: relative;
+
+        .lib-icon-image(
+            @_icon-image: '@{baseDir}Magento_Braintree/images/paypal-small.png',
+            @_icon-image-position: before,
+            @_icon-image-width: @braintree-paypal-icon__width,
+            @_icon-image-height: @braintree-paypal-icon__height
+        );
+
+        &:before {
+            left: @braintree-paypal-account__padding-right/2 - @braintree-paypal-icon__width/2;
+            margin-top: -@braintree-paypal-icon__height/2;
+            position: absolute;
+            top: 50%;
+        }
+
+        .payment-method-type {
+            font-weight: @font-weight__bold;
+        }
+
+        .payment-method-description {
+            color: @color-gray34;
+        }
+    }
+
+    .braintree-paypal-fieldset {
+        border: 0;
+        margin: 0;
+        padding: 0;
+    }
+
     .action-braintree-paypal-logo {
         .lib-button-reset();
 
@@ -101,35 +139,30 @@
         }
     }
 
-    .payment-method-content {
-        .card-label {
-            display: block;
-            padding: 8px 0;
-            margin-top: -1px;
-            z-index: 1;
-            position: relative;
-            overflow: hidden;
-            transform: translate3d(0,0,0);
-            transition: background-color 131ms linear;
+    .payment-method {
+        .payment-method-content {
+            .actions-toolbar {
+                &.braintree-paypal-actions {
+                    margin-left: 0;
+                }
+            }
         }
-        .payment-method-icon.paypal {
-            display: block;
-            text-indent: -999em;
-            background-image: url(https://assets.braintreegateway.com/dropin/2.21.0/images/braintree_dropin_sprite.png);
-            background-position: 0 -429px;
-            width: 44px;
-            height: 29px;
-        }
-        .payment-method-type {
-            color: #283036;
-            font-weight: 800;
-            margin-left: 71px;
-        }
-        .payment-method-description {
-            position: relative;
-            line-height: 50px;
-            height: 50px;
-            color: #6E787F;
+    }
+
+    //  My Account > Stored Payment Methods
+    .account {
+        .table {
+            .col {
+                &.paypal-account {
+                    img {
+                        vertical-align: middle;
+                    }
+
+                    + .actions {
+                        vertical-align: middle;
+                    }
+                }
+            }
         }
     }
 }
@@ -145,5 +178,13 @@
                 left: 6rem;
             }
         }
+    }
+
+    .braintree-paypal-account {
+        border-color: @color-gray80;
+        border-style: solid;
+        border-width: 1px 0;
+        display: inline-block;
+        width: 50%;
     }
 }
