@@ -8,6 +8,7 @@
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
+use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class BooleanTest extends \PHPUnit_Framework_TestCase
@@ -66,6 +67,13 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     ) {
         $attributeMock = $this->getAttributeMock();
         $attributeMock->expects($this->any())->method('isScopeGlobal')->will($this->returnValue($isScopeGlobal));
+
+        $entity = $this->getMockBuilder(AbstractEntity::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getLinkField'])
+            ->getMockForAbstractClass();
+        $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
+        $attributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
 
         $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
 
@@ -173,7 +181,7 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
      */
     protected function getAttributeMock()
     {
-        $attributeMockMethods = ['getAttributeCode', 'getId', 'getBackend', 'isScopeGlobal', '__wakeup'];
+        $attributeMockMethods = ['getAttributeCode', 'getId', 'getBackend', 'isScopeGlobal', '__wakeup' , 'getEntity'];
         $attributeMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Attribute\AbstractAttribute', $attributeMockMethods, [], '', false
         );

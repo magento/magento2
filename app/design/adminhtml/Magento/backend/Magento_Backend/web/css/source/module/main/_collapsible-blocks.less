@@ -398,6 +398,7 @@
         }
 
         .label {
+            &:extend(.abs-word-wrap all);
             color: @color-gray19;
             float: none;
             font-size: 14px;
@@ -412,6 +413,7 @@
 
             span {
                 &[data-config-scope] {
+                    display: inline-block;
                     position: relative;
 
                     &:before {
