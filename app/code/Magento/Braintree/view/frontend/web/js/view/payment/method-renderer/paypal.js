@@ -400,6 +400,14 @@ define([
          */
         getButtonTitle: function () {
             return this.isSkipOrderReview() ? 'Pay with PayPal' : 'Continue to PayPal';
+        },
+
+        /**
+         * Get button id
+         * @returns {String}
+         */
+        getButtonId: function () {
+            return this.getCode() + (this.isSkipOrderReview() ? '_pay_with' : '_continue_to');
         }
     });
 });
