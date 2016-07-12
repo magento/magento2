@@ -254,6 +254,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     'value_index' => $option['value_index'],
                     'label' => $option['option_title'],
                     'product_super_attribute_id' => $itemId,
+                    'default_label' => $option['default_title'],
+                    'store_label' => $option['default_title'],
+                    'use_default_value' => true
                 ];
             }
             $values = array_values($values);
