@@ -10,6 +10,9 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Payment\Helper\Data;
@@ -318,6 +321,94 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
         );
 
         static::assertEquals([$tokenUiComponent], $configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+    }
+
+    /**
+     * @param \Exception $exception
+     * @covers \Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider::getTokensComponents
+     * @dataProvider getTokensComponentsGuestCustomerExceptionsProvider
+     */
+    public function testGetTokensComponentsGuestCustomerOrderNotFound($exception)
+    {
+        $customerId = null;
+
+        $this->initStoreMock();
+
+        $this->session->expects(static::once())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+
+        $this->paymentDataHelper->expects(static::once())
+            ->method('getMethodInstance')
+            ->with(self::VAULT_PAYMENT_CODE)
+            ->willReturn($this->vaultPayment);
+
+        $this->vaultPayment->expects(static::once())
+            ->method('isActive')
+            ->with(self::STORE_ID)
+            ->willReturn(true);
+        $this->vaultPayment->expects(static::once())
+            ->method('getProviderCode')
+            ->willReturn(self::VAULT_PROVIDER_CODE);
+
+        $this->session->expects(static::once())
+            ->method('getReordered')
+            ->willReturn(self::ORDER_ID);
+        $this->orderRepository->expects(static::once())
+            ->method('get')
+            ->with(self::ORDER_ID)
+            ->willThrowException($exception);
+
+        $this->filterBuilder->expects(static::once())
+            ->method('setField')
+            ->with(PaymentTokenInterface::ENTITY_ID)
+            ->willReturnSelf();
+        $this->filterBuilder->expects(static::never())
+            ->method('setValue');
+        $this->searchCriteriaBuilder->expects(self::never())
+            ->method('addFilters');
+
+        $configProvider = new TokensConfigProvider(
+            $this->session,
+            $this->paymentTokenRepository,
+            $this->filterBuilder,
+            $this->searchCriteriaBuilder,
+            $this->storeManager,
+            $this->dateTimeFactory,
+            [
+                self::VAULT_PROVIDER_CODE => $this->getMock(TokenUiComponentProviderInterface::class)
+            ]
+        );
+
+        $this->objectManager->setBackwardCompatibleProperty(
+            $configProvider,
+            'paymentDataHelper',
+            $this->paymentDataHelper
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $configProvider,
+            'paymentTokenManagement',
+            $this->paymentTokenManagement
+        );
+        $this->objectManager->setBackwardCompatibleProperty(
+            $configProvider,
+            'orderRepository',
+            $this->orderRepository
+        );
+
+        static::assertEmpty($configProvider->getTokensComponents(self::VAULT_PAYMENT_CODE));
+    }
+
+    /**
+     * Set of catching exception types
+     * @return array
+     */
+    public function getTokensComponentsGuestCustomerExceptionsProvider()
+    {
+        return [
+            [new InputException()],
+            [new NoSuchEntityException()],
+        ];
     }
 
     /**
