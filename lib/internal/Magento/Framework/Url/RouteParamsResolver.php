@@ -34,7 +34,7 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
     /**
      * @var \Magento\Framework\ZendEscaper
      */
-    private $escaper;
+    protected $escaper;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
@@ -156,7 +156,7 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
 
     /**
      * @param void
-     * @return Escaper
+     * @return \Magento\Framework\ZendEscaper
      */
     private function getEscaper()
     {
