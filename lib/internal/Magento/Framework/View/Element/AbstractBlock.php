@@ -865,33 +865,37 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape html entities
+     * Escape HTML entities
      *
      * @param string|array $data
      * @param array|null $allowedTags
      * @return string
      */
-    public function escapeHtml($data, $allowedTags = null)
+    public function escapeHtml($data, $allowedTags = [])
     {
         return $this->_escaper->escapeHtml($data, $allowedTags);
     }
 
     /**
-     * @param string $data
+     * Escape string for the JavaScript context
+     * 
+     * @param string $string
      * @return string
      */
-    public function escapeJs($data)
+    public function escapeJs($string)
     {
-        return $this->_escaper->escapeJs($data);
+        return $this->_escaper->escapeJs($string);
     }
 
     /**
-     * @param string $data
+     * Escape a string for the HTML attribute context
+     *
+     * @param string $string
      * @return string
      */
-    public function escapeHtmlAttr($data)
+    public function escapeHtmlAttr($string)
     {
-        return $this->_escaper->escapeHtmlAttr($data);
+        return $this->_escaper->escapeHtmlAttr($string);
     }
 
     /**
@@ -911,14 +915,14 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape html entities in url
+     * Escape URL
      *
-     * @param string $data
+     * @param string $string
      * @return string
      */
-    public function escapeUrl($data)
+    public function escapeUrl($string)
     {
-        return $this->_escaper->escapeUrl($data);
+        return $this->_escaper->escapeUrl($string);
     }
 
     /**
@@ -926,6 +930,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $data
      * @return string
+     * @deprecated
      */
     public function escapeXssInUrl($data)
     {
@@ -940,6 +945,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param  string $data
      * @param  bool $addSlashes
      * @return string
+     * @deprecated
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -952,6 +958,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param string $quote
      * @return string|array
+     * @deprecated
      */
     public function escapeJsQuote($data, $quote = '\'')
     {

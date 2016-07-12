@@ -28,7 +28,7 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
         $this->_escaper = new Escaper();
         $this->zendEscaper = new \Magento\Framework\ZendEscaper();
         $objectManagerHelper = new ObjectManager($this);
-        $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'zendEscaper', $this->zendEscaper);
+        $objectManagerHelper->setBackwardCompatibleProperty($this->_escaper, 'escaper', $this->zendEscaper);
     }
 
     /**
