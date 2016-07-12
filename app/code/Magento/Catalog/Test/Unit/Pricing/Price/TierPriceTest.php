@@ -394,7 +394,8 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         return [
             ['basePrice' => '100', 'tierPrice' => '90', 'savedPercent' => '10'],
             ['basePrice' => '70', 'tierPrice' => '35', 'savedPercent' => '50'],
-            ['basePrice' => '50', 'tierPrice' => '35', 'savedPercent' => '30']
+            ['basePrice' => '50', 'tierPrice' => '35', 'savedPercent' => '30'],
+            ['basePrice' => '20.80', 'tierPrice' => '18.72', 'savedPercent' => '10']
         ];
     }
 }
