@@ -15,6 +15,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
+use Magento\Framework\Console\Cli;
+use Magento\Deploy\Model\ProcessManager;
+use Magento\Deploy\Model\Process;
 
 /**
  * Deploy static content command
@@ -105,6 +108,19 @@ class DeployStaticContentCommand extends Command
      * Key for exclude area option
      */
     const EXCLUDE_AREA_OPTION = 'exclude-area';
+
+    /**
+     * Jey for jobs option
+     */
+    const JOBS_AMOUNT = 'jobs';
+
+    /**
+     * Default jobs amount
+     */
+    const DEFAULT_JOBS_AMOUNT = 3;
+
+    /** @var InputInterface */
+    private $input;
 
     /**
      * @var Locale
@@ -249,6 +265,13 @@ class DeployStaticContentCommand extends Command
                     'List of areas you do not want the tool populate files for.',
                     ['none']
                 ),
+                new InputOption(
+                    self::JOBS_AMOUNT,
+                    '-j',
+                    InputOption::VALUE_OPTIONAL,
+                    'Amount of jobs to which script can be paralleled.',
+                    self::DEFAULT_JOBS_AMOUNT
+                ),
                 new InputArgument(
                     self::LANGUAGES_ARGUMENT,
                     InputArgument::IS_ARRAY,
@@ -257,7 +280,6 @@ class DeployStaticContentCommand extends Command
             ]);
 
         parent::configure();
-
     }
 
     /**
@@ -410,6 +432,8 @@ class DeployStaticContentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->input = $input;
+
         $filesUtil = $this->objectManager->create(Files::class);
 
         $magentoAreas = [];
@@ -478,10 +502,94 @@ class DeployStaticContentCommand extends Command
             ]
         );
 
+        if ($this->isCanBeParalleled()) {
+            return $this->runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages);
+        } else {
+            return $this->deploy($deployer, $deployableLanguages, $deployableAreaThemeMap);
+        }
+    }
+
+    /**
+     * @param \Magento\Deploy\Model\Deployer $deployer
+     * @param array $deployableLanguages
+     * @param array $deployableAreaThemeMap
+     * @return int
+     */
+    private function deploy($deployer, $deployableLanguages, $deployableAreaThemeMap)
+    {
         return $deployer->deploy(
             $this->objectManagerFactory,
             $deployableLanguages,
             $deployableAreaThemeMap
         );
+    }
+
+    /**
+     * @param $deployer
+     * @param $deployableAreaThemeMap
+     * @param $deployableLanguages
+     * @return int
+     */
+    private function runProcessesInParallel($deployer, $deployableAreaThemeMap, $deployableLanguages)
+    {
+        /** @var ProcessManager $processManager */
+        $processManager = $this->objectManager->create(ProcessManager::class);
+        $processNumber = 0;
+        $processQueue = [];
+        foreach ($deployableAreaThemeMap as $area => &$themes) {
+            foreach ($themes as $theme) {
+                foreach ($deployableLanguages as $lang) {
+                    $deployerFunc = function (Process $process) use ($area, $theme, $lang, $deployer) {
+                        return $this->deploy($deployer, [$lang], [$area => [$theme]]);
+                    };
+                    if ($processNumber >= $this->getProcessesAmount()) {
+                        $processQueue[] = $deployerFunc;
+                    } else {
+                        $processManager->fork($deployerFunc);
+                    }
+                    $processNumber++;
+                }
+            }
+        }
+        $returnStatus = null;
+        while (count($processManager->getProcesses()) > 0)  {
+            foreach ($processManager->getProcesses() as $process) {
+                if ($process->isCompleted()) {
+                    $processManager->delete($process);
+                    $returnStatus |= $process->getStatus();
+                    if ($queuedProcess = array_shift($processQueue)) {
+                        $processManager->fork($queuedProcess);
+                    }
+                    if (count($processManager->getProcesses()) >= $this->getProcessesAmount()) {
+                        break 1;
+                    }
+                }
+            }
+            usleep(5000);
+        }
+
+        return $returnStatus === Cli::RETURN_SUCCESS ?: Cli::RETURN_FAILURE;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isCanBeParalleled()
+    {
+        return function_exists('pcntl_fork');
+    }
+
+    /**
+     * @return int
+     */
+    private function getProcessesAmount()
+    {
+        $jobs = (int)$this->input->getOption(self::JOBS_AMOUNT);
+        if ($jobs <= 1) {
+            throw new \InvalidArgumentException(
+                self::JOBS_AMOUNT . 'argument has invalid value. It must be greater than 1'
+            );
+        }
+        return $jobs;
     }
 }
