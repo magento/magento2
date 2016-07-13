@@ -14,12 +14,10 @@ use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Payment\Helper\Data;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\OrderRepository;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
@@ -246,7 +244,7 @@ final class TokensConfigProvider
     {
         if ($this->orderRepository === null) {
             $this->orderRepository = ObjectManager::getInstance()
-                ->get(OrderRepository::class);
+                ->get(OrderRepositoryInterface::class);
         }
 
         return $this->orderRepository;
@@ -261,7 +259,7 @@ final class TokensConfigProvider
     {
         if ($this->paymentTokenManagement === null) {
             $this->paymentTokenManagement = ObjectManager::getInstance()
-                ->get(PaymentTokenManagement::class);
+                ->get(PaymentTokenManagementInterface::class);
         }
 
         return $this->paymentTokenManagement;
