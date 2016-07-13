@@ -124,7 +124,13 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             'catalog_product',
             'sku'
         );
-        $this->assertSame($sku, $this->_model->getAttributeById($sku->getId(), $product));
+        $this->assertSame(
+            $sku->getAttributeId(),
+            $this->_model->getAttributeById(
+                $sku->getId(),
+                $product
+            )->getAttributeId()
+        );
     }
 
     /**
