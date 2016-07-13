@@ -147,6 +147,7 @@ class ReportNewRelicCron
      * Reports counts info to New Relic
      *
      * @return void
+     * @throws \Exception
      */
     protected function reportCounts()
     {

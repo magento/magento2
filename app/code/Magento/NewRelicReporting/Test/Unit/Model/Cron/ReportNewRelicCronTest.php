@@ -182,4 +182,57 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
             $this->model->report()
         );
     }
+
+    /**
+     * Test case when module is enabled and request is failed
+     *
+     * @expectedException \Exception
+     */
+    public function testReportNewRelicCronRequestFailed()
+    {
+        $testModuleData = [
+            'changes' => [
+                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'enabled'],
+                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'disabled'],
+                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'installed'],
+                ['name' => 'name', 'setup_version' => '2.0.0', 'type' => 'uninstalled'],
+            ],
+            'enabled' => 1,
+            'disabled' => 1,
+            'installed' => 1,
+        ];
+
+        $this->config->expects($this->once())
+            ->method('isNewRelicEnabled')
+            ->willReturn(true);
+        $this->collect->expects($this->once())
+            ->method('getModuleData')
+            ->willReturn($testModuleData);
+        $this->counter->expects($this->once())
+            ->method('getAllProductsCount');
+        $this->counter->expects($this->once())
+            ->method('getConfigurableCount');
+        $this->counter->expects($this->once())
+            ->method('getActiveCatalogSize');
+        $this->counter->expects($this->once())
+            ->method('getCategoryCount');
+        $this->counter->expects($this->once())
+            ->method('getWebsiteCount');
+        $this->counter->expects($this->once())
+            ->method('getStoreViewsCount');
+        $this->counter->expects($this->once())
+            ->method('getCustomerCount');
+        $this->cronEventModel->expects($this->once())
+            ->method('addData')
+            ->willReturnSelf();
+        $this->cronEventModel->expects($this->once())
+            ->method('sendRequest');
+
+        $this->cronEventModel->expects($this->once())->method('sendRequest')->willThrowException(new \Exception());
+
+        $this->deploymentsModel->expects($this->any())
+            ->method('setDeployment');
+
+        $this->model->report();
+    }
 }
