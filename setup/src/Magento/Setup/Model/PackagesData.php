@@ -297,32 +297,34 @@ class PackagesData
     public function getPackagesForInstall()
     {
         $actualInstallPackages = [];
-        $installPackagesInfo = $this->syncPackagesForInstall();
 
         try {
-            $installPackages = $installPackagesInfo['packages'];
-            $availablePackageNames = array_column(
-                $this->composerInformation->getInstalledMagentoPackages(),
-                'name'
-            );
+            $installPackages = $this->syncPackagesForInstall()['packages'];
             $metaPackageByPackage = $this->getMetaPackageForPackage($installPackages);
             foreach ($installPackages as $package) {
-                if (!in_array($package['name'], $availablePackageNames) &&
-                    in_array($package['type'], $this->composerInformation->getPackagesTypes()) &&
-                    strpos($package['name'], 'magento/product-') === false &&
-                    strpos($package['name'], 'magento/project-') === false
-                ) {
-                    $package['metapackage'] =
-                        isset($metaPackageByPackage[$package['name']]) ? $metaPackageByPackage[$package['name']] : '';
-                    $actualInstallPackages[$package['name']] = $package;
-                    $actualInstallPackages[$package['name']]['version'] = $package['versions'][0];
-                }
+                $package['metapackage'] =
+                    isset($metaPackageByPackage[$package['name']]) ? $metaPackageByPackage[$package['name']] : '';
+                $actualInstallPackages[$package['name']] = $package;
+                $actualInstallPackages[$package['name']]['version'] = $package['versions'][0];
             }
             $installPackagesInfo['packages'] = $actualInstallPackages;
             return $installPackagesInfo;
         } catch (\Exception $e) {
             throw new \RuntimeException('Error in getting new packages to install');
         }
+    }
+
+    /**
+     * Retrieve list of installed extensions
+     *
+     * @return array
+     */
+    public function getInstalledExtensions()
+    {
+        return array_intersect_key(
+            $this->composerInformation->getInstalledMagentoPackages(),
+            $this->composerInformation->getRootPackage()->getRequires()
+        );
     }
 
     /**
