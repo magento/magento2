@@ -26,6 +26,12 @@
     <type name="Magento\Translation\Model\Inline\Parser">
         <arguments>
             <argument name="inputFilter" xsi:type="object">Magento\Framework\Filter\Input\MaliciousCode</argument>
+            <argument name="relatedCacheTypes" xsi:type="array">
+                <item name="blockCache" xsi:type="string">block_html</item>
+                <item name="layoutCache" xsi:type="string">layout</item>
+                <item name="translationCache" xsi:type="string">translate</item>
+                <item name="fullPageCache" xsi:type="string">full_page</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Translate\Inline\Provider">
