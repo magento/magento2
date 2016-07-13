@@ -172,7 +172,7 @@ class Deployer
                                     $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
                                     $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
-                        ) {;
+                        ) {
                             $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module, $fullPath);
                             if ($compiledFile !== '') {
                                 $this->deployFile($compiledFile, $area, $themePath, $locale, $module, $fullPath);
@@ -303,7 +303,7 @@ class Deployer
      * @param string $themePath
      * @param string $locale
      * @param string $module
-     * @param string $fullPath
+     * @param string|null $fullPath
      * @return string
      * @throws \InvalidArgumentException
      * @throws LocalizedException
@@ -351,14 +351,13 @@ class Deployer
             }
             $this->count++;
         } catch (ContentProcessorException $exception) {
-            $pathInfo = ($fullPath) ? $fullPath : $filePath;
+            $pathInfo = $fullPath ?: $filePath;
             $errorMessage =  __('Compilation from source: ') . $pathInfo
                 . PHP_EOL . $exception->getMessage();
             $this->errorCount++;
-            $this->output->write(PHP_EOL. PHP_EOL . $errorMessage . PHP_EOL, true);
+            $this->output->write(PHP_EOL . PHP_EOL . $errorMessage . PHP_EOL, true);
 
-            $logger = $this->getLogger();
-            $logger->critical($errorMessage);
+            $this->getLogger()->critical($errorMessage);
         } catch (\Exception $exception) {
             $this->output->write('.');
             $this->verboseLog($exception->getTraceAsString());
@@ -401,6 +400,8 @@ class Deployer
     }
 
     /**
+     * Retrieves LoggerInterface instance
+     * 
      * @return LoggerInterface
      * @deprecated 
      */
