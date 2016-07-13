@@ -3,21 +3,21 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Test\Unit\Component\Filters\Type;
+namespace Magento\Braintree\Test\Unit\Ui\Component\Report\Filters\Type;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
-use Magento\Ui\Component\Filters\Type\Date;
+use Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 
 /**
- * Class DateTest
+ * Class DateRangeTest
  */
-class DateTest extends \PHPUnit_Framework_TestCase
+class DateRangeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -74,24 +74,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run test getComponentName method
-     *
-     * @return void
-     */
-    public function testGetComponentName()
-    {
-        $date = new Date(
-            $this->contextMock,
-            $this->uiComponentFactory,
-            $this->filterBuilderMock,
-            $this->filterModifierMock,
-            []
-        );
-
-        static::assertTrue($date->getComponentName() === Date::NAME);
-    }
-
-    /**
      * Run test prepare method
      *
      * @param string $name
@@ -102,7 +84,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepare($name, $filterData, $expectedCondition)
     {
-        /** @var FormDate $uiComponent */
+        /** @var FormDate PHPUnit_Framework_MockObject_MockObject|$uiComponent */
         $uiComponent = $this->getMockBuilder(FormDate::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -113,10 +95,10 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getNamespace')
-            ->willReturn(Date::NAME);
+            ->willReturn(DateRange::NAME);
         $this->contextMock->expects($this->any())
             ->method('addComponentDefinition')
-            ->with(Date::NAME, ['extends' => Date::NAME]);
+            ->with(DateRange::NAME, ['extends' => DateRange::NAME]);
 
         $this->contextMock->expects($this->any())
             ->method('getFiltersParams')
@@ -131,12 +113,18 @@ class DateTest extends \PHPUnit_Framework_TestCase
                 $uiComponent->expects(static::once())
                     ->method('convertDate')
                     ->with($filterData[$name])
-                    ->willReturn(new \DateTime($filterData[$name]));
+                    ->willReturn(new \DateTime($filterData[$name], new \DateTimeZone('UTC')));
             } else {
                 $uiComponent->method('convertDate')
                     ->willReturnMap([
-                        [$filterData[$name]['from'], 0, 0, 0, new \DateTime($filterData[$name]['from'])],
-                        [$filterData[$name]['to'], 23, 59, 59, new \DateTime($filterData[$name]['to'] . ' 23:59:59')],
+                        [
+                            $filterData[$name]['from'], 0, 0, 0,
+                            new \DateTime($filterData[$name]['from'], new \DateTimeZone('UTC'))
+                        ],
+                        [
+                            $filterData[$name]['to'], 23, 59, 59,
+                            new \DateTime($filterData[$name]['to'] . ' 23:59:00', new \DateTimeZone('UTC'))
+                        ],
                     ]);
             }
 
@@ -177,10 +165,10 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
         $this->uiComponentFactory->expects($this->any())
             ->method('create')
-            ->with($name, Date::COMPONENT, ['context' => $this->contextMock])
+            ->with($name, DateRange::COMPONENT, ['context' => $this->contextMock])
             ->willReturn($uiComponent);
 
-        $date = new Date(
+        $date = new DateRange(
             $this->contextMock,
             $this->uiComponentFactory,
             $this->filterBuilderMock,
@@ -233,31 +221,31 @@ class DateTest extends \PHPUnit_Framework_TestCase
             [
                 'test_date',
                 ['test_date' => ['from' => '11-05-2015', 'to' => null]],
-                ['date' => '2015-05-11 00:00:00', 'type' => 'gteq'],
+                ['date' => '2015-05-11T00:00:00+0000', 'type' => 'gteq'],
             ],
             [
                 'test_date',
                 ['test_date' => ['from' => null, 'to' => '11-05-2015']],
-                ['date' => '2015-05-11 23:59:59', 'type' => 'lteq'],
+                ['date' => '2015-05-11T23:59:00+0000', 'type' => 'lteq'],
             ],
             [
                 'test_date',
                 ['test_date' => ['from' => '11-05-2015', 'to' => '11-05-2015']],
                 [
-                    'date_from' => '2015-05-11 00:00:00', 'type_from' => 'gteq',
-                    'date_to' => '2015-05-11 23:59:59', 'type_to' => 'lteq'
+                    'date_from' => '2015-05-11T00:00:00+0000', 'type_from' => 'gteq',
+                    'date_to' => '2015-05-11T23:59:00+0000', 'type_to' => 'lteq'
                 ],
             ],
             [
                 'test_date',
                 ['test_date' => '11-05-2015'],
-                ['date' => '2015-05-11 00:00:00', 'type' => 'eq'],
+                ['date' => '2015-05-11T00:00:00+0000', 'type' => 'eq'],
             ],
             [
                 'test_date',
                 ['test_date' => ['from' => '', 'to' => '']],
                 null,
-            ],
+            ]
         ];
     }
 }
