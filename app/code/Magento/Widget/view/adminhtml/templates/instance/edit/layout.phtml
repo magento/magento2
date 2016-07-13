@@ -45,18 +45,18 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
             '<col width="200" />'+
             '<thead>'+
                 '<tr>'+
-                    '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('%1', $container['label'])) ?></label></th>'+
-                    '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
-                    '<th><label><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Template')) ?></label></th>'+
+                    '<th><label><?php echo $block->escapeJs(__('%1', $container['label'])) ?></label></th>'+
+                    '<th><label><?php echo $block->escapeJs(__('Container')) ?> <span class="required">*</span></label></th>'+
+                    '<th><label><?php echo $block->escapeJs(__('Template')) ?></label></th>'+
                 '</tr>'+
             '</thead>'+
             '<tbody>'+
                 '<tr>'+
                     '<td>'+
                         '<input disabled="disabled" type="radio" class="radio for_all" id="all_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>" name="widget_instance[<%- data.id %>][<?php /* @escapeNotVerified */ echo $container['name'] ?>][for]" value="all" onclick="WidgetInstance.togglePageGroupChooser(this)" checked="checked" />&nbsp;'+
-                        '<label for="all_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php /* @escapeNotVerified */ echo $block->escapeJs(__('All')) ?></label><br />'+
+                        '<label for="all_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php echo $block->escapeJs(__('All')) ?></label><br />'+
                         '<input disabled="disabled" type="radio" class="radio for_specific" id="specific_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>" name="widget_instance[<%- data.id %>][<?php /* @escapeNotVerified */ echo $container['name'] ?>][for]" value="specific" onclick="WidgetInstance.togglePageGroupChooser(this)" />&nbsp;'+
-                        '<label for="specific_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php /* @escapeNotVerified */ echo $block->escapeJs(__('Specific %1', $container['label'])) ?></label>'+
+                        '<label for="specific_<?php /* @escapeNotVerified */ echo $container['name'] ?>_<%- data.id %>"><?php echo $block->escapeJs(__('Specific %1', $container['label'])) ?></label>'+
                     '</td>'+
                     '<td>'+
                         '<div class="block_reference_container">'+
