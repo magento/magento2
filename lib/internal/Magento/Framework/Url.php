@@ -222,20 +222,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * @param void
-     * @return Escaper
-     */
-    private function getEscaper()
-    {
-        if ($this->escaper === null) {
-            $this->escaper =
-                \Magento\Framework\App\ObjectManager::getInstance()
-                    ->get(\Magento\Framework\ZendEscaper::class);
-        }
-        return $this->escaper;
-    }
-
-    /**
      * Initialize object data from retrieved url
      *
      * @param   string $url
@@ -918,27 +904,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
          */
         if ($query !== null) {
             if (is_string($query)) {
-                /*
-                if (!empty($query)) {
-                    $parts = explode('=', $query);
-                    $query = implode(
-                        '=',
-                        [
-                            $this->getEscaper()->escapeUrl($parts[0]),
-                            $this->getEscaper()->escapeUrl($parts[1])
-                        ]
-                    );
-                }*/
                 $this->_setQuery($query);
             } elseif (is_array($query)) {
-                /*
-                if (count($query)) {
-                    foreach ($query as $key => $value) {
-                        unset($query[$key]);
-                        $query[$this->getEscaper()->escapeUrl($key)] = $this->getEscaper()->escapeUrl($value);
-                    }
-                }
-                */
                 $this->addQueryParams($query, !empty($routeParams['_current']));
             }
             if ($query === false) {
@@ -1024,6 +991,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $value
      * @return string
+     * @deprecated
      */
     public function escape($value)
     {
@@ -1193,5 +1161,21 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         return $this->urlModifier;
+    }
+
+    /**
+     * Get escaper
+     *
+     * @param void
+     * @return Escaper
+     * @deprecated
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper == null) {
+            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
+                    ->get(\Magento\Framework\ZendEscaper::class);
+        }
+        return $this->escaper;
     }
 }

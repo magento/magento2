@@ -96,14 +96,7 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
                     $data[$this->getEscaper()->escapeUrl($key)] = $this->getEscaper()->escapeUrl($value);
                 }
                 foreach ($this->request->getQuery() as $key => $value) {
-//                    $this->queryParamsResolver->setQueryParam(
-//                        $this->getEscaper()->escapeUrl($key),
-//                        $this->getEscaper()->escapeUrl($value)
-//                    );
-                    $this->queryParamsResolver->setQueryParam(
-                        $key,
-                        $value
-                    );
+                    $this->queryParamsResolver->setQueryParam($key, $value);
                 }
             }
             unset($data['_current']);
@@ -155,14 +148,16 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
     }
 
     /**
+     * Get escaper
+     *
      * @param void
      * @return \Magento\Framework\ZendEscaper
+     * @deprecated
      */
     private function getEscaper()
     {
-        if ($this->escaper === null) {
-            $this->escaper =
-                \Magento\Framework\App\ObjectManager::getInstance()
+        if ($this->escaper == null) {
+            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
                     ->get(\Magento\Framework\ZendEscaper::class);
         }
         return $this->escaper;
