@@ -33,6 +33,11 @@
                 <span>Home</span>
             </a>
         </li>
+        <li class="item-extension level-0"   ng-class="{_active: $state.current.type === 'extension'}">
+            <a href="" ui-sref="root.extension">
+                <span>Extension Manager</span>
+            </a>
+        </li>
         <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'update'
         || $state.current.type === 'uninstall'}">
             <a href="" ui-sref="root.module">

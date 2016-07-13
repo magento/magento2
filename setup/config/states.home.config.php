@@ -36,6 +36,17 @@ return [
             'type'        => 'update'
         ],
         [
+            'id'          => 'root.extension',
+            'url'         => 'extension-grid',
+            'templateUrl' => "$base/extension-grid",
+            'title'       => 'Extension Manager',
+            'controller'  => 'extensionGridController',
+            'nav'         => false,
+            'noMenu'      => true,
+            'order'       => 1,
+            'type'        => 'extension'
+        ],
+        [
             'id'          => 'root.install',
             'url'         => 'install-extension-grid',
             'templateUrl' => "$base/install-extension-grid",
