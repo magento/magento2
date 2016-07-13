@@ -11,6 +11,7 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Setup\Test\Fixture\InstallExtension;
+use Magento\Setup\Test\Constraint\AssertFindExtensionOnGrid;
 
 class InstallExtensionTest extends Injectable
 {
@@ -43,6 +44,7 @@ class InstallExtensionTest extends Injectable
 
     public function test(
         FixtureFactory $fixtureFactory,
+        AssertFindExtensionOnGrid $assertFindExtensionOnGrid,
         $installExtension = []
     ) {
         // Create fixture
@@ -56,5 +58,24 @@ class InstallExtensionTest extends Injectable
 
         $this->setupWizard->getSetupHome()->clickComponentManager();
         $this->setupWizard->getExtensionsGrid()->clickInstallButton();
+
+        $this->findExtensionOnGrid('magento/sample-data-media');
+        $assertFindExtensionOnGrid->processAssert($this->setupWizard, 'magento/sample-data-media');
+        $this->setupWizard->getExtensionsInstallGrid()->clickInstall('magento/sample-data-media');
+    }
+
+    /**
+     * Find Extension on the grid by name
+     *
+     * @param string $name
+     */
+    protected function findExtensionOnGrid($name)
+    {
+        while (true) {
+            if ($this->setupWizard->getExtensionsInstallGrid()->isExtensionOnGrid($name)
+                || !$this->setupWizard->getExtensionsInstallGrid()->clickNextPageButton()) {
+                break;
+            }
+        }
     }
 }
