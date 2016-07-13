@@ -8,8 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
     <page name="setupWizard" area="Adminhtml" mca="admin/backendapp/redirect/app/setup/" module="Magento_Setup">
         <block name="setupHome" class="Magento\Setup\Test\Block\Home" locator="body" strategy="css selector"/>
-        <block name="extensionsGrid" class="Magento\Setup\Test\Block\ExtensionsGrid" locator="body" strategy="css selector"/>
-        <block name="extensionsInstallGrid" class="Magento\Setup\Test\Block\ExtensionsInstallGrid" locator="body" strategy="css selector"/>
+        <block name="extensionsGrid" class="Magento\Setup\Test\Block\Extension\ExtensionsGrid" locator="body" strategy="css selector"/>
+        <block name="extensionsInstallGrid" class="Magento\Setup\Test\Block\Extension\ExtensionsInstallGrid" locator="body" strategy="css selector"/>
+        <block name="installExtension" class="Magento\Setup\Test\Block\Extension\InstallExtension" locator="body" strategy="css selector"/>
         <block name="systemConfig" class="Magento\Setup\Test\Block\SystemConfig" locator="body" strategy="css selector"/>
         <block name="authentication" class="Magento\Setup\Test\Block\Authentication" locator="body" strategy="css selector"/>
         <block name="selectVersion" class="Magento\Setup\Test\Block\SelectVersion" locator="body" strategy="css selector"/>

@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Constraint;
+namespace Magento\Setup\Test\Constraint\Extension;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
+use Magento\Setup\Test\Block\Extension\AbstractGrid;
 
 /**
  * Check that there is extension on grid
@@ -17,14 +17,14 @@ class AssertFindExtensionOnGrid extends AbstractConstraint
     /**
      * Assert upgrade is successfully
      *
-     * @param SetupWizard $setupWizard
+     * @param AbstractGrid $grid
      * @param string $name
      * @return void
      */
-    public function processAssert(SetupWizard $setupWizard, $name)
+    public function processAssert(AbstractGrid $grid, $name)
     {
         \PHPUnit_Framework_Assert::assertTrue(
-            $setupWizard->getExtensionsInstallGrid()->isExtensionOnGrid($name),
+            $grid->isExtensionOnGrid($name),
             'Extension is not found on the grid.'
         );
     }

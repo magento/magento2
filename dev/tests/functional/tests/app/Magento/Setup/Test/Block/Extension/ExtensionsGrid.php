@@ -4,15 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Block;
+namespace Magento\Setup\Test\Block\Extension;
 
-use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
  * Extensions Grid block.
  */
-class ExtensionsGrid extends Block
+class ExtensionsGrid extends AbstractGrid
 {
     /**
      * @var string

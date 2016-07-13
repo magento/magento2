@@ -9,7 +9,11 @@
     <testCase name="Magento\Setup\Test\TestCase\InstallExtensionTest" summary="Install Extension" ticketId="MAGETWO-47925">
         <variation name="PerformInstallExtension">
             <data name="description" xsi:type="string">Install Extension Page</data>
-            <data name="installExtension/itemsPerPage" xsi:type="string">200</data>
+            <data name="installExtension/extension" xsi:type="string">magento/sample-data-media</data>
+            <data name="installExtension/version" xsi:type="string">100.1.0-rc3</data>
+            <data name="installExtension/optionsCode" xsi:type="string">No</data>
+            <data name="installExtension/optionsMedia" xsi:type="string">No</data>
+            <data name="installExtension/optionsDb" xsi:type="string">No</data>
         </variation>
     </testCase>
 </config>
