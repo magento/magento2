@@ -99,7 +99,7 @@ main.controller('navigationController',
             } else if ($state.current.type === 'upgrade') {
                 $state.go('root.upgrade');
             } else {
-                $state.go('root.update');
+                $state.go('root.module');
             }
         }
 

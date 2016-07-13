@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Module;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Module\ModuleList;
 
 /**
  * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
@@ -57,6 +59,11 @@ class PackageInfo
      * @var array
      */
     protected $nonExistingDependencies = [];
+
+    /**
+     * @var ModuleList
+     */
+    private $moduleList;
 
     /**
      * Constructor
@@ -211,6 +218,42 @@ class PackageInfo
             $require = $this->convertToModuleNames($this->requireMap[$moduleName]);
         }
         return $require;
+    }
+
+    /**
+     * Get all module names a module required by
+     *
+     * @param string $requiredModuleName
+     * @return array
+     */
+    public function getRequiredBy($requiredModuleName)
+    {
+        $this->load();
+        $requiredBy = [];
+        foreach ($this->requireMap as $moduleName => $moduleRequireList) {
+            if (in_array($requiredModuleName, $moduleRequireList)) {
+                $requiredBy[] = [
+                    'name' => $this->getPackageName($moduleName),
+                    'moduleName' => $moduleName,
+                    'type' => 'Module',
+                    'enable' => $this->getModuleList()->has($moduleName),
+                    'version' => $this->getVersion($moduleName)
+                ];
+            }
+        }
+       
+        return $requiredBy;
+    }
+
+    /**
+     * @return \Magento\Framework\Module\ModuleList
+     */
+    private function getModuleList()
+    {
+        if ($this->moduleList === null) {
+            $this->moduleList = ObjectManager::getInstance()->get(ModuleList::class);
+        }
+        return $this->moduleList;
     }
 
     /**
