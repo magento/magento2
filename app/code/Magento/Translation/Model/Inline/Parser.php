@@ -127,6 +127,11 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     private $cacheManager;
 
     /**
+     * @var array
+     */
+    private $relatedCacheTypes;
+
+    /**
      * @return \Magento\Translation\Model\Inline\CacheManager
      *
      * @deprecated
@@ -148,8 +153,9 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * @param \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\App\Cache\TypeListInterface $appCache,
+     * @param \Magento\Framework\App\Cache\TypeListInterface $appCache
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param array $relatedCacheTypes
      */
     public function __construct(
         \Magento\Translation\Model\ResourceModel\StringUtilsFactory $resource,
@@ -157,7 +163,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\Cache\TypeListInterface $appCache,
-        \Magento\Framework\Translate\InlineInterface $translateInline
+        \Magento\Framework\Translate\InlineInterface $translateInline,
+        array $relatedCacheTypes = []
     ) {
         $this->_resourceFactory = $resource;
         $this->_storeManager = $storeManager;
@@ -165,6 +172,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         $this->_appState = $appState;
         $this->_appCache = $appCache;
         $this->_translateInline = $translateInline;
+        $this->relatedCacheTypes = $relatedCacheTypes;
     }
 
     /**
@@ -178,7 +186,9 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
         if (!$this->_translateInline->isAllowed()) {
             return ['inline' => 'not allowed'];
         }
-        $this->_appCache->invalidate(\Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER);
+        if (!empty($this->relatedCacheTypes)) {
+            $this->_appCache->invalidate($this->relatedCacheTypes);
+        }
 
         $this->_validateTranslationParams($translateParams);
         $this->_filterTranslationParams($translateParams, ['custom']);
