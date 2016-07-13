@@ -18,6 +18,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -74,6 +76,11 @@ class Deployer
      * @var AlternativeSourceInterface[]
      */
     private $alternativeSources;
+
+    /**
+     * @var Minification
+     */
+    private $minification;
 
     /**
      * @var LoggerInterface
@@ -141,7 +148,7 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+                    $design = $this->objectManager->get('Magento\Theme\Model\View\Design');
                     $design->setDesignTheme($themePath, $area);
                     $assetRepo = $this->objectManager->create(
                         'Magento\Framework\View\Asset\Repository',
@@ -179,7 +186,6 @@ class Deployer
                             }
                         }
                     }
-
                     foreach ($libFiles as $filePath) {
                         $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, null);
                         if ($compiledFile !== '') {
@@ -189,6 +195,9 @@ class Deployer
                     if ($this->jsTranslationConfig->dictionaryEnabled()) {
                         $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                         $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
+                    }
+                    if ($this->getMinification()->isEnabled('js')) {
+                        $fileManager->createMinResolverAsset();
                     }
                     $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
@@ -218,6 +227,21 @@ class Deployer
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Get Minification instance
+     *
+     * @deprecated
+     * @return Minification
+     */
+    private function getMinification()
+    {
+        if (null === $this->minification) {
+            $this->minification = ObjectManager::getInstance()->get(Minification::class);
+        }
+
+        return $this->minification;
     }
 
     /**
