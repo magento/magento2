@@ -41,15 +41,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
-        //drop foreign key for single DB case
-        if (version_compare($context->getVersion(), '2.0.3', '<')
-            && $setup->tableExists($setup->getTable('quote_item'))
-        ) {
-            $setup->getConnection()->dropForeignKey(
-                $setup->getTable('quote_item'),
-                $setup->getFkName('quote_item', 'product_id', 'catalog_product_entity', 'entity_id')
-            );
-        }
 
         $setup->endSetup();
     }
