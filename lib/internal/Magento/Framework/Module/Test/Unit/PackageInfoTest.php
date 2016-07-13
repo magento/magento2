@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
+use Magento\Framework\Module\ModuleList;
 use \Magento\Framework\Module\PackageInfo;
 
 class PackageInfoTest extends \PHPUnit_Framework_TestCase
@@ -20,9 +21,19 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
     private $reader;
 
     /**
+     * @var ModuleList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $moduleListMock;
+
+    /**
      * @var PackageInfo
      */
     private $packageInfo;
+
+    /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManagerHelper;
 
     protected function setUp()
     {
@@ -48,6 +59,16 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($fileIteratorMock));
 
         $this->packageInfo = new PackageInfo($this->reader, $this->componentRegistrar);
+
+        $this->moduleListMock = $this->getMockBuilder(ModuleList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->packageInfo,
+            'moduleList',
+            $this->moduleListMock
+        );
     }
 
     public function testGetModuleName()
@@ -99,5 +120,18 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0.3', $this->packageInfo->getVersion('D'));
         $this->assertEquals('0.4', $this->packageInfo->getVersion('E'));
         $this->assertEquals('', $this->packageInfo->getVersion('F'));
+    }
+
+    public function testGetRequiredBy()
+    {
+        $this->moduleListMock->expects(static::any())
+            ->method('has')
+            ->willReturn(true);
+        $this->packageInfo->getRequiredBy('b');
+
+        $this->assertEquals(
+            [['name' => 'a', 'type' => 'Module', 'enable' => true, 'version' => '0.1', 'moduleName'=> 'A']],
+            $this->packageInfo->getRequiredBy('b')
+        );
     }
 }

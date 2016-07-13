@@ -18,7 +18,7 @@ var app = angular.module(
         'create-admin-account',
         'install',
         'success',
-        'component-grid',
+        'module-grid',
         'install-extension-grid',
         'create-backup',
         'complete-backup',
