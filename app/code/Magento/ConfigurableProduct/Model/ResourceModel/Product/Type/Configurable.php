@@ -226,8 +226,8 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             implode(
                 ' AND ',
                 [
-                    'option_value.option_id = entity_value.value',
-                    'option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                    'default_option_value.option_id = entity_value.value',
+                    'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
                 ]
             ),
             []
