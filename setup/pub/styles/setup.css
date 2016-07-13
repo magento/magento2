@@ -10741,7 +10741,7 @@ body.ngdialog-open {
     margin-top: 4rem
 }
 
-.setup-home-item-component:before {
+.setup-home-item-module:before {
     content: '\e612'
 }
 
