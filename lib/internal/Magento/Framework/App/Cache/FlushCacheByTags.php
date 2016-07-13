@@ -55,11 +55,15 @@ class FlushCacheByTags
     public function aroundSave(
         $subject,
         \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $object
+        $object = null
     ) {
-        $tags = $object->getIdentities();
+        if ($object instanceof \Magento\Framework\Model\AbstractMode) {
+            $tags = $object->getIdentities();
+        }
         $result = $proceed($object);
-        $this->cleanCacheByTags($tags);
+        if ($object instanceof \Magento\Framework\Model\AbstractMode) {
+            $this->cleanCacheByTags($tags);
+        }
         return $result;
     }
 
@@ -75,9 +79,11 @@ class FlushCacheByTags
     public function aroundDelete(
         $subject,
         \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $object
+        $object = null
     ) {
-        $tags = $object->getIdentities();
+        if ($object instanceof \Magento\Framework\Model\AbstractMode) {
+            $tags = $object->getIdentities();
+        }
         $result = $proceed($object);
         $this->cleanCacheByTags($tags);
         return $result;
