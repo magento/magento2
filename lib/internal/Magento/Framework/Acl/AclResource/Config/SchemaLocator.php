@@ -15,15 +15,18 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     protected $urnResolver;
 
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
         $this->urnResolver = $urnResolver;
     }
 
     /**
-     * Get path to merged config schema
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getSchema()
     {
@@ -31,9 +34,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     }
 
     /**
-     * Get path to pre file validation schema
-     *
-     * @return null
+     * {@inheritdoc}
      */
     public function getPerFileSchema()
     {
