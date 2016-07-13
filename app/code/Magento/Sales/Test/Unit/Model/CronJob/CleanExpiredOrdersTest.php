@@ -88,4 +88,35 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
 
         $this->model->execute();
     }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Error500
+     */
+    public function testExecuteWithException()
+    {
+        $schedule = [
+            1 => 20,
+        ];
+        $exceptionMessage = 'Error500';
+
+        $this->storesConfigMock->expects($this->once())
+            ->method('getStoresConfigByPath')
+            ->with('sales/orders/delete_pending_after')
+            ->willReturn($schedule);
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->orderCollectionMock);
+        $this->orderCollectionMock->expects($this->exactly(2))->method('addFieldToFilter');
+
+        $selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
+        $selectMock->expects($this->once())->method('where')->willReturnSelf();
+        $this->orderCollectionMock->expects($this->once())->method('getSelect')->willReturn($selectMock);
+
+        $this->orderCollectionMock->expects($this->once())
+            ->method('walk')
+            ->willThrowException(new \Exception($exceptionMessage));
+
+        $this->model->execute();
+    }
 }

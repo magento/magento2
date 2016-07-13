@@ -220,8 +220,12 @@ class ProcessCronQueueObserver implements ObserverInterface
                         && $this->state->getMode() === State::MODE_DEVELOPER
                     ) {
                         $this->logger->info(
-                            $schedule->getMessages() . ' Schedule Id: ' . $schedule->getScheduleId()
-                            . ' Job Code: ' . $schedule->getJobCode()
+                            sprintf(
+                                "%s Schedule Id: %s Job Code: %s",
+                                $schedule->getMessages(),
+                                $schedule->getScheduleId(),
+                                $schedule->getJobCode()
+                            )
                         );
                     }
                 }

@@ -27,7 +27,7 @@ class FetchReports
      * Goes to reports.paypal.com and fetches Settlement reports.
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function execute()
     {
