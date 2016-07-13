@@ -68,20 +68,44 @@ class ExtensionGrid extends AbstractActionController
      */
     public function extensionsAction()
     {
+        $error = '';
         $lastSyncData = [];
         $authDetails = $this->packagesAuth->getAuthJsonData();
         if ($authDetails) {
-            $lastSyncData = $this->packagesData->syncPackagesData();
+            try {
+                $lastSyncData = $this->packagesData->syncPackagesData();
+            } catch (\Exception $e) {
+                $error = $e->getMessage();
+            }
         }
 
-        $extensions = $this->packagesData->getPackagesForInstall();
-        $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
+        $extensions = $this->packagesData->getInstalledExtensions();
+
+        foreach ($extensions as &$extension) {
+            $extension['update'] = false;
+            $extension['uninstall'] = false;
+            if ($this->composerInformation->isPackageInComposerJson($extension['name'])) {
+                $extension['uninstall'] = true;
+                if (isset($lastSyncData['packages'][$extension['name']]['latestVersion'])
+                    && version_compare(
+                        $lastSyncData['packages'][$extension['name']]['latestVersion'],
+                        $extension['version'],
+                        '>'
+                    )) {
+                    $extension['update'] = true;
+                }
+            }
+            $parts = explode('/', $extension['name']);
+            $extension['vendor'] = $parts[0];
+        }
+
         return new JsonModel(
             [
                 'success' => true,
-                'extensions' => array_values($packages),
-                'total' => count($packages),
-                'lastSyncData' => $lastSyncData
+                'extensions' => array_values($extensions),
+                'total' => count($extensions),
+                'lastSyncData' => $lastSyncData,
+                'error' => $error
             ]
         );
     }
