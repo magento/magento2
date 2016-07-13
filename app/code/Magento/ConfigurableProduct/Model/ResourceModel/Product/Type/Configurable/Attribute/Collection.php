@@ -17,6 +17,9 @@ use Magento\Framework\App\ObjectManager;
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    /** @var ConfigurableResource */
+    private $configurableResource;
+
     /**
      * Configurable attributes label table name
      *
@@ -73,11 +76,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource,
+        ConfigurableResource $configurableResource = null,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_catalogData = $catalogData;
+        $this->configurableResource = $configurableResource;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -241,7 +246,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function loadOptions()
     {
         /** @var ConfigurableResource $configurableResource */
-        $configurableResource = ObjectManager::getInstance()->get(ConfigurableResource::class);
+        $configurableResource = $this->getConfigurableResource();
         foreach ($this->_items as $item) {
             $values = [];
 
@@ -289,5 +294,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function getProduct()
     {
         return $this->_product;
+    }
+
+    /**
+     * Get Configurable Resource
+     *
+     * @return ConfigurableResource
+     */
+    private function getConfigurableResource()
+    {
+        if (!($this->configurableResource instanceof ConfigurableResource)) {
+            $this->configurableResource = ObjectManager::getInstance()->get(
+                ConfigurableResource::class
+            );
+        }
+        return $this->configurableResource;
     }
 }

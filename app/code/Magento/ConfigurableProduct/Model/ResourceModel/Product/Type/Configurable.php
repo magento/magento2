@@ -30,9 +30,11 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
+        ScopeResolverInterface $scopeResolver = null,
         $connectionName = null
     ) {
         $this->_catalogProductRelation = $catalogProductRelation;
+        $this->scopeResolver = $scopeResolver;
         parent::__construct($context, $connectionName);
     }
 
@@ -247,7 +249,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     private function getScopeResolver()
     {
-        if (!$this->scopeResolver instanceof ScopeResolverInterface) {
+        if (!($this->scopeResolver instanceof ScopeResolverInterface)) {
             $this->scopeResolver = ObjectManager::getInstance()->get(ScopeResolverInterface::class);
         }
         return $this->scopeResolver;
