@@ -96,6 +96,9 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($assetMock)
             ->willThrowException(new \Exception(self::ERROR_MESSAGE));
 
+        $this->loggerMock->expects(self::never())
+            ->method('critical');
+
         $this->temporaryFileMock->expects(self::never())
             ->method('createFile');
 
