@@ -85,7 +85,7 @@ class CreateSimpleProductEntityTest extends Injectable
 
         // Preconditions
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
@@ -105,10 +105,9 @@ class CreateSimpleProductEntityTest extends Injectable
      */
     public function tearDown()
     {
-        // TODO: Make sure flush is invoked here
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => $this->configData, 'rollback' => true]
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
         )->run();
     }
 }
