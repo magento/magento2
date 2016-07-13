@@ -98,7 +98,6 @@ class SetupConfigurationStep implements TestStepInterface
         }
         
         if ($this->flushCache) {
-            // TODO: Does not work on rollback
             $this->adminCache->open();
             $this->adminCache->getActionsBlock()->flushMagentoCache();
             $this->adminCache->getMessagesBlock()->waitSuccessMessage();
