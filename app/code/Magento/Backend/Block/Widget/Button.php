@@ -113,7 +113,7 @@ class Button extends \Magento\Backend\Block\Widget
             if ($attributeValue === null || $attributeValue == '') {
                 continue;
             }
-            $html .= $attributeKey . '="' . $this->escapeHtml($attributeValue) . '" ';
+            $html .= $attributeKey . '="' . htmlspecialchars($attributeValue, ENT_COMPAT, 'UTF-8', false) . '" ';
         }
 
         return $html;
