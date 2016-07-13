@@ -21,9 +21,20 @@ class ExtensionsInstallGrid extends Form
      */
     protected $perPageSelect = '#perPage';
 
+    /**
+     * @var string
+     */
     protected $nextPageButton = '.action-next';
 
+    /**
+     * @var string
+     */
     protected $extensionNameXpath = "//table[contains(@class, 'data-grid')]//tr//td//span[contains(text(), '#extensionName#')]";
+
+    /**
+     * @var string
+     */
+    protected $extensionInstallXpath = "//table[contains(@class, 'data-grid')]//tr//td//span[contains(text(), '#extensionName#')]//..//..//td//div[contains(@class, 'action-wrap')]//button";
 
     /**
      * Click 'Next Page' button
@@ -41,12 +52,31 @@ class ExtensionsInstallGrid extends Form
 
         return false;
     }
-    
+
+    /**
+     * Check that there is extension on grid
+     *
+     * @param string $name
+     * @return bool
+     */
     public function isExtensionOnGrid($name)
     {
         return $this->_rootElement->find(
             str_replace('#extensionName#', $name, $this->extensionNameXpath),
             Locator::SELECTOR_XPATH
         )->isVisible();
+    }
+
+    /**
+     * Click to Install extension
+     *
+     * @param string $name
+     */
+    public function clickInstall($name)
+    {
+        $this->_rootElement->find(
+            str_replace('#extensionName#', $name, $this->extensionInstallXpath),
+            Locator::SELECTOR_XPATH
+        );
     }
 }
