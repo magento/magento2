@@ -412,7 +412,7 @@ class AdvancedPricing extends AbstractModifier
                 'data' => [
                     'config' => [
                         'componentType' => 'dynamicRows',
-                        'label' => __('Tier Price'),
+                        'label' => __('Customer Group Price'),
                         'renderDefaultRecord' => false,
                         'recordTemplate' => 'record',
                         'dataScope' => '',
