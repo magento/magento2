@@ -158,28 +158,6 @@ angular.module('extension-grid', ['ngStorage'])
                 $localStorage.extensionType = extension.type;
                 $state.go('root.readiness-check-uninstall');
             };
-
-            $scope.enableDisable = function(type, extension) {
-                if (extension.type.indexOf('module') >= 0) {
-                    $localStorage.packages = [
-                        {
-                            name: extension.moduleName
-                        }
-                    ];
-                    if (extension.moduleName) {
-                        $localStorage.moduleName = extension.moduleName;
-                    } else {
-                        $localStorage.moduleName = extension.name;
-                    }
-                    if ($localStorage.titles[type].indexOf($localStorage.moduleName) < 0 ) {
-                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                            + $localStorage.moduleName;
-                    }
-                    $rootScope.titles = $localStorage.titles;
-                    $localStorage.extensionType = extension.type;
-                    $state.go('root.readiness-check-' + type);
-                }
-            };
         }
     ])
     .filter('startFrom', function () {

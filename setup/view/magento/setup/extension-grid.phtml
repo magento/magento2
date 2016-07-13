@@ -171,21 +171,12 @@
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(extension)}">
                         <button class="action-select"
-                                ng-show="isAvailableUpdatePackage(extension.name) || extension.uninstall ||
-                                extension.enable || extension.disable"
+                                ng-show="isAvailableUpdatePackage(extension.name) || extension.uninstall"
                                 ng-click="toggleActiveActionsCell(extension)"
                                 ng-blur="closeActiveActionsCell(extension)">
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(extension)}">
-                            <li ng-class="{'hide': !extension.disable}"
-                                ng-mousedown="enableDisable('enable', extension)">
-                                <a class="action-menu-item">Enable</a>
-                            </li>
-                            <li ng-class="{'hide': !extension.enable}"
-                                ng-mousedown="enableDisable('disable', extension)">
-                                <a class="action-menu-item">Disable</a>
-                            </li>
                             <li ng-class="{'hide': !isAvailableUpdatePackage(extension.name)}"
                                 ng-mousedown="update(extension)">
                                 <a class="action-menu-item">Update</a>
