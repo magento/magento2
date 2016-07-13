@@ -53,14 +53,11 @@ class FlushCacheByTags
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundSave(
-        \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
+        $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $object
     ) {
-        $tags = [];
-        if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
-            $tags = $object->getIdentities();
-        }
+        $tags = $object->getIdentities();
         $result = $proceed($object);
         $this->cleanCacheByTags($tags);
         return $result;
@@ -76,14 +73,11 @@ class FlushCacheByTags
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
-        \Magento\Framework\Model\ResourceModel\AbstractResource $subject,
+        $subject,
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $object
     ) {
-        $tags = [];
-        if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
-            $tags = $object->getIdentities();
-        }
+        $tags = $object->getIdentities();
         $result = $proceed($object);
         $this->cleanCacheByTags($tags);
         return $result;
