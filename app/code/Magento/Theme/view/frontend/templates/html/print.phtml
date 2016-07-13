@@ -5,7 +5,9 @@
  */
 ?>
 <script>
-    jQuery(function() {
-        window.print();
+    require(['jquery'], function(jQuery){
+        (function($) {
+            window.print();
+        })(jQuery);
     });
 </script>
