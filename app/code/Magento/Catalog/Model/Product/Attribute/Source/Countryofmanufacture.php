@@ -63,7 +63,7 @@ class Countryofmanufacture extends AbstractSource implements OptionSourceInterfa
         if ($cache = $this->_configCacheType->load($cacheKey)) {
             $options = unserialize($cache);
         } else {
-            $collection = $this->_countryFactory->create()->getResourceCollection()->loadByStore();
+            $collection = $this->_countryFactory->create()->getResourceCollection();
             $options = $collection->toOptionArray();
             $this->_configCacheType->save(serialize($options), $cacheKey);
         }
