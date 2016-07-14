@@ -83,7 +83,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
         $this->getSelect()->reset(
             \Magento\Framework\DB\Select::COLUMNS
         )->joinInner(
-            ['customer' => $connection->getTableName('customer_entity')],
+            ['customer' => $this->getTable('customer_entity')],
             'customer.entity_id = detail.customer_id',
             []
         )->columns(

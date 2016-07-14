@@ -756,10 +756,6 @@
         display: none;
     }
 
-    label {
-        display: inline-block;
-    }
-
     label > input[type="radio"],
     label > input[type="checkbox"] {
         margin: -3px 3px 0 0;
@@ -3791,6 +3787,14 @@
     .rule-tree .x-tree ul {
         padding-left: 0 !important;
         border-left: none !important;
+    }
+
+    .rule-tree {
+        ._has-datepicker {
+            + .ui-datepicker-trigger {
+                position: static;
+            }
+        }
     }
 
     .rule-param .label {
