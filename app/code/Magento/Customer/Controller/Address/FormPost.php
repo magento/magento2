@@ -9,7 +9,6 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
-use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as HelperData;
@@ -140,15 +139,6 @@ class FormPost extends \Magento\Customer\Controller\Address
     }
 
     /**
-     * @deprecated
-     * @return CustomerRegistry
-     */
-    private function getCustomerRegistry()
-    {
-        return ObjectManager::getInstance()->get(CustomerRegistry::class);
-    }
-
-    /**
      * Update region data
      *
      * @param array $attributeValues
@@ -202,7 +192,6 @@ class FormPost extends \Magento\Customer\Controller\Address
         try {
             $address = $this->_extractAddress();
             $this->_addressRepository->save($address);
-            $this->getCustomerRegistry()->remove($address->getCustomerId());
             $this->messageManager->addSuccess(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
             return $this->resultRedirectFactory->create()->setUrl($this->_redirect->success($url));
