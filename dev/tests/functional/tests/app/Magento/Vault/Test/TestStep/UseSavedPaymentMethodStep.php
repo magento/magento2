@@ -10,9 +10,9 @@ use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Select saved credit card.
+ * Select saved payment.
  */
-class UseSavedCreditCardStep implements TestStepInterface
+class UseSavedPaymentMethodStep implements TestStepInterface
 {
     /**
      * Onepage checkout page.
