@@ -118,7 +118,7 @@ class Link extends AbstractRenderer
             if ($value === null || $value == '') {
                 continue;
             }
-            $html[] = sprintf('%s="%s"', $key, htmlspecialchars($value, ENT_COMPAT, 'UTF-8', false));
+            $html[] = sprintf('%s="%s"', $key, $this->escapeHtmlAttr($value, false));
         }
 
         return join(' ', $html);
