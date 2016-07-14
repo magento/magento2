@@ -89,11 +89,7 @@
     <preference for="Magento\Quote\Model\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
     <preference for="Magento\Quote\Api\Data\ShippingInterface" type="Magento\Quote\Model\Shipping" />
     <preference for="Magento\Quote\Api\Data\ShippingAssignmentInterface" type="Magento\Quote\Model\ShippingAssignment" />
-    <type name="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems">
-        <arguments>
-            <argument name="quoteItemsCleaner" xsi:type="object">Magento\Quote\Model\Product\QuoteItemsCleaner</argument>
-        </arguments>
-    </type>
+    <preference for="Magento\Quote\Model\Product\QuoteItemsCleanerInterface" type="Magento\Quote\Model\Product\QuoteItemsCleaner" />
     <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="clean_quote_items_after_product_delete" type="Magento\Quote\Model\Product\Plugin\RemoveQuoteItems"/>
     </type>
