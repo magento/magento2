@@ -24,7 +24,7 @@ class ExtensionsGrid extends AbstractGrid
     protected $popupLoading = '.popup popup-loading';
 
     /**
-     * Click to 'Install' button
+     * Click to 'Install' button.
      *
      * @return void
      */

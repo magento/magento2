@@ -10,12 +10,12 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check extension installing is successfully
+ * Check extension installing is successfully.
  */
 class AssertSuccessMessage extends AbstractConstraint
 {
     /**
-     * Assert extension installing is successfully
+     * Assert extension installing is successfully.
      *
      * @param SetupWizard $setupWizard
      * @param string $extension

@@ -10,12 +10,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Setup\Test\Block\Extension\AbstractGrid;
 
 /**
- * Check that there is extension on grid
+ * Check that there is extension on grid.
  */
 class AssertFindExtensionOnGrid extends AbstractConstraint
 {
     /**
-     * Assert upgrade is successfully
+     * Assert that there is extension on grid.
      *
      * @param AbstractGrid $grid
      * @param string $name
