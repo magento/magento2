@@ -174,7 +174,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private $urlModifier;
 
     /**
-     * @var \Magento\Framework\ZendEscaper
+     * @var \Magento\Framework\Escaper
      */
     private $escaper;
 
@@ -933,7 +933,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         if (!is_null($fragment)) {
-            $url .= '#' . $this->getEscaper()->escapeUrl($fragment);
+            $url .= '#' . $this->getEscaper()->encodeUrlParam($fragment);
         }
         $this->getRouteParamsResolver()->unsetData('secure');
         $this->getRouteParamsResolver()->unsetData('escape_params');
@@ -988,7 +988,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
 
         $fragment = $this->_getFragment();
         if ($fragment) {
-            $url .= '#' . $this->getEscaper()->escapeUrl($fragment);
+            $url .= '#' . $this->getEscaper()->encodeUrlParam($fragment);
         }
 
         return $url;
@@ -1182,7 +1182,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     {
         if ($this->escaper == null) {
             $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
-                    ->get(\Magento\Framework\ZendEscaper::class);
+                    ->get(\Magento\Framework\Escaper::class);
         }
         return $this->escaper;
     }

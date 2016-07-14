@@ -891,11 +891,23 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Escape a string for the HTML attribute context
      *
      * @param string $string
+     * @param boolean $escapeSingleQuote
      * @return string
      */
-    public function escapeHtmlAttr($string)
+    public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
-        return $this->_escaper->escapeHtmlAttr($string);
+        return $this->_escaper->escapeHtmlAttr($string, $escapeSingleQuote);
+    }
+
+    /**
+     * Encode JSON
+     *
+     * @param array $data
+     * @return string
+     */
+    public function encodeJSON($data)
+    {
+        return $this->_escaper->encodeJSON($data);
     }
 
     /**
