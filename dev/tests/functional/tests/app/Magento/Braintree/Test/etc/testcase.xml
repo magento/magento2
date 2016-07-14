@@ -38,8 +38,8 @@
         <step name="addProductsToTheCartVault" alias="addProductsToTheCart" module="Magento_Checkout" next="estimateShippingAndTaxVault" />
         <step name="estimateShippingAndTaxVault" alias="estimateShippingAndTax" module="Magento_Checkout" next="clickProceedToCheckoutVault" />
         <step name="clickProceedToCheckoutVault" alias="clickProceedToCheckout" module="Magento_Checkout" next="fillShippingMethodVault" />
-        <step name="fillShippingMethodVault" alias="fillShippingMethod" module="Magento_Checkout" next="useSavedCreditCard" />
-        <step name="useSavedCreditCard" module="Magento_Vault" next="placeOrder3dSecureVault" />
+        <step name="fillShippingMethodVault" alias="fillShippingMethod" module="Magento_Checkout" next="useSavedPaymentMethod" />
+        <step name="useSavedPaymentMethod" module="Magento_Vault" next="placeOrder3dSecureVault" />
         <step name="placeOrder3dSecureVault" alias="placeOrderWith3dSecure" module="Magento_Braintree" />
     </scenario>
     <scenario name="OnePageCheckoutWithBraintreePaypalTest" firstStep="setupConfiguration">
