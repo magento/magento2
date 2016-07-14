@@ -109,7 +109,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
-        $this->getLogger()->critical($exception->getMessage() . "\n" . $exception->getTraceAsString());
+        $this->getLogger()->critical($exception->getMessage());
         if ($bootstrap->isDeveloperMode()) {
             $this->response->setHttpResponseCode(404);
             $this->response->setHeader('Content-Type', 'text/plain');
@@ -176,7 +176,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     private function getLogger()
     {
         if (!$this->logger) {
-            $this->logger = $this->objectManager->get(LoggerInterface::class);
+            $this->logger = $this->objectManager->create(LoggerInterface::class);
         }
 
         return $this->logger;
