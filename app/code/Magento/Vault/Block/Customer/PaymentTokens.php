@@ -3,23 +3,30 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Vault\Block;
+namespace Magento\Vault\Block\Customer;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\View\Element\Template;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Block\TokenRendererInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 
-class CreditCards extends Template
+/**
+ * Class PaymentTokens
+ */
+abstract class PaymentTokens extends Template
 {
+    /**
+     * @var PaymentTokenInterface[]
+     */
+    private $customerTokens;
+
     /**
      * @var CustomerTokenManagement
      */
     private $customerTokenManagement;
 
     /**
-     * CreditCards constructor.
+     * PaymentTokens constructor.
      * @param Template\Context $context
      * @param CustomerTokenManagement $customerTokenManagement
      * @param array $data
@@ -34,11 +41,24 @@ class CreditCards extends Template
     }
 
     /**
+     * Get type of token
+     * @return string
+     */
+    abstract function getType();
+
+    /**
      * @return PaymentTokenInterface[]
      */
     public function getPaymentTokens()
     {
-        return $this->customerTokenManagement->getCustomerSessionTokens();
+        $tokens = [];
+        /** @var PaymentTokenInterface $token */
+        foreach ($this->getCustomerTokens() as $token) {
+            if ($token->getType() === $this->getType()) {
+                $tokens[] = $token;
+            }
+        };
+        return $tokens;
     }
 
     /**
@@ -55,5 +75,26 @@ class CreditCards extends Template
         }
 
         return '';
+    }
+
+    /**
+     * Checks if customer tokens exists
+     * @return bool
+     */
+    public function isExistsCustomerTokens()
+    {
+        return !empty($this->getCustomerTokens());
+    }
+
+    /**
+     * Get customer session tokens
+     * @return PaymentTokenInterface[]
+     */
+    private function getCustomerTokens()
+    {
+        if (empty($this->customerTokens)) {
+            $this->customerTokens = $this->customerTokenManagement->getCustomerSessionTokens();
+        }
+        return $this->customerTokens;
     }
 }

@@ -51,7 +51,7 @@
             <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
-            <data name="configData" xsi:type="string">braintree_sale</data>
+            <data name="configData" xsi:type="string">braintree, braintree_sale</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Hold, Ship</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />

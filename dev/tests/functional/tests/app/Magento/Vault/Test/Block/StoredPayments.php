@@ -10,7 +10,7 @@ use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\InjectableFixture;
 
-class CreditCards extends Block
+class StoredPayments extends Block
 {
     /**
      * Delete button locator for popup window.
@@ -20,6 +20,13 @@ class CreditCards extends Block
     private $deleteButton = './/*[@data-type="popup"]//span[text()="Delete"]';
 
     /**
+     * Delete link for stored payment method.
+     *
+     * @var string
+     */
+    private $deleteStoredPayment = '.delete';
+
+    /**
      * Delete saved credit card.
      *
      * @param ElementInterface $creditCard
@@ -27,6 +34,17 @@ class CreditCards extends Block
     public function deleteCreditCard(ElementInterface $creditCard)
     {
         $creditCard->click();
+        $this->browser->selectWindow();
+        $this->browser->find($this->deleteButton, Locator::SELECTOR_XPATH)->click();
+        $this->browser->selectWindow();
+    }
+
+    /**
+     * Delete Stored Payment Method.
+     */
+    public function deleteStoredPayment()
+    {
+        $this->browser->find($this->deleteStoredPayment)->click();
         $this->browser->selectWindow();
         $this->browser->find($this->deleteButton, Locator::SELECTOR_XPATH)->click();
         $this->browser->selectWindow();
