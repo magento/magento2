@@ -3,9 +3,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Bulk\Api;
+namespace Magento\Framework\Bulk;
 
-use Magento\Framework\Bulk\Api\Data\BulkSummaryInterface;
 /**
  * Interface BulkStatusInterface
  */
@@ -14,7 +13,7 @@ interface BulkStatusInterface
     /**
      * @param string $bulkUuid
      * @param int|null $failureType
-     * @return \Magento\Framework\Bulk\Api\Data\OperationInterface[]
+     * @return \Magento\BulkOperations\Api\Data\OperationInterface[]
      */
     public function getFailedOperationsByBulkId($bulkUuid, $failureType = null);
 

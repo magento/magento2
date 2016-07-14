@@ -3,12 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Bulk\Api\Data;
+namespace Magento\Framework\Bulk;
 
 /**
  * Interface BulkSummaryInterface
  */
-interface BulkSummaryInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface BulkSummaryInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -73,20 +73,4 @@ interface BulkSummaryInterface extends \Magento\Framework\Api\ExtensibleDataInte
      */
     public function setUserId($userId);
 
-    /**
-     * Retrieve existing extension attributes object.
-     *
-     * @return \Magento\Framework\Bulk\Api\Data\BulkSummaryExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Framework\Bulk\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Magento\Framework\Bulk\Api\Data\BulkSummaryExtensionInterface $extensionAttributes
-    );
 }

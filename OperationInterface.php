@@ -3,12 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Bulk\Api\Data;
+namespace Magento\Framework\Bulk;
 
 /**
  * Interface OperationInterface
  */
-interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface OperationInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -111,22 +111,5 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setErrorCode($errorCode);
-
-    /**
-     * Retrieve existing extension attributes object.
-     *
-     * @return \Magento\Framework\Bulk\Api\Data\OperationExtensionInterface|null
-     */
-    public function getExtensionAttributes();
-
-    /**
-     * Set an extension attributes object.
-     *
-     * @param \Magento\Framework\Bulk\Api\Data\OperationExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Magento\Framework\Bulk\Api\Data\OperationExtensionInterface $extensionAttributes
-    );
 
 }

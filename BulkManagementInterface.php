@@ -3,10 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Bulk\Api;
+namespace Magento\Framework\Bulk;
 
-use Magento\Framework\Bulk\Api\Data\OperationInterface;
-use Magento\Framework\Bulk\Api\Data\IdentityInterface;
+use Magento\Framework\Bulk\IdentityInterface;
 
 /**
  * Interface BulkManagementInterface
