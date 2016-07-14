@@ -10334,7 +10334,6 @@ body.ngdialog-open {
     overflow: hidden
 }
 
-.extension-indicator,
 .component-indicator {
     border-radius: 50%;
     cursor: help;
@@ -10344,8 +10343,6 @@ body.ngdialog-open {
     width: 20px
 }
 
-.extension-indicator::after,
-.extension-indicator::before,
 .component-indicator::after,
 .component-indicator::before {
     background: #fff;
@@ -10356,7 +10353,6 @@ body.ngdialog-open {
     visibility: hidden
 }
 
-.extension-indicator::before,
 .component-indicator::before {
     border: 1px solid #adadad;
     border-radius: 1px;
@@ -10368,7 +10364,6 @@ body.ngdialog-open {
     padding: 4px 5px
 }
 
-.extension-indicator::after,
 .component-indicator::after {
     border-color: #999;
     border-style: solid;
@@ -10383,8 +10378,6 @@ body.ngdialog-open {
     width: 10px
 }
 
-.extension-indicator:hover::after,
-.extension-indicator:hover::before,
 .component-indicator:hover::after,
 .component-indicator:hover::before {
     opacity: 1;
@@ -10392,7 +10385,6 @@ body.ngdialog-open {
     visibility: visible
 }
 
-.extension-indicator span,
 .component-indicator span {
     display: block;
     height: 20px;
@@ -10400,7 +10392,6 @@ body.ngdialog-open {
     width: 20px
 }
 
-.extension-indicator span:before,
 .component-indicator span:before {
     content: '';
     display: block;
@@ -10411,17 +10402,14 @@ body.ngdialog-open {
     width: 100%
 }
 
-.extension-indicator._on,
 .component-indicator._on {
     background: #79a22e
 }
 
-.extension-indicator._off,
 .component-indicator._off {
     background: #e22626
 }
 
-.extension-indicator._off span:before,
 .component-indicator._off span:before {
     background: #fff;
     height: 4px;
@@ -10429,17 +10417,14 @@ body.ngdialog-open {
     width: 12px
 }
 
-.extension-indicator._info,
 .component-indicator._info {
     background: 0 0
 }
 
-.extension-indicator._info span,
 .component-indicator._info span {
     width: 21px
 }
 
-.extension-indicator._info span:before,
 .component-indicator._info span:before {
     color: #008bdb;
     content: '\e61a';
