@@ -17,6 +17,8 @@ use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * A service for deploying Magento static view files for production mode
@@ -73,6 +75,11 @@ class Deployer
      * @var AlternativeSourceInterface[]
      */
     private $alternativeSources;
+
+    /**
+     * @var Minification
+     */
+    private $minification;
 
     /**
      * Constructor
@@ -135,7 +142,7 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     /** @var \Magento\Theme\Model\View\Design $design */
-                    $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+                    $design = $this->objectManager->get('Magento\Theme\Model\View\Design');
                     $design->setDesignTheme($themePath, $area);
                     $assetRepo = $this->objectManager->create(
                         'Magento\Framework\View\Asset\Repository',
@@ -183,6 +190,9 @@ class Deployer
                         $dictionaryFileName = $this->jsTranslationConfig->getDictionaryFileName();
                         $this->deployFile($dictionaryFileName, $area, $themePath, $locale, null);
                     }
+                    if ($this->getMinification()->isEnabled('js')) {
+                        $fileManager->createMinResolverAsset();
+                    }
                     $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
@@ -211,6 +221,21 @@ class Deployer
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Get Minification instance
+     *
+     * @deprecated
+     * @return Minification
+     */
+    private function getMinification()
+    {
+        if (null === $this->minification) {
+            $this->minification = ObjectManager::getInstance()->get(Minification::class);
+        }
+
+        return $this->minification;
     }
 
     /**
