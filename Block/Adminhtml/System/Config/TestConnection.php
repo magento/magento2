@@ -50,7 +50,7 @@ class TestConnection extends \Magento\Config\Block\System\Config\Form\Field
                 'button_label' => __($originalData['button_label']),
                 'html_id' => $element->getHtmlId(),
                 'ajax_url' => $this->_urlBuilder->getUrl('catalog/search_system_config/testconnection'),
-                'field_mapping' => json_encode($this->_getFieldMapping(), JSON_HEX_QUOT | JSON_HEX_APOS)
+                'field_mapping' => $this->encodeJSON($this->_getFieldMapping())
             ]
         );
 
