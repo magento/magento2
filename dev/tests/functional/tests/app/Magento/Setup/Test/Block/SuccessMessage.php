@@ -27,4 +27,10 @@ class SuccessMessage extends Block
         $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CLASS_NAME);
         return $this->_rootElement->find($this->successMessage, Locator::SELECTOR_CLASS_NAME)->getText();
     }
+
+    public function getDisableModuleStatus() {
+        $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CLASS_NAME);
+
+        return $this->_rootElement->find($this->successMessage, Locator::SELECTOR_CLASS_NAME)->getText();
+    }
 }
