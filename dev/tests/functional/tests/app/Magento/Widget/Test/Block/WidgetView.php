@@ -27,6 +27,7 @@ class WidgetView extends Block
         'recentlyComparedProducts' => '/descendant-or-self::div[contains(.,"%s")]',
         'recentlyViewedProducts' => '/descendant-or-self::div[contains(.,"%s")]',
         'cmsStaticBlock' => '/descendant-or-self::div[contains(.,"%s")]',
+        'catalogNewProductsList' => '/descendant-or-self::div[contains(.,"%s")]',
     ];
 
     /**
