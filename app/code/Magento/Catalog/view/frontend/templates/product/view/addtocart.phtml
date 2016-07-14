@@ -40,7 +40,6 @@
     </div>
 </div>
 <?php endif; ?>
-<?php if ($block->isRedirectToCartEnabled()) : ?>
 <script type="text/x-magento-init">
     {
         "#product_addtocart_form": {
@@ -50,7 +49,6 @@
         }
     }
 </script>
-<?php else : ?>
 <script>
     require([
         'jquery',
@@ -73,5 +71,15 @@
             }
         });
     });
+</script>
+<?php if (!$block->isRedirectToCartEnabled()) : ?>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "catalogAddToCart": {
+                "bindSubmit": false
+            }
+        }
+    }
 </script>
 <?php endif; ?>
