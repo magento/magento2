@@ -203,6 +203,8 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Psr\Log\LoggerInterface')
             ->willReturn($this->logger);
+        $this->logger->expects($this->once())
+            ->method('critical');
         $bootstrap = $this->getMockBuilder(Bootstrap::class)->disableOriginalConstructor()->getMock();
         $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(true);
         $exception = new \Exception('Error: nothing works');
