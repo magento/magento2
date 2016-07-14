@@ -11,14 +11,19 @@ use Magento\Mtf\Client\Locator;
 /**
  * Extensions Grid block.
  */
-class ExtensionsGrid extends AbstractGrid
+class Grid extends AbstractGrid
 {
     /**
+     * "Install" button that opens grid with extensions for installing.
+     *
      * @var string
      */
-    protected $installButton = "//div[contains(@class, 'item-install')]//button[contains(@href,'#install-extension-grid')]";
+    protected $installButton = "//div[contains(@class, 'item-install')]"
+        . "//button[contains(@href, '#install-extension-grid')]";
 
     /**
+     * Popup Loading.
+     *
      * @var string
      */
     protected $popupLoading = '.popup popup-loading';

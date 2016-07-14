@@ -20,6 +20,8 @@ class Home extends Block
     protected $systemUpgrade = '.setup-home-item-upgrade';
 
     /**
+     * Button that opens grid with installed extensions.
+     *
      * @var string
      */
     protected $componentManager = '.setup-home-item-component';

@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="installExtension"
+    <fixture name="extension"
              module="Magento_Setup"
              type="virtual"
-             entity_type="installExtension"
-             handler_interface="Magento\Setup\Test\Handler\InstallExtension\InstallExtensionInterface"
-             class="Magento\Setup\Test\Fixture\InstallExtension">
+             entity_type="extension"
+             handler_interface="Magento\Setup\Test\Handler\Extension\ExtensionInterface"
+             class="Magento\Setup\Test\Fixture\Extension">
         <field name="extension" />
         <field name="version" />
         <field name="optionsCode" />

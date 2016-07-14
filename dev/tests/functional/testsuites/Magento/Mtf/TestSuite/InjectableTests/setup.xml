@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="../../../../../vendor/magento/mtf/Magento/Mtf/TestRunner/etc/testRunner.xsd">
     <rule scope="testsuite">
         <allow>
-            <module value="Magento_Upgrade"/>
+            <module value="Magento_Setup"/>
         </allow>
     </rule>
 </config>
