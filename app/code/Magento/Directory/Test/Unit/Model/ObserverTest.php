@@ -129,21 +129,15 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testScheduledUpdateCurrencyRatesThrowsException()
     {
-        $this->scopeConfig
-            ->expects($this->at(0))
+        $this->scopeConfig->expects($this->exactly(3))
             ->method('getValue')
-            ->with(Observer::IMPORT_ENABLE, ScopeInterface::SCOPE_STORE)
-            ->willReturn(1);
-        $this->scopeConfig
-            ->expects($this->at(1))
-            ->method('getValue')
-            ->with(Observer::CRON_STRING_PATH, ScopeInterface::SCOPE_STORE)
-            ->willReturn('cron-path');
-        $this->scopeConfig
-            ->expects($this->at(2))
-            ->method('getValue')
-            ->with(Observer::IMPORT_SERVICE, ScopeInterface::SCOPE_STORE)
-            ->willReturn('import-service');
+            ->willReturnMap(
+                [
+                    [Observer::IMPORT_ENABLE, ScopeInterface::SCOPE_STORE, null, 1],
+                    [Observer::CRON_STRING_PATH, ScopeInterface::SCOPE_STORE, null, 'cron-path'],
+                    [Observer::IMPORT_SERVICE, ScopeInterface::SCOPE_STORE, null, 'import-service']
+                ]
+            );
 
         $this->importFactory
             ->expects($this->once())
