@@ -94,16 +94,14 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
         $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
-
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-
+        
         $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->getMockForAbstractClass();
 
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($store));
+        $storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+            ->setMethods(['getStore', 'getCode'])
+            ->getMockForAbstractClass();
+        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
@@ -137,7 +135,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $context->expects($this->any())
             ->method('getUrlBuilder')
             ->will($this->returnValue($urlBuilder));
-        
+
         $this->rendererPool = $this->getMockBuilder('Magento\Framework\Pricing\Render\RendererPool')
             ->disableOriginalConstructor()
             ->getMock();
@@ -377,5 +375,10 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->object->getCacheKey();
         $this->assertStringEndsWith('list-category-page', $result);
+    }
+
+    public function testGetCacheKeyInfo()
+    {
+        $this->assertArrayHasKey('display_minimal_price', $this->object->getCacheKeyInfo());
     }
 }
