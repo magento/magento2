@@ -175,7 +175,7 @@ class Dob extends AbstractWidget
     public function getFieldHtml()
     {
         $this->dateElement->setData([
-            'extra_params' => $this->isRequired() ? 'data-validate="{required:true}"' : '',
+            'extra_params' => $this->getHtmlExtraParams(),
             'name' => $this->getHtmlId(),
             'id' => $this->getHtmlId(),
             'class' => $this->getHtmlClass(),
@@ -199,6 +199,26 @@ class Dob extends AbstractWidget
     public function getHtmlId()
     {
         return 'dob';
+    }
+
+    /**
+     * Return id
+     *
+     * @return string
+     */
+    public function getHtmlExtraParams()
+    {
+        $extraParams = array(
+            "'validate-date-au':true"
+        );
+
+        if ($this->isRequired()) {
+            array_push($extraParams, 'required:true');
+        }
+
+        $extraParams = implode(', ', $extraParams);
+        
+        return 'data-validate="{' . $extraParams . '}"';
     }
 
     /**
