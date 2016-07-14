@@ -176,7 +176,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     private function getLogger()
     {
         if (!$this->logger) {
-            $this->logger = $this->objectManager->create(LoggerInterface::class);
+            $this->logger = $this->objectManager->get(LoggerInterface::class);
         }
 
         return $this->logger;
