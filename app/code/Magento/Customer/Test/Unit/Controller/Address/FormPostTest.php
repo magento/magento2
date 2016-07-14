@@ -420,16 +420,6 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $newRegion,
         $newRegionCode
     ) {
-        $customerRegistryMock = $this->getMockBuilder(CustomerRegistry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManager->expects($this->atLeastOnce())
-            ->method("get")
-            ->with(CustomerRegistry::class)
-            ->willReturn($customerRegistryMock);
-        ObjectManager::setInstance($this->objectManager);
-        $customerRegistryMock->expects($this->once())
-            ->method("remove");
         $existingAddressData = [
             'country_id' => $countryId,
             'region_id' => $regionId,
