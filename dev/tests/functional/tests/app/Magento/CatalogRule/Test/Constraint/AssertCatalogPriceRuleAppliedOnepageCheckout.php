@@ -67,6 +67,8 @@ class AssertCatalogPriceRuleAppliedOnepageCheckout extends AbstractConstraint
             $expectedPrices,
             $actualPrices,
             'Wrong total cart prices are displayed.'
+            . "\nExpected: " . implode(PHP_EOL, $expectedPrices)
+            . "\nActual: " . implode(PHP_EOL, $actualPrices) . "\n"
         );
     }
 
