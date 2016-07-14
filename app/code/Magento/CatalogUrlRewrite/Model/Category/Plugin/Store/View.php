@@ -14,6 +14,9 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class View
 {
     /** @var UrlPersistInterface */
@@ -100,7 +103,7 @@ class View
         $collection = $this->productFactory->create()
             ->getCollection()
             ->addCategoryIds()
-            ->addAttributeToSelect(['name', 'url_path', 'url_key'])
+            ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addWebsiteFilter($websiteIds);
         foreach ($collection as $product) {
             $product->setStoreId($storeId);
