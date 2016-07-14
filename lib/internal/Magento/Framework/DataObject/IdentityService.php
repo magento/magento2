@@ -24,11 +24,11 @@ class IdentityService implements IdentityGeneratorInterface
 
     /**
      * IdentityService constructor.
-     * @param \Ramsey\Uuid\UuidFactoryInterface $uuidFactory
+     * @param \Ramsey\Uuid\UuidFactory $uuidFactory
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Ramsey\Uuid\UuidFactoryInterface $uuidFactory,
+        \Ramsey\Uuid\UuidFactory $uuidFactory,
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->uuidFactory = $uuidFactory;
