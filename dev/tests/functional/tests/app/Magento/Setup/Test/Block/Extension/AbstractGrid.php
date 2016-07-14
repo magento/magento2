@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Block\Extension;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Setup\Test\Fixture\Extension;
 
 /**
  * Abstract Extensions Grid block.
@@ -15,26 +16,65 @@ use Magento\Mtf\Client\Locator;
 abstract class AbstractGrid extends Block
 {
     /**
+     * 'Next Page' button for grid.
+     *
      * @var string
      */
     protected $nextPageButton = '.action-next';
 
     /**
+     * Grid that contains the list of extensions.
+     *
      * @var string
      */
     protected $dataGrid = '.data-grid';
 
     /**
+     * Container that contains name of the extension.
+     *
      * @var string
      */
-    protected $extensionName = "//table[contains(@class, 'data-grid')]//tr//td//span[contains(text(), '#extensionName#')]";
+    protected $extensionName = "//*[contains(text(), '#extensionName#')]";
+
+    /**
+     * Find Extension on the grid by name.
+     *
+     * @param Extension $extension
+     * @return boolean
+     */
+    public function findExtensionOnGrid(Extension $extension)
+    {
+        $result = false;
+        while (true) {
+            if ($result = $this->isExtensionOnGrid($extension->getExtension()) || !$this->clickNextPageButton()) {
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Check that there is extension on grid.
+     *
+     * @param string $name
+     * @return bool
+     */
+    protected function isExtensionOnGrid($name)
+    {
+        $this->waitForElementVisible($this->dataGrid);
+        return $this->_rootElement->find(
+            str_replace('#extensionName#', $name, $this->extensionName),
+            Locator::SELECTOR_XPATH
+        )->isVisible();
+    }
 
     /**
      * Click 'Next Page' button.
      *
      * @return bool
      */
-    public function clickNextPageButton()
+    protected function clickNextPageButton()
     {
         $this->waitForElementVisible($this->nextPageButton);
         $nextPageButton = $this->_rootElement->find($this->nextPageButton);
@@ -44,20 +84,5 @@ abstract class AbstractGrid extends Block
         }
 
         return false;
-    }
-
-    /**
-     * Check that there is extension on grid.
-     *
-     * @param string $name
-     * @return bool
-     */
-    public function isExtensionOnGrid($name)
-    {
-        $this->waitForElementVisible($this->dataGrid);
-        return $this->_rootElement->find(
-            str_replace('#extensionName#', $name, $this->extensionName),
-            Locator::SELECTOR_XPATH
-        )->isVisible();
     }
 }

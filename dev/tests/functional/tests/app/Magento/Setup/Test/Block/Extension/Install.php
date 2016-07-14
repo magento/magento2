@@ -12,14 +12,18 @@ use Magento\Mtf\Client\Locator;
 /**
  * Install Extension block.
  */
-class InstallExtension extends Block
+class Install extends Block
 {
     /**
+     * Container with a message about installation.
+     *
      * @var string
      */
     protected $installMessage = 'start-updater';
 
     /**
+     * "Install" button that starts an installation.
+     *
      * @var string
      */
     protected $installButton = "[ng-click*='update']";

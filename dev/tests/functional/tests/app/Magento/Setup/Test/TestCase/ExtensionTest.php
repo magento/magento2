@@ -10,14 +10,16 @@ use Magento\Mtf\TestCase\Injectable;
 use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Setup\Test\Fixture\InstallExtension;
+use Magento\Setup\Test\Fixture\Extension;
 use Magento\Setup\Test\Constraint\Extension\AssertFindExtensionOnGrid;
 use Magento\Setup\Test\Constraint\Extension\AssertSuccessMessage;
 use Magento\Setup\Test\Constraint\Extension\AssertExtensionAndVersionCheck;
 use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
-use Magento\Setup\Test\Block\Extension\AbstractGrid;
 
-class InstallExtensionTest extends Injectable
+/**
+ * ExtensionTest checks installing, updating and uninstalling of extensions.
+ */
+class ExtensionTest extends Injectable
 {
     /**
      * Page System Upgrade Index.
@@ -27,6 +29,8 @@ class InstallExtensionTest extends Injectable
     protected $setupWizard;
 
     /**
+     * Admin Dashboard
+     *
      * @var Dashboard
      */
     protected $adminDashboard;
@@ -52,7 +56,7 @@ class InstallExtensionTest extends Injectable
      * @param AssertSuccessfulReadinessCheck $assertReadiness
      * @param AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck
      * @param AssertSuccessMessage $assertSuccessMessage
-     * @param array $installExtension
+     * @param array $extensionData
      * @return void
      */
     public function test(
@@ -61,19 +65,9 @@ class InstallExtensionTest extends Injectable
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck,
         AssertSuccessMessage $assertSuccessMessage,
-        $installExtension = []
+        $extensionData = []
     ) {
-        $createBackupConfig = array_intersect_key(
-            $installExtension,
-            ['optionsCode' => '', 'optionsMedia' => '', 'optionsDb' => '']
-        );
-        $createBackupFixture = $fixtureFactory->create(
-            InstallExtension::class,
-            ['data' => $createBackupConfig]
-        );
-
-        $extension = $installExtension['extension'];
-        $version = $installExtension['version'];
+        $extensionFixture = $fixtureFactory->create(Extension::class, ['data' => $extensionData]);
 
         // Authenticate in admin area
         $this->adminDashboard->open();
@@ -85,11 +79,9 @@ class InstallExtensionTest extends Injectable
         $this->setupWizard->getSetupHome()->clickComponentManager();
         $this->setupWizard->getExtensionsGrid()->clickInstallButton();
 
-        // Find extension on grid and click install
-        $this->findExtensionOnGrid($this->setupWizard->getExtensionsInstallGrid(), $extension);
-        $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsInstallGrid(), $extension);
-        $this->setupWizard->getExtensionsInstallGrid()->chooseExtensionVersion($extension, $version);
-        $this->setupWizard->getExtensionsInstallGrid()->clickInstall($extension);
+        // Find extension on grid and install
+        $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsInstallGrid(), $extensionFixture);
+        $this->setupWizard->getExtensionsInstallGrid()->install($extensionFixture);
 
         // Readiness Check
         $this->setupWizard->getReadiness()->clickReadinessCheck();
@@ -97,34 +89,17 @@ class InstallExtensionTest extends Injectable
         $this->setupWizard->getReadiness()->clickNext();
 
         // Create Backup page
-        $this->setupWizard->getCreateBackup()->fill($createBackupFixture);
+        $this->setupWizard->getCreateBackup()->fill($extensionFixture);
         $this->setupWizard->getCreateBackup()->clickNext();
 
         // Install Extension
-        $assertExtensionAndVersionCheck->processAssert($this->setupWizard, $extension, $version);
+        $assertExtensionAndVersionCheck->processAssert($this->setupWizard, $extensionFixture);
         $this->setupWizard->getInstallExtension()->clickInstallButton();
-        $assertSuccessMessage->processAssert($this->setupWizard, $extension);
+        $assertSuccessMessage->processAssert($this->setupWizard, $extensionFixture);
 
         // Open Extension Grid with installed extensions and find installed extension
         $this->setupWizard->open();
         $this->setupWizard->getSetupHome()->clickComponentManager();
-        $this->findExtensionOnGrid($this->setupWizard->getExtensionsGrid(), $extension);
-        $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extension);
-    }
-
-    /**
-     * Find Extension on the grid by name.
-     *
-     * @param AbstractGrid $grid
-     * @param string $name
-     * @return void
-     */
-    protected function findExtensionOnGrid(AbstractGrid $grid, $name)
-    {
-        while (true) {
-            if ($grid->isExtensionOnGrid($name) || !$grid->clickNextPageButton()) {
-                break;
-            }
-        }
+        $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extensionFixture);
     }
 }

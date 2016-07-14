@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Setup\Test\TestCase\ExtensionTest" summary="Install, Update and Uninstall Extension" ticketId="MAGETWO-47925">
+        <variation name="PerformInstallUpdateUninstallExtension">
+            <data name="extensionData/extension" xsi:type="string">magento/sample-data-media</data>
+            <data name="extensionData/version" xsi:type="string">100.1.0</data>
+            <data name="extensionData/optionsCode" xsi:type="string">No</data>
+            <data name="extensionData/optionsMedia" xsi:type="string">No</data>
+            <data name="extensionData/optionsDb" xsi:type="string">No</data>
+        </variation>
+    </testCase>
+</config>

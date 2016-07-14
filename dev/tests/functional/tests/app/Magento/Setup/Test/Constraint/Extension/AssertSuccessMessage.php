@@ -8,6 +8,7 @@ namespace Magento\Setup\Test\Constraint\Extension;
 
 use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Setup\Test\Fixture\Extension;
 
 /**
  * Check extension installing is successfully.
@@ -18,10 +19,10 @@ class AssertSuccessMessage extends AbstractConstraint
      * Assert extension installing is successfully.
      *
      * @param SetupWizard $setupWizard
-     * @param string $extension
+     * @param Extension $extension
      * @return void
      */
-    public function processAssert(SetupWizard $setupWizard, $extension)
+    public function processAssert(SetupWizard $setupWizard, Extension $extension)
     {
         $message = "You installed:";
         \PHPUnit_Framework_Assert::assertContains(
@@ -30,7 +31,7 @@ class AssertSuccessMessage extends AbstractConstraint
             'Success message is incorrect.'
         );
         \PHPUnit_Framework_Assert::assertContains(
-            $extension,
+            $extension->getExtension(),
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
             'Installed extension is incorrect.'
         );
