@@ -40,8 +40,8 @@ class ExtensionGrid extends AbstractActionController
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        \Magento\Setup\Model\PackagesData $packagesData,
-        \Magento\Setup\Model\PackagesAuth $packagesAuth
+        PackagesData $packagesData,
+        PackagesAuth $packagesAuth
     ) {
         $this->composerInformation = $composerInformation;
         $this->packagesData = $packagesData;

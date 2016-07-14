@@ -119,9 +119,6 @@
         <table class="data-grid">
             <thead data-part="head">
             <tr>
-                <th class="data-grid-th _col-xs">
-                    <span></span>
-                </th>
                 <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
                 && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
                     <span>Product Name</span>
@@ -147,14 +144,13 @@
             <tr ng-repeat="extension in extensions | orderBy:predicate:reverse
                 | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
             >
-                <td class="data-grid-indicator-cell">
-                    <span class="extension-indicator"
+                <td>
+                    <span class="component-indicator"
+                          ng-show="isAvailableUpdatePackage(extension.name)"
                           ng-class="getIndicatorInfo(extension, 'icon')"
                           data-label="{{getIndicatorInfo(extension, 'label')}}"
                     ><span>{{getIndicatorInfo(extension, 'label')}}</span>
                     </span>
-                </td>
-                <td>
                     <span class="data-grid-data">{{extension.name}}</span>
                 </td>
                 <td>

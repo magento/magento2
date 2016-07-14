@@ -94,16 +94,10 @@ angular.module('extension-grid', ['ngStorage'])
                 return isAvailable;
             };
 
-            $scope.getIndicatorInfo = function(extension, type) {
+            $scope.getIndicatorInfo = function (extension, type) {
                 var indicators = {
                     'info': {
                         'icon': '_info', 'label': 'Update Available'
-                    },
-                    'on': {
-                        'icon': '_on', 'label': 'On'
-                    },
-                    'off': {
-                        'icon': '_off', 'label': 'Off'
                     }
                 };
 
@@ -115,10 +109,7 @@ angular.module('extension-grid', ['ngStorage'])
 
                 if ($scope.isAvailableUpdatePackage(extension.name)) {
                     return indicators.info[type];
-                } else if (extension.disable === true) {
-                    return indicators.off[type];
                 }
-                return indicators.on[type];
             };
 
             $scope.update = function(extension) {
