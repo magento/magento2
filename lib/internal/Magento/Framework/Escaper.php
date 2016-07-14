@@ -48,11 +48,15 @@ class Escaper
      * Escape a string for the HTML attribute context
      *
      * @param string $string
+     * @param boolean $escapeSingleQuote
      * @return string
      */
-    public function escapeHtmlAttr($string)
+    public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
-        return $this->getEscaper()->escapeHtmlAttr($string);
+        if ($escapeSingleQuote) {
+            return $this->getEscaper()->escapeHtmlAttr($string);
+        }
+        return htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
     }
 
     /**
@@ -64,6 +68,28 @@ class Escaper
     public function escapeUrl($string)
     {
         return $this->escapeHtml($this->escapeXssInUrl($string));
+    }
+
+    /**
+     * Encode URL
+     *
+     * @param string $string
+     * @return string
+     */
+    public function encodeUrlParam($string)
+    {
+        return $this->getEscaper()->escapeUrl($string);
+    }
+
+    /**
+     * Encode JSON
+     *
+     * @param array $data
+     * @return string
+     */
+    public function encodeJSON($data)
+    {
+        return json_encode($data, JSON_HEX_QUOT | JSON_HEX_APOS);
     }
 
     /**

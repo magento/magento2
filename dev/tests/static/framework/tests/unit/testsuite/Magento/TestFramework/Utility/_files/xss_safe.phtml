@@ -12,7 +12,6 @@
 <input name="form_key" type="hidden" value="<?php echo $block->escapeUrl($var) ?>" />
 <input name="form_key" type="hidden" value="<?php echo $block->escapeHtmlAttr('value') ?>" />
 <input name="form_key" type="hidden" value="<?php echo $block->escapeJs('value') ?>" />
-<input name="form_key" type="hidden" value="<?php echo $block->escapeXssInUrl("some value") ?>" />
 echo $var;
 <?php echo $block->getHtmlId("some value") ?>
 <?php echo $block->getIdHtml("some value") ?>

@@ -229,7 +229,7 @@ class SplitButton extends \Magento\Backend\Block\Widget
             if ($attributeValue === null || $attributeValue == '') {
                 continue;
             }
-            $html[] = $attributeKey . '="' . htmlspecialchars($attributeValue, ENT_COMPAT, 'UTF-8', false) . '"';
+            $html[] = $attributeKey . '="' . $this->escapeHtmlAttr($attributeValue, false) . '"';
         }
         return join(' ', $html);
     }
