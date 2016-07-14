@@ -480,6 +480,11 @@ class AdvancedPricing extends AbstractModifier
                                         'dataType' => Number::NAME,
                                         'label' => __('Quantity'),
                                         'dataScope' => 'price_qty',
+                                        'validation' => [
+                                            'required-entry' => true,
+                                            'validate-greater-than-zero' => true,
+                                            'validate-digits' => true,
+                                        ],
                                     ],
                                 ],
                             ],
@@ -497,6 +502,11 @@ class AdvancedPricing extends AbstractModifier
                                         'addbefore' => $this->locator->getStore()
                                                                      ->getBaseCurrency()
                                                                      ->getCurrencySymbol(),
+                                        'validation' => [
+                                            'required-entry' => true,
+                                            'validate-greater-than-zero' => true,
+                                            'validate-number' => true,
+                                        ],
                                     ],
                                 ],
                             ],

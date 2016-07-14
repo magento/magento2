@@ -51,4 +51,12 @@ class Remote implements AssetInterface
     {
         return $this->contentType;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSourceContentType()
+    {
+        return $this->getContentType();
+    }
 }
