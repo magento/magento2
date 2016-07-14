@@ -128,4 +128,16 @@ class FinalPriceBox extends BasePriceBox
     {
         return parent::getCacheKey() . ($this->getData('list_category_page') ? '-list-category-page': '');
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        $cacheKeys = parent::getCacheKeyInfo();
+        $cacheKeys['display_minimal_price'] = $this->getDisplayMinimalPrice();
+        return $cacheKeys;
+    }
 }
