@@ -132,8 +132,12 @@ class Content extends \Magento\Backend\Block\Widget
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
                 $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
-                $fileHandler = $directory->stat($this->_mediaConfig->getMediaPath($image['file']));
-                $image['size'] = $fileHandler['size'];
+                try {
+                    $fileHandler = $directory->stat($this->_mediaConfig->getMediaPath($image['file']));
+                    $image['size'] = $fileHandler['size'];
+                } catch (\Magento\Framework\Exception\FileSystemException $e) {
+                    $image['size'] = 0;
+                }
             }
             return $this->_jsonEncoder->encode($images);
         }
