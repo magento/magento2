@@ -121,7 +121,7 @@ class SystemBackupTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(true);
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')
-            ->with(('system/backup/type'), ('store'))
+            ->with('system/backup/type', 'store')
             ->willReturn($type);
 
         $this->backupFactoryMock->expects($this->once())->method('create')->willReturn($this->backupDbMock);
