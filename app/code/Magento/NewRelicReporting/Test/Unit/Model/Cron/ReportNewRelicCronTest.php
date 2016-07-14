@@ -53,6 +53,11 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
     protected $deploymentsModel;
 
     /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
+    /**
      * Setup
      *
      * @return void
@@ -102,13 +107,15 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
         $this->deploymentsFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->deploymentsModel);
+        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
 
         $this->model = new ReportNewRelicCron(
             $this->config,
             $this->collect,
             $this->counter,
             $this->cronEventFactory,
-            $this->deploymentsFactory
+            $this->deploymentsFactory,
+            $this->logger
         );
     }
 
@@ -229,6 +236,7 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
             ->method('sendRequest');
 
         $this->cronEventModel->expects($this->once())->method('sendRequest')->willThrowException(new \Exception());
+        $this->logger->expects($this->never())->method('critical');
 
         $this->deploymentsModel->expects($this->any())
             ->method('setDeployment');

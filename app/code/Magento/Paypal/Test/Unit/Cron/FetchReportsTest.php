@@ -29,6 +29,11 @@ class FetchReportsTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManagerMock;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
     protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
@@ -37,6 +42,7 @@ class FetchReportsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
 
         $this->objectManager = new ObjectManager($this);
         $this->fetchReports = $this->objectManager->getObject(
@@ -68,6 +74,7 @@ class FetchReportsTest extends \PHPUnit_Framework_TestCase
 
         $settlementMock->expects($this->once())->method('getSftpCredentials')->with(true)->willReturn($sftpCredentials);
         $settlementMock->expects($this->any())->method('fetchAndSave')->willThrowException(new \Exception);
+        $this->logger->expects($this->never())->method('critical');
 
         $this->fetchReports->execute();
     }
