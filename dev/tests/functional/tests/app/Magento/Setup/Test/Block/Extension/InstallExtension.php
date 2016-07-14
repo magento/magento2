@@ -25,7 +25,7 @@ class InstallExtension extends Block
     protected $installButton = "[ng-click*='update']";
 
     /**
-     * Click to 'Install' button
+     * Click to 'Install' button.
      *
      * @return void
      */

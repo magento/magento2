@@ -30,7 +30,7 @@ abstract class AbstractGrid extends Block
     protected $extensionName = "//table[contains(@class, 'data-grid')]//tr//td//span[contains(text(), '#extensionName#')]";
 
     /**
-     * Click 'Next Page' button
+     * Click 'Next Page' button.
      *
      * @return bool
      */
@@ -47,7 +47,7 @@ abstract class AbstractGrid extends Block
     }
 
     /**
-     * Check that there is extension on grid
+     * Check that there is extension on grid.
      *
      * @param string $name
      * @return bool

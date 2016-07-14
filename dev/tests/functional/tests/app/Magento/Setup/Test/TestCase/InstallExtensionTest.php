@@ -46,6 +46,15 @@ class InstallExtensionTest extends Injectable
         $this->setupWizard = $setupWizard;
     }
 
+    /**
+     * @param FixtureFactory $fixtureFactory
+     * @param AssertFindExtensionOnGrid $assertFindExtensionOnGrid
+     * @param AssertSuccessfulReadinessCheck $assertReadiness
+     * @param AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck
+     * @param AssertSuccessMessage $assertSuccessMessage
+     * @param array $installExtension
+     * @return void
+     */
     public function test(
         FixtureFactory $fixtureFactory,
         AssertFindExtensionOnGrid $assertFindExtensionOnGrid,
@@ -92,7 +101,7 @@ class InstallExtensionTest extends Injectable
         $this->setupWizard->getCreateBackup()->clickNext();
 
         // Install Extension
-        $assertExtensionAndVersionCheck->processAssert($this->setupWizard, $extension, '100.1.0-rc3');
+        $assertExtensionAndVersionCheck->processAssert($this->setupWizard, $extension, $version);
         $this->setupWizard->getInstallExtension()->clickInstallButton();
         $assertSuccessMessage->processAssert($this->setupWizard, $extension);
 
@@ -104,10 +113,11 @@ class InstallExtensionTest extends Injectable
     }
 
     /**
-     * Find Extension on the grid by name
+     * Find Extension on the grid by name.
      *
      * @param AbstractGrid $grid
      * @param string $name
+     * @return void
      */
     protected function findExtensionOnGrid(AbstractGrid $grid, $name)
     {

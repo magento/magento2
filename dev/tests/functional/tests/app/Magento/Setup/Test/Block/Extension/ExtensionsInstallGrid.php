@@ -9,7 +9,7 @@ namespace Magento\Setup\Test\Block\Extension;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Extensions Install Grid
+ * Extensions Install Grid.
  */
 class ExtensionsInstallGrid extends AbstractGrid
 {
@@ -24,9 +24,10 @@ class ExtensionsInstallGrid extends AbstractGrid
     protected $extensionSelectVersion = "//table[contains(@class, 'data-grid')]//tr//td//span[contains(text(), '#extensionName#')]//..//..//td//span[contains(@class, 'data-grid-data')]//select";
 
     /**
-     * Click to Install extension
+     * Click to Install extension.
      *
      * @param string $name
+     * @return void
      */
     public function clickInstall($name)
     {
@@ -37,25 +38,22 @@ class ExtensionsInstallGrid extends AbstractGrid
     }
 
     /**
-     * Choose version of extension to install
+     * Choose version of extension to install.
      *
      * @param string $name
      * @param string $version
+     * @return void
      */
     public function chooseExtensionVersion($name, $version)
     {
         $select = $this->_rootElement->find(
             str_replace('#extensionName#', $name, $this->extensionSelectVersion),
             Locator::SELECTOR_XPATH,
-            'select'
+            'strictselect'
         );
 
         if ($select->isVisible()) {
-            $a = 1;
             $select->setValue($version);
-//            $select->click();
-//            $option = $select->find("//option[@value='" . $version . "']", Locator::SELECTOR_XPATH);
-//            $option->click();
         }
     }
 }
