@@ -11,15 +11,15 @@ use Magento\Mtf\Client\Locator;
 /**
  * Class Modules
  */
-class Modules extends Block
+class ModuleManagement extends Block
 {
     /**
      * @var string
      */
-    protected $upgrade = ".setup-home-item-component";
+    protected $moduleManagement = ".setup-home-item-component";
 
     public function clickModules()
     {
-        $this->_rootElement->find($this->upgrade, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->moduleManagement, Locator::SELECTOR_CSS)->click();
     }
 }

@@ -16,7 +16,7 @@ class AssertModule extends AbstractConstraint
     public function processAssert(SetupWizard $setupWizard, $moduleName)
     {
         \PHPUnit_Framework_Assert::assertTrue(
-            $setupWizard->getModulesGrid()->findByName($moduleName)->isVisible(),
+            $setupWizard->getModuleGrid()->findModuleByName($moduleName)->isVisible(),
             'Module was not found in grid.'
         );
     }
