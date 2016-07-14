@@ -93,7 +93,7 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
                     if (array_key_exists($key, $data) || $this->getRouteParam($key)) {
                         continue;
                     }
-                    $data[$this->getEscaper()->escapeUrl($key)] = $this->getEscaper()->escapeUrl($value);
+                    $data[$key] = $value;
                 }
                 foreach ($this->request->getQuery() as $key => $value) {
                     $this->queryParamsResolver->setQueryParam($key, $value);
@@ -111,9 +111,20 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
                 $this->setRouteParam($key, $value);
             } else {
                 if (is_object($value)) {
-                    $this->setRouteParam($this->getEscaper()->escapeUrl($key), $value);
+                    if ($this->getData('escape_params')) {
+                        $this->setRouteParam($this->getEscaper()->escapeUrl($key), $value);
+                    } else {
+                        $this->setRouteParam($key, $value);
+                    }
                 } else {
-                    $this->setRouteParam($this->getEscaper()->escapeUrl($key), $this->getEscaper()->escapeUrl($value));
+                    if ($this->getData('escape_params')) {
+                        $this->setRouteParam(
+                            $this->getEscaper()->escapeUrl($key),
+                            $this->getEscaper()->escapeUrl($value)
+                        );
+                    } else {
+                        $this->setRouteParam($key, $value);
+                    }
                 }
             }
         }
