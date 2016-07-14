@@ -867,6 +867,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private function createUrl($routePath = null, array $routeParams = null)
     {
         $escapeQuery = false;
+        $escapeParams = true;
 
         /**
          * All system params should be unset before we call getRouteUrl
@@ -884,6 +885,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $escapeQuery = $routeParams['_escape'];
             unset($routeParams['_escape']);
         }
+
+        if (isset($routeParams['_escape_params'])) {
+            $escapeParams = $routeParams['_escape_params'];
+            unset($routeParams['_escape_params']);
+        }
+        $this->getRouteParamsResolver()->setData('escape_params', $escapeParams);
 
         $query = null;
         if (isset($routeParams['_query'])) {
@@ -929,6 +936,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             $url .= '#' . $this->getEscaper()->escapeUrl($fragment);
         }
         $this->getRouteParamsResolver()->unsetData('secure');
+        $this->getRouteParamsResolver()->unsetData('escape_params');
 
         return $url;
     }
