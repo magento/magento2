@@ -77,12 +77,11 @@ class Ga extends \Magento\Framework\View\Element\Template
         $pageName = trim($this->getPageName());
         $optPageURL = '';
         if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
-            $optPageURL = ", '{$this->escapeJs($pageName)}'";
+            $optPageURL = ", '" . htmlspecialchars($pageName, ENT_COMPAT, 'UTF-8', false) . "'";
         }
 
-        return "\nga('create', '{$this->escapeJs(
-            $accountId
-        )}', 'auto');\nga('send', 'pageview'{$optPageURL});\n";
+        return "\nga('create', '" . htmlspecialchars($accountId, ENT_COMPAT, 'UTF-8', false)
+            . ", 'auto');\nga('send', 'pageview'{$optPageURL});\n";
     }
 
     /**
