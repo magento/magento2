@@ -25,6 +25,7 @@
                 <can_refund>1</can_refund>
                 <can_void>1</can_void>
                 <can_cancel>1</can_cancel>
+                <can_edit>1</can_edit>
                 <cctypes>AE,VI,MC,DI,JCB,CUP,DN,MI</cctypes>
                 <useccv>1</useccv>
                 <cctypes_braintree_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP"}]]></cctypes_braintree_mapper>
