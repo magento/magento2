@@ -18,6 +18,9 @@ class ModuleManagement extends Block
      */
     protected $moduleManagement = ".setup-home-item-component";
 
+    /**
+     * Click on Modules section.
+     */
     public function clickModules()
     {
         $this->_rootElement->find($this->moduleManagement, Locator::SELECTOR_CSS)->click();

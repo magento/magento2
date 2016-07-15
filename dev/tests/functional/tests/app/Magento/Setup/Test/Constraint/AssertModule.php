@@ -13,6 +13,12 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
  */
 class AssertModule extends AbstractConstraint
 {
+    /**
+     * Process asserting.
+     *
+     * @param SetupWizard $setupWizard
+     * @param string $moduleName
+     */
     public function processAssert(SetupWizard $setupWizard, $moduleName)
     {
         \PHPUnit_Framework_Assert::assertTrue(
@@ -21,6 +27,9 @@ class AssertModule extends AbstractConstraint
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function toString()
     {
         return 'module was found in grid.';

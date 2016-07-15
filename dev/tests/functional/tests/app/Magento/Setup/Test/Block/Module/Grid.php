@@ -22,25 +22,43 @@ class Grid extends Block
     protected $selectAction = '.action-select';
 
     /**
-     * Module name xPath.
+     * Module name path.
      *
      * @var string
      */
     protected $componentName = '//table/tbody/tr/td/span[contains(text(), \'#placeholder#\')]';
 
     /**
-     * Select
+     * Select path.
      *
      * @var string
      */
-    protected $select = '//table[contains(@class, \'data-grid\')]//tbody//tr//td//span[contains(text(), \'#placeholder#\')]//..//..//td//div[contains(@class, \'action-select\')]';
+    protected $select = '//table[contains(@class, \'data-grid\')]//*//span[contains(text(), \'#placeholder#\')]//..//..//td//div[contains(@class, \'action-select\')]';
 
     /**
+     * Next button selector.
+     *
      * @var string
      */
     protected $next = '.action-next';
 
     /**
+     * Item enable selector.
+     *
+     * @var string
+     */
+    protected $itemEnable = '.item-enable';
+
+    /**
+     * Item disable selector.
+     *
+     * @var string
+     */
+    protected $itemDisable = '.item-disable';
+
+    /**
+     * Click Next button.
+     *
      * @return void
      */
     public function clickNext()
@@ -49,6 +67,8 @@ class Grid extends Block
     }
 
     /**
+     * Check if Next page button is available.
+     *
      * @return bool
      */
     public function isClickNextAvailable()
@@ -57,6 +77,8 @@ class Grid extends Block
     }
 
     /**
+     * Find module by it's name.
+     *
      * @param string $name
      * @return \Magento\Mtf\Client\ElementInterface
      */
@@ -74,6 +96,8 @@ class Grid extends Block
     }
 
     /**
+     * Retrieve module by it's name.
+     *
      * @param string $name
      * @return \Magento\Mtf\Client\ElementInterface
      */
@@ -84,31 +108,43 @@ class Grid extends Block
         return $this->_rootElement->find($componentName, Locator::SELECTOR_XPATH);
     }
 
+    /**
+     * Check if Module is enabled.s
+     *
+     * @param string $name
+     * @return bool
+     */
     public function isModuleEnabled($name)
     {
         $element = $this->findModuleByName($name);
         $select = str_replace('#placeholder#', $name, $this->select);
 
-        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
-
         return $element->find($select, Locator::SELECTOR_XPATH)->find('.item-disable')->isVisible();
     }
 
+    /**
+     * Disable Module.
+     *
+     * @param string $name
+     */
     public function disableModule($name)
     {
         $element = $this->findModuleByName($name);
         $select = str_replace('#placeholder#', $name, $this->select);
 
-        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
-        $element->find($select, Locator::SELECTOR_XPATH)->find('.item-disable')->click();
+        $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemDisable)->click();
     }
 
+    /**
+     * Enable Module.
+     *
+     * @param $name
+     */
     public function enableModule($name)
     {
         $element = $this->findModuleByName($name);
         $select = str_replace('#placeholder#', $name, $this->select);
 
-        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
-        $element->find($select, Locator::SELECTOR_XPATH)->find('.item-enable')->click();
+        $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemEnable)->click();
     }
 }
