@@ -46,7 +46,7 @@ abstract class AbstractGrid extends Block
     {
         $result = false;
         while (true) {
-            if ($result = $this->isExtensionOnGrid($extension->getExtension()) || !$this->clickNextPageButton()) {
+            if (($result = $this->isExtensionOnGrid($extension->getExtension())) || !$this->clickNextPageButton()) {
                 break;
             }
         }
