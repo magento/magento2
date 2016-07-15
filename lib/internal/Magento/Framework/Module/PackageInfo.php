@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**
