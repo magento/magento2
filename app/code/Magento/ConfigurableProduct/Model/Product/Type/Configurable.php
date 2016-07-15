@@ -561,6 +561,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 }
                 $cache = [];
                 $tags = ['price', self::TYPE_CODE . '_' . $product->getId()];
+
+                $collection->addTierPriceData();
                 foreach ($collection as $item) {
                     /** @var \Magento\Catalog\Model\Product $item */
                     $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
