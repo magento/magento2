@@ -94,10 +94,6 @@ class ReviewTest extends AbstractModifierTest
         $this->productMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn($productId);
-        $this->moduleManager->expects($this->exactly(3))
-            ->method('isOutputEnabled')
-            ->with('Magento_Review')
-            ->willReturn(1);
 
         $this->assertArrayHasKey($productId, $this->getModel()->modifyData([]));
         $this->assertArrayHasKey(Review::DATA_SOURCE_DEFAULT, $this->getModel()->modifyData([])[$productId]);
