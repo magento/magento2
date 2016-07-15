@@ -45,7 +45,7 @@ class CreateProductsStep implements TestStepInterface
      * @param array $products
      * @param array $data [optional]
      */
-    public function __construct(FixtureFactory $fixtureFactory, $products, array $data = [])
+    public function __construct(FixtureFactory $fixtureFactory, array $products, array $data = [])
     {
         $this->products = $products;
         $this->data = $data;

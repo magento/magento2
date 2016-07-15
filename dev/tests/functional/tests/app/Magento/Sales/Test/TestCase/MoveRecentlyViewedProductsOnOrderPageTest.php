@@ -61,7 +61,7 @@ class MoveRecentlyViewedProductsOnOrderPageTest extends Injectable
      * @param array $products
      * @return array
      */
-    public function test(Customer $customer, $products)
+    public function test(Customer $customer, array $products)
     {
         // Preconditions
         $products = $this->objectManager
