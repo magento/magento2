@@ -24,7 +24,7 @@ class Home extends Block
      *
      * @var string
      */
-    protected $componentManager = '.setup-home-item-component';
+    protected $extensionManager = '.setup-home-item-extension';
 
     /**
      * Click on 'System Upgrade' button.
@@ -43,6 +43,6 @@ class Home extends Block
      */
     public function clickComponentManager()
     {
-        $this->_rootElement->find($this->componentManager, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->extensionManager, Locator::SELECTOR_CSS)->click();
     }
 }
