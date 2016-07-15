@@ -25,6 +25,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation
+     * @param ScopeResolverInterface $scopeResolver
      * @param string $connectionName
      */
     public function __construct(

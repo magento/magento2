@@ -57,11 +57,12 @@ class FlushCacheByTags
         \Closure $proceed,
         $object = null
     ) {
-        if ($object instanceof \Magento\Framework\Model\AbstractMode) {
+        $tags = [];
+        if ($object instanceof \Magento\Framework\Model\AbstractModel) {
             $tags = $object->getIdentities();
         }
         $result = $proceed($object);
-        if ($object instanceof \Magento\Framework\Model\AbstractMode) {
+        if ($object instanceof \Magento\Framework\Model\AbstractModel) {
             $this->cleanCacheByTags($tags);
         }
         return $result;
@@ -81,7 +82,8 @@ class FlushCacheByTags
         \Closure $proceed,
         $object = null
     ) {
-        if ($object instanceof \Magento\Framework\Model\AbstractMode) {
+        $tags = [];
+        if ($object instanceof \Magento\Framework\Model\AbstractModel) {
             $tags = $object->getIdentities();
         }
         $result = $proceed($object);

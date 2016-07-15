@@ -537,10 +537,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 )
             );
             $collection = $this->getUsedProductCollection($product);
-            $data = $this->getCache()->load($key);
+            $data = unserialize($this->getCache()->load($key));
             if (!empty($data)) {
                 $usedProducts = [];
-                foreach (unserialize($data) as $item) {
+                foreach ($data as $item) {
                     $productItem = $collection->getNewEmptyItem()->setData($item);
                     $usedProducts[] = $productItem;
                 }

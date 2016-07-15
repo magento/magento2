@@ -223,6 +223,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /**
      * Retrieve resource model mock instance and its adapter
      *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     protected function _prepareResourceModel()
