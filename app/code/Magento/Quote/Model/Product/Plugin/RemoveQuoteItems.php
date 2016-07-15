@@ -26,6 +26,7 @@ class RemoveQuoteItems
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * TODO: reimplement with after plugin
      */
     public function aroundDelete(
         \Magento\Catalog\Model\ResourceModel\Product $subject,
