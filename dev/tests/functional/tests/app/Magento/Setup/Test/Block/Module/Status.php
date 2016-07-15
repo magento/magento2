@@ -9,13 +9,29 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class Disable
+ * Class Status
  */
-class Disable extends Block
+class Status extends Block
 {
+    /**
+     * Button selector.
+     *
+     * @var string
+     */
     protected $button = '.btn-large';
 
+    /**
+     * Click on Disable Element.
+     */
     public function clickDisable()
+    {
+        $this->_rootElement->find($this->button, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Click en Enable element.
+     */
+    public function clickEnable()
     {
         $this->_rootElement->find($this->button, Locator::SELECTOR_CSS)->click();
     }

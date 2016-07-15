@@ -39,6 +39,15 @@ class EnableDisableModuleTest extends Injectable
         $this->setupWizard = $setupWizard;
     }
 
+    /**
+     * Test method.
+     *
+     * @param FixtureFactory $fixtureFactory
+     * @param AssertModule $assertModule
+     * @param AssertSuccessfulReadinessCheck $assertReadiness
+     * @param AssertSuccessMessage $assertSuccessMessage
+     * @param array $module
+     */
     public function test(
         FixtureFactory $fixtureFactory,
         AssertModule $assertModule,
@@ -67,19 +76,11 @@ class EnableDisableModuleTest extends Injectable
         // Search for module
         $assertModule->processAssert($this->setupWizard, $module['moduleName']);
 
-        if (false && !$this->setupWizard->getModuleGrid()->isModuleEnabled($module['moduleName'])) {
-            $this->setupWizard->getModuleGrid()->enableModule($module['moduleName']);
-
-            // Readiness Check
-            $this->setupWizard->getReadiness()->clickReadinessCheck();
-            $assertReadiness->processAssert($this->setupWizard);
-            $this->setupWizard->getReadiness()->clickNext();
-
-            // Create Backup page
-            $this->setupWizard->getCreateBackup()->fill($createBackupFixture);
-            $this->setupWizard->getCreateBackup()->clickNext();
+        if (!$this->setupWizard->getModuleGrid()->isModuleEnabled($module['moduleName'])) {
+            $this->fail('Module is already disabled.');
         }
 
+        // Find and disable Module in the Grid.
         $this->setupWizard->getModuleGrid()->disableModule($module['moduleName']);
 
         // Readiness Check
@@ -92,9 +93,57 @@ class EnableDisableModuleTest extends Injectable
         $this->setupWizard->getCreateBackup()->clickNext();
 
         // Disable Module
-        $this->setupWizard->getModuleDisable()->clickDisable();
+        $this->setupWizard->getModuleStatus()->clickDisable();
 
         // Assert for Success message
         $assertSuccessMessage->processAssert($this->setupWizard);
+
+        // Return to Setup Tool
+        $this->setupWizard->getSuccessMessage()->clickBackToSetup();
+
+        // Open Modules page
+        $this->setupWizard->getModuleManagement()->clickModules();
+
+        // Search for Module
+        $assertModule->processAssert($this->setupWizard, $module['moduleName']);
+
+        // Enable Module
+        $this->enableModule($createBackupFixture, $assertReadiness, $assertSuccessMessage, $module);
+    }
+
+    /**
+     * Enabling Module.
+     *
+     * @param mixed $createBackupFixture
+     * @param AssertSuccessfulReadinessCheck $assertReadiness
+     * @param AssertSuccessMessage $assertSuccessMessage
+     * @param array $module
+     */
+    private function enableModule(
+        $createBackupFixture,
+        AssertSuccessfulReadinessCheck $assertReadiness,
+        AssertSuccessMessage $assertSuccessMessage,
+        array $module
+    ) {
+        // Find and enable Module in the Grid.
+        $this->setupWizard->getModuleGrid()->enableModule($module['moduleName']);
+
+        // Readiness Check
+        $this->setupWizard->getReadiness()->clickReadinessCheck();
+        $assertReadiness->processAssert($this->setupWizard);
+        $this->setupWizard->getReadiness()->clickNext();
+
+        // Create Backup page
+        $this->setupWizard->getCreateBackup()->fill($createBackupFixture);
+        $this->setupWizard->getCreateBackup()->clickNext();
+
+        // Enable Module
+        $this->setupWizard->getModuleStatus()->clickEnable();
+
+        // Assert for Success message
+        $assertSuccessMessage->processAssert($this->setupWizard);
+
+        // Return to Setup Tool
+        $this->setupWizard->getSuccessMessage()->clickBackToSetup();
     }
 }
