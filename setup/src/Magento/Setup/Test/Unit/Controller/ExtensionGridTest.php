@@ -6,9 +6,9 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Controller\ExtensionGrid;
+use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
@@ -16,9 +16,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class ExtensionGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ComposerInformation|MockObject
+     * @var Extension|MockObject
      */
-    private $composerInformation;
+    private $gridExtension;
 
     /**
      * Controller
@@ -50,8 +50,8 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
     /**#@+
      * Formatted date and time to return from mock
      */
-    const FORMATTED_DATE = 'Jan 15, 1980';
-    const FORMATTED_TIME = '1:55:55 PM';
+    const FORMATTED_DATE = 'Jan 15 1980';
+    const FORMATTED_TIME = '01:55PM';
     /**#@-*/
 
     public function setUp()
@@ -72,21 +72,25 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
             'countOfUpdate' => 1
         ];
         $this->extensionData = [
-            'magento/sample-module-one' => [
+            [
                 'name' => 'magento/sample-module-one',
                 'type' => 'magento2-module',
-                'version' => '1.0.0'
+                'version' => '1.0.0',
+                'update' => false,
+                'uninstall' => true,
+                'vendor' => 'magento',
             ]
         ];
 
-        $this->composerInformation = $this->getMock(ComposerInformation::class, [], [], '', false);
+
         $this->packagesData = $this->getMock(PackagesData::class, [], [], '', false);
         $this->packagesAuth = $this->getMock(PackagesAuth::class, [], [], '', false);
+        $this->gridExtension = $this->getMock(Extension::class, [], [], '', false);
 
         $this->controller = new ExtensionGrid(
-            $this->composerInformation,
             $this->packagesData,
-            $this->packagesAuth
+            $this->packagesAuth,
+            $this->gridExtension
         );
     }
 
@@ -99,17 +103,13 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
 
     public function testExtensionsAction()
     {
+        $this->gridExtension->expects($this->once())
+            ->method('getList')
+            ->willReturn($this->extensionData);
+
         $this->packagesData->expects($this->once())
             ->method('syncPackagesData')
             ->willReturn($this->lastSyncData);
-
-        $this->packagesData->expects($this->once())
-            ->method('getInstalledExtensions')
-            ->willReturn($this->extensionData);
-
-        $this->composerInformation->expects($this->once())
-            ->method('isPackageInComposerJson')
-            ->willReturn(true);
 
         $this->packagesAuth->expects($this->once())
              ->method('getAuthJsonData')
@@ -125,15 +125,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
-        $expected = [[
-            'name' => 'magento/sample-module-one',
-            'type' => 'magento2-module',
-            'version' => '1.0.0',
-            'update' => false,
-            'uninstall' => true,
-            'vendor' => 'magento',
-        ]];
-        $this->assertEquals($expected, $variables['extensions']);
+        $this->assertEquals($this->extensionData, $variables['extensions']);
         $this->assertArrayHasKey('total', $variables);
         $this->assertEquals(1, $variables['total']);
         $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);

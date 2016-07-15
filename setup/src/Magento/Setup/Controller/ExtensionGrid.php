@@ -6,23 +6,18 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Setup\Model\Grid;
 
 /**
  * Controller for extension grid tasks
  */
 class ExtensionGrid extends AbstractActionController
 {
-    /**
-     * @var \Magento\Framework\Composer\ComposerInformation
-     */
-    private $composerInformation;
-
     /**
      * @var PackagesData
      */
@@ -34,18 +29,23 @@ class ExtensionGrid extends AbstractActionController
     private $packagesAuth;
 
     /**
-     * @param ComposerInformation $composerInformation
+     * @var Grid\Extension
+     */
+    private $gridExtension;
+
+    /**
      * @param PackagesData $packagesData
      * @param PackagesAuth $packagesAuth
+     * @param Grid\Extension $gridExtension
      */
     public function __construct(
-        ComposerInformation $composerInformation,
         PackagesData $packagesData,
-        PackagesAuth $packagesAuth
+        PackagesAuth $packagesAuth,
+        Grid\Extension $gridExtension
     ) {
-        $this->composerInformation = $composerInformation;
         $this->packagesData = $packagesData;
         $this->packagesAuth = $packagesAuth;
+        $this->gridExtension = $gridExtension;
     }
 
     /**
@@ -79,30 +79,13 @@ class ExtensionGrid extends AbstractActionController
             }
         }
 
-        $extensions = $this->packagesData->getInstalledExtensions();
-
-        foreach ($extensions as &$extension) {
-            $extension['update'] = false;
-            $extension['uninstall'] = false;
-            if ($this->composerInformation->isPackageInComposerJson($extension['name'])) {
-                $extension['uninstall'] = true;
-                if (isset($lastSyncData['packages'][$extension['name']]['latestVersion'])
-                    && version_compare(
-                        $lastSyncData['packages'][$extension['name']]['latestVersion'],
-                        $extension['version'],
-                        '>'
-                    )) {
-                    $extension['update'] = true;
-                }
-            }
-            $parts = explode('/', $extension['name']);
-            $extension['vendor'] = $parts[0];
-        }
+        $this->gridExtension->setLastSyncData($lastSyncData);
+        $extensions = $this->gridExtension->getList();
 
         return new JsonModel(
             [
                 'success' => true,
-                'extensions' => array_values($extensions),
+                'extensions' => $extensions,
                 'total' => count($extensions),
                 'lastSyncData' => $lastSyncData,
                 'error' => $error
