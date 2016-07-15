@@ -138,12 +138,18 @@ class PackagesData
             'date' => $timezone->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::MEDIUM,
-                \IntlDateFormatter::NONE
+                \IntlDateFormatter::NONE,
+                null,
+                null,
+                'd MMM Y'
             ),
             'time' => $timezone->formatDateTime(
                 new \DateTime('@'.$syncDate),
                 \IntlDateFormatter::NONE,
-                \IntlDateFormatter::MEDIUM
+                \IntlDateFormatter::MEDIUM,
+                null,
+                null,
+                'hh:mma'
             ),
         ];
     }
@@ -312,19 +318,6 @@ class PackagesData
         } catch (\Exception $e) {
             throw new \RuntimeException('Error in getting new packages to install');
         }
-    }
-
-    /**
-     * Retrieve list of installed extensions
-     *
-     * @return array
-     */
-    public function getInstalledExtensions()
-    {
-        return array_intersect_key(
-            $this->composerInformation->getInstalledMagentoPackages(),
-            $this->composerInformation->getRootPackage()->getRequires()
-        );
     }
 
     /**

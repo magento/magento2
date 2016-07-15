@@ -21,27 +21,32 @@
         <div class="extension-manager-content">
             <ul class="extension-manager-items row">
                 <li class="item col-m-4">
-                    <div class="item-title">New Updates</div>
                     <div class="item-number">{{countOfUpdate}}</div>
+                    <div class="item-title">Updates<br />Available</div>
+                    <button ui-sref="root.update" href="#update-extension-grid"
+                            ng-class="{'disabled' : !countOfUpdate}"
+                            type="button" class="btn">
+                        Review Updates
+                    </button>
                 </li>
                 <li class="item col-m-4">
-                    <div class="item-title">New Purchases</div>
                     <div class="item-number">{{countOfInstall}}</div>
+                    <div class="item-title">Products<br />Ready to Install</div>
                     <div class="item-install">
-                        <button ng-show="!enabledInstall" type="button" class="btn disabled">Install</button>
                         <button ui-sref="root.install" href="#install-extension-grid"
-                                ng-show="enabledInstall" type="button" class="btn">
-                            Install
+                                ng-class="{'disabled' : !enabledInstall}"
+                                type="button" class="btn">
+                            Review and Install
                         </button>
                     </div>
                 </li>
                 <li class="item col-m-4">
-                    <div ng-hide="isOutOfSync" class="item-title">Last Sync</div>
+                    <div ng-hide="isOutOfSync" class="item-title">Last Refresh at {{lastSyncTime}} on </div>
                     <div ng-hide="isOutOfSync" class="item-date">
-                        at {{lastSyncTime}} on {{lastSyncDate}}
+                        {{lastSyncDate}}
                     </div>
                     <span ng-show="isOutOfSync">No sync history</span>
-                    <button type="button" ng-click="sync()" class="btn">Sync</button>
+                    <button type="button" ng-click="sync()" class="btn">Refresh</button>
                 </li>
             </ul>
         </div>
@@ -79,8 +84,9 @@
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3">
-                <div class="admin__control-support-text">
-                    <span>{{total}}</span> records found
+                <div class="extension-manager-title">
+                    Installed Products
+                    <span>{{total}}</span> products
                 </div>
             </div>
             <div class="col-xs-9 admin__data-grid-pager-wrap">
@@ -167,18 +173,16 @@
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(extension)}">
                         <button class="action-select"
-                                ng-show="isAvailableUpdatePackage(extension.name) || extension.uninstall"
                                 ng-click="toggleActiveActionsCell(extension)"
                                 ng-blur="closeActiveActionsCell(extension)">
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(extension)}">
-                            <li ng-class="{'hide': !isAvailableUpdatePackage(extension.name)}"
+                            <li ng-class="{'disabled': !isAvailableUpdatePackage(extension.name)}"
                                 ng-mousedown="update(extension)">
                                 <a class="action-menu-item">Update</a>
                             </li>
-                            <li ng-class="{'hide': !extension.uninstall}"
-                                ng-mousedown="uninstall(extensions)">
+                            <li ng-mousedown="uninstall(extensions)">
                                 <a class="action-menu-item">Uninstall</a>
                             </li>
                         </ul>

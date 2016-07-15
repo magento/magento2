@@ -114,25 +114,4 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, count($latestData['installPackages']));
         $this->assertSame(1, $latestData['countOfInstall']);
     }
-
-    public function testGetInstalledExtensions()
-    {
-        $rootPackage = $this->getMock(RootPackage::class, [], ['magento/project', '2.1.0', '2']);
-
-        $rootPackage->expects($this->once())
-            ->method('getRequires')
-            ->willReturn(['magento/package-1' => '2.0.1']);
-
-        $this->composerInformation
-             ->expects($this->any())
-             ->method('getRootPackage')
-             ->willReturn($rootPackage);
-
-        $this->assertEquals(
-            [
-                'magento/package-1' => ['name' => 'magento/package-1', 'type' => 'magento2-module', 'version'=> '1.0.1'],
-            ],
-            $this->packagesData->getInstalledExtensions()
-        );
-    }
 }
