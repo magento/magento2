@@ -58,6 +58,8 @@ class ButtonTest extends \PHPUnit_Framework_TestCase
         $column->expects($this->any())
             ->method('getId')
             ->willReturn('1');
+        $this->escaperMock->expects($this->at(0))->method('escapeHtmlAttr')->willReturn('1');
+        $this->escaperMock->expects($this->at(1))->method('escapeHtmlAttr')->willReturn('bigButton');
         $column->expects($this->any())
             ->method('getIndex')
             ->willReturn('name');
