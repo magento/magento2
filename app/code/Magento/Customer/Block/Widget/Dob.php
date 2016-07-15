@@ -202,7 +202,7 @@ class Dob extends AbstractWidget
     }
 
     /**
-     * Return id
+     * Return data-validate rules
      *
      * @return string
      */
