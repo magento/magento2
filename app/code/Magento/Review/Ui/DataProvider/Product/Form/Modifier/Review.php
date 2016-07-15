@@ -10,8 +10,9 @@ namespace Magento\Review\Ui\DataProvider\Product\Form\Modifier;
  */
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Form;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Form;
 
 /**
  * Class Review
@@ -35,15 +36,24 @@ class Review extends AbstractModifier
     protected $urlBuilder;
 
     /**
+     * Module manager
+     *
+     * @var \Magento\Framework\Module\Manager
+     */
+    private $moduleManager;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      */
     public function __construct(
         LocatorInterface $locator,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        Manager $moduleManager
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -51,7 +61,7 @@ class Review extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if (!$this->locator->getProduct()->getId()) {
+        if (!($this->locator->getProduct()->getId() && $this->moduleManager->isOutputEnabled('Magento_Review'))) {
             return $meta;
         }
 
