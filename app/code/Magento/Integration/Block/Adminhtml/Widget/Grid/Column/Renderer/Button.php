@@ -87,7 +87,7 @@ class Button extends AbstractRenderer
             if ($attributeValue) {
                 $attributes[] = sprintf(
                     '%s="%s"',
-                    $attributeName, htmlspecialchars($attributeValue, ENT_COMPAT, 'UTF-8', false)
+                    $attributeName, $this->escapeHtmlAttr($attributeValue, false)
                 );
             }
         }
