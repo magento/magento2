@@ -6,12 +6,7 @@
 
 namespace Magento\Setup\Controller;
 
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleList;
-use Magento\Framework\Module\PackageInfo;
-use Magento\Framework\Module\PackageInfoFactory;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\Grid;
 
 /**
  * Controller for module grid tasks
@@ -19,52 +14,19 @@ use Magento\Setup\Model\ObjectManagerProvider;
 class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**
-     * @var ComposerInformation
-     */
-    private $composerInformation;
-
-    /**
-     * Module package info
+     * Module grid
      *
-     * @var PackageInfo
+     * @var Grid\Module
      */
-    private $packageInfo;
+    private $gridModule;
 
     /**
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
-    /**
-     * Full Module info
-     *
-     * @var FullModuleList
-     */
-    private $fullModuleList;
-
-    /**
-     * Module info
-     *
-     * @var ModuleList
-     */
-    private $moduleList;
-
-    /**
-     * @param ComposerInformation $composerInformation
-     * @param FullModuleList $fullModuleList
-     * @param ModuleList $moduleList
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param Grid\Module $gridModule
      */
     public function __construct(
-        ComposerInformation $composerInformation,
-        FullModuleList $fullModuleList,
-        ModuleList $moduleList,
-        ObjectManagerProvider $objectManagerProvider
+        Grid\Module $gridModule
     ) {
-        $this->composerInformation = $composerInformation;
-        $this->fullModuleList = $fullModuleList;
-        $this->moduleList = $moduleList;
-        $this->objectManagerProvider = $objectManagerProvider;
+        $this->gridModule = $gridModule;
     }
 
     /**
@@ -87,11 +49,7 @@ class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
      */
     public function modulesAction()
     {
-        $this->packageInfo = $this->objectManagerProvider->get()
-            ->get(PackageInfoFactory::class)
-            ->create();
-
-        $moduleList = $this->getModuleList();
+        $moduleList = $this->gridModule->getList();
 
         return new \Zend\View\Model\JsonModel(
             [
@@ -100,52 +58,5 @@ class ModuleGrid extends \Zend\Mvc\Controller\AbstractActionController
                 'total' => count($moduleList),
             ]
         );
-    }
-
-    /**
-     * Get list of installed modules (composer + direct installation)
-     *
-     * @return array
-     */
-    private function getModuleList()
-    {
-        $items = array_replace_recursive(
-            $this->composerInformation->getInstalledMagentoPackages(),
-            $this->getInstalledModules()
-        );
-
-        $items = array_filter($items, function ($item) {
-            return $item['type'] === ComposerInformation::MODULE_PACKAGE_TYPE;
-        });
-
-        array_walk($items, function (&$module, $name) {
-            $module['moduleName'] = isset($module['moduleName']) ?
-                $module['moduleName'] : $this->packageInfo->getModuleName($name);
-            $module['enable'] = $this->moduleList->has($module['moduleName']);
-            $module['vendor'] = current(explode('/', $name));
-            $module['type'] = str_replace('magento2-', '', $module['type']);
-            $module['requiredBy'] = $this->packageInfo->getRequiredBy($name);
-        });
-
-        return array_values($items);
-    }
-
-    /**
-     * Get full list of installed modules
-     *
-     * @return array
-     */
-    private function getInstalledModules()
-    {
-        $modules = [];
-        $allModules = $this->fullModuleList->getNames();
-        foreach ($allModules as $module) {
-            $name = $this->packageInfo->getPackageName($module);
-            $modules[$name]['name'] = $name;
-            $modules[$name]['type'] = ComposerInformation::MODULE_PACKAGE_TYPE;
-            $modules[$name]['version'] = $this->packageInfo->getVersion($module);
-        }
-
-        return $modules;
     }
 }
