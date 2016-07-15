@@ -95,6 +95,21 @@ class TierpriceTest extends \PHPUnit_Framework_TestCase
         $this->_model->validate($product);
     }
 
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testValidatePercentage()
+    {
+        $product = new \Magento\Framework\DataObject();
+        $product->setTierPrice(
+            [
+                ['website_id' => 0, 'cust_group' => 1, 'price_qty' => 2, 'percentage_value' => 101],
+            ]
+        );
+
+        $this->_model->validate($product);
+    }
+
     public function testPreparePriceData()
     {
         $data = [

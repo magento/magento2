@@ -8,6 +8,8 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Customer\Model\GroupManagement;
 
@@ -213,11 +215,27 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($tps[$i]->getQty(), $tpData['price_qty'], 'Qty does not match');
         }
 
+        $tierPriceExtention = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
+            ->setMethods(['setWebsiteId', 'setPercentageValue', 'getPercentageValue'])
+            ->disableOriginalConstructor()->getMock();
+        $tierPriceExtention->expects($this->any())->method('getPercentageValue')->willReturn(50);
+        $factoryMock = $this->getMockBuilder(ProductTierPriceExtensionFactory::class)->setMethods(['create'])
+            ->disableOriginalConstructor()->getMock();
+        $factoryMock->expects($this->any())->method('create')->willReturn($tierPriceExtention);
+
+        $reflection = new \ReflectionClass(get_class($this->model));
+        $reflectionProperty = $reflection->getProperty('tierPriceExtensionFactory');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $factoryMock);
+
         // test with the data retrieved as a REST object
         $tpRests = $this->model->getTierPrices($this->product);
         $this->assertNotNull($tpRests);
         $this->assertTrue(is_array($tpRests));
         $this->assertEquals(sizeof($tps), sizeof($tpRests));
+        foreach ($tpRests as $tpRest) {
+            $this->assertEquals(50, $tpRest->getExtensionAttributes()->getPercentageValue());
+        }
 
         for ($i = 0; $i < sizeof($tps); $i++) {
             $this->assertEquals(

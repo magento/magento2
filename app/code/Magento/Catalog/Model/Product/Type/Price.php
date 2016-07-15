@@ -372,8 +372,10 @@ class Price
             if (!$tierPrice->getExtensionAttributes()) {
                 $tierPrice->setExtensionAttributes($this->getTierPriceExtensionAttributes());
             }
-            $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
-            $tierPrice->getExtensionAttributes()->setWebsiteId($price['website_id']);
+            $percentageValue = isset($price['percentage_value']) ? $price['percentage_value'] : 0;
+            $websiteId = isset($price['website_id']) ? $price['website_id'] : $this->getWebsiteForPriceScope();
+            $tierPrice->getExtensionAttributes()->setPercentageValue($percentageValue);
+            $tierPrice->getExtensionAttributes()->setWebsiteId($websiteId);
             $prices[] = $tierPrice;
         }
         return $prices;
@@ -407,18 +409,20 @@ class Price
         }
 
         $allGroupsId = $this->getAllCustomerGroupsId();
+        $websiteId = $this->getWebsiteForPriceScope();
 
         // build the new array of tier prices
         $prices = [];
         foreach ($tierPrices as $price) {
+            $extensionAttributes = $price->getExtensionAttributes();
             $prices[] = [
-                'website_id' => $price->getExtensionAttributes()->getWebsiteId(),
+                'website_id' => $extensionAttributes ? $extensionAttributes->getWebsiteId() : $websiteId,
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),
                 'all_groups' => ($price->getCustomerGroupId() == $allGroupsId),
                 'price_qty' => $price->getQty(),
-                'percentage_value' => $price->getExtensionAttributes()->getPercentageValue()
+                'percentage_value' => $extensionAttributes ? $extensionAttributes->getPercentageValue() : 0
             ];
         }
         $product->setData('tier_price', $prices);

@@ -12,6 +12,38 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
 
+$tierPrices = [];
+/** @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory */
+$tierPriceFactory = $objectManager->get(\Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class);
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+            'qty' => 2,
+            'value' => 8
+        ]
+    ]
+);
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
+            'qty' => 5,
+            'value' => 5
+        ]
+    ]
+);
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+            'qty' => 3,
+            'value' => 0,
+            'percentage_value' => 50
+        ]
+    ]
+);
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->isObjectNew(true);
@@ -25,28 +57,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setWeight(1)
     ->setShortDescription("Short description")
     ->setTaxClassId(0)
-    ->setTierPrice(
-        [
-            [
-                'website_id' => 0,
-                'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                'price_qty'  => 2,
-                'price'      => 8,
-            ],
-            [
-                'website_id' => 0,
-                'cust_group' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                'price_qty'  => 5,
-                'price'      => 5,
-            ],
-            [
-                'website_id' => 0,
-                'cust_group' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
-                'price_qty'  => 3,
-                'price'      => 5,
-            ],
-        ]
-    )
+    ->setTierPrices($tierPrices)
     ->setDescription('Description with <b>html tag</b>')
     ->setMetaTitle('meta title')
     ->setMetaKeyword('meta keyword')
