@@ -11,6 +11,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Base items collection class
@@ -234,8 +235,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
-        $countSelect->columns('COUNT(*)');
+        if (!count($this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP))) {
+            $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
+            return $countSelect;
+        }
 
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $group = $this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
         return $countSelect;
     }
 
@@ -873,5 +880,28 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             }
         }
         throw new \LogicException("Main table cannot be identified.");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_fetchStrategy', '_logger', '_conn', 'extensionAttributesJoinProcessor']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_fetchStrategy = $objectManager->get(Logger::class);
+        $this->_logger = $objectManager->get(FetchStrategyInterface::class);
+        $this->_conn = $objectManager->get(ResourceConnection::class)->getConnection();
     }
 }

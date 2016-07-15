@@ -8,6 +8,8 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ConfigurableResource;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 
@@ -44,7 +46,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Catalog product type configurable
      *
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var Configurable
      */
     protected $_productTypeConfigurable;
 
@@ -61,9 +63,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable
+     * @param Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource
+     * @param Attribute $resource
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -73,9 +75,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
+        Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource,
+        Attribute $resource,
         ConfigurableResource $configurableResource = null,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -115,7 +117,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Get product type
      *
-     * @return \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @return Configurable
      */
     private function getProductType()
     {
@@ -155,9 +157,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Profiler::start('TTT1:' . __METHOD__, ['group' => 'TTT1', 'method' => __METHOD__]);
         $this->_addProductAttributes();
         \Magento\Framework\Profiler::stop('TTT1:' . __METHOD__);
-        \Magento\Framework\Profiler::start('TTT2:' . __METHOD__, ['group' => 'TTT2', 'method' => __METHOD__]);
-        $this->_addAssociatedProductFilters();
-        \Magento\Framework\Profiler::stop('TTT2:' . __METHOD__);
         \Magento\Framework\Profiler::start('TTT3:' . __METHOD__, ['group' => 'TTT3', 'method' => __METHOD__]);
         $this->_loadLabels();
         \Magento\Framework\Profiler::stop('TTT3:' . __METHOD__);
@@ -181,20 +180,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             );
             $item->setProductAttribute($productAttribute);
         }
-        return $this;
-    }
-
-    /**
-     * Add Associated Product Filters (From Product Type Instance)
-     *
-     * @return $this
-     */
-    public function _addAssociatedProductFilters()
-    {
-        $this->getProductType()->getUsedProducts(
-            $this->getProduct(),
-            $this->getColumnValues('attribute_id') // Filter associated products
-        );
         return $this;
     }
 
@@ -233,8 +218,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
             $result = $this->getConnection()->fetchAll($select);
             foreach ($result as $data) {
-                $this->getItemById($data['product_super_attribute_id'])->setLabel($data['label']);
-                $this->getItemById($data['product_super_attribute_id'])->setUseDefault($data['use_default']);
+                $item = $this->getItemById($data['product_super_attribute_id']);
+                $item->setLabel($data['label']);
+                $item->setUseDefault($data['use_default']);
             }
         }
         return $this;
@@ -294,6 +280,36 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function getProduct()
     {
         return $this->_product;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            [
+                '_product',
+                '_catalogData',
+                '_productTypeConfigurable',
+                '_storeManager',
+                'configurableResource'
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = ObjectManager::getInstance();
+        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_productTypeConfigurable = $objectManager->get(Configurable::class);
+        $this->_catalogData = $objectManager->get(\Magento\Catalog\Helper\Data::class);
+        $this->configurableResource = $objectManager->get(ConfigurableResource::class);
     }
 
     /**

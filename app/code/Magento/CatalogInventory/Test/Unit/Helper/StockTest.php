@@ -182,10 +182,10 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $stockStatusMock = $this->getMockBuilder('Magento\CatalogInventory\Model\ResourceModel\Stock\Status')
             ->disableOriginalConstructor()
-            ->setMethods(['addIsInStockFilterToCollection'])
+            ->setMethods(['addStockDataToCollection'])
             ->getMock();
         $stockStatusMock->expects($this->once())
-            ->method('addIsInStockFilterToCollection')
+            ->method('addStockDataToCollection')
             ->with($collectionMock);
         $this->statusFactoryMock->expects($this->once())
             ->method('create')

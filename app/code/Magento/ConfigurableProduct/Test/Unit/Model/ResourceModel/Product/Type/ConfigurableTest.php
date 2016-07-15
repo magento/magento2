@@ -6,12 +6,14 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
+    protected $connection;
     /**
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
      */
@@ -34,10 +36,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
 
         $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
+        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->relation = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Relation', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -58,11 +60,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(false));
 
-        $typeInstance = $this->getMockBuilder('Magento\ConfigurableProduct\Model\Product\Type\Configurable')
-            ->disableOriginalConstructor()->getMock();
-        $typeInstance->expects($this->once())->method('getUsedProductIds')->will($this->returnValue([1]));
 
-        $mainProduct->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
+        $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+
+        $this->connection->method('select')->willReturn($select);
+        $select->method('from')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+
+        $statement  = $this->getMockBuilder(\Zend_Db_Statement::class)->disableOriginalConstructor()->getMock();
+        $select->method('query')->willReturn($statement);
+        $statement->method('fetchAll')->willReturn([1]);
 
         $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
     }

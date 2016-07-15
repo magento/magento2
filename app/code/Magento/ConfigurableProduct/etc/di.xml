@@ -126,4 +126,9 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
+    <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+    </type>
 </config>
