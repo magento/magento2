@@ -1,6 +1,6 @@
 2.0.8
 =============
-* Fixed issues:
+* Fixed bugs:
     * Fixed exception when merchant resets "Product Attributes mass update" Admin form.
     * Fixed fatal error in CLI command after compilation on some environments.
     * Fixed duplicate URL keys on creating configurable product.
