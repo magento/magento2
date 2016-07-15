@@ -38,7 +38,15 @@ $tierPrices[] = $tierPriceFactory->create(
         'data' => [
             'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
             'qty' => 3,
-            'value' => 0,
+            'value' => 5
+        ]
+    ]
+);
+$tierPrices[] = $tierPriceFactory->create(
+    [
+        'data' => [
+            'customer_group_id' => \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID,
+            'qty' => 10,
             'percentage_value' => 50
         ]
     ]
