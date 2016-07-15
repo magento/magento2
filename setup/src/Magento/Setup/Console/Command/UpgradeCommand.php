@@ -7,6 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,8 +33,9 @@ class UpgradeCommand extends AbstractSetupCommand
      * Constructor
      *
      * @param InstallerFactory $installerFactory
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(InstallerFactory $installerFactory)
+    public function __construct(InstallerFactory $installerFactory, ObjectManagerProvider $objectManagerProvider)
     {
         $this->installerFactory = $installerFactory;
         parent::__construct();
