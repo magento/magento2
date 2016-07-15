@@ -8,6 +8,7 @@
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
+use Magento\Customer\Controller\Account\Confirm;
 use Magento\Customer\Helper\Address;
 use Magento\Customer\Model\Url;
 use Magento\Store\Model\ScopeInterface;
@@ -19,7 +20,7 @@ use Magento\Store\Model\ScopeInterface;
 class ConfirmTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Controller\Account\Confirm
+     * @var Confirm
      */
     protected $model;
 
@@ -307,6 +308,40 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->will($this->returnValue($this->storeMock));
 
+
+
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataManager->expects($this->once())
+            ->method('getCookie')
+            ->with('mage-cache-sessid')
+            ->willReturn(true);
+        $cookieMetadataFactory = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadata = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataFactory->expects($this->once())
+            ->method('createCookieMetadata')
+            ->willReturn($cookieMetadata);
+        $cookieMetadata->expects($this->once())
+            ->method('setPath')
+            ->with('/');
+        $cookieMetadataManager->expects($this->once())
+            ->method('deleteCookie')
+            ->with('mage-cache-sessid', $cookieMetadata);
+
+        $refClass = new \ReflectionClass(Confirm::class);
+        $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
+        $cookieMetadataManagerProperty->setAccessible(true);
+        $cookieMetadataManagerProperty->setValue($this->model, $cookieMetadataManager);
+
+        $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
+        $cookieMetadataFactoryProperty->setAccessible(true);
+        $cookieMetadataFactoryProperty->setValue($this->model, $cookieMetadataFactory);
+
         $this->model->execute();
     }
 
@@ -403,6 +438,19 @@ class ConfirmTest extends \PHPUnit_Framework_TestCase
                 ScopeInterface::SCOPE_STORE
             )
             ->willReturn($isSetFlag);
+
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataManager->expects($this->once())
+            ->method('getCookie')
+            ->with('mage-cache-sessid')
+            ->willReturn(false);
+
+        $refClass = new \ReflectionClass(Confirm::class);
+        $refProperty = $refClass->getProperty('cookieMetadataManager');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->model, $cookieMetadataManager);
 
         $this->model->execute();
     }

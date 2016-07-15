@@ -756,10 +756,6 @@
         display: none;
     }
 
-    label {
-        display: inline-block;
-    }
-
     label > input[type="radio"],
     label > input[type="checkbox"] {
         margin: -3px 3px 0 0;
@@ -3793,6 +3789,14 @@
         border-left: none !important;
     }
 
+    .rule-tree {
+        ._has-datepicker {
+            + .ui-datepicker-trigger {
+                position: static;
+            }
+        }
+    }
+
     .rule-param .label {
         color: #000;
         float: none;
@@ -3867,10 +3871,6 @@
         padding-top: 13px;
     }
 
-    // jstree
-    .jstree-default .disabled > a {
-        color: #a29c94;
-    }
     //
     //  debug.less (end)
     //  --------------------------------------
@@ -4712,6 +4712,20 @@
         .col-request_path {
             &:extend(.ellipsis all);
             &:extend(.col-150-max all);
+        }
+    }
+}
+
+.content-category-tree {
+    clear: both;
+
+    .jstree-default {
+        margin-bottom: 3rem;
+
+        .disabled {
+            > a {
+                color: #a29c94;
+            }
         }
     }
 }

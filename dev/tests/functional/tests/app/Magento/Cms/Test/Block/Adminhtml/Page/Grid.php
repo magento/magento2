@@ -102,7 +102,7 @@ class Grid extends DataGrid
             $rowItem->find($this->selectAction)->click();
             $rowItem->find($this->previewCmsPage)->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
     }
 }

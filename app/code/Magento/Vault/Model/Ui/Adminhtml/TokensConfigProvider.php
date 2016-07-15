@@ -7,8 +7,10 @@ namespace Magento\Vault\Model\Ui\Adminhtml;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Payment\Helper\Data;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
@@ -44,11 +46,6 @@ final class TokensConfigProvider
     private $session;
 
     /**
-     * @var VaultPaymentInterface
-     */
-    private $vaultPayment;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
@@ -59,14 +56,14 @@ final class TokensConfigProvider
     private $tokenUiComponentProviders;
 
     /**
-     * @var string
-     */
-    private $providerCode;
-
-    /**
      * @var DateTimeFactory
      */
     private $dateTimeFactory;
+
+    /**
+     * @var Data
+     */
+    private $paymentDataHelper;
 
     /**
      * Constructor
@@ -76,7 +73,6 @@ final class TokensConfigProvider
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param StoreManagerInterface $storeManager
-     * @param VaultPaymentInterface $vaultPayment
      * @param DateTimeFactory $dateTimeFactory
      * @param TokenUiComponentProviderInterface[] $tokenUiComponentProviders
      */
@@ -86,7 +82,6 @@ final class TokensConfigProvider
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         StoreManagerInterface $storeManager,
-        VaultPaymentInterface $vaultPayment,
         DateTimeFactory $dateTimeFactory,
         array $tokenUiComponentProviders = []
     ) {
@@ -94,16 +89,16 @@ final class TokensConfigProvider
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->session = $session;
-        $this->vaultPayment = $vaultPayment;
         $this->storeManager = $storeManager;
         $this->tokenUiComponentProviders = $tokenUiComponentProviders;
         $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
+     * @param string $vaultPaymentCode
      * @return TokenUiComponentInterface[]
      */
-    public function getTokensComponents()
+    public function getTokensComponents($vaultPaymentCode)
     {
         $result = [];
 
@@ -112,9 +107,14 @@ final class TokensConfigProvider
             return $result;
         }
 
-        $vaultProviderCode = $this->getProviderMethodCode();
+        $vaultPayment = $this->getVaultPayment($vaultPaymentCode);
+        if ($vaultPayment === null) {
+            return $result;
+        }
+
+        $vaultProviderCode = $vaultPayment->getProviderCode();
         $componentProvider = $this->getComponentProvider($vaultProviderCode);
-        if (null === $componentProvider) {
+        if ($componentProvider === null) {
             return $result;
         }
 
@@ -147,32 +147,6 @@ final class TokensConfigProvider
     }
 
     /**
-     * Get code of payment method provider
-     * @return null|string
-     */
-    private function getProviderMethodCode()
-    {
-        if (!$this->providerCode) {
-            $storeId = $this->getStoreId();
-            $this->providerCode = $storeId ? $this->vaultPayment->getProviderCode($storeId) : null;
-        }
-        return $this->providerCode;
-    }
-
-    /**
-     * Get store id for current active vault payment
-     * @return int|null
-     */
-    private function getStoreId()
-    {
-        $storeId = $this->storeManager->getStore()->getId();
-        if (!$this->vaultPayment->isActive($storeId)) {
-            return null;
-        }
-        return $storeId;
-    }
-
-    /**
      * @param string $vaultProviderCode
      * @return TokenUiComponentProviderInterface|null
      */
@@ -184,5 +158,30 @@ final class TokensConfigProvider
         return $componentProvider instanceof TokenUiComponentProviderInterface
             ? $componentProvider
             : null;
+    }
+
+    /**
+     * Get active vault payment by code
+     * @param $vaultPaymentCode
+     * @return VaultPaymentInterface|null
+     */
+    private function getVaultPayment($vaultPaymentCode)
+    {
+        $storeId = $this->storeManager->getStore()->getId();
+        $vaultPayment = $this->getPaymentDataHelper()->getMethodInstance($vaultPaymentCode);
+        return $vaultPayment->isActive($storeId) ? $vaultPayment : null;
+    }
+
+    /**
+     * Get payment data helper instance
+     * @return Data
+     * @deprecated
+     */
+    private function getPaymentDataHelper()
+    {
+        if ($this->paymentDataHelper === null) {
+            $this->paymentDataHelper = ObjectManager::getInstance()->get(Data::class);
+        }
+        return $this->paymentDataHelper;
     }
 }

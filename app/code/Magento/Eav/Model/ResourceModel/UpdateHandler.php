@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -47,6 +48,11 @@ class UpdateHandler implements AttributeInterface
      * @var ScopeResolver
      */
     private $scopeResolver;
+
+    /**
+     * @var ReadHandler
+     */
+    private $readHandler;
 
     /**
      * UpdateHandler constructor.
@@ -163,6 +169,21 @@ class UpdateHandler implements AttributeInterface
             }
             $this->attributePersistor->flush($entityType, $context);
         }
-        return $entityData;
+        return $this->getReadHandler()->execute($entityType, $entityData, $arguments);
+    }
+
+    /**
+     * Get read handler
+     *
+     * @deprecated
+     *
+     * @return ReadHandler
+     */
+    protected function getReadHandler()
+    {
+        if (!$this->readHandler) {
+            $this->readHandler = ObjectManager::getInstance()->get(ReadHandler::class);
+        }
+        return $this->readHandler;
     }
 }
