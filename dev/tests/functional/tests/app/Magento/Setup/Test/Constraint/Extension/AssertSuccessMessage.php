@@ -11,20 +11,40 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Setup\Test\Fixture\Extension;
 
 /**
- * Check extension installing is successfully.
+ * Check extension installing, updating or uninstalling is successfully.
  */
 class AssertSuccessMessage extends AbstractConstraint
 {
+    /**#@+
+     * Types of the job on extensions.
+     */
+    const TYPE_INSTALL = 1;
+    const TYPE_UNINSTALL = 2;
+    /*#@-*/
+
     /**
-     * Assert extension installing is successfully.
+     * Assert extension installing, updating or uninstalling is successfully.
      *
      * @param SetupWizard $setupWizard
      * @param Extension $extension
+     * @param int $type
      * @return void
      */
-    public function processAssert(SetupWizard $setupWizard, Extension $extension)
+    public function processAssert(SetupWizard $setupWizard, Extension $extension, $type)
     {
-        $message = "You installed:";
+        switch ($type) {
+            case self::TYPE_INSTALL:
+                $message = "You installed:";
+                break;
+
+            case self::TYPE_UNINSTALL:
+                $message = "You uninstalled:";
+                break;
+
+            default:
+                $message = '';
+        }
+
         \PHPUnit_Framework_Assert::assertContains(
             $message,
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
@@ -33,7 +53,7 @@ class AssertSuccessMessage extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertContains(
             $extension->getExtension(),
             $setupWizard->getSuccessMessage()->getUpdaterStatus(),
-            'Installed extension is incorrect.'
+            'Extension name is incorrect.'
         );
     }
 
@@ -44,6 +64,6 @@ class AssertSuccessMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return "Install Extension success message is correct.";
+        return "Extension Updater success message is correct.";
     }
 }

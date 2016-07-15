@@ -58,6 +58,7 @@ class ExtensionTest extends Injectable
      * @param AssertSuccessMessage $assertSuccessMessage
      * @param array $extensionData
      * @return void
+     * @throws \Exception
      */
     public function test(
         FixtureFactory $fixtureFactory,
@@ -67,6 +68,7 @@ class ExtensionTest extends Injectable
         AssertSuccessMessage $assertSuccessMessage,
         $extensionData = []
     ) {
+        /** @var Extension $extensionFixture */
         $extensionFixture = $fixtureFactory->create(Extension::class, ['data' => $extensionData]);
 
         // Authenticate in admin area
@@ -74,6 +76,14 @@ class ExtensionTest extends Injectable
 
         // Open Web Setup Wizard
         $this->setupWizard->open();
+
+        // Authenticate on repo.magento.com
+        if ($extensionFixture->getNeedAuthentication() === 'Yes') {
+            $this->setupWizard->getSystemConfig()->clickSystemConfig();
+            $this->setupWizard->getAuthentication()->fill($extensionFixture);
+            $this->setupWizard->getAuthentication()->clickSaveConfig();
+            $this->setupWizard->open();
+        }
 
         // Open Extension Grid with extensions to install
         $this->setupWizard->getSetupHome()->clickComponentManager();
@@ -93,13 +103,57 @@ class ExtensionTest extends Injectable
         $this->setupWizard->getCreateBackup()->clickNext();
 
         // Install Extension
-        $assertExtensionAndVersionCheck->processAssert($this->setupWizard, $extensionFixture);
-        $this->setupWizard->getInstallExtension()->clickInstallButton();
-        $assertSuccessMessage->processAssert($this->setupWizard, $extensionFixture);
+        $assertExtensionAndVersionCheck->processAssert(
+            $this->setupWizard,
+            $extensionFixture,
+            AssertExtensionAndVersionCheck::TYPE_INSTALL
+        );
+        $this->setupWizard->getUpdaterExtension()->clickStartButton();
+        $assertSuccessMessage->processAssert(
+            $this->setupWizard,
+            $extensionFixture,
+            AssertSuccessMessage::TYPE_INSTALL
+        );
 
         // Open Extension Grid with installed extensions and find installed extension
         $this->setupWizard->open();
         $this->setupWizard->getSetupHome()->clickComponentManager();
         $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extensionFixture);
+
+        // Click to uninstall extension
+        $this->setupWizard->getExtensionsGrid()->clickUninstallButton($extensionFixture);
+
+        // Readiness Check
+        $this->setupWizard->getReadiness()->clickReadinessCheck();
+        $assertReadiness->processAssert($this->setupWizard);
+        $this->setupWizard->getReadiness()->clickNext();
+
+        // Create Backup page
+        $this->setupWizard->getCreateBackup()->fill($extensionFixture);
+        $this->setupWizard->getCreateBackup()->clickNext();
+
+        // Data Option (keep or remove data of extension)
+        $this->setupWizard->getDataOption()->clickNext();
+
+        // Uninstall extension
+        $assertExtensionAndVersionCheck->processAssert(
+            $this->setupWizard,
+            $extensionFixture,
+            AssertExtensionAndVersionCheck::TYPE_UNINSTALL
+        );
+        $this->setupWizard->getUpdaterExtension()->clickStartButton();
+        $assertSuccessMessage->processAssert(
+            $this->setupWizard,
+            $extensionFixture,
+            AssertSuccessMessage::TYPE_UNINSTALL
+        );
+
+        // Check that extension is uninstalled
+        $this->setupWizard->open();
+        $this->setupWizard->getSetupHome()->clickComponentManager();
+
+        if ($this->setupWizard->getExtensionsGrid()->findExtensionOnGrid($extensionFixture)) {
+            throw new \Exception('Extension is not uninstalled!');
+        }
     }
 }

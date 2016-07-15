@@ -15,20 +15,40 @@ use Magento\Setup\Test\Fixture\Extension;
  */
 class AssertExtensionAndVersionCheck extends AbstractConstraint
 {
+    /**#@+
+     * Types of the job on extensions.
+     */
+    const TYPE_INSTALL = 1;
+    const TYPE_UNINSTALL = 2;
+    /*#@-*/
+    
     /**
      * Assert that extension and version is correct.
      *
      * @param SetupWizard $setupWizard
      * @param Extension $extension
+     * @param int $type
      * @return void
      */
-    public function processAssert(SetupWizard $setupWizard, Extension $extension)
+    public function processAssert(SetupWizard $setupWizard, Extension $extension, $type)
     {
-        $message = "We're ready to install " . $extension->getExtension() . " to " . $extension->getVersion();
+        switch ($type) {
+            case self::TYPE_INSTALL:
+                $message = "We're ready to install " . $extension->getExtension() . " to " . $extension->getVersion();
+                break;
+
+            case self::TYPE_UNINSTALL:
+                $message = "We're ready to uninstall " . $extension->getExtension();
+                break;
+
+            default:
+                $message = '';
+        }
+
         \PHPUnit_Framework_Assert::assertContains(
             $message,
-            $setupWizard->getInstallExtension()->getInstallMessage(),
-            'Updater application check is incorrect.'
+            $setupWizard->getUpdaterExtension()->getMessage(),
+            'Extension name and version check is incorrect.'
         );
     }
 

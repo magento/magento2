@@ -12,6 +12,9 @@
              entity_type="extension"
              handler_interface="Magento\Setup\Test\Handler\Extension\ExtensionInterface"
              class="Magento\Setup\Test\Fixture\Extension">
+        <field name="needAuthentication" />
+        <field name="publicKey" />
+        <field name="privateKey" />
         <field name="extension" />
         <field name="version" />
         <field name="optionsCode" />
