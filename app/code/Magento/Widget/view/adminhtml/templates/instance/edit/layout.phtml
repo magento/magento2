@@ -77,10 +77,10 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
             '<p>' +
                 '<input disabled="disabled" type="text" class="input-text entities" name="widget_instance[<%- data.id %>][<?php /* @escapeNotVerified */ echo $container['name'] ?>][entities]" value="<%- data.<?php /* @escapeNotVerified */ echo $container['name'] ?>_entities %>" readonly="readonly" />&nbsp;' +
                 '<a class="widget-option-chooser" href="javascript:void(0)" onclick="WidgetInstance.displayEntityChooser(\'<?php /* @escapeNotVerified */ echo $container['code'] ?>\', \'<?php /* @escapeNotVerified */ echo $container['name'] ?>_ids_<%- data.id %>\')"  title="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Open Chooser')) ?>">' +
-                    '<img src="<?php echo $block->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Open Chooser')); ?>" />' +
+                    '<img src="<?php echo /* @escapeNotVerified */ $block->getViewFileUrl('images/rule_chooser_trigger.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Open Chooser')); ?>" />' +
                 '</a>&nbsp;' +
                 '<a href="javascript:void(0)" onclick="WidgetInstance.hideEntityChooser(\'<?php /* @escapeNotVerified */ echo $container['name'] ?>_ids_<%- data.id %>\')" title="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Apply')); ?>">' +
-                    '<img src="<?php echo $block->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Apply')); ?>" />' +
+                    '<img src="<?php echo /* @escapeNotVerified */ $block->getViewFileUrl('images/rule_component_apply.gif') ?>" alt="<?php /* @escapeNotVerified */ echo $block->escapeJs(__('Apply')); ?>" />' +
                 '</a>' +
             '</p>'+
             '<div class="chooser"></div>'+
