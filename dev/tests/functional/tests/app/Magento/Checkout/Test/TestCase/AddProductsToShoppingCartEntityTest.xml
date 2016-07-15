@@ -76,7 +76,7 @@
             <data name="productsData/2" xsi:type="string">downloadableProduct::with_two_separately_links</data>
             <data name="productsData/3" xsi:type="string">groupedProduct::three_simple_products</data>
             <data name="productsData/4" xsi:type="string">configurableProduct::default</data>
-            <data name="productsData/5" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
+            <data name="productsData/5" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <data name="productsData/6" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <data name="cart/data/grand_total" xsi:type="string">2922.43</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />

@@ -82,7 +82,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
      * @param array $checkoutData
      * @return array
      */
-    public function test($originalProduct, $checkoutData)
+    public function test(array $originalProduct, array $checkoutData)
     {
         // Preconditions:
         $product = $this->createProduct($originalProduct);
@@ -114,7 +114,7 @@ class UpdateProductFromMiniShoppingCartEntityTest extends Injectable
      * @param array $data [optional]
      * @return FixtureInterface
      */
-    protected function createProduct($product, array $data = [])
+    protected function createProduct(array $product, array $data = [])
     {
         $createProductsStep = $this->objectManager->create(
             'Magento\Catalog\Test\TestStep\CreateProductsStep',
