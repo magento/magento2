@@ -74,6 +74,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $column->expects($this->any())
             ->method('getId')
             ->willReturn('1');
+        $this->escaperMock->expects($this->at(0))->method('escapeHtmlAttr')->willReturn('Link Caption');
         $this->linkRenderer->setColumn($column);
         $object = new \Magento\Framework\DataObject(['id' => '1']);
         $actualResult = $this->linkRenderer->render($object);
