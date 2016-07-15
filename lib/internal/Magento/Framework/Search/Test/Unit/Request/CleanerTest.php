@@ -338,7 +338,7 @@ class CleanerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Search\Request\EmptyRequestDataException
-     * @expectedExceptionMessage Request query and filter is not set
+     * @expectedExceptionMessage Request query and filters are not set
      */
     public function testCleanEmptyQueryAndFilter()
     {

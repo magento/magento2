@@ -26,10 +26,10 @@ class ModifierComposite implements ModifierInterface
     /**
      * {@inheritdoc}
      */
-    public function execute($url, $params = null, $mode = ModifierInterface::MODE_ENTIRE)
+    public function execute($url, $mode = ModifierInterface::MODE_ENTIRE)
     {
         foreach ($this->modifiers as $modifier) {
-            $url = $modifier->execute($url, $params, $mode);
+            $url = $modifier->execute($url, $mode);
         }
 
         return $url;

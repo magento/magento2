@@ -7,6 +7,7 @@
 namespace Magento\Setup\Test\Unit\Controller;
 
 use \Magento\Setup\Controller\Install;
+use Magento\Setup\Model\RequestDataConverter;
 
 class InstallTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,6 +25,11 @@ class InstallTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer\ProgressFactory
      */
     private $progressFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|RequestDataConverter
+     */
+    private $requestDataConverter;
 
     /**
      * @var Install
@@ -48,6 +54,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->progressFactory = $this->getMock('\Magento\Setup\Model\Installer\ProgressFactory', [], [], '', false);
         $this->sampleDataState = $this->getMock('\Magento\Framework\Setup\SampleData\State', [], [], '', false);
         $this->deploymentConfig = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->requestDataConverter = $this->getMock(RequestDataConverter::class, [], [], '', false);
 
         $installerFactory->expects($this->once())->method('create')->with($this->webLogger)
             ->willReturn($this->installer);
@@ -56,7 +63,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
             $installerFactory,
             $this->progressFactory,
             $this->sampleDataState,
-            $this->deploymentConfig
+            $this->deploymentConfig,
+            $this->requestDataConverter
         );
     }
 

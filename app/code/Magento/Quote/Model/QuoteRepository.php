@@ -101,7 +101,6 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
             $quote = $this->loadQuote('load', 'cartId', $cartId, $sharedStoreIds);
             $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
-            $this->quotesByCustomerId[$quote->getCustomerId()] = $quote;
         }
         return $this->quotesById[$cartId];
     }
@@ -151,13 +150,12 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
     {
         if ($quote->getId()) {
             $currentQuote = $this->get($quote->getId(), [$quote->getStoreId()]);
-            $currentQuote->setStoreId($quote->getStoreId());
-            // This part has to be refactored
-            if ($quote->getBillingAddress()) {
-                $currentQuote->setBillingAddress($quote->getBillingAddress());
+
+            foreach ($currentQuote->getData() as $key => $value) {
+                if (!$quote->hasData($key)) {
+                    $quote->setData($key, $value);
+                }
             }
-            $currentQuote->addData($quote->getData());
-            $quote = $currentQuote;
         }
 
         $this->getSaveHandler()->save($quote);

@@ -170,7 +170,7 @@ define([
          * @returns {Object} Chainable.
          */
         createHeaderTemplate: function (prop) {
-            var visible = _.isUndefined(prop.visible) ? this.visible() : prop.visible,
+            var visible = prop.visible !== false,
                 disabled = _.isUndefined(prop.disabled) ? this.disabled() : prop.disabled;
 
             return {
@@ -555,15 +555,6 @@ define([
                     rec.position = this.maxPosition;
                     this.setMaxPosition();
                 }
-
-                elems.forEach(function (record) {
-                    _.where(record.elems(),
-                        {
-                            formElement: 'select'
-                        }).forEach(function (elem) {
-                        elem.value(undefined);
-                    });
-                });
 
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + idx);
                 this.source.set(path, rec);

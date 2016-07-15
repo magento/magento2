@@ -196,16 +196,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitialize()
     {
-        $this->websiteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($this->websiteId);
-        $this->storeMock->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($this->websiteMock);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getStore')
-            ->with(true)
-            ->willReturn($this->storeMock);
         $this->customOptionMock->expects($this->once())
             ->method('setProductSku');
         $this->customOptionMock->expects($this->once())
@@ -270,9 +260,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->with(['stock_data'])
             ->willReturn(['stock_data']);
-        $this->storeManagerMock->expects($this->once())
-            ->method('hasSingleStore')
-            ->willReturn(true);
         $this->productMock->expects($this->once())
             ->method('isLockedAttribute')
             ->with('media')
@@ -300,9 +287,6 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())
             ->method('getSku')
             ->willReturn('sku');
-        $this->productMock->expects($this->once())
-            ->method('setWebsiteIds')
-            ->with([$this->websiteId]);
         $this->productMock->expects($this->any())
             ->method('getOptionsReadOnly')
             ->willReturn(false);
@@ -322,29 +306,142 @@ class HelperTest extends \PHPUnit_Framework_TestCase
      * Data provider for testMergeProductOptions
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function mergeProductOptionsDataProvider()
     {
         return [
-            [
+            'options are not array, empty array is returned' => [
                 null,
                 [],
                 [],
             ],
-            [
-                ['key' => 'val'],
+            'replacement is not array, original options are returned' => [
+                ['val'],
                 null,
-                ['key' => 'val'],
+                ['val'],
             ],
-            [
-                ['key' => ['key' => 'val']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
+            'ids do not match, no replacement occurs' => [
+                [
+                    [
+                        'option_id' => '3',
+                        'key1' => 'val1',
+                        'default_key1' => 'val2',
+                        'values' => [
+                            [
+                                'option_type_id' => '2',
+                                'key1' => 'val1',
+                                'default_key1' => 'val2'
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    4 => [
+                        'key1' => '1',
+                        'values' => [3 => ['key1' => 1]]
+                    ]
+                ],
+                [
+                    [
+                        'option_id' => '3',
+                        'key1' => 'val1',
+                        'default_key1' => 'val2',
+                        'values' => [
+                            [
+                                'option_type_id' => '2',
+                                'key1' => 'val1',
+                                'default_key1' => 'val2'
+                            ]
+                        ]
+                    ]
+                ]
             ],
-            [
-                ['key' => ['key' => 'val', 'another_key' => 'another_value']],
-                ['key' => ['key' => 'val2', 'key2' => 'val2']],
-                ['key' => ['key' => 'val2', 'another_key' => 'another_value', 'key2' => 'val2',]],
+            'key2 is replaced, key1 is not (checkbox is not checked)' => [
+                [
+                    [
+                        'option_id' => '5',
+                        'key1' => 'val1',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3',
+                        'default_key2' => 'val4',
+                        'values' => [
+                            [
+                                'option_type_id' => '2',
+                                'key1' => 'val1',
+                                'key2' => 'val2',
+                                'default_key1' => 'val11',
+                                'default_key2' => 'val22'
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    5 => [
+                        'key1' => '0',
+                        'key2' => '1',
+                        'values' => [2 => ['key1' => 1]]
+                    ]
+                ],
+                [
+                    [
+                        'option_id' => '5',
+                        'key1' => 'val1',
+                        'key2' => 'val4',
+                        'default_key1' => 'val3',
+                        'default_key2' => 'val4',
+                        'values' => [
+                            [
+                                'option_type_id' => '2',
+                                'key1' => 'val11',
+                                'key2' => 'val2',
+                                'default_key1' => 'val11',
+                                'default_key2' => 'val22'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            'key1 is replaced, key2 has no default value' => [
+                [
+                    [
+                        'option_id' => '7',
+                        'key1' => 'val1',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3',
+                        'values' => [
+                            [
+                                'option_type_id' => '2',
+                                'key1' => 'val1',
+                                'key2' => 'val2',
+                                'default_key1' => 'val11'
+                            ]
+                        ]
+                    ]
+                ],
+                [
+                    7 => [
+                        'key1' => '1',
+                        'key2' => '1',
+                        'values' => [2 => ['key1' => 1, 'key2' => 1]]
+                    ]
+                ],
+                [
+                    [
+                        'option_id' => '7',
+                        'key1' => 'val3',
+                        'key2' => 'val2',
+                        'default_key1' => 'val3',
+                        'values' => [
+                            [
+                                'option_type_id' => '2',
+                                'key1' => 'val11',
+                                'key2' => 'val2',
+                                'default_key1' => 'val11'
+                            ]
+                        ]
+                    ]
+                ],
             ],
         ];
     }

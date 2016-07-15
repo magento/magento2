@@ -433,7 +433,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('getPostValue')
             ->willReturn($postData);
         $addData = $postData;
-        $addData['image_additional_data'] = ['delete' => true];
+        $addData['image'] = ['delete' => true];
         $categoryMock->expects($this->once())
             ->method('addData')
             ->with($addData);

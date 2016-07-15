@@ -41,7 +41,7 @@ endif; ?>
 
     <fieldset id="<?php /* @escapeNotVerified */ echo $_addressChoiceContainerId ?>" class="admin__fieldset order-choose-address">
     <?php if ($block->getIsShipping()): ?>
-        <div class="admin__field admin__field-option">
+        <div class="admin__field admin__field-option admin__field-shipping-same-as-billing">
             <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing"
                    onclick="order.setShippingAsBilling(this.checked)" class="admin__control-checkbox"
                    <?php if ($block->getIsAsBilling()): ?>checked<?php endif; ?> />
@@ -50,13 +50,13 @@ endif; ?>
             </label>
         </div>
     <?php endif; ?>
-        <div class="admin__field">
+        <div class="admin__field admin__field-select-from-existing-address">
             <label class="admin__field-label"><?php /* @escapeNotVerified */ echo __('Select from existing customer addresses:') ?></label>
             <?php $_id = $block->getForm()->getHtmlIdPrefix() . 'customer_address_id' ?>
             <div class="admin__field-control">
                 <select id="<?php /* @escapeNotVerified */ echo $_id ?>"
                         name="<?php echo $block->getForm()->getHtmlNamePrefix() ?>[customer_address_id]"
-                        style="width: 97.5%;" onchange="order.selectAddress(this, '<?php /* @escapeNotVerified */ echo $_fieldsContainerId ?>')"
+                        onchange="order.selectAddress(this, '<?php /* @escapeNotVerified */ echo $_fieldsContainerId ?>')"
                         class="admin__control-select">
                     <option value=""><?php /* @escapeNotVerified */ echo __('Add New Address') ?></option>
                     <?php foreach ($block->getAddressCollection() as $_address): ?>

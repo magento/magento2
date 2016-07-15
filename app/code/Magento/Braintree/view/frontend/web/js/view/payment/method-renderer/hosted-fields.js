@@ -11,7 +11,7 @@ define([
     'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
     'mage/translate'
-], function ($, Component, validator, vaultEnabler, $t) {
+], function ($, Component, validator, VaultEnabler, $t) {
     'use strict';
 
     return Component.extend({
@@ -24,7 +24,8 @@ define([
                  * {String}
                  */
                 id: 'co-transparent-form-braintree'
-            }
+            },
+            isValidCardNumber: false
         },
 
         /**
@@ -32,8 +33,8 @@ define([
          */
         initialize: function () {
             this._super();
-            this.vaultEnabler = vaultEnabler();
-            this.vaultEnabler.setPaymentCode(this.getCode());
+            this.vaultEnabler = new VaultEnabler();
+            this.vaultEnabler.setPaymentCode(this.getVaultCode());
 
             return this;
         },
@@ -113,11 +114,7 @@ define([
                 }
 
                 if (event.target.fieldKey === 'number' && event.card) {
-                    if (event.isValid) {
-                        self.cardNumber = event.card;
-                    } else {
-                        self.cardNumber = null;
-                    }
+                    self.isValidCardNumber = event.isValid;
                     self.selectedCardType(
                         validator.getMageCardType(event.card.type, self.getCcAvailableTypes())
                     );
@@ -137,7 +134,7 @@ define([
 
             $selector.removeClass(invalidClass);
 
-            if (this.selectedCardType() === null) {
+            if (this.selectedCardType() === null || !this.isValidCardNumber) {
                 $(this.getSelector('cc_number')).addClass(invalidClass);
 
                 return false;
@@ -153,6 +150,13 @@ define([
             if (this.validateCardType()) {
                 $(this.getSelector('submit')).trigger('click');
             }
+        },
+
+        /**
+         * @returns {String}
+         */
+        getVaultCode: function () {
+            return window.checkoutConfig.payment[this.getCode()].ccVaultCode;
         }
     });
 });

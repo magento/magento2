@@ -148,13 +148,12 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                     'getEnvironment' => 'test-environment',
                     'getKountMerchantId' => 'test-kount-merchant-id',
                     'getMerchantId' => 'test-merchant-id',
-                    'hasFraudProtection' => true
+                    'hasFraudProtection' => true,
                 ],
                 'expected' => [
                     'payment' => [
                         ConfigProvider::CODE => [
                             'isActive' => true,
-                            'isSingleUse' => false,
                             'clientToken' => self::CLIENT_TOKEN,
                             'ccTypesMapper' => ['visa' => 'VI', 'american-express' => 'AE'],
                             'sdkUrl' => self::SDK_URL,
@@ -167,7 +166,8 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
                             'environment' => 'test-environment',
                             'kountMerchantId' => 'test-kount-merchant-id',
                             'merchantId' => 'test-merchant-id',
-                            'hasFraudProtection' => true
+                            'hasFraudProtection' => true,
+                            'ccVaultCode' => ConfigProvider::CC_VAULT_CODE
                         ],
                         Config::CODE_3DSECURE => [
                             'enabled' => true,

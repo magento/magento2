@@ -70,6 +70,7 @@ class UrlRewriteHandler
             $collection = $this->productCollectionFactory->create()
                 ->setStoreId($storeId)
                 ->addIdFilter($category->getAffectedProductIds())
+                ->addAttributeToSelect('visibility')
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('url_key')
                 ->addAttributeToSelect('url_path');
@@ -104,6 +105,7 @@ class UrlRewriteHandler
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $category->getProductCollection()
             ->addAttributeToSelect('name')
+            ->addAttributeToSelect('visibility')
             ->addAttributeToSelect('url_key')
             ->addAttributeToSelect('url_path');
         $productUrls = [];

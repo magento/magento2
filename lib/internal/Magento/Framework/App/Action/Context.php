@@ -7,6 +7,9 @@ namespace Magento\Framework\App\Action;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @api
+ */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**

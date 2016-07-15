@@ -1,7 +1,7 @@
-﻿/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
+﻿// /**
+//  * Copyright © 2016 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
 
 //
 //  Video Management Variables
@@ -52,7 +52,7 @@
         height: 49px;
         left: 50%;
         margin-left: -24px;
-        opacity: 0.7;
+        opacity: .7;
         position: absolute;
         top: 18px;
         width: 49px;
@@ -64,7 +64,7 @@
     }
 }
 
-.preview_hidden_image_input_button {
+.preview-image-hidden-input {
     display: none;
 }
 
@@ -88,14 +88,14 @@
     }
 
     .video-player-sidebar {
-        width: 34.99999%;
         float: left;
+        width: 34.99999%;
     }
 
     .video-player-container {
         &:extend(.abs-video-gallery-icon all);
 
-        border: 1px solid #e3e3e3;
+        border: 1px solid @color-gray89;
         height: 20vw;
         margin-bottom: 30px;
         position: relative;
@@ -107,39 +107,39 @@
         margin-bottom: 7px;
 
         &:after {
-            content: "";
-            visibility: hidden;
+            clear: both;
+            content: '';
             display: block;
             height: 0;
-            clear: both;
+            visibility: hidden;
         }
 
         label {
-            font-family: 'Open Sans', @font-family__sans-serif;
-            font-size: @font-size__s + 0.2;
-            font-weight: @font-weight__semibold;
             display: block;
-            width: 25%;
             float: left;
+            font-family: @font-family__base;
+            font-size: @font-size__s + .2;
+            font-weight: @font-weight__semibold;
             text-align: right;
+            width: 25%;
         }
 
         span {
-            font-family: 'Open Sans', @font-family__sans-serif;
-            font-size: @font-size__s + 0.2;
-            font-weight: @font-weight__light;
             display: block;
-            width: 74.9999%;
             float: left;
+            font-family: @font-family__base;
+            font-size: @font-size__s + .2;
+            font-weight: @font-weight__light;
             padding-left: 20px;
+            width: 74.9999%;
         }
     }
 
     .product-video {
-        width: 100%;
-        z-index: 20;
         height: 100%;
         position: relative;
+        width: 100%;
+        z-index: 20;
     }
 
     //  TODO UI: this code must be deleted when video slideout panel will be implemented with ui-components
@@ -193,7 +193,7 @@
                 margin-bottom: 50px;
             }
 
-            &.field-roleLabel {
+            &.field-role-label {
                 height: 0;
 
                 .admin__field-control {
@@ -205,8 +205,8 @@
                     .control-value {
                         color: @color-black;
                         float: right;
-                        font-family: 'Open Sans', @font-family__sans-serif;
-                        font-size: @font-size__s + 0.2;
+                        font-family: @font-family__base;
+                        font-size: @font-size__s + .2;
                         font-weight: @font-weight__semibold;
                         position: relative;
                         right: 50px;
@@ -215,47 +215,47 @@
                 }
             }
 
-            label > input[type="checkbox"] {
+            label > input[type='checkbox'] {
                 margin: -3px 3px 0 0;
                 vertical-align: middle;
             }
 
-            input[type="checkbox"] {
+            input[type='checkbox'] {
                 -moz-appearance: none;
                 -webkit-appearance: none;
                 appearance: none;
-                background: #fff;
+                background: @color-white;
+                border: 1px solid @color-gray68;
                 border-radius: 2px;
-                border: 1px solid #adadad;
                 cursor: pointer;
                 display: inline-block;
                 height: 16px;
                 margin: 0 5px 0 0;
                 position: relative;
-                transition: all 0.1s ease-in;
+                transition: all .1s ease-in;
                 vertical-align: middle;
                 width: 16px;
 
                 &:focus {
-                    border-color: #007bdb;
+                    border-color: @color-blue-pure;
                     box-shadow: none;
                     outline: 0;
                 }
 
                 &[disabled] {
-                    background-color: #e9e9e9;
-                    border-color: #adadad;
+                    background-color: @color-lighter-gray;
+                    border-color: @color-gray68;
                     opacity: .5;
                 }
 
                 &:checked {
                     &:after {
-                        color: #514943;
-                        content: "\e62d";
+                        color: @color-brownie;
+                        content: '\e62d';
                         display: inline-block;
                         font-family: 'Admin Icons';
                         font-size: 11px;
-                        font-weight: 400
+                        font-weight: 400;
                         left: 0;
                         line-height: 13px;
                         position: absolute;
@@ -267,7 +267,7 @@
             }
 
             .control {
-                > input[type="checkbox"] {
+                > input[type='checkbox'] {
                     padding: 0;
                     width: 16px;
                 }
@@ -276,7 +276,7 @@
     }
 }
 
-.image.video-placeholder > button[data-role="add-video-button"],
+.image.video-placeholder > button[data-role='add-video-button'],
 .image.video-placeholder > button {
     background: transparent;
     border: 0;
@@ -291,7 +291,7 @@
 }
 
 .image-upload-error {
-    background: #F9E1E1;
+    background: @color-pink-light;
     color: @color-gray19;
     font-size: 12px;
     font-weight: 400;
