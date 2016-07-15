@@ -34,6 +34,11 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     private $collectionFactory;
 
     /**
+     * @var ProductInterface[]
+     */
+    private $products;
+
+    /**
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceInterface $productProviderByPrice
@@ -59,15 +64,20 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
      */
     public function getProducts(ProductInterface $product)
     {
-        if ($this->requestSafety->isSafeMethod()) {
-            $productIds = $this->resource->getConnection()->fetchCol(
-                '(' . implode(') UNION (', $this->productProviderByPrice->getSelect($product->getId())) . ')'
-            );
+        if (!isset($this->products[$product->getId()])) {
+            if ($this->requestSafety->isSafeMethod()) {
+                $productIds = $this->resource->getConnection()->fetchCol(
+                    '(' . implode(') UNION (', $this->productProviderByPrice->getSelect($product->getId())) . ')'
+                );
 
-            return $this->collectionFactory->create()->addIdFilter($productIds)->addPriceData();
-        } else {
+                $this->products[$product->getId()] = $this->collectionFactory->create()
+                    ->addIdFilter($productIds)
+                    ->addPriceData();
+            } else {
 
-            return $this->configurable->getUsedProducts($product);
+                $this->products[$product->getId()] = $this->configurable->getUsedProducts($product);
+            }
         }
+        return $this->products[$product->getId()];
     }
 }
