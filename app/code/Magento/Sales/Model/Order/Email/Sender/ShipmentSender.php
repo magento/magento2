@@ -126,6 +126,9 @@ class ShipmentSender extends Sender
                 $this->shipmentResource->saveAttribute($shipment, ['send_email', 'email_sent']);
                 return true;
             }
+        } else {
+            $shipment->setEmailSent(null);
+            $this->shipmentResource->saveAttribute($shipment, 'email_sent');
         }
 
         $this->shipmentResource->saveAttribute($shipment, 'send_email');
