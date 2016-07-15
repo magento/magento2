@@ -93,14 +93,7 @@ class ExtensionTest extends Injectable
         $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsInstallGrid(), $extensionFixture);
         $this->setupWizard->getExtensionsInstallGrid()->install($extensionFixture);
 
-        // Readiness Check
-        $this->setupWizard->getReadiness()->clickReadinessCheck();
-        $assertReadiness->processAssert($this->setupWizard);
-        $this->setupWizard->getReadiness()->clickNext();
-
-        // Create Backup page
-        $this->setupWizard->getCreateBackup()->fill($extensionFixture);
-        $this->setupWizard->getCreateBackup()->clickNext();
+        $this->readinessCheckAndBackup($assertReadiness, $extensionFixture);
 
         // Install Extension
         $assertExtensionAndVersionCheck->processAssert(
@@ -120,17 +113,45 @@ class ExtensionTest extends Injectable
         $this->setupWizard->getSetupHome()->clickComponentManager();
         $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extensionFixture);
 
+        // Check version of installed extension
+        $versionOnGrid = $this->setupWizard->getExtensionsGrid()->getVersion($extensionFixture);
+        if ($extensionFixture->getVersion() != $versionOnGrid) {
+            throw new \Exception('Version of installed extension is incorrect!');
+        }
+
+        // Update extension
+        $this->setupWizard->getExtensionsGrid()->clickUpdateButton($extensionFixture);
+
+        $this->readinessCheckAndBackup($assertReadiness, $extensionFixture);
+
+        // Update extension
+        $assertExtensionAndVersionCheck->processAssert(
+            $this->setupWizard,
+            $extensionFixture,
+            AssertExtensionAndVersionCheck::TYPE_UPDATE
+        );
+        $this->setupWizard->getUpdaterExtension()->clickStartButton();
+        $assertSuccessMessage->processAssert(
+            $this->setupWizard,
+            $extensionFixture,
+            AssertSuccessMessage::TYPE_UPDATE
+        );
+
+        // Open Extension Grid with updated extensions and find updated extension
+        $this->setupWizard->open();
+        $this->setupWizard->getSetupHome()->clickComponentManager();
+        $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extensionFixture);
+
+        // Check version of updated extension
+        $versionOnGrid = $this->setupWizard->getExtensionsGrid()->getVersion($extensionFixture);
+        if ($extensionFixture->getVersionToUpdate() != $versionOnGrid) {
+            throw new \Exception('Version of updated extension is incorrect!');
+        }
+
         // Click to uninstall extension
         $this->setupWizard->getExtensionsGrid()->clickUninstallButton($extensionFixture);
 
-        // Readiness Check
-        $this->setupWizard->getReadiness()->clickReadinessCheck();
-        $assertReadiness->processAssert($this->setupWizard);
-        $this->setupWizard->getReadiness()->clickNext();
-
-        // Create Backup page
-        $this->setupWizard->getCreateBackup()->fill($extensionFixture);
-        $this->setupWizard->getCreateBackup()->clickNext();
+        $this->readinessCheckAndBackup($assertReadiness, $extensionFixture);
 
         // Data Option (keep or remove data of extension)
         $this->setupWizard->getDataOption()->clickNext();
@@ -155,5 +176,26 @@ class ExtensionTest extends Injectable
         if ($this->setupWizard->getExtensionsGrid()->findExtensionOnGrid($extensionFixture)) {
             throw new \Exception('Extension is not uninstalled!');
         }
+    }
+
+    /**
+     * Readiness check and Create Backup steps.
+     *
+     * @param AssertSuccessfulReadinessCheck $assertReadiness
+     * @param Extension $extensionFixture
+     * @return void
+     */
+    protected function readinessCheckAndBackup(
+        AssertSuccessfulReadinessCheck $assertReadiness,
+        Extension $extensionFixture
+    ) {
+        // Readiness Check
+        $this->setupWizard->getReadiness()->clickReadinessCheck();
+        $assertReadiness->processAssert($this->setupWizard);
+        $this->setupWizard->getReadiness()->clickNext();
+
+        // Create Backup page
+        $this->setupWizard->getCreateBackup()->fill($extensionFixture);
+        $this->setupWizard->getCreateBackup()->clickNext();
     }
 }

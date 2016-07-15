@@ -20,6 +20,7 @@ class AssertSuccessMessage extends AbstractConstraint
      */
     const TYPE_INSTALL = 1;
     const TYPE_UNINSTALL = 2;
+    const TYPE_UPDATE = 3;
     /*#@-*/
 
     /**
@@ -39,6 +40,10 @@ class AssertSuccessMessage extends AbstractConstraint
 
             case self::TYPE_UNINSTALL:
                 $message = "You uninstalled:";
+                break;
+
+            case self::TYPE_UPDATE:
+                $message = "You updated:";
                 break;
 
             default:
