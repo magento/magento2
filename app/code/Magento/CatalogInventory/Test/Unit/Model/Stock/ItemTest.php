@@ -72,8 +72,18 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeId = 111;
 
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventDispatcher;
+
     protected function setUp()
     {
+        $this->eventDispatcher = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['dispatch'])
+            ->getMock();
+
         $this->context = $this->getMock(
             '\Magento\Framework\Model\Context',
             ['getEventDispatcher'],
@@ -81,6 +91,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
         $this->registry = $this->getMock(
             '\Magento\Framework\Registry',
@@ -455,6 +466,41 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 ],
                 3
             ],
+        ];
+    }
+
+        /**
+     * We wan't to ensure that property $_eventPrefix used during event dispatching
+     *
+     * @param $eventName
+     * @param $methodName
+     *
+     * @dataProvider eventsDataProvider
+     */
+    public function testDispatchEvents($eventName, $methodName)
+    {
+        $isCalledWithRightPrefix = 0;
+        $this->eventDispatcher->expects($this->any())->method('dispatch')->with(
+            $this->callback(function($arg) use (&$isCalledWithRightPrefix, $eventName) {
+                $isCalledWithRightPrefix |= ($arg === $eventName);
+                return true;
+            }),
+            $this->anything()
+        );
+
+        $this->item->$methodName();
+        $this->assertEquals(
+            1,
+            (int) $isCalledWithRightPrefix,
+            sprintf("Event %s doesn't dispatched", $eventName)
+        );
+    }
+
+    public function eventsDataProvider()
+    {
+        return [
+            ['cataloginventory_stock_item_save_before', 'beforeSave'],
+            ['cataloginventory_stock_item_save_after', 'afterSave'],
         ];
     }
 }

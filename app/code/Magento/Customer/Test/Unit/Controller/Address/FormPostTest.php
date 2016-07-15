@@ -157,6 +157,11 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var \Magento\Customer\Model\Address\Mapper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerAddressMapper;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -197,6 +202,10 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->customerAddressMapper = $this->getMockBuilder('Magento\Customer\Model\Address\Mapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new FormPost(
             $this->context,
             $this->session,
@@ -211,6 +220,13 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             $this->resultPageFactory,
             $this->regionFactory,
             $this->helperData
+        );
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'customerAddressMapper',
+            $this->customerAddressMapper
         );
     }
 
@@ -458,21 +474,10 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($this->addressData)
             ->willReturnSelf();
 
-        $this->dataProcessor->expects($this->once())
-            ->method('buildOutputDataArray')
-            ->with($this->addressData, '\Magento\Customer\Api\Data\AddressInterface')
+        $this->customerAddressMapper->expects($this->once())
+            ->method('toFlatArray')
+            ->with($this->addressData)
             ->willReturn($existingAddressData);
-
-        $this->addressData->expects($this->any())
-            ->method('getRegion')
-            ->willReturn($this->regionData);
-
-        $this->regionData->expects($this->once())
-            ->method('getRegionCode')
-            ->willReturn($regionCode);
-        $this->regionData->expects($this->once())
-            ->method('getRegion')
-            ->willReturn($region);
 
         $this->formFactory->expects($this->once())
             ->method('create')
