@@ -16,10 +16,11 @@ use Magento\Setup\Test\Fixture\Extension;
 class AssertExtensionAndVersionCheck extends AbstractConstraint
 {
     /**#@+
-     * Types of the job on extensions.
-     */
+ * Types of the job on extensions.
+ */
     const TYPE_INSTALL = 1;
     const TYPE_UNINSTALL = 2;
+    const TYPE_UPDATE = 3;
     /*#@-*/
     
     /**
@@ -39,6 +40,11 @@ class AssertExtensionAndVersionCheck extends AbstractConstraint
 
             case self::TYPE_UNINSTALL:
                 $message = "We're ready to uninstall " . $extension->getExtension();
+                break;
+
+            case self::TYPE_UPDATE:
+                $message = "We're ready to update " . $extension->getExtension()
+                    . " to " . $extension->getVersionToUpdate();
                 break;
 
             default:

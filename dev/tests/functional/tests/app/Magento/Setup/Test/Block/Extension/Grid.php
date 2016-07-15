@@ -27,7 +27,7 @@ class Grid extends AbstractGrid
      *
      * @var string
      */
-    protected $selectAction = "//*[contains(text(), 'magento/sample-data-media')]"
+    protected $selectAction = "//*[contains(text(), '#extensionName#')]"
         . "//..//..//*[contains(@class, 'action-select')]";
 
     /**
@@ -35,8 +35,24 @@ class Grid extends AbstractGrid
      *
      * @var string
      */
-    protected $uninstallAction = "//*[contains(text(), 'magento/sample-data-media')]"
+    protected $uninstallAction = "//*[contains(text(), '#extensionName#')]"
         . "//..//..//*[contains(@ng-mousedown, 'uninstall')]";
+
+    /**
+     * Update action of extension.
+     *
+     * @var string
+     */
+    protected $updateAction = "//*[contains(text(), '#extensionName#')]"
+        . "//..//..//*[contains(@ng-mousedown, 'update')]";
+
+    /**
+     * Container that contains version of extension.
+     *
+     * @var string
+     */
+    protected $versionContainer = "//*[contains(text(), '#extensionName#')]"
+        . "//..//..//*[@data-type='version']";
 
     /**
      * Popup Loading.
@@ -65,12 +81,60 @@ class Grid extends AbstractGrid
      */
     public function clickUninstallButton(Extension $extension)
     {
+        $this->clickSelectActionButton($extension);
+        $button = $this->_rootElement->find(
+            str_replace('#extensionName#', $extension->getExtension(), $this->uninstallAction),
+            Locator::SELECTOR_XPATH
+        );
+
+        if ($button->isVisible()) {
+            $button->click();
+        }
+    }
+
+    /**
+     * Get version of extension.
+     *
+     * @param Extension $extension
+     * @return string
+     */
+    public function getVersion(Extension $extension)
+    {
+        return $this->_rootElement->find(
+            str_replace('#extensionName#', $extension->getExtension(), $this->versionContainer),
+            Locator::SELECTOR_XPATH
+        )->getText();
+    }
+
+    /**
+     * Click to update button.
+     *
+     * @param Extension $extension
+     * @return void
+     */
+    public function clickUpdateButton(Extension $extension)
+    {
+        $this->clickSelectActionButton($extension);
+        $button = $this->_rootElement->find(
+            str_replace('#extensionName#', $extension->getExtension(), $this->updateAction),
+            Locator::SELECTOR_XPATH
+        );
+
+        if ($button->isVisible()) {
+            $button->click();
+        }
+    }
+
+    /**
+     * Click to Select action
+     *
+     * @param Extension $extension
+     * @return void
+     */
+    protected function clickSelectActionButton(Extension $extension)
+    {
         $this->_rootElement->find(
             str_replace('#extensionName#', $extension->getExtension(), $this->selectAction),
-            Locator::SELECTOR_XPATH
-        )->click();
-        $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtension(), $this->uninstallAction),
             Locator::SELECTOR_XPATH
         )->click();
     }
