@@ -107,25 +107,13 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
         }
 
         foreach ($data as $key => $value) {
-            if ($key == 'key') {
+            if (!is_scalar($value) || $key == 'key' || !$this->getData('escape_params')) {
                 $this->setRouteParam($key, $value);
             } else {
-                if (is_object($value)) {
-                    if ($this->getData('escape_params')) {
-                        $this->setRouteParam($this->getEscaper()->encodeUrlParam($key), $value);
-                    } else {
-                        $this->setRouteParam($key, $value);
-                    }
-                } else {
-                    if ($this->getData('escape_params')) {
-                        $this->setRouteParam(
-                            $this->getEscaper()->encodeUrlParam($key),
-                            $this->getEscaper()->encodeUrlParam($value)
-                        );
-                    } else {
-                        $this->setRouteParam($key, $value);
-                    }
-                }
+                $this->setRouteParam(
+                    $this->getEscaper()->encodeUrlParam($key),
+                    $this->getEscaper()->encodeUrlParam($value)
+                );
             }
         }
 
