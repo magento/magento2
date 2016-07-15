@@ -281,7 +281,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method("remove")
             ->with($customerId);
         $address->expects($this->once())
@@ -517,7 +517,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerModel->expects($this->atLeastOnce())
             ->method('setPasswordHash')
             ->with($passwordHash);
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 
@@ -824,7 +824,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 
@@ -852,7 +852,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 
