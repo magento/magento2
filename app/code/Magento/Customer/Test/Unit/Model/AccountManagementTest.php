@@ -547,7 +547,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->with($storeId)
             ->willReturn($storeMock);
-
         $exception = new \Magento\Framework\Exception\LocalizedException(
             new \Magento\Framework\Phrase('Exception message')
         );
