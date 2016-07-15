@@ -106,7 +106,7 @@ class UpgradeSystemTest extends Injectable
         }
 
         // Select upgrade to version
-        $this->setupWizard->getSystemUpgradeHome()->clickSystemUpgrade();
+        $this->setupWizard->getSetupHome()->clickSystemUpgrade();
         $this->setupWizard->getSelectVersion()->fill($upgradeFixture);
         if ($upgrade['otherComponents'] === 'Yes') {
             $this->setupWizard->getSelectVersion()->chooseUpgradeOtherComponents();
