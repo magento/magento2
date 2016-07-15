@@ -452,6 +452,7 @@ class AdvancedPricing extends AbstractModifier
                                         'value' => $this->getDefaultWebsite(),
                                         'visible' => $this->isMultiWebsites(),
                                         'disabled' => ($this->isShowWebsiteColumn() && !$this->isAllowChangeWebsite()),
+                                        'sortOrder' => 10,
                                     ],
                                 ],
                             ],
@@ -467,6 +468,7 @@ class AdvancedPricing extends AbstractModifier
                                         'label' => __('Customer Group'),
                                         'options' => $this->getCustomerGroups(),
                                         'value' => $this->getDefaultCustomerGroup(),
+                                        'sortOrder' => 20,
                                     ],
                                 ],
                             ],
@@ -480,6 +482,7 @@ class AdvancedPricing extends AbstractModifier
                                         'dataType' => Number::NAME,
                                         'label' => __('Quantity'),
                                         'dataScope' => 'price_qty',
+                                        'sortOrder' => 30,
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
@@ -503,6 +506,7 @@ class AdvancedPricing extends AbstractModifier
                                         'addbefore' => $this->locator->getStore()
                                                                      ->getBaseCurrency()
                                                                      ->getCurrencySymbol(),
+                                        'sortOrder' => 40,
                                         'validation' => [
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
@@ -522,6 +526,7 @@ class AdvancedPricing extends AbstractModifier
                                         'componentType' => 'actionDelete',
                                         'dataType' => Text::NAME,
                                         'label' => '',
+                                        'sortOrder' => 50,
                                     ],
                                 ],
                             ],

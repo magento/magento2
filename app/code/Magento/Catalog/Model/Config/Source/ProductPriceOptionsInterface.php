@@ -5,10 +5,12 @@
  */
 namespace Magento\Catalog\Model\Config\Source;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
  * Interface ProductPriceOptionsInterface
  */
-interface ProductPriceOptionsInterface
+interface ProductPriceOptionsInterface extends OptionSourceInterface
 {
     /**#@+
      * Values
@@ -16,11 +18,4 @@ interface ProductPriceOptionsInterface
     const VALUE_FIXED = 'fixed';
     const VALUE_PERCENT = 'percent';
     /**#@-*/
-
-    /**
-     * Return array of options as value-label pairs
-     *
-     * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
-     */
-    public function toOptionArray();
 }

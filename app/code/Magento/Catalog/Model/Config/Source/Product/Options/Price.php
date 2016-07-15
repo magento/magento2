@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Price implements ProductPriceOptionsInterface, \Magento\Framework\Option\ArrayInterface
+class Price implements ProductPriceOptionsInterface
 {
     /**
      * {@inheritdoc}
