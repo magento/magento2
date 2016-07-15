@@ -40,7 +40,6 @@ class AssertCustomerGroupOnCatalogPriceRuleForm extends AbstractConstraint
             $ruleInformationSection->isVisibleCustomerGroup($customerGroup),
             "Customer group {$customerGroup->getCustomerGroupCode()} not in catalog price rule page."
         );
-
     }
 
     /**
