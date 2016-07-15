@@ -299,6 +299,18 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRedirect')
             ->willReturn($this->resultRedirect);
 
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataManager->expects($this->once())
+            ->method('getCookie')
+            ->with('mage-cache-sessid')
+            ->willReturn(false);
+        $refClass = new \ReflectionClass(LoginPost::class);
+        $refProperty = $refClass->getProperty('cookieMetadataManager');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->controller, $cookieMetadataManager);
+
         $this->assertSame($this->resultRedirect, $this->controller->execute());
     }
 
@@ -351,6 +363,38 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
         $this->accountRedirect->expects($this->once())
             ->method('getRedirect')
             ->willReturn($this->resultRedirect);
+
+        $cookieMetadataManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataManager->expects($this->once())
+            ->method('getCookie')
+            ->with('mage-cache-sessid')
+            ->willReturn(true);
+        $cookieMetadataFactory = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadata = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataFactory->expects($this->once())
+            ->method('createCookieMetadata')
+            ->willReturn($cookieMetadata);
+        $cookieMetadata->expects($this->once())
+            ->method('setPath')
+            ->with('/');
+        $cookieMetadataManager->expects($this->once())
+            ->method('deleteCookie')
+            ->with('mage-cache-sessid', $cookieMetadata);
+
+        $refClass = new \ReflectionClass(LoginPost::class);
+        $cookieMetadataManagerProperty = $refClass->getProperty('cookieMetadataManager');
+        $cookieMetadataManagerProperty->setAccessible(true);
+        $cookieMetadataManagerProperty->setValue($this->controller, $cookieMetadataManager);
+
+        $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
+        $cookieMetadataFactoryProperty->setAccessible(true);
+        $cookieMetadataFactoryProperty->setValue($this->controller, $cookieMetadataFactory);
 
         $this->assertSame($this->resultRedirect, $this->controller->execute());
     }

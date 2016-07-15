@@ -11,15 +11,17 @@ define(
     ],
     function ($, modal) {
         'use strict';
+
         return {
             modalWindow: null,
 
             /** Create popUp window for provided element */
-            createPopUp: function(element) {
+            createPopUp: function (element) {
                 this.modalWindow = element;
                 var options = {
                     'type': 'popup',
                     'modalClass': 'popup-authentication',
+                    'focus': '[name=username]',
                     'responsive': true,
                     'innerScroll': true,
                     'trigger': '.proceed-to-checkout',
@@ -29,7 +31,7 @@ define(
             },
 
             /** Show login popup window */
-            showModal: function() {
+            showModal: function () {
                 $(this.modalWindow).modal('openModal');
             }
         }

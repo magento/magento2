@@ -94,7 +94,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(
             'Magento\Quote\Model\Quote\Address',
-            [],
+            ['setTotalQty', 'getTotalQty', 'removeItem', 'getQuote'],
             [],
             '',
             false
@@ -133,20 +133,21 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
 
         $shipping = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface');
         $shipping->expects($this->exactly(2))->method('getAddress')->willReturn($address);
+        $address->expects($this->at(0))->method('setTotalQty')->with(0);
+        $address->expects($this->any())->method('getTotalQty')->willReturn(0);
         $shippingAssignmentMock = $this->getMock('\Magento\Quote\Api\Data\ShippingAssignmentInterface');
         $shippingAssignmentMock->expects($this->exactly(2))->method('getShipping')->willReturn($shipping);
         $shippingAssignmentMock->expects($this->once())->method('getItems')->willReturn([$quoteItem]);
 
         $total = $this->getMock(
             '\Magento\Quote\Model\Quote\Address\Total',
-            ['setBaseVirtualAmount', 'setVirtualAmount', 'setTotalQty'],
+            ['setBaseVirtualAmount', 'setVirtualAmount'],
             [],
             '',
             false
         );
         $total->expects($this->once())->method('setBaseVirtualAmount')->willReturnSelf();
         $total->expects($this->once())->method('setVirtualAmount')->willReturnSelf();
-        $total->expects($this->once())->method('setTotalQty')->with(0)->willReturnSelf();
 
         $this->subtotalModel->collect($quote, $shippingAssignmentMock, $total);
 

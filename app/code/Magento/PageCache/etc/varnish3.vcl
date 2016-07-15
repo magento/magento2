@@ -1,5 +1,7 @@
 import std;
 # The minimal Varnish version is 3.0.5
+# For SSL offloading, pass the following header in your proxy server or load balancer: '/* {{ ssl_offloaded_header }} */: https'
+
 
 backend default {
     .host = "/* {{ host }} */";
@@ -47,8 +49,8 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Bypass shopping cart and checkout requests
-    if (req.url ~ "/checkout") {
+    # Bypass shopping cart, checkout and search requests
+    if (req.url ~ "/checkout" || req.url ~ "/catalogsearch") {
         return (pass);
     }
 
@@ -61,6 +63,7 @@ sub vcl_recv {
     # static files are always cacheable. remove SSL flag and cookie
     if (req.url ~ "^/(pub/)?(media|static)/.*\.(ico|css|js|jpg|jpeg|png|gif|tiff|bmp|gz|tgz|bz2|tbz|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)$") {
         unset req.http.Https;
+        unset req.http./* {{ ssl_offloaded_header }} */;
         unset req.http.Cookie;
     }
 
@@ -72,6 +75,10 @@ sub vcl_recv {
 sub vcl_hash {
     if (req.http.cookie ~ "X-Magento-Vary=") {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
+    }
+
+    if (req.http./* {{ ssl_offloaded_header }} */) {
+        hash_data(req.http./* {{ ssl_offloaded_header }} */);
     }
     /* {{ design_exceptions_code }} */
 }

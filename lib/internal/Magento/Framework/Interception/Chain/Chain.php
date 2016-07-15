@@ -47,13 +47,13 @@ class Chain implements \Magento\Framework\Interception\ChainInterface
         $result = null;
         if (isset($pluginInfo[DefinitionInterface::LISTENER_BEFORE])) {
             foreach ($pluginInfo[DefinitionInterface::LISTENER_BEFORE] as $code) {
-                $beforeResult = call_user_func_array(
-                    [$this->pluginList->getPlugin($type, $code), 'before' . $capMethod],
-                    array_merge([$subject], $arguments)
-                );
+                $pluginInstance = $this->pluginList->getPlugin($type, $code);
+                $pluginMethod = 'before' . $capMethod;
+                $beforeResult = $pluginInstance->$pluginMethod($subject, ...array_values($arguments));
                 if ($beforeResult) {
                     $arguments = $beforeResult;
                 }
+                unset($pluginInstance, $pluginMethod);
             }
         }
         if (isset($pluginInfo[DefinitionInterface::LISTENER_AROUND])) {
@@ -62,10 +62,10 @@ class Chain implements \Magento\Framework\Interception\ChainInterface
             $next = function () use ($chain, $type, $method, $subject, $code) {
                 return $chain->invokeNext($type, $method, $subject, func_get_args(), $code);
             };
-            $result = call_user_func_array(
-                [$this->pluginList->getPlugin($type, $code), 'around' . $capMethod],
-                array_merge([$subject, $next], $arguments)
-            );
+            $pluginInstance = $this->pluginList->getPlugin($type, $code);
+            $pluginMethod = 'around' . $capMethod;
+            $result = $pluginInstance->$pluginMethod($subject, $next, ...array_values($arguments));
+            unset($pluginInstance, $pluginMethod);
         } else {
             $result = $subject->___callParent($method, $arguments);
         }

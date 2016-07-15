@@ -29,6 +29,7 @@
         <observer name="persistent" instance="Magento\Persistent\Observer\ApplyPersistentDataObserver" />
     </event>
     <event name="controller_action_predispatch">
+        <observer name="persistent_synchronize" instance="Magento\Persistent\Observer\SynchronizePersistentInfoObserver" />
         <observer name="persistent" instance="Magento\Persistent\Observer\EmulateQuoteObserver" />
         <observer name="persistent_session" instance="Magento\Persistent\Observer\RenewCookieObserver" />
         <observer name="persistent_quote" instance="Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver" />
@@ -58,5 +59,8 @@
     </event>
     <event name="update_customer_cookies">
         <observer name="persistent" instance="Magento\Persistent\Observer\UpdateCustomerCookiesObserver" />
+    </event>
+    <event name="persistent_session_expired">
+        <observer name="refresh_customer_data" instance="Magento\Persistent\Observer\RefreshCustomerData" />
     </event>
 </config>
