@@ -3,9 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -48,6 +48,11 @@ class UpdateHandler implements AttributeInterface
      * @var ScopeResolver
      */
     private $scopeResolver;
+
+    /**
+     * @var ReadHandler
+     */
+    private $readHandler;
 
     /**
      * UpdateHandler constructor.
@@ -114,7 +119,6 @@ class UpdateHandler implements AttributeInterface
                 }
             }
             $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
-            $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
                     continue;
@@ -148,7 +152,6 @@ class UpdateHandler implements AttributeInterface
                         $attribute->getAttributeCode(),
                         $entityData[$attribute->getAttributeCode()]
                     );
-                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
                 if (array_key_exists($attribute->getAttributeCode(), $snapshot)
                     && $snapshot[$attribute->getAttributeCode()] !== false
@@ -162,11 +165,25 @@ class UpdateHandler implements AttributeInterface
                         $attribute->getAttributeCode(),
                         $entityData[$attribute->getAttributeCode()]
                     );
-                    $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
             }
             $this->attributePersistor->flush($entityType, $context);
         }
-        return $entityData;
+        return $this->getReadHandler()->execute($entityType, $entityData, $arguments);
+    }
+
+    /**
+     * Get read handler
+     *
+     * @deprecated
+     *
+     * @return ReadHandler
+     */
+    protected function getReadHandler()
+    {
+        if (!$this->readHandler) {
+            $this->readHandler = ObjectManager::getInstance()->get(ReadHandler::class);
+        }
+        return $this->readHandler;
     }
 }

@@ -354,6 +354,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
+                    'session.cookie_secure' => false,
                 ],
             ],
             'all invalid' => [
@@ -362,6 +363,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     'session.cache_limiter' => 'files',
                     'session.cookie_httponly' => false,
+                    'session.cookie_secure' => false,
                 ],
             ],
             'invalid_valid' => [
@@ -373,6 +375,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
+                    'session.cookie_secure' => false,
                 ],
             ],
         ];

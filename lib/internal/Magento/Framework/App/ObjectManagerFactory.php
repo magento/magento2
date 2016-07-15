@@ -111,7 +111,7 @@ class ObjectManagerFactory
     {
         $writeFactory = new \Magento\Framework\Filesystem\Directory\WriteFactory($this->driverPool);
         $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory);
-        $generatedFiles->regenerate();
+        $generatedFiles->cleanGeneratedFiles();
 
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $this->configFilePool, $arguments);
         $arguments = array_merge($deploymentConfig->get(), $arguments);

@@ -297,7 +297,7 @@
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Visitor</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Console\CommandList">
+    <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="upgradeHashAlgorithmCommand" xsi:type="object">Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand</item>
@@ -306,5 +306,13 @@
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
+    </type>
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
+    </type>
+    <type name="Magento\Customer\Model\Customer\NotificationStorage">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Customer\Model\Cache\Type\Notification</argument>
+        </arguments>
     </type>
 </config>

@@ -58,8 +58,12 @@ define([
             recordsCache: [],
             draggableElement: {},
             draggableElementClass: '_dragged',
+            elemPositions: [],
             listens: {
                 '${ $.recordsProvider }:elems': 'setCacheRecords'
+            },
+            modules: {
+                parentComponent: '${ $.recordsProvider }'
             }
         },
 
@@ -131,9 +135,7 @@ define([
             drEl.instance = recordNode = this.processingStyles(recordNode, elem);
             drEl.instanceCtx = this.getRecord(originRecord[0]);
             drEl.eventMousedownY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY;
-            drEl.minYpos =
-                $table.offset().top - originRecord.offset().top +
-                $table.outerHeight() - $table.find('tbody').outerHeight();
+            drEl.minYpos = $table.offset().top - originRecord.offset().top + $table.find('thead').outerHeight();
             drEl.maxYpos = drEl.minYpos + $table.find('tbody').outerHeight() - originRecord.outerHeight();
             $tableWrapper.append(recordNode);
 
@@ -185,9 +187,15 @@ define([
         /**
          * Mouse up handler
          */
-        mouseupHandler: function () {
+        mouseupHandler: function (event) {
             var depElementCtx,
-                drEl = this.draggableElement;
+                drEl = this.draggableElement,
+                pageY = isTouchDevice ? event.originalEvent.touches[0].pageY : event.pageY,
+                positionY = pageY - drEl.eventMousedownY;
+
+            drEl.depElement = this.getDepElement(drEl.instance, positionY, this.draggableElement.originRow);
+
+            drEl.instance.remove();
 
             if (drEl.depElement) {
                 depElementCtx = this.getRecord(drEl.depElement.elem[0]);
@@ -208,7 +216,6 @@ define([
                 this.body.unbind('mouseup', this.mouseupHandler);
             }
 
-            drEl.instance.remove();
             this.draggableElement = {};
         },
 
@@ -222,11 +229,34 @@ define([
         setPosition: function (depElem, depElementCtx, dragData) {
             var depElemPosition = ~~depElementCtx.position;
 
+            this.cacheElementsPosition();
+
             if (dragData.depElement.insert === 'after') {
                 dragData.instanceCtx.position = depElemPosition + 1;
             } else if (dragData.depElement.insert === 'before') {
                 dragData.instanceCtx.position = depElemPosition;
             }
+
+            this.normalizePositions();
+        },
+
+        /**
+         * Saves elements position from current elements
+         */
+        cacheElementsPosition: function () {
+            this.elemPositions = [];
+            this.parentComponent().elems.each(function (elem) {
+                this.elemPositions.push(elem.position);
+            }, this);
+        },
+
+        /**
+         * Normalize position, uses start elements position
+         */
+        normalizePositions: function () {
+            this.parentComponent().elems.each(function (item, index) {
+                item.position = this.elemPositions[index];
+            }, this);
         },
 
         /**
@@ -274,12 +304,12 @@ define([
                 rec = collection.eq(i);
 
                 if (position === 'before') {
-                    rangeStart = collection.eq(i).position().top;
-                    rangeEnd = rangeStart + this.step;
+                    rangeStart = collection.eq(i).position().top - this.step;
+                    rangeEnd = rangeStart + this.step * 2;
                     className = this.separatorsClass.top;
                 } else if (position === 'after') {
-                    rangeEnd = rec.position().top + rec.height();
-                    rangeStart = rangeEnd - this.step;
+                    rangeEnd = rec.position().top + rec.height() + this.step;
+                    rangeStart = rangeEnd - this.step * 2;
                     className = this.separatorsClass.bottom;
                 }
 

@@ -109,7 +109,7 @@
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="cartItemProcessors" xsi:type="array">
-                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor</item>
+                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor\Proxy</item>
             </argument>
         </arguments>
     </type>
@@ -149,6 +149,13 @@
     <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Observer\HideUnsupportedAttributeTypes">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="select" xsi:type="string">select</item>
+            </argument>
         </arguments>
     </type>
 </config>

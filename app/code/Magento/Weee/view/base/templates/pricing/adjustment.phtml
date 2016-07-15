@@ -44,7 +44,7 @@ $priceDisplay = $block->isPriceIncludesTax();
 <?php endif; ?>
 
 <?php if ($block->showExclDescrIncl()): // excl. + weee + final ?>
-    <span class="price-final_price"
+    <span class="price-final price-final_price"
           data-price-type="weeePrice"
           data-price-amount="<?php /* @escapeNotVerified */ echo $block->getRawFinalAmount(); ?>"
           data-label="<?php /* @escapeNotVerified */ echo __('Final Price'); ?>"><?php /* @escapeNotVerified */ echo $block->getFinalAmount(); ?></span>

@@ -171,6 +171,13 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     private $dateTimeColumns = ['transaction_initiation_date', 'transaction_completion_date'];
 
     /**
+     * Columns with amount type
+     *
+     * @var array
+     */
+    private $amountColumns = ['gross_transaction_amount', 'fee_amount'];
+
+    /**
     * @param \Magento\Framework\Model\Context $context
     * @param \Magento\Framework\Registry $registry
     * @param \Magento\Framework\Filesystem $filesystem
@@ -406,6 +413,9 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                 if (in_array($rowMap[$sectionColumns[$i]], $this->dateTimeColumns)) {
                     $line[$i] = $this->formatDateTimeColumns($line[$i]);
                 }
+                if (in_array($rowMap[$sectionColumns[$i]], $this->amountColumns)) {
+                    $line[$i] = $this->formatAmountColumn($line[$i]);
+                }
                 $bodyItem[$rowMap[$sectionColumns[$i]]] = $line[$i];
             }
         }
@@ -423,6 +433,19 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
         /** @var DateTime $date */
         $date = new DateTime($lineItem, new \DateTimeZone('UTC'));
         return $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+    }
+
+    /**
+     * Format amount columns
+     *
+     * PayPal api returns amounts in cents, hence the values need to be divided by 100
+     *
+     * @param string $lineItem
+     * @return float
+     */
+    private function formatAmountColumn($lineItem)
+    {
+        return intval($lineItem) / 100;
     }
 
     /**

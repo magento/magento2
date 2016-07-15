@@ -7,15 +7,14 @@
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 class DateTime extends Date
 {
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * 
-     * @deprecated 
+     *
+     * @deprecated
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {

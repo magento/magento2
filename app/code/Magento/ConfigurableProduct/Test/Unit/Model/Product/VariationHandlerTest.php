@@ -254,11 +254,6 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $parentProductMock->expects($this->once())
             ->method('getQuantityAndStockStatus')
             ->willReturn(['is_in_stock' => 1]);
-        $newSimpleProductMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $this->stockConfiguration->expects($this->once())
-            ->method('getManageStock')
-            ->with('store_id')
-            ->willReturn(1);
         $newSimpleProductMock->expects($this->once())->method('addData')->willReturnSelf();
         $parentProductMock->expects($this->once())->method('getWebsiteIds')->willReturn('website_id');
         $newSimpleProductMock->expects($this->once())->method('setWebsiteIds')->with('website_id')->willReturnSelf();

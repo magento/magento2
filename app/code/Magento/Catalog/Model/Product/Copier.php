@@ -7,6 +7,8 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 class Copier
 {
     /**
@@ -23,6 +25,11 @@ class Copier
      * @var \Magento\Catalog\Model\ProductFactory
      */
     protected $productFactory;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param CopyConstructorInterface $copyConstructor
@@ -73,14 +80,18 @@ class Copier
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
             }
         } while (!$isDuplicateSaved);
-
         $this->getOptionRepository()->duplicate($product, $duplicate);
-        $product->getResource()->duplicate($product->getEntityId(), $duplicate->getEntityId());
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $product->getResource()->duplicate(
+            $product->getData($metadata->getLinkField()),
+            $duplicate->getData($metadata->getLinkField())
+        );
         return $duplicate;
     }
 
     /**
      * @return Option\Repository
+     * @deprecated
      */
     private function getOptionRepository()
     {
@@ -89,5 +100,18 @@ class Copier
                 ->get('Magento\Catalog\Model\Product\Option\Repository');
         }
         return $this->optionRepository;
+    }
+
+    /**
+     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @deprecated
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\EntityManager\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

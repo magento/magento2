@@ -7,7 +7,13 @@ namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -86,6 +92,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
         $appState = $this->getMock('Magento\Framework\App\State', ['getAreaCode'], [], '', false);
         $appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
+        $storeManagerMock = $this->getMock(StoreManager::class, [], [], '', false);
+        $storeMock = $this->getMock(Store::class, [], [], '', false);
+        $storeManagerMock->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+        $storeMock->expects($this->any())
+            ->method('getCode')
+            ->willReturn('storeCode');
+        $urlBuilderMock = $this->getMock(UrlInterface::class, [], [], '', false);
+        $urlBuilderMock->expects($this->any())
+            ->method('getBaseUrl')
+            ->willReturn('baseUrl');
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $helper->getObject(
             'Magento\Framework\View\Element\Template',
@@ -96,6 +114,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 'validator' => $this->validator,
                 'appState' => $appState,
                 'logger' => $this->loggerMock,
+                'storeManager' => $storeManagerMock,
+                'urlBuilder' => $urlBuilderMock,
                 'data' => ['template' => 'template.phtml', 'module_name' => 'Fixture_Module']
             ]
         );
@@ -156,5 +176,19 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->templateEngine->expects($this->once())->method('render')->with($context);
         $this->block->setTemplateContext($context);
         $this->block->fetchView($template);
+    }
+
+    public function testGetCacheKeyInfo()
+    {
+        $this->assertEquals(
+            [
+                'BLOCK_TPL',
+                'storeCode',
+                null,
+                'base_url' => 'baseUrl',
+                'template' => 'template.phtml',
+            ],
+            $this->block->getCacheKeyInfo()
+        );
     }
 }

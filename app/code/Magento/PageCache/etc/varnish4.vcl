@@ -2,6 +2,7 @@ vcl 4.0;
 
 import std;
 # The minimal Varnish version is 4.0
+# For SSL offloading, pass the following header in your proxy server or load balancer: '/* {{ ssl_offloaded_header }} */: https'
 
 backend default {
     .host = "/* {{ host }} */";
@@ -40,8 +41,8 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Bypass shopping cart and checkout requests
-    if (req.url ~ "/checkout") {
+    # Bypass shopping cart, checkout and search requests
+    if (req.url ~ "/checkout" || req.url ~ "/catalogsearch") {
         return (pass);
     }
 
@@ -74,6 +75,7 @@ sub vcl_recv {
     # static files are always cacheable. remove SSL flag and cookie
         if (req.url ~ "^/(pub/)?(media|static)/.*\.(ico|css|js|jpg|jpeg|png|gif|tiff|bmp|mp3|ogg|svg|swf|woff|woff2|eot|ttf|otf)$") {
         unset req.http.Https;
+        unset req.http./* {{ ssl_offloaded_header }} */;
         unset req.http.Cookie;
     }
 
@@ -93,8 +95,8 @@ sub vcl_hash {
     }
 
     # To make sure http users don't see ssl warning
-    if (req.http.X-Forwarded-Proto) {
-        hash_data(req.http.X-Forwarded-Proto);
+    if (req.http./* {{ ssl_offloaded_header }} */) {
+        hash_data(req.http./* {{ ssl_offloaded_header }} */);
     }
     /* {{ design_exceptions_code }} */
 }
@@ -133,6 +135,15 @@ sub vcl_backend_response {
             set beresp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
             set beresp.grace = 1m;
         }
+    }
+
+   # If page is not cacheable then bypass varnish for 2 minutes as Hit-For-Pass
+   if (beresp.ttl <= 0s ||
+        beresp.http.Surrogate-control ~ "no-store" ||
+        (!beresp.http.Surrogate-Control && beresp.http.Vary == "*")) {
+        # Mark as Hit-For-Pass for the next 2 minutes
+        set beresp.ttl = 120s;
+        set beresp.uncacheable = true;
     }
     return (deliver);
 }

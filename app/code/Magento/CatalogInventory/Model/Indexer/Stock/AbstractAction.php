@@ -9,6 +9,7 @@
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ResourceConnection;
 
 /**
@@ -64,7 +65,6 @@ abstract class AbstractAction
      * @var \Magento\Framework\Event\ManagerInterface
      */
     private $eventManager;
-
 
     /**
      * @param ResourceConnection $resource
@@ -247,17 +247,10 @@ abstract class AbstractAction
                 $indexer->reindexEntity($byType[$indexer->getTypeId()]);
             }
         }
-
-        $select = $connection->select()
-            ->distinct(true)
-            ->from($this->_getTable('catalog_category_product'), ['category_id'])
-            ->where('product_id IN(?)', $processIds);
-
-        $affectedCategories = $connection->fetchCol($select);
-        $this->cacheContext->registerEntities(Category::CACHE_TAG, $affectedCategories);
-
+        
+        $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
         $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
-
+        
         return $this;
     }
 
