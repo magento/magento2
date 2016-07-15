@@ -22,14 +22,31 @@ class Media extends Product\Attribute\Backend\AbstractMedia
      */
     public function afterLoad($object)
     {
-        $attribute = $this->getAttribute();
-        $attrCode = $attribute->getAttributeCode();
+        $mediaEntries = $this->getResource()->loadProductGalleryByAttributeId(
+            $object,
+            $this->getAttribute()->getId()
+        );
+        $this->addMediaDataToProduct(
+            $object,
+            $mediaEntries
+        );
+
+        return $object;
+    }
+
+    /**
+     * @param Product $product
+     * @param array $mediaEntries
+     * @return $this
+     */
+    public function addMediaDataToProduct(Product $product, array $mediaEntries)
+    {
+        $attrCode = $this->getAttribute()->getAttributeCode();
         $value = [];
         $value['images'] = [];
         $value['values'] = [];
         $localAttributes = ['label', 'position', 'disabled'];
 
-        $mediaEntries = $this->getResource()->loadProductGalleryByAttributeId($object, $attribute->getId());
         foreach ($mediaEntries as $mediaEntry) {
             foreach ($localAttributes as $localAttribute) {
                 if ($mediaEntry[$localAttribute] === null) {
@@ -38,9 +55,9 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             }
             $value['images'][] = $mediaEntry;
         }
-        $object->setData($attrCode, $value);
+        $product->setData($attrCode, $value);
 
-        return $object;
+        return $this;
     }
 
     /**

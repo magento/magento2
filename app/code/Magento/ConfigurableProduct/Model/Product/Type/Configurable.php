@@ -562,14 +562,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 $cache = [];
                 $tags = ['price', self::TYPE_CODE . '_' . $product->getId()];
 
+                $collection->addMediaGalleryData();
                 $collection->addTierPriceData();
-                foreach ($collection as $item) {
-                    /** @var \Magento\Catalog\Model\Product $item */
-                    $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
-                    $usedProducts[] = $item;
-                    $cache[] = $item->getData();
-                    $tags[] = \Magento\Catalog\Model\Product::CACHE_TAG . '_' . $item->getId();
-                }
+                $usedProducts = $collection->getItems();
                 $this->getCache()->save(
                     serialize($cache),
                     $key,
@@ -584,9 +579,19 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 );
             }
             $product->setData($this->_usedProducts, $usedProducts);
+
+//            $usedProducts = [];
+//            foreach ($collection as $item) {
+//                /** @var \Magento\Catalog\Model\Product $item */
+//                $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
+//                $usedProducts[] = $item;
+//            }
+//
+//            $product->setData($this->_usedProducts, $usedProducts);
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
-        return $product->getData($this->_usedProducts);
+        $usedProducts =  $product->getData($this->_usedProducts);
+        return $usedProducts;
     }
 
     /**
