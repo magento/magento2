@@ -33,4 +33,11 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceComposite">
+        <arguments>
+            <argument name="productProviderByPrice" xsi:type="array">
+                <item name="rulePrice" xsi:type="object">Magento\CatalogRule\Model\ResourceModel\Product\ProductProviderByRulePrice</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
