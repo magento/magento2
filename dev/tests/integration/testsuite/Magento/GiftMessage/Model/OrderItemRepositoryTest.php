@@ -33,9 +33,9 @@ class OrderItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unset($this->objectManager);
-        unset($this->message);
-        unset($this->giftMessageOrderItemRepository);
+        $this->objectManager = null;
+        $this->message = null;
+        $this->giftMessageOrderItemRepository = null;
     }
 
     /**

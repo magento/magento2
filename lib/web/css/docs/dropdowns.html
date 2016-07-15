@@ -13,7 +13,7 @@
 <h2 id="button-tag-dropdown-toggle">Button tag drop-down toggle</h2>
 <p>  To implement a drop-down using a button + drop-down, use the following markup:</p>
 <textarea class="preview-code" spellcheck="false">  &lt;div class="actions dropdown example-dropdown-1"&gt;
-     &lt;button class="action toggle" data-toggle="dropdown" aria-haspopup="true"&gt;
+     &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
          &lt;span&gt;button + dropdown&lt;/span&gt;
      &lt;/button&gt;
      &lt;ul class="dropdown"&gt;
@@ -30,7 +30,7 @@
   &lt;/div&gt;</textarea><h2 id="span-tag-dropdown-toggle">Span tag drop-down toggle</h2>
 <p>  To implement a drop-down using a span + drop-down, use the following markup:</p>
 <textarea class="preview-code" spellcheck="false">  &lt;div class="example-dropdown-2"&gt;
-     &lt;span class="action toggle" data-toggle="dropdown" aria-haspopup="true"&gt;
+     &lt;span class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
          &lt;span&gt;span + dropdown&lt;/span&gt;
      &lt;/span&gt;
      &lt;ul class="dropdown"&gt;
@@ -328,7 +328,7 @@
   @_dropdown-toggle-active-icon-content: @icon-collapse</code></pre>
 <p>  The <code>.lib-dropdown()</code> mixin uses the <code>.icon-font()</code> mixin to display and customize toggle icon. More information about <code>.icon-font()</code> mixin parameters you can find at the <strong>Icons</strong> page</p>
 <textarea class="preview-code" spellcheck="false">  &lt;div class="actions dropdown example-dropdown-3"&gt;
-     &lt;span class="action toggle" data-toggle="dropdown" aria-haspopup="true"&gt;
+     &lt;span class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
          &lt;span&gt;span + dropdown&lt;/span&gt;
      &lt;/span&gt;
      &lt;ul class="dropdown"&gt;
@@ -355,7 +355,7 @@
 }</code></pre></div></article><article id="modify-dropdown-list-styles" class="section"><div class="docs"><a href="#modify-dropdown-list-styles" class="permalink"><svg viewBox="0 0 512 512" height="32" width="32" class="icon"><path d="M156.2,199.7c7.5-7.5,15.9-13.8,24.8-18.7c49.6-27.3,113.1-12.8,145,35.5l-38.5,38.5c-11.1-25.2-38.5-39.6-65.8-33.5c-10.3,2.3-20.1,7.4-28,15.4l-73.9,73.9c-22.4,22.4-22.4,58.9,0,81.4c22.4,22.4,58.9,22.4,81.4,0l22.8-22.8c20.7,8.2,42.9,11.5,64.9,9.9l-50.3,50.3c-43.1,43.1-113,43.1-156.1,0c-43.1-43.1-43.1-113-0-156.1L156.2,199.7z M273.6,82.3l-50.3,50.3c21.9-1.6,44.2,1.6,64.9,9.9l22.8-22.8c22.4-22.4,58.9-22.4,81.4,0c22.4,22.4,22.4,58.9,0,81.4l-73.9,73.9c-22.5,22.5-59.1,22.3-81.4,0c-5.2-5.2-9.7-11.7-12.5-18l-38.5,38.5c4,6.1,8.3,11.5,13.7,16.9c13.9,13.9,31.7,24.3,52.1,29.3c26.5,6.4,54.8,2.8,79.2-10.6c8.9-4.9,17.3-11.1,24.8-18.7l73.9-73.9c43.1-43.1,43.1-113,0-156.1C386.6,39.2,316.7,39.2,273.6,82.3z"></path></svg></a><h1 id="modify-dropdown-list-styles">Modify dropdown list styles</h1>
 <p>  You can customize dropdown list style</p>
 <textarea class="preview-code" spellcheck="false"> &lt;div class="actions dropdown example-dropdown-5"&gt;
-    &lt;span class="action toggle" data-toggle="dropdown" aria-haspopup="true"&gt;
+    &lt;span class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
         &lt;span&gt;span + dropdown&lt;/span&gt;
     &lt;/span&gt;
     &lt;ul class="dropdown"&gt;
@@ -385,10 +385,10 @@
 <p>  Split button can be formed of two buttons or a link and a button. The first element (link or button) must have <code>class=&quot;action split&quot;</code>, the toggle element must have <code>class=&quot;action toggle&quot;</code>.</p>
 <h2 id="split-button-buttonbutton">Split button: button+button</h2>
 <textarea class="preview-code" spellcheck="false">  &lt;div class="actions split example-dropdown-6"&gt;
-     &lt;button href="#" class="action split"&gt;
+     &lt;button class="action split"&gt;
          &lt;span&gt;Spit button&lt;/span&gt;
      &lt;/button&gt;
-     &lt;button data-toggle="dropdown" class="action toggle" aria-haspopup="true"&gt;
+     &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
          &lt;span&gt;Select&lt;/span&gt;
      &lt;/button&gt;
      &lt;ul class="dropdown"&gt;
@@ -407,7 +407,7 @@
       &lt;a href="#" class="action split"&gt;
           &lt;span&gt;Spit button&lt;/span&gt;
       &lt;/a&gt;
-      &lt;button data-toggle="dropdown" class="action toggle" aria-haspopup="true"&gt;
+      &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
           &lt;span&gt;Select&lt;/span&gt;
       &lt;/button&gt;
       &lt;ul class="dropdown"&gt;
@@ -742,7 +742,7 @@
     &lt;button class="action split"&gt;
         &lt;span&gt;Spit button&lt;/span&gt;
     &lt;/button&gt;
-    &lt;button data-toggle="dropdown" class="action toggle" aria-haspopup="true"&gt;
+    &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
         &lt;span&gt;Select&lt;/span&gt;
     &lt;/button&gt;
     &lt;ul class="dropdown"&gt;
@@ -761,7 +761,7 @@
     &lt;button class="action split"&gt;
         &lt;span&gt;Spit button&lt;/span&gt;
     &lt;/button&gt;
-    &lt;button data-toggle="dropdown" class="action toggle" aria-haspopup="true"&gt;
+    &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
         &lt;span&gt;Select&lt;/span&gt;
     &lt;/button&gt;
     &lt;ul class="dropdown"&gt;
@@ -780,7 +780,7 @@
     &lt;button class="action split"&gt;
         &lt;span&gt;Spit button&lt;/span&gt;
     &lt;/button&gt;
-    &lt;button data-toggle="dropdown" class="action toggle" aria-haspopup="true"&gt;
+    &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
         &lt;span&gt;Select&lt;/span&gt;
     &lt;/button&gt;
     &lt;ul class="dropdown"&gt;
@@ -819,7 +819,7 @@
      &lt;button class="action split"&gt;
          &lt;span&gt;Spit button&lt;/span&gt;
      &lt;/button&gt;
-     &lt;button data-toggle="dropdown" class="action toggle" aria-haspopup="true"&gt;
+     &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
          &lt;span&gt;Select&lt;/span&gt;
      &lt;/button&gt;
      &lt;ul class="dropdown"&gt;
@@ -850,7 +850,7 @@
      &lt;button class="action split"&gt;
          &lt;span&gt;Spit button&lt;/span&gt;
      &lt;/button&gt;
-     &lt;button data-toggle="dropdown" class="action toggle" aria-haspopup="true"&gt;
+     &lt;button class="action toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown" aria-haspopup="true"&gt;
          &lt;span&gt;Select&lt;/span&gt;
      &lt;/button&gt;
      &lt;ul class="dropdown"&gt;
