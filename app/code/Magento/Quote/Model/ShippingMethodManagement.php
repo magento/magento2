@@ -202,10 +202,7 @@ class ShippingMethodManagement implements
             return [];
         }
 
-        return $this->getShippingMethods(
-            $quote,
-            $address
-        );
+        return $this->getShippingMethods($quote, $address);
     }
 
     /**
@@ -273,16 +270,14 @@ class ShippingMethodManagement implements
     /**
      * Get list of available shipping methods
      * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Framework\Api\ExtensibleDataInterface|null $address
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $address
      * @return \Magento\Quote\Api\Data\ShippingMethodInterface[]
      */
     private function getShippingMethods(Quote $quote, $address)
     {
         $output = [];
         $shippingAddress = $quote->getShippingAddress();
-        if ($address) {
-            $shippingAddress->addData($this->extractAddressData($address));
-        }
+        $shippingAddress->addData($this->extractAddressData($address));
         $shippingAddress->setCollectShippingRates(true);
 
         $this->totalsCollector->collectAddressTotals($quote, $shippingAddress);
