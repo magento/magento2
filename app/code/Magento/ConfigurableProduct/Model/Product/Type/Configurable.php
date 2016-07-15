@@ -439,13 +439,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 return $product->getData($this->_usedProducts);
             }
 
-            $usedProducts = [];
             $collection = $this->getUsedProductCollection($product)
                 ->addAttributeToSelect('*')
-                ->addAttributeToSelect('media_gallery')
+//                ->addAttributeToSelect('media_gallery')
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
-
             if (is_array($requiredAttributeIds)) {
                 foreach ($requiredAttributeIds as $attributeId) {
                     $attribute = $this->getAttributeById($attributeId, $product);
@@ -454,17 +452,22 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                     }
                 }
             }
-
-            foreach ($collection as $item) {
-                /** @var \Magento\Catalog\Model\Product $item */
-                $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
-                $usedProducts[] = $item;
-            }
-
+            $collection->addMediaGalleryData();
+            $usedProducts = $collection->getItems();
             $product->setData($this->_usedProducts, $usedProducts);
+
+//            $usedProducts = [];
+//            foreach ($collection as $item) {
+//                /** @var \Magento\Catalog\Model\Product $item */
+//                $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
+//                $usedProducts[] = $item;
+//            }
+//
+//            $product->setData($this->_usedProducts, $usedProducts);
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
-        return $product->getData($this->_usedProducts);
+        $usedProducts =  $product->getData($this->_usedProducts);
+        return $usedProducts;
     }
 
     /**
