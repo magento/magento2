@@ -30,7 +30,8 @@ class ReviewTest extends AbstractModifierTest
         parent::setUp();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->moduleManager = $this->getMockBuilder(Manager::class);
+        $this->moduleManager = $this->getMockBuilder(Manager::class)
+            ->getMock();
     }
 
     protected function createModel()
