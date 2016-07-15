@@ -188,7 +188,7 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [
                     $mainTableAlias . '.value_id = default_value.value_id',
                     'default_value.store_id = 0',
-                    'value.entity_id = entity.entity_id',
+                    'default_value.entity_id = entity.entity_id',
                 ]
             ),
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
