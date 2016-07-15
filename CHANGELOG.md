@@ -1,3 +1,15 @@
+2.0.8
+=============
+* Fixed bugs:
+    * Fixed exception when merchant resets "Product Attributes mass update" Admin form.
+    * Fixed fatal error in CLI command after compilation on some environments.
+    * Fixed duplicate URL keys on creating configurable product.
+    * Fixed issue with Magento sending emails from Admin using default configuration instead of a store-specific email address.
+    * Fixed issue with delayed session messages.
+* GitHub requests:
+    * [#3490](https://github.com/magento/magento2/pull/3490) -- Fix support for GLOB_BRACE on non-GNU Linux systems
+    * [#3018](https://github.com/magento/magento2/issues/3018) -- Magento\Sales\Model\OrderRepository::getList() is incomplete
+
 2.0.7
 =============
 * GitHub requests:
