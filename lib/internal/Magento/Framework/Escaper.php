@@ -93,6 +93,17 @@ class Escaper
     }
 
     /**
+     * Escape string for the CSS context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeCss($string)
+    {
+        return $this->getEscaper()->escapeCss($string);
+    }
+
+    /**
      * Escape quotes in java script
      *
      * @param string|array $data
