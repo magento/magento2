@@ -900,17 +900,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Encode JSON
-     *
-     * @param array $data
-     * @return string
-     */
-    public function encodeJSON($data)
-    {
-        return $this->_escaper->encodeJSON($data);
-    }
-
-    /**
      * Wrapper for standard strip_tags() function with extra functionality for html entities
      *
      * @param string $data
