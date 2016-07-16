@@ -82,17 +82,6 @@ class Escaper
     }
 
     /**
-     * Encode JSON
-     *
-     * @param array $data
-     * @return string
-     */
-    public function encodeJSON($data)
-    {
-        return json_encode($data, JSON_HEX_QUOT | JSON_HEX_APOS);
-    }
-
-    /**
      * Escape string for the JavaScript context
      *
      * @param string $string
