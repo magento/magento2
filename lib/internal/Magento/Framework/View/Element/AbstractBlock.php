@@ -900,6 +900,17 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
+     * Escape string for the CSS context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeCss($string)
+    {
+        return $this->_escaper->escapeCss($string);
+    }
+
+    /**
      * Wrapper for standard strip_tags() function with extra functionality for html entities
      *
      * @param string $data
