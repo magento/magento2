@@ -28,9 +28,9 @@ echo $var;
 <?php pecho($var);?>
 <?php echo $object->methodHtml() .
     (bool)$var .
-    $block->escapeXssInUrl("some value");
+    $block->escapeUrl("some value");
 ?>
-<?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
+<?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeHtml($data['parentSymbol']) . '\''; ?>
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml(); ?>
 <?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
 <?php
