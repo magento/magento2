@@ -566,7 +566,7 @@ abstract class AbstractType
      */
     protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
-        $transport = new \StdClass();
+        $transport = new \stdClass();
         $transport->options = [];
         $options = null;
         if ($product->getHasOptions()) {
