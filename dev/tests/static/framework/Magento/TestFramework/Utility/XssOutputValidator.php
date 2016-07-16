@@ -202,7 +202,7 @@ class XssOutputValidator
         switch (true)
         {
             case preg_match(
-                '/->(escapeHtmlAttr|escapeUrl|escapeJs|escapeXssInUrl|.*html.*)\(/simU',
+                '/->(escapeHtmlAttr|escapeUrl|escapeJs|escapeCss|.*html.*)\(/simU',
                 $this->getLastMethod($command)
             ):
                 return false;
