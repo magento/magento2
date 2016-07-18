@@ -24,14 +24,14 @@ class FillBillingInformationStep implements TestStepInterface
     protected $checkoutOnepage;
 
     /**
-     * Address fixture.
+     * Billing Address fixture.
      *
      * @var Address
      */
     protected $billingAddress;
 
     /**
-     * Address fixture.
+     * Shipping Address fixture.
      *
      * @var Address
      */

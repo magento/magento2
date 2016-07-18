@@ -1112,7 +1112,7 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="tier_price" xsi:type="array">
-                <item name="dataset" xsi:type="string">default</item>
+                <item name="dataset" xsi:type="string">more_is_cheaper</item>
             </field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
             <field name="checkout_data" xsi:type="array">
