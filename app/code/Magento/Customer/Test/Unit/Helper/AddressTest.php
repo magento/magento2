@@ -372,4 +372,34 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ['invalid_code', '']
         ];
     }
+
+    /**
+     * @param string $attributeCode
+     * @param bool $isMetadataExists
+     * @dataProvider isAttributeVisibleDataProvider
+     */
+    public function testIsAttributeVisible($attributeCode, $isMetadataExists)
+    {
+        $attributeMetadata = null;
+        if ($isMetadataExists) {
+            $attributeMetadata = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+                ->getMockForAbstractClass();
+            $attributeMetadata->expects($this->once())
+                ->method('isVisible')
+                ->willReturn(true);
+        }
+        $this->addressMetadataService->expects($this->once())
+            ->method('getAttributeMetadata')
+            ->with($attributeCode)
+            ->willReturn($attributeMetadata);
+        $this->assertEquals($isMetadataExists, $this->helper->isAttributeVisible($attributeCode));
+    }
+
+    public function isAttributeVisibleDataProvider()
+    {
+        return [
+            ['fax', true],
+            ['invalid_code', false]
+        ];
+    }
 }

@@ -14,7 +14,6 @@
     <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>
-            <argument name="paymentTokenRepository" xsi:type="object">Magento\Vault\Model\PaymentTokenRepositoryProxy</argument>
         </arguments>
     </type>
 </config>

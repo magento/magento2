@@ -34,9 +34,6 @@ class WeightTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        if (version_compare('5.5.28', phpversion(), '=')) {
-            $this->markTestSkipped('MAGETWO-43290: This test fails with Segmentation fault on PHP 5.5.28');
-        }
         $this->weightSwitcher = $this->getMock(
             'Magento\Framework\Data\Form\Element\Radios',
             ['setId', 'setName', 'setLabel', 'setForm'],

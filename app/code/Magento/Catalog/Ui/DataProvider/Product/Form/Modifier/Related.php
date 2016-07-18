@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Phrase;
 use Magento\Framework\UrlInterface;
 use Magento\Ui\Component\DynamicRows;
@@ -89,6 +90,11 @@ class Related extends AbstractModifier
      * @var string
      */
     protected $scopePrefix;
+
+    /**
+     * @var \Magento\Catalog\Ui\Component\Listing\Columns\Price
+     */
+    private $priceModifier;
 
     /**
      * @param LocatorInterface $locator
@@ -174,6 +180,12 @@ class Related extends AbstractModifier
             return $data;
         }
 
+        $priceModifier = $this->getPriceModifier();
+        /**
+         * Set field name for modifier
+         */
+        $priceModifier->setData('name', 'price');
+
         foreach ($this->getDataScopes() as $dataScope) {
             $data[$productId]['links'][$dataScope] = [];
             foreach ($this->productLinkRepository->getList($product) as $linkItem) {
@@ -189,12 +201,36 @@ class Related extends AbstractModifier
                 );
                 $data[$productId]['links'][$dataScope][] = $this->fillData($linkedProduct, $linkItem);
             }
+            if (!empty($data[$productId]['links'][$dataScope])) {
+                $dataMap = $priceModifier->prepareDataSource([
+                    'data' => [
+                        'items' => $data[$productId]['links'][$dataScope]
+                    ]
+                ]);
+                $data[$productId]['links'][$dataScope] = $dataMap['data']['items'];
+            }
         }
 
         $data[$productId][self::DATA_SOURCE_DEFAULT]['current_product_id'] = $productId;
         $data[$productId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $this->locator->getStore()->getId();
 
         return $data;
+    }
+
+    /**
+     * Get price modifier
+     *
+     * @return \Magento\Catalog\Ui\Component\Listing\Columns\Price
+     * @deprecated
+     */
+    private function getPriceModifier()
+    {
+        if (!$this->priceModifier) {
+            $this->priceModifier = ObjectManager::getInstance()->get(
+                \Magento\Catalog\Ui\Component\Listing\Columns\Price::class
+            );
+        }
+        return $this->priceModifier;
     }
 
     /**

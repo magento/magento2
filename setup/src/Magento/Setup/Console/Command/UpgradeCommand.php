@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -31,9 +30,7 @@ class UpgradeCommand extends AbstractSetupCommand
     private $installerFactory;
 
     /**
-     * Object Manager
-     *
-     * @var ObjectManagerProvider
+     * @var \Magento\Setup\Model\ObjectManagerProvider;
      */
     private $objectManagerProvider;
 
@@ -76,9 +73,9 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $areaCode = 'setup';
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = $this->objectManagerProvider->get();
-        $areaCode = 'setup';
         /** @var \Magento\Framework\App\State $appState */
         $appState = $objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
@@ -94,5 +91,7 @@ class UpgradeCommand extends AbstractSetupCommand
         if (!$keepGenerated) {
             $output->writeln('<info>Please re-run Magento compile command</info>');
         }
+
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 }

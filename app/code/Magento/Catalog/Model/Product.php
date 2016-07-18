@@ -303,11 +303,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_productIdCached;
 
     /**
-     * @var \Magento\Framework\App\State
-     */
-    private $appState;
-
-    /**
      * List of attributes in ProductInterface
      * @var array
      */
@@ -931,8 +926,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         // Resize images for catalog product and save results to image cache
         /** @var Product\Image\Cache $imageCache */
-        $imageCache = $this->imageCacheFactory->create();
-        $imageCache->generate($this);
+        if (!$this->_appState->isAreaCodeEmulated()) {
+            $imageCache = $this->imageCacheFactory->create();
+            $imageCache->generate($this);
+        }
 
         return $result;
     }
@@ -2272,17 +2269,40 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        if ($this->getOrigData('status') != $this->getData('status')) {
+        
+        if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
             foreach ($this->getCategoryIds() as $categoryId) {
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        if ($this->getAppState()->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
+        if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
         }
+
         return array_unique($identities);
     }
 
+    /**
+     * Check whether stock status changed
+     * 
+     * @return bool
+     */
+    private function isStockStatusChanged()
+    {
+        $stockItem = null;
+        $extendedAttributes = $this->getExtensionAttributes();
+        if ($extendedAttributes !== null) {
+            $stockItem = $extendedAttributes->getStockItem();
+        }
+        $stockData = $this->getStockData();
+        return (
+            (is_array($stockData))
+            && array_key_exists('is_in_stock', $stockData)
+            && (null !== $stockItem)
+            && ($stockItem->getIsInStock() != $stockData['is_in_stock'])
+        );
+    }
+    
     /**
      * Reload PriceInfo object
      *
@@ -2564,22 +2584,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setId($value)
     {
         return $this->setData('entity_id', $value);
-    }
-
-    /**
-     * Get application state
-     *
-     * @deprecated
-     * @return \Magento\Framework\App\State
-     */
-    private function getAppState()
-    {
-        if (!$this->appState instanceof \Magento\Framework\App\State) {
-            $this->appState = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Framework\App\State::class
-            );
-        }
-        return $this->appState;
     }
 
     /**

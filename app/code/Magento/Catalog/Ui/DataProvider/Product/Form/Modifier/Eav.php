@@ -30,6 +30,7 @@ use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Framework\Locale\CurrencyInterface;
 
 /**
  * Class Eav
@@ -160,6 +161,11 @@ class Eav extends AbstractModifier
      * @var array
      */
     private $prevSetAttributes;
+
+    /**
+     * @var CurrencyInterface
+     */
+    private $localeCurrency;
 
     /**
      * @param LocatorInterface $locator
@@ -308,9 +314,7 @@ class Eav extends AbstractModifier
             ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER),
             $attributeContainer,
             [
-                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
-                // TODO: Eliminate this in scope of MAGETWO-51364
-                'scopeLabel' => $this->getScopeLabel($attribute),
+                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER
             ]
         );
 
@@ -866,5 +870,39 @@ class Eav extends AbstractModifier
         }
 
         return $attributeGroupCode;
+    }
+
+    /**
+     * The getter function to get the locale currency for real application code
+     *
+     * @return \Magento\Framework\Locale\CurrencyInterface
+     *
+     * @deprecated
+     */
+    private function getLocaleCurrency()
+    {
+        if ($this->localeCurrency === null) {
+            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()->get(CurrencyInterface::class);
+        }
+        return $this->localeCurrency;
+    }
+
+    /**
+     * Format price according to the locale of the currency
+     *
+     * @param mixed $value
+     * @return string
+     */
+    protected function formatPrice($value)
+    {
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        $store = $this->storeManager->getStore();
+        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
+        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
+
+        return $value;
     }
 }
