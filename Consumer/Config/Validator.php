@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\MessageQueue\ConsumerInterface;
 
 /**
  * Consumer config data validator.
@@ -30,27 +31,61 @@ class Validator
      */
     public function validate($configData)
     {
-        foreach ($configData as $consumerConfig) {
+        foreach ($configData as $consumerName => $consumerConfig) {
+            $this->validateConsumerRequiredFields($consumerName, $consumerConfig);
             $this->validateHandlers($consumerConfig);
+            $this->validateConsumerInstance($consumerConfig);
+        }
+    }
+
+    /**
+     * Make sure all required fields are present in the consumer item config.
+     *
+     * @param string $consumerName
+     * @param array $consumerConfig
+     */
+    private function validateConsumerRequiredFields($consumerName, $consumerConfig)
+    {
+        $requiredFields = ['name', 'queue', 'handlers', 'consumerInstance', 'connection', 'maxMessages'];
+        foreach ($requiredFields as $fieldName) {
+            if (!array_key_exists($fieldName, $consumerConfig)) {
+                throw new \LogicException(
+                    sprintf("'%s' field must be specified for consumer '%s'", $fieldName, $consumerName)
+                );
+            }
+        }
+    }
+
+    /**
+     * Make sure that specified consumer instance is valid.
+     *
+     * @param array $consumerConfig
+     */
+    private function validateConsumerInstance($consumerConfig)
+    {
+        $consumerInstance = $consumerConfig['consumerInstance'];
+        $implementedInterfaces = class_implements($consumerInstance);
+        if (!in_array(ConsumerInterface::class, $implementedInterfaces)) {
+            throw new \LogicException(
+                sprintf(
+                    "'%s' cannot be specified as 'consumerInstance' for '%s' consumer,"
+                        . " unless it implements '%s' interface",
+                    $consumerInstance,
+                    $consumerConfig['name'],
+                    ConsumerInterface::class
+                )
+            );
         }
     }
 
     /**
      * Validate handlers configuration for the specific consumer.
-     * 
+     *
      * @param array $consumerConfig
      */
     private function validateHandlers($consumerConfig)
     {
         $consumerName = $consumerConfig['name'];
-        if (!isset($consumerConfig['handlers'])) {
-            throw new \LogicException(
-                sprintf(
-                    "'handlers' array (at least empty one) must be specified for consumer '%s'",
-                    $consumerName
-                )
-            );
-        }
         if (!is_array($consumerConfig['handlers'])) {
             throw new \LogicException(
                 sprintf(
@@ -66,7 +101,7 @@ class Validator
 
     /**
      * Validate handler configuration.
-     * 
+     *
      * @param array $handler
      * @param string $consumerName
      */
