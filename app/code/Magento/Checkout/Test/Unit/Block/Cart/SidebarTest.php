@@ -163,7 +163,7 @@ class SidebarTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                \Magento\Checkout\Block\Cart\Sidebar::XML_PATH_CHECKOUT_SIDEBAR_COUNT,
+                'checkout/sidebar/count',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )->willReturn(3);
 

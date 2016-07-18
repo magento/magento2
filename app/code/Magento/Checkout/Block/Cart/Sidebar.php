@@ -18,11 +18,6 @@ class Sidebar extends AbstractCart
     const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
 
     /**
-     * Xml pah to checkout sidebar count value
-     */
-    const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
-
-    /**
      * @var \Magento\Catalog\Helper\Image
      */
     protected $imageHelper;
