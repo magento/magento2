@@ -40,6 +40,13 @@ class CreateSimpleProductEntityTest extends Injectable
     protected $configData;
 
     /**
+     * Should cache be flushed
+     *
+     * @var bool
+     */
+    private $flushCache;
+
+    /**
      * Prepare data.
      *
      * @param Category $category
@@ -62,6 +69,7 @@ class CreateSimpleProductEntityTest extends Injectable
      * @param CatalogProductIndex $productGrid
      * @param CatalogProductNew $newProductPage
      * @param string $configData
+     * @param bool $flushCache
      * @return array
      */
     public function testCreate(
@@ -69,14 +77,16 @@ class CreateSimpleProductEntityTest extends Injectable
         Category $category,
         CatalogProductIndex $productGrid,
         CatalogProductNew $newProductPage,
+        $flushCache = false,
         $configData = null
     ) {
         $this->configData = $configData;
+        $this->flushCache = $flushCache;
 
         // Preconditions
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => $this->configData]
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'flushCache' => $this->flushCache]
         )->run();
 
         // Steps
@@ -96,8 +106,8 @@ class CreateSimpleProductEntityTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
-            ['configData' => $this->configData, 'rollback' => true]
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
+            ['configData' => $this->configData, 'rollback' => true, 'flushCache' => $this->flushCache]
         )->run();
     }
 }
