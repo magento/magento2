@@ -145,8 +145,8 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Framework\FilePermissions::getMissingWritableDirectoriesForInstallation
-     * @covers \Magento\Framework\FilePermissions::getMissingWritablePathsForInstallation
+     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritableDirectoriesForInstallation
+     * @covers \Magento\Framework\Setup\FilePermissions::getMissingWritablePathsForInstallation
      */
     public function testGetMissingWritableDirectoriesAndPathsForInstallation()
     {

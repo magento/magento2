@@ -18,9 +18,6 @@ use \Magento\Framework\Session\Config;
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /** mock session.save_handler value from deployment config */
-    const SESSION_HANDLER_CONFIG = 'files';
-
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
@@ -92,7 +89,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         return [
             ['save_path', 'getSavePath', __DIR__],
             ['name', 'getName', 'FOOBAR'],
-            ['save_handler', 'getSaveHandler', 'user'],
             ['gc_probability', 'getGcProbability', 42],
             ['gc_divisor', 'getGcDivisor', 3],
             ['gc_maxlifetime', 'getGcMaxlifetime', 180],
@@ -136,27 +132,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->getModel($this->validatorMock);
         $this->config->setName('FOOBAR');
         $this->assertEquals('FOOBAR', $this->config->getName());
-    }
-
-    public function testSaveHandlerFromConfig()
-    {
-        $this->getModel($this->validatorMock);
-        $this->assertSame(
-            self::SESSION_HANDLER_CONFIG,
-            $this->config->getSaveHandler(),
-            var_export($this->config->toArray(), 1)
-        );
-    }
-
-    public function testSaveHandlerIsMutable()
-    {
-        $this->getModel($this->validatorMock);
-        $this->config->setSaveHandler('redis');
-        $this->assertEquals('user', $this->config->getSaveHandler());
-        $this->assertEquals('redis', $this->config->getSaveHandlerName());
-        $this->config->setSaveHandler('files');
-        $this->assertEquals('files', $this->config->getSaveHandler());
-        $this->assertEquals('files', $this->config->getSaveHandlerName());
     }
 
     public function testCookieLifetimeIsMutable()
@@ -377,33 +352,33 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 true,
                 true,
                 [
-                    'session.save_handler' => 'files',
                     'session.cache_limiter' => 'files',
                     'session.cookie_lifetime' => 0,
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
+                    'session.cookie_secure' => false,
                 ],
             ],
             'all invalid' => [
                 true,
                 false,
                 [
-                    'session.save_handler' => 'files',
                     'session.cache_limiter' => 'files',
                     'session.cookie_httponly' => false,
+                    'session.cookie_secure' => false,
                 ],
             ],
             'invalid_valid' => [
                 false,
                 true,
                 [
-                    'session.save_handler' => 'files',
                     'session.cache_limiter' => 'files',
                     'session.cookie_lifetime' => 3600,
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
+                    'session.cookie_secure' => false,
                 ],
             ],
         ];
@@ -460,13 +435,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $deploymentConfigMock->expects($this->at(0))
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_METHOD, ini_get('session.save_handler') ?: 'files')
-            ->willReturn(self::SESSION_HANDLER_CONFIG);
-        $deploymentConfigMock->expects($this->at(1))
-            ->method('get')
             ->with(Config::PARAM_SESSION_SAVE_PATH)
             ->will($this->returnValue(null));
-        $deploymentConfigMock->expects($this->at(2))
+        $deploymentConfigMock->expects($this->at(1))
             ->method('get')
             ->with(Config::PARAM_SESSION_CACHE_LIMITER)
             ->will($this->returnValue('files'));
@@ -477,13 +448,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'scopeConfig' => $this->configMock,
                 'validatorFactory' => $this->validatorFactoryMock,
                 'scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                'cacheLimiter' => \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
+                'cacheLimiter' => 'files',
                 'lifetimePath' => 'test_web/test_cookie/test_cookie_lifetime',
                 'request' => $this->requestMock,
                 'filesystem' => $filesystemMock,
                 'deploymentConfig' => $deploymentConfigMock,
             ]
-
         );
         return $this->config;
     }

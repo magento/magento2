@@ -80,7 +80,6 @@ class Edit extends \Magento\Customer\Controller\AbstractAccount
         $this->session->setChangePassword($this->getRequest()->getParam('changepass') == 1);
 
         $resultPage->getConfig()->getTitle()->set(__('Account Information'));
-        $resultPage->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
         return $resultPage;
     }
 }

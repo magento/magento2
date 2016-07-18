@@ -117,25 +117,36 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $associatedEntitiesMap = [
-            'customer_group' => [
-                'associations_table' => 'salesrule_customer_group',
-                'rule_id_field' => 'rule_id',
-                'entity_id_field' => 'customer_group_id'
+        $associatedEntitiesMap = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $associatedEntitiesMap->expects($this->once())
+            ->method('getData')
+            ->willReturn(
+                [
+                    'customer_group' => [
+                        'associations_table' => 'salesrule_customer_group',
+                        'rule_id_field' => 'rule_id',
+                        'entity_id_field' => 'customer_group_id'
+                    ],
+                    'website' => [
+                        'associations_table' => 'salesrule_website',
+                        'rule_id_field' => 'rule_id',
+                        'entity_id_field' => 'website_id'
+                    ],
+                ]
+            );
+
+        $this->prepareObjectManager([
+            [
+                'Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap',
+                $associatedEntitiesMap
             ],
-            'website' => [
-                'associations_table' => 'salesrule_website',
-                'rule_id_field' => 'rule_id',
-                'entity_id_field' => 'website_id'
-            ],
-        ];
+        ]);
 
         $this->model = $objectManager->getObject(
             \Magento\SalesRule\Model\ResourceModel\Rule::class,
             [
                 'context' => $context,
                 'connectionName' => $connectionName,
-                'associatedEntitiesMap' => $associatedEntitiesMap,
                 'entityManager' => $this->entityManager,
             ]
         );
@@ -153,7 +164,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->entityManager->expects($this->once())
             ->method('load')
-            ->with($abstractModel, $ruleId, RuleInterface::class);
+            ->with($abstractModel, $ruleId);
         $result = $this->model->load($abstractModel, $ruleId);
         $this->assertSame($this->model, $result);
     }
@@ -162,7 +173,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager->expects($this->once())
             ->method('save')
-            ->with($this->rule, RuleInterface::class);
+            ->with($this->rule);
         $this->assertEquals($this->model->save($this->rule), $this->model);
     }
 
@@ -170,7 +181,23 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager->expects($this->once())
             ->method('delete')
-            ->with($this->rule, RuleInterface::class);
+            ->with($this->rule);
         $this->assertEquals($this->model->delete($this->rule), $this->model);
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

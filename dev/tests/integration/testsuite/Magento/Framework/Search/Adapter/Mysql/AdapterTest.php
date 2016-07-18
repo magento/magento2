@@ -47,7 +47,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $converter = $this->objectManager->create(\Magento\Framework\Search\Request\Config\Converter::class);
 
         $document = new \DOMDocument();
-        $document->load($this->getRequestConfig());
+        $document->load($this->getRequestConfigPath());
         $requestConfig = $converter->convert($document);
 
         /** @var \Magento\Framework\Search\Request\Config $config */
@@ -63,9 +63,11 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Get request config path
+     *
      * @return string
      */
-    protected function getRequestConfig()
+    protected function getRequestConfigPath()
     {
         return __DIR__ . '/../../_files/requests.xml';
     }
@@ -109,7 +111,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         $actualIds = [];
         foreach ($queryResponse as $document) {
-            /** @var \Magento\Framework\Search\Document $document */
+            /** @var \Magento\Framework\Api\Search\Document $document */
             $actualIds[] = $document->getId();
         }
         sort($actualIds);
@@ -363,6 +365,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
      * @magentoConfigFixture current_store catalog/search/engine mysql
      */
     public function testCustomFilterableAttribute()
@@ -383,12 +386,41 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());
         $this->requestBuilder->bind('multiselect_attribute', $multiselectOptions->getLastItem()->getId());
-        $this->requestBuilder->bind('price.from', 9);
-        $this->requestBuilder->bind('price.to', 12);
+        $this->requestBuilder->bind('price.from', 98);
+        $this->requestBuilder->bind('price.to', 100);
         $this->requestBuilder->bind('category_ids', 2);
         $this->requestBuilder->setRequestName('filterable_custom_attributes');
 
         $queryResponse = $this->executeQuery();
         $this->assertEquals(1, $queryResponse->count());
+    }
+
+    /**
+     * Advanced search request using date product attribute
+     *
+     * @param $rangeFilter
+     * @param $expectedRecordsCount
+     * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @dataProvider dateDataProvider
+     */
+    public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
+    {
+        $this->requestBuilder->bind('date.from', $rangeFilter['from']);
+        $this->requestBuilder->bind('date.to', $rangeFilter['to']);
+        $this->requestBuilder->setRequestName('advanced_search_date_field');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals($expectedRecordsCount, $queryResponse->count());
+    }
+
+    public function dateDataProvider()
+    {
+        return [
+            [['from' => '2000-01-01T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1], //Y-m-d
+            [['from' => '2000-01-01T00:00:00Z', 'to' => ''], 1],
+            [['from' => '1999-12-31T00:00:00Z', 'to' => '2000-01-01T00:00:00Z'], 1],
+            [['from' => '2000-02-01T00:00:00Z', 'to' => ''], 0],
+        ];
     }
 }

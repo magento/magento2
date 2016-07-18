@@ -61,6 +61,7 @@
         <xs:attribute name="showInDefault" type="xs:int" use="optional" />
         <xs:attribute name="showInStore" type="xs:int" use="optional" />
         <xs:attribute name="showInWebsite" type="xs:int" use="optional" />
+        <xs:attribute name="canRestore" type="xs:int" use="optional" />
         <xs:attribute name="advanced" type="xs:boolean" use="optional" />
         <xs:attribute name="extends" type="xs:string" use="optional" />
     </xs:attributeGroup>

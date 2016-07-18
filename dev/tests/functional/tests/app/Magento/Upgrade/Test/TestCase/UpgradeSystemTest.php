@@ -73,8 +73,21 @@ class UpgradeSystemTest extends Injectable
         );
         $version = $upgrade['upgradeVersion'];
 
-        if (preg_match('/^[0-9].[0-9].[0-9]/', $version, $out)) {
-            $version = array_shift($out);
+        $suffix = "( (CE|EE))$";
+        $normalVersion = '(0|[1-9]\d*)';
+        $preReleaseVersion = "((0(?!\\d+(\\.|\\+|{$suffix}))|[1-9A-Za-z])[0-9A-Za-z-]*)";
+        $buildVersion = '([0-9A-Za-z][0-9A-Za-z-]*)';
+        $versionPattern = "/^{$normalVersion}(\\.{$normalVersion}){2}"
+            . "(-{$preReleaseVersion}(\\.{$preReleaseVersion})*)?"
+            . "(\\+{$buildVersion}(\\.{$buildVersion})*)?{$suffix}/";
+
+        if (preg_match($versionPattern, $version)) {
+            preg_match("/(.*){$suffix}/", $version, $matches);
+            $version = $matches[1];
+        } else {
+            $this->fail(
+                "Provided version format does not comply with semantic versioning specification. Got '{$version}'"
+            );
         }
 
         // Authenticate in admin area
@@ -94,6 +107,9 @@ class UpgradeSystemTest extends Injectable
         // Select upgrade to version
         $this->setupWizard->getSystemUpgradeHome()->clickSystemUpgrade();
         $this->setupWizard->getSelectVersion()->fill($upgradeFixture);
+        if ($upgrade['otherComponents'] === 'Yes') {
+            $this->setupWizard->getSelectVersion()->chooseUpgradeOtherComponents();
+        }
         $this->setupWizard->getSelectVersion()->clickNext();
 
         // Readiness Check

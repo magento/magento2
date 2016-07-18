@@ -149,7 +149,7 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
                         'partner' => null,
                         'pwd' => null,
                         'verbosity' => null,
-                        'BNCODE' => 'build notation code',
+                        'BUTTONSOURCE' => 'build notation code',
                         'tender' => 'C',
                     ],
                     $this->returnSelf()

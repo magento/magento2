@@ -23,6 +23,8 @@ class JobFactory
     const JOB_MODULE_ENABLE = 'setup:module:enable';
     const JOB_MODULE_DISABLE = 'setup:module:disable';
     const JOB_STATIC_REGENERATE = 'setup:static:regenerate';
+    const JOB_ENABLE_CACHE = 'setup:cache:enable';
+    const JOB_DISABLE_CACHE = 'setup:cache:disable';
 
     /**
      * @var ServiceLocatorInterface
@@ -52,7 +54,7 @@ class JobFactory
         $cronStatus = $this->serviceLocator->get(\Magento\Setup\Model\Cron\Status::class);
         $statusStream = fopen($cronStatus->getStatusFilePath(), 'a+');
         $logStream = fopen($cronStatus->getLogFilePath(), 'a+');
-        $multipleStreamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
+        $streamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
         $objectManagerProvider = $this->serviceLocator->get(\Magento\Setup\Model\ObjectManagerProvider::class);
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = $objectManagerProvider->get();
@@ -61,7 +63,7 @@ class JobFactory
                 return new JobUpgrade(
                     $this->serviceLocator->get(\Magento\Setup\Console\Command\UpgradeCommand::class),
                     $objectManagerProvider,
-                    $multipleStreamOutput,
+                    $streamOutput,
                     $this->serviceLocator->get(\Magento\Setup\Model\Cron\Queue::class),
                     $cronStatus,
                     $name,
@@ -71,7 +73,7 @@ class JobFactory
             case self::JOB_DB_ROLLBACK:
                 return new JobDbRollback(
                     $objectManager->get(\Magento\Framework\Setup\BackupRollbackFactory::class),
-                    $multipleStreamOutput,
+                    $streamOutput,
                     $cronStatus,
                     $objectManagerProvider,
                     $name,
@@ -81,7 +83,7 @@ class JobFactory
             case self::JOB_STATIC_REGENERATE:
                 return new JobStaticRegenerate(
                     $objectManagerProvider,
-                    $multipleStreamOutput,
+                    $streamOutput,
                     $cronStatus,
                     $name,
                     $params
@@ -102,7 +104,7 @@ class JobFactory
                     $moduleUninstall,
                     $themeUninstall,
                     $objectManagerProvider,
-                    $multipleStreamOutput,
+                    $streamOutput,
                     $this->serviceLocator->get(\Magento\Setup\Model\Cron\Queue::class),
                     $cronStatus,
                     $this->serviceLocator->get(\Magento\Setup\Model\Updater::class),
@@ -114,7 +116,7 @@ class JobFactory
                 return new JobModule(
                     $this->serviceLocator->get(\Magento\Setup\Console\Command\ModuleEnableCommand::class),
                     $objectManagerProvider,
-                    $multipleStreamOutput,
+                    $streamOutput,
                     $cronStatus,
                     $name,
                     $params
@@ -124,11 +126,19 @@ class JobFactory
                 return new JobModule(
                     $this->serviceLocator->get(\Magento\Setup\Console\Command\ModuleDisableCommand::class),
                     $objectManagerProvider,
-                    $multipleStreamOutput,
+                    $streamOutput,
                     $cronStatus,
                     $name,
                     $params
                 );
+                break;
+            case self::JOB_ENABLE_CACHE:
+                $cmd = $objectManager->get(\Magento\Backend\Console\Command\CacheEnableCommand::class);
+                return new JobSetCache($cmd, $objectManagerProvider, $streamOutput, $cronStatus, $name, $params);
+                break;
+            case self::JOB_DISABLE_CACHE:
+                $cmd = $objectManager->get(\Magento\Backend\Console\Command\CacheDisableCommand::class);
+                return new JobSetCache($cmd, $objectManagerProvider, $streamOutput, $cronStatus, $name);
                 break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));

@@ -12,6 +12,7 @@ class JobUpgradeTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $queue = $this->getMock(\Magento\Setup\Model\Cron\Queue::class, [], [], '', false);
+        $queue->expects($this->exactly(2))->method('addJobs');
         $command = $this->getMock(\Magento\Setup\Console\Command\UpgradeCommand::class, [], [], '', false);
         $command->expects($this->once())->method('run');
         $status = $this->getMock(\Magento\Setup\Model\Cron\Status::class, [], [], '', false);

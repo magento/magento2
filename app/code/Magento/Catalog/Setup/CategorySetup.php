@@ -28,6 +28,16 @@ class CategorySetup extends EavSetup
     private $categoryFactory;
 
     /**
+     * This should be set explicitly
+     */
+    const CATEGORY_ENTITY_TYPE_ID = 3;
+
+    /**
+     * This should be set explicitly
+     */
+    const CATALOG_PRODUCT_ENTITY_TYPE_ID = 4;
+
+    /**
      * Init
      *
      * @param ModuleDataSetupInterface $setup
@@ -69,6 +79,7 @@ class CategorySetup extends EavSetup
     {
         return [
             'catalog_category' => [
+                'entity_type_id' => self::CATEGORY_ENTITY_TYPE_ID,
                 'entity_model' => \Magento\Catalog\Model\ResourceModel\Category::class,
                 'attribute_model' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
                 'table' => 'catalog_category_entity',
@@ -339,6 +350,7 @@ class CategorySetup extends EavSetup
                 ],
             ],
             'catalog_product' => [
+                'entity_type_id' => self::CATALOG_PRODUCT_ENTITY_TYPE_ID,
                 'entity_model' => \Magento\Catalog\Model\ResourceModel\Product::class,
                 'attribute_model' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
                 'table' => 'catalog_product_entity',
@@ -744,6 +756,9 @@ class CategorySetup extends EavSetup
                         'sort_order' => 9,
                         'visible' => true,
                         'group' => 'General',
+                        'is_used_in_grid' => false,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
                     ],
                     'options_container' => [
                         'type' => 'varchar',

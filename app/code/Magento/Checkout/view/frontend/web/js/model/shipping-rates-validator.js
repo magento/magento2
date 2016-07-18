@@ -29,7 +29,8 @@ define(
         var checkoutConfig = window.checkoutConfig,
             validators = [],
             observedElements = [],
-            postcodeElement = null;
+            postcodeElement = null,
+            postcodeElementName = 'postcode';
 
         return {
             validateAddressTimeout: 0,
@@ -50,7 +51,7 @@ define(
              * @return {Boolean}
              */
             validateAddressData: function (address) {
-                return validators.some(function(validator) {
+                return validators.some(function (validator) {
                     return validator.validate(address);
                 });
             },
@@ -63,6 +64,11 @@ define(
             initFields: function (formPath) {
                 var self = this,
                     elements = shippingRatesValidationRules.getObservableFields();
+
+                if ($.inArray(postcodeElementName, elements) === -1) {
+                    // Add postcode field to observables if not exist for zip code validation support
+                    elements.push(postcodeElementName);
+                }
 
                 $.each(elements, function (index, field) {
                     uiRegistry.async(formPath + '.' + field)(self.doElementBinding.bind(self));
@@ -80,12 +86,12 @@ define(
                 var observableFields = shippingRatesValidationRules.getObservableFields();
 
                 if (element && (observableFields.indexOf(element.index) !== -1 || force)) {
-                    if (element.index !== 'postcode') {
+                    if (element.index !== postcodeElementName) {
                         this.bindHandler(element, delay);
                     }
                 }
 
-                if (element.index === 'postcode') {
+                if (element.index === postcodeElementName) {
                     this.bindHandler(element, delay);
                     postcodeElement = element;
                 }
@@ -135,7 +141,7 @@ define(
              */
             postcodeValidation: function () {
                 var countryId = $('select[name="country_id"]').val(),
-                    validationResult = postcodeValidator.validate(postcodeElement.value(), countryId),
+                    validationResult,
                     warnMessage;
 
                 if (postcodeElement == null || postcodeElement.value() == null) {
@@ -143,6 +149,7 @@ define(
                 }
 
                 postcodeElement.warn(null);
+                validationResult = postcodeValidator.validate(postcodeElement.value(), countryId);
 
                 if (!validationResult) {
                     warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');

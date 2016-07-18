@@ -44,6 +44,13 @@ class FillCustomerAddressesStep implements TestStepInterface
     protected $products;
 
     /**
+     * Customer fixture instance.
+     *
+     * @var Customer
+     */
+    private $customer;
+
+    /**
      * @param MultishippingCheckoutAddresses $addresses
      * @param Customer $customer
      * @param ObjectManager $objectManager
@@ -58,8 +65,8 @@ class FillCustomerAddressesStep implements TestStepInterface
         $this->addresses = $addresses;
         $this->customer = $customer;
         $this->products = $products;
-        $this->objectManeger = $objectManager;
-        $this->objectManeger->configure(
+        $this->objectManager = $objectManager;
+        $this->objectManager->configure(
             [\Magento\Customer\Test\Block\Address\Renderer::class => ['shared' => false]]
         );
     }
@@ -76,7 +83,7 @@ class FillCustomerAddressesStep implements TestStepInterface
 
         foreach ($this->products as $key => $product) {
             $productName = $product->getName();
-            $addressRender = $this->objectManeger->create(
+            $addressRender = $this->objectManager->create(
                 \Magento\Customer\Test\Block\Address\Renderer::class,
                 ['address' => $addresses[$key], 'type' => 'oneline']
             );

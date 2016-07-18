@@ -75,13 +75,8 @@ class CombineTest extends \PHPUnit_Framework_TestCase
     public function testCollectValidatedAttributes()
     {
         $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
-            ->disableOriginalConstructor()->setMethods(['getSelect'])
+            ->disableOriginalConstructor()
             ->getMock();
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
-            ->disableOriginalConstructor()->setMethods(['getPart'])
-            ->getMock();
-        $select->expects($this->any())->method('getPart')->with('from')->willReturn(['alias_table' => 'table_name']);
-        $collection->expects($this->any())->method('getSelect')->willReturn($select);
         $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
             ->disableOriginalConstructor()->setMethods(['addToCollection'])
             ->getMock();

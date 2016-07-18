@@ -271,7 +271,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns additional_data
      *
-     * @return string
+     * @return string|null
      */
     public function getAdditionalData()
     {
@@ -281,7 +281,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_cost
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseCost()
     {
@@ -291,7 +291,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountAmount()
     {
@@ -301,7 +301,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -311,7 +311,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_price
      *
-     * @return float
+     * @return float|null
      */
     public function getBasePrice()
     {
@@ -321,7 +321,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_price_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBasePriceInclTax()
     {
@@ -331,7 +331,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_row_total
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseRowTotal()
     {
@@ -341,7 +341,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_row_total_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseRowTotalInclTax()
     {
@@ -351,7 +351,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns base_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTaxAmount()
     {
@@ -361,7 +361,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns description
      *
-     * @return string
+     * @return string|null
      */
     public function getDescription()
     {
@@ -371,7 +371,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountAmount()
     {
@@ -381,7 +381,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -391,7 +391,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns name
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -411,7 +411,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns parent_id
      *
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {
@@ -421,7 +421,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns price
      *
-     * @return float
+     * @return float|null
      */
     public function getPrice()
     {
@@ -431,7 +431,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns price_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getPriceInclTax()
     {
@@ -441,7 +441,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns product_id
      *
-     * @return int
+     * @return int|null
      */
     public function getProductId()
     {
@@ -461,7 +461,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns row_total
      *
-     * @return float
+     * @return float|null
      */
     public function getRowTotal()
     {
@@ -471,7 +471,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns row_total_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getRowTotalInclTax()
     {
@@ -491,7 +491,7 @@ class Item extends AbstractModel implements InvoiceItemInterface
     /**
      * Returns tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getTaxAmount()
     {

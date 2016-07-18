@@ -129,7 +129,9 @@ class ActionPool implements ActionPoolInterface
     {
         $toolbar = $this->getToolbar();
         $container = $this->context->getPageLayout()->createBlock($type, $name, $arguments);
-        $toolbar->setChild($name, $container);
+        if ($toolbar) {
+            $toolbar->setChild($name, $container);
+        }
     }
 
     /**

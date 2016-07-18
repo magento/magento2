@@ -88,7 +88,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     private function getProductGallery($product)
     {
         $result = [];
-        $this->productGalleryReadHandler->execute('', $product);
+        $this->productGalleryReadHandler->execute($product);
         $images = $product->getMediaGalleryImages();
         foreach ($images as $image) {
             $result[] = [

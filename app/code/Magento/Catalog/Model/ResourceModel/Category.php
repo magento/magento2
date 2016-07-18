@@ -993,8 +993,8 @@ class Category extends AbstractResource
     {
         $this->_attributes = [];
         $this->loadAttributesMetadata($attributes);
-        $object = $this->getEntityManager()->load($object, $entityId, CategoryInterface::class, []);
-        if (!$this->getEntityManager()->has($object, \Magento\Catalog\Api\Data\CategoryInterface::class, [])) {
+        $object = $this->getEntityManager()->load($object, $entityId);
+        if (!$this->getEntityManager()->has($object)) {
             $object->isObjectNew(true);
         }
         return $this;
@@ -1005,7 +1005,7 @@ class Category extends AbstractResource
      */
     public function delete($object)
     {
-        $this->getEntityManager()->delete($object, CategoryInterface::class, []);
+        $this->getEntityManager()->delete($object);
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
             ['product' => $object]
@@ -1022,7 +1022,7 @@ class Category extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->getEntityManager()->save($object, CategoryInterface::class, []);
+        $this->getEntityManager()->save($object);
         return $this;
     }
 

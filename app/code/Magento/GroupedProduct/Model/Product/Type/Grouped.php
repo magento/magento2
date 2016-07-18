@@ -202,7 +202,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getAssociatedProductCollection(
                 $product
             )->addAttributeToSelect(
-                ['name', 'price']
+                ['name', 'price',  'special_price', 'special_from_date', 'special_to_date']
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
                 $this->getStoreFilter($product)
             )->addAttributeToFilter(
@@ -308,9 +308,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         $links = $product->getLinkInstance();
         $links->setLinkTypeId(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
         $collection = $links->getProductCollection()->setFlag(
-            'require_stock_items',
-            true
-        )->setFlag(
             'product_children',
             true
         )->setIsStrongMode();

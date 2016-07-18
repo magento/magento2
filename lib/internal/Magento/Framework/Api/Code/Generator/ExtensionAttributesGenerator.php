@@ -25,6 +25,11 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     protected $config;
 
     /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
+    private $typeProcessor;
+
+    /**
      * @var array
      */
     protected $allCustomAttributes;
@@ -59,6 +64,22 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
     }
 
     /**
+     * Get type processor
+     *
+     * @return \Magento\Framework\Reflection\TypeProcessor
+     * @deprecated
+     */
+    private function getTypeProcessor()
+    {
+        if ($this->typeProcessor === null) {
+            $this->typeProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\Reflection\TypeProcessor::class
+            );
+        }
+        return $this->typeProcessor;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function _getDefaultConstructorDefinition()
@@ -90,9 +111,15 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
                 'body' => "return \$this->_get('{$attributeName}');",
                 'docblock' => ['tags' => [['name' => 'return', 'description' => $attributeType . '|null']]],
             ];
+            $parameters = ['name' => $propertyName];
+            // If the attribute type is a valid type declaration (e.g., interface, class, array) then use it to enforce
+            // constraints on the generated setter methods
+            if ($this->getTypeProcessor()->isValidTypeDeclaration($attributeType)) {
+                $parameters['type'] = $attributeType;
+            }
             $methods[] = [
                 'name' => $setterName,
-                'parameters' => [['name' => $propertyName]],
+                'parameters' => [$parameters],
                 'body' => "\$this->setData('{$attributeName}', \${$propertyName});" . PHP_EOL . "return \$this;",
                 'docblock' => [
                     'tags' => [

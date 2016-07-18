@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Eav\Model\ResourceModel;
 
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
@@ -13,12 +12,18 @@ use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Model\Entity\ScopeResolver;
 use Magento\Framework\Model\Entity\ScopeInterface;
 use Magento\Framework\EntityManager\Operation\AttributeInterface;
+use Magento\Eav\Model\Entity\AttributeCache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadHandler implements AttributeInterface
 {
+    /**
+     * @var AttributeCache
+     */
+    private $attributeCache;
+
     /**
      * @var AttributeRepository
      */
@@ -52,19 +57,22 @@ class ReadHandler implements AttributeInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AppResource $appResource
      * @param ScopeResolver $scopeResolver
+     * @param AttributeCache $attributeCache
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AppResource $appResource,
-        ScopeResolver $scopeResolver
+        ScopeResolver $scopeResolver,
+        AttributeCache $attributeCache
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->appResource = $appResource;
         $this->scopeResolver = $scopeResolver;
+        $this->attributeCache = $attributeCache;
     }
 
     /**
@@ -74,13 +82,19 @@ class ReadHandler implements AttributeInterface
      */
     protected function getAttributes($entityType)
     {
-        $metadata = $this->metadataPool->getMetadata($entityType);
 
+        $attributes = $this->attributeCache->getAttributes($entityType);
+        if ($attributes) {
+            return $attributes;
+        }
+        $metadata = $this->metadataPool->getMetadata($entityType);
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
+            $this->searchCriteriaBuilder->create()
         );
-        return $searchResult->getItems();
+        $attributes = $searchResult->getItems();
+        $this->attributeCache->saveAttributes($entityType, $attributes);
+        return $attributes;
     }
 
     /**
@@ -104,7 +118,7 @@ class ReadHandler implements AttributeInterface
      * @throws \Exception
      * @throws \Magento\Framework\Exception\ConfigurationMismatchException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entityData, $arguments = [])
     {
@@ -114,39 +128,43 @@ class ReadHandler implements AttributeInterface
         }
         $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
         $connection = $metadata->getEntityConnection();
-        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
+
         $attributeTables = [];
         $attributesMap = [];
         $selects = [];
 
+        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         foreach ($this->getAttributes($entityType) as $attribute) {
             if (!$attribute->isStatic()) {
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
                 $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();
             }
         }
-        foreach ($attributeTables as $attributeTable => $attributeCodes) {
-            $select = $connection->select()
-                ->from(
-                    ['t' => $attributeTable],
-                    ['value' => 't.value', 'attribute_id' => 't.attribute_id']
-                )
-                ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
-            foreach ($context as $scope) {
-                //TODO: if (in table exists context field)
-                $select->where(
-                    $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
-                    $this->getContextVariables($scope)
-                )->order('t.' . $scope->getIdentifier() . ' DESC');
+        if (count($attributeTables)) {
+            $attributeTables = array_keys($attributeTables);
+            foreach ($attributeTables as $attributeTable) {
+                $select = $connection->select()
+                    ->from(
+                        ['t' => $attributeTable],
+                        ['value' => 't.value', 'attribute_id' => 't.attribute_id']
+                    )
+                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
+                foreach ($context as $scope) {
+                    //TODO: if (in table exists context field)
+                    $select->where(
+                        $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
+                        $this->getContextVariables($scope)
+                    )->order('t.' . $scope->getIdentifier() . ' DESC');
+                }
+                $selects[] = $select;
             }
-            $selects[] = $select;
-        }
-        $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
-            $selects,
-            \Magento\Framework\DB\Select::SQL_UNION_ALL
-        );
-        foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
-            $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
+                $selects,
+                \Magento\Framework\DB\Select::SQL_UNION_ALL
+            );
+            foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
+                $entityData[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
+            }
         }
         return $entityData;
     }

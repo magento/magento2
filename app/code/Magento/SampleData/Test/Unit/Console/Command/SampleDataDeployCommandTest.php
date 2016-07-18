@@ -40,10 +40,9 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getSampleDataPackages')
             ->willReturn($sampleDataPackages);
 
-        $commandInput = $this->getMock(\Symfony\Component\Console\Input\ArrayInput::class, [], [], '', false);
-
         $arrayInputFactory = $this
             ->getMock(\Symfony\Component\Console\Input\ArrayInputFactory::class, ['create'], [], '', false);
+        $arrayInputFactory->expects($this->never())->method('create');
 
         array_walk($sampleDataPackages, function (&$v, $k) {
             $v = "$k:$v";
@@ -57,10 +56,7 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
             '--no-progress' => 1,
             'packages'      => $packages,
         ];
-        $arrayInputFactory->expects($this->any())
-            ->method('create')
-            ->with(['parameters' => $requireArgs])
-            ->willReturn($commandInput);
+        $commandInput = new \Symfony\Component\Console\Input\ArrayInput($requireArgs);
 
         $application = $this->getMock(\Composer\Console\Application::class, [], [], '', false);
         $application->expects($this->any())->method('run')

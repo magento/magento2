@@ -29,6 +29,11 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestC
                             Converter::DATA_TYPE => '\Magento\Bundle\Api\Data\OptionInterface[]',
                             Converter::RESOURCE_PERMISSIONS => [],
                         ],
+                        // Ensure type declaration is added to argument of setter
+                        'complex_object_attribute_with_type_declaration' => [
+                            Converter::DATA_TYPE => '\Magento\Bundle\Api\Data\BundleOptionInterface',
+                            Converter::RESOURCE_PERMISSIONS => [],
+                        ],
                     ],
                     \Magento\Catalog\Api\Data\Product::class => [
                         'should_not_include' => [
@@ -38,12 +43,17 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestC
                     ],
                 ]
             );
+        $typeProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
+            ->disableOriginalConstructor()
+            ->setMethods(null)
+            ->getMock();
 
         /** @var \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator $model */
         $model = $objectManager->getObject(
             \Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::class,
             [
                 'config' => $configMock,
+                'typeProcessor' => $typeProcessorMock,
                 'sourceClassName' => \Magento\Catalog\Api\Data\Product::class,
                 'resultClassName' => \Magento\Catalog\Api\Data\ProductExtensionInterface::class,
                 'classGenerator' => null

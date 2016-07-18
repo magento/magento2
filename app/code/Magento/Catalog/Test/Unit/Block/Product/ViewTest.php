@@ -84,6 +84,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
-        $this->assertEquals(['catalog_product_1', 'catalog_category_product_1'], $this->view->getIdentities());
+        $this->assertEquals(['catalog_product_1', 'catalog_category_1'], $this->view->getIdentities());
     }
 }

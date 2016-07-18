@@ -71,6 +71,19 @@ class Method extends Block
     }
 
     /**
+     * Click Continue to Paypal button.
+     *
+     * @return string
+     */
+    public function clickContinueToPaypal()
+    {
+        $currentWindow = $this->browser->getCurrentWindow();
+        $this->_rootElement->find($this->placeOrderButton)->click();
+        $this->waitForElementNotVisible($this->waitElement);
+        return $currentWindow;
+    }
+    
+    /**
      * Click "Check out with PayPal" button.
      */
     public function inContextPaypalCheckout()

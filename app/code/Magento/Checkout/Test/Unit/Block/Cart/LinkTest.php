@@ -57,7 +57,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         )->with(
             'Magento_Checkout'
         )->will(
-            $this->returnValue(true)
+            $this->returnValue(false)
         );
         $this->assertSame('', $block->toHtml());
     }

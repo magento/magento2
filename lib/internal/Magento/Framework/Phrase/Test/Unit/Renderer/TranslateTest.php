@@ -60,6 +60,15 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
     }
 
+    public function testRenderWithoutTranslation()
+    {
+        $translate = "Text with quote \'";
+        $this->_translator->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue([]));
+        $this->assertEquals($translate, $this->_renderer->render([$translate], []));
+    }
+
     public function testRenderTextWithDoubleQuotes()
     {
         $translatedTextInDictionary = "That\"s translated text";

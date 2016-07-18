@@ -301,7 +301,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             $this->accountManagement->validateResetPasswordLinkToken(1, $invalidToken);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals(InputException::REQUIRED_FIELD, $ie->getRawMessage());
+            $this->assertEquals('%fieldName is a required field.', $ie->getRawMessage());
             $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getMessage());
             $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
@@ -350,7 +350,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             $this->accountManagement->validateResetPasswordLinkToken(1, null);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals(InputException::REQUIRED_FIELD, $ie->getRawMessage());
+            $this->assertEquals('%fieldName is a required field.', $ie->getRawMessage());
             $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getMessage());
             $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
@@ -468,7 +468,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             $this->accountManagement->resetPassword('customer@example.com', $invalidToken, $password);
             $this->fail('Expected exception not thrown.');
         } catch (InputException $ie) {
-            $this->assertEquals(InputException::REQUIRED_FIELD, $ie->getRawMessage());
+            $this->assertEquals('%fieldName is a required field.', $ie->getRawMessage());
             $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getMessage());
             $this->assertEquals('resetPasswordLinkToken is a required field.', $ie->getLogMessage());
             $this->assertEmpty($ie->getErrors());
@@ -576,12 +576,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             $this->accountManagement->createAccount($customerEntity);
             $this->fail('Expected exception not thrown');
         } catch (InputException $ie) {
-            $this->assertEquals(InputException::DEFAULT_MESSAGE, $ie->getMessage());
-            $errors = $ie->getErrors();
-            $this->assertCount(3, $errors);
-            $this->assertEquals('firstname is a required field.', $errors[0]->getLogMessage());
-            $this->assertEquals('lastname is a required field.', $errors[1]->getLogMessage());
-            $this->assertEquals('Invalid value of "" provided for the email field.', $errors[2]->getLogMessage());
+            $this->assertEquals('Please enter a customer email.', $ie->getMessage());
         }
     }
 
@@ -655,10 +650,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             'id',
             'lastname',
         ];
-        sort($expectedInAfter);
         $actualInAfterOnly = array_keys($inAfterOnly);
-        sort($actualInAfterOnly);
-        $this->assertEquals($expectedInAfter, $actualInAfterOnly);
+        foreach ($expectedInAfter as $item) {
+            $this->assertContains($item, $actualInAfterOnly);
+        }
     }
 
     /**

@@ -105,5 +105,10 @@ class CreditmemoGetTest extends WebapiAbstract
             $this->assertArrayHasKey($field, $actual);
             $this->assertEquals($expected[$field], $actual[$field]);
         }
+
+        //check that nullable fields were marked as optional and were not sent
+        foreach ($actual as $value) {
+            $this->assertNotNull($value);
+        }
     }
 }

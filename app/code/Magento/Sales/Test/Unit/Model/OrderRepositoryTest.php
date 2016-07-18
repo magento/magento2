@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
@@ -33,7 +35,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $searchResultFactory;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -42,7 +44,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $className = \Magento\Sales\Model\ResourceModel\Metadata::class;
         $this->metadata = $this->getMock($className, [], [], '', false);
@@ -67,13 +69,11 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $fieldName = 'field';
         $searchCriteriaMock = $this->getMock(\Magento\Framework\Api\SearchCriteria::class, [], [], '', false);
-
         $collectionMock = $this->getMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class, [], [], '', false);
-
         $filterGroupMock = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
         $filterGroupFilterMock = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
         $sortOrderMock = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
-        $itemsMock = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
+        $itemsMock = $this->getMockBuilder(OrderInterface::class)->disableOriginalConstructor()->getMock();
 
         $extensionAttributes = $this->getMock(
             \Magento\Sales\Api\Data\OrderExtension::class,

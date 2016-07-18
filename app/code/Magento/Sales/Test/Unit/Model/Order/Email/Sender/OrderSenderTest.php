@@ -145,7 +145,10 @@ class OrderSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->orderResourceMock->expects($this->once())
+            $this->orderResourceMock->expects($this->at(0))
+                ->method('saveAttribute')
+                ->with($this->orderMock, 'email_sent');
+            $this->orderResourceMock->expects($this->at(1))
                 ->method('saveAttribute')
                 ->with($this->orderMock, 'send_email');
 

@@ -95,4 +95,50 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $result = $connection->fetchAll($select);
         $this->assertCount(0, $result);
     }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/products_with_multiselect_attribute.php
+     */
+    public function testReindexMultiselectAttribute()
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()
+            ->create(ProductRepositoryInterface::class);
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attr **/
+        $attr = Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
+           ->getAttribute('catalog_product', 'multiselect_attribute');
+        $attr->setIsFilterable(1)->save();
+
+        /** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
+        $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
+        );
+        $options->setAttributeFilter($attr->getId());
+        $optionIds = $options->getAllIds();
+        $product1Id = $optionIds[0] * 10;
+        $product2Id = $optionIds[1] * 10;
+
+        /** @var \Magento\Catalog\Model\Product $product1 **/
+        $product1 = $productRepository->getById($product1Id);
+        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $productRepository->save($product1);
+
+        /** @var \Magento\Catalog\Model\Product $product2 **/
+        $product2 = $productRepository->getById($product2Id);
+        $product1->setSpecialFromDate(date('Y-m-d H:i:s'));
+        $product1->setNewsFromDate(date('Y-m-d H:i:s'));
+        $productRepository->save($product2);
+
+        $this->_eavIndexerProcessor->reindexAll();
+
+        $connection = $this->productResource->getConnection();
+        $select = $connection->select()->from($this->productResource->getTable('catalog_product_index_eav'))
+            ->where('entity_id in (?)', [$product1Id, $product2Id])
+            ->where('attribute_id = ?', $attr->getId());
+
+        $result = $connection->fetchAll($select);
+        $this->assertCount(3, $result);
+    }
 }

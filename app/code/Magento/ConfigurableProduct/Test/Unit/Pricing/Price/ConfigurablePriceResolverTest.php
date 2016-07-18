@@ -56,9 +56,9 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getName']
+            ['getSku']
         );
-        $product->expects($this->once())->method('getName')->willReturn('Kiwi');
+        $product->expects($this->once())->method('getSku')->willReturn('Kiwi');
 
         $this->configurable->expects($this->once())->method('getUsedProducts')->willReturn([]);
 
@@ -81,9 +81,9 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getName']
+            ['getSku']
         );
-        $product->expects($this->never())->method('getName');
+        $product->expects($this->never())->method('getSku');
 
         $this->configurable->expects($this->once())->method('getUsedProducts')->willReturn([$product]);
         $this->priceResolver->expects($this->atLeastOnce())->method('resolvePrice')->willReturn($price);

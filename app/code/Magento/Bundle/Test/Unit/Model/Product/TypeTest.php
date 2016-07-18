@@ -1956,7 +1956,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->with('*')
             ->will($this->returnSelf());
         $flagMap = [
-            ['require_stock_items', true, $usedSelectionsMock],
             ['product_children', true, $usedSelectionsMock],
         ];
         $usedSelectionsMock->expects($this->any())

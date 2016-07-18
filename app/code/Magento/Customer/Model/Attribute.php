@@ -181,4 +181,26 @@ class Attribute extends \Magento\Eav\Model\Attribute
         return $this->getData('is_filterable_in_grid')
             && in_array($this->getFrontendInput(), ['text', 'date', 'select', 'boolean']);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        $this->unsetData('entity_type');
+        return array_diff(
+            parent::__sleep(),
+            ['indexerRegistry', '_website']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->indexerRegistry = $objectManager->get(\Magento\Framework\Indexer\IndexerRegistry::class);
+    }
 }
