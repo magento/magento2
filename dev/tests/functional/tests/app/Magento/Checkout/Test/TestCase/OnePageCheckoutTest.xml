@@ -174,7 +174,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">60.00</item>
+                <item name="grandTotal" xsi:type="string">87.00</item>
             </data>
             <data name="payment/method" xsi:type="string">banktransfer</data>
             <data name="configData" xsi:type="string">banktransfer_specificcountry_gb</data>
