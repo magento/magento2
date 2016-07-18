@@ -15,7 +15,28 @@ use Magento\Setup\Test\Fixture\EnableDisableModule;
 use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
 /**
- * Class EnableDisableModuleTest
+ * Preconditions:
+ * 1. Appropriate Module must be installed and enabled.
+ *
+ * Steps:
+ * 1. Open Backend.
+ * 2. Go to System > Web Setup Wizard.
+ * 3. Click "Component Manager" button.
+ * 4. Find appropriate Module in the Grid.
+ * 5. Click Select > Disable module.
+ * 6. Perform Readiness Checks.
+ * 7. Perform DB Backup.
+ * 8. Disable Module.
+ * 9. Return to "Web Setup Wizard".
+ * 10. Click "Component Manager" button.
+ * 11. Find appropriate Module in the Grid.
+ * 12. Click Select > Enable module.
+ * 13. Perform Readiness Checks.
+ * 14. Perform DB Backup.
+ * 15. Enable Module.
+ *
+ * @group Setup_(CS)
+ * @ZephyrId MAGETWO-43202
  */
 class EnableDisableModuleTest extends Injectable
 {
