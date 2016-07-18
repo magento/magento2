@@ -119,7 +119,11 @@ class Grid extends Block
         $element = $this->findModuleByName($name);
         $select = str_replace('#placeholder#', $name, $this->select);
 
-        return $element->find($select, Locator::SELECTOR_XPATH)->find('.item-disable')->isVisible();
+        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
+        $isVisible = $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemDisable)->isVisible();
+        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
+
+        return $isVisible;
     }
 
     /**
@@ -132,6 +136,7 @@ class Grid extends Block
         $element = $this->findModuleByName($name);
         $select = str_replace('#placeholder#', $name, $this->select);
 
+        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
         $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemDisable)->click();
     }
 
@@ -145,6 +150,7 @@ class Grid extends Block
         $element = $this->findModuleByName($name);
         $select = str_replace('#placeholder#', $name, $this->select);
 
+        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
         $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemEnable)->click();
     }
 }
