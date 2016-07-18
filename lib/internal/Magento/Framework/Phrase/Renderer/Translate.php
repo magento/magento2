@@ -60,6 +60,6 @@ class Translate implements RendererInterface
             throw $e;
         }
 
-        return array_key_exists($text, $data) ? $data[$text] : $text;
+        return array_key_exists($text, $data) ? $data[$text] : end($source);
     }
 }

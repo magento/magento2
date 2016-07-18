@@ -12,7 +12,7 @@ define(
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Vault/js/view/payment/vault-enabler'
     ],
-    function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader, vaultEnabler) {
+    function ($, Component, additionalValidators, setPaymentInformationAction, fullScreenLoader, VaultEnabler) {
         'use strict';
 
         return Component.extend({
@@ -27,8 +27,8 @@ define(
              */
             initialize: function () {
                 this._super();
-                this.vaultEnabler = vaultEnabler();
-                this.vaultEnabler.setPaymentCode(this.getCode());
+                this.vaultEnabler = new VaultEnabler();
+                this.vaultEnabler.setPaymentCode(this.getVaultCode());
 
                 return this;
             },
@@ -127,6 +127,13 @@ define(
              */
             isVaultEnabled: function () {
                 return this.vaultEnabler.isVaultEnabled();
+            },
+
+            /**
+             * @returns {String}
+             */
+            getVaultCode: function () {
+                return 'payflowpro_cc_vault';
             }
         });
     }

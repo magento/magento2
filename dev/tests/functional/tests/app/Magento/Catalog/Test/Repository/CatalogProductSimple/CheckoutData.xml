@@ -144,5 +144,9 @@
                 <item name="subtotal" xsi:type="string">250</item>
             </field>
         </dataset>
+
+        <dataset name="simple_order_qty_3">
+            <field name="qty" xsi:type="string">3</field>
+        </dataset>
     </repository>
 </config>

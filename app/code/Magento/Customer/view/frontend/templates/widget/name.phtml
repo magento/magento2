@@ -30,7 +30,7 @@ $middle = $block->showMiddlename();
 $suffix = $block->showSuffix();
 ?>
 
-<?php if ($prefix || $middle || $suffix && !$block->getNoWrap()): ?>
+<?php if (($prefix || $middle || $suffix) && !$block->getNoWrap()): ?>
 <div class="field required fullname <?php /* @escapeNotVerified */ echo $block->getContainerClassName() ?>">
     <label for="<?php /* @escapeNotVerified */ echo $block->getFieldId('firstname') ?>" class="label">
         <span><?php /* @escapeNotVerified */ echo __('Name') ?></span>
@@ -139,7 +139,7 @@ $suffix = $block->showSuffix();
         </div>
     <?php endif; ?>
 
-    <?php if ($prefix || $middle || $suffix && !$block->getNoWrap()): ?>
+    <?php if (($prefix || $middle || $suffix) && !$block->getNoWrap()): ?>
             </div>
         </fieldset>
     </div>
