@@ -305,6 +305,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'setStoreId',
                 'addPriceData',
                 'getIterator',
+                'load',
             ]
         )->disableOriginalConstructor()
             ->getMock();
