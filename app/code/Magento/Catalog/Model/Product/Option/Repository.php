@@ -242,7 +242,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     {
         if (null === $this->hydratorPool) {
             $this->hydratorPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\HydratorPool');
+                ->get(\Magento\Framework\EntityManager\HydratorPool::class);
         }
         return $this->hydratorPool;
     }

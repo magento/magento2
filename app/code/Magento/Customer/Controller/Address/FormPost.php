@@ -229,7 +229,9 @@ class FormPost extends \Magento\Customer\Controller\Address
     private function getCustomerAddressMapper()
     {
         if ($this->customerAddressMapper === null) {
-            $this->customerAddressMapper = ObjectManager::getInstance()->get('Magento\Customer\Model\Address\Mapper');
+            $this->customerAddressMapper = ObjectManager::getInstance()->get(
+                \Magento\Customer\Model\Address\Mapper::class
+            );
         }
         return $this->customerAddressMapper;
     }

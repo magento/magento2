@@ -214,7 +214,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
      */
     public function afterSaveDataProvider()
     {
-        $orderTaxDetailsApplied = $this->getMockBuilder('\Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface')
+        $orderTaxDetailsApplied = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRates'])
             ->getMockForAbstractClass();

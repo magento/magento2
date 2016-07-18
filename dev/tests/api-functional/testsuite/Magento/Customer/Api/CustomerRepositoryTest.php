@@ -159,7 +159,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
         //$customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
         $customerTokenService = Bootstrap::getObjectManager()->create(
-            'Magento\Integration\Api\CustomerTokenServiceInterface'
+            \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
         $token = $customerTokenService->createCustomerAccessToken($firstCustomerData[Customer::EMAIL], 'test@123');
 
@@ -172,7 +172,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->dataObjectHelper->populateWithArray(
             $newCustomerDataObject,
             $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         $serviceInfo = [
@@ -185,7 +185,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
             $newCustomerDataObject,
-            'Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $requestData = ['customer' => $newCustomerDataObject];
         $this->_webApiCall($serviceInfo, $requestData);

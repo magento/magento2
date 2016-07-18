@@ -322,7 +322,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     private function getCustomerMapper()
     {
         if ($this->customerMapper === null) {
-            $this->customerMapper = ObjectManager::getInstance()->get('Magento\Customer\Model\Customer\Mapper');
+            $this->customerMapper = ObjectManager::getInstance()->get(\Magento\Customer\Model\Customer\Mapper::class);
         }
         return $this->customerMapper;
     }

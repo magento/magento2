@@ -163,7 +163,7 @@ class Image extends File
     {
         if ($this->imageContentFactory === null) {
             $this->imageContentFactory = ObjectManager::getInstance()
-                ->get('Magento\Framework\Api\Data\ImageContentInterfaceFactory');
+                ->get(\Magento\Framework\Api\Data\ImageContentInterfaceFactory::class);
         }
         return $this->imageContentFactory;
     }

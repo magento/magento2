@@ -134,7 +134,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     {
         if ($this->urlBuilder === null) {
             $this->urlBuilder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Catalog\Model\Product\Option\UrlBuilder');
+                ->get(\Magento\Catalog\Model\Product\Option\UrlBuilder::class);
         }
         return $this->urlBuilder;
     }

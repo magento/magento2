@@ -69,7 +69,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ['filesystem' => $this->filesystemMock]
         );
 
-        $this->urlModifierMock = $this->getMock('Magento\Framework\Url\ModifierInterface');
+        $this->urlModifierMock = $this->getMock(\Magento\Framework\Url\ModifierInterface::class);
         $this->urlModifierMock->expects($this->any())
             ->method('execute')
             ->willReturnArgument(0);

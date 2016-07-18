@@ -202,7 +202,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerAddressMapper = $this->getMockBuilder('Magento\Customer\Model\Address\Mapper')
+        $this->customerAddressMapper = $this->getMockBuilder(\Magento\Customer\Model\Address\Mapper::class)
             ->disableOriginalConstructor()
             ->getMock();
 

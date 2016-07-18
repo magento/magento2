@@ -22,7 +22,7 @@ class BooleanTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->attributeFactoryMock = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\AttributeFactory',
+            \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory::class,
             [],
             [],
             '',

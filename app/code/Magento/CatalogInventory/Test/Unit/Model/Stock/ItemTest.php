@@ -79,7 +79,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eventDispatcher = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();

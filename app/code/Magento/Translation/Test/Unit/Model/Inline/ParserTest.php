@@ -78,17 +78,20 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->translateInlineMock = $this->getMockForAbstractClass('Magento\Framework\Translate\InlineInterface');
-        $this->appCacheMock = $this->getMockForAbstractClass('Magento\Framework\App\Cache\TypeListInterface');
-        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
-        $this->storeMock = $this->getMockForAbstractClass('Magento\Store\Api\Data\StoreInterface');
+        $this->translateInlineMock =
+            $this->getMockForAbstractClass(\Magento\Framework\Translate\InlineInterface::class);
+        $this->appCacheMock = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeMock = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->resourceFactoryMock = $this->getMockBuilder('Magento\Translation\Model\ResourceModel\StringUtilsFactory')
+        $this->resourceFactoryMock = $this->getMockBuilder(
+            \Magento\Translation\Model\ResourceModel\StringUtilsFactory::class
+        )
             ->setMethods(['create'])
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Translation\Model\ResourceModel\StringUtils')
+        $this->resourceMock = $this->getMockBuilder(\Magento\Translation\Model\ResourceModel\StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -98,12 +101,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->resourceFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->resourceMock);
-        $this->cacheManagerMock = $this->getMockBuilder('Magento\Translation\Model\Inline\CacheManager')
+        $this->cacheManagerMock = $this->getMockBuilder(\Magento\Translation\Model\Inline\CacheManager::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
+        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

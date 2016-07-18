@@ -460,7 +460,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         if ($this->fileProcessorFactory === null) {
             $this->fileProcessorFactory = ObjectManager::getInstance()
-                ->get('Magento\Customer\Model\FileProcessorFactory');
+                ->get(\Magento\Customer\Model\FileProcessorFactory::class);
         }
         return $this->fileProcessorFactory;
     }

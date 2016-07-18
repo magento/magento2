@@ -31,7 +31,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestC
                         ],
                         // Ensure type declaration is added to argument of setter
                         'complex_object_attribute_with_type_declaration' => [
-                            Converter::DATA_TYPE => '\Magento\Bundle\Api\Data\BundleOptionInterface',
+                            Converter::DATA_TYPE => \Magento\Bundle\Api\Data\BundleOptionInterface::class,
                             Converter::RESOURCE_PERMISSIONS => [],
                         ],
                     ],
@@ -43,7 +43,7 @@ class ExtensionAttributesInterfaceGeneratorTest extends \PHPUnit_Framework_TestC
                     ],
                 ]
             );
-        $typeProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
+        $typeProcessorMock = $this->getMockBuilder(\Magento\Framework\Reflection\TypeProcessor::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();

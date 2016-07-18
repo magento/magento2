@@ -43,11 +43,11 @@ class UploadTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resultFactory = $this->getMockBuilder('Magento\Framework\Controller\ResultFactory')
+        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Backend\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -55,15 +55,15 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->fileUploaderFactory = $this->getMockBuilder('Magento\Customer\Model\FileUploaderFactory')
+        $this->fileUploaderFactory = $this->getMockBuilder(\Magento\Customer\Model\FileUploaderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->customerMetadataService = $this->getMockBuilder('Magento\Customer\Api\CustomerMetadataInterface')
+        $this->customerMetadataService = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
 
-        $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
+        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMockForAbstractClass();
 
         $this->controller = new Upload(
@@ -82,7 +82,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->with($exception)
             ->willReturnSelf();
 
-        $resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultJson->expects($this->once())
@@ -98,7 +98,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_JSON)
             ->willReturn($resultJson);
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Json', $this->controller->execute());
+        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Json::class, $this->controller->execute());
     }
 
     public function testExecute()
@@ -125,7 +125,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             'url' => $resultFileUrl,
         ];
 
-        $attributeMetadataMock = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $attributeMetadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
 
         $this->customerMetadataService->expects($this->once())
@@ -133,7 +133,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->with($attributeCode)
             ->willReturn($attributeMetadataMock);
 
-        $fileUploader = $this->getMockBuilder('Magento\Customer\Model\FileUploader')
+        $fileUploader = $this->getMockBuilder(\Magento\Customer\Model\FileUploader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fileUploader->expects($this->once())
@@ -152,7 +152,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturn($fileUploader);
 
-        $resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultJson->expects($this->once())
@@ -165,7 +165,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_JSON)
             ->willReturn($resultJson);
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Json', $this->controller->execute());
+        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Json::class, $this->controller->execute());
     }
 
     public function testExecuteWithErrors()
@@ -185,7 +185,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             'error2',
         ];
 
-        $attributeMetadataMock = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')
+        $attributeMetadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
 
         $this->customerMetadataService->expects($this->once())
@@ -193,7 +193,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->with($attributeCode)
             ->willReturn($attributeMetadataMock);
 
-        $fileUploader = $this->getMockBuilder('Magento\Customer\Model\FileUploader')
+        $fileUploader = $this->getMockBuilder(\Magento\Customer\Model\FileUploader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fileUploader->expects($this->once())
@@ -209,7 +209,7 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturn($fileUploader);
 
-        $resultJson = $this->getMockBuilder('Magento\Framework\Controller\Result\Json')
+        $resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultJson->expects($this->once())
@@ -225,6 +225,6 @@ class UploadTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_JSON)
             ->willReturn($resultJson);
 
-        $this->assertInstanceOf('Magento\Framework\Controller\Result\Json', $this->controller->execute());
+        $this->assertInstanceOf(\Magento\Framework\Controller\Result\Json::class, $this->controller->execute());
     }
 }

@@ -138,7 +138,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerMapperMock = $this->getMockBuilder('Magento\Customer\Model\Customer\Mapper')
+        $this->customerMapperMock = $this->getMockBuilder(\Magento\Customer\Model\Customer\Mapper::class)
             ->disableOriginalConstructor()
             ->getMock();
 

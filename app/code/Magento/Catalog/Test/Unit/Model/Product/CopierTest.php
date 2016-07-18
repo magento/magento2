@@ -60,10 +60,10 @@ class CopierTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
         $this->productMock->expects($this->any())->method('getEntityId')->willReturn(1);
 
-        $this->metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
+        $this->metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
+        $metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($this->metadata);

@@ -406,7 +406,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
     {
         if ($this->request == null) {
             $this->request = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\App\Request\Http');
+                ->get(\Magento\Framework\App\Request\Http::class);
         }
         return $this->request;
     }

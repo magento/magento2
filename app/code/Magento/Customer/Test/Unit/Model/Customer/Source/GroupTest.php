@@ -90,7 +90,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             ->with($this->searchCriteriaMock)
             ->willReturn($this->searchResultMock);
 
-        $groupTest = $this->getMockBuilder('\Magento\Customer\Api\Data\GroupInterface')
+        $groupTest = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();

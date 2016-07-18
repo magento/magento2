@@ -63,11 +63,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
 
     public function testFilePermissionsInstaller()
     {
-        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
-        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
-        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+        $request = $this->getMock(\Zend\Http\PhpEnvironment\Request::class, [], [], '', false);
+        $response = $this->getMock(\Zend\Http\PhpEnvironment\Response::class, [], [], '', false);
+        $routeMatch = $this->getMock(\Zend\Mvc\Router\RouteMatch::class, [], [], '', false);
 
-        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class, [], [], '', false);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);

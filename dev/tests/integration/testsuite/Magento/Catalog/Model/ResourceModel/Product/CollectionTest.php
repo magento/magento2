@@ -24,11 +24,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ResourceModel\Product\Collection'
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
 
         $this->processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Indexer\Product\Price\Processor'
+            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
         );
     }
 
@@ -42,7 +42,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->processor->getIndexer()->setScheduled(true);
         $this->assertTrue($this->processor->getIndexer()->isScheduled());
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get('simple');
         $this->assertEquals(10, $product->getPrice());
@@ -61,7 +61,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->processor->getIndexer()->reindexList([1]);
 
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ResourceModel\Product\Collection'
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
         $this->collection->addPriceData(0, 1);
         $this->collection->load();
@@ -86,7 +86,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->processor->getIndexer()->setScheduled(false);
         $this->assertFalse($this->processor->getIndexer()->isScheduled());
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get('simple');
         $this->assertNotEquals(15, $product->getPrice());

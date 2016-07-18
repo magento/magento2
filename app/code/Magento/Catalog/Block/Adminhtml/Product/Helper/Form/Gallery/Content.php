@@ -257,7 +257,7 @@ class Content extends \Magento\Backend\Block\Widget
     {
         if ($this->imageHelper === null) {
             $this->imageHelper = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Helper\Image');
+                ->get(\Magento\Catalog\Helper\Image::class);
         }
         return $this->imageHelper;
     }
@@ -270,7 +270,7 @@ class Content extends \Magento\Backend\Block\Widget
     {
         if ($this->assetRepo === null) {
             $this->assetRepo = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\View\Asset\Repository');
+                ->get(\Magento\Framework\View\Asset\Repository::class);
         }
 
         return $this->assetRepo;

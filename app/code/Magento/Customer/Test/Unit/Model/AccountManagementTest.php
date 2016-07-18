@@ -1612,15 +1612,15 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
 
         //Handle store
-        $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
+        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->any())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
         //Handle address - existing and non-existing. Non-Existing should return null when call getId method
-        $existingAddress = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+        $existingAddress = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $nonExistingAddress = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+        $nonExistingAddress = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         //Ensure that existing address is not in use
@@ -1642,7 +1642,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method("setId")
             ->with(null);
         //Handle Customer calls
-        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $customer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)->getMock();
         $customer
             ->expects($this->atLeastOnce())
             ->method('getWebsiteId')
@@ -1665,7 +1665,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getById')
             ->with($customerId)
             ->willReturn($customer);
-        $customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+        $customerSecure = $this->getMockBuilder(\Magento\Customer\Model\Data\CustomerSecure::class)
             ->setMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -123,7 +123,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn($isFlatEnabled);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -157,7 +157,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn(true);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -192,7 +192,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn($isFlatEnabled);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -226,7 +226,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->willReturn(true);
 
-        $indexerMock = $this->getMockBuilder('Magento\Indexer\Model\Indexer')
+        $indexerMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

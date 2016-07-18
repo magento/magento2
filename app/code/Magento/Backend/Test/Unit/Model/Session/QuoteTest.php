@@ -451,10 +451,10 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareObjectManager($map)
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
         $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $reflectionProperty = $reflectionClass->getProperty('_instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock);

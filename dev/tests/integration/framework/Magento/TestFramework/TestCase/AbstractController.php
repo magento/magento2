@@ -219,7 +219,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      */
     protected function getMessages(
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         return array_merge(
             $this->getSessionMessages($messageType, $messageManagerClass),
@@ -236,7 +236,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
      */
     protected function getSessionMessages(
         $messageType = null,
-        $messageManagerClass = 'Magento\Framework\Message\Manager'
+        $messageManagerClass = \Magento\Framework\Message\Manager::class
     ) {
         /** @var $messageManager \Magento\Framework\Message\ManagerInterface */
         $messageManager = $this->_objectManager->get($messageManagerClass);
