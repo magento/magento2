@@ -537,7 +537,7 @@
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="cartItemProcessors" xsi:type="array">
-                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\CustomOptions\CustomOptionProcessor</item>
+                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\CustomOptions\CustomOptionProcessor\Proxy</item>
             </argument>
         </arguments>
     </type>

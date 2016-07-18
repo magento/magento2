@@ -93,8 +93,25 @@ class Suffix extends \Magento\Framework\App\Config\Value
     {
         if ($this->isValueChanged()) {
             $this->updateSuffixForUrlRewrites();
+            if ($this->isCategorySuffixChanged()) {
+                $this->cacheTypeList->invalidate([
+                    \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
+                    \Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER
+                ]);
+            }
         }
         return parent::afterSave();
+    }
+
+    /**
+     * Check is category suffix changed
+     *
+     * @return bool
+     */
+    private function isCategorySuffixChanged()
+    {
+        return $this->isValueChanged()
+            && ($this->getPath() == CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX);
     }
 
     /**

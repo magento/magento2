@@ -59,10 +59,10 @@
                     data-input="new-password"
                     data-validate="{required:true, 'validate-customer-password':true}"
                     autocomplete="off" />
-                <div id="password-strength-meter-container" data-role="password-strength-meter" >
+                <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
                     <div id="password-strength-meter" class="password-strength-meter">
                         <?php /* @escapeNotVerified */ echo __('Password Strength'); ?>:
-                        <span id="password-strength-meter-label" data-role="password-strength-meter-label" >
+                        <span id="password-strength-meter-label" data-role="password-strength-meter-label">
                             <?php /* @escapeNotVerified */ echo __('No Password'); ?>
                         </span>
                     </div>
