@@ -64,7 +64,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOutputFormat($withCurrency, $noCurrency, $expected)
     {
-        $currencyMock = $this->getMockBuilder('\Magento\Framework\Currency')
+        $currencyMock = $this->getMockBuilder(\Magento\Framework\Currency::class)
             ->disableOriginalConstructor()
             ->getMock();
         $currencyMock->expects($this->at(0))

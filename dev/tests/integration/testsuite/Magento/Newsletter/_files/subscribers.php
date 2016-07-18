@@ -37,7 +37,7 @@ $subscriber->setStoreId($otherStore)
 
 /** @var \Magento\Newsletter\Model\Subscriber $subscriber */
 $subscriber = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Newsletter\Model\Subscriber');
+    ->create(\Magento\Newsletter\Model\Subscriber::class);
 $subscriber->setStoreId($currentStore)
     ->setCustomerId(1)
     ->setSubscriberEmail('customer_confirm@example.com')

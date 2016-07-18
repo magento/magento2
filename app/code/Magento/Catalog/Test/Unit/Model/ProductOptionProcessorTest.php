@@ -82,7 +82,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             $this->customOptionFactory
         );
 
-        $urlBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Product\Option\UrlBuilder')
+        $urlBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\UrlBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUrl'])
             ->getMock();

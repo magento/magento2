@@ -123,7 +123,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     {
         $amount = 20.;
 
-        $priceMock = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
+        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
             ->getMockForAbstractClass();
 
         $this->priceInfoMock->expects($this->once())

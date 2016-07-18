@@ -67,7 +67,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->cleanupFilesMock = $this->getMock(\Magento\Framework\App\State\CleanupFiles::class, [], [], '', false);
         $this->fullModuleListMock = $this->getMock(\Magento\Framework\Module\FullModuleList::class, [], [], '', false);
         $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
-        $this->generatedFiles = $this->getMock('\Magento\Framework\Code\GeneratedFiles', [], [], '', false);
+        $this->generatedFiles = $this->getMock(\Magento\Framework\Code\GeneratedFiles::class, [], [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([

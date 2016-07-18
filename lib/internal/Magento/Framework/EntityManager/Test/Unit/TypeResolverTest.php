@@ -25,7 +25,8 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->metadataPoolMock = $this->getMock('\Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock =
+            $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
         $this->resolver = new \Magento\Framework\EntityManager\TypeResolver($this->metadataPoolMock);
     }
 

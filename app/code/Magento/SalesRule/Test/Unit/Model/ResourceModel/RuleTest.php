@@ -117,7 +117,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $associatedEntitiesMap = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
+        $associatedEntitiesMap = $this->getMock(\Magento\Framework\DataObject::class, [], [], '', false);
         $associatedEntitiesMap->expects($this->once())
             ->method('getData')
             ->willReturn(
@@ -137,7 +137,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareObjectManager([
             [
-                'Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap',
+                \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class,
                 $associatedEntitiesMap
             ],
         ]);
@@ -190,12 +190,12 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareObjectManager($map)
     {
-        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($map));
-        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionClass = new \ReflectionClass(\Magento\Framework\App\ObjectManager::class);
         $reflectionProperty = $reflectionClass->getProperty('_instance');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($objectManagerMock);

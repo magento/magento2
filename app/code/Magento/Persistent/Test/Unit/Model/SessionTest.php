@@ -70,7 +70,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 'cookieManager' => $this->cookieManagerMock,
                 'context'       => $context,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
-                'request' => $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false, false),
+                'request' => $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false, false),
                 'resource' => $resourceMock,
             ]
         );

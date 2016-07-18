@@ -286,7 +286,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->customerDataFactoryMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
             ['create'],
             [],
             '',
@@ -574,7 +574,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false
         );
         $requestMock = $this->getMock(
-            '\Magento\Framework\DataObject'
+            \Magento\Framework\DataObject::class
         );
 
         $this->extensibleDataObjectConverterMock->expects($this->any())

@@ -323,11 +323,11 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     {
         $price = 10.;
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $renderBlockMock = $this->getMockBuilder('Magento\Framework\Pricing\Render')
+        $renderBlockMock = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderBlockMock->expects($this->once())
@@ -346,7 +346,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with(
-                'Magento\Framework\Pricing\Render',
+                \Magento\Framework\Pricing\Render::class,
                 'product.price.render.default',
                 ['data' => ['price_render_handle' => 'catalog_product_prices']]
             )
@@ -359,11 +359,11 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     {
         $price = 10.;
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $renderBlockMock = $this->getMockBuilder('Magento\Framework\Pricing\Render')
+        $renderBlockMock = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderBlockMock->expects($this->once())

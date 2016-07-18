@@ -82,11 +82,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCustomerFormData', 'unsCustomerFormData'])
             ->getMockForAbstractClass();
 
-        $this->fileProcessor = $this->getMockBuilder('Magento\Customer\Model\FileProcessor')
+        $this->fileProcessor = $this->getMockBuilder(\Magento\Customer\Model\FileProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileProcessorFactory = $this->getMockBuilder('Magento\Customer\Model\FileProcessorFactory')
+        $this->fileProcessorFactory = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -615,7 +615,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $attributeMock = $this->getMockBuilder('Magento\Customer\Model\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->exactly(2))
@@ -625,14 +625,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeCode')
             ->willReturn('img1');
 
-        $entityTypeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityTypeMock->expects($this->once())
             ->method('getEntityTypeCode')
             ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerMock->expects($this->once())
@@ -654,7 +654,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityType')
             ->willReturn($entityTypeMock);
 
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -691,7 +691,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
-            '\Magento\Customer\Model\Customer\DataProvider',
+            \Magento\Customer\Model\Customer\DataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
@@ -731,7 +731,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $attributeMock = $this->getMockBuilder('Magento\Customer\Model\Attribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock->expects($this->once())
@@ -741,14 +741,14 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getAttributeCode')
             ->willReturn('img1');
 
-        $entityTypeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityTypeMock->expects($this->once())
             ->method('getEntityTypeCode')
             ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerMock->expects($this->once())
@@ -769,7 +769,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityType')
             ->willReturn($entityTypeMock);
 
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -786,7 +786,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
-            '\Magento\Customer\Model\Customer\DataProvider',
+            \Magento\Customer\Model\Customer\DataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',
@@ -819,7 +819,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $attributeCode = 'img1';
 
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Customer\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collectionMock->expects($this->once())
@@ -830,7 +830,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($collectionMock);
 
-        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->setMethods([
                 'getAttributeCode',
                 'getFrontendInput',
@@ -852,7 +852,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-        $typeCustomerMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $typeCustomerMock->expects($this->once())
@@ -862,7 +862,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeCode')
             ->willReturn(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
-        $typeAddressMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')
+        $typeAddressMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $typeAddressMock->expects($this->once())
@@ -905,7 +905,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $dataProvider = $objectManager->getObject(
-            '\Magento\Customer\Model\Customer\DataProvider',
+            \Magento\Customer\Model\Customer\DataProvider::class,
             [
                 'name' => 'test-name',
                 'primaryFieldName' => 'primary-field-name',

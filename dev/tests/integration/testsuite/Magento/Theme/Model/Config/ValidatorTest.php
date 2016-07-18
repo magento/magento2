@@ -20,13 +20,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\AreaList')
+        $objectManager->get(\Magento\Framework\App\AreaList::class)
             ->getArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
             ->load(\Magento\Framework\App\Area::PART_CONFIG);
-        $objectManager->get('Magento\Framework\App\State')
+        $objectManager->get(\Magento\Framework\App\State::class)
             ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-        $this->model = $objectManager->get('Magento\Theme\Model\Design\Config\Validator');
+        $this->model = $objectManager->get(\Magento\Theme\Model\Design\Config\Validator::class);
     }
 
     /**
@@ -42,15 +42,16 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'field' => 'email_header_template'
         ];
 
-        $designConfigMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+        $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designConfigExtensionMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
+        $designConfigExtensionMock =
+            $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designElementMock = $this->getMockBuilder('Magento\Theme\Model\Data\Design\Config\Data')
+        $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -79,15 +80,16 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'field' => 'email_footer_template'
         ];
 
-        $designConfigMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigInterface')
+        $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designConfigExtensionMock = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
+        $designConfigExtensionMock =
+            $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $designElementMock = $this->getMockBuilder('Magento\Theme\Model\Data\Design\Config\Data')
+        $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

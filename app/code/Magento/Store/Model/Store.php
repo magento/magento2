@@ -1327,7 +1327,7 @@ class Store extends AbstractExtensibleModel implements
     {
         if ($this->urlModifier === null) {
             $this->urlModifier = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\Url\ModifierInterface'
+                \Magento\Framework\Url\ModifierInterface::class
             );
         }
 

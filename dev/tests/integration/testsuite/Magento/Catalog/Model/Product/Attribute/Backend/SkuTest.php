@@ -45,7 +45,7 @@ class SkuTest extends \PHPUnit_Framework_TestCase
     public function testGenerateUniqueLongSku()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ProductRepository'
+            \Magento\Catalog\Model\ProductRepository::class
         );
         $product = $repository->get('simple');
         $product->setSku('0123456789012345678901234567890123456789012345678901234567890123');

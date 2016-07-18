@@ -88,7 +88,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
             true
         );
 
-        $this->connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['quoteInto'])
             ->getMockForAbstractClass();

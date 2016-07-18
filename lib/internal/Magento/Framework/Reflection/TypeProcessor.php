@@ -77,7 +77,7 @@ class TypeProcessor
     {
         if ($this->nameFinder === null) {
             $this->nameFinder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('\Magento\Framework\Reflection\NameFinder');
+                ->get(\Magento\Framework\Reflection\NameFinder::class);
         }
         return $this->nameFinder;
     }
