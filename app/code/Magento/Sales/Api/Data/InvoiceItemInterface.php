@@ -140,7 +140,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the base discount tax compensation amount for the invoice item.
      *
-     * @return float Base discount tax compensation amount.
+     * @return float|null Base discount tax compensation amount.
      */
     public function getBaseDiscountTaxCompensationAmount();
 
@@ -211,7 +211,7 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     /**
      * Gets the discount tax compensation amount for the invoice item.
      *
-     * @return float Discount tax compensation amount.
+     * @return float|null Discount tax compensation amount.
      */
     public function getDiscountTaxCompensationAmount();
 
