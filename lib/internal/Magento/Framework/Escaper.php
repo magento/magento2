@@ -11,7 +11,7 @@ namespace Magento\Framework;
 class Escaper
 {
     /**
-     * @var \Zend\Escaper\Escaper
+     * @var \Magento\Framework\ZendEscaper
      */
     private $escaper;
 
@@ -162,7 +162,7 @@ class Escaper
      * Get escaper
      *
      * @param void
-     * @return \Magento\Framework\Escaper
+     * @return \Magento\Framework\ZendEscaper
      * @deprecated
      */
     private function getEscaper()
