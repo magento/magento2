@@ -58,7 +58,7 @@ class ResponseFactory
     {
         $documents = [];
         foreach ($response['documents'] as $rawDocument) {
-            /** @var \Magento\Framework\Search\Document[] $documents */
+            /** @var \Magento\Framework\Api\Search\Document[] $documents */
             $documents[] = $this->documentFactory->create(
                 $rawDocument
             );

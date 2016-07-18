@@ -7,8 +7,11 @@ namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EntityMetadata;
-use Magento\Framework\Search\Document;
-use Magento\Framework\Search\DocumentField;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\AttributeValue;
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Api\Search\DocumentInterface;
 
 /**
  * Document Factory
@@ -19,6 +22,7 @@ class DocumentFactory
      * Object Manager instance
      *
      * @var ObjectManagerInterface
+     * @deprecated
      */
     protected $objectManager;
 
@@ -45,26 +49,27 @@ class DocumentFactory
      */
     public function create($rawDocument)
     {
-        /** @var DocumentField[] $fields */
-        $fields = [];
+        /** @var AttributeValue[] $fields */
+        $attributes = [];
         $documentId = null;
         $entityId = $this->entityMetadata->getEntityId();
         foreach ($rawDocument as $fieldName => $value) {
             if ($fieldName === $entityId) {
                 $documentId = $value;
             } elseif ($fieldName === '_score') {
-                $fields['score'] = $this->objectManager->create(
-                    \Magento\Framework\Search\DocumentField::class,
-                    ['name' => 'score', 'value' => $value]
+                $attributes['score'] = new AttributeValue(
+                    [
+                        AttributeInterface::ATTRIBUTE_CODE => $fieldName,
+                        AttributeInterface::VALUE => $value,
+                    ]
                 );
             }
         }
 
-        return $this->objectManager->create(
-            \Magento\Framework\Search\Document::class,
+        return new Document(
             [
-                'documentId' => $documentId,
-                'documentFields' => $fields
+                DocumentInterface::ID => $documentId,
+                CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => $attributes,
             ]
         );
     }

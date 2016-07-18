@@ -139,6 +139,7 @@ class ProductDataMapper implements DataMapperInterface
                         'tier_price',
                         'quantity_and_stock_status',
                         'media_gallery',
+                        'giftcard_amounts'
                     ]
                 )
             ) {
