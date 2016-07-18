@@ -9,6 +9,7 @@ use Magento\Framework\Communication\ConfigInterface as Config;
 use Magento\Framework\Phrase;
 use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\Communication\Config\ConfigParser;
 use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
 
 /**
@@ -16,6 +17,10 @@ use Magento\Framework\Communication\Config\Reader\XmlReader\Validator;
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @deprecated
+     * @see ConfigParser::SERVICE_METHOD_NAME_PATTERN
+     */
     const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
 
     /**
@@ -34,6 +39,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $xmlValidator;
 
     /**
+     * @var ConfigParser
+     */
+    private $configParser;
+
+    /**
      * Initialize dependencies
      *
      * @param ReflectionGenerator $reflectionGenerator
@@ -48,6 +58,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $this->reflectionGenerator = $reflectionGenerator;
         $this->booleanUtils = $booleanUtils;
         $this->xmlValidator = $xmlValidator;
+    }
+
+    /**
+     * The getter function to get the new ConfigParser dependency.
+     *
+     * @return \Magento\Framework\Communication\Config\ConfigParser
+     * @deprecated
+     */
+    private function getConfigParser()
+    {
+        if ($this->configParser === NULL) {
+            $this->configParser = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Communication\Config\ConfigParser::class);
+        }
+        return $this->configParser;
     }
 
     /**
@@ -213,22 +238,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             return null;
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
-        return $this->parseServiceMethod($topicAttributes->getNamedItem('schema')->nodeValue, $topicName);
-    }
-
-    /**
-     * Parse service method name, also ensure that it exists.
-     *
-     * @param string $serviceMethod
-     * @param string $topicName
-     * @return array Contains class name and method name
-     */
-    protected function parseServiceMethod($serviceMethod, $topicName)
-    {
-        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $serviceMethod, $matches);
-        $className = $matches[1];
-        $methodName = $matches[2];
-        $this->xmlValidator->validateServiceMethod($serviceMethod, $topicName, $className, $methodName);
-        return ['typeName' => $className, 'methodName' => $methodName];
+        $serviceMethod = $topicAttributes->getNamedItem('schema')->nodeValue;
+        $parsedServiceMethod = $this->getConfigParser()->parseServiceMethod($serviceMethod, $topicName);
+        $this->xmlValidator->validateServiceMethod(
+            $serviceMethod,
+            $topicName,
+            $parsedServiceMethod['type'],
+            $parsedServiceMethod['method']
+        );
+        return $parsedServiceMethod;
     }
 }
