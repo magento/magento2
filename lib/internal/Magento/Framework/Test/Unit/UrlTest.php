@@ -491,6 +491,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         return [
             'with port' => ['https://example.com:88/index.php/catalog/index/view?query=123#hash'],
             'without port' => ['https://example.com/index.php/catalog/index/view?query=123#hash'],
+            'http' => ['http://example.com/index.php/catalog/index/view?query=123#hash']
         ];
     }
 

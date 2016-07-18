@@ -240,7 +240,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                     'type' => 'object',
                     'description' => 'Interface for custom attribute value.',
                     'properties' => [
-                        'attributeCode' => [
+                        'attribute_code' => [
                             'type' => 'string',
                             'description' => 'Attribute code',
                         ],
@@ -250,7 +250,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                         ],
                     ],
                     'required' => [
-                        'attributeCode',
+                        'attribute_code',
                         'value',
                     ],
                 ],
@@ -258,7 +258,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                     'type' => 'object',
                     'description' => 'Some Data Object short description. Data Object long multi line description.',
                     'properties' => [
-                        'entityId' => [
+                        'entity_id' => [
                             'type' => 'integer',
                                 'description' => 'Item ID',
                             ],
@@ -274,7 +274,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                                 'type' => 'boolean',
                                 'description' => 'If current entity has a property defined',
                             ],
-                            'customAttributes' =>        [
+                            'custom_attributes' =>        [
                             'type' => 'array',
                             'description' => 'Custom attributes values.',
                             'items' => [
@@ -283,7 +283,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
                         ],
                     ],
                     'required' => [
-                        'entityId',
+                        'entity_id',
                         'enabled',
                         'orders',
                     ],

@@ -27,8 +27,8 @@
 //  Validation
 .validation-symbol {
     &:after {
-        content: '*';
         color: @validation__color;
+        content: '*';
         font-weight: @font-weight__regular;
         margin-left: 3px;
     }
@@ -128,4 +128,9 @@
     position: absolute;
     right: 0;
     text-transform: lowercase;
+}
+
+//  Word wrap
+.abs-word-wrap {
+    .lib-wrap-words();
 }

@@ -34,8 +34,6 @@ class Index extends \Magento\Checkout\Controller\Onepage
 
         $this->_customerSession->regenerateId();
         $this->_objectManager->get(\Magento\Checkout\Model\Session::class)->setCartWasUpdated(false);
-        $currentUrl = $this->_url->getUrl('*/*/*', ['_secure' => true]);
-        $this->_objectManager->get(\Magento\Customer\Model\Session::class)->setBeforeAuthUrl($currentUrl);
         $this->getOnepage()->initCheckout();
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->set(__('Checkout'));

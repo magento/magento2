@@ -123,7 +123,7 @@ class ImageProcessor implements ImageProcessorInterface
                 );
                 if ($previousImageAttribute) {
                     $previousImagePath = $previousImageAttribute->getValue();
-                    if (!empty($previousImagePath)) {
+                    if (!empty($previousImagePath) && ($previousImagePath != $filename)) {
                         @unlink($this->mediaDirectory->getAbsolutePath() . $entityType . $previousImagePath);
                     }
                 }

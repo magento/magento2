@@ -42,22 +42,28 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Api\DataObjectHelper  */
     protected $dataObjectHelper;
 
+    /** @var \Magento\Framework\Encryption\EncryptorInterface */
+    protected $encryptor;
+
+    /** @var \Magento\Customer\Model\CustomerRegistry */
+    protected $customerRegistry;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->customerRepository = $this->objectManager->create(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class
-        );
-        $this->customerFactory = $this->objectManager->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
-        );
+        $this->customerRepository =
+            $this->objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->customerFactory =
+            $this->objectManager->create(\Magento\Customer\Api\Data\CustomerInterfaceFactory::class);
         $this->addressFactory = $this->objectManager->create(\Magento\Customer\Api\Data\AddressInterfaceFactory::class);
         $this->regionFactory = $this->objectManager->create(\Magento\Customer\Api\Data\RegionInterfaceFactory::class);
-        $this->accountManagement = $this->objectManager->create(
-            \Magento\Customer\Api\AccountManagementInterface::class
-        );
+        $this->accountManagement =
+            $this->objectManager->create(\Magento\Customer\Api\AccountManagementInterface::class);
         $this->converter = $this->objectManager->create(\Magento\Framework\Api\ExtensibleDataObjectConverter::class);
         $this->dataObjectHelper = $this->objectManager->create(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->encryptor = $this->objectManager->create(\Magento\Framework\Encryption\EncryptorInterface::class);
+        $this->customerRegistry = $this->objectManager->create(\Magento\Customer\Model\CustomerRegistry::class);
+
         /** @var \Magento\Framework\Config\CacheInterface $cache */
         $cache = $this->objectManager->create(\Magento\Framework\Config\CacheInterface::class);
         $cache->remove('extension_attributes_config');
@@ -145,6 +151,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $email = 'savecustomer@example.com';
         $firstName = 'Firstsave';
         $lastName = 'Lastsave';
+        $newPassword = 'newPassword123';
+        $newPasswordHash = $this->encryptor->getHash($newPassword, true);
         $customerBefore = $this->customerRepository->getById($existingCustomerId);
         $customerData = array_merge($customerBefore->__toArray(), [
                 'id' => 1,
@@ -162,7 +170,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $this->customerRepository->save($customerDetails);
+        $this->customerRepository->save($customerDetails, $newPasswordHash);
         $customerAfter = $this->customerRepository->getById($existingCustomerId);
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
@@ -175,8 +183,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             $defaultShipping
         );
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
-        $passwordFromFixture = 'password';
-        $this->accountManagement->authenticate($customerAfter->getEmail(), $passwordFromFixture);
+        $this->accountManagement->authenticate($customerAfter->getEmail(), $newPassword);
         $attributesBefore = $this->converter->toFlatArray(
             $customerBefore,
             [],

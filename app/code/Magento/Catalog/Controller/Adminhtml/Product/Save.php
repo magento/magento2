@@ -145,13 +145,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-                $this->_session->setProductData($data);
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->messageManager->addError($e->getMessage());
-                $this->_session->setProductData($data);
                 $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }

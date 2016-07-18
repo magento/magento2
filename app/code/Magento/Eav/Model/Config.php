@@ -247,7 +247,9 @@ class Config
      */
     protected function _getAttributeKey($entityTypeCode, $attributeCode)
     {
-        return 'ATTRIBUTE/' . $entityTypeCode . '/' . $attributeCode;
+        $codeSegments = explode('.', $attributeCode);
+
+        return 'ATTRIBUTE/' . $entityTypeCode . '/' . array_pop($codeSegments);
     }
 
     /**

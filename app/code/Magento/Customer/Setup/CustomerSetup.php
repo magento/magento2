@@ -127,6 +127,7 @@ class CustomerSetup extends EavSetup
     {
         $entities = [
             'customer' => [
+                'entity_type_id' => \Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'entity_model' => \Magento\Customer\Model\ResourceModel\Customer::class,
                 'attribute_model' => \Magento\Customer\Model\Attribute::class,
                 'table' => 'customer_entity',
@@ -339,6 +340,7 @@ class CustomerSetup extends EavSetup
                 ],
             ],
             'customer_address' => [
+                'entity_type_id' => \Magento\Customer\Api\AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
                 'entity_model' => \Magento\Customer\Model\ResourceModel\Address::class,
                 'attribute_model' => \Magento\Customer\Model\Attribute::class,
                 'table' => 'customer_address_entity',

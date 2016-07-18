@@ -107,8 +107,8 @@ class RowTest extends \PHPUnit_Framework_TestCase
     public function getCastedAmountDataProvider()
     {
         return [
-            ['fee_amount', ['fee_amount' => 100, 'fee_debit_or_credit' => 'CR'], -1],
-            ['fee_amount', ['fee_amount' => 100, 'fee_debit_or_credit' => 'DB'], 1]
+            ['fee_amount', ['fee_amount' => 1, 'fee_debit_or_credit' => 'CR'], -1],
+            ['fee_amount', ['fee_amount' => 1, 'fee_debit_or_credit' => 'DB'], 1]
         ];
     }
 }

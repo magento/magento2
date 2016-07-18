@@ -7,6 +7,7 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\UpgradeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Console\Cli;
 
 class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,6 +20,6 @@ class UpgradeCommandTest extends \PHPUnit_Framework_TestCase
         $installer->expects($this->at(2))->method('installDataFixtures');
         $installerFactory->expects($this->once())->method('create')->willReturn($installer);
         $commandTester = new CommandTester(new UpgradeCommand($installerFactory));
-        $commandTester->execute([]);
+        $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->execute([]));
     }
 }

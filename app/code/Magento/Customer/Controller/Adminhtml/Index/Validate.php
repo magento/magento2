@@ -26,13 +26,9 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
             $customer = $this->customerDataFactory->create();
 
             $customerForm = $this->_formFactory->create(
-                \customer::class,
+                'customer',
                 'adminhtml_customer',
-                $this->_extensibleDataObjectConverter->toFlatArray(
-                    $customer,
-                    [],
-                    \Magento\Customer\Api\Data\CustomerInterface::class
-                ),
+                [],
                 true
             );
             $customerForm->setInvisibleIgnored(true);

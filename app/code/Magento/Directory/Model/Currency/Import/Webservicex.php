@@ -72,7 +72,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
             )->getBody();
 
             $xml = simplexml_load_string($response, null, LIBXML_NOERROR);
-            if (!$xml) {
+            if (!$xml || (isset($xml[0]) && $xml[0] == -1)) {
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
                 return null;
             }

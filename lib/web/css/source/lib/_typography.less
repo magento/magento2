@@ -51,8 +51,11 @@
 }
 
 .lib-wrap-words() {
-    .lib-hyphens();
+    overflow-wrap: break-word;
     word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    .lib-hyphens();
 }
 
 .lib-text-overflow() {
@@ -71,7 +74,6 @@
 
 //  Optional hyphenation
 .lib-hyphens(@mode: auto) {
-    word-wrap: break-word;
     -webkit-hyphens: @mode;
        -moz-hyphens: @mode;
         -ms-hyphens: @mode; // IE10+

@@ -62,7 +62,7 @@ class AssertGiftMessageInFrontendOrderItems extends AbstractConstraint
                     'message' => $itemGiftMessage->getMessage(),
                 ];
             }
-            if ($product->getProductHasWeight() !== 'Yes') {
+            if ($product->getProductHasWeight() !== 'This item has weight') {
                 $expectedData = [];
             }
 

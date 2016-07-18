@@ -70,6 +70,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
                 'cookieManager' => $this->cookieManagerMock,
                 'context'       => $context,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'request' => $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false, false),
                 'resource' => $resourceMock,
             ]
         );
@@ -130,6 +131,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->with($duration)
             ->will($this->returnSelf());
         $cookieMetadataMock->expects($this->once())
+            ->method('setSecure')
+            ->with(false)
+            ->will($this->returnSelf());
+        $cookieMetadataMock->expects($this->once())
             ->method('setHttpOnly')
             ->with(true)
             ->will($this->returnSelf());
@@ -171,6 +176,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setDuration')
             ->with($cookieDuration)
+            ->will($this->returnSelf());
+        $cookieMetadataMock->expects($this->exactly($numCalls))
+            ->method('setSecure')
+            ->with(false)
             ->will($this->returnSelf());
         $cookieMetadataMock->expects($this->exactly($numCalls))
             ->method('setHttpOnly')

@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 
+use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
@@ -398,14 +399,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->_renderFilters();
         $result = [];
         $aggregations = $this->searchResult->getAggregations();
-        $bucket = $aggregations->getBucket($field . '_bucket');
-        if ($bucket) {
-            foreach ($bucket->getValues() as $value) {
-                $metrics = $value->getMetrics();
-                $result[$metrics['value']] = $metrics;
+        // This behavior is for case with empty object when we got EmptyRequestDataException
+        if (null !== $aggregations) {
+            $bucket = $aggregations->getBucket($field . RequestGenerator::BUCKET_SUFFIX);
+            if ($bucket) {
+                foreach ($bucket->getValues() as $value) {
+                    $metrics = $value->getMetrics();
+                    $result[$metrics['value']] = $metrics;
+                }
+            } else {
+                throw new StateException(__('Bucket does not exist'));
             }
-        } else {
-            throw new StateException(__('Bucket do not exists'));
         }
         return $result;
     }

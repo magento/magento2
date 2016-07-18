@@ -8,6 +8,8 @@ namespace Magento\Paypal\Test\Unit\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * Class AbstractConfigTest
@@ -290,10 +292,18 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBuildNotationCode()
     {
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('paypal/bncode');
+        $productMetadata = $this->getMock(ProductMetadataInterface::class, [], [], '', false);
+        $productMetadata->expects($this->once())
+            ->method('getEdition')
+            ->will($this->returnValue('SomeEdition'));
 
-        $this->config->getBuildNotationCode();
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->config,
+            'productMetadata',
+            $productMetadata
+        );
+
+        $this->assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
     }
 }

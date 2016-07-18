@@ -205,7 +205,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'name' => 'in_products',
                 'values' => $this->_getSelectedProducts(),
                 'index' => 'entity_id',
-                'sortable' => false
+                'sortable' => false,
+                'header_css_class' => 'col-select',
+                'column_css_class' => 'col-select'
             ]
         );
 

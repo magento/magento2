@@ -6,6 +6,8 @@
 namespace Magento\Sales\Model\AdminOrder;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Sales\Model\Order;
+use Magento\Framework\Registry;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -118,6 +120,32 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($payment->getCcExpYear());
         $this->assertNull($payment->getCcType());
         $this->assertNull($payment->getCcLast4());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     */
+    public function testInitFromOrderWithEmptyPaymentDetails()
+    {
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var $order \Magento\Sales\Model\Order */
+        $order = $objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+
+        $objectManager->get(Registry::class)
+            ->unregister('rule_data');
+
+        $initOrder = $this->_model->initFromOrder($order);
+        $payment = $initOrder->getQuote()->getPayment();
+
+        static::assertEquals($initOrder->getQuote()->getId(), $payment->getData('quote_id'));
+        $payment->unsetData('quote_id');
+
+        static::assertEmpty($payment->getMethod());
+        static::assertEmpty($payment->getAdditionalInformation());
+        static::assertEmpty($payment->getAdditionalData());
+        static::assertEmpty($payment->getData());
     }
 
     /**

@@ -361,7 +361,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'scope_id' => $this->getScopeId(),
                 'scope_label' => $this->getScopeLabel($field),
                 'can_use_default_value' => $this->canUseDefaultValue($field->showInDefault()),
-                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite())
+                'can_use_website_value' => $this->canUseWebsiteValue($field->showInWebsite()),
+                'can_restore_to_default' => $this->isCanRestoreToDefault($field->canRestore())
             ]
         );
         $field->populateInput($formField);
@@ -497,6 +498,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function canUseWebsiteValue($fieldValue)
     {
         if ($this->getScope() == self::SCOPE_STORES && $fieldValue) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if can use restore value
+     *
+     * @param int $fieldValue
+     * @return bool
+     */
+    public function isCanRestoreToDefault($fieldValue)
+    {
+        if ($this->getScope() == self::SCOPE_DEFAULT && $fieldValue) {
             return true;
         }
         return false;

@@ -37,7 +37,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Session::testUnloginAction
+     * @covers \Magento\Setup\Controller\Session::unloginAction
      */
     public function testUnloginAction()
     {

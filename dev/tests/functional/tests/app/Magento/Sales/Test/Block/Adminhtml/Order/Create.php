@@ -288,13 +288,14 @@ class Create extends Block
      */
     public function fillAddresses(FixtureInterface $address, $saveAddress = 'No', $setShippingAddress = true)
     {
-        $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
+        if ($setShippingAddress) {
+            $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
+        }
         $this->browser->find($this->header)->hover();
         $this->getBillingAddressBlock()->fill($address);
         $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
         $this->getTemplateBlock()->waitLoader();
         if ($setShippingAddress) {
-            $this->browser->find($this->accountInformationBlock)->hover();
             $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
             $this->getTemplateBlock()->waitLoader();
         }

@@ -255,7 +255,7 @@ class Wishlist implements DataProviderInterface
         }
         if ($priceRender) {
             $price = $priceRender->render(
-                \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                'wishlist_configured_price',
                 $product,
                 ['zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST]
             );

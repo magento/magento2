@@ -17,11 +17,11 @@
 
 @account-nav-item-hover: @color-gray91;
 
-@password-strength-color__default: @color-gray-light01;
-@password-strength-color__weak: #ffafae;
-@password-strength-color__medium: #ffd6b3;
-@password-strength-color__strong: #c5eeac;
-@password-strength-color__very-strong: #81b562;
+@_password-default: @color-gray-light01;
+@_password-weak: #ffafae;
+@_password-medium: #ffd6b3;
+@_password-strong: #c5eeac;
+@_password-very-strong: #81b562;
 
 //
 //  Common
@@ -41,7 +41,7 @@
                 .lib-font-size(18);
             }
         }
-    
+
         .fieldset {
             .lib-form-hasrequired(bottom);
             &:after {
@@ -49,35 +49,35 @@
             }
         }
     }
-    
+
     .block-addresses-list {
         .items.addresses {
             > .item {
                 margin-bottom: @indent__base;
-    
+
                 &:last-child {
                     margin-bottom: 0;
                 }
             }
         }
     }
-    
+
     .form-address-edit {
         #region_id {
             display: none;
         }
-    
+
         .actions-toolbar .action.primary {
             &:extend(.abs-button-l all);
         }
     }
-    
+
     .form-edit-account {
         .fieldset.password {
             display: none;
         }
     }
-    
+
     .box-billing-address,
     .box-shipping-address,
     .box-information,
@@ -96,43 +96,43 @@
             h2 {
                 margin-top: 0;
             }
-    
+
             .toolbar {
                 text-align: center;
                 .limiter-options {
                     width: auto;
                 }
             }
-    
+
             .limiter {
                 >.label {
                     &:extend(.abs-visually-hidden all);
                 }
             }
-    
+
             .block:not(.widget) {
                 &:extend(.abs-account-blocks all);
             }
         }
-    
+
         .sidebar-additional {
             margin-top: 40px;
         }
-    
+
         .table-wrapper {
             &:last-child {
                 margin-bottom: 0;
             }
-    
+
             .action {
                 margin-right: 15px;
-    
+
                 &:last-child {
                     margin-right: 0;
                 }
             }
         }
-    
+
         .table-return-items {
             .qty {
                 .input-text {
@@ -141,7 +141,7 @@
             }
         }
     }
-    
+
     //  Checkout address (create shipping address)
     .field.street {
         .field.additional {
@@ -214,10 +214,10 @@
                 margin-bottom: 0;
             }
         }
-    
+
         .title {
             margin-bottom: @indent__s;
-    
+
             strong {
                 .lib-heading(h4);
                 .column.main & {
@@ -250,12 +250,13 @@
 
             .input-text {
                 .lib-vendor-prefix-order(0);
+                z-index: 2;
             }
         }
     }
 
     .password-strength-meter {
-        background-color: @password-strength-color__default;
+        background-color: @_password-default;
         height: @form-element-input__height;
         line-height: @form-element-input__height;
         padding: @form-element-input__padding;
@@ -271,35 +272,42 @@
             z-index: -1;
         }
 
-        .password-strength-meter-1 & {
+        .password-none & {
             &:before {
-                background-color: @password-strength-color__weak;
+                background-color: @_password-default;
+                width: 100%;
+            }
+        }
+
+        .password-weak & {
+            &:before {
+                background-color: @_password-weak;
                 width: 25%;
             }
         }
 
-        .password-strength-meter-2 & {
+        .password-medium & {
             &:before {
-                background-color: @password-strength-color__medium;
+                background-color: @_password-medium;
                 width: 50%;
             }
         }
 
-        .password-strength-meter-3 & {
+        .password-strong & {
             &:before {
-                background-color: @password-strength-color__strong;
+                background-color: @_password-strong;
                 width: 75%;
             }
         }
 
-        .password-strength-meter-4 & {
+        .password-very-strong & {
             &:before {
-                background-color: @password-strength-color__very-strong;
+                background-color: @_password-very-strong;
                 width: 100%;
             }
         }
     }
-    
+
     .control.captcha-image {
         .lib-css(margin-top, @indent__s);
 

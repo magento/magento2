@@ -10,7 +10,7 @@ use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Adminhtml\SystemConfig;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Backend\Test\Page\Adminhtml\AdminCache;
+use Magento\PageCache\Test\Page\Adminhtml\AdminCache;
 
 /**
  * Assert that store can be localized.

@@ -34,3 +34,13 @@ $subscriber->setStoreId($otherStore)
     ->setSubscriberEmail('customer_two@example.com')
     ->setSubscriberStatus(\Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED)
     ->save();
+
+/** @var \Magento\Newsletter\Model\Subscriber $subscriber */
+$subscriber = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Newsletter\Model\Subscriber');
+$subscriber->setStoreId($currentStore)
+    ->setCustomerId(1)
+    ->setSubscriberEmail('customer_confirm@example.com')
+    ->setSubscriberConfirmCode('ysayquyajua23iq29gxwu2eax2qb6gvy')
+    ->setSubscriberStatus(\Magento\Newsletter\Model\Subscriber::STATUS_UNSUBSCRIBED)
+    ->save();

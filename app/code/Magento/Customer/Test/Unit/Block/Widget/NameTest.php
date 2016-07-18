@@ -130,7 +130,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -151,7 +151,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))
@@ -408,7 +408,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->throwException(new NoSuchEntityException(
                 __(
-                    NoSuchEntityException::MESSAGE_SINGLE_FIELD,
+                    'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
             ))

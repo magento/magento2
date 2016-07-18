@@ -34,9 +34,18 @@ class BinderTest extends \PHPUnit_Framework_TestCase
             'queries' => [
                 'query' => ['value' => '$query$'],
                 'empty_query' => ['value' => '$empty_query$'],
-                'space_query' => ['value' => '$space_query$']
+                'space_query' => ['value' => '$space_query$'],
+                'zero_value_query' => ['name' => 'zero_value', 'type' => 'filteredQuery'],
             ],
-            'filters' => ['filter' => ['from' => '$from$', 'to' => '$to$', 'value' => '$filter$']],
+            'filters' => [
+                'filter' => ['from' => '$from$', 'to' => '$to$', 'value' => '$filter$'],
+                'zero_value_filter' => [
+                    'type' => 'termFilter',
+                    'name' => 'zero_value',
+                    'field' => 'zero_value',
+                    'value' => '$zero_value$',
+                ],
+            ],
             'aggregations' => ['price' => ['method' => '$method$']],
             'from' => 0,
             'size' => 15,
@@ -51,6 +60,7 @@ class BinderTest extends \PHPUnit_Framework_TestCase
                 '$to$' => 'filter_to',
                 '$filter$' => 'filter_value',
                 '$method$' => 'filter_method',
+                '$zero_value$' => '0',
             ],
             'from' => 1,
             'size' => 10,
@@ -60,7 +70,8 @@ class BinderTest extends \PHPUnit_Framework_TestCase
             'queries' => [
                 'query' => ['value' => 'match_query', 'is_bind' => true],
                 'empty_query' => ['value' => '$empty_query$'],
-                'space_query' => ['value' => 'value', 'is_bind' => true]
+                'space_query' => ['value' => 'value', 'is_bind' => true],
+                'zero_value_query' => ['name' => 'zero_value', 'type' => 'filteredQuery'],
             ],
             'filters' => [
                 'filter' => [
@@ -68,6 +79,13 @@ class BinderTest extends \PHPUnit_Framework_TestCase
                     'to' => 'filter_to',
                     'value' => 'filter_value',
                     'is_bind' => true
+                ],
+                'zero_value_filter' => [
+                    'type' => 'termFilter',
+                    'name' => 'zero_value',
+                    'field' => 'zero_value',
+                    'value' => '0',
+                    'is_bind' => true,
                 ]
             ],
             'aggregations' => ['price' => ['method' => 'filter_method', 'is_bind' => true]],

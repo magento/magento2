@@ -94,7 +94,7 @@ class InstallData implements InstallDataInterface
                 'label' => 'Allow Gift Message',
                 'input' => 'select',
                 'class' => '',
-                'source' => \Magento\Eav\Model\Entity\Attribute\Source\Boolean::class,
+                'source' => \Magento\Catalog\Model\Product\Attribute\Source\Boolean::class,
                 'global' => true,
                 'visible' => true,
                 'required' => false,
