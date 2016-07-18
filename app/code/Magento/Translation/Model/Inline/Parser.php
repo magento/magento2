@@ -344,7 +344,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     {
         $specialTags = $tagHtml . '<span class="translate-inline-' . $tagName . '" ' . $this->_getHtmlAttribute(
             self::DATA_TRANSLATE,
-            '[' . join(',', $trArr) . ']'
+            '[' . htmlspecialchars(join(',', $trArr)) . ']'
         );
         $additionalAttr = $this->_getAdditionalHtmlAttribute($tagName);
         if ($additionalAttr !== null) {
@@ -527,10 +527,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     private function _translateTags(&$content, $tagsList, $formatCallback)
     {
         $nextTag = 0;
+        $tagRegExpBody = '#<(body)(/?>| \s*[^>]*+/?>)#iSU';
 
         $tags = implode('|', array_keys($tagsList));
         $tagRegExp = '#<(' . $tags . ')(/?>| \s*[^>]*+/?>)#iSU';
         $tagMatch = [];
+        $headTranslateTags = '';
         while (preg_match($tagRegExp, $content, $tagMatch, PREG_OFFSET_CAPTURE, $nextTag)) {
             $tagName = strtolower($tagMatch[1][0]);
             if (substr($tagMatch[0][0], -2) == '/>') {
@@ -564,11 +566,35 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 
             if (!empty($trArr)) {
                 $trArr = array_unique($trArr);
-                $tagHtml = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+
+                $tagBodyMatch = [];
+                preg_match($tagRegExpBody, $content, $tagBodyMatch, PREG_OFFSET_CAPTURE);
+                if (!empty($tagBodyMatch)) {
+                    $tagBodyOpenStartPosition = $tagBodyMatch[0][1];
+
+                    if (array_key_exists($tagName, $this->_allowedTagsGlobal)
+                        && $tagBodyOpenStartPosition > $tagMatch[0][1]
+                    ) {
+                        $tagHtmlHead = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+                        $headTranslateTags .= substr($tagHtmlHead, strlen($tagHtml));
+                    } else {
+                        $tagHtml = call_user_func([$this, $formatCallback], $tagHtml, $tagName, $trArr);
+                    }
+                }
+
                 $tagClosurePos = $tagMatch[0][1] + strlen($tagHtml);
                 $content = substr_replace($content, $tagHtml, $tagMatch[0][1], $tagLength);
             }
             $nextTag = $tagClosurePos;
+        }
+        if ($headTranslateTags) {
+            $tagBodyMatch = [];
+            preg_match($tagRegExpBody, $content, $tagBodyMatch, PREG_OFFSET_CAPTURE);
+            $tagBodyOpenStartPosition = $tagBodyMatch[0][1];
+            $openTagBodyEndPosition = $tagBodyOpenStartPosition + strlen($tagBodyMatch[0][0]);
+            $content = substr($content, 0, $openTagBodyEndPosition)
+                . $headTranslateTags
+                . substr($content, $openTagBodyEndPosition);
         }
     }
 
