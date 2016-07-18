@@ -41,7 +41,7 @@ class Home extends Block
      *
      * @return void
      */
-    public function clickComponentManager()
+    public function clickExtensionManager()
     {
         $this->_rootElement->find($this->extensionManager, Locator::SELECTOR_CSS)->click();
     }
