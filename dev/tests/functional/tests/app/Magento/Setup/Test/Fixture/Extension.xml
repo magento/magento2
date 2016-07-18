@@ -15,7 +15,7 @@
         <field name="needAuthentication" />
         <field name="publicKey" />
         <field name="privateKey" />
-        <field name="extension" />
+        <field name="extensionName" />
         <field name="version" />
         <field name="versionToUpdate" />
         <field name="optionsCode" />

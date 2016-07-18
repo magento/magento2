@@ -83,7 +83,7 @@ class Grid extends AbstractGrid
     {
         $this->clickSelectActionButton($extension);
         $button = $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtension(), $this->uninstallAction),
+            str_replace('#extensionName#', $extension->getExtensionName(), $this->uninstallAction),
             Locator::SELECTOR_XPATH
         );
 
@@ -101,7 +101,7 @@ class Grid extends AbstractGrid
     public function getVersion(Extension $extension)
     {
         return $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtension(), $this->versionContainer),
+            str_replace('#extensionName#', $extension->getExtensionName(), $this->versionContainer),
             Locator::SELECTOR_XPATH
         )->getText();
     }
@@ -116,7 +116,7 @@ class Grid extends AbstractGrid
     {
         $this->clickSelectActionButton($extension);
         $button = $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtension(), $this->updateAction),
+            str_replace('#extensionName#', $extension->getExtensionName(), $this->updateAction),
             Locator::SELECTOR_XPATH
         );
 
@@ -134,7 +134,7 @@ class Grid extends AbstractGrid
     protected function clickSelectActionButton(Extension $extension)
     {
         $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtension(), $this->selectAction),
+            str_replace('#extensionName#', $extension->getExtensionName(), $this->selectAction),
             Locator::SELECTOR_XPATH
         )->click();
     }
