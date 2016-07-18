@@ -14,43 +14,56 @@ angular.module('marketplace-credentials', ['ngStorage'])
                 submitted : false
             };
 
-            $scope.upgradeProcessError = false;
-
-            $http.get('index.php/select-version/installedSystemPackage', {'responseType' : 'json'})
-                .success(function (data) {
-                    if (data.responseType == 'error') {
-                        $scope.upgradeProcessError = true;
-                        $scope.upgradeProcessErrorMessage = $sce.trustAsHtml(data.error);
-                    } else {
-                        if (!$rootScope.authRequest || !$rootScope.isMarketplaceAuthorized) {
-                            $scope.isHiddenSpinner = false;
-                            $http.post('index.php/marketplace/check-auth', [])
-                                .success(function (response) {
-                                    if (response.success) {
-                                        $localStorage.marketplaceUsername = $scope.user.username = response.data.username;
-                                        $localStorage.isMarketplaceAuthorized = true;
-                                        $scope.nextState();
-                                    } else {
-                                        $localStorage.isMarketplaceAuthorized = false;
-                                        $scope.showCredsForm = true;
-                                    }
-                                    $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
-                                    $rootScope.authRequest = true;
-                                });
-                        } else {
-                            $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
-                            $scope.nextState();
-                        }
-                    }
-                })
-                .error(function (data) {
-                    $scope.upgradeProcessError = true;
-                });
-
             $scope.errors = false;
+            $scope.checkAuth = function() {
+                if (!$rootScope.authRequest || !$rootScope.isMarketplaceAuthorized) {
+                    $scope.isHiddenSpinner = false;
+                    $http.post('index.php/marketplace/check-auth', [])
+                        .success(function (response) {
+                            if (response.success) {
+                                $localStorage.marketplaceUsername = $scope.user.username = response.data.username;
+                                $localStorage.isMarketplaceAuthorized = true;
+                                $scope.nextState();
+                            } else {
+                                $localStorage.isMarketplaceAuthorized = false;
+                                $scope.showCredsForm = true;
+                            }
+                            $scope.isHiddenSpinner = true;
+                            $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
+                            $rootScope.authRequest = true;
+                        })
+                        .error(function() {
+                            $scope.isHiddenSpinner = true;
+                            $localStorage.isMarketplaceAuthorized = false;
+                            $scope.errors = true;
+                        });
+                } else {
+                    $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
+                    $scope.nextState();
+                }
+            };
+
+            $scope.upgradeProcessError = false;
+            if ($state.current.type == 'upgrade') {
+                $http.get('index.php/select-version/installedSystemPackage', {'responseType' : 'json'})
+                    .success(function (data) {
+                        if (data.responseType == 'error') {
+                            $scope.upgradeProcessError = true;
+                            $scope.upgradeProcessErrorMessage = $sce.trustAsHtml(data.error);
+                        } else {
+                            $scope.checkAuth();
+                        }
+                    })
+                    .error(function (data) {
+                        $scope.upgradeProcessError = true;
+                    });
+            } else {
+                $scope.checkAuth();
+            }
 
             $scope.saveAuthJson = function () {
                 if ($scope.auth.$valid) {
+                    $scope.isHiddenSpinner = false;
                     $http.post('index.php/marketplace/save-auth-json', $scope.user)
                         .success(function (data) {
                             $scope.saveAuthJson.result = data;
@@ -63,10 +76,12 @@ angular.module('marketplace-credentials', ['ngStorage'])
                                 $localStorage.isMarketplaceAuthorized = false;
                                 $scope.errors = true;
                             }
+                            $scope.isHiddenSpinner = true;
                             $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
                             $localStorage.marketplaceUsername = $scope.user.username;
                         })
                         .error(function (data) {
+                            $scope.isHiddenSpinner = true;
                             $scope.saveAuthJson.failed = data;
                             $localStorage.isMarketplaceAuthorized = false;
                             $scope.errors = true;

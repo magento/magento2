@@ -36,14 +36,25 @@ return [
             'type'        => 'update'
         ],
         [
+            'id'          => 'root.extension-auth',
+            'url'         => 'marketplace-credentials',
+            'templateUrl' => "$base/marketplace-credentials",
+            'title'       => 'Extension Manager',
+            'controller'  => 'MarketplaceCredentialsController',
+            'order'       => 1,
+            'nav'         => false,
+            'noMenu'      => true,
+            'type'        => 'extension'
+        ],
+        [
             'id'          => 'root.extension',
             'url'         => 'extension-grid',
             'templateUrl' => "$base/extension-grid",
             'title'       => 'Extension Manager',
             'controller'  => 'extensionGridController',
+            'order'       => 2,
             'nav'         => false,
             'noMenu'      => true,
-            'order'       => 1,
             'type'        => 'extension'
         ],
         [

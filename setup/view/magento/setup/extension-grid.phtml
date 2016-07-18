@@ -5,82 +5,69 @@
  */
 ?>
 <h2 class="page-title">{{$state.current.header}}</h2>
-<div ng-controller="authDialogController">
-    <div class="message message-error" ng-show="syncError">
+
+<div class="message message-error" ng-show="syncError">
             <span class="message-text">
                 {{ErrorMessage}}
             </span>
-    </div>
-    <div ng-show="$root.isMarketplaceAuthorized" class="extension-manager-wrap">
-        <div class="extension-manager-title">
-            Magento Marketplace Account
-            <div class="extension-manager-account">
-                <a ng-click="reset()" href="#" class="sign-in-out">Disconnect</a>
-            </div>
+</div>
+<div ng-show="$root.isMarketplaceAuthorized" class="extension-manager-wrap">
+    <div class="extension-manager-title">
+        Magento Marketplace Account
+        <div class="extension-manager-account">
+            <a ng-click="reset()" href="#" class="sign-in-out">Disconnect</a>
         </div>
-        <div class="extension-manager-content">
-            <ul class="extension-manager-items row">
-                <li class="item col-m-4">
-                    <div class="item-number">{{countOfUpdate}}</div>
-                    <div class="item-title">Updates<br />Available</div>
-                    <button ui-sref="root.update" href="#update-extension-grid"
-                            ng-class="{'disabled' : !countOfUpdate}"
+    </div>
+    <div class="extension-manager-content">
+        <ul class="extension-manager-items row">
+            <li class="item col-m-4">
+                <div class="item-number">{{countOfUpdate}}</div>
+                <div class="item-title">Updates<br />Available</div>
+                <button ui-sref="root.update" href="#update-extension-grid"
+                        ng-class="{'disabled' : !countOfUpdate}"
+                        type="button" class="btn">
+                    Review Updates
+                </button>
+            </li>
+            <li class="item col-m-4">
+                <div class="item-number">{{countOfInstall}}</div>
+                <div class="item-title">Products<br />Ready to Install</div>
+                <div class="item-install">
+                    <button ui-sref="root.install" href="#install-extension-grid"
+                            ng-class="{'disabled' : !enabledInstall}"
                             type="button" class="btn">
-                        Review Updates
+                        Review and Install
                     </button>
-                </li>
-                <li class="item col-m-4">
-                    <div class="item-number">{{countOfInstall}}</div>
-                    <div class="item-title">Products<br />Ready to Install</div>
-                    <div class="item-install">
-                        <button ui-sref="root.install" href="#install-extension-grid"
-                                ng-class="{'disabled' : !enabledInstall}"
-                                type="button" class="btn">
-                            Review and Install
-                        </button>
-                    </div>
-                </li>
-                <li class="item col-m-4">
-                    <div ng-hide="isOutOfSync" class="item-title">Last Refresh at {{lastSyncTime}} on </div>
-                    <div ng-hide="isOutOfSync" class="item-date">
-                        {{lastSyncDate}}
-                    </div>
-                    <span ng-show="isOutOfSync">No sync history</span>
-                    <button type="button" ng-click="sync()" class="btn">Refresh</button>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <div ng-show="!$root.isMarketplaceAuthorized" class="extension-manager-wrap">
-        <div class="extension-manager-title">
-            Magento Marketplace Account
-            <div class="extension-manager-account">
-                <a href="" ng-click="open()" class="sign-in-out">Sign In</a>
-            </div>
-        </div>
-        <div class="extension-manager-content">
-            <a href="" ng-click="open()">Sign in</a> to sync your Magento Marketplace purchases
-        </div>
-    </div>
-
-    <div ng-show="logout===true" id="messages">
-        <div class="messages">
-            <div class="message message-success success">
-                <div data-ui-id="messages-message-success">
-                    You have logged out
                 </div>
+            </li>
+            <li class="item col-m-4">
+                <div ng-hide="isOutOfSync" class="item-title">Last Refresh at {{lastSyncTime}} on </div>
+                <div ng-hide="isOutOfSync" class="item-date">
+                    {{lastSyncDate}}
+                </div>
+                <span ng-show="isOutOfSync">No sync history</span>
+                <button type="button" ng-click="sync()" class="btn">Refresh</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div ng-show="logout===true" id="messages">
+    <div class="messages">
+        <div class="message message-success success">
+            <div data-ui-id="messages-message-success">
+                You have logged out
             </div>
         </div>
     </div>
 </div>
 
-<div class="row" ng-show="extensionsProcessed && total == 0">
+<div class="row" ng-show="$root.isMarketplaceAuthorized && extensionsProcessed && total == 0">
     <label class="form-label">
         <b>We didn't find any extensions to update at this time. Please try later.</b><br/>
     </label>
 </div>
-<div class="admin__data-grid-outer-wrap" ng-show="extensionsProcessed && total > 0">
+<div class="admin__data-grid-outer-wrap" ng-show="$root.isMarketplaceAuthorized && extensionsProcessed && total > 0">
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3">
@@ -195,7 +182,7 @@
 </div>
 
 <div ng-show="!isHiddenSpinner || $root.saveAuthProccessed ||
-(!$root.extensionsProcessed || !$root.isAuthLoadingComplete)" class="loading-mask ng-scope" data-role="loader">
+(!$root.extensionsProcessed)" class="loading-mask ng-scope" data-role="loader">
     <div class="popup popup-loading">
         <div class="popup-inner">
             <img alt="Loading..." src="<?php echo $this->basePath() ?>/pub/images/loader-1.gif">
@@ -203,5 +190,3 @@
         </div>
     </div>
 </div>
-
-<div ng-include="'index.php/marketplace/popup-auth'" style="display: inline-block"></div>

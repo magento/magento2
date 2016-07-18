@@ -10,6 +10,16 @@ angular.module('extension-grid', ['ngStorage'])
         function ($rootScope, $scope, $http, $localStorage, $state) {
             $rootScope.extensionsProcessed = false;
             $scope.syncError = false;
+            $rootScope.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
+
+            $scope.auth = function () {
+                $state.go('root.extension-auth');
+            };
+
+            if ($rootScope.isMarketplaceAuthorized == false) {
+                $scope.auth();
+            }
+
             $http.get('index.php/extensionGrid/extensions').success(function (data) {
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
@@ -148,6 +158,19 @@ angular.module('extension-grid', ['ngStorage'])
                 $rootScope.titles = $localStorage.titles;
                 $localStorage.extensionType = extension.type;
                 $state.go('root.readiness-check-uninstall');
+            };
+
+            $scope.reset = function () {
+                $http.post('index.php/marketplace/remove-credentials', [])
+                    .success(function (response) {
+                        if (response.success) {
+                            $scope.logout = true;
+                            $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
+                            $scope.auth();
+                        }
+                    })
+                    .error(function (data) {
+                    });
             };
         }
     ])
