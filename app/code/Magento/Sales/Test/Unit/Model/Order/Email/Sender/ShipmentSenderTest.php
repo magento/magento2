@@ -181,7 +181,10 @@ class ShipmentSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->shipmentResourceMock->expects($this->once())
+            $this->shipmentResourceMock->expects($this->at(0))
+                ->method('saveAttribute')
+                ->with($this->shipmentMock, 'email_sent');
+            $this->shipmentResourceMock->expects($this->at(1))
                 ->method('saveAttribute')
                 ->with($this->shipmentMock, 'send_email');
 
