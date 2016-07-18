@@ -13,6 +13,8 @@ angular.module('marketplace-credentials', ['ngStorage'])
                 password : '',
                 submitted : false
             };
+            $scope.actionMessage = $state.current.type == 'upgrade' ? 'upgrade' : 'upgrade or install';
+
 
             $scope.errors = false;
             $scope.checkAuth = function() {
