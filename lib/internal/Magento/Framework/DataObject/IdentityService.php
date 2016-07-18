@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\DataObject;
 
-use \Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class IdentityService
@@ -18,21 +18,13 @@ class IdentityService implements IdentityGeneratorInterface
     private $uuidFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * IdentityService constructor.
      * @param \Ramsey\Uuid\UuidFactory $uuidFactory
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Ramsey\Uuid\UuidFactory $uuidFactory,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Ramsey\Uuid\UuidFactory $uuidFactory
     ) {
         $this->uuidFactory = $uuidFactory;
-        $this->objectManager = $objectManager;
     }
 
     /**
