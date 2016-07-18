@@ -55,7 +55,7 @@ class ExtensionGrid extends AbstractActionController
      */
     public function indexAction()
     {
-        $view = new \Zend\View\Model\ViewModel();
+        $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
     }
