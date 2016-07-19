@@ -12,6 +12,7 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\PackagesData;
 
 /**
  * Module grid
@@ -55,24 +56,32 @@ class Module
     private $typeMapper;
 
     /**
+     * @var PackagesData
+     */
+    private $packagesData;
+
+    /**
      * @param ComposerInformation $composerInformation
      * @param FullModuleList $fullModuleList
      * @param ModuleList $moduleList
      * @param ObjectManagerProvider $objectManagerProvider
      * @param TypeMapper $typeMapper
+     * @param PackagesData $packagesData
      */
     public function __construct(
         ComposerInformation $composerInformation,
         FullModuleList $fullModuleList,
         ModuleList $moduleList,
         ObjectManagerProvider $objectManagerProvider,
-        TypeMapper $typeMapper
+        TypeMapper $typeMapper,
+        PackagesData $packagesData
     ) {
         $this->composerInformation = $composerInformation;
         $this->fullModuleList = $fullModuleList;
         $this->moduleList = $moduleList;
         $this->objectManagerProvider = $objectManagerProvider;
         $this->typeMapper = $typeMapper;
+        $this->packagesData = $packagesData;
     }
 
     /**
@@ -98,7 +107,7 @@ class Module
         array_walk($items, function (&$module, $name) {
             $module['moduleName'] = $this->packageInfo->getModuleName($name);
             $module['enable'] = $this->moduleList->has($module['moduleName']);
-            $module['vendor'] = current(explode('/', $name));
+            $module['vendor'] = ucfirst(current(explode('/', $name)));
             $module['type'] = $this->typeMapper->map($name, $module['type']);
             $module['requiredBy'] = $this->getModuleRequiredBy($name);
         });
@@ -107,15 +116,29 @@ class Module
     }
 
     /**
-     * Get all modules and extensions a module required by
+     * Get all modules, extensions, metapackages a module required by
      * 
      * @param string $name Module name
      * @return array
      */
     private function getModuleRequiredBy($name)
     {
-        $modules = $this->packageInfo->getRequiredBy($name);
         $result = [];
+        $metaPackagesMap = $this->packagesData->getMetaPackagesMap();
+        if (isset($metaPackagesMap[$name])) {
+            $result[] = [
+                'name' => $metaPackagesMap[$name],
+                'moduleName' => $metaPackagesMap[$name],
+                'type' => $this->typeMapper->map(
+                    $metaPackagesMap[$name],
+                    ComposerInformation::METAPACKAGE_PACKAGE_TYPE
+                ),
+                'enable' => true,
+                'version' => $this->packageInfo->getVersion($metaPackagesMap[$name])
+            ];
+        }
+
+        $modules = $this->packageInfo->getRequiredBy($name);
         foreach ($modules as $moduleName) {
             $packageName = $this->packageInfo->getPackageName($moduleName);
             $result[] = [
@@ -126,7 +149,7 @@ class Module
                 'version' => $this->packageInfo->getVersion($moduleName)
             ];
         }
-        
+
         return $result;
     }
 

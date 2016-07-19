@@ -15,6 +15,7 @@ use Magento\Setup\Model\Grid\TypeMapper;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Model\PackagesData;
 
 /**
  * Class ModuleTest
@@ -57,6 +58,11 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
      * @var TypeMapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $typeMapperMock;
+
+    /**
+     * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $packagesDataMock;
 
     /**
      * Model
@@ -129,12 +135,17 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->packagesDataMock = $this->getMockBuilder(PackagesData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new Module(
             $this->composerInformationMock,
             $this->fullModuleListMock,
             $this->moduleListMock,
             $this->objectManagerProvider,
-            $this->typeMapperMock
+            $this->typeMapperMock,
+            $this->packagesDataMock
         );
     }
 
@@ -167,10 +178,13 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 ['magento/sample-module-two', 'magento2-module', 'Module'],
             ]);
 
+        $this->packagesDataMock->expects(static::exactly(2))
+            ->method('getMetaPackagesMap')
+            ->willReturn([]);
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getRequiredBy')
             ->willReturn([]);
-        $this->packageInfoMock
+        $this->packageInfoMock->expects(static::exactly(2))
             ->method('getPackageName')
             ->willReturnMap([
                     ['magento/sample-module-one', $this->allComponentData['magento/sample-module-one']['name']],
@@ -194,7 +208,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 'name' => 'magento/sample-module-one',
                 'type' => 'Module',
                 'version' => '1.0.0',
-                'vendor' => 'magento',
+                'vendor' => 'Magento',
                 'moduleName' => 'Sample_Module_One',
                 'enable' => true,
                 'requiredBy' => []
@@ -203,7 +217,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 'name' => 'magento/sample-module-two',
                 'type' => 'Module',
                 'version' => '1.0.0',
-                'vendor' => 'magento',
+                'vendor' => 'Magento',
                 'moduleName' => 'Sample_Module_Two',
                 'enable' => true,
                 'requiredBy' => []
