@@ -26,7 +26,6 @@ class ExtensionTest extends AbstractExtensionTest
      * @param AssertSuccessMessage $assertSuccessMessage
      * @param array $extensionData
      * @return void
-     * @throws \Exception
      */
     public function test(
         FixtureFactory $fixtureFactory,
@@ -84,7 +83,7 @@ class ExtensionTest extends AbstractExtensionTest
         // Check version of installed extension
         $versionOnGrid = $this->setupWizard->getExtensionsGrid()->getVersion($extensionFixture);
         if ($extensionFixture->getVersion() != $versionOnGrid) {
-            throw new \Exception('Version of installed extension is incorrect!');
+            $this->fail('Version of installed extension is incorrect!');
         }
 
         // Update extension
@@ -113,7 +112,7 @@ class ExtensionTest extends AbstractExtensionTest
         // Check version of updated extension
         $versionOnGrid = $this->setupWizard->getExtensionsGrid()->getVersion($extensionFixture);
         if ($extensionFixture->getVersionToUpdate() != $versionOnGrid) {
-            throw new \Exception('Version of updated extension is incorrect!');
+            $this->fail('Version of updated extension is incorrect!');
         }
 
         // Uninstall extension.

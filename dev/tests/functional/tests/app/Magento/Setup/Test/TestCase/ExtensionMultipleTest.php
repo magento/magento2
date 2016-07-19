@@ -32,7 +32,6 @@ class ExtensionMultipleTest extends AbstractExtensionTest
      * @param AssertFindExtensionOnGrid $assertFindExtensionOnGrid
      * @param $extensions
      * @param array $extensionData
-     * @throws \Exception
      */
     public function test(
         FixtureFactory $fixtureFactory,
