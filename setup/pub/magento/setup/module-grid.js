@@ -67,25 +67,23 @@ angular.module('module-grid', ['ngStorage'])
             };
 
             $scope.enableDisable = function(type, component) {
-                if (component.type.indexOf('module') >= 0 ) {
-                    $localStorage.packages = [
-                        {
-                            name: component.moduleName
-                        }
-                    ];
-                    if (component.moduleName) {
-                        $localStorage.moduleName = component.moduleName;
-                    } else {
-                        $localStorage.moduleName = component.name;
+                $localStorage.packages = [
+                    {
+                        name: component.moduleName
                     }
-                    if ($localStorage.titles[type].indexOf($localStorage.moduleName) < 0 ) {
-                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                            + $localStorage.moduleName;
-                    }
-                    $rootScope.titles = $localStorage.titles;
-                    $localStorage.componentType = component.type;
-                    $state.go('root.readiness-check-'+type);
+                ];
+                if (component.moduleName) {
+                    $localStorage.moduleName = component.moduleName;
+                } else {
+                    $localStorage.moduleName = component.name;
                 }
+                if ($localStorage.titles[type].indexOf($localStorage.moduleName) < 0 ) {
+                    $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                        + $localStorage.moduleName;
+                }
+                $rootScope.titles = $localStorage.titles;
+                $localStorage.componentType = component.type;
+                $state.go('root.readiness-check-'+type);
             };
         }
     ])
