@@ -36,7 +36,7 @@ Subtotal,Subtotal
 "Cannot assign customer to the given cart. The cart belongs to different store.","Cannot assign customer to the given cart. The cart belongs to different store."
 "Cannot assign customer to the given cart. The cart is not anonymous.","Cannot assign customer to the given cart. The cart is not anonymous."
 "Cannot assign customer to the given cart. Customer already has active cart.","Cannot assign customer to the given cart. Customer already has active cart."
-"Unable to place order. Please try again later.","Unable to place order. Please try again later."
+"An error occurred on the server. Please try to place the order again.","An error occurred on the server. Please try to place the order again."
 "This item price or quantity is not valid for checkout.","This item price or quantity is not valid for checkout."
 "Please check the shipping address information. %1","Please check the shipping address information. %1"
 "Please specify a shipping method.","Please specify a shipping method."
