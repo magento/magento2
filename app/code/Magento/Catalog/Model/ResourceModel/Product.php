@@ -74,6 +74,11 @@ class Product extends AbstractResource
     protected $availableCategoryIdsCache = [];
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     */
+    private $productCategoryLink;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -226,17 +231,10 @@ class Product extends AbstractResource
      */
     public function getCategoryIds($product)
     {
-        $connection = $this->getConnection();
-
-        $select = $connection->select()->from(
-            $this->getProductCategoryTable(),
-            'category_id'
-        )->where(
-            'product_id = ?',
-            (int)$product->getId()
-        );
-
-        return $connection->fetchCol($select);
+        $result =  array_map(function($value) {
+            return isset($value['category_id']) ? $value['category_id'] : null;
+        }, $this->getProductCategoryLink()->getCategoryLinks($product));
+        return $result;
     }
 
     /**
@@ -370,39 +368,8 @@ class Product extends AbstractResource
         if (!$object->hasCategoryIds()) {
             return $this;
         }
-        $categoryIds = $object->getCategoryIds();
-        $oldCategoryIds = $this->getCategoryIds($object);
 
         $object->setIsChangedCategories(false);
-
-        $insert = array_diff($categoryIds, $oldCategoryIds);
-        $delete = array_diff($oldCategoryIds, $categoryIds);
-
-        $connection = $this->getConnection();
-        if (!empty($insert)) {
-            $data = [];
-            foreach ($insert as $categoryId) {
-                if (empty($categoryId)) {
-                    continue;
-                }
-                $data[] = [
-                    'category_id' => (int)$categoryId,
-                    'product_id' => (int)$object->getEntityId(),
-                    'position' => 1,
-                ];
-            }
-            if ($data) {
-                $connection->insertMultiple($this->getProductCategoryTable(), $data);
-            }
-        }
-
-        if (!empty($delete)) {
-            foreach ($delete as $categoryId) {
-                $where = ['product_id = ?' => (int)$object->getEntityId(), 'category_id = ?' => (int)$categoryId];
-
-                $connection->delete($this->getProductCategoryTable(), $where);
-            }
-        }
 
         if (!empty($insert) || !empty($delete)) {
             $object->setAffectedCategoryIds(array_merge($insert, $delete));
@@ -706,5 +673,17 @@ class Product extends AbstractResource
                 ->get('Magento\Framework\EntityManager\EntityManager');
         }
         return $this->entityManager;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     */
+    private function getProductCategoryLink()
+    {
+        if (null === $this->productCategoryLink) {
+            $this->productCategoryLink = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Product\CategoryLink');
+        }
+        return $this->productCategoryLink;
     }
 }
