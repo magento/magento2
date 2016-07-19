@@ -9,7 +9,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**
- * 'Fixed Product Tax' form.
+ * Fixed Product Tax.
  */
 class Fpt extends SimpleElement
 {
@@ -51,7 +51,7 @@ class Fpt extends SimpleElement
     /**
      * Fill Fixed Product Tax form.
      *
-     * @param array $value
+     * @param string|array $value
      * @return void
      */
     public function setValue($value)
@@ -59,21 +59,14 @@ class Fpt extends SimpleElement
         if ($this->find($this->buttonFormLocator)->isVisible()) {
             $this->find($this->buttonFormLocator)->click();
         }
-        $countryElement = $this->find($this->country, Locator::SELECTOR_CSS, 'select');
-        if ($countryElement->isVisible()) {
-            $countryElement->setValue($value['country']);
-        }
-        $taxElement = $this->find($this->tax, Locator::SELECTOR_CSS, 'input');
-        if ($taxElement->isVisible()) {
-            $taxElement->setValue($value['tax']);
-        }
-        $websiteElement = $this->find($this->website, Locator::SELECTOR_CSS, 'select');
-        if ($websiteElement->isVisible()) {
-            $websiteElement->setValue($value['website']);
-        }
-        $stateElement = $this->find($this->state, Locator::SELECTOR_CSS, 'select');
-        if ($stateElement->isVisible()) {
-            $stateElement->setValue($value['state']);
+        foreach ((array)$value as $name => $data) {
+            $element = $name === 'tax'
+                ? $this->find($this->$name, Locator::SELECTOR_CSS, 'input')
+                : $this->find($this->$name, Locator::SELECTOR_CSS, 'select');
+
+            if ($element->isVisible()) {
+                $element->setValue($data);
+            }
         }
     }
 }

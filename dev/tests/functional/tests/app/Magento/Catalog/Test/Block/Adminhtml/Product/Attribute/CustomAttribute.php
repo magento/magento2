@@ -11,7 +11,6 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\DriverInterface;
 use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Ui\Component\DynamicRows;
 
 /**
  * Catalog product custom attribute element.
@@ -94,17 +93,17 @@ class CustomAttribute extends SimpleElement
     }
 
     /**
-     * Get element data by class.
+     * Get element by class.
      *
      * @param string $class
-     * @return array
+     * @return array|null
      */
     private function getElementByClass($class)
     {
         $element = null;
         foreach ($this->classReferences as $key => $reference) {
             if (strpos($class, $key) !== false) {
-                $element = $reference;
+                return $this->classReferences[$class];
             }
         }
         return $element;
@@ -118,11 +117,9 @@ class CustomAttribute extends SimpleElement
      */
     private function getElementClass($code)
     {
-        if ($this->find($this->dataGrid)->isVisible()) {
-            return DynamicRows::NAME;
-        } else {
-            return $this->find(sprintf($this->inputSelector, $code), Locator::SELECTOR_CSS)->getAttribute('class');
-        }
+        return $this->find($this->dataGrid)->isVisible()
+            ? 'dynamicRows'
+            : $this->find(sprintf($this->inputSelector, $code), Locator::SELECTOR_CSS)->getAttribute('class');
     }
 
     /**
