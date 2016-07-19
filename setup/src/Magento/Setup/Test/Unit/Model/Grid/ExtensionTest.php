@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Test\Unit\Model\Grid;
 
 use Composer\Package\RootPackage;
@@ -20,12 +19,12 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var ComposerInformation|MockObject
      */
-    private $composerInformation;
+    private $composerInformationMock;
 
     /**
      * @var TypeMapper|MockObject
      */
-    private $typeMapper;
+    private $typeMapperMock;
 
     /**
      * Extension
@@ -36,15 +35,14 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerInformation =  $this->getMockBuilder(ComposerInformation::class)
+        $this->composerInformationMock =  $this->getMockBuilder(ComposerInformation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->typeMapperMock = $this->getMockBuilder(TypeMapper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->typeMapper = $this->getMockBuilder(TypeMapper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->composerInformation->expects($this->any())->method('getInstalledMagentoPackages')->willReturn(
+        $this->composerInformationMock->expects($this->any())->method('getInstalledMagentoPackages')->willReturn(
             [
                 'magento/package-1' => ['name' => 'magento/package-1', 'type' => 'magento2-module', 'version' => '1.0.0'],
                 'magento/package-2' => ['name' => 'magento/package-2', 'type' => 'magento2-module', 'version' => '1.0.1'],
@@ -57,16 +55,22 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
         $rootPackage->expects($this->once())
             ->method('getRequires')
             ->willReturn(['magento/rootPackage-1' => '1.0.0']);
-
-        $this->composerInformation
+        $this->composerInformationMock
             ->expects($this->any())
             ->method('getRootPackage')
             ->willReturn($rootPackage);
 
         $this->model = new Extension(
-            $this->composerInformation,
-            $this->typeMapper
+            $this->composerInformationMock,
+            $this->typeMapperMock
         );
+    }
+
+    public function testGetList()
+    {
+        $this->typeMapperMock->expects($this->once())
+            ->method('map')
+            ->willReturn('Extension');
 
         $this->model->setLastSyncData([
             "packages" => [
@@ -78,20 +82,14 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
         ]);
-    }
 
-    public function testGetList()
-    {
-        $this->typeMapper->expects($this->once())
-            ->method('map')
-            ->willReturn('Extension');
-        
         $expected = [
             [
                 'name' => 'magento/rootPackage-1',
                 'type' => 'Extension',
                 'version' => '1.0.0',
                 'update' => true,
+                'uninstall' => true,
                 'vendor' => 'Magento',
             ]
         ];

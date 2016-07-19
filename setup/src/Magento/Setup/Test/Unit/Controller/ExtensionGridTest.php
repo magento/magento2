@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Framework\Module\ModuleList;
@@ -13,12 +12,15 @@ use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
+/**
+ * Class ExtensionGridTest
+ */
 class ExtensionGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var Extension|MockObject
      */
-    private $gridExtension;
+    private $gridExtensionMock;
 
     /**
      * Controller
@@ -30,12 +32,12 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
     /**
      * @var PackagesData|MockObject
      */
-    private $packagesData;
+    private $packagesDataMock;
 
     /**
      * @var PackagesAuth|MockObject
      */
-    private $packagesAuth;
+    private $packagesAuthMock;
 
     /**
      * @var array
@@ -82,15 +84,14 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-
-        $this->packagesData = $this->getMock(PackagesData::class, [], [], '', false);
-        $this->packagesAuth = $this->getMock(PackagesAuth::class, [], [], '', false);
-        $this->gridExtension = $this->getMock(Extension::class, [], [], '', false);
+        $this->packagesDataMock = $this->getMock(PackagesData::class, [], [], '', false);
+        $this->packagesAuthMock = $this->getMock(PackagesAuth::class, [], [], '', false);
+        $this->gridExtensionMock = $this->getMock(Extension::class, [], [], '', false);
 
         $this->controller = new ExtensionGrid(
-            $this->packagesData,
-            $this->packagesAuth,
-            $this->gridExtension
+            $this->packagesDataMock,
+            $this->packagesAuthMock,
+            $this->gridExtensionMock
         );
     }
 
@@ -103,15 +104,13 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
 
     public function testExtensionsAction()
     {
-        $this->gridExtension->expects($this->once())
+        $this->gridExtensionMock->expects($this->once())
             ->method('getList')
             ->willReturn($this->extensionData);
-
-        $this->packagesData->expects($this->once())
+        $this->packagesDataMock->expects($this->once())
             ->method('syncPackagesData')
             ->willReturn($this->lastSyncData);
-
-        $this->packagesAuth->expects($this->once())
+        $this->packagesAuthMock->expects($this->once())
              ->method('getAuthJsonData')
              ->willReturn(
             [
@@ -133,7 +132,7 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
 
     public function testSyncAction()
     {
-        $this->packagesData->expects($this->once())
+        $this->packagesDataMock->expects($this->once())
             ->method('syncPackagesData')
             ->willReturn($this->lastSyncData);
         $jsonModel = $this->controller->syncAction();
