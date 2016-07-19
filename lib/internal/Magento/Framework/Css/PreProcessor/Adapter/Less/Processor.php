@@ -94,10 +94,7 @@ class Processor implements ContentProcessorInterface
 
             return $content;
         } catch (\Exception $e) {
-            $errorMessage = PHP_EOL . self::ERROR_MESSAGE_PREFIX . PHP_EOL . $path . PHP_EOL . $e->getMessage();
-            $this->logger->critical($errorMessage);
-
-            throw new ContentProcessorException(new Phrase($errorMessage));
+            throw new ContentProcessorException(new Phrase($e->getMessage()));
         }
     }
 }
