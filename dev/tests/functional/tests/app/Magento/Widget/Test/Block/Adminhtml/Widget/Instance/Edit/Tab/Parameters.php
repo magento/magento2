@@ -28,7 +28,7 @@ class Parameters extends Tab
      *
      * @var string
      */
-    protected $path = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\\';
+    protected $path = 'Magento\*\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\\';
 
     /**
      * Fill Widget options form.
@@ -40,14 +40,29 @@ class Parameters extends Tab
     public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $data = $fields['parameters']['value'];
-        $path = $this->path . str_replace(' ', '', $fields['code']);
         /** @var ParametersForm $parametersForm */
         $parametersForm = $this->blockFactory->create(
-            $path,
+            $this->getElementClass($fields),
             ['element' => $this->_rootElement->find($this->formSelector)]
         );
         $parametersForm->fillForm($data, $element);
 
         return $this;
+    }
+
+    /**
+     * Get element class.
+     *
+     * @param array $fields
+     * @return string
+     */
+    private function getElementClass(array $fields)
+    {
+        $path = $this->path . str_replace(' ', '', $fields['code']) . '.php';
+        $mtfTestsPath = str_replace('/', '\\', MTF_TESTS_PATH);
+        $path = $mtfTestsPath . $path;
+        $paths = glob($path);
+
+        return str_replace('.php', '', str_replace($mtfTestsPath, '', $paths[0]));
     }
 }
