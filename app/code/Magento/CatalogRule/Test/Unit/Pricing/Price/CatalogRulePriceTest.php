@@ -10,6 +10,7 @@ use \Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 
 /**
  * Class CatalogRulePriceTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
 {

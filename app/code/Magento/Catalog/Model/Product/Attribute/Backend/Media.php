@@ -372,5 +372,4 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             );
         }
     }
-    
 }

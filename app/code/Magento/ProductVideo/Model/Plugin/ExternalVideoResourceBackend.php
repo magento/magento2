@@ -89,5 +89,4 @@ class ExternalVideoResourceBackend
 
         return $select;
     }
-
 }

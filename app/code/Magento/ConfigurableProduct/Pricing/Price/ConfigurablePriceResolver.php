@@ -72,6 +72,7 @@ class ConfigurablePriceResolver implements PriceResolverInterface
 
     /**
      * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
+     * @deprecated
      */
     private function getConfigurableOptionsProvider()
     {
