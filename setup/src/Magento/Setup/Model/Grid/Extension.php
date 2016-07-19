@@ -49,6 +49,7 @@ class Extension
         $extensions = $this->getInstalledExtensions();
 
         foreach ($extensions as &$extension) {
+            $extension['uninstall'] = true;
             $extension['update'] = false;
             if (isset($this->lastSyncData['packages'][$extension['name']]['latestVersion'])
                 && version_compare(
@@ -57,6 +58,9 @@ class Extension
                     '>'
                 )) {
                 $extension['update'] = true;
+            }
+            if ($extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE) {
+                $extension['uninstall'] = false;
             }
             $parts = explode('/', $extension['name']);
             $extension['vendor'] = ucfirst($parts[0]);

@@ -150,7 +150,7 @@
                     <span class="data-grid-data">{{extension.type}}</span>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.version}}</span>
+                    <span class="data-grid-data" data-type="version">{{extension.version}}</span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{extension.vendor}}</span>
@@ -169,7 +169,8 @@
                                 ng-mousedown="update(extension)">
                                 <a class="action-menu-item">Update</a>
                             </li>
-                            <li ng-mousedown="uninstall(extension)">
+                            <li ng-class="{'hide': !extension.uninstall}"
+                                ng-mousedown="uninstall(extension)">
                                 <a class="action-menu-item">Uninstall</a>
                             </li>
                         </ul>
