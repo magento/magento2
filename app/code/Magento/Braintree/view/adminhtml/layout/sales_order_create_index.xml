@@ -19,7 +19,7 @@
                 <argument name="template" xsi:type="string">Magento_Vault::form/vault.phtml</argument>
             </action>
         </referenceBlock>
-        <referenceBlock name="data">
+        <referenceBlock name="content">
             <block name="braintree_payment_script"
                    as="braintree_payment_script"
                    template="Magento_Braintree::payment/script.phtml"
