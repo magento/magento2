@@ -126,6 +126,9 @@ class CreditmemoSender extends Sender
                 $this->creditmemoResource->saveAttribute($creditmemo, ['send_email', 'email_sent']);
                 return true;
             }
+        } else {
+            $creditmemo->setEmailSent(null);
+            $this->creditmemoResource->saveAttribute($creditmemo, 'email_sent');
         }
 
         $this->creditmemoResource->saveAttribute($creditmemo, 'send_email');
