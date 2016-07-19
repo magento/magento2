@@ -240,12 +240,22 @@ class Write extends Read implements WriteInterface
      * @param string $path
      * @param string $mode
      * @return \Magento\Framework\Filesystem\File\WriteInterface
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function openFile($path, $mode = 'w')
     {
         $folder = dirname($path);
         $this->create($folder);
-        $this->assertWritable($folder);
+        if (!$this->isExist($path)) {
+            $this->assertWritable($folder);
+        } else {
+            if (!$this->isWritable($path)) {
+                throw new FileSystemException(new \Magento\Framework\Phrase(
+                    'The path "%1" is not writable',
+                    [$this->getAbsolutePath($path)]
+                ));
+            }
+        }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         return $this->fileFactory->create($absolutePath, $this->driver, $mode);
     }
