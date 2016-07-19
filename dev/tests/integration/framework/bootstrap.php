@@ -15,6 +15,8 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
 }
 
+require_once __DIR__ . '/deployFixture.php';
+
 try {
     /* Bootstrap the application */
     $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
