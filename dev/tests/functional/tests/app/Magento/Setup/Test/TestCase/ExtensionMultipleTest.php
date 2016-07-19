@@ -42,8 +42,8 @@ class ExtensionMultipleTest extends AbstractExtensionTest
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertSelectSeveralExtensions $assertSelectSeveralExtensions,
         AssertFindExtensionOnGrid $assertFindExtensionOnGrid,
-        $extensions,
-        $extensionData = []
+        array $extensions,
+        array $extensionData = []
     ) {
         foreach ($extensions as $key => $extension) {
             $extensions[$key] = $fixtureFactory->create(

@@ -60,7 +60,7 @@ class UpgradeSystemTest extends Injectable
         AssertVersionAndEditionCheck $assertVersionAndEdition,
         AssertSuccessMessage $assertSuccessMessage,
         AssertApplicationVersion $assertApplicationVersion,
-        $upgrade = []
+        array $upgrade = []
     ) {
         // Create fixture
         $upgradeFixture = $fixtureFactory->create(Upgrade::class, ['data' => $upgrade]);

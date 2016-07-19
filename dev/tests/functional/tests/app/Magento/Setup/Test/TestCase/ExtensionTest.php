@@ -33,7 +33,7 @@ class ExtensionTest extends AbstractExtensionTest
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck,
         AssertSuccessMessage $assertSuccessMessage,
-        $extensionData = []
+        array $extensionData = []
     ) {
         /** @var Extension $extensionFixture */
         $extensionFixture = $fixtureFactory->create(Extension::class, ['data' => $extensionData]);
