@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
+
 /**
- * Factory class for @see \Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem
+ * Factory class for @see ConsumerConfigItemInterface
  */
-class ConsumerConfigItemFactory
+class ConsumerConfigItemInterfaceFactory
 {
     /**
      * Object Manager instance
@@ -32,7 +34,7 @@ class ConsumerConfigItemFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem'
+        $instanceName = ConsumerConfigItemInterface::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
@@ -42,7 +44,7 @@ class ConsumerConfigItemFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem
+     * @return ConsumerConfigItemInterface
      */
     public function create(array $data = [])
     {

@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Consumer\Config;
 
 use Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface;
 use Magento\Framework\Phrase;
-use Magento\Framework\MessageQueue\Consumer\Config\Validator;
+use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 
 /**
  * Composite reader for consumer config.
@@ -15,7 +15,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\Validator;
 class CompositeReader implements ReaderInterface
 {
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $validator;
 
@@ -27,10 +27,10 @@ class CompositeReader implements ReaderInterface
     /**
      * Initialize dependencies.
      *
-     * @param Validator $validator
+     * @param ValidatorInterface $validator
      * @param array $readers
      */
-    public function __construct(Validator $validator, array $readers)
+    public function __construct(ValidatorInterface $validator, array $readers)
     {
         $this->validator = $validator;
         $this->readers = [];
@@ -44,7 +44,7 @@ class CompositeReader implements ReaderInterface
                     )
                 );
             }
-            $this->readers[] = $readerInfo['reader'];
+            $this->readers[$name] = $readerInfo['reader'];
         }
     }
 

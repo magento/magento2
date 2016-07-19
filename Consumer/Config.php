@@ -6,9 +6,9 @@
 namespace Magento\Framework\MessageQueue\Consumer;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerFactory as HandlerConfigFactory;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterfaceFactory as HandlerConfigFactory;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterface as HandlerConfigItemInterface;
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemFactory;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterfaceFactory;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\MessageQueue\Consumer\Config\Data as ConfigData;
 use Magento\Framework\Phrase;
@@ -24,7 +24,7 @@ class Config implements ConfigInterface
     private $configData;
 
     /**
-     * @var ConsumerConfigItemFactory
+     * @var ConsumerConfigItemInterfaceFactory
      */
     private $consumerConfigItemFactory;
 
@@ -37,12 +37,12 @@ class Config implements ConfigInterface
      * Initialize dependencies.
      *
      * @param ConfigData $configData
-     * @param ConsumerConfigItemFactory $consumerConfigItemFactory
+     * @param ConsumerConfigItemInterfaceFactory $consumerConfigItemFactory
      * @param HandlerConfigFactory $handlerFactory
      */
     public function __construct(
         ConfigData $configData,
-        ConsumerConfigItemFactory $consumerConfigItemFactory,
+        ConsumerConfigItemInterfaceFactory $consumerConfigItemFactory,
         HandlerConfigFactory $handlerFactory
     ) {
         $this->configData = $configData;

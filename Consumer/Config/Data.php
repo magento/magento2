@@ -14,7 +14,7 @@ class Data extends \Magento\Framework\Config\Data
      * {@inheritdoc}
      */
     public function __construct(
-        \Magento\Framework\Config\ReaderInterface $reader,
+        \Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'message_queue_consumer_config_cache'
     ) {

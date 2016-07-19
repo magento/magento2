@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
 
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterface;
+
 /**
- * Factory type for @see \Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler
+ * Factory type for @see HandlerInterface
  */
-class HandlerFactory
+class HandlerInterfaceFactory
 {
     /**
      * Object Manager instance
@@ -32,7 +34,7 @@ class HandlerFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler'
+        $instanceName = HandlerInterface::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
@@ -42,7 +44,7 @@ class HandlerFactory
      * Create type instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler
+     * @return HandlerInterface
      */
     public function create(array $data = [])
     {
