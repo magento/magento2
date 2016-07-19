@@ -76,7 +76,7 @@ class ProductProviderByBasePrice implements ProductProviderByPriceInterface
 
         if (!$this->catalogHelper->isPriceGlobal()) {
             $priceSelect->where('t.store_id = ?', $this->storeManager->getStore()->getId());
-            $select[] = $priceSelect;;
+            $select[] = $priceSelect;
         }
 
         return $select;

@@ -176,8 +176,8 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load options for attribute
      *
-     * @param $superAttribute
-     * @param $productId
+     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $superAttribute
+     * @param int $productId
      * @return array
      */
     public function getAttributeOptions($superAttribute, $productId)
