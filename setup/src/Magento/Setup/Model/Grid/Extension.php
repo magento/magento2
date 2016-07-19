@@ -3,10 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
+
 /**
  * Extension Grid
  */
