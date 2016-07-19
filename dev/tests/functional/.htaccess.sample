@@ -1,5 +1,6 @@
-## Allow access  to website.sh
-    <Files website.php>
+##############################################
+## Allow access to command.php and website.php
+    <FilesMatch "command.php|website.php">
          order allow,deny
          allow from all
-    </Files>
+    </FilesMatch>
