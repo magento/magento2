@@ -217,6 +217,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     private function getCache()
     {
+        if (null === $this->cache) {
+            $this->cache = ObjectManager::getInstance()->get(\Magento\Framework\Cache\FrontendInterface::class);
+        }
         return $this->cache;
     }
 
@@ -226,7 +229,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     private function getCustomerSession()
     {
-        if (! $this->customerSession instanceof \Magento\Customer\Model\Session) {
+        if (null === $this->customerSession) {
             $this->customerSession = ObjectManager::getInstance()->get(\Magento\Customer\Model\Session::class);
         }
         return $this->customerSession;
@@ -415,7 +418,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param mixed $configurableAttributes
      * @return bool
      */
-    protected function hasCacheData($configurableAttributes)
+    private function hasCacheData($configurableAttributes)
     {
         $configurableAttributes = $configurableAttributes ?: unserialize($configurableAttributes);
         if (is_array($configurableAttributes)) {

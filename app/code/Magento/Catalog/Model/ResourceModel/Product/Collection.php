@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
 
@@ -244,7 +244,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $dateTime;
 
     /**
-     * @var GroupManagementInterface
+     * @var \Magento\Customer\Api\GroupManagementInterface
      */
     protected $_groupManagement;
 
@@ -256,7 +256,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $needToAddWebsiteNamesToResult;
 
     /**
-     * @var Media
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
      */
     private $mediaGalleryResource;
 
@@ -2205,12 +2205,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
     /**
      * @deprecated
-     * @return Media
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media
      */
     private function getMediaGalleryResource()
     {
         if (null === $this->mediaGalleryResource) {
-            $this->mediaGalleryResource = \Magento\Framework\App\ObjectManager::getInstance()->get(Media::class);
+            $this->mediaGalleryResource = ObjectManager::getInstance()->get(Media::class);
         }
         return $this->mediaGalleryResource;
     }

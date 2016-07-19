@@ -57,9 +57,9 @@ class Media extends Product\Attribute\Backend\AbstractMedia
 
     /**
      * @param array $rawData
-     * @return mixed
+     * @return array
      */
-    protected function substituteNullsWithDefaultValues(array $rawData)
+    private function substituteNullsWithDefaultValues(array $rawData)
     {
         $processedData = [];
         foreach ($rawData as $key => $rawValue) {
