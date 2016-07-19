@@ -155,6 +155,7 @@ define([
             additionalInvalid: false,
             selectorPrefix: '.page-content',
             messagesClass: 'messages',
+            errorClass: '.admin__field._error',
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
@@ -247,11 +248,16 @@ define([
          * @param {Object} data
          */
         save: function (redirect, data) {
+            var scrollTop;
+
             this.validate();
 
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
                 this.setAdditionalData(data)
                     .submit(redirect);
+            } else {
+                scrollTop = $(this.errorClass).offset().top - window.innerHeight / 2;
+                window.scrollTo(0, scrollTop);
             }
         },
 
