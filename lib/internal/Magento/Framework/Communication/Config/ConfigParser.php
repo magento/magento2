@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Communication\Config;
+
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**
@@ -11,18 +13,25 @@ use Magento\Framework\Phrase;
  */
 class ConfigParser
 {
-    const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
-
     /**
      * Parse service method name.
      *
      * @param string $serviceMethod
      * @return array Contains class name and method name
+     * @throws LocalizedException
      */
     public function parseServiceMethod($serviceMethod)
     {
-        preg_match(self::SERVICE_METHOD_NAME_PATTERN, $serviceMethod, $matches);
-        // service method format is validated by XSD, so extra validation here may be omitted
+        $pattern = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
+        preg_match($pattern, $serviceMethod, $matches);
+        if (!isset($matches[1]) || !isset($matches[2])) {
+            throw new LocalizedException(
+                new Phrase(
+                    'Service method "%serviceMethod" must match the following pattern: "%pattern"',
+                    ['serviceMethod' => $serviceMethod, 'pattern' => $pattern]
+                )
+            );
+        }
         $className = $matches[1];
         $methodName = $matches[2];
         return ['type' => $className, 'method' => $methodName];

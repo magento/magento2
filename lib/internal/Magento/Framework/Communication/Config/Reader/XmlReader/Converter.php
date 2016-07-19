@@ -239,7 +239,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $serviceMethod = $topicAttributes->getNamedItem('schema')->nodeValue;
-        $parsedServiceMethod = $this->getConfigParser()->parseServiceMethod($serviceMethod, $topicName);
+        $parsedServiceMethod = $this->getConfigParser()->parseServiceMethod($serviceMethod);
         $this->xmlValidator->validateServiceMethod(
             $serviceMethod,
             $topicName,
