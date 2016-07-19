@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
-use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\Consumer\Config\Validator;
 
@@ -39,8 +39,8 @@ class CompositeReader implements ReaderInterface
             if (!isset($readerInfo['reader']) || !($readerInfo['reader'] instanceof ReaderInterface)) {
                 throw new \InvalidArgumentException(
                     new Phrase(
-                        'Reader [%name] must implement Magento\Framework\Config\ReaderInterface',
-                        ['name' => $name]
+                        'Reader "%name" must implement "%readerInterface"',
+                        ['name' => $name, 'readerInterface' => ReaderInterface::class]
                     )
                 );
             }

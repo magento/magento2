@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\Xml;
 
+use Magento\Framework\MessageQueue\Consumer\Config\ReaderInterface;
+
 /**
  * Reader for etc/queue_consumer.xml configs.
  */
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+class Reader extends \Magento\Framework\Config\Reader\Filesystem implements ReaderInterface
 {
     /**
      * {@inheritdoc}
@@ -22,8 +24,8 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function __construct(
         \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Framework\MessageQueue\Consumer\Config\Xml\Reader\Converter $converter,
-        \Magento\Framework\MessageQueue\Consumer\Config\Xml\Reader\SchemaLocator $schemaLocator,
+        \Magento\Framework\MessageQueue\Consumer\Config\Xml\Converter $converter,
+        \Magento\Framework\MessageQueue\Consumer\Config\Xml\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'queue_consumer.xml',
         $idAttributes = [],

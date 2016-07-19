@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Consumer\Config\Xml\Reader;
+namespace Magento\Framework\MessageQueue\Consumer\Config\Xml;
 
 use Magento\Framework\MessageQueue\Config\Validator;
 use Magento\Framework\MessageQueue\ConfigInterface;
@@ -15,8 +15,8 @@ use Magento\Framework\Communication\Config\ConfigParser;
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
-    const DEFAULT_CONNECTION = 'amqp';
-    const DEFAULT_INSTANCE = ConsumerInterface::class;
+    private static $defaultConnection = 'amqp';
+    private static $defaultInstance = ConsumerInterface::class;
 
     /**
      * @var ConfigParser
@@ -50,13 +50,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'consumerInstance' => $this->getAttributeValue(
                     $consumerNode,
                     'consumerInstance',
-                    self::DEFAULT_INSTANCE
+                    self::$defaultInstance
                 ),
                 'handlers' => $handler ? [$this->configParser->parseServiceMethod($handler)] : [],
                 'connection' => $this->getAttributeValue(
                     $consumerNode,
                     'connection',
-                    self::DEFAULT_CONNECTION
+                    self::$defaultConnection
                 ),
                 'maxMessages' => $this->getAttributeValue($consumerNode, 'maxMessages')
             ];

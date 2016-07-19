@@ -33,6 +33,7 @@ class Validator
     {
         foreach ($configData as $consumerName => $consumerConfig) {
             $this->validateConsumerRequiredFields($consumerName, $consumerConfig);
+            $this->validateConsumerFieldsTypes($consumerName, $consumerConfig);
             $this->validateHandlers($consumerConfig);
             $this->validateConsumerInstance($consumerConfig);
         }
@@ -57,6 +58,49 @@ class Validator
     }
 
     /**
+     * Make sure types of all fields in the consumer item config are correct.
+     *
+     * @param string $consumerName
+     * @param array $consumerConfig
+     */
+    private function validateConsumerFieldsTypes($consumerName, $consumerConfig)
+    {
+        $fields = [
+            'name' => 'string',
+            'queue' => 'string',
+            'handlers' => 'array',
+            'consumerInstance' => 'string',
+            'connection' => 'string'
+        ];
+        foreach ($fields as $fieldName => $expectedType) {
+            $actualType = gettype($consumerConfig[$fieldName]);
+            if ($actualType !== $expectedType) {
+                throw new \LogicException(
+                    sprintf(
+                        "Type of '%s' field specified in configuration of '%s' consumer is invalid. "
+                        . "Given '%s', '%s' was expected.",
+                        $fieldName,
+                        $consumerName,
+                        $actualType,
+                        $expectedType
+                    )
+                );
+            }
+        }
+        if (!is_null($consumerConfig['maxMessages']) && !is_numeric($consumerConfig['maxMessages'])) {
+            throw new \LogicException(
+                sprintf(
+                    "Type of 'maxMessages' field specified in configuration of '%s' consumer is invalid. "
+                    . "Given '%s', '%s' was expected.",
+                    $consumerName,
+                    gettype($consumerConfig['maxMessages']),
+                    'int|null'
+                )
+            );
+        }
+    }
+
+    /**
      * Make sure that specified consumer instance is valid.
      *
      * @param array $consumerConfig
@@ -69,7 +113,7 @@ class Validator
             throw new \LogicException(
                 sprintf(
                     "'%s' cannot be specified as 'consumerInstance' for '%s' consumer,"
-                        . " unless it implements '%s' interface",
+                    . " unless it implements '%s' interface",
                     $consumerInstance,
                     $consumerConfig['name'],
                     ConsumerInterface::class
