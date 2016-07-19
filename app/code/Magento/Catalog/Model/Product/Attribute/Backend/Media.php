@@ -68,7 +68,7 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             } elseif (isset($rawData[$key . '_default'])) {
                 $processedValue = $rawData[$key . '_default'];
             } else {
-                $processedValue = '';
+                $processedValue = null;
             }
             $processedData[$key] = $processedValue;
         }
