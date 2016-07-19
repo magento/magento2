@@ -59,7 +59,10 @@ class Extension
                 )) {
                 $extension['update'] = true;
             }
-            if ($extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE) {
+            if (
+                $extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE
+                || !$this->composerInformation->isPackageInComposerJson($extension['name'])
+            ) {
                 $extension['uninstall'] = false;
             }
             $parts = explode('/', $extension['name']);
