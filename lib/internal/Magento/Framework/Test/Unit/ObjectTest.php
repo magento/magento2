@@ -346,8 +346,8 @@ string',
         $this->assertTrue($this->_object->offsetExists('key1'));
         $this->assertFalse($this->_object->offsetExists('key2'));
 
-        $this->assertEquals('value1', $this->_object->offsetget(\key1::class));
-        $this->assertNull($this->_object->offsetget(\key2::class));
+        $this->assertEquals('value1', $this->_object->offsetGet('key1'));
+        $this->assertNull($this->_object->offsetGet('key2'));
         $this->_object->offsetUnset('key1');
         $this->assertFalse($this->_object->offsetExists('key1'));
     }

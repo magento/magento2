@@ -158,26 +158,30 @@ class NvpTest extends \PHPUnit_Framework_TestCase
             ['', [], null],
             [
                 "\r\n" . 'ACK=Failure&L_ERRORCODE0=10417&L_SHORTMESSAGE0=Message.&L_LONGMESSAGE0=Long%20Message.',
-                [], \Magento\Framework\Exception\LocalizedException::class,
+                [],
+                \Magento\Framework\Exception\LocalizedException::class,
                 'PayPal gateway has rejected request. Long Message (#10417: Message).',
                 0
             ],
             [
                 "\r\n" . 'ACK=Failure&L_ERRORCODE0=10417&L_SHORTMESSAGE0=Message.&L_LONGMESSAGE0=Long%20Message.',
-                [10417, 10422], \Magento\Paypal\Model\Api\ProcessableException::class,
+                [10417, 10422],
+                \Magento\Paypal\Model\Api\ProcessableException::class,
                 'PayPal gateway has rejected request. Long Message (#10417: Message).',
                 10417
             ],
             [
                 "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10417'
                     . '&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=Long%20Message.',
-                [10417, 10422], \Magento\Paypal\Model\Api\ProcessableException::class,
+                [10417, 10422],
+                \Magento\Paypal\Model\Api\ProcessableException::class,
                 'PayPal gateway has rejected request. Long Message (#10417: Message).',
                 10417
             ],
             [
                 "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10417&L_SHORTMESSAGE0[8]=Message.',
-                [10417, 10422], \Magento\Paypal\Model\Api\ProcessableException::class,
+                [10417, 10422],
+                \Magento\Paypal\Model\Api\ProcessableException::class,
                 'PayPal gateway has rejected request. #10417: Message.',
                 10417
             ],

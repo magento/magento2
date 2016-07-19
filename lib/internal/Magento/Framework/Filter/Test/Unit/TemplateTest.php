@@ -80,7 +80,7 @@ EXPECTED_RESULT;
         $expectedResult = 'TEST STRING';
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder(\stdObject::class)
+        $callbackObject = $this->getMockBuilder('stdObject')
             ->setMethods(['afterFilterCallbackMethod'])
             ->getMock();
 
@@ -108,7 +108,7 @@ EXPECTED_RESULT;
         $expectedResult = 'TEST STRING';
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder(\stdObject::class)
+        $callbackObject = $this->getMockBuilder('stdObject')
             ->setMethods(['afterFilterCallbackMethod'])
             ->getMock();
 

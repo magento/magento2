@@ -73,9 +73,8 @@ class InfoTest extends \PHPUnit_Framework_TestCase
             $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         }
 
-        $paymentInfo = $this->getMockBuilder(
-            \Magento\Payment\Model\Info::class
-        )->disableOriginalConstructor()->getMock();
+        $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
+            ->disableOriginalConstructor()->getMock();
         $paymentInfo->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
 
         $this->_object->setData('info', $paymentInfo);
@@ -133,9 +132,8 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSpecificInformation()
     {
-        $paymentInfo = $this->getMockBuilder(
-            \Magento\Payment\Model\Info::class
-        )->disableOriginalConstructor()->getMock();
+        $paymentInfo = $this->getMockBuilder(\Magento\Payment\Model\Info::class)
+            ->disableOriginalConstructor()->getMock();
 
         $this->_object->setData('info', $paymentInfo);
         $this->_object->getSpecificInformation();
