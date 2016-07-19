@@ -79,7 +79,6 @@ abstract class AbstractExtensionTest extends Injectable
      * @param AssertFindExtensionOnGrid $assertFindExtensionOnGrid
      * @param AssertExtensionAndVersionCheck $assertExtensionAndVersionCheck
      * @param AssertSuccessMessage $assertSuccessMessage
-     * @throws \Exception
      */
     protected function uninstallExtension(
         Extension $extensionFixture,
@@ -119,7 +118,7 @@ abstract class AbstractExtensionTest extends Injectable
         $this->setupWizard->getSetupHome()->clickExtensionManager();
 
         if ($this->setupWizard->getExtensionsGrid()->findExtensionOnGrid($extensionFixture)) {
-            throw new \Exception('Extension is not uninstalled!');
+            $this->fail('Extension is not uninstalled!');
         }
     }
 }
