@@ -13,7 +13,7 @@ class CategoryLink extends \Magento\Framework\Api\AbstractExtensibleObject imple
     \Magento\Catalog\Api\Data\CategoryLinkInterface
 {
     /**#@+
-     * Constant for confirmation status
+     * Constants
      */
     const KEY_POSITION = 'position';
     const KEY_CATEGORY_ID = 'category_id';

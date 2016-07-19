@@ -48,7 +48,8 @@ class CategoryLink
         $select = $connection->select();
         $select->from($this->getCategoryLinkMetadata()->getEntityTable(), ['category_id', 'position']);
         $select->where('product_id = ?', (int)$product->getId());
-        return $connection->fetchAll($select);
+        $result = $connection->fetchAll($select);
+        return $result;
     }
 
     /**
@@ -57,46 +58,23 @@ class CategoryLink
      */
     public function saveCategoryLinks(ProductInterface $product, array $categoryIds = [])
     {
-        $categoryPositions = array_map(function ($categoryData) {
+        $newCategoryPositions = array_map(function ($categoryData) {
             if (is_array($categoryData)) {
                 return $categoryData;
             } else {
                 return ['category_id' => (int)$categoryData, 'position' => 1];
             }
         }, $categoryIds);
+
         $oldCategoryPositions = $this->getCategoryLinks($product);
 
+        $insertUpdate = $this->processCategoryLinks($newCategoryPositions, $oldCategoryPositions);
+        $deleteUpdate = $this->processCategoryLinks($oldCategoryPositions, $newCategoryPositions);
 
-        $insert = [];
-        $delete = [];
-        foreach ($oldCategoryPositions as $oldCategoryPosition)
-        {
-            $key = array_search($oldCategoryPosition['category_id'], array_column($categoryPositions, 'category_id'));
-            if ($key === false) {
-                $delete[] = $oldCategoryPosition['category_id'];
-            } else {
-                if ($categoryPositions[$key]['position'] == $oldCategoryPosition['position']) {
-                    continue;
-                } else {
-                    $insert[] = $categoryPositions[$key];
-                    unset($categoryPositions[$key]);
-                }
-            }
-        }
-
-        foreach ($categoryPositions as $categoryPosition)
-        {
-            $key = array_search($categoryPosition['category_id'], array_column($oldCategoryPositions, 'category_id'));
-            if ($key === false) {
-                $insert[] = $categoryPosition;
-            } else {
-                if ($oldCategoryPositions[$key]['position'] == $categoryPosition['position']) {
-                    continue;
-                } else {
-                    $insert[] = $categoryPositions[$key];
-                }
-            }
-        }
+        $delete = isset($deleteUpdate['changed']) ? $deleteUpdate['changed'] : [];
+        $insert = isset($insertUpdate['changed']) ? $insertUpdate['changed'] : [];
+        $insert = isset($deleteUpdate['updated']) ? array_merge_recursive($insert, $deleteUpdate['updated']) : $insert;
+        $insert = isset($insertUpdate['updated']) ? array_merge_recursive($insert, $insertUpdate['updated']) : $insert;
 
         $connection = $this->resourceConnection->getConnection();
         if (!empty($insert)) {
@@ -136,5 +114,32 @@ class CategoryLink
         }
 
         return $this->categoryLinkMetadata;
+    }
+
+    /**
+     * Process category links
+     *
+     * @param $newCategoryPositions
+     * @param $oldCategoryPositions
+     * @return array
+     */
+    private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
+    {
+        $result = [];
+        foreach ($newCategoryPositions as $newCategoryPosition) {
+            $key = array_search($newCategoryPosition['category_id'], array_column($oldCategoryPositions, 'category_id'));
+            if ($key === false) {
+                $result['changed'][] = $newCategoryPosition;
+            } else {
+                if ($oldCategoryPositions[$key]['position'] == $newCategoryPosition['position']) {
+                    continue;
+                } else {
+                    $result['updated'][] = $newCategoryPositions[$key];
+                    unset($oldCategoryPositions[$key]);
+                }
+            }
+        }
+
+        return $result;
     }
 }
