@@ -68,7 +68,10 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Exception $e) {
-            throw new CouldNotSaveException(__('Unable to place order. Please try again later.'), $e);
+            throw new CouldNotSaveException(
+                __('An error occurred on the server. Please try to place the order again.'),
+                $e
+            );
         }
         return $orderId;
     }
