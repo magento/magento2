@@ -89,15 +89,16 @@ class Curl extends AbstractCurl implements ConfigDataInterface
             }
             $resultArray .= '[' . $subPath . ']';
         }
-        $resultArray .= '[value]';
-        if (is_array($input['value'])) {
+        $valueCode = isset($input['inherit']) ? 'inherit' : 'value';
+        $resultArray .= "[$valueCode]";
+        if (isset($input['value']) && is_array($input['value'])) {
             $values = [];
             foreach ($input['value'] as $key => $value) {
                 $values[] = $resultArray . "[$key]=$value";
             }
             $resultArray = implode('&', $values);
         } else {
-            $resultArray .= '=' . $input['value'];
+            $resultArray .= '=' . $input[$valueCode];
         }
         return $resultArray;
     }
