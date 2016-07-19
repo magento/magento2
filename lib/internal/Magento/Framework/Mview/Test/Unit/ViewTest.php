@@ -336,7 +336,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($listId)
         );
 
-        $actionMock = $this->getMock(\Magento\Framework\Mview\ActionInterface::class, ['execute'], [], '', false);
+        $actionMock = $this->getMock(\Magento\Framework\Mview\ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->will($this->returnSelf());
         $this->actionFactoryMock->expects(
             $this->once()

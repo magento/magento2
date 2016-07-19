@@ -32,9 +32,8 @@ class FreeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->currencyPrice = $this->getMockBuilder(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class)->getMock(
-            );
+        $this->currencyPrice = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+            ->getMock();
 
         $context = $this->getMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher'], [], '', false);
         $eventManagerMock = $this->getMock(\Magento\Framework\Event\ManagerInterface::class);

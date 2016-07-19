@@ -244,7 +244,7 @@ class Factory
                 }
                 break;
             case 'apc':
-                if (extension_loaded('apc') && ini_get(\apc.enabled::class)) {
+                if (extension_loaded('apc') && ini_get('apc.enabled')) {
                     $enableTwoLevels = true;
                     $backendType = 'Apc';
                 }
@@ -257,7 +257,7 @@ class Factory
                 break;
             case 'eaccelerator':
             case 'varien_cache_backend_eaccelerator':
-                if (extension_loaded('eaccelerator') && ini_get(\eaccelerator.enable::class)) {
+                if (extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
                     $enableTwoLevels = true;
                     $backendType = \Magento\Framework\Cache\Backend\Eaccelerator::class;
                 }

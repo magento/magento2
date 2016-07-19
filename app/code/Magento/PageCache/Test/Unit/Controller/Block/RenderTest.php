@@ -50,10 +50,8 @@ class RenderTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\View\Layout::class
         )->disableOriginalConstructor()->getMock();
 
-        $contextMock =
-            $this->getMockBuilder(
-                \Magento\Framework\App\Action\Context::class)->disableOriginalConstructor()->getMock(
-                );
+        $contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
+            ->disableOriginalConstructor()->getMock();
 
         $this->requestMock = $this->getMockBuilder(
             \Magento\Framework\App\Request\Http::class
@@ -61,9 +59,8 @@ class RenderTest extends \PHPUnit_Framework_TestCase
         $this->responseMock = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http::class
         )->disableOriginalConstructor()->getMock();
-        $this->viewMock = $this->getMockBuilder(
-            \Magento\Framework\App\View::class)->disableOriginalConstructor()->getMock(
-            );
+        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
+            ->disableOriginalConstructor()->getMock();
 
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
         $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));

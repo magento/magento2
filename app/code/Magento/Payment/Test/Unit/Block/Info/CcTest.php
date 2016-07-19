@@ -93,8 +93,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
     {
         $paymentInfo = $this->getMock(
             \Magento\Payment\Model\Info::class,
-            ['getCcExpMonth',
-            'getCcExpYear'],
+            ['getCcExpMonth', 'getCcExpYear'],
             [],
             '',
             false
@@ -152,8 +151,7 @@ class CcTest extends \PHPUnit_Framework_TestCase
     {
         $paymentInfo = $this->getMock(
             \Magento\Payment\Model\Info::class,
-            ['getCcExpMonth',
-            'getCcExpYear'],
+            ['getCcExpMonth', 'getCcExpYear'],
             [],
             '',
             false
