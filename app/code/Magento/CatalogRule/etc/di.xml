@@ -33,10 +33,10 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceComposite">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite">
         <arguments>
-            <argument name="productProviderByPrice" xsi:type="array">
-                <item name="rulePrice" xsi:type="object">Magento\CatalogRule\Model\ResourceModel\Product\ProductProviderByRulePrice</item>
+            <argument name="linkedProductSelectBuilder" xsi:type="array">
+                <item name="catalogRulePrice" xsi:type="object">Magento\CatalogRule\Model\ResourceModel\Product\LinkedProductSelectBuilderByCatalogRulePrice</item>
             </argument>
         </arguments>
     </type>

@@ -8,12 +8,9 @@ namespace Magento\CatalogRule\Model\ResourceModel\Product;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceInterface;
+use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
-/**
- * Class ProductProviderByRulePrice
- */
-class ProductProviderByRulePrice implements ProductProviderByPriceInterface
+class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -64,7 +61,7 @@ class ProductProviderByRulePrice implements ProductProviderByPriceInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelect($productId)
+    public function build($productId)
     {
         $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
         $currentDate = $this->dateTime->formatDate($timestamp, false);

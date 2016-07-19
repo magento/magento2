@@ -9,10 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 
-/**
- * Class ProductProviderBySpecialPrice
- */
-class ProductProviderBySpecialPrice implements ProductProviderByPriceInterface
+class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -71,7 +68,7 @@ class ProductProviderBySpecialPrice implements ProductProviderByPriceInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelect($productId)
+    public function build($productId)
     {
         $connection = $this->resource->getConnection();
         $specialPriceAttribute = $this->eavConfig->getAttribute(Product::ENTITY, 'special_price');

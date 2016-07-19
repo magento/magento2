@@ -7,14 +7,10 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
+use Magento\Store\Model\Store;
 
-class ProductProviderByTierPrice implements ProductProviderByPriceInterface
+class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilderInterface
 {
-    /**
-     * Default website id
-     */
-    const DEFAULT_WEBSITE_ID = 0;
-
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
@@ -26,9 +22,9 @@ class ProductProviderByTierPrice implements ProductProviderByPriceInterface
     private $resource;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Magento\Eav\Model\Config
      */
-    private $customerSession;
+    private $eavConfig;
 
     /**
      * @var \Magento\Catalog\Helper\Data
@@ -38,44 +34,45 @@ class ProductProviderByTierPrice implements ProductProviderByPriceInterface
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Helper\Data $catalogHelper
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Data $catalogHelper
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
-        $this->customerSession = $customerSession;
+        $this->eavConfig = $eavConfig;
         $this->catalogHelper = $catalogHelper;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSelect($productId)
+    public function build($productId)
     {
+        $priceAttribute = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
         $priceSelect = $this->resource->getConnection()->select()
-                ->from(['t' => $this->resource->getTableName('catalog_product_entity_tier_price')], 'entity_id')
-                ->joinInner(
-                    ['link' => $this->resource->getTableName('catalog_product_relation')],
-                    'link.child_id = t.entity_id',
-                    []
-                )->where('link.parent_id = ? ', $productId)
-                ->where('t.all_groups = 1 OR customer_group_id = ?', $this->customerSession->getCustomerGroupId())
-                ->where('t.qty = ?', 1)
-                ->order('t.value ' . Select::SQL_ASC)
-                ->limit(1);
+            ->from(['t' => $priceAttribute->getBackendTable()], 'entity_id')
+            ->joinInner(
+                ['link' => $this->resource->getTableName('catalog_product_relation')],
+                'link.child_id = t.entity_id',
+                []
+            )->where('link.parent_id = ? ', $productId)
+            ->where('t.attribute_id = ?', $priceAttribute->getAttributeId())
+            ->where('t.value IS NOT NULL')
+            ->order('t.value ' . Select::SQL_ASC)
+            ->limit(1);
 
         $priceSelectDefault = clone $priceSelect;
-        $priceSelectDefault->where('t.website_id = ?', self::DEFAULT_WEBSITE_ID);
+        $priceSelectDefault->where('t.store_id = ?', Store::DEFAULT_STORE_ID);
         $select[] = $priceSelectDefault;
 
         if (!$this->catalogHelper->isPriceGlobal()) {
-            $priceSelect->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId());
+            $priceSelect->where('t.store_id = ?', $this->storeManager->getStore()->getId());
             $select[] = $priceSelect;
         }
 

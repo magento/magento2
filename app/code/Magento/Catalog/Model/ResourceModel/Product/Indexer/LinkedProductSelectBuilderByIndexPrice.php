@@ -8,12 +8,9 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
-use Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceInterface;
+use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
 
-/**
- * Class ProductProviderByIndexPrice
- */
-class ProductProviderByIndexPrice implements ProductProviderByPriceInterface
+class LinkedProductSelectBuilderByIndexPrice implements LinkedProductSelectBuilderInterface
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -48,7 +45,7 @@ class ProductProviderByIndexPrice implements ProductProviderByPriceInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelect($productId)
+    public function build($productId)
     {
         return [$this->resource->getConnection()->select()
             ->from(['t' => $this->resource->getTableName('catalog_product_index_price')], 'entity_id')

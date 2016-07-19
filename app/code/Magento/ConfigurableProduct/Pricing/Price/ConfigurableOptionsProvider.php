@@ -24,9 +24,9 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     private $resource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceInterface
+     * @var \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface
      */
-    private $productProviderByPrice;
+    private $linkedProductSelectBuilder;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
@@ -41,20 +41,20 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     /**
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param \Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceInterface $productProviderByPrice
+     * @param \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Framework\App\RequestSafetyInterface $requestSafety
      */
     public function __construct(
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
-        \Magento\Catalog\Model\ResourceModel\Product\ProductProviderByPriceInterface $productProviderByPrice,
+        \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface $linkedProductSelectBuilder,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\Framework\App\RequestSafetyInterface $requestSafety
     ) {
         $this->configurable = $configurable;
         $this->resource = $resourceConnection;
-        $this->productProviderByPrice = $productProviderByPrice;
+        $this->linkedProductSelectBuilder = $linkedProductSelectBuilder;
         $this->collectionFactory = $collectionFactory;
         $this->requestSafety = $requestSafety;
     }
@@ -67,7 +67,7 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
         if (!isset($this->products[$product->getId()])) {
             if ($this->requestSafety->isSafeMethod()) {
                 $productIds = $this->resource->getConnection()->fetchCol(
-                    '(' . implode(') UNION (', $this->productProviderByPrice->getSelect($product->getId())) . ')'
+                    '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($product->getId())) . ')'
                 );
 
                 $this->products[$product->getId()] = $this->collectionFactory->create()
