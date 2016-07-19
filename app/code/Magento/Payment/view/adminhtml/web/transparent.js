@@ -91,6 +91,9 @@ define([
                     } else {
                         this._processErrors(response);
                     }
+                },
+                complete: function () {
+                    $('body').trigger('processStop');
                 }
             });
         },
