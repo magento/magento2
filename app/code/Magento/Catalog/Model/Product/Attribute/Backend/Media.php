@@ -45,19 +45,35 @@ class Media extends Product\Attribute\Backend\AbstractMedia
         $value = [];
         $value['images'] = [];
         $value['values'] = [];
-        $localAttributes = ['label', 'position', 'disabled'];
 
         foreach ($mediaEntries as $mediaEntry) {
-            foreach ($localAttributes as $localAttribute) {
-                if ($mediaEntry[$localAttribute] === null) {
-                    $mediaEntry[$localAttribute] = $this->findDefaultValue($localAttribute, $mediaEntry);
-                }
-            }
+            $mediaEntry = $this->substituteNullsWithDefaultValues($mediaEntry);
             $value['images'][] = $mediaEntry;
         }
         $product->setData($attrCode, $value);
 
         return $this;
+    }
+
+    /**
+     * @param array $rawData
+     * @return mixed
+     */
+    protected function substituteNullsWithDefaultValues(array $rawData)
+    {
+        $processedData = [];
+        foreach ($rawData as $key => $rawValue) {
+            if (null !== $rawValue) {
+                $processedValue = $rawValue;
+            } elseif (isset($rawData[$key . '_default'])) {
+                $processedValue = $rawData[$key . '_default'];
+            } else {
+                $processedValue = '';
+            }
+            $processedData[$key] = $processedValue;
+        }
+
+        return $processedData;
     }
 
     /**
@@ -356,18 +372,5 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             );
         }
     }
-
-    /**
-     * @param string $key
-     * @param string[] &$image
-     * @return string
-     */
-    protected function findDefaultValue($key, &$image)
-    {
-        if (isset($image[$key . '_default'])) {
-            return $image[$key . '_default'];
-        }
-
-        return '';
-    }
+    
 }
