@@ -14,19 +14,19 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Check that created widget displayed on frontend on Category Page.
+ * Check that created Catalog New Products List widget displayed on frontend on Category Page.
  */
 class AssertWidgetCatalogNewProductsList extends AbstractConstraint
 {
     /**
-     * Category Page on Frontend
+     * Category Page on Frontend.
      *
      * @var CatalogCategoryView
      */
     protected $catalogCategoryView;
     
     /**
-     * Assert that created widget displayed on frontend on Category Page.
+     * Assert that created Catalog New Products List widget displayed on frontend on Category Page.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
@@ -59,11 +59,11 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
         $cmsIndex->open();
         $categoryName = $widget->getWidgetInstance()[0]['entities']->getName();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $this->checkCatalogNewProductsListBlockOnCategory($products);
         \PHPUnit_Framework_Assert::assertTrue(
             $catalogCategoryView->getWidgetView()->isWidgetVisible($widget, 'New Products'),
             'Widget is absent on Category page.'
         );
+        $this->checkCatalogNewProductsListBlockOnCategory($products);
     }
 
     /**
@@ -77,7 +77,7 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $products,
             $this->catalogCategoryView->getViewBlock()->getProductsFromCatalogNewProductsListBlock(),
-            'Products are absent on Catalog New Products List block on Category page.'
+            'There are wrong products or products are absent on Catalog New Products List block on Category page.'
         );
     }
 
@@ -88,6 +88,6 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
      */
     public function toString()
     {
-        return "Widget is present on Category page.";
+        return "Catalog New Products List widget is present on Category page.";
     }
 }
