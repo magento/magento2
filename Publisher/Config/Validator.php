@@ -8,8 +8,22 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 /**
  * Publisher config data validator.
  */
-class Validator
+class Validator implements ValidatorInterface
 {
+    /**
+     * @var ValidatorInterface[]
+     */
+    private $validators;
+
+    /**
+     * Validator constructor.
+     * @param ValidatorInterface[] $validators
+     */
+    public function __construct($validators)
+    {
+        $this->validators = $validators;
+    }
+
     /**
      * Validate merged publisher config data.
      *
@@ -18,6 +32,13 @@ class Validator
      */
     public function validate($configData)
     {
-
+        foreach ($this->validators as $validator) {
+            if ($validator instanceof ValidatorInterface) {
+                throw new \LogicException(
+                    'Validator does not implements Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface'
+                );
+            }
+            $validator->validate($configData);
+        }
     }
 }

@@ -10,10 +10,10 @@ use Magento\Framework\Phrase;
 /**
  * Composite reader for publisher config.
  */
-class CompositeReader implements ReaderInterface
+class Reader implements ReaderInterface
 {
     /**
-     * @var Validator
+     * @var ValidatorInterface
      */
     private $validator;
 
@@ -25,10 +25,10 @@ class CompositeReader implements ReaderInterface
     /**
      * Initialize dependencies.
      *
-     * @param Validator $validator
+     * @param ValidatorInterface $validator
      * @param array $readers
      */
-    public function __construct(Validator $validator, array $readers)
+    public function __construct(ValidatorInterface $validator, array $readers)
     {
         $this->validator = $validator;
         $this->readers = [];
