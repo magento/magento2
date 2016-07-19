@@ -14,9 +14,8 @@ angular.module('marketplace-credentials', ['ngStorage'])
                 submitted : false
             };
             $scope.actionMessage = $state.current.type == 'upgrade' ? 'upgrade' : 'upgrade or install';
-
-
             $scope.errors = false;
+
             $scope.checkAuth = function() {
                 if (!$rootScope.authRequest || !$rootScope.isMarketplaceAuthorized) {
                     $scope.isHiddenSpinner = false;
@@ -95,10 +94,6 @@ angular.module('marketplace-credentials', ['ngStorage'])
             };
 
             $scope.validate = function() {
-                if ($scope.user.$valid) {
-                    $scope.user.submitted = false;
-                } else {
-                    $scope.user.submitted = true;
-                }
+                $scope.user.submitted = !$scope.user.$valid;
             }
         }]);
