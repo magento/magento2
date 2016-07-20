@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Acl\Test\Unit\AclResource\Config;
 
-class XsdTest extends \PHPUnit_Framework_TestCase
+class MergedXsdTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\Acl\AclResource\Config\SchemaLocator
@@ -31,7 +31,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $this->_schemaLocator = new \Magento\Framework\Acl\AclResource\Config\SchemaLocator(
             new \Magento\Framework\Config\Dom\UrnResolver()
         );
-        $this->_xsdSchema = $this->_schemaLocator->getPerFileSchema();
+        $this->_xsdSchema = $this->_schemaLocator->getSchema();
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 
@@ -48,7 +48,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     public function testSchemaCorrectlyIdentifiesValidXml()
     {
-        $xmlString = file_get_contents(__DIR__ . '/_files/valid_acl.xml');
+        $xmlString = file_get_contents(__DIR__ . '/_files/valid_merged_acl.xml');
         $actualResult = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
 
         $this->assertEmpty($actualResult);
@@ -59,6 +59,6 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
-        return include __DIR__ . '/_files/invalidAclXmlArray.php';
+        return include __DIR__ . '/_files/invalidMergedAclXmlArray.php';
     }
 }

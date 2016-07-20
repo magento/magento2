@@ -84,21 +84,24 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
         $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
             ->getMockForAbstractClass();
 
+        $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resolver = $this->getMockBuilder(\Magento\Framework\View\Element\Template\File\Resolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+            ->getMockForAbstractClass();
+        
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+            ->getMockForAbstractClass();
+
         $storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
             ->setMethods(['getStore', 'getCode'])
             ->getMockForAbstractClass();
-        $storeManager->expects($this->any())->method('getStore')->willReturnSelf();
-
-        $appState = $this->getMockBuilder('\Magento\Framework\App\State')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $resolver = $this->getMockBuilder('\Magento\Framework\View\Element\Template\File\Resolver')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $urlBuilder = $this->getMockBuilder('\Magento\Framework\UrlInterface')
-            ->getMockForAbstractClass();
+        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
@@ -150,7 +153,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
                 'saleableItem' => $this->product,
                 'rendererPool' => $this->rendererPool,
                 'price' => $this->price,
-                'data' => ['zone' => 'test_zone']
+                'data' => ['zone' => 'test_zone', 'list_category_page' => true]
             ]
         );
     }
@@ -247,6 +250,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
 
         $arguments = [
             'zone' => 'test_zone',
+            'list_category_page' => true,
             'display_label' => 'As low as',
             'price_id' => $priceId,
             'include_container' => false,
@@ -365,6 +369,12 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $this->assertEmpty($this->object->toHtml());
+    }
+
+    public function testGetCacheKey()
+    {
+        $result = $this->object->getCacheKey();
+        $this->assertStringEndsWith('list-category-page', $result);
     }
 
     public function testGetCacheKeyInfo()
