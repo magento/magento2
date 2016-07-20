@@ -15,7 +15,8 @@ use Magento\Sales\Api\Data\OrderInterface;
  */
 interface StateCheckerInterface
 {
-    const PROCESSING = 'processing';
+    const IN_PROGRESS = 'order_in_progress';
+    const FORCED_CREDITMEMO = 'forced_creditmemo';
 
     /**
      * @param OrderInterface $order

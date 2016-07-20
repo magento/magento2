@@ -13,7 +13,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\InvoiceBuilderInterface;
 use Magento\Sales\Model\Order\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\Order\OrderStatisticInterface;
+use Magento\Sales\Model\Order\InvoiceStatisticInterface;
 use Magento\Sales\Model\Order\StateCheckerInterface;
 use Magento\Sales\Model\Order\InvoiceNotifierInterface;
 use Magento\Sales\Model\Order\Config;
@@ -39,9 +39,9 @@ class InvoiceCapture implements InvoiceCaptureInterface
     private $paymentAdapter;
 
     /**
-     * @var OrderStatisticInterface
+     * @var InvoiceStatisticInterface
      */
-    private $orderStatistic;
+    private $invoiceStatistic;
 
     /**
      * @var OrderRepositoryInterface
@@ -79,7 +79,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
      * @param InvoiceBuilderInterface $invoiceBuilder
      * @param InvoiceValidatorInterface $invoiceValidator
      * @param PaymentAdapterInterface $paymentAdapter
-     * @param OrderStatisticInterface $orderStatistic
+     * @param InvoiceStatisticInterface $invoiceStatistic
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceRepositoryInterface $invoiceRepository
      * @param StateCheckerInterface $stateChecker
@@ -91,7 +91,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         InvoiceBuilderInterface $invoiceBuilder,
         InvoiceValidatorInterface $invoiceValidator,
         PaymentAdapterInterface $paymentAdapter,
-        OrderStatisticInterface $orderStatistic,
+        InvoiceStatisticInterface $invoiceStatistic,
         OrderRepositoryInterface $orderRepository,
         InvoiceRepositoryInterface $invoiceRepository,
         StateCheckerInterface $stateChecker,
@@ -102,7 +102,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $this->invoiceBuilder = $invoiceBuilder;
         $this->invoiceValidator = $invoiceValidator;
         $this->paymentAdapter = $paymentAdapter;
-        $this->orderStatistic = $orderStatistic;
+        $this->invoiceStatistic = $invoiceStatistic;
         $this->orderRepository = $orderRepository;
         $this->invoiceRepository = $invoiceRepository;
         $this->stateChecker = $stateChecker;
@@ -115,7 +115,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
      * @param int $orderId
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
      * @param bool|false $notify
-     * @param Data\InvoiceCommentBaseInterface|null $comment
+     * @param Data\InvoiceCommentCreationInterface|null $comment
      * @param Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int
      */
@@ -123,7 +123,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $orderId,
         array $items = [],
         $notify = false,
-        \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
+        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     ) {
         $connection = $this->resourceConnection->getConnectionByName('sales');
@@ -140,7 +140,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $connection->beginTransaction();
         try {
             $order = $this->paymentAdapter->captureOffline($order, $invoice);
-            $order = $this->orderStatistic->calculateInvoice($order, $invoice);
+            $order = $this->invoiceStatistic->register($order, $invoice);
             $order->setState($this->stateChecker->getStateForOrder($order, [StateCheckerInterface::PROCESSING]));
             $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
             $invoice->setState(self::STATE_PAID);
@@ -159,9 +159,9 @@ class InvoiceCapture implements InvoiceCaptureInterface
 
     /**
      * @param int $orderId
-     * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
+     * @param \Magento\Sales\Api\Data\InvoiceItemCreationInterface[] $items
      * @param bool|false $notify
-     * @param Data\InvoiceCommentBaseInterface|null $comment
+     * @param Data\InvoiceCommentCreationInterface|null $comment
      * @param Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int
      */
@@ -169,7 +169,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $orderId,
         array $items = [],
         $notify = false,
-        \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
+        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     ) {
         $connection = $this->resourceConnection->getConnectionByName('sales');
@@ -186,7 +186,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $connection->beginTransaction();
         try {
             $order = $this->paymentAdapter->captureOnline($order, $invoice);
-            $order = $this->orderStatistic->calculateInvoice($order, $invoice);
+            $order = $this->invoiceStatistic->register($order, $invoice);
             $order->setState($this->stateChecker->getStateForOrder($order, [StateCheckerInterface::PROCESSING]));
             $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
             $invoice->setState(self::STATE_PAID);

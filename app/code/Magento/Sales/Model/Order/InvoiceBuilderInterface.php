@@ -6,10 +6,10 @@
 
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\InvoiceCommentBaseInterface;
-use Magento\Sales\Api\Data\InvoiceItemBaseInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 
 /**
@@ -31,24 +31,24 @@ interface InvoiceBuilderInterface
     public function getOrder();
 
     /**
-     * @param InvoiceItemBaseInterface[] $items
+     * @param InvoiceItemCreationInterface[] $items
      * @return void
      */
     public function setItems(array $items);
 
     /**
-     * @return InvoiceItemBaseInterface[]
+     * @return InvoiceItemCreationInterface[]
      */
     public function getItems();
 
     /**
-     * @param InvoiceCommentBaseInterface $comment
+     * @param InvoiceCommentCreationInterface $comment
      * @return void
      */
-    public function setComment(InvoiceCommentBaseInterface $comment);
+    public function setComment(InvoiceCommentCreationInterface $comment);
 
     /**
-     * @return InvoiceCommentBaseInterface
+     * @return InvoiceCommentCreationInterface
      */
     public function getComment();
 

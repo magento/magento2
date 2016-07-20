@@ -15,9 +15,9 @@ interface InvoiceCaptureInterface
 {
     /**
      * @param int $orderId
-     * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
+     * @param \Magento\Sales\Api\Data\InvoiceItemCreationInterface[] $items
      * @param bool|false $notify
-     * @param Data\InvoiceCommentBaseInterface|null $comment
+     * @param Data\InvoiceCommentCreationInterface|null $comment
      * @param Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int
      */
@@ -25,15 +25,15 @@ interface InvoiceCaptureInterface
         $orderId,
         array $items = [],
         $notify = false,
-        \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
+        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     );
 
     /**
      * @param int $orderId
-     * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
+     * @param \Magento\Sales\Api\Data\InvoiceItemCreationInterface[] $items
      * @param bool|false $notify
-     * @param Data\InvoiceCommentBaseInterface|null $comment
+     * @param Data\InvoiceCommentCreationInterface|null $comment
      * @param Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int
      */
@@ -41,7 +41,7 @@ interface InvoiceCaptureInterface
         $orderId,
         array $items = [],
         $notify = false,
-        \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
+        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     );
 }

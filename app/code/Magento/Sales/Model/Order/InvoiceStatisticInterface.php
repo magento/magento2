@@ -14,12 +14,12 @@ use Magento\Sales\Api\Data\InvoiceInterface;
  *
  * @api
  */
-interface OrderStatisticInterface
+interface InvoiceStatisticInterface
 {
     /**
      * @param OrderInterface $order
      * @param InvoiceInterface $invoice
      * @return OrderInterface
      */
-    public function calculateInvoice(OrderInterface $order, InvoiceInterface $invoice);
+    public function register(OrderInterface $order, InvoiceInterface $invoice);
 }
