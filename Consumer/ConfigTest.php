@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer;
 
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\Iterator as HandlerIterator;
+
 /**
  * Test of queue consumer configuration reading and parsing.
  *
@@ -42,7 +44,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Magento\Framework\MessageQueue\BatchConsumer', $consumer->getConsumerInstance());
         $this->assertEquals('100', $consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();
-        $this->assertInternalType('array', $handlers);
+        $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(1, $handlers);
         $this->assertEquals('handlerMethodOne', $handlers[0]->getMethod());
         $this->assertEquals('Magento\TestModuleMessageQueueConfiguration\HandlerOne', $handlers[0]->getType());
@@ -61,7 +63,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Magento\Framework\MessageQueue\ConsumerInterface', $consumer->getConsumerInstance());
         $this->assertEquals(null, $consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();
-        $this->assertInternalType('array', $handlers);
+        $this->assertInstanceOf(HandlerIterator::class, $handlers);
         $this->assertCount(0, $handlers);
     }
 
