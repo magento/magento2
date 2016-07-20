@@ -133,8 +133,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function testOpenFileNonWritable()
     {
         $targetPath = '/path/to/target.file';
-        $this->driver->expects($this->once())->method('isExists')->will($this->returnValue(true));
-        $this->driver->expects($this->once())->method('isWritable')->will($this->returnValue(false));
+        $this->driver->expects($this->once())->method('isExists')->willReturn(true);
+        $this->driver->expects($this->once())->method('isWritable')->willReturn(false);
         $this->write->openFile($targetPath);
     }
 

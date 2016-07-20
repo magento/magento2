@@ -248,11 +248,7 @@ class Write extends Read implements WriteInterface
     {
         $folder = dirname($path);
         $this->create($folder);
-        if (!$this->isExist($path)) {
-            $this->assertWritable($folder);
-        } else {
-            $this->assertWritable($path);
-        }
+        $this->assertWritable($this->isExist($path) ? $path : $folder);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         return $this->fileFactory->create($absolutePath, $this->driver, $mode);
     }
