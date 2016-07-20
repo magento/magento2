@@ -10,7 +10,7 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Setup\Test\Constraint\Module\AssertModuleInGrid;
 use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
 use Magento\Setup\Test\Constraint\Module\AssertSuccessMessage;
-use Magento\Setup\Test\Fixture\BackupConfig;
+use Magento\Setup\Test\Fixture\BackupOptions;
 use Magento\Setup\Test\Fixture\Module;
 use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
@@ -66,14 +66,14 @@ class EnableDisableModuleTest extends Injectable
      * Test root method.
      *
      * @param Module $module
-     * @param BackupConfig $backupConfig
+     * @param BackupOptions $backupOptions
      * @param AssertModuleInGrid $assertModuleInGrid
      * @param AssertSuccessfulReadinessCheck $assertReadiness
      * @param AssertSuccessMessage $assertSuccessMessage
      */
     public function test(
         Module $module,
-        BackupConfig $backupConfig,
+        BackupOptions $backupOptions,
         AssertModuleInGrid $assertModuleInGrid,
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertSuccessMessage $assertSuccessMessage
@@ -85,7 +85,7 @@ class EnableDisableModuleTest extends Injectable
         $this->setupWizard->open();
 
         // Open Modules page
-        $this->setupWizard->getModuleManagement()->clickModules();
+        $this->setupWizard->getSetupHome()->clickModules();
 
         // Search for module
         $assertModuleInGrid->processAssert($this->setupWizard, $module->getModuleName());
@@ -103,7 +103,7 @@ class EnableDisableModuleTest extends Injectable
         $this->setupWizard->getReadiness()->clickNext();
 
         // Create Backup page
-        $this->setupWizard->getCreateBackup()->fill($backupConfig);
+        $this->setupWizard->getCreateBackup()->fill($backupOptions);
         $this->setupWizard->getCreateBackup()->clickNext();
 
         // Disable Module
@@ -116,7 +116,7 @@ class EnableDisableModuleTest extends Injectable
         $this->setupWizard->getSuccessMessage()->clickBackToSetup();
 
         // Open Modules page
-        $this->setupWizard->getModuleManagement()->clickModules();
+        $this->setupWizard->getSetupHome()->clickModules();
 
         // Search for Module
         $assertModuleInGrid->processAssert($this->setupWizard, $module->getModuleName());
@@ -130,7 +130,7 @@ class EnableDisableModuleTest extends Injectable
         $this->setupWizard->getReadiness()->clickNext();
 
         // Create Backup page
-        $this->setupWizard->getCreateBackup()->fill($backupConfig);
+        $this->setupWizard->getCreateBackup()->fill($backupOptions);
         $this->setupWizard->getCreateBackup()->clickNext();
 
         // Enable Module
