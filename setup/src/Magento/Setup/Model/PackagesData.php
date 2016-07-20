@@ -383,20 +383,17 @@ class PackagesData
     public function getMetaPackagesMap()
     {
         if ($this->metapackagesMap === null) {
-            $packagesJson = $this->getPackagesJson();
-            if ($packagesJson) {
-                $packages = json_decode($packagesJson, true)['packages'];
-                array_walk($packages, function ($packageVersions) {
-                    $package = array_shift($packageVersions);
-                    if ($package['type'] == ComposerInformation::METAPACKAGE_PACKAGE_TYPE
-                        && isset($package['require'])
-                    ) {
-                        foreach ($package['require'] as $key => $requirePackage) {
-                            $this->metapackagesMap[$key] = $package['name'];
-                        }
+            $packages = $this->getPackagesJson();
+            array_walk($packages, function ($packageVersions) {
+                $package = array_shift($packageVersions);
+                if ($package['type'] == ComposerInformation::METAPACKAGE_PACKAGE_TYPE
+                    && isset($package['require'])
+                ) {
+                    foreach ($package['require'] as $key => $requirePackage) {
+                        $this->metapackagesMap[$key] = $package['name'];
                     }
-                });
-            }
+                }
+            });
         }
 
         return $this->metapackagesMap;

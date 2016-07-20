@@ -39,7 +39,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $this->composerInformation->expects($this->any())->method('getRootRepositories')->willReturn(['repo1', 'repo2']);
         $this->composerInformation->expects($this->any())->method('getPackagesTypes')->willReturn(['magento2-module']);
         $rootPackage = $this->getMock(RootPackage::class, [], ['magento/project', '2.1.0', '2']);
-        $rootPackage->expects($this->once())
+        $rootPackage->expects($this->any())
             ->method('getRequires')
             ->willReturn([
                 'magento/package-1' => '1.0.0',
