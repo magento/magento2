@@ -7,29 +7,34 @@
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Framework\App\RequestSafetyInterface;
 
 class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
 {
-    /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    /** @var Configurable */
     private $configurable;
 
     /**
-     * @var \Magento\Framework\App\RequestSafetyInterface
+     * @var RequestSafetyInterface
      */
     private $requestSafety;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     private $resource;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface
+     * @var LinkedProductSelectBuilderInterface
      */
     private $linkedProductSelectBuilder;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     private $collectionFactory;
 
@@ -39,18 +44,18 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     private $products;
 
     /**
-     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable
-     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
-     * @param \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\App\RequestSafetyInterface $requestSafety
+     * @param Configurable $configurable
+     * @param ResourceConnection $resourceConnection
+     * @param LinkedProductSelectBuilderInterface $linkedProductSelectBuilder
+     * @param CollectionFactory $collectionFactory
+     * @param RequestSafetyInterface $requestSafety
      */
     public function __construct(
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurable,
-        \Magento\Framework\App\ResourceConnection $resourceConnection,
-        \Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface $linkedProductSelectBuilder,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
-        \Magento\Framework\App\RequestSafetyInterface $requestSafety
+        Configurable $configurable,
+        ResourceConnection $resourceConnection,
+        LinkedProductSelectBuilderInterface $linkedProductSelectBuilder,
+        CollectionFactory $collectionFactory,
+        RequestSafetyInterface $requestSafety
     ) {
         $this->configurable = $configurable;
         $this->resource = $resourceConnection;
