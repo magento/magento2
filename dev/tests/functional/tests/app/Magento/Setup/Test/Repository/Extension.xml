@@ -15,14 +15,10 @@
 
         <dataset name="firstExtension">
             <field name="extensionName" xsi:type="string">magento/sample-data-media</field>
-            <field name="version" xsi:type="string" />
-            <field name="versionToUpdate" xsi:type="string" />
         </dataset>
 
         <dataset name="secondExtension">
             <field name="extensionName" xsi:type="string">magento/module-theme-sample-data</field>
-            <field name="version" xsi:type="string" />
-            <field name="versionToUpdate" xsi:type="string" />
         </dataset>
     </repository>
 </config>
