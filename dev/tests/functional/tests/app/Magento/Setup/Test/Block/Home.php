@@ -19,6 +19,8 @@ class Home extends Block
      */
     protected $systemUpgrade = '.setup-home-item-upgrade';
 
+    
+    
     /**
      * Button that opens grid with installed extensions.
      *
@@ -27,11 +29,11 @@ class Home extends Block
     protected $extensionManager = '.setup-home-item-extension';
 
     /**
-     * Module management button.
+     * 'Module Manager' button.
      *
      * @var string
      */
-    protected $moduleManagement = ".setup-home-item-component";
+    protected $moduleManager = '.setup-home-item-component';
 
     /**
      * Click on 'System Upgrade' button.
@@ -44,7 +46,7 @@ class Home extends Block
     }
 
     /**
-     * Click on 'Component Manager' button.
+     * Click on 'Extension Manager' button.
      *
      * @return void
      */
@@ -54,12 +56,12 @@ class Home extends Block
     }
 
     /**
-     * Click on Modules section.
+     * Click on 'Module Manager' section.
      *
      * @return void
      */
-    public function clickModules()
+    public function clickModuleManager()
     {
-        $this->_rootElement->find($this->moduleManagement, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->moduleManager, Locator::SELECTOR_CSS)->click();
     }
 }
