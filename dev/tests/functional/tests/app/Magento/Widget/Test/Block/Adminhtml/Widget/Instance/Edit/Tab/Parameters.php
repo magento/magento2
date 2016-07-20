@@ -63,6 +63,6 @@ class Parameters extends Tab
         $path = $mtfTestsPath . $path;
         $paths = glob($path);
 
-        return str_replace('.php', '', str_replace($mtfTestsPath, '', $paths[0]));
+        return str_replace([$mtfTestsPath, '.php'], '', $paths[0]);
     }
 }
