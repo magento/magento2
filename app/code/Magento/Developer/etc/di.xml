@@ -9,6 +9,7 @@
     <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Framework\View\Asset\PreProcessor\ChainFactory"/>
     <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
     <preference for="Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface" type="Magento\Framework\View\Asset\PreProcessor\Helper\Sort"/>
+    <preference for="Magento\Framework\Logger\Handler\Debug" type="Magento\Developer\Model\Logger\Handler\Debug"/>
 
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
@@ -241,4 +242,14 @@
             <argument name="subDir" xsi:type="string">web</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Framework\View\Asset\PreProcessor\Chain">
+        <arguments>
+            <argument name="compatibleTypes" xsi:type="array">
+                <item name="css" xsi:type="array">
+                    <item name="less" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

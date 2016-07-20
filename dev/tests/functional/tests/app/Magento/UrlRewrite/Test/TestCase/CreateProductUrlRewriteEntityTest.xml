@@ -9,7 +9,7 @@
     <testCase name="Magento\UrlRewrite\Test\TestCase\CreateProductUrlRewriteEntityTest" summary="Create Product URL Rewrites" ticketId="MAGETWO-25150">
         <variation name="CreateProductUrlRewriteEntityTestVariation1" summary="Add Temporary Redirect for Product" ticketId="MAGETWO-12409">
             <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
-            <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For Product</data>
             <data name="product/dataset" xsi:type="string">product_with_category</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">cat%isolation%/simp_redirect%isolation%.html</data>
@@ -19,7 +19,7 @@
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect" />
         </variation>
         <variation name="CreateProductUrlRewriteEntityTestVariation2" summary="Create Product URL Rewrites with no redirect">
-            <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For Product</data>
             <data name="product/dataset" xsi:type="string">default</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
@@ -28,7 +28,7 @@
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteSaveMessage" />
         </variation>
         <variation name="CreateProductUrlRewriteEntityTestVariation3" summary="Create Product URL Rewrites with Temporary redirect">
-            <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For Product</data>
             <data name="product/dataset" xsi:type="string">default</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
@@ -38,7 +38,7 @@
             <constraint name="Magento\UrlRewrite\Test\Constraint\AssertUrlRewriteProductRedirect" />
         </variation>
         <variation name="CreateProductUrlRewriteEntityTestVariation4" summary="Create Product URL Rewrites with Permanent redirect">
-            <data name="urlRewrite/data/entity_type" xsi:type="string">For product</data>
+            <data name="urlRewrite/data/entity_type" xsi:type="string">For Product</data>
             <data name="product/dataset" xsi:type="string">default</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/Default Store View</data>
             <data name="urlRewrite/data/request_path" xsi:type="string">test_%isolation%.html</data>
