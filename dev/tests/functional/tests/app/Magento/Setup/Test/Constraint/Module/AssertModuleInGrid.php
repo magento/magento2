@@ -3,21 +3,24 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Test\Constraint;
+namespace Magento\Setup\Test\Constraint\Module;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
 /**
  * Class AssertGrid
+ *
+ * Checks whether Module is in grids.
  */
-class AssertModule extends AbstractConstraint
+class AssertModuleInGrid extends AbstractConstraint
 {
     /**
-     * Process asserting.
+     * Recursively search for the Module name.
      *
      * @param SetupWizard $setupWizard
      * @param string $moduleName
+     * @return void
      */
     public function processAssert(SetupWizard $setupWizard, $moduleName)
     {
@@ -32,7 +35,6 @@ class AssertModule extends AbstractConstraint
      */
     public function toString()
     {
-        return 'module was found in grid.';
+        return 'Module was found in grid.';
     }
-
 }

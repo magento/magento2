@@ -1,11 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Setup\Test\TestCase\EnableDisableModuleTest" summary="Enable/Disable Module" ticketId="MAGETWO-43202">
         <variation name="variation1">
-            <data name="description" xsi:type="string">Enable and Disable Module</data>
-            <data name="module/moduleName" xsi:type="string">magento/module-sitemap</data>
-            <data name="module/optionsCode" xsi:type="string">No</data>
-            <data name="module/optionsMedia" xsi:type="string">No</data>
-            <data name="module/optionsDb" xsi:type="string">No</data>
+            <data name="description" xsi:type="string">Disable Module Magento_Sitemap</data>
+            <data name="module/data/moduleName" xsi:type="string">magento/module-sitemap</data>
+            <data name="backupConfig/data/optionsCode" xsi:type="string">No</data>
+            <data name="backupConfig/data/optionsMedia" xsi:type="string">No</data>
+            <data name="backupConfig/data/optionsDb" xsi:type="string">No</data>
         </variation>
     </testCase>
 </config>

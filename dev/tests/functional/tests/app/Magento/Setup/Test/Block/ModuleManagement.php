@@ -14,12 +14,16 @@ use Magento\Mtf\Client\Locator;
 class ModuleManagement extends Block
 {
     /**
+     * Module management button.
+     *
      * @var string
      */
     protected $moduleManagement = ".setup-home-item-component";
 
     /**
      * Click on Modules section.
+     *
+     * @return void
      */
     public function clickModules()
     {
