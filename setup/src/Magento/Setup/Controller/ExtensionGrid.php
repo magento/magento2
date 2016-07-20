@@ -78,7 +78,6 @@ class ExtensionGrid extends AbstractActionController
             }
         }
 
-        $this->gridExtension->setLastSyncData($lastSyncData);
         $extensions = $this->gridExtension->getList();
 
         return new JsonModel(

@@ -31,6 +31,11 @@ class PackagesData
     protected $urlPrefix = 'https://';
 
     /**
+     * @var array
+     */
+    private $packagesJson;
+
+    /**
      * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
@@ -80,7 +85,9 @@ class PackagesData
     public function syncPackagesData()
     {
         try {
-            $lastSyncData = $this->syncPackagesForUpdate();
+            $lastSyncData = [];
+            $lastSyncData['lastSyncDate'] = $this->getLastSyncDate();
+            $lastSyncData['packages'] = $this->getPackagesForUpdate();
             $packagesForInstall = $this->syncPackagesForInstall();
             $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
             return $lastSyncData;
@@ -155,27 +162,41 @@ class PackagesData
     }
 
     /**
-     * Sync packages that need updates
+     * Get list of manually installed package
      *
      * @return array
      */
-    private function syncPackagesForUpdate()
+    public function getInstalledPackages()
     {
-        $availableVersions = [];
-        $packages = $this->composerInformation->getInstalledMagentoPackages();
+        return array_intersect_key(
+            $this->composerInformation->getInstalledMagentoPackages(),
+            $this->composerInformation->getRootPackage()->getRequires()
+        );
+    }
+
+    /**
+     * Get packages that need updates
+     *
+     * @return array
+     */
+    public function getPackagesForUpdate()
+    {
+        $packagesForUpdate = [];
+        $packages = $this->getInstalledPackages();
+
         foreach ($packages as $package) {
             $latestProductVersion = $this->getLatestNonDevVersion($package['name']);
             if ($latestProductVersion && version_compare($latestProductVersion, $package['version'], '>')) {
-                $packageName = $package['name'];
-                $availableVersions[$packageName] = [
-                    'name' => $packageName,
-                    'latestVersion' => $latestProductVersion
-                ];
+                $availableVersions = $this->getPackageAvailableVersions($package['name']);
+                $package['latestVersion'] = $latestProductVersion;
+                $package['versions'] = array_filter($availableVersions, function ($version) use ($package) {
+                    return version_compare($version, $package['version'], '>');
+                });
+                $packagesForUpdate[$package['name']] = $package;
             }
         }
-        $lastSyncData['lastSyncDate'] = $this->getLastSyncDate();
-        $lastSyncData['packages'] = $availableVersions;
-        return $lastSyncData;
+        
+        return $packagesForUpdate;
     }
 
     /**
@@ -196,22 +217,32 @@ class PackagesData
     }
 
     /**
-     * Gets packages.json
+     * Gets array of packages from packages.json
      *
-     * @return string
+     * @return array
      * @throws \RuntimeException
      */
     private function getPackagesJson()
     {
+        if ($this->packagesJson !== null) {
+            return $this->packagesJson;
+        }
+
         try {
-            $packagesJson = '';
+            $jsonData = '';
             $directory = $this->filesystem->getDirectoryRead(
                 \Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME
             );
             if ($directory->isExist(PackagesAuth::PATH_TO_PACKAGES_FILE)) {
-                $packagesJson = $directory->readFile(PackagesAuth::PATH_TO_PACKAGES_FILE);
+                $jsonData = $directory->readFile(PackagesAuth::PATH_TO_PACKAGES_FILE);
             }
-            return $packagesJson;
+            $packagesData = json_decode($jsonData, true);
+
+            $this->packagesJson = is_array($packagesData) && isset($packagesData['packages']) ?
+                $packagesData['packages'] :
+                [];
+
+            return $this->packagesJson;
         } catch (\Exception $e) {
             throw new \RuntimeException('Error in reading packages.json');
         }
@@ -227,15 +258,10 @@ class PackagesData
     {
         try {
             $packagesJson = $this->getPackagesJson();
-            if ($packagesJson) {
-                $packagesJsonData = json_decode($packagesJson, true);
-            } else {
-                $packagesJsonData['packages'] = [];
-            }
             $packages = $this->composerInformation->getInstalledMagentoPackages();
             $packageNames = array_column($packages, 'name');
             $installPackages = [];
-            foreach ($packagesJsonData['packages'] as $packageName => $package) {
+            foreach ($packagesJson as $packageName => $package) {
                 if (!empty($package) && isset($package) && is_array($package)) {
                     $package = $this->unsetDevVersions($package);
                     ksort($package);
@@ -358,15 +384,10 @@ class PackagesData
             count($magentoRepositories) === 1
             && strpos($magentoRepositories[0], $this->packagesAuth->getCredentialBaseUrl())
         ) {
-            $packagesJsonData = $this->getPackagesJson();
-            if ($packagesJsonData) {
-                $packagesJsonData = json_decode($packagesJsonData, true);
-            } else {
-                $packagesJsonData['packages'] = [];
-            }
+            $packagesJson = $this->getPackagesJson();
 
-            if (isset($packagesJsonData['packages'][$package])) {
-                $packageVersions = $packagesJsonData['packages'][$package];
+            if (isset($packagesJson[$package])) {
+                $packageVersions = $packagesJson[$package];
                 uksort($packageVersions, 'version_compare');
                 $packageVersions = array_reverse($packageVersions);
 
