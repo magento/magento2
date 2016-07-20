@@ -54,7 +54,7 @@ abstract class AbstractExtensionTest extends Injectable
     /**
      * Set credentials for connecting to repo.magento.com
      *
-     * @param $needAuthentication
+     * @param bool $needAuthentication
      * @param RepoCredentials $repoCredentials
      * @return void
      */

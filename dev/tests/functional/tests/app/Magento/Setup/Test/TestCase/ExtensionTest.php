@@ -83,7 +83,8 @@ class ExtensionTest extends AbstractExtensionTest
         // Check version of installed extension
         $assertVersionOnGrid->processAssert(
             $this->setupWizard->getExtensionsGrid(),
-            $extension, AssertVersionOnGrid::TYPE_INSTALL
+            $extension,
+            AssertVersionOnGrid::TYPE_INSTALL
         );
 
         // Update extension
@@ -112,7 +113,8 @@ class ExtensionTest extends AbstractExtensionTest
         // Check version of updated extension
         $assertVersionOnGrid->processAssert(
             $this->setupWizard->getExtensionsGrid(),
-            $extension, AssertVersionOnGrid::TYPE_UPDATE
+            $extension,
+            AssertVersionOnGrid::TYPE_UPDATE
         );
 
         // Uninstall extension
