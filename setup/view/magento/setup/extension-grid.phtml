@@ -166,7 +166,7 @@
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(extension)}">
                             <li ng-class="{'disabled': !isAvailableUpdatePackage(extension.name)}"
-                                ng-mousedown="update(extension)">
+                                ng-mousedown="isAvailableUpdatePackage(extension.name) && update(extension)">
                                 <a class="action-menu-item">Update</a>
                             </li>
                             <li ng-class="{'hide': !extension.uninstall}"
