@@ -10,6 +10,8 @@ use Magento\Mtf\Client\Locator;
 
 /**
  * Class Status
+ *
+ * Contains action to manipulate with Module's actions.
  */
 class Status extends Block
 {
@@ -22,6 +24,8 @@ class Status extends Block
 
     /**
      * Click on Disable Element.
+     *
+     * @return void
      */
     public function clickDisable()
     {
@@ -30,6 +34,8 @@ class Status extends Block
 
     /**
      * Click en Enable element.
+     *
+     * @return void
      */
     public function clickEnable()
     {

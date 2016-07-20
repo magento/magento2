@@ -6,11 +6,12 @@
 namespace Magento\Setup\Test\Block\Module;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**
  * Class Grid
+ *
+ * Table grid on backend.
  */
 class Grid extends Block
 {
@@ -26,14 +27,14 @@ class Grid extends Block
      *
      * @var string
      */
-    protected $componentName = '//table/tbody/tr/td/span[contains(text(), \'#placeholder#\')]';
+    protected $componentName = '//table//*//span[contains(text(), \'%s\')]';
 
     /**
      * Select path.
      *
      * @var string
      */
-    protected $select = '//table[contains(@class, \'data-grid\')]//*//span[contains(text(), \'#placeholder#\')]//..//..//td//div[contains(@class, \'action-select\')]';
+    protected $select = '//span[contains(text(), \'%s\')]//..//..//td//div[contains(@class, \'action-select\')]';
 
     /**
      * Next button selector.
@@ -55,6 +56,13 @@ class Grid extends Block
      * @var string
      */
     protected $itemDisable = '.item-disable';
+
+    /**
+     * Button element.
+     *
+     * @var string
+     */
+    protected $button = 'button';
 
     /**
      * Click Next button.
@@ -103,7 +111,7 @@ class Grid extends Block
      */
     private function getModuleByName($name)
     {
-        $componentName = str_replace('#placeholder#', $name, $this->componentName);
+        $componentName = sprintf($this->componentName, $name);
 
         return $this->_rootElement->find($componentName, Locator::SELECTOR_XPATH);
     }
@@ -117,11 +125,11 @@ class Grid extends Block
     public function isModuleEnabled($name)
     {
         $element = $this->findModuleByName($name);
-        $select = str_replace('#placeholder#', $name, $this->select);
+        $select = sprintf($this->select, $name);
 
-        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
+        $element->find($select, Locator::SELECTOR_XPATH)->find($this->button)->click();
         $isVisible = $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemDisable)->isVisible();
-        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
+        $element->find($select, Locator::SELECTOR_XPATH)->find($this->button)->click();
 
         return $isVisible;
     }
@@ -130,27 +138,29 @@ class Grid extends Block
      * Disable Module.
      *
      * @param string $name
+     * @return void
      */
     public function disableModule($name)
     {
         $element = $this->findModuleByName($name);
-        $select = str_replace('#placeholder#', $name, $this->select);
+        $select = sprintf($this->select, $name);
 
-        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
+        $element->find($select, Locator::SELECTOR_XPATH)->find($this->button)->click();
         $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemDisable)->click();
     }
 
     /**
      * Enable Module.
      *
-     * @param $name
+     * @param string $name
+     * @return void
      */
     public function enableModule($name)
     {
         $element = $this->findModuleByName($name);
-        $select = str_replace('#placeholder#', $name, $this->select);
+        $select = sprintf($this->select, $name);
 
-        $element->find($select, Locator::SELECTOR_XPATH)->find('button')->click();
+        $element->find($select, Locator::SELECTOR_XPATH)->find($this->button)->click();
         $element->find($select, Locator::SELECTOR_XPATH)->find($this->itemEnable)->click();
     }
 }

@@ -27,6 +27,7 @@ class SuccessMessage extends Block
     public function getUpdaterStatus()
     {
         $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CLASS_NAME);
+
         return $this->_rootElement->find($this->successMessage, Locator::SELECTOR_CLASS_NAME)->getText();
     }
 
@@ -45,10 +46,10 @@ class SuccessMessage extends Block
     /**
      * Click Back to Setup button.
      *
-     * @return array|string
+     * @return void
      */
     public function clickBackToSetup()
     {
-        return $this->_rootElement->find('btn-prime', Locator::SELECTOR_CLASS_NAME)->click();
+        $this->_rootElement->find('btn-prime', Locator::SELECTOR_CLASS_NAME)->click();
     }
 }

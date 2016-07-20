@@ -9,9 +9,13 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 
 /**
  * Class AssertSuccessMessage
+ *
+ * Checks whether Module manipulation was succeed.
  */
 class AssertSuccessMessage
 {
+    const SUCCESS_MESSAGE = 'Success';
+
     /**
      * Assert module action is successful.
      *
@@ -20,9 +24,8 @@ class AssertSuccessMessage
      */
     public function processAssert(SetupWizard $setupWizard)
     {
-        $message = "Success";
         \PHPUnit_Framework_Assert::assertContains(
-            $message,
+            static::SUCCESS_MESSAGE,
             $setupWizard->getSuccessMessage()->getDisableModuleStatus(),
             'Success message is incorrect.'
         );
