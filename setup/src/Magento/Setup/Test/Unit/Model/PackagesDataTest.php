@@ -38,6 +38,17 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
 
         $this->composerInformation->expects($this->any())->method('getRootRepositories')->willReturn(['repo1', 'repo2']);
         $this->composerInformation->expects($this->any())->method('getPackagesTypes')->willReturn(['magento2-module']);
+        $rootPackage = $this->getMock(RootPackage::class, [], ['magento/project', '2.1.0', '2']);
+        $rootPackage->expects($this->once())
+            ->method('getRequires')
+            ->willReturn([
+                'magento/package-1' => '1.0.0',
+                'magento/package-2' => '1.0.1'
+            ]);
+        $this->composerInformation
+            ->expects($this->any())
+            ->method('getRootPackage')
+            ->willReturn($rootPackage);
         $timeZoneProvider = $this->getMock('\Magento\Setup\Model\DateTime\TimeZoneProvider', [], [], '', false);
         $timeZone = $this->getMock('\Magento\Framework\Stdlib\DateTime\Timezone', [], [], '', false);
         $timeZoneProvider->expects($this->any())->method('get')->willReturn($timeZone);
@@ -113,5 +124,24 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('installPackages', $latestData);
         $this->assertSame(1, count($latestData['installPackages']));
         $this->assertSame(1, $latestData['countOfInstall']);
+    }
+
+    public function testGetPackagesForUpdate()
+    {
+        $packages = $this->packagesData->getPackagesForUpdate();
+        $this->assertEquals(2, count($packages));
+        $this->assertArrayHasKey('magento/package-1', $packages);
+        $this->assertArrayHasKey('magento/package-2', $packages);
+        $firstPackage = array_values($packages)[0];
+        $this->assertArrayHasKey('latestVersion', $firstPackage);
+        $this->assertArrayHasKey('versions', $firstPackage);
+    }
+
+    public function testGetInstalledPackages()
+    {
+        $installedPackages = $this->packagesData->getInstalledPackages();
+        $this->assertEquals(2, count($installedPackages));
+        $this->assertArrayHasKey('magento/package-1', $installedPackages);
+        $this->assertArrayHasKey('magento/package-2', $installedPackages);
     }
 }

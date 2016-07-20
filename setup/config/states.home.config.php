@@ -33,7 +33,7 @@ return [
             'nav'         => false,
             'noMenu'      => true,
             'order'       => 1,
-            'type'        => 'update'
+            'type'        => 'module'
         ],
         [
             'id'          => 'root.extension-auth',
@@ -68,6 +68,19 @@ return [
             'order'       => 1,
             'type'        => 'install',
             'wrapper'     => 1
+        ],
+        [
+            'id'          => 'root.update',
+            'url'         => 'update-extension-grid',
+            'templateUrl' => "$base/update-extension-grid",
+            'title'       => "Extensions Manager",
+            'controller'  => 'updateExtensionGridController',
+            'nav'         => false,
+            'noMenu'      => true,
+            'order'       => 1,
+            'type'        => 'update',
+            'wrapper'     => 1,
+            'header'      => 'New Updates'
         ],
         [
             'id'          => 'root.upgrade',

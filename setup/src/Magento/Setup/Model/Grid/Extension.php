@@ -6,6 +6,7 @@
 namespace Magento\Setup\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Setup\Model\PackagesData;
 
 /**
  * Extension Grid
@@ -23,19 +24,22 @@ class Extension
     private $typeMapper;
 
     /**
-     * @var array
+     * @var PackagesData
      */
-    private $lastSyncData;
+    private $packagesData;
 
     /**
      * @param ComposerInformation $composerInformation
+     * @param PackagesData $packagesData
      * @param TypeMapper $typeMapper
      */
     public function __construct(
         ComposerInformation $composerInformation,
+        PackagesData $packagesData,
         TypeMapper $typeMapper
     ) {
         $this->composerInformation = $composerInformation;
+        $this->packagesData = $packagesData;
         $this->typeMapper = $typeMapper;
     }
 
@@ -46,51 +50,45 @@ class Extension
      */
     public function getList()
     {
-        $extensions = $this->getInstalledExtensions();
+        $extensions = $this->packagesData->getInstalledPackages();
+        $packagesForUpdate = $this->packagesData->getPackagesForUpdate();
 
         foreach ($extensions as &$extension) {
+            $extension['update'] = array_key_exists($extension['name'], $packagesForUpdate);
             $extension['uninstall'] = true;
-            $extension['update'] = false;
-            if (isset($this->lastSyncData['packages'][$extension['name']]['latestVersion'])
-                && version_compare(
-                    $this->lastSyncData['packages'][$extension['name']]['latestVersion'],
-                    $extension['version'],
-                    '>'
-                )) {
-                $extension['update'] = true;
-            }
             if (
                 $extension['type'] === ComposerInformation::METAPACKAGE_PACKAGE_TYPE
                 || !$this->composerInformation->isPackageInComposerJson($extension['name'])
             ) {
                 $extension['uninstall'] = false;
             }
-            $parts = explode('/', $extension['name']);
-            $extension['vendor'] = ucfirst($parts[0]);
-            $extension['type'] = $this->typeMapper->map($extension['name'], $extension['type']);
         }
 
-        return array_values($extensions);
+        return $this->formatExtensions($extensions);
     }
 
     /**
-     * Retrieve list of installed extensions
+     * Get formatted list of extensions that have new version
      *
      * @return array
      */
-    public function getInstalledExtensions()
+    public function getListForUpdate()
     {
-        return array_intersect_key(
-            $this->composerInformation->getInstalledMagentoPackages(),
-            $this->composerInformation->getRootPackage()->getRequires()
-        );
+        $extensions = $this->packagesData->getPackagesForUpdate();
+
+        return $this->formatExtensions($extensions);
     }
 
     /**
-     * @param array $lastSyncData
+     * @param array $extensions
+     * @return array
      */
-    public function setLastSyncData($lastSyncData)
+    private function formatExtensions(array $extensions)
     {
-        $this->lastSyncData = $lastSyncData;
+        array_walk($extensions, function (&$extension, $name) {
+            $extension['vendor'] = current(explode('/', $name));
+            $extension['type'] = $this->typeMapper->map($name, $extension['type']);
+        });
+        return array_values($extensions);
     }
 }

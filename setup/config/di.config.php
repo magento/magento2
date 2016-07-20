@@ -40,6 +40,7 @@ return [
             'Magento\Setup\Controller\Marketplace',
             'Magento\Setup\Controller\SystemConfig',
             'Magento\Setup\Controller\InstallExtensionGrid',
+            'Magento\Setup\Controller\UpdateExtensionGrid',
             'Magento\Setup\Controller\MarketplaceCredentials',
             'Magento\Setup\Controller\Session'
         ],

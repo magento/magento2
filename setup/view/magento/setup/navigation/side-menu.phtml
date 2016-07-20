@@ -34,12 +34,13 @@
             </a>
         </li>
         <li class="item-extension level-0"   ng-class="{_active: $state.current.type === 'extension'
-            || $state.current.type === 'uninstall'}">
+            || $state.current.type === 'uninstall'
+            || $state.current.type === 'update'}">
             <a href="" ui-sref="root.extension-auth">
                 <span>Extension Manager</span>
             </a>
         </li>
-        <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'update'}">
+        <li class="item-component level-0"   ng-class="{_active: $state.current.type === 'module'}">
             <a href="" ui-sref="root.module">
                 <span>Module Manager</span>
             </a>

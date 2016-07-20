@@ -98,6 +98,8 @@ main.controller('navigationController',
                 $state.go('root.landing-install');
             } else if ($state.current.type === 'upgrade') {
                 $state.go('root.upgrade');
+            } else if ($state.current.type === 'update') {
+                $state.go('root.update');
             } else {
                 $state.go('root.module');
             }

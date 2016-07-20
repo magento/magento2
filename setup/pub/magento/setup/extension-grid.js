@@ -138,7 +138,7 @@ angular.module('extension-grid', ['ngStorage'])
                     $localStorage.titles['update'] = 'Update ' + $localStorage.moduleName;
                 }
                 $rootScope.titles = $localStorage.titles;
-                $scope.nextState();
+                $state.go('root.readiness-check-update');
             };
 
             $scope.uninstall = function(extension) {

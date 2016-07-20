@@ -21,6 +21,7 @@ var app = angular.module(
         'module-grid',
         'extension-grid',
         'install-extension-grid',
+        'update-extension-grid',
         'create-backup',
         'complete-backup',
         'data-option',
