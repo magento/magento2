@@ -386,6 +386,7 @@ class CustomOptions extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Fieldset::NAME,
+                                        'collapsible' => true,
                                         'label' => null,
                                         'sortOrder' => 10,
                                         'opened' => true,
@@ -597,6 +598,22 @@ class CustomOptions extends AbstractModifier
      */
     protected function getSelectTypeGridConfig($sortOrder)
     {
+        $options = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'imports' => [
+                            'optionId' => '${ $.provider }:${ $.parentScope }.option_id',
+                            'optionTypeId' => '${ $.provider }:${ $.parentScope }.option_type_id',
+                        ],
+                        'service' => [
+                            'template' => 'Magento_Catalog/form/element/helper/custom-option-type-service',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         return [
             'arguments' => [
                 'data' => [
@@ -626,7 +643,10 @@ class CustomOptions extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::FIELD_TITLE_NAME => $this->getTitleFieldConfig(10),
+                        static::FIELD_TITLE_NAME => $this->getTitleFieldConfig(
+                            10,
+                            $this->locator->getProduct()->getStoreId() ? $options : []
+                        ),
                         static::FIELD_PRICE_NAME => $this->getPriceFieldConfig(20),
                         static::FIELD_PRICE_TYPE_NAME => $this->getPriceTypeFieldConfig(30, ['fit' => true]),
                         static::FIELD_SKU_NAME => $this->getSkuFieldConfig(40),

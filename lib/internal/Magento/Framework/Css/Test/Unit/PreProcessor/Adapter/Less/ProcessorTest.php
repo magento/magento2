@@ -81,7 +81,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
      * Test for processContent method (exception)
      *
      * @expectedException \Magento\Framework\View\Asset\ContentProcessorException
-     * @expectedExceptionMessageRegExp (Compilation from source:.*Test exception)
+     * @expectedExceptionMessageRegExp (Test exception)
      */
     public function testProcessContentException()
     {
@@ -96,11 +96,8 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             ->with($assetMock)
             ->willThrowException(new \Exception(self::ERROR_MESSAGE));
 
-        $this->loggerMock->expects(self::once())
-            ->method('critical')
-            ->with(
-                PHP_EOL . Processor::ERROR_MESSAGE_PREFIX . PHP_EOL . self::ASSET_PATH  . PHP_EOL . self::ERROR_MESSAGE
-            );
+        $this->loggerMock->expects(self::never())
+            ->method('critical');
 
         $this->temporaryFileMock->expects(self::never())
             ->method('createFile');
