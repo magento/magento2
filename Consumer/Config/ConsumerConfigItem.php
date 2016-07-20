@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterface;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\Iterator as HandlerIterator;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler\IteratorFactory as HandlerIteratorFactory;
 
 /**
  * {@inheritdoc}
@@ -33,7 +34,7 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
     private $consumerInstance;
 
     /**
-     * @var ConsumerConfigItem\HandlerInterface[]
+     * @var HandlerIterator
      */
     private $handlers;
 
@@ -43,29 +44,13 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
     private $maxMessages;
 
     /**
-     * Initialize data.
+     * Initialize dependencies.
      *
-     * @param string $name
-     * @param string $connection
-     * @param string $queue
-     * @param string $consumerInstance
-     * @param HandlerInterface[] $handlers
-     * @param string $maxMessages
+     * @param HandlerIteratorFactory $handlerIteratorFactory
      */
-    public function __construct(
-        $name,
-        $connection,
-        $queue,
-        $consumerInstance,
-        $handlers,
-        $maxMessages
-    ) {
-        $this->name = $name;
-        $this->connection = $connection;
-        $this->queue = $queue;
-        $this->consumerInstance = $consumerInstance;
-        $this->handlers = $handlers;
-        $this->maxMessages = $maxMessages;
+    public function __construct(HandlerIteratorFactory $handlerIteratorFactory)
+    {
+        $this->handlers = $handlerIteratorFactory->create();
     }
 
     /**
@@ -114,5 +99,18 @@ class ConsumerConfigItem implements ConsumerConfigItemInterface
     public function getMaxMessages()
     {
         return $this->maxMessages;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setData(array $data)
+    {
+        $this->name = $data['name'];
+        $this->connection = $data['connection'];
+        $this->queue = $data['queue'];
+        $this->consumerInstance = $data['consumerInstance'];
+        $this->maxMessages = $data['maxMessages'];
+        $this->handlers->setData($data['handlers']);
     }
 }
