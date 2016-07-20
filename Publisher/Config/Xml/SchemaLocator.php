@@ -31,8 +31,8 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $this->schema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/queue/publisher.xsd');
-        $this->perFileSchema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/queue/publisher.xsd');
+        $this->schema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/publisher.xsd');
+        $this->perFileSchema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/publisher.xsd');
     }
 
     /**

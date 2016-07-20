@@ -19,16 +19,22 @@ use Magento\Framework\Phrase;
 class Config implements ConfigInterface
 {
     /**
+     * Publishers config data.
+     *
      * @var ConfigData
      */
     private $configData;
 
     /**
+     * Publisher config item factory.
+     *
      * @var PublisherConfigItemFactory
      */
     private $publisherConfigItemFactory;
 
     /**
+     * Publisher connection factory.
+     *
      * @var PublisherConnectionFactory
      */
     private $publishedConnectionFactory;
@@ -59,7 +65,13 @@ class Config implements ConfigInterface
         if (!$publisherData) {
             throw new LocalizedException(new Phrase("Publisher '%publisher' is not declared.", ['publisher' => $name]));
         }
-        return $this->createPublisherConfigItem($publisherData);
+
+        $publisher = $this->createPublisherConfigItem($publisherData);
+
+        if ($publisher->isDisabled()) {
+            throw new LocalizedException(new Phrase("Publisher '%publisher' is not declared.", ['publisher' => $name]));
+        }
+        return $publisher;
     }
 
     /**
@@ -68,8 +80,12 @@ class Config implements ConfigInterface
     public function getPublishers()
     {
         $publisherConfigItems = [];
-        foreach ($this->configData as $publisherName => $publisherData) {
-            $publisherConfigItems[$publisherName] = $this->createPublisherConfigItem($publisherData);
+        foreach ($this->configData->get() as $publisherName => $publisherData) {
+            $publisher = $this->createPublisherConfigItem($publisherData);
+            if ($publisher->isDisabled()) {
+                continue;
+            }
+            $publisherConfigItems[$publisherName] = $publisher;
         }
         return $publisherConfigItems;
     }
@@ -80,23 +96,35 @@ class Config implements ConfigInterface
      * @param array $publisherData
      * @return PublisherConfigItemInterface
      */
-    private function createPublisherConfigItem($publisherData)
+    private function createPublisherConfigItem(array $publisherData)
     {
-        $handlers = [];
+        $connection = null;
         foreach ($publisherData['connections'] as $connectionConfig) {
-            $handlers[] = $this->createPublisherConnection($connectionConfig);
+            if (!$connectionConfig['disabled']) {
+                $connection = $this->createPublisherConnection($connectionConfig);
+                break;
+            }
+        }
+        if (null === $connection) {
+            $connection = $this->createPublisherConnection(
+                [
+                    'name' => 'amqp',
+                    'exchange' => 'magento',
+                    'disabled' => false,
+                ]
+            );
         }
         return $this->publisherConfigItemFactory->create([
             'topic' => $publisherData['topic'],
-            'isDisabled' => $publisherData['isDisabled'],
-            'connections' => $handlers,
+            'disabled' => $publisherData['disabled'],
+            'connection' => $connection,
         ]);
     }
 
     /**
      * Create publisher connection config item object based on provided connection data.
      *
-     * @param array $connection
+     * @param string[] $connection
      * @return PublisherConnectionInterface
      */
     private function createPublisherConnection($connection)
@@ -105,7 +133,7 @@ class Config implements ConfigInterface
             [
                 'name' => $connection['name'],
                 'exchange' => $connection['exchange'],
-                'isDisabled' => $connection['isDisabled'],
+                'disabled' => $connection['disabled'],
             ]
         );
     }

@@ -16,7 +16,7 @@ interface ConfigInterface
     /**
      * Get publisher configuration by publisher name.
      *
-     * @param string
+     * @param string $name
      * @return PublisherConfigItemInterface
      * @throws LocalizedException
      */

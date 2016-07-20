@@ -11,6 +11,8 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 class Validator implements ValidatorInterface
 {
     /**
+     * Config validator list.
+     *
      * @var ValidatorInterface[]
      */
     private $validators;
@@ -29,11 +31,12 @@ class Validator implements ValidatorInterface
      *
      * @param array $configData
      * @throws \LogicException
+     * @return void
      */
     public function validate($configData)
     {
         foreach ($this->validators as $validator) {
-            if ($validator instanceof ValidatorInterface) {
+            if (!$validator instanceof ValidatorInterface) {
                 throw new \LogicException(
                     'Validator does not implements Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface'
                 );

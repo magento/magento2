@@ -26,9 +26,9 @@ interface PublisherConfigItemInterface
     public function isDisabled();
 
     /**
-     * Get publisher connections.
+     * Get publisher connection.
      *
-     * @return PublisherConnectionInterface[]
+     * @return PublisherConnectionInterface
      */
-    public function getConnections();
+    public function getConnection();
 }

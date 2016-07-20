@@ -20,6 +20,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private static $defaultExchange = 'magento';
 
     /**
+     * Boolean value converter.
+     *
      * @var BooleanUtils
      */
     private $booleanUtils;
@@ -55,11 +57,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     throw new \InvalidArgumentException('Connection name is missed');
                 }
                 $exchangeName = $this->getAttributeValue($connectionConfig, 'exchange', self::$defaultExchange);
-                $isDisabled = $this->getAttributeValue($connectionConfig, 'isDisabled', false);
+                $isDisabled = $this->getAttributeValue($connectionConfig, 'disabled', false);
                 $connections[$connectionName] = [
                     'name' => $connectionName,
                     'exchange' => $exchangeName,
-                    'isDisabled' => $this->booleanUtils->toBoolean($isDisabled),
+                    'disabled' => $this->booleanUtils->toBoolean($isDisabled),
                 ];
             }
             $isDisabled = $this->getAttributeValue($publisherConfig, 'disabled', false);

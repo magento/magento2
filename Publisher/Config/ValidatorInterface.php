@@ -15,6 +15,7 @@ interface ValidatorInterface
      *
      * @param array $configData
      * @throws \LogicException
+     * @return void
      */
     public function validate($configData);
 }

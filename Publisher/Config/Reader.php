@@ -13,11 +13,15 @@ use Magento\Framework\Phrase;
 class Reader implements ReaderInterface
 {
     /**
+     * Config validator.
+     *
      * @var ValidatorInterface
      */
     private $validator;
 
     /**
+     * Config reade list.
+     *
      * @var ReaderInterface[]
      */
     private $readers;

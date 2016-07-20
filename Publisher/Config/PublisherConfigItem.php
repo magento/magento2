@@ -11,31 +11,38 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 class PublisherConfigItem implements PublisherConfigItemInterface
 {
     /**
+     * Publisher topic name.
+     *
      * @var string
      */
     private $topic;
 
     /**
-     * @var PublisherConnectionInterface[]
+     * Publisher connection.
+     *
+     * @var PublisherConnectionInterface
      */
-    private $connections;
+    private $connection;
 
     /**
+     * Flag. Is publisher disabled.
+     *
      * @var bool
      */
-    private $isDisabled;
+    private $disabled;
 
     /**
      * Initialize data.
      *
      * @param string $topic
-     * @param PublisherConnectionInterface[] $connections
-     * @param bool $isDisabled
+     * @param PublisherConnectionInterface $connection
+     * @param bool $disabled
      */
-    public function __construct($topic, $connections, $isDisabled)
+    public function __construct($topic, $connection, $disabled)
     {
         $this->topic = $topic;
-        $this->connections = $connections;
+        $this->connection = $connection;
+        $this->disabled = $disabled;
     }
 
     /**
@@ -51,14 +58,14 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      */
     public function isDisabled()
     {
-        return $this->isDisabled;
+        return $this->disabled;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConnections()
+    public function getConnection()
     {
-        return $this->connections;
+        return $this->connection;
     }
 }

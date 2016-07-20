@@ -11,32 +11,38 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 class PublisherConnection implements PublisherConnectionInterface
 {
     /**
+     * Connection name.
+     *
      * @var string
      */
     private $name;
 
     /**
+     * Exchange name.
+     *
      * @var string
      */
     private $exchange;
 
     /**
+     * Flag. Is connection disabled.
+     *
      * @var bool
      */
-    private $isDisabled;
+    private $disabled;
 
     /**
      * Initialize dependencies.
      *
      * @param string $name
      * @param string $exchange
-     * @param bool $isDisabled
+     * @param bool $disabled
      */
-    public function __construct($name, $exchange, $isDisabled)
+    public function __construct($name, $exchange, $disabled)
     {
         $this->name = $name;
         $this->exchange = $exchange;
-        $this->isDisabled = $isDisabled;
+        $this->disabled = $disabled;
     }
 
     /**
@@ -60,6 +66,6 @@ class PublisherConnection implements PublisherConnectionInterface
      */
     public function isDisabled()
     {
-        return $this->isDisabled;
+        return $this->disabled;
     }
 }
