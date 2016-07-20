@@ -86,6 +86,6 @@ class Link
      */
     private function getProductWebsiteTable()
     {
-        return $this->resourceConnection->getConnection()->getTableName('catalog_product_website');
+        return $this->resourceConnection->getTableName('catalog_product_website');
     }
 }
