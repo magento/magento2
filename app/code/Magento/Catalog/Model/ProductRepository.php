@@ -303,7 +303,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function assignProductToWebsites(\Magento\Catalog\Model\Product $product)
     {
         if (!$this->storeManager->hasSingleStore()) {
-
             if ($this->storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE) {
                 $websiteIds = array_keys($this->storeManager->getWebsites());
             } else {

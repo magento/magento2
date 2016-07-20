@@ -6,8 +6,10 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Product;
 use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Store\Model\Website;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 
@@ -46,11 +48,11 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testGet()
     {
         $productData = $this->productData[0];
-
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         foreach ([ProductInterface::SKU, ProductInterface::NAME, ProductInterface::PRICE] as $key) {
             $this->assertEquals($productData[$key], $response[$key]);
         }
+        $this->assertEquals([1], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"]);
     }
 
     /**
@@ -124,6 +126,73 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [$productBuilder([ProductInterface::TYPE_ID => 'simple', ProductInterface::SKU => 'psku-test-1'])],
             [$productBuilder([ProductInterface::TYPE_ID => 'virtual', ProductInterface::SKU => 'psku-test-2'])],
         ];
+    }
+
+    private function markAreaAsSecure()
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Registry::class);
+        $registry->unregister("isSecureArea");
+        $registry->register("isSecureArea", true);
+    }
+
+    /**
+     * Test removing association between product and website 1
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testUpdateWithDeleteWebsites()
+    {
+        $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
+        /** @var Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('second_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t save website");
+        }
+
+        $websitesData = [
+            'website_ids' => [
+                $website->getId(),
+            ]
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->updateProduct($productBuilder);
+        $this->assertEquals($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"], $websitesData["website_ids"]);
+        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
+        $this->markAreaAsSecure();
+        $website->delete();
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/second_website.php
+     */
+    public function testCreateWithMultipleWebsites()
+    {
+        $productBuilder = $this->getSimpleProductData();
+        $productBuilder[ProductInterface::SKU] = 'test-test-sku';
+        $productBuilder[ProductInterface::TYPE_ID] = 'simple';
+
+        /** @var Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('test_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t save website");
+        }
+        $websitesData = [
+            'website_ids' => [
+                1,
+                $website->getId(),
+            ]
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->saveProduct($productBuilder);
+        $this->assertEquals($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"], $websitesData["website_ids"]);
+        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
+        $this->markAreaAsSecure();
+        $website->delete();
     }
 
     /**
