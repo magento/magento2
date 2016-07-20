@@ -23,9 +23,7 @@ class AddressSnapshotTest extends \PHPUnit_Framework_TestCase
     {
         $this->metadataMock = $this->getMockBuilder(
             \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        )->disableOriginalConstructor()->getMock();
 
         $this->model = new AddressSnapshot(
             $this->metadataMock

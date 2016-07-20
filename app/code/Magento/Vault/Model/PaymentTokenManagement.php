@@ -141,7 +141,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
             ->setConditionType('gt')
             ->setValue(
                 $this->dateTimeFactory->create(
-                    \now::class,
+                    'now',
                     new \DateTimeZone('UTC')
                 )->format('Y-m-d 00:00:00')
             )

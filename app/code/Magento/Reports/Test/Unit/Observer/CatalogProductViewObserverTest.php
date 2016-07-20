@@ -118,8 +118,7 @@ class CatalogProductViewObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->productCompFactoryMock = $this->getMockBuilder(
             \Magento\Reports\Model\Product\Index\ComparedFactory::class
-        )
-            ->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 

@@ -107,11 +107,10 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     {
         $carrierCode = 'some carrier code';
         $name = 'some name';
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->with('carriers/' . $carrierCode . '/title',
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
+            'carriers/' . $carrierCode . '/title',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will($this->returnValue($name
-        )
-        );
+        )->will($this->returnValue($name));
 
         $this->assertEquals($name, $this->model->getCarrierName($carrierCode));
     }
@@ -119,11 +118,10 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
     public function testGetCarrierNameWithEmptyName()
     {
         $carrierCode = 'some carrier code';
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->with('carriers/' . $carrierCode . '/title',
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->with(
+            'carriers/' . $carrierCode . '/title',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will($this->returnValue(null
-        )
-        );
+        )->will($this->returnValue(null));
 
         $this->assertEquals($carrierCode, $this->model->getCarrierName($carrierCode));
     }

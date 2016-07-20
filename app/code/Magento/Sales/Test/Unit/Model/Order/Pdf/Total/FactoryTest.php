@@ -74,6 +74,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateException()
     {
-        $this->_factory->create(\TEST::class);
+        $this->_factory->create('TEST');
     }
 }
