@@ -19,7 +19,6 @@ use Magento\Sales\Model\Order\InvoiceNotifierInterface;
 use Magento\Sales\Model\Order\Config;
 use Magento\Framework\App\ResourceConnection;
 
-
 class InvoiceCapture implements InvoiceCaptureInterface
 {
     /**
@@ -68,6 +67,11 @@ class InvoiceCapture implements InvoiceCaptureInterface
     private $config;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * InvoiceCapture constructor.
      *
      * @param InvoiceBuilderInterface $invoiceBuilder
@@ -79,6 +83,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
      * @param StateCheckerInterface $stateChecker
      * @param InvoiceNotifierInterface $invoiceNotifier
      * @param Config $config
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         InvoiceBuilderInterface $invoiceBuilder,
@@ -89,7 +94,8 @@ class InvoiceCapture implements InvoiceCaptureInterface
         InvoiceRepositoryInterface $invoiceRepository,
         StateCheckerInterface $stateChecker,
         InvoiceNotifierInterface $invoiceNotifier,
-        Config $config
+        Config $config,
+        ResourceConnection $resourceConnection
     ) {
         $this->invoiceBuilder = $invoiceBuilder;
         $this->invoiceValidator = $invoiceValidator;
@@ -100,7 +106,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $this->stateChecker = $stateChecker;
         $this->invoiceNotifier = $invoiceNotifier;
         $this->config = $config;
-
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -119,6 +125,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     )
     {
+        $connection = $this->resourceConnection->getConnectionByName('sales');
         $order = $this->orderRepository->get($orderId);
         $this->invoiceBuilder->setOrder($order);
         $this->invoiceBuilder->setItems($items);
@@ -129,13 +136,21 @@ class InvoiceCapture implements InvoiceCaptureInterface
         if (!empty($errorMessages)) {
 //            throw new SalesDocumentValidationException($messages);
         }
-        $order = $this->paymentAdapter->captureOffline($order, $invoice);
-        $order = $this->orderStatistic->calculateInvoice($order, $invoice);
-        $order->setState($this->stateChecker->getStateForOrder($order, [StateCheckerInterface::PROCESSING]));
-        $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-        $invoice->setState($this->paymentAdapter->getPaidState());
-        $this->invoiceRepository->save($invoice);
-        $this->orderRepository->save($order);
+        $connection->beginTransaction();
+        try {
+            $order = $this->paymentAdapter->captureOffline($order, $invoice);
+            $order = $this->orderStatistic->calculateInvoice($order, $invoice);
+            $order->setState($this->stateChecker->getStateForOrder($order, [StateCheckerInterface::PROCESSING]));
+            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+            $invoice->setState($this->paymentAdapter->getPaidState());
+            $this->invoiceRepository->save($invoice);
+            $this->orderRepository->save($order);
+            $connection->commit();
+        } catch (\Exception $e) {
+            // log original exception
+            $connection->rollBack();
+            // throw new SalesOperationFailedException
+        }
         if ($notify) {
             $this->invoiceNotifier->notify($order, $invoice, $comment);
         }
