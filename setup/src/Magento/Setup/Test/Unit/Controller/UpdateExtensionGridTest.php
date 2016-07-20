@@ -40,6 +40,7 @@ class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
+
         $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
@@ -64,6 +65,7 @@ class UpdateExtensionGridTest extends \PHPUnit_Framework_TestCase
         $jsonModel = $this->controller->extensionsAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
+
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
         $this->assertEquals($extensionData, $variables['extensions']);

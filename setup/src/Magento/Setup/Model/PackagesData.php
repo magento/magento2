@@ -245,7 +245,7 @@ class PackagesData
             }
             $packagesData = json_decode($jsonData, true);
 
-            $this->packagesJson = is_array($packagesData) && isset($packagesData['packages']) ?
+            $this->packagesJson = isset($packagesData['packages']) ?
                 $packagesData['packages'] :
                 [];
 
