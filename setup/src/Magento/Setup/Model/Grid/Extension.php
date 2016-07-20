@@ -88,7 +88,7 @@ class Extension
     private function formatExtensions(array $extensions)
     {
         foreach ($extensions as &$extension) {
-            $extension['vendor'] = reset(explode('/', $extension['name']));
+            $extension['vendor'] = current(explode('/', $extension['name']));
             $extension['type'] = $this->typeMapper->map($extension['name'], $extension['type']);
         }
         return array_values($extensions);
