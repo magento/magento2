@@ -80,15 +80,17 @@ class Extension
     }
 
     /**
+     * Format given array of extensions, add vendor and format extension type
+     *
      * @param array $extensions
      * @return array
      */
     private function formatExtensions(array $extensions)
     {
-        array_walk($extensions, function (&$extension, $name) {
-            $extension['vendor'] = current(explode('/', $name));
-            $extension['type'] = $this->typeMapper->map($name, $extension['type']);
-        });
+        foreach ($extensions as &$extension) {
+            $extension['vendor'] = reset(explode('/', $extension['name']));
+            $extension['type'] = $this->typeMapper->map($extension['name'], $extension['type']);
+        }
         return array_values($extensions);
     }
 }
