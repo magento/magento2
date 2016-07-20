@@ -21,18 +21,6 @@ class Handler implements HandlerInterface
     private $method;
 
     /**
-     * Initialize data.
-     *
-     * @param string $type
-     * @param string $method
-     */
-    public function __construct($type, $method)
-    {
-        $this->type = $type;
-        $this->method = $method;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getType()
@@ -46,5 +34,14 @@ class Handler implements HandlerInterface
     public function getMethod()
     {
         return $this->method;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setData(array $data)
+    {
+        $this->type = $data['type'];
+        $this->method = $data['method'];
     }
 }
