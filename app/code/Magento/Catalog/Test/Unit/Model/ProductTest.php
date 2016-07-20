@@ -8,9 +8,12 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductExtensionFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 
@@ -173,6 +176,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $appStateMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttrbutes;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -186,6 +199,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->extensionAttrbutes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+            ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->stockItemFactoryMock = $this->getMock(
             'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory',
             ['create'],
@@ -346,7 +364,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->productLinkRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductLinkRepositoryInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
+        $this->extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -356,6 +376,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'context' => $contextMock,
                 'catalogProductType' => $this->productTypeInstanceMock,
                 'productFlatIndexerProcessor' => $this->productFlatProcessor,
+                'extensionFactory' => $this->extensionAttributesFactory,
                 'productPriceIndexerProcessor' => $this->productPriceProcessor,
                 'catalogProductOptionFactory' => $optionFactory,
                 'storeManager' => $storeManager,
@@ -405,7 +426,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $expectedStoreIds = [1, 2, 3];
         $websiteIds = ['test'];
-        $this->resource->expects($this->once())->method('getWebsiteIds')->will($this->returnValue($websiteIds));
+        $this->model->setWebsiteIds($websiteIds);
         $this->website->expects($this->once())->method('getStoreIds')->will($this->returnValue($expectedStoreIds));
         $this->assertEquals($expectedStoreIds, $this->model->getStoreIds());
     }
@@ -417,13 +438,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->unsStoreId();
         $this->store->expects($this->once())->method('getId')->will($this->returnValue(5));
         $this->assertEquals(5, $this->model->getStoreId());
-    }
-
-    public function testGetWebsiteIds()
-    {
-        $expected = ['test'];
-        $this->resource->expects($this->once())->method('getWebsiteIds')->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->model->getWebsiteIds());
     }
 
     public function testGetCategoryCollection()
