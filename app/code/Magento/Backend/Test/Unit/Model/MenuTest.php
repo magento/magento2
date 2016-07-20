@@ -115,9 +115,9 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_items['item3']->expects($this->any())->method('hasChildren')->will($this->returnValue(false));
         $menu2->add($this->_items['item3']);
 
-        $this->assertEquals($this->_items['item1'], $this->_model->get(\item1::class));
-        $this->assertEquals($this->_items['item2'], $this->_model->get(\item2::class));
-        $this->assertEquals($this->_items['item3'], $this->_model->get(\item3::class));
+        $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
+        $this->assertEquals($this->_items['item2'], $this->_model->get('item2'));
+        $this->assertEquals($this->_items['item3'], $this->_model->get('item3'));
     }
 
     public function testMove()
@@ -170,11 +170,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_model->add($this->_items['item1']);
 
         $this->assertCount(1, $this->_model);
-        $this->assertEquals($this->_items['item1'], $this->_model->get(\item1::class));
+        $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
 
         $this->_model->remove('item1');
         $this->assertCount(0, $this->_model);
-        $this->assertNull($this->_model->get(\item1::class));
+        $this->assertNull($this->_model->get('item1'));
     }
 
     public function testRemoveRemovesMenuItemRecursively()

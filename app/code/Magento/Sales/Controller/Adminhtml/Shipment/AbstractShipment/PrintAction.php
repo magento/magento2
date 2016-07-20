@@ -64,7 +64,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
                     \Magento\Framework\Stdlib\DateTime\DateTime::class
                 )->date('Y-m-d_H-i-s');
                 return $this->_fileFactory->create(
-                    \packingslip::class . $date . '.pdf',
+                    'packingslip' . $date . '.pdf',
                     $pdf->render(),
                     DirectoryList::VAR_DIR,
                     'application/pdf'

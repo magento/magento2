@@ -565,7 +565,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         $this->getQuote()->getBillingAddress()->setCustomerAddressId('');
         $this->_objectCopyService->copyFieldsetToTarget(
-            \sales_copy_order_billing_address::class,
+            'sales_copy_order_billing_address',
             'to_order',
             $order->getBillingAddress(),
             $this->getQuote()->getBillingAddress()
@@ -587,7 +587,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $orderShippingAddress && $orderShippingAddress->getSameAsBilling()
         );
         $this->_objectCopyService->copyFieldsetToTarget(
-            \sales_copy_order_shipping_address::class,
+            'sales_copy_order_shipping_address',
             'to_order',
             $orderShippingAddress,
             $quoteShippingAddress

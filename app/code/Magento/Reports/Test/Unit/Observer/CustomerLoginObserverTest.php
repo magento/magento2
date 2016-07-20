@@ -64,8 +64,7 @@ class CustomerLoginObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->productIndexFactoryMock = $this->getMockBuilder(
             \Magento\Reports\Model\Product\Index\ViewedFactory::class
-        )
-            ->setMethods(['create'])
+        )->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->productIndexMock = $this->getMockBuilder(\Magento\Reports\Model\Product\Index\Viewed::class)
             ->disableOriginalConstructor()->getMock();
@@ -89,8 +88,7 @@ class CustomerLoginObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->productCompFactoryMock = $this->getMockBuilder(
             \Magento\Reports\Model\Product\Index\ComparedFactory::class
-        )
-            ->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->productCompFactoryMock->expects($this->any())

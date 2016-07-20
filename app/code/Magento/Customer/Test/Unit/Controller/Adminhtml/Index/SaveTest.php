@@ -161,8 +161,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             \Magento\Backend\Model\View\Result\ForwardFactory::class
-        )
-            ->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Forward::class)
@@ -194,8 +193,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->customerDataFactoryMock = $this->getMockBuilder(
             \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
-        )
-            ->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)

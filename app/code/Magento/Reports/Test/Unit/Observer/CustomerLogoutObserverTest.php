@@ -41,8 +41,7 @@ class CustomerLogoutObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->productIndexFactoryMock = $this->getMockBuilder(
             \Magento\Reports\Model\Product\Index\ViewedFactory::class
-        )
-            ->setMethods(['create'])
+        )->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
         $this->productIndexMock = $this->getMockBuilder(\Magento\Reports\Model\Product\Index\Viewed::class)
             ->disableOriginalConstructor()->getMock();

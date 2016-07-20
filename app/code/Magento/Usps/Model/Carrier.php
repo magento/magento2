@@ -492,8 +492,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $client = $this->_httpClientFactory->create();
                 $client->setUri($url);
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-                $client->setParameterget('API', $api);
-                $client->setParameterget('XML', $request);
+                $client->setParameterGet('API', $api);
+                $client->setParameterGet('XML', $request);
                 $response = $client->request();
                 $responseBody = $response->getBody();
 
@@ -1008,7 +1008,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         foreach ($trackings as $tracking) {
             $xml = $this->_xmlElFactory->create(
-                
                 ['data' => '<?xml version = "1.0" encoding = "UTF-8"?><TrackRequest/>']
             );
             $xml->addAttribute('USERID', $r->getUserId());
@@ -1028,8 +1027,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $client = $this->_httpClientFactory->create();
                 $client->setUri($url);
                 $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-                $client->setParameterget('API', $api);
-                $client->setParameterget('XML', $request);
+                $client->setParameterGet('API', $api);
+                $client->setParameterGet('XML', $request);
                 $response = $client->request();
                 $responseBody = $response->getBody();
                 $debugData['result'] = $responseBody;
@@ -1888,8 +1887,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $client = $this->_httpClientFactory->create();
         $client->setUri($url);
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
-        $client->setParameterget('API', $api);
-        $client->setParameterget('XML', $requestXml);
+        $client->setParameterGet('API', $api);
+        $client->setParameterGet('XML', $requestXml);
         $response = $client->request()->getBody();
 
         $response = $this->parseXml($response);
