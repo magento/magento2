@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\Validator;
 
+use Magento\Framework\MessageQueue\Consumer;
 use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 
@@ -33,6 +34,9 @@ class ConsumerInstance implements ValidatorInterface
     private function validateConsumerInstance($consumerConfig)
     {
         $consumerInstance = $consumerConfig['consumerInstance'];
+        if ($consumerInstance == ConsumerInterface::class) {
+            return;
+        }
         if (!class_exists($consumerInstance)) {
             throw new \LogicException(
                 sprintf(

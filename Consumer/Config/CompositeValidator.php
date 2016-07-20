@@ -21,10 +21,9 @@ class CompositeValidator implements ValidatorInterface
     /**
      * Initialize dependencies.
      *
-     * @param ValidatorInterface $validator
      * @param array $validators
      */
-    public function __construct(ValidatorInterface $validator, array $validators)
+    public function __construct(array $validators)
     {
         $this->validators = [];
         $validators = $this->sortValidators($validators);
