@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory as HistoryCollectionFactory;
 
@@ -755,6 +756,115 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->salesOrderCollectionMock->expects($this->once())->method('load')->willReturnSelf();
         $this->salesOrderCollectionMock->expects($this->once())->method('getFirstItem')->willReturn($this->order);
         $this->assertSame($this->order, $this->order->loadByIncrementIdAndStoreId($incrementId, $storeId));
+    }
+
+    public function testSetPaymentWithId()
+    {
+        $this->order->setId(123);
+        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->order->setData(OrderInterface::PAYMENT, $payment);
+        $this->order->setDataChanges(false);
+
+        $payment->expects($this->once())
+            ->method('setOrder')
+            ->with($this->order)
+            ->willReturnSelf();
+
+        $payment->expects($this->once())
+            ->method('setParentId')
+            ->with(123)
+            ->willReturnSelf();
+
+        $payment->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->order->setPayment($payment);
+
+        $this->assertEquals(
+            $this->order->getData(
+                OrderInterface::PAYMENT
+            ),
+            $payment
+        );
+
+        $this->assertFalse(
+            $this->order->hasDataChanges()
+        );
+    }
+
+    public function testSetPaymentNoId()
+    {
+        $this->order->setId(123);
+        $this->order->setDataChanges(false);
+
+        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $payment->expects($this->once())
+            ->method('setOrder')
+            ->with($this->order)
+            ->willReturnSelf();
+
+        $payment->expects($this->once())
+            ->method('setParentId')
+            ->with(123)
+            ->willReturnSelf();
+
+        $payment->expects($this->any())
+            ->method('getId')
+            ->willReturn(null);
+
+        $this->order->setPayment($payment);
+
+        $this->assertEquals(
+            $this->order->getData(
+                OrderInterface::PAYMENT
+            ),
+            $payment
+        );
+
+        $this->assertTrue(
+            $this->order->hasDataChanges()
+        );
+    }
+
+    public function testSetPaymentNull()
+    {
+        $this->assertEquals(null, $this->order->setPayment(null));
+
+        $this->assertEquals(
+            $this->order->getData(
+                OrderInterface::PAYMENT
+            ),
+            null
+        );
+
+        $this->assertTrue(
+            $this->order->hasDataChanges()
+        );
+    }
+
+    public function testResetOrderWillResetPayment()
+    {
+        $payment = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->order->setData(OrderInterface::PAYMENT, $payment);
+        $this->order->reset();
+        $this->assertEquals(
+            $this->order->getData(
+                OrderInterface::PAYMENT
+            ),
+            null
+        );
+
+        $this->assertTrue(
+            $this->order->hasDataChanges()
+        );
     }
 
     public function notInvoicingStatesProvider()
