@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Framework\MessageQueue\Consumer;
+
+/**
+ * Test of queue consumer configuration reading and parsing.
+ *
+ * @magentoCache config disabled
+ */
+class ConfigTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+    }
+
+    public function testGetConsumers()
+    {
+        /** @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface $config */
+        $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Consumer\ConfigInterface::class);
+
+        $consumers = $config->getConsumers();
+        $consumer = $config->getConsumer('consumer1');
+
+        $this->assertEquals(
+            $consumer,
+            $consumers['consumer1'],
+            'Consumers received from collection and via getter must be the same'
+        );
+
+        $this->assertEquals('consumer1', $consumer->getName());
+        $this->assertEquals('queue1', $consumer->getQueue());
+        $this->assertEquals('connection1', $consumer->getConnection());
+        $this->assertEquals('Magento\Framework\MessageQueue\BatchConsumer', $consumer->getConsumerInstance());
+        $this->assertEquals('100', $consumer->getMaxMessages());
+        $handlers = $consumer->getHandlers();
+        $this->assertInternalType('array', $handlers);
+        $this->assertCount(1, $handlers);
+        $this->assertEquals('handlerMethodOne', $handlers[0]->getMethod());
+        $this->assertEquals('Magento\TestModuleMessageQueueConfiguration\HandlerOne', $handlers[0]->getType());
+    }
+
+    public function testGetConsumerWithDefaultValues()
+    {
+        /** @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface $config */
+        $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Consumer\ConfigInterface::class);
+
+        $consumer = $config->getConsumer('consumer5');
+
+        $this->assertEquals('consumer5', $consumer->getName());
+        $this->assertEquals('queue5', $consumer->getQueue());
+        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals('Magento\Framework\MessageQueue\ConsumerInterface', $consumer->getConsumerInstance());
+        $this->assertEquals(null, $consumer->getMaxMessages());
+        $handlers = $consumer->getHandlers();
+        $this->assertInternalType('array', $handlers);
+        $this->assertCount(0, $handlers);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage Consumer 'undeclaredConsumer' is not declared.
+     */
+    public function testGetUndeclaredConsumer()
+    {
+        /** @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface $config */
+        $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Consumer\ConfigInterface::class);
+        $config->getConsumer('undeclaredConsumer');
+    }
+}
