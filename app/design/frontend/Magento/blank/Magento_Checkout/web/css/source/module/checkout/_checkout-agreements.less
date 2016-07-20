@@ -9,7 +9,9 @@
 
 & when (@media-common = true) {
     .checkout-agreements-block {
-        margin-bottom: @indent__base;
+        .checkout-agreements {
+            margin-bottom: @indent__base;
+        }
 
         .action-show {
             &:extend(.abs-action-button-as-link all);
