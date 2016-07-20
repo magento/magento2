@@ -7,7 +7,7 @@
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Catalog\Model\Indexer\Product\Eav;
-use \Magento\Setup\Fixtures\EavVariationsFixture;
+use Magento\Setup\Fixtures\EavVariationsFixture;
 
 class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,7 +35,7 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
             [
                 'setAttributeSetId',
                 'setAttributeGroupId',
-                'save'
+                'save',
             ],
             [],
             '',
@@ -66,7 +66,7 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
             [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $attributeMock],
             [\Magento\Store\Model\StoreManager::class, [], $storeManagerMock],
             [\Magento\Eav\Model\Entity\Attribute\Set::class, $setMock],
-            [\Magento\Framework\App\CacheInterface::class, $cacheMock]
+            [\Magento\Framework\App\CacheInterface::class, $cacheMock],
         ];
 
         $objectManagerMock = $this->getMock(\Magento\Framework\ObjectManager\ObjectManager::class, [], [], '', false);
@@ -78,9 +78,13 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValueMap($valueMap));
 
         $this->fixtureModelMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(1));
+            ->willReturnMap([
+                ['configurable_products', 0, 1],
+                ['configurable_products_variation', 3, 1],
+            ]);
+
         $this->fixtureModelMock
             ->expects($this->exactly(4))
             ->method('getObjectManager')
