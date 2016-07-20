@@ -44,7 +44,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connection);
-        $this->connection->expects($this->atLeastOnce())
+        $this->resource->expects($this->atLeastOnce())
             ->method('getTableName')
             ->with('catalog_product_website')
             ->willReturn('catalog_product_website');
