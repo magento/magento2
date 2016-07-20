@@ -20,8 +20,8 @@
             </xs:sequence>
         </xs:complexType>
         <xs:key name="handleName">
-            <xs:selector xpath="handle"></xs:selector>
-            <xs:field xpath="@id"></xs:field>
+            <xs:selector xpath="handle"/>
+            <xs:field xpath="@id"/>
         </xs:key>
     </xs:element>
 
@@ -43,6 +43,27 @@
             <xs:field xpath="@name"/>
         </xs:keyref>
     </xs:element>
+
+    <xs:simpleType name="elementNameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="layoutType">
+        <xs:annotation>
+            <xs:documentation>
+                Layout Type definition
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="update" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
 
     <xs:complexType name="handleType">
         <xs:annotation>
