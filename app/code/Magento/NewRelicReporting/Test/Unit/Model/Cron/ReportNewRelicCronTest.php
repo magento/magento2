@@ -108,7 +108,7 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
         $this->deploymentsFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->deploymentsModel);
-        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
+        $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
 
         $this->model = new ReportNewRelicCron(
             $this->config,
