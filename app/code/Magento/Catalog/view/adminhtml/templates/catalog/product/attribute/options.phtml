@@ -10,9 +10,9 @@
 
 $stores = $block->getStoresSortedBySortOrder();
 ?>
-<fieldset class="fieldset">
+<fieldset class="admin__fieldset fieldset">
     <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Manage Options (Values of Your Attribute)') ?></span></legend>
-    <div id="manage-options-panel" data-index="attribute_options_select_container">
+    <div class="admin__control-table-wrapper" id="manage-options-panel" data-index="attribute_options_select_container">
         <table class="admin__control-table" data-index="attribute_options_select">
             <thead>
                 <tr id="attribute-options-table">
