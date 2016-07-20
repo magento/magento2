@@ -34,6 +34,7 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
  * 13. Perform Readiness Checks.
  * 14. Perform DB Backup.
  * 15. Enable Module.
+ * 16. Return to Web Setup Wizard.
  *
  * @group Setup_(CS)
  * @ZephyrId MAGETWO-43202
@@ -102,7 +103,7 @@ class EnableDisableModuleTest extends Injectable
         $assertReadiness->processAssert($this->setupWizard);
         $this->setupWizard->getReadiness()->clickNext();
 
-        // Create Backup page
+        // Create Backup
         $this->setupWizard->getCreateBackup()->fill($backupConfig);
         $this->setupWizard->getCreateBackup()->clickNext();
 
@@ -129,7 +130,7 @@ class EnableDisableModuleTest extends Injectable
         $assertReadiness->processAssert($this->setupWizard);
         $this->setupWizard->getReadiness()->clickNext();
 
-        // Create Backup page
+        // Create Backup
         $this->setupWizard->getCreateBackup()->fill($backupConfig);
         $this->setupWizard->getCreateBackup()->clickNext();
 
@@ -139,7 +140,7 @@ class EnableDisableModuleTest extends Injectable
         // Assert for Success message
         $assertSuccessMessage->processAssert($this->setupWizard);
 
-        // Return to Setup Tool
+        // Return to Web Setup Wizard
         $this->setupWizard->getSuccessMessage()->clickBackToSetup();
     }
 }
