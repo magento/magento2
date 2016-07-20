@@ -126,15 +126,18 @@ class Module
         $result = [];
         $metaPackagesMap = $this->packagesData->getMetaPackagesMap();
         if (isset($metaPackagesMap[$name])) {
+            $metaPackagesName = $metaPackagesMap[$name];
+            $composerRootRequires = $this->composerInformation->getRootPackage()->getRequires();
             $result[] = [
-                'name' => $metaPackagesMap[$name],
-                'moduleName' => $metaPackagesMap[$name],
+                'name' => $metaPackagesName,
+                'moduleName' => $metaPackagesName,
                 'type' => $this->typeMapper->map(
                     $metaPackagesMap[$name],
                     ComposerInformation::METAPACKAGE_PACKAGE_TYPE
                 ),
                 'enable' => true,
-                'version' => $this->packageInfo->getVersion($metaPackagesMap[$name])
+                'version' => isset($composerRootRequires[$metaPackagesName]) ?
+                    $composerRootRequires[$metaPackagesName]->getPrettyConstraint() :''
             ];
         }
 
