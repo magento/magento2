@@ -151,7 +151,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->websiteMock = $this->getMock(
-            '\Magento\Store\Model\Website',
+            \Magento\Store\Model\Website::class,
             ['getDefaultGroup', 'getDefaultStore'],
             [],
             '',
@@ -165,7 +165,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productRepositoryMock = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
             ->getMock();
-        $this->productMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
