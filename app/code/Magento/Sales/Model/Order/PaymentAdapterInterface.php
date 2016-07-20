@@ -17,11 +17,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 interface PaymentAdapterInterface
 {
     /**
-     * @return int
-     */
-    public function getPaidState();
-
-    /**
      * @param OrderInterface $order
      * @param InvoiceInterface $invoice
      * @return OrderInterface

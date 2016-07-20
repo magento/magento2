@@ -21,6 +21,8 @@ use Magento\Framework\App\ResourceConnection;
 
 class InvoiceCapture implements InvoiceCaptureInterface
 {
+    const STATE_PAID = 2;
+
     /**
      * @var InvoiceBuilderInterface
      */
@@ -123,8 +125,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $notify = false,
         \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
-    )
-    {
+    ) {
         $connection = $this->resourceConnection->getConnectionByName('sales');
         $order = $this->orderRepository->get($orderId);
         $this->invoiceBuilder->setOrder($order);
@@ -142,7 +143,7 @@ class InvoiceCapture implements InvoiceCaptureInterface
             $order = $this->orderStatistic->calculateInvoice($order, $invoice);
             $order->setState($this->stateChecker->getStateForOrder($order, [StateCheckerInterface::PROCESSING]));
             $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $invoice->setState($this->paymentAdapter->getPaidState());
+            $invoice->setState(self::STATE_PAID);
             $this->invoiceRepository->save($invoice);
             $this->orderRepository->save($order);
             $connection->commit();
@@ -170,8 +171,35 @@ class InvoiceCapture implements InvoiceCaptureInterface
         $notify = false,
         \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
-    )
-    {
-        // TODO: Implement captureOnline() method.
+    ) {
+        $connection = $this->resourceConnection->getConnectionByName('sales');
+        $order = $this->orderRepository->get($orderId);
+        $this->invoiceBuilder->setOrder($order);
+        $this->invoiceBuilder->setItems($items);
+        $this->invoiceBuilder->setComment($comment);
+        $this->invoiceBuilder->setCreationArguments($arguments);
+        $invoice = $this->invoiceBuilder->create();
+        $errorMessages = $this->invoiceValidator->validate($invoice, $order);
+        if (!empty($errorMessages)) {
+//            throw new SalesDocumentValidationException($messages);
+        }
+        $connection->beginTransaction();
+        try {
+            $order = $this->paymentAdapter->captureOnline($order, $invoice);
+            $order = $this->orderStatistic->calculateInvoice($order, $invoice);
+            $order->setState($this->stateChecker->getStateForOrder($order, [StateCheckerInterface::PROCESSING]));
+            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+            $invoice->setState(self::STATE_PAID);
+            $this->invoiceRepository->save($invoice);
+            $this->orderRepository->save($order);
+            $connection->commit();
+        } catch (\Exception $e) {
+            // log original exception
+            $connection->rollBack();
+            // throw new SalesOperationFailedException
+        }
+        if ($notify) {
+            $this->invoiceNotifier->notify($order, $invoice, $comment);
+        }
     }
 }
