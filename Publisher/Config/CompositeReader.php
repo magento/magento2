@@ -62,16 +62,14 @@ class CompositeReader implements ReaderInterface
         foreach ($this->readers as $reader) {
             $result = array_replace_recursive($result, $reader->read($scope));
         }
+
+        $result = $this->addDefaultConnection($result);
+
         $this->validator->validate($result);
 
-        foreach ($result as $key => $value) {
-            /** Set default connection */
-            $connection = [
-                'name' => 'amqp',
-                'exchange' => 'magento',
-                'disabled' => false,
-            ];
-            /** Find enabled connection */
+        foreach ($result as $key => &$value) {
+            //Find enabled connection
+            $connection = null;
             foreach ($value['connections'] as $connectionConfig) {
                 if (!$connectionConfig['disabled']) {
                     $connection = $connectionConfig;
@@ -79,10 +77,45 @@ class CompositeReader implements ReaderInterface
                 }
             }
             $value['connection'] = $connection;
-            unset($result[$key]['connections']);
+            unset($value['connections']);
             $result[$key] = $value;
         }
         return $result;
+    }
+
+    /**
+     * Add default connection.
+     *
+     * @param array $config
+     * @return array
+     */
+    private function addDefaultConnection(array $config)
+    {
+        $default = [
+            'name' => 'amqp',
+            'exchange' => 'magento',
+            'disabled' => false,
+        ];
+
+        foreach ($config as $key => &$value) {
+            if (!isset($value['connections']) || empty($value['connections'])) {
+                $value['connections'] = [$default];
+                continue;
+            }
+
+            $hasActiveConnection = false;
+            /** Find enabled connection */
+            foreach ($value['connections'] as $connectionConfig) {
+                if (!$connectionConfig['disabled']) {
+                    $hasActiveConnection = true;
+                    break;
+                }
+            }
+            if (!$hasActiveConnection) {
+                $value['connections']['amqp'] = $default;
+            }
+        }
+        return $config;
     }
 
     /**

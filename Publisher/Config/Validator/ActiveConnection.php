@@ -27,26 +27,20 @@ class ActiveConnection implements ValidatorInterface
             if (!isset($publisherData['connections'])) {
                 continue;
             }
-
-            if (!is_array($publisherData['connections'])) {
-                $errors[] = sprintf('Invalid connections configuration for publisher %s', $name);
-                continue;
-            }
-
             $enabledConnections = 0;
             foreach ($publisherData['connections'] as $connectionConfig) {
-                if (!isset($connectionConfig['disabled']) || $connectionConfig['disabled'] == false) {
+                if ($connectionConfig['disabled'] == false) {
                     $enabledConnections++;
                 }
             }
 
             if ($enabledConnections > 1) {
-                $errors[] = sprintf('More than 1 enabled connections configured for publisher %s. ', $name);
+                $errors[] = sprintf('More than 1 enabled connections configured for publisher %s.', $name);
             }
         }
 
         if (!empty($errors)) {
-            throw new \LogicException(implode(PHP_EOL, $errors));
+            throw new \LogicException(implode(' ', $errors));
         }
     }
 }
