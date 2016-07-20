@@ -9,6 +9,8 @@ namespace Magento\Setup\Test\TestCase;
 use Magento\Setup\Test\Constraint\Extension\AssertFindExtensionOnGrid;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Setup\Test\Fixture\Extension;
+use Magento\Setup\Test\Fixture\BackupOptions;
+use Magento\Setup\Test\Fixture\RepoCredentials;
 use Magento\Setup\Test\Constraint\AssertSuccessfulReadinessCheck;
 use Magento\Setup\Test\Constraint\Extension\AssertSuccessMessage;
 use Magento\Setup\Test\Constraint\Extension\AssertMultipleSuccessMessage;
@@ -30,8 +32,10 @@ class ExtensionMultipleTest extends AbstractExtensionTest
      * @param AssertSuccessfulReadinessCheck $assertReadiness
      * @param AssertSelectSeveralExtensions $assertSelectSeveralExtensions
      * @param AssertFindExtensionOnGrid $assertFindExtensionOnGrid
-     * @param $extensions
-     * @param array $extensionData
+     * @param bool $needAuthentication
+     * @param RepoCredentials $repoCredentials
+     * @param BackupOptions $backupOptions
+     * @param Extension[] $extensions
      */
     public function test(
         FixtureFactory $fixtureFactory,
@@ -42,18 +46,14 @@ class ExtensionMultipleTest extends AbstractExtensionTest
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertSelectSeveralExtensions $assertSelectSeveralExtensions,
         AssertFindExtensionOnGrid $assertFindExtensionOnGrid,
-        array $extensions,
-        array $extensionData = []
+        $needAuthentication,
+        RepoCredentials $repoCredentials,
+        BackupOptions $backupOptions,
+        array $extensions
     ) {
-        foreach ($extensions as $key => $extension) {
-            $extensions[$key] = $fixtureFactory->create(
-                Extension::class,
-                ['data' => array_merge($extension, $extensionData)]
-            );
+        foreach ($extensions as $key => $options) {
+            $extensions[$key] = $fixtureFactory->create(Extension::class, $options);
         }
-        
-        /** @var Extension $extensionFixture */
-        $extensionFixture = $fixtureFactory->create(Extension::class, ['data' => $extensionData]);
 
         // Authenticate in admin area
         $this->adminDashboard->open();
@@ -62,46 +62,42 @@ class ExtensionMultipleTest extends AbstractExtensionTest
         $this->setupWizard->open();
 
         // Authenticate on repo.magento.com
-        if ($extensionFixture->getNeedAuthentication() === 'Yes') {
-            $this->setupWizard->getSystemConfig()->clickSystemConfig();
-            $this->setupWizard->getAuthentication()->fill($extensionFixture);
-            $this->setupWizard->getAuthentication()->clickSaveConfig();
-            $this->setupWizard->open();
-        }
+        $this->repoAuthentication($needAuthentication, $repoCredentials);
 
         // Open Extension Grid with extensions to install
         $this->setupWizard->getSetupHome()->clickExtensionManager();
         $this->setupWizard->getExtensionsGrid()->clickInstallButton();
 
-        // Select several extensions on grid and check it.
+        // Select several extensions on grid and check it
         $assertSelectSeveralExtensions->processAssert($this->setupWizard->getExtensionsInstallGrid(), $extensions);
 
-        // Click general "Install" button.
+        // Click general "Install" button
         $this->setupWizard->getExtensionsInstallGrid()->clickInstallAll();
 
-        $this->readinessCheckAndBackup($assertReadiness, $extensionFixture);
+        $this->readinessCheckAndBackup($assertReadiness, $backupOptions);
 
-        // Check selected extensions.
+        // Check selected extensions
         $assertMultipleExtensionAndVersionCheck->processAssert(
             $this->setupWizard,
             $extensions,
             AssertExtensionAndVersionCheck::TYPE_INSTALL
         );
 
-        // Start installing.
+        // Start installing
         $this->setupWizard->getUpdaterExtension()->clickStartButton();
 
-        // Check success message.
+        // Check success message
         $assertMultipleSuccessMessage->processAssert(
             $this->setupWizard,
             $extensions,
             AssertSuccessMessage::TYPE_INSTALL
         );
 
-        // Uninstall installed extensions.
+        // Uninstall installed extensions
         foreach ($extensions as $extension) {
             $this->uninstallExtension(
                 $extension,
+                $backupOptions,
                 $assertReadiness,
                 $assertFindExtensionOnGrid,
                 $assertExtensionAndVersionCheck,

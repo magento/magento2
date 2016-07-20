@@ -34,7 +34,7 @@ abstract class AbstractGrid extends Block
      *
      * @var string
      */
-    protected $extensionName = "//*[contains(text(), '#extensionName#')]";
+    protected $extensionName = "//*[contains(text(), '%s')]";
 
     /**
      * Find Extension on the grid by name.
@@ -64,7 +64,7 @@ abstract class AbstractGrid extends Block
     {
         $this->waitForElementVisible($this->dataGrid);
         return $this->_rootElement->find(
-            str_replace('#extensionName#', $name, $this->extensionName),
+            sprintf($this->extensionName, $name),
             Locator::SELECTOR_XPATH
         )->isVisible();
     }

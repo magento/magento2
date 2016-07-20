@@ -19,24 +19,29 @@ class InstallGrid extends AbstractGrid
      * 
      * @var string
      */
-    protected $extensionInstall = "//*[contains(text(), '#extensionName#')]"
-        . "//..//..//*[contains(@class, 'action-wrap')]//button";
+    protected $extensionInstall = "//tr[td/*[contains(text(), '%s')]]//*[contains(@class, 'action-wrap')]//button";
 
     /**
      * Select version of extension.
      *
      * @var string
      */
-    protected $extensionSelectVersion = "//*[contains(text(), '#extensionName#')]"
-        . "//..//..//*[contains(@class, 'data-grid-data')]//select";
+    protected $extensionSelectVersion = "//tr[td/*[contains(text(), '%s')]]"
+        . "//*[contains(@class, 'data-grid-data')]//select";
 
     /**
      * Checkbox for select extension.
      *
      * @var string
      */
-    protected $extensionCheckbox = "//*[contains(text(), '#extensionName#')]"
-        . "//..//..//*[contains(@ng-checked, 'selectedExtension')]";
+    protected $extensionCheckbox = "//tr[td/*[contains(text(), '%s')]]//*[contains(@ng-checked, 'selectedExtension')]";
+
+    /**
+     * "Install All" button.
+     *
+     * @var string
+     */
+    protected $installAllButton = "[ng-click*='installAll']";
 
     /**
      * Install extension.
@@ -47,7 +52,7 @@ class InstallGrid extends AbstractGrid
     public function install(Extension $extension)
     {
         $select = $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtensionName(), $this->extensionSelectVersion),
+            sprintf($this->extensionSelectVersion, $extension->getExtensionName()),
             Locator::SELECTOR_XPATH,
             'strictselect'
         );
@@ -57,7 +62,7 @@ class InstallGrid extends AbstractGrid
         }
 
         $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtensionName(), $this->extensionInstall),
+            sprintf($this->extensionInstall, $extension->getExtensionName()),
             Locator::SELECTOR_XPATH
         )->click();
     }
@@ -69,10 +74,12 @@ class InstallGrid extends AbstractGrid
      */
     public function clickInstallAll()
     {
-        $this->_rootElement->find("[ng-click*='installAll']", Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->installAllButton, Locator::SELECTOR_CSS)->click();
     }
 
     /**
+     * Select several extensions to install on grid.
+     *
      * @param Extension[] $extensions
      * @return Extension[]
      */
@@ -103,7 +110,7 @@ class InstallGrid extends AbstractGrid
     protected function selectExtension($extensionName)
     {
         $this->_rootElement->find(
-            str_replace('#extensionName#', $extensionName, $this->extensionCheckbox),
+            sprintf($this->extensionCheckbox, $extensionName),
             Locator::SELECTOR_XPATH
         )->click();
     }

@@ -27,32 +27,28 @@ class Grid extends AbstractGrid
      *
      * @var string
      */
-    protected $selectAction = "//*[contains(text(), '#extensionName#')]"
-        . "//..//..//*[contains(@class, 'action-select')]";
+    protected $selectAction = "//tr[td/*[contains(text(), '%s')]]//*[contains(@class, 'action-select')]";
 
     /**
      * Uninstall action of extension.
      *
      * @var string
      */
-    protected $uninstallAction = "//*[contains(text(), '#extensionName#')]"
-        . "//..//..//*[contains(@ng-mousedown, 'uninstall')]";
+    protected $uninstallAction = "//tr[td/*[contains(text(), '%s')]]//*[contains(@ng-mousedown, 'uninstall')]";
 
     /**
      * Update action of extension.
      *
      * @var string
      */
-    protected $updateAction = "//*[contains(text(), '#extensionName#')]"
-        . "//..//..//*[contains(@ng-mousedown, 'update')]";
+    protected $updateAction = "//tr[td/*[contains(text(), '%s')]]//*[contains(@ng-mousedown, 'update')]";
 
     /**
      * Container that contains version of extension.
      *
      * @var string
      */
-    protected $versionContainer = "//*[contains(text(), '#extensionName#')]"
-        . "//..//..//*[@data-type='version']";
+    protected $versionContainer = "//tr[td/*[contains(text(), '%s')]]//*[@data-type='version']";
 
     /**
      * Popup Loading.
@@ -83,7 +79,7 @@ class Grid extends AbstractGrid
     {
         $this->clickSelectActionButton($extension);
         $button = $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtensionName(), $this->uninstallAction),
+            sprintf($this->uninstallAction, $extension->getExtensionName()),
             Locator::SELECTOR_XPATH
         );
 
@@ -101,7 +97,7 @@ class Grid extends AbstractGrid
     public function getVersion(Extension $extension)
     {
         return $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtensionName(), $this->versionContainer),
+            sprintf($this->versionContainer, $extension->getExtensionName()),
             Locator::SELECTOR_XPATH
         )->getText();
     }
@@ -116,7 +112,7 @@ class Grid extends AbstractGrid
     {
         $this->clickSelectActionButton($extension);
         $button = $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtensionName(), $this->updateAction),
+            sprintf($this->updateAction, $extension->getExtensionName()),
             Locator::SELECTOR_XPATH
         );
 
@@ -134,7 +130,7 @@ class Grid extends AbstractGrid
     protected function clickSelectActionButton(Extension $extension)
     {
         $this->_rootElement->find(
-            str_replace('#extensionName#', $extension->getExtensionName(), $this->selectAction),
+            sprintf($this->selectAction, $extension->getExtensionName()),
             Locator::SELECTOR_XPATH
         )->click();
     }

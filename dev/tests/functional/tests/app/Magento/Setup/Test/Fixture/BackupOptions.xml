@@ -6,14 +6,14 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-    <fixture name="extension"
+    <fixture name="backupOptions"
              module="Magento_Setup"
              type="virtual"
-             entity_type="extension"
-             class="Magento\Setup\Test\Fixture\Extension"
-             repository_class="Magento\Setup\Test\Repository\Extension">
-        <field name="extensionName" />
-        <field name="version" />
-        <field name="versionToUpdate" />
+             entity_type="backup_options"
+             class="Magento\Setup\Test\Fixture\BackupOptions"
+             repository_class="Magento\Setup\Test\Repository\BackupOptions">
+        <field name="optionsCode" />
+        <field name="optionsMedia" />
+        <field name="optionsDb" />
     </fixture>
 </config>
