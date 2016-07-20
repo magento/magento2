@@ -30,12 +30,4 @@ interface PublisherConnectionInterface
      * @return bool
      */
     public function isDisabled();
-
-    /**
-     * Set connection data.
-     *
-     * @param array $data
-     * @return void
-     */
-    public function setData(array $data);
 }

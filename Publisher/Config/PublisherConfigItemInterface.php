@@ -31,12 +31,4 @@ interface PublisherConfigItemInterface
      * @return PublisherConnectionInterface
      */
     public function getConnection();
-
-    /**
-     * Set item data.
-     *
-     * @param array $data
-     * @return void
-     */
-    public function setData(array $data);
 }

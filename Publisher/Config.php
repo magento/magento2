@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Publisher;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use Magento\Framework\MessageQueue\Publisher\Config\FlyweightIterator;
+use \Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem\Iterator;
 
 /**
  * {@inheritdoc}
@@ -17,16 +17,16 @@ class Config implements ConfigInterface
     /**
      * Publisher config data iterator.
      *
-     * @var FlyweightIterator
+     * @var Iterator
      */
     private $iterator;
 
     /**
      * Initialize dependencies.
      *
-     * @param FlyweightIterator $iterator
+     * @param Iterator $iterator
      */
-    public function __construct(FlyweightIterator $iterator)
+    public function __construct(Iterator $iterator)
     {
         $this->iterator = $iterator;
     }

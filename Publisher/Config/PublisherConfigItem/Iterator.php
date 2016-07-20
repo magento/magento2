@@ -4,19 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue\Publisher\Config;
+namespace Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem;
+
+use \Magento\Framework\MessageQueue\Publisher\Config\Data;
+use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem;
+use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemFactory;
 
 /**
  * Publisher config data iterator.
  */
-class FlyweightIterator implements \Iterator, \ArrayAccess
+class Iterator implements \Iterator, \ArrayAccess
 {
     /**
      * Publisher config item.
      *
-     * @var PublisherConfigItemInterface
+     * @var PublisherConfigItem
      */
-    private $flyweight;
+    private $object;
 
     /**
      * Config data.
@@ -34,17 +38,17 @@ class FlyweightIterator implements \Iterator, \ArrayAccess
     public function __construct(Data $configData, PublisherConfigItemFactory $itemFactory)
     {
         $this->data = $configData->get();
-        $this->flyweight = $itemFactory->create();
+        $this->object = $itemFactory->create();
     }
 
     /**
      * Get current item.
      *
-     * @return PublisherConfigItemInterface
+     * @return PublisherConfigItem
      */
     public function current()
     {
-        return $this->flyweight;
+        return $this->object;
     }
 
     /**
@@ -54,7 +58,7 @@ class FlyweightIterator implements \Iterator, \ArrayAccess
     {
         next($this->data);
         if (current($this->data)) {
-            $this->initFlyweight(current($this->data));
+            $this->initObject(current($this->data));
             if ($this->current()->isDisabled()) {
                 $this->next();
             }
@@ -67,9 +71,9 @@ class FlyweightIterator implements \Iterator, \ArrayAccess
      * @param array $data
      * @return void
      */
-    private function initFlyweight(array $data)
+    private function initObject(array $data)
     {
-        $this->flyweight->setData($data);
+        $this->object->setData($data);
     }
 
     /**
@@ -95,7 +99,7 @@ class FlyweightIterator implements \Iterator, \ArrayAccess
     {
         reset($this->data);
         if (current($this->data)) {
-            $this->initFlyweight(current($this->data));
+            $this->initObject(current($this->data));
             if ($this->current()->isDisabled()) {
                 $this->next();
             }
@@ -118,7 +122,7 @@ class FlyweightIterator implements \Iterator, \ArrayAccess
         if (!$this->offsetExists($offset) || $this->data[$offset]['disabled'] == true) {
             return null;
         }
-        $item = clone $this->flyweight;
+        $item = clone $this->object;
         $item->setData($this->data[$offset]);
         return $item;
     }
