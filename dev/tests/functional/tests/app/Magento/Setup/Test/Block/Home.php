@@ -27,6 +27,13 @@ class Home extends Block
     protected $extensionManager = '.setup-home-item-extension';
 
     /**
+     * Module management button.
+     *
+     * @var string
+     */
+    protected $moduleManagement = ".setup-home-item-component";
+
+    /**
      * Click on 'System Upgrade' button.
      *
      * @return void
@@ -44,5 +51,15 @@ class Home extends Block
     public function clickExtensionManager()
     {
         $this->_rootElement->find($this->extensionManager, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Click on Modules section.
+     *
+     * @return void
+     */
+    public function clickModules()
+    {
+        $this->_rootElement->find($this->moduleManagement, Locator::SELECTOR_CSS)->click();
     }
 }
