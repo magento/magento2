@@ -11,7 +11,7 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 /**
  * Class AssertGrid
  *
- * Checks whether Module is in grids.
+ * Checks whether Module presents in the grid.
  */
 class AssertModuleInGrid extends AbstractConstraint
 {
@@ -31,7 +31,9 @@ class AssertModuleInGrid extends AbstractConstraint
     }
 
     /**
-     * {@inheritdoc}
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {
