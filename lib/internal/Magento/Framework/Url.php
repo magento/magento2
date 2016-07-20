@@ -1174,7 +1174,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     /**
      * Get escaper
      *
-     * @param void
      * @return Escaper
      * @deprecated
      */
