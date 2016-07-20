@@ -68,7 +68,7 @@ class Config implements ConfigInterface
     public function getConsumers()
     {
         $consumerConfigItems = [];
-        foreach ($this->configData as $consumerName => $consumerData) {
+        foreach ($this->configData->get() as $consumerName => $consumerData) {
             $consumerConfigItems[$consumerName] = $this->createConsumerConfigItem($consumerData);
         }
         return $consumerConfigItems;

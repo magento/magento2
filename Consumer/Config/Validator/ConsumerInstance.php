@@ -33,6 +33,16 @@ class ConsumerInstance implements ValidatorInterface
     private function validateConsumerInstance($consumerConfig)
     {
         $consumerInstance = $consumerConfig['consumerInstance'];
+        if (!class_exists($consumerInstance)) {
+            throw new \LogicException(
+                sprintf(
+                    "'%s' does not exist and thus cannot be used as 'consumerInstance' for '%s' consumer.",
+                    $consumerInstance,
+                    $consumerConfig['name'],
+                    ConsumerInterface::class
+                )
+            );
+        }
         $implementedInterfaces = class_implements($consumerInstance);
         if (!in_array(ConsumerInterface::class, $implementedInterfaces)) {
             throw new \LogicException(

@@ -10,7 +10,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 /**
  * Consumer config data validator for fields types.
  */
-class FieldTypes implements ValidatorInterface
+class FieldsTypes implements ValidatorInterface
 {
     /**
      * {@inheritdoc}
