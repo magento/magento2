@@ -1,0 +1,162 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Sales\Model;
+
+use Magento\Sales\Api\Data;
+use Magento\Sales\Api\InvoiceCaptureInterface;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\InvoiceBuilderInterface;
+use Magento\Sales\Model\Order\InvoiceValidatorInterface;
+use Magento\Sales\Model\Order\PaymentAdapterInterface;
+use Magento\Sales\Model\Order\OrderStatisticInterface;
+use Magento\Sales\Model\Order\StateCheckerInterface;
+use Magento\Sales\Model\Order\InvoiceNotifierInterface;
+use Magento\Sales\Model\Order\Config;
+use Magento\Framework\App\ResourceConnection;
+
+
+class InvoiceCapture implements InvoiceCaptureInterface
+{
+    /**
+     * @var InvoiceBuilderInterface
+     */
+    private $invoiceBuilder;
+
+    /**
+     * @var InvoiceValidatorInterface
+     */
+    private $invoiceValidator;
+
+    /**
+     * @var PaymentAdapterInterface
+     */
+    private $paymentAdapter;
+
+    /**
+     * @var OrderStatisticInterface
+     */
+    private $orderStatistic;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
+     * @var StateCheckerInterface
+     */
+    private $stateChecker;
+
+    /**
+     * @var InvoiceNotifierInterface
+     */
+    private $invoiceNotifier;
+
+    /**
+     * @var Config
+     */
+    private $config;
+
+    /**
+     * InvoiceCapture constructor.
+     *
+     * @param InvoiceBuilderInterface $invoiceBuilder
+     * @param InvoiceValidatorInterface $invoiceValidator
+     * @param PaymentAdapterInterface $paymentAdapter
+     * @param OrderStatisticInterface $orderStatistic
+     * @param OrderRepositoryInterface $orderRepository
+     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param StateCheckerInterface $stateChecker
+     * @param InvoiceNotifierInterface $invoiceNotifier
+     * @param Config $config
+     */
+    public function __construct(
+        InvoiceBuilderInterface $invoiceBuilder,
+        InvoiceValidatorInterface $invoiceValidator,
+        PaymentAdapterInterface $paymentAdapter,
+        OrderStatisticInterface $orderStatistic,
+        OrderRepositoryInterface $orderRepository,
+        InvoiceRepositoryInterface $invoiceRepository,
+        StateCheckerInterface $stateChecker,
+        InvoiceNotifierInterface $invoiceNotifier,
+        Config $config
+    ) {
+        $this->invoiceBuilder = $invoiceBuilder;
+        $this->invoiceValidator = $invoiceValidator;
+        $this->paymentAdapter = $paymentAdapter;
+        $this->orderStatistic = $orderStatistic;
+        $this->orderRepository = $orderRepository;
+        $this->invoiceRepository = $invoiceRepository;
+        $this->stateChecker = $stateChecker;
+        $this->invoiceNotifier = $invoiceNotifier;
+        $this->config = $config;
+
+    }
+
+    /**
+     * @param int $orderId
+     * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
+     * @param bool|false $notify
+     * @param Data\InvoiceCommentBaseInterface|null $comment
+     * @param Data\InvoiceCreationArgumentsInterface|null $arguments
+     * @return int
+     */
+    public function captureOffline(
+        $orderId,
+        array $items = [],
+        $notify = false,
+        \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
+        \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
+    )
+    {
+        $order = $this->orderRepository->get($orderId);
+        $this->invoiceBuilder->setOrder($order);
+        $this->invoiceBuilder->setItems($items);
+        $this->invoiceBuilder->setComment($comment);
+        $this->invoiceBuilder->setCreationArguments($arguments);
+        $invoice = $this->invoiceBuilder->create();
+        $errorMessages = $this->invoiceValidator->validate($invoice, $order);
+        if (!empty($errorMessages)) {
+//            throw new SalesDocumentValidationException($messages);
+        }
+        $order = $this->paymentAdapter->captureOffline($order, $invoice);
+        $order = $this->orderStatistic->calculateInvoice($order, $invoice);
+        $order->setState($this->stateChecker->getStateForOrder($order, [StateCheckerInterface::PROCESSING]));
+        $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+        $invoice->setState($this->paymentAdapter->getPaidState());
+        $this->invoiceRepository->save($invoice);
+        $this->orderRepository->save($order);
+        if ($notify) {
+            $this->invoiceNotifier->notify($order, $invoice, $comment);
+        }
+    }
+
+    /**
+     * @param int $orderId
+     * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
+     * @param bool|false $notify
+     * @param Data\InvoiceCommentBaseInterface|null $comment
+     * @param Data\InvoiceCreationArgumentsInterface|null $arguments
+     * @return int
+     */
+    public function captureOnline(
+        $orderId,
+        array $items = [],
+        $notify = false,
+        \Magento\Sales\Api\Data\InvoiceCommentBaseInterface $comment = null,
+        \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
+    )
+    {
+        // TODO: Implement captureOnline() method.
+    }
+}
