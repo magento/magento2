@@ -10,7 +10,7 @@ use Magento\Framework\Phrase;
 /**
  * Composite reader for publisher config.
  */
-class Reader implements ReaderInterface
+class ReaderComposite implements ReaderInterface
 {
     /**
      * Config validator.
