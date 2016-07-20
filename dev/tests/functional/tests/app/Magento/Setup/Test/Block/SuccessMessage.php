@@ -15,6 +15,8 @@ use Magento\Mtf\Client\Locator;
 class SuccessMessage extends Block
 {
     /**
+     * Success message block class.
+     *
      * @var string
      */
     protected $successMessage = 'content-success';
