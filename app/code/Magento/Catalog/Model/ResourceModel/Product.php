@@ -370,9 +370,9 @@ class Product extends AbstractResource
         }
 
         $object->setIsChangedCategories(false);
-
-        if (!empty($insert) || !empty($delete)) {
-            $object->setAffectedCategoryIds(array_merge($insert, $delete));
+        $affectedCategoryIds = $this->getProductCategoryLink()->saveCategoryLinks($object, $object->getCategoryIds());
+        if (!empty($affectedCategoryIds)) {
+            $object->setAffectedCategoryIds($affectedCategoryIds);
             $object->setIsChangedCategories(true);
         }
 

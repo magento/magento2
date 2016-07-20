@@ -53,8 +53,11 @@ class CategoryLink
     }
 
     /**
+     * Save product category links and return affected category_ids
+     *
      * @param ProductInterface $product
      * @param array $categoryIds
+     * @return array
      */
     public function saveCategoryLinks(ProductInterface $product, array $categoryIds = [])
     {
@@ -102,6 +105,11 @@ class CategoryLink
                 $connection->delete($this->getCategoryLinkMetadata()->getEntityTable(), $where);
             }
         }
+        $result =  array_map(function($value) {
+            return isset($value['category_id']) ? $value['category_id'] : null;
+        }, array_merge($insert, $delete));
+
+        return $result;
     }
 
     /**
