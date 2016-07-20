@@ -29,8 +29,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $publishers = $config->getPublishers();
         $publisher = $config->getPublisher('topic.message.queue.config.01');
+        $itemFromList = null;
+        foreach ($publishers as $item) {
+            if ($item->getTopic() == 'topic.message.queue.config.01') {
+                $itemFromList = $item;
+                break;
+            }
+        }
 
-        $this->assertEquals($publisher, $publishers['topic.message.queue.config.01'], 'Inconsistent publisher object');
+        $this->assertEquals($publisher, $itemFromList, 'Inconsistent publisher object');
 
         $this->assertEquals('topic.message.queue.config.01', $publisher->getTopic(), 'Incorrect topic name');
         $this->assertFalse($publisher->isDisabled(), 'Incorrect publisher state');
