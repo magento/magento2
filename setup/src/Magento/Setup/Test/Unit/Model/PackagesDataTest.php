@@ -90,7 +90,8 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
             ->method('readFile')
             ->willReturn(
                 '{"packages":{"magento\/package-1":{'
-                . '"1.0.0":{"name":"magento\/package-1","version":"1.0.0","vendor":"test","type":"magento2-module"},'
+                . '"1.0.0":{"name":"magento\/package-1","version":"1.0.0","vendor":"test","type":"metapackage",'
+                . '"require":{"magento\/package-3":"1.0.0"}},'
                 . '"1.0.1":{"name":"magento\/package-1","version":"1.0.1","vendor":"test","type":"magento2-module"},'
                 . '"1.0.2":{"name":"magento\/package-1","version":"1.0.2","vendor":"test","type":"magento2-module"}'
                 . '}, "magento\/package-2":{'
@@ -143,5 +144,13 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($installedPackages));
         $this->assertArrayHasKey('magento/package-1', $installedPackages);
         $this->assertArrayHasKey('magento/package-2', $installedPackages);
+    }
+
+    public function testGetMetaPackagesMap()
+    {
+        static::assertEquals(
+            ['magento/package-3' => 'magento/package-1'],
+            $this->packagesData->getMetaPackagesMap()
+        );
     }
 }
