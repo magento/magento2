@@ -16,8 +16,9 @@ interface ConfigInterface
     /**
      * Get consumer configuration by consumer name.
      *
-     * @param string
+     * @param string $name
      * @return ConsumerConfigItemInterface
+     *
      * @throws LocalizedException
      */
     public function getConsumer($name);

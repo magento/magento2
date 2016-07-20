@@ -53,12 +53,4 @@ interface ConsumerConfigItemInterface
      * @return int
      */
     public function getMaxMessages();
-
-    /**
-     * Set item data.
-     *
-     * @param array $data
-     * @return void
-     */
-    public function setData(array $data);
 }

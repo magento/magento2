@@ -10,4 +10,5 @@ namespace Magento\Framework\MessageQueue\Consumer\Config;
  */
 interface ReaderInterface extends \Magento\Framework\Config\ReaderInterface
 {
+
 }

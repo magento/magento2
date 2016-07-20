@@ -15,7 +15,14 @@ use Magento\Framework\Communication\Config\ConfigParser;
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @var string
+     */
     private static $defaultConnection = 'amqp';
+
+    /**
+     * @var string
+     */
     private static $defaultInstance = ConsumerInterface::class;
 
     /**
@@ -28,9 +35,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @param ConfigParser $configParser
      */
-    public function __construct(
-        ConfigParser $configParser
-    ) {
+    public function __construct(ConfigParser $configParser)
+    {
         $this->configParser = $configParser;
     }
 

@@ -54,7 +54,7 @@ class FieldsTypes implements ValidatorInterface
                 );
             }
         }
-        if (!is_null($consumerConfig['maxMessages']) && !is_numeric($consumerConfig['maxMessages'])) {
+        if (null !== $consumerConfig['maxMessages'] && !is_numeric($consumerConfig['maxMessages'])) {
             throw new \LogicException(
                 sprintf(
                     "Type of 'maxMessages' field specified in configuration of '%s' consumer is invalid. "
