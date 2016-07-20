@@ -63,7 +63,7 @@ main.controller('navigationController',
 
         $scope.goToState = function (stateId) {
             $state.go(stateId)
-        }
+        };
 
         $scope.state = $state;
 
@@ -91,7 +91,7 @@ main.controller('navigationController',
 
         $scope.endsWith = function(str, suffix) {
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
-        }
+        };
 
         $scope.goToStart = function() {
             if ($state.current.type === 'install') {
@@ -103,7 +103,7 @@ main.controller('navigationController',
             } else {
                 $state.go('root.module');
             }
-        }
+        };
 
         $scope.goToBackup = function() {
             $state.go('root.create-backup-uninstall');

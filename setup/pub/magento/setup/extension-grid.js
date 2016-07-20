@@ -10,16 +10,15 @@ angular.module('extension-grid', ['ngStorage'])
         function ($rootScope, $scope, $http, $localStorage, $state) {
             $rootScope.extensionsProcessed = false;
             $scope.syncError = false;
-            $rootScope.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
+            $rootScope.isMarketplaceAuthorized = typeof $rootScope.isMarketplaceAuthorized !== 'undefined' ? $rootScope.isMarketplaceAuthorized : false;
 
             $scope.auth = function () {
-                $state.go('root.extension-auth');
+                if ($rootScope.isMarketplaceAuthorized == false) {
+                    $state.go('root.extension-auth');
+                }
             };
 
-            if ($rootScope.isMarketplaceAuthorized == false) {
-                $scope.auth();
-            }
-
+            $scope.auth();
             $http.get('index.php/extensionGrid/extensions').success(function (data) {
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
