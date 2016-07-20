@@ -40,7 +40,7 @@ class Write extends Read implements WriteInterface
     }
 
     /**
-     * Check if directory is writable
+     * Check if directory or file is writable
      *
      * @param string $path
      * @return void
@@ -49,7 +49,9 @@ class Write extends Read implements WriteInterface
     protected function assertWritable($path)
     {
         if ($this->isWritable($path) === false) {
-            $path = $this->getAbsolutePath($this->path, $path);
+            $path = (!$this->driver->isFile($path))
+                ? $this->getAbsolutePath($this->path, $path)
+                : $this->getAbsolutePath($path);
             throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable', [$path]));
         }
     }
@@ -249,12 +251,7 @@ class Write extends Read implements WriteInterface
         if (!$this->isExist($path)) {
             $this->assertWritable($folder);
         } else {
-            if (!$this->isWritable($path)) {
-                throw new FileSystemException(new \Magento\Framework\Phrase(
-                    'The path "%1" is not writable',
-                    [$this->getAbsolutePath($path)]
-                ));
-            }
+            $this->assertWritable($path);
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         return $this->fileFactory->create($absolutePath, $this->driver, $mode);
