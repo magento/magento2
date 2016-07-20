@@ -99,7 +99,7 @@ class CompositeReader implements ReaderInterface
 
         foreach ($config as $key => &$value) {
             if (!isset($value['connections']) || empty($value['connections'])) {
-                $value['connections'] = [$default];
+                $value['connections']['amqp'] = $default;
                 continue;
             }
 

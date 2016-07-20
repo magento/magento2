@@ -38,6 +38,10 @@ class ActiveConnectionTest extends \PHPUnit_Framework_TestCase
                 'connections' => [
                     'con01' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => true],
                 ]
+            ],
+            'pub03' => [
+                'topic' => 'pub02',
+                'disabled' => false,
             ]
         ];
         $this->model->validate($configData);
