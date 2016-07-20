@@ -55,7 +55,7 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $logger;
+    private $logger;
 
     /**
      * Setup
@@ -101,8 +101,6 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setDeployment'])
             ->getMock();
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
-            ->getMock();
 
         $this->cronEventFactory->expects($this->any())
             ->method('create')
@@ -110,6 +108,7 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
         $this->deploymentsFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->deploymentsModel);
+        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
 
         $this->model = new ReportNewRelicCron(
             $this->config,
@@ -195,7 +194,7 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
     /**
      * Test case when module is enabled and request is failed
      *
-     * @return void
+     * @expectedException \Exception
      */
     public function testReportNewRelicCronRequestFailed()
     {
@@ -237,17 +236,12 @@ class ReportNewRelicCronTest extends \PHPUnit_Framework_TestCase
         $this->cronEventModel->expects($this->once())
             ->method('sendRequest');
 
-        $this->cronEventModel->expects($this->once())->method('sendRequest')->willThrowException(
-            new \Exception()
-        );
-        $this->logger->expects($this->once())->method('critical');
+        $this->cronEventModel->expects($this->once())->method('sendRequest')->willThrowException(new \Exception());
+        $this->logger->expects($this->never())->method('critical');
 
         $this->deploymentsModel->expects($this->any())
             ->method('setDeployment');
 
-        $this->assertSame(
-            $this->model,
-            $this->model->report()
-        );
+        $this->model->report();
     }
 }

@@ -270,7 +270,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'File with compilation error results in error message' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/file-with-error.css"',
-                \Magento\Framework\View\Asset\ContentProcessorInterface::ERROR_MESSAGE_PREFIX,
+                'variable @non-existent-variable is undefined',
             ],
         ];
     }
@@ -356,7 +356,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'Developer mode - File with compilation error results in error message' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                \Magento\Framework\View\Asset\ContentProcessorInterface::ERROR_MESSAGE_PREFIX,
+                'CSS inlining error:',
                 false,
             ],
         ];
