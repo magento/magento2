@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+	<publisher topic="topic.message.queue.config.01">
+		<connection name="amqp1" exchange="magento2" />
+		<connection name="amqp2" exchange="magento2" disabled="true" />
+		<connection name="amqp3" exchange="magento3" disabled="true" />
+	</publisher>
+	<publisher topic="topic.message.queue.config.02">
+		<connection name="amqp1" exchange="magento2" disabled="true"/>
+		<connection name="amqp2" exchange="magento2" disabled="true" />
+	</publisher>
+	<publisher topic="topic.message.queue.config.03" disabled="true" />
+</config>
