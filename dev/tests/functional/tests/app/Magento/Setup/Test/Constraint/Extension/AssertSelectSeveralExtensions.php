@@ -11,12 +11,12 @@ use Magento\Setup\Test\Block\Extension\InstallGrid;
 use Magento\Setup\Test\Fixture\Extension;
 
 /**
- * Check that several extensions was selected on the grid.
+ * Check that several extensions were selected on the grid.
  */
 class AssertSelectSeveralExtensions extends AbstractConstraint
 {
     /**
-     * Assert that extensions was selected on the grid.
+     * Assert that extensions were selected on the grid.
      *
      * @param InstallGrid $grid
      * @param Extension[] $extensions

@@ -31,6 +31,13 @@ class Authentication extends Form
     protected $firstField = '[name="username"]';
 
     /**
+     * Popup Loading.
+     *
+     * @var string
+     */
+    protected $popupLoading = '.popup popup-loading';
+
+    /**
      * Click on 'Save Config' button.
      *
      * @return void
@@ -38,6 +45,7 @@ class Authentication extends Form
     public function clickSaveConfig()
     {
         $this->_rootElement->find($this->save, Locator::SELECTOR_CSS)->click();
+        $this->waitForElementNotVisible($this->popupLoading);
     }
 
     /**
