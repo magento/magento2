@@ -63,17 +63,6 @@ class AssertWidgetCatalogNewProductsList extends AbstractConstraint
             $catalogCategoryView->getWidgetView()->isWidgetVisible($widget, 'New Products'),
             'Widget is absent on Category page.'
         );
-        $this->checkCatalogNewProductsListBlockOnCategory($products);
-    }
-
-    /**
-     * Check that block Catalog New Products List contains products on category page.
-     *
-     * @param array $products
-     * @return void
-     */
-    protected function checkCatalogNewProductsListBlockOnCategory(array $products)
-    {
         \PHPUnit_Framework_Assert::assertEquals(
             $products,
             $this->catalogCategoryView->getViewBlock()->getProductsFromCatalogNewProductsListBlock(),
