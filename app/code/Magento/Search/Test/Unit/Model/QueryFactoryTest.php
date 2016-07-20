@@ -333,7 +333,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $cleanedRawText
-     * @param void
+     * @return void
      */
     private function mockSetQueryTextOnceExecute($cleanedRawText)
     {
