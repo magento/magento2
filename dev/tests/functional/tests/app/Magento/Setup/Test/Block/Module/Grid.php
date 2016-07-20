@@ -7,6 +7,7 @@ namespace Magento\Setup\Test\Block\Module;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\ElementInterface;
 
 /**
  * Class Grid
@@ -88,7 +89,7 @@ class Grid extends Block
      * Find module by it's name.
      *
      * @param string $name
-     * @return \Magento\Mtf\Client\ElementInterface
+     * @return ElementInterface
      */
     public function findModuleByName($name)
     {
@@ -107,7 +108,7 @@ class Grid extends Block
      * Retrieve module by it's name.
      *
      * @param string $name
-     * @return \Magento\Mtf\Client\ElementInterface
+     * @return ElementInterface
      */
     private function getModuleByName($name)
     {
