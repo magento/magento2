@@ -21,19 +21,21 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
  * Steps:
  * 1. Open Backend.
  * 2. Go to System > Web Setup Wizard.
- * 3. Click "Component Manager" button.
- * 4. Find appropriate Module in the Grid.
- * 5. Click Select > Disable module.
- * 6. Perform Readiness Checks.
- * 7. Perform DB Backup.
- * 8. Disable Module.
+ * 3. Click "Module Manager" button.
+ * 4. Find Module in the Grid and click Select > Disable module.
+ * 5. Perform Readiness Checks.
+ * 6. Perform DB Backup.
+ * 7. Click "Disable" button.
+ * 8. Check for Success message
  * 9. Return to "Web Setup Wizard".
- * 10. Click "Component Manager" button.
+ * 10. Click "Module Manager" button.
  * 11. Find appropriate Module in the Grid.
- * 12. Click Select > Enable module.
+ * 12. Find Module in the Grid and click Select > Enable module.
  * 13. Perform Readiness Checks.
  * 14. Perform DB Backup.
- * 15. Enable Module.
+ * 15. Click "Enable" button.
+ * 16. Check for Success message
+ * 17. Return to "Web Setup Wizard".
  *
  * @group Setup_(CS)
  * @ZephyrId MAGETWO-43202
@@ -41,11 +43,15 @@ use Magento\Setup\Test\Page\Adminhtml\SetupWizard;
 class EnableDisableModuleTest extends Injectable
 {
     /**
+     * Dashboard page.
+     *
      * @var Dashboard
      */
     private $adminDashboard;
 
     /**
+     * Web Setup Wizard page.
+     *
      * @var SetupWizard
      */
     private $setupWizard;
@@ -78,68 +84,68 @@ class EnableDisableModuleTest extends Injectable
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertSuccessMessage $assertSuccessMessage
     ) {
-        // Authenticate in admin area
+        // Open Backend
         $this->adminDashboard->open();
 
-        // Open Web Setup Wizard
+        // Go to System > Web Setup Wizard
         $this->setupWizard->open();
 
-        // Open Modules page
-        $this->setupWizard->getSetupHome()->clickModules();
+        // Click "Module Manager" button
+        $this->setupWizard->getSetupHome()->clickModuleManager();
 
-        // Search for module
+        // Find appropriate Module in the grid
         $assertModuleInGrid->processAssert($this->setupWizard, $module->getModuleName());
 
         if (!$this->setupWizard->getModuleGrid()->isModuleEnabled($module->getModuleName())) {
             $this->fail('Module is already disabled.');
         }
 
-        // Find and disable Module in the Grid.
+        // Find Module in the Grid and click Select > Disable module
         $this->setupWizard->getModuleGrid()->disableModule($module->getModuleName());
 
-        // Readiness Check
+        // Perform Readiness Checks
         $this->setupWizard->getReadiness()->clickReadinessCheck();
         $assertReadiness->processAssert($this->setupWizard);
         $this->setupWizard->getReadiness()->clickNext();
 
-        // Create Backup page
+        // Perform DB Backup
         $this->setupWizard->getCreateBackup()->fill($backupOptions);
         $this->setupWizard->getCreateBackup()->clickNext();
 
-        // Disable Module
+        // Click "Disable" button
         $this->setupWizard->getModuleStatus()->clickDisable();
 
-        // Assert for Success message
+        // Check for Success message
         $assertSuccessMessage->processAssert($this->setupWizard);
 
-        // Return to Setup Tool
+        // Return to "Web Setup Wizard"
         $this->setupWizard->getSuccessMessage()->clickBackToSetup();
 
-        // Open Modules page
-        $this->setupWizard->getSetupHome()->clickModules();
+        // Click "Module Manager" button
+        $this->setupWizard->getSetupHome()->clickModuleManager();
 
-        // Search for Module
+        // Find appropriate Module in the Grid
         $assertModuleInGrid->processAssert($this->setupWizard, $module->getModuleName());
 
-        // Find and enable Module in the Grid.
+        // Find Module in the Grid and click Select > Enable module
         $this->setupWizard->getModuleGrid()->enableModule($module->getModuleName());
 
-        // Readiness Check
+        // Perform Readiness Checks
         $this->setupWizard->getReadiness()->clickReadinessCheck();
         $assertReadiness->processAssert($this->setupWizard);
         $this->setupWizard->getReadiness()->clickNext();
 
-        // Create Backup page
+        // Perform DB Backup
         $this->setupWizard->getCreateBackup()->fill($backupOptions);
         $this->setupWizard->getCreateBackup()->clickNext();
 
-        // Enable Module
+        // Click "Enable" button
         $this->setupWizard->getModuleStatus()->clickEnable();
 
-        // Assert for Success message
+        // Check for Success message
         $assertSuccessMessage->processAssert($this->setupWizard);
 
-        // Return to Setup Tool
+        // Return to "Web Setup Wizard"
         $this->setupWizard->getSuccessMessage()->clickBackToSetup();
     }
 }
