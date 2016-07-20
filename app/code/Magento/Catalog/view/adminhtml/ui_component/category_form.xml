@@ -185,6 +185,7 @@
                     </item>
                     <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="source" xsi:type="string">category</item>
+                    <item name="label" xsi:type="string" translate="true">Description</item>
                     <item name="wysiwyg" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="string">description</item>
                     <item name="sortOrder" xsi:type="number">50</item>
@@ -217,6 +218,7 @@
                     <item name="sortOrder" xsi:type="number">70</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Display Mode</item>
                 </item>
             </argument>
         </field>
@@ -244,7 +246,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="sortOrder" xsi:type="number">90</item>
-                    <item name="label" xsi:type="string" translate="true">Sort Products By</item>
                 </item>
             </argument>
             <field name="available_sort_by">
@@ -253,6 +254,7 @@
                         <item name="additionalClasses" xsi:type="string">admin__field-default</item>
                         <item name="formElement" xsi:type="string">multiselect</item>
                         <item name="source" xsi:type="string">category</item>
+                        <item name="label" xsi:type="string" translate="true">Available Product Listing Sort By</item>
                     </item>
                 </argument>
             </field>
@@ -279,7 +281,6 @@
                 <item name="config" xsi:type="array">
                     <item name="breakLine" xsi:type="boolean">true</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">Default Product Sorting</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                 </item>
@@ -290,6 +291,7 @@
                         <item name="additionalClasses" xsi:type="string">admin__field-default</item>
                         <item name="formElement" xsi:type="string">select</item>
                         <item name="source" xsi:type="string">category</item>
+                        <item name="label" xsi:type="string" translate="true">Default Product Listing Sort By</item>
                     </item>
                 </argument>
             </field>
@@ -316,7 +318,6 @@
                 <item name="config" xsi:type="array">
                     <item name="breakLine" xsi:type="boolean">true</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">Layered Navigation Price Step</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="sortOrder" xsi:type="number">110</item>
                 </item>
@@ -327,6 +328,7 @@
                         <item name="additionalClasses" xsi:type="string">admin__field-small</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="source" xsi:type="string">category</item>
+                        <item name="label" xsi:type="string" translate="true">Layered Navigation Price Step</item>
                         <item name="addbefore" xsi:type="string">$</item>
                     </item>
                 </argument>
@@ -362,7 +364,6 @@
                 <item name="type" xsi:type="string">group</item>
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
-                    <item name="label" xsi:type="string" translate="true">URL Key</item>
                     <item name="required" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">120</item>
                 </item>
@@ -372,6 +373,7 @@
                     <item name="config" xsi:type="array">
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="source" xsi:type="string">category</item>
+                        <item name="label" xsi:type="string" translate="true">URL Key</item>
                         <item name="sortOrder" xsi:type="number">10</item>
                         <item name="imports" xsi:type="array">
                             <item name="disabled" xsi:type="string">${ $.provider }:data.use_default.url_key</item>
