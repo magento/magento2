@@ -32,17 +32,13 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     private $disabled;
 
     /**
-     * Initialize data.
+     * Initialize dependencies.
      *
-     * @param string $topic
-     * @param PublisherConnectionInterface $connection
-     * @param bool $disabled
+     * @param PublisherConnectionFactory $connectionFactory
      */
-    public function __construct($topic, $connection, $disabled)
+    public function __construct(PublisherConnectionFactory $connectionFactory)
     {
-        $this->topic = $topic;
-        $this->connection = $connection;
-        $this->disabled = $disabled;
+        $this->connection = $connectionFactory->create();
     }
 
     /**
@@ -67,5 +63,15 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setData(array $data)
+    {
+        $this->topic = $data['topic'];
+        $this->disabled = $data['disabled'];
+        $this->connection->setData($data['connection']);
     }
 }

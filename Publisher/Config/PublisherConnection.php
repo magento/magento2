@@ -32,20 +32,6 @@ class PublisherConnection implements PublisherConnectionInterface
     private $disabled;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param string $name
-     * @param string $exchange
-     * @param bool $disabled
-     */
-    public function __construct($name, $exchange, $disabled)
-    {
-        $this->name = $name;
-        $this->exchange = $exchange;
-        $this->disabled = $disabled;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getName()
@@ -67,5 +53,15 @@ class PublisherConnection implements PublisherConnectionInterface
     public function isDisabled()
     {
         return $this->disabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setData(array $data)
+    {
+        $this->name = $data['name'];
+        $this->exchange = $data['exchange'];
+        $this->disabled = $data['disabled'];
     }
 }

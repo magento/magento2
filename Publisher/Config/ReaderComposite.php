@@ -63,6 +63,25 @@ class ReaderComposite implements ReaderInterface
             $result = array_replace_recursive($result, $reader->read($scope));
         }
         $this->validator->validate($result);
+
+        foreach ($result as $key => $value) {
+            /** Set default connection */
+            $connection = [
+                'name' => 'amqp',
+                'exchange' => 'magento',
+                'disabled' => false,
+            ];
+            /** Find enabled connection */
+            foreach ($value['connections'] as $connectionConfig) {
+                if (!$connectionConfig['disabled']) {
+                    $connection = $connectionConfig;
+                    break;
+                }
+            }
+            $value['connection'] = $connection;
+            unset($result[$key]['connections']);
+            $result[$key] = $value;
+        }
         return $result;
     }
 
