@@ -10,6 +10,7 @@
         <arguments>
             <argument name="configProviders" xsi:type="array">
                 <item name="braintree_config_provider" xsi:type="object">Magento\Braintree\Model\Ui\ConfigProvider</item>
+                <item name="braintree_paypal_config_provider" xsi:type="object">Magento\Braintree\Model\Ui\PayPal\ConfigProvider</item>
             </argument>
         </arguments>
     </type>
@@ -32,6 +33,7 @@
         <arguments>
             <argument name="tokenUiComponentProviders" xsi:type="array">
                 <item name="braintree" xsi:type="object">Magento\Braintree\Model\Ui\TokenUiComponentProvider</item>
+                <item name="braintree_paypal" xsi:type="object">Magento\Braintree\Model\Ui\PayPal\TokenUiComponentProvider</item>
             </argument>
         </arguments>
     </type>
