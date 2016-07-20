@@ -23,12 +23,4 @@ interface HandlerInterface
      * @return string
      */
     public function getMethod();
-
-    /**
-     * Set item data.
-     *
-     * @param array $data
-     * @return void
-     */
-    public function setData(array $data);
 }

@@ -66,7 +66,7 @@ class Iterator implements \Iterator, \ArrayAccess
     }
 
     /**
-     * Initialize Flyweight object.
+     * Initialize object.
      *
      * @param array $data
      * @return void

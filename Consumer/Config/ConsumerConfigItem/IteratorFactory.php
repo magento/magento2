@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
 
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Iterator;
-
 /**
  * Factory class for @see Iterator
  */

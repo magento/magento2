@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler;
 
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterface;
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerInterfaceFactory;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Handler;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\HandlerFactory;
 
 /**
  * Consumer handler config iterator.
@@ -16,9 +16,9 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * Consumer config handler item.
      *
-     * @var HandlerInterface
+     * @var Handler
      */
-    private $flyweight;
+    private $object;
 
     /**
      * Config data.
@@ -30,11 +30,11 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * Initialize dependencies.
      *
-     * @param HandlerInterfaceFactory $itemFactory
+     * @param HandlerFactory $itemFactory
      */
-    public function __construct(HandlerInterfaceFactory $itemFactory)
+    public function __construct(HandlerFactory $itemFactory)
     {
-        $this->flyweight = $itemFactory->create();
+        $this->object = $itemFactory->create();
     }
 
     /**
@@ -50,11 +50,11 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * Get current item.
      *
-     * @return HandlerInterface
+     * @return Handler
      */
     public function current()
     {
-        return $this->flyweight;
+        return $this->object;
     }
 
     /**
@@ -64,19 +64,19 @@ class Iterator implements \Iterator, \ArrayAccess
     {
         next($this->data);
         if (current($this->data)) {
-            $this->initFlyweight(current($this->data));
+            $this->initObject(current($this->data));
         }
     }
 
     /**
-     * Initialize flyweight object.
+     * Initialize object.
      *
      * @param array $data
      * @return void
      */
-    private function initFlyweight(array $data)
+    private function initObject(array $data)
     {
-        $this->flyweight->setData($data);
+        $this->object->setData($data);
     }
 
     /**
@@ -102,7 +102,7 @@ class Iterator implements \Iterator, \ArrayAccess
     {
         reset($this->data);
         if (current($this->data)) {
-            $this->initFlyweight(current($this->data));
+            $this->initObject(current($this->data));
         }
     }
 
@@ -122,7 +122,7 @@ class Iterator implements \Iterator, \ArrayAccess
         if (!$this->offsetExists($offset)) {
             return null;
         }
-        $item = clone $this->flyweight;
+        $item = clone $this->object;
         $item->setData($this->data[$offset]);
         return $item;
     }
