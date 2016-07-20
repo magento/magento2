@@ -6,6 +6,8 @@
 namespace Magento\Backend\Test\Unit\App\Action\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Backend\App\AbstractAction;
+use Magento\Framework\App\RequestInterface;
 
 class MassactionKeyTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,17 +17,12 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     protected $plugin;
 
     /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|RequestInterface
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|AbstractAction
      */
     protected $subjectMock;
 
@@ -35,14 +32,15 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
             return 'Expected';
         };
         $this->subjectMock = $this->getMock('Magento\Backend\App\AbstractAction', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->requestMock = $this->getMockForAbstractClass(
+        	RequestInterface::class, [], '', false, false, true, ['getPost', 'setPostValue']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->plugin = $objectManager->getObject(
             'Magento\Backend\App\Action\Plugin\MassactionKey',
             [
                 'subject' => $this->subjectMock,
-                'closure' => $this->closureMock,
                 'request' => $this->requestMock,
             ]
         );
@@ -70,8 +68,8 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
             ->with('key', $convertedData);
 
         $this->assertEquals(
-            'Expected',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            [$this->requestMock],
+            $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
 
@@ -96,8 +94,8 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
             ->method('setPostValue');
 
         $this->assertEquals(
-            'Expected',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+            [$this->requestMock],
+            $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
 }
