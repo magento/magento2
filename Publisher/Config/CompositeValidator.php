@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\Publisher\Config;
 /**
  * Publisher config data validator.
  */
-class ValidatorComposite implements ValidatorInterface
+class CompositeValidator implements ValidatorInterface
 {
     /**
      * Config validator list.
