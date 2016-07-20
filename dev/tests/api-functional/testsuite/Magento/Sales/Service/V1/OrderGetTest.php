@@ -83,8 +83,8 @@ class OrderGetTest extends WebapiAbstract
         }
 
         //check that nullable fields were marked as optional and were not sent
-        foreach ($result as $value) {
-            $this->assertNotNull($value);
+        foreach ($result as $key => $value) {
+            $this->assertNotNull($value, 'Failed asserting that "' . $key . '" field is not null.');
         }
     }
 }
