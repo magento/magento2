@@ -8,8 +8,9 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Website;
 
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
+use Magento\Catalog\Model\Product\Website\SaveHandler;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Website\ReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -23,7 +24,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
     private $storeManager;
 
-    /** @var  Product\Website\SaveHandler */
+    /** @var SaveHandler */
     private $saveHandler;
 
     /** @var  ProductInterface | \PHPUnit_Framework_MockObject_MockObject */
@@ -31,12 +32,12 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->productWebsiteLink = $this->getMockBuilder(ResourceModel\Website\Link::class)
+        $this->productWebsiteLink = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMock(StoreManagerInterface::class);
         $this->product = $this->getMock(ProductInterface::class);
-        $this->saveHandler = new Product\Website\SaveHandler($this->productWebsiteLink, $this->storeManager);
+        $this->saveHandler = new SaveHandler($this->productWebsiteLink, $this->storeManager);
     }
 
     public function testWithMultipleStoreMode()
