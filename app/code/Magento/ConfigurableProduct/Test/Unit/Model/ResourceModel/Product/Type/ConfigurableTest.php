@@ -80,6 +80,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             [
                 'resource' => $this->resource,
                 'catalogProductRelation' => $this->relation,
+                'scopeResolver' => $this->getMockForAbstractClass(\Magento\Framework\App\ScopeResolverInterface::class)
             ]
         );
         $reflection = new \ReflectionClass(
@@ -89,6 +90,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->configurable, $this->metadataPoolMock);
     }
+
     public function testSaveProducts()
     {
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $mainProduct */
@@ -104,9 +106,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ->method('getData')
                 ->with('link')
                 ->willReturn(3);
-            
-            $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(false));
-
 
         $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
 
@@ -117,19 +116,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $statement  = $this->getMockBuilder(\Zend_Db_Statement::class)->disableOriginalConstructor()->getMock();
         $select->method('query')->willReturn($statement);
         $statement->method('fetchAll')->willReturn([1]);
-
-        $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
-    }
-
-    public function testSaveProductsForDuplicate()
-    {
-        $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
-        $mainProduct->expects($this->never())->method('getTypeInstance')->will($this->returnSelf());
 
         $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
     }
@@ -162,11 +148,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var Configurable|\PHPUnit_Framework_MockObject_MockObject $configurable */
-        $configurable = $this->getMockBuilder(Configurable::class)
-            ->setMethods(['getTable', 'getConnection'])
-            ->setConstructorArgs([$context, $this->relation])
-            ->getMock();
+
         $reflection = new \ReflectionClass(Configurable::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
@@ -328,8 +310,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     'getAttributeId value'
                 ]
             );
-        $readerAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-
 
         $readerAdapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods([
@@ -345,7 +325,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('fetchAll')
             ->with($select)
             ->willReturn('fetchAll value');
-        $configurable->expects($this->exactly(2))
 
         $configurable->expects($this->any())
             ->method('getConnection')

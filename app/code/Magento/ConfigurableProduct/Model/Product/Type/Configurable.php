@@ -575,46 +575,36 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             } else {
                 $collection
                     ->setFlag('has_stock_status_filter', true)
-                    ->addAttributeToSelect('name')
-                    ->addAttributeToSelect('price')
-                    ->addAttributeToSelect('weight')
-                    ->addAttributeToSelect('image')
-                    ->addAttributeToSelect('thumbnail')
-                    ->addAttributeToSelect('status')
-                    ->addAttributeToSelect('media_gallery')
                     ->addAttributeToSelect($this->getCatalogConfig()->getProductAttributes())
                     ->addFilterByRequiredOptions()
                     ->setStoreId($product->getStoreId());
+
+                $requiredAttributes = ['name', 'price', 'weight', 'image', 'thumbnail', 'status', 'media_gallery'];
+                foreach ($requiredAttributes as $attributeCode) {
+                    $collection->addAttributeToSelect($attributeCode);
+                }
                 foreach ($this->getUsedProductAttributes($product) as $usedProductAttribute) {
                     $collection->addAttributeToSelect($usedProductAttribute->getAttributeCode());
                 }
-                if (is_array($requiredAttributeIds)) {
-                    foreach ($requiredAttributeIds as $attributeId) {
-                        $attribute = $this->getAttributeById($attributeId, $product);
-                        if (!is_null($attribute)) {
-                            $collection->addAttributeToFilter($attribute->getAttributeCode(), ['notnull' => 1]);
-                        }
-                    }
-                }
-                $tags = ['price', self::TYPE_CODE . '_' . $productId];
                 $collection->addMediaGalleryData();
                 $collection->addTierPriceData();
                 $usedProducts = $collection->getItems();
-                $cache = array_map(
-                    function ($item) {
-                        return $item->getData();
-                    },
-                    $usedProducts
-                );
+
                 $this->getCache()->save(
-                    serialize($cache),
+                    serialize(array_map(
+                        function ($item) {
+                            return $item->getData();
+                        },
+                        $usedProducts
+                    )),
                     $key,
                     array_merge(
                         $product->getIdentities(),
-                        $tags,
                         [
                             \Magento\Catalog\Model\Category::CACHE_TAG,
-                            \Magento\Catalog\Model\Product::CACHE_TAG
+                            \Magento\Catalog\Model\Product::CACHE_TAG,
+                            'price',
+                            self::TYPE_CODE . '_' . $productId
                         ]
                     )
                 );

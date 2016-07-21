@@ -227,7 +227,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'getConfigurableProductLinks'
             ])
             ->getMockForAbstractClass();
-        $this->entityMetadata->expects($this->exactly(2))
+        $this->entityMetadata->expects($this->any())
             ->method('getLinkField')
             ->willReturn('link');
         $dataMap = [
@@ -338,6 +338,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $product->expects($this->any())->method('getIdentities')->willReturn(['123']);
         $product->expects($this->any())->method('getAssociatedProductIds')->will($this->returnValue([2]));
+
         $product->expects($this->any())->method('hasData')
             ->will(
                 $this->returnValueMap(
@@ -345,11 +346,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                         ['_cache_instance_used_product_attribute_ids', 1],
                         ['_cache_instance_products', 0],
                         ['_cache_instance_configurable_attributes', 1],
+                        ['_cache_instance_used_product_attributes', 1],
                     ]
                 )
             );
         $product->expects($this->any())->method('getData')
-            ->will($this->returnValue(1));
+            ->will($this->returnValueMap(
+                [
+                    ['_cache_instance_used_product_attributes', null, []],
+                ]
+            ));
+
+
         $productCollection = $this->getMockBuilder(
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection'
         )->setMethods(

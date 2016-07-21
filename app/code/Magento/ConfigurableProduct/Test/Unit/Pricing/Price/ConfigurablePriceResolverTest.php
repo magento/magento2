@@ -5,10 +5,14 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var  ConfigurableOptionsProviderInterface */
+    private $cofigurableOptionProvider;
+
     /**
      * @var \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver
      */
@@ -32,12 +36,17 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
         $className = 'Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface';
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
+        $this->cofigurableOptionProvider = $this->getMockBuilder(ConfigurableOptionsProviderInterface::class)
+            ->disableOriginalConstructor()->getMock();
+
+
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
             'Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver',
             [
                 'priceResolver' => $this->priceResolver,
                 'configurable' => $this->configurable,
+                'configurableOptionsProvider' => $this->cofigurableOptionProvider,
             ]
         );
     }
@@ -49,18 +58,13 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolvePriceWithNoPrices()
     {
-        $product = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\SaleableInterface',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getSku']
-        );
+        $product = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product::class
+        )->disableOriginalConstructor()->getMock();
+
         $product->expects($this->once())->method('getSku')->willReturn('Kiwi');
 
-        $this->configurable->expects($this->once())->method('getUsedProducts')->willReturn([]);
+        $this->cofigurableOptionProvider->expects($this->once())->method('getProducts')->willReturn([]);
 
         $this->resolver->resolvePrice($product);
     }
@@ -74,18 +78,13 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
     {
         $price = $expectedValue;
 
-        $product = $this->getMockForAbstractClass(
-            'Magento\Framework\Pricing\SaleableInterface',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getSku']
-        );
+        $product = $this->getMockBuilder(
+            \Magento\Catalog\Model\Product::class
+        )->disableOriginalConstructor()->getMock();
+
         $product->expects($this->never())->method('getSku');
 
-        $this->configurable->expects($this->once())->method('getUsedProducts')->willReturn([$product]);
+        $this->cofigurableOptionProvider->expects($this->once())->method('getProducts')->willReturn([$product]);
         $this->priceResolver->expects($this->atLeastOnce())->method('resolvePrice')->willReturn($price);
 
         $this->assertEquals($expectedValue, $this->resolver->resolvePrice($product));
