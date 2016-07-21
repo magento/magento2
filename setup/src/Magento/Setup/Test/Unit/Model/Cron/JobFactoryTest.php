@@ -6,6 +6,8 @@
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Setup\Model\Cron\JobFactory;
+use Magento\Backend\Console\Command\CacheDisableCommand;
+use Magento\Backend\Console\Command\CacheEnableCommand;
 
 class JobFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -131,50 +133,16 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $this->jobFactory->create('unknown', []);
     }
 
-    public function testModuleDisable()
-    {
-        $valueMap = [
-            [
-                'Magento\Framework\Module\PackageInfoFactory',
-                $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false)
-            ],
-        ];
-        $this->objectManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($valueMap));
-
-        $this->assertInstanceOf(
-            'Magento\Setup\Model\Cron\AbstractJob',
-            $this->jobFactory->create('setup:module:disable', [])
-        );
-    }
-
-    public function testModuleEnable()
-    {
-        $valueMap = [
-            [
-                'Magento\Framework\Module\PackageInfoFactory',
-                $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false)
-            ],
-        ];
-        $this->objectManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($valueMap));
-
-        $this->assertInstanceOf(
-            'Magento\Setup\Model\Cron\AbstractJob',
-            $this->jobFactory->create('setup:module:enable', [])
-        );
-    }
-
     public function testCacheEnable()
     {
+        $cacheEnableCommandMock = $this->getCommandMock(CacheEnableCommand::class);
         $valueMap = [
             [
-                'Magento\Backend\Console\Command\CacheEnableCommand',
-                $this->getMock('Magento\Backend\Console\Command\CacheEnableCommand', [], [], '', false)
+                CacheEnableCommand::class,
+                $cacheEnableCommandMock
             ]
         ];
+
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap($valueMap));
@@ -187,10 +155,11 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheDisable()
     {
+        $cacheDisableCommandMock = $this->getCommandMock(CacheDisableCommand::class);
         $valueMap = [
             [
                 'Magento\Backend\Console\Command\CacheDisableCommand',
-                $this->getMock('Magento\Backend\Console\Command\CacheDisableCommand', [], [], '', false)
+                $cacheDisableCommandMock
             ]
         ];
         $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
@@ -199,6 +168,33 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             'Magento\Setup\Model\Cron\JobSetCache',
             $this->jobFactory->create('setup:cache:disable', [])
         );
+    }
+
+    /**
+     * Get command mock
+     *
+     * @param string $commandClassName
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getCommandMock($commandClassName)
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject $commandMock
+         */
+        $commandMock = $this->getMockBuilder($commandClassName)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cliApplicationMock = $this->getMockBuilder(\Magento\Framework\Console\Cli::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $commandMock->expects($this->once())
+            ->method('getApplication')
+            ->willReturn(null);
+        $commandMock->expects($this->once())
+            ->method('setApplication')
+            ->willReturn($cliApplicationMock);
+
+        return $commandMock;
     }
 }
 
