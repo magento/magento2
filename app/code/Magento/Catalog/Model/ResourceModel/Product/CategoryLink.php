@@ -58,6 +58,8 @@ class CategoryLink
      * @param ProductInterface $product
      * @param array $categoryIds
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function saveCategoryLinks(ProductInterface $product, array $categoryIds = [])
     {
@@ -65,7 +67,7 @@ class CategoryLink
             if (is_array($categoryData)) {
                 return $categoryData;
             } else {
-                return ['category_id' => (int)$categoryData, 'position' => 1];
+                return ['category_id' => (int)$categoryData, 'position' => 0];
             }
         }, $categoryIds);
 
@@ -105,7 +107,7 @@ class CategoryLink
                 $connection->delete($this->getCategoryLinkMetadata()->getEntityTable(), $where);
             }
         }
-        $result =  array_map(function($value) {
+        $result =  array_map(function ($value) {
             return isset($value['category_id']) ? $value['category_id'] : null;
         }, array_merge($insert, $delete));
 
@@ -127,15 +129,18 @@ class CategoryLink
     /**
      * Process category links
      *
-     * @param $newCategoryPositions
-     * @param $oldCategoryPositions
+     * @param array $newCategoryPositions
+     * @param array $oldCategoryPositions
      * @return array
      */
     private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
     {
         $result = [];
         foreach ($newCategoryPositions as $newCategoryPosition) {
-            $key = array_search($newCategoryPosition['category_id'], array_column($oldCategoryPositions, 'category_id'));
+            $key = array_search(
+                $newCategoryPosition['category_id'],
+                array_column($oldCategoryPositions, 'category_id')
+            );
             if ($key === false) {
                 $result['changed'][] = $newCategoryPosition;
             } else {

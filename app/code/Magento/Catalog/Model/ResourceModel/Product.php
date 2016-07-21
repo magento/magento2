@@ -148,7 +148,7 @@ class Product extends AbstractResource
 
     /**
      * Product Category table name getter
-     * 
+     *
      * @deprecated
      * @return string
      */
@@ -232,7 +232,7 @@ class Product extends AbstractResource
      */
     public function getCategoryIds($product)
     {
-        $result =  array_map(function($value) {
+        $result =  array_map(function ($value) {
             return isset($value['category_id']) ? $value['category_id'] : null;
         }, $this->getProductCategoryLink()->getCategoryLinks($product));
         return $result;
