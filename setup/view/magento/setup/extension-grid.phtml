@@ -7,9 +7,9 @@
 <h2 class="page-title">{{$state.current.header}}</h2>
 
 <div class="message message-error" ng-show="syncError">
-            <span class="message-text">
-                {{ErrorMessage}}
-            </span>
+    <span class="message-text">
+        {{ErrorMessage}}
+    </span>
 </div>
 <div ng-show="$root.isMarketplaceAuthorized" class="extension-manager-wrap">
     <div class="extension-manager-title">
@@ -41,7 +41,7 @@
                 </div>
             </li>
             <li class="item col-m-4">
-                <div ng-hide="isOutOfSync" class="item-title">Last Refresh at {{lastSyncTime}} on </div>
+                <div ng-hide="isOutOfSync" class="item-title item-date-title">Last Refresh at {{lastSyncTime}} on </div>
                 <div ng-hide="isOutOfSync" class="item-date">
                     {{lastSyncDate}}
                 </div>
@@ -70,11 +70,9 @@
 <div class="admin__data-grid-outer-wrap" ng-show="$root.isMarketplaceAuthorized && extensionsProcessed && total > 0">
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
-            <div class="col-xs-3">
-                <div class="extension-manager-title">
-                    Installed Products
-                    <span>{{total}}</span> products
-                </div>
+            <div class="col-xs-3 module-summary">
+                <span class="module-summary-title">Installed Products</span>
+                <span class="module-summary-count">{{total}} products</span>
             </div>
             <div class="col-xs-9 admin__data-grid-pager-wrap">
                 <select id="perPage" class="admin__control-select" ng-model="rowLimit">
@@ -109,23 +107,31 @@
         </div>
     </div>
     <div class="admin__data-grid-wrap" ng-show="$state.is('root.extension')">
-        <table class="data-grid">
+        <table class="data-grid extension-manager-grid">
             <thead data-part="head">
             <tr>
-                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
-                && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('name')"
+                    ng-class="{'_ascend' : predicate === 'name' && !reverse,
+                               '_descend' : predicate === 'name' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Product Name</span>
                 </th>
-                <th ng-click="order('type')" ng-class="{'_ascend' : predicate === 'type'
-                && !reverse,'_descend' : predicate === 'type' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('type')"
+                    ng-class="{'_ascend' : predicate === 'type' && !reverse,
+                               '_descend' : predicate === 'type' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Type</span>
                 </th>
-                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version' &&
-                !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('version')"
+                    ng-class="{'_ascend' : predicate === 'version' && !reverse,
+                               '_descend' : predicate === 'version' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Version</span>
                 </th>
-                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor'
-                && !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('vendor')"
+                    ng-class="{'_ascend' : predicate === 'vendor' && !reverse,
+                               '_descend' : predicate === 'vendor' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Vendor</span>
                 </th>
                 <th class="data-grid-actions-cell data-grid-th">
@@ -136,8 +142,9 @@
             <tbody>
             <tr ng-repeat="extension in extensions | orderBy:predicate:reverse
                 | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
+                ng-class="{'_odd-row' : $index % 2}"
             >
-                <td>
+                <td class="col-manager-item-name">
                     <span class="component-indicator"
                           ng-show="isAvailableUpdatePackage(extension.name)"
                           ng-class="getIndicatorInfo(extension, 'icon')"
@@ -156,8 +163,6 @@
                     <span class="data-grid-data">{{extension.vendor}}</span>
                 </td>
                 <td class="data-grid-actions-cell">
-                    <!-- "_active" class should be added when .action-select button clicked to the -->
-                    <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(extension)}">
                         <button class="action-select"
                                 ng-click="toggleActiveActionsCell(extension)"
@@ -165,7 +170,7 @@
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(extension)}">
-                            <li ng-class="{'disabled': !isAvailableUpdatePackage(extension.name)}"
+                            <li ng-class="{'_disabled': !isAvailableUpdatePackage(extension.name)}"
                                 ng-mousedown="update(extension)">
                                 <a class="action-menu-item">Update</a>
                             </li>
