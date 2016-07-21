@@ -59,10 +59,9 @@ class Parameters extends Tab
     private function getElementClass(array $fields)
     {
         $path = $this->path . str_replace(' ', '', $fields['code']) . '.php';
-        $mtfTestsPath = str_replace('/', '\\', MTF_TESTS_PATH);
-        $path = $mtfTestsPath . $path;
+        $path = str_replace('\\', DIRECTORY_SEPARATOR, MTF_TESTS_PATH . $path);
         $paths = glob($path);
 
-        return str_replace([$mtfTestsPath, '.php'], '', $paths[0]);
+        return str_replace([MTF_TESTS_PATH, '.php'], '', $paths[0]);
     }
 }
