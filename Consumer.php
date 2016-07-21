@@ -3,15 +3,18 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
- * A MessageQueue Consumer to handle receiving a message.
+ * Class Consumer used to process a single message, unlike batch consumer.
+ *
+ * This could be used for both synchronous and asynchronous processing, depending on topic.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Consumer implements ConsumerInterface
@@ -42,20 +45,24 @@ class Consumer implements ConsumerInterface
     private $messageController;
 
     /**
-     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
-     *
-     * @return MessageController
-     *
-     * @deprecated
+     * @var \Magento\Framework\MessageQueue\QueueRepository
      */
-    private function getMessageController()
-    {
-        if ($this->messageController === null) {
-            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\MessageQueue\MessageController');
-        }
-        return $this->messageController;
-    }
+    private $queueRepository;
+
+    /**
+     * @var \Magento\Framework\MessageQueue\ConfigInterface
+     */
+    private $queueConfig;
+
+    /**
+     * @var EnvelopeFactory
+     */
+    private $envelopeFactory;
+
+    /**
+     * @var MessageValidator
+     */
+    private $messageValidator;
 
     /**
      * Initialize dependencies.
@@ -64,17 +71,32 @@ class Consumer implements ConsumerInterface
      * @param MessageEncoder $messageEncoder
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
+     * @param \Magento\Framework\MessageQueue\QueueRepository $queueRepository
+     * @param ConsumerConfigurationInterface $configuration
+     * @param MessageController $messageController
+     * @param MessageValidator $messageValidator
+     * @param EnvelopeFactory $envelopeFactory
      */
     public function __construct(
         CallbackInvoker $invoker,
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
-        ConsumerConfigurationInterface $configuration
+        ConsumerConfigurationInterface $configuration,
+        \Magento\Framework\MessageQueue\QueueRepository $queueRepository,
+        \Magento\Framework\MessageQueue\ConfigInterface $queueConfig,
+        MessageController $messageController,
+        EnvelopeFactory $envelopeFactory,
+        MessageValidator $messageValidator
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
         $this->resource = $resource;
         $this->configuration = $configuration;
+        $this->queueRepository = $queueRepository;
+        $this->queueConfig = $queueConfig;
+        $this->messageController = $messageController;
+        $this->messageValidator = $messageValidator;
+        $this->envelopeFactory = $envelopeFactory;
     }
 
     /**
@@ -92,36 +114,63 @@ class Consumer implements ConsumerInterface
     }
 
     /**
-     * Decode message and invoke callback method
+     * Decode message and invoke callback method, return reply back for sync processing.
      *
      * @param EnvelopeInterface $message
-     * @return void
+     * @param boolean $isSync
+     * @return string|null
      * @throws LocalizedException
      */
-    private function dispatchMessage(EnvelopeInterface $message)
+    private function dispatchMessage(EnvelopeInterface $message, $isSync = false)
     {
         $properties = $message->getProperties();
         $topicName = $properties['topic_name'];
         $handlers = $this->configuration->getHandlers($topicName);
-
         $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
 
         if (isset($decodedMessage)) {
             $messageSchemaType = $this->configuration->getMessageSchemaType($topicName);
             if ($messageSchemaType == QueueConfig::TOPIC_SCHEMA_TYPE_METHOD) {
                 foreach ($handlers as $callback) {
-                    call_user_func_array($callback, $decodedMessage);
+                    $result = call_user_func_array($callback, $decodedMessage);
+                    if ($isSync && isset($result)) {
+                        $this->messageValidator->validate($topicName, $result, false);
+                        return $this->messageEncoder->encode($topicName, $result, false);
+                    } else if ($isSync) {
+                        throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
+                    }
                 }
             } else {
                 foreach ($handlers as $callback) {
-                    call_user_func($callback, $decodedMessage);
+                    $result = call_user_func($callback, $decodedMessage);
+                    if ($isSync && isset($result)) {
+                        $this->messageValidator->validate($topicName, $result, false);
+                        return $this->messageEncoder->encode($topicName, $result, false);
+                    } else if ($isSync) {
+                        throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
+                    }
                 }
             }
         }
+        return null;
     }
 
     /**
-     * Get transaction callback
+     * Send RPC response message.
+     *
+     * @param EnvelopeInterface $envelope
+     * @return void
+     */
+    private function sendResponse(EnvelopeInterface $envelope)
+    {
+        $messageProperties = $envelope->getProperties();
+        $connectionName = $this->queueConfig->getConnectionByTopic($messageProperties['topic_name']);
+        $queue = $this->queueRepository->get($connectionName, $messageProperties['reply_to']);
+        $queue->push($envelope);
+    }
+
+    /**
+     * Get transaction callback. This handles the case of both sync and async.
      *
      * @param QueueInterface $queue
      * @return \Closure
@@ -130,17 +179,28 @@ class Consumer implements ConsumerInterface
     {
         return function (EnvelopeInterface $message) use ($queue) {
             try {
-                $topicName = $message->getProperties()['topic_name'];
-                $allowedTopics = $this->configuration->getTopicNames();
                 $this->resource->getConnection()->beginTransaction();
-                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
-                if (in_array($topicName, $allowedTopics)) {
-                    $this->dispatchMessage($message);
-                    $this->resource->getConnection()->commit();
-                    $queue->acknowledge($message);
+                $topicName = $message->getProperties()['topic_name'];
+                $consumerType = $this->configuration->getConsumerType($topicName);
+                $this->messageController->lock($message, $this->configuration->getConsumerName());
+
+                if ($consumerType == 'sync') {
+                    $responseBody = $this->dispatchMessage($message, true);
+                    $responseMessage = $this->envelopeFactory->create(
+                        ['body' => $responseBody, 'properties' => $message->getProperties()]
+                    );
+                    $this->sendResponse($responseMessage);
                 } else {
-                    $queue->reject($message); //push message back to the queue
+                    $allowedTopics = $this->configuration->getTopicNames();
+                    if (in_array($topicName, $allowedTopics)) {
+                        $this->dispatchMessage($message);
+                    } else {
+                        $queue->reject($message);
+                        return;
+                    }
                 }
+                $this->resource->getConnection()->commit();
+                $queue->acknowledge($message);
             } catch (MessageLockException $exception) {
                 $this->resource->getConnection()->rollBack();
                 $queue->acknowledge($message);

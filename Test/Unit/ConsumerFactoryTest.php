@@ -24,7 +24,6 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
     private $queueConfigMock;
 
     const TEST_CONSUMER_NAME = "test_consumer_name";
-    const TEST_CONSUMER_CONNECTION = "test_consumer_connection";
     const TEST_CONSUMER_QUEUE = "test_consumer_queue";
     const TEST_CONSUMER_METHOD = "test_consumer_method";
 
@@ -43,45 +42,11 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testUndeclaredConsumerName()
     {
         $consumerFactory = $this->objectManager->getObject(
-            'Magento\Framework\MessageQueue\ConsumerFactory',
+            \Magento\Framework\MessageQueue\ConsumerFactory::class,
             [
                 'queueConfig' => $this->queueConfigMock,
             ]
         );
-        $consumerFactory->get(self::TEST_CONSUMER_NAME);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not find an implementation type for connection "test_consumer_connection".
-     */
-    public function testConsumerNotInjectedIntoClass()
-    {
-        $consumers = [
-            [
-                'type' => ['nonExistentType' => ''],
-                'connectionName' => self::TEST_CONSUMER_CONNECTION,
-            ]
-        ];
-        $consumerFactory = $this->getConsumerFactoryInstance($consumers);
-        $consumerFactory->get(self::TEST_CONSUMER_NAME);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not find an implementation type for connection "test_consumer_connection".
-     */
-    public function testNoConnectionInjectedForConsumer()
-    {
-        $consumerType = 'async';
-        $consumerTypeValue = 'Magento\Framework\MessageQueue\Model\TestConsumer';
-        $consumers = [
-            [
-                'type' => [$consumerType => $consumerTypeValue],
-                'connectionName' => 'randomPublisherConnection',
-            ]
-        ];
-        $consumerFactory = $this->getConsumerFactoryInstance($consumers);
         $consumerFactory->get(self::TEST_CONSUMER_NAME);
     }
 
@@ -91,8 +56,7 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
         $consumerTypeValue = 'Magento\Framework\MessageQueue\Model\TestConsumer';
         $consumers = [
             [
-                'type' => [$consumerType => $consumerTypeValue],
-                'connectionName' => self::TEST_CONSUMER_CONNECTION,
+                'type' => [$consumerType => $consumerTypeValue]
             ]
         ];
         $consumerFactory = $this->getConsumerFactoryInstance($consumers);
@@ -117,19 +81,18 @@ class ConsumerFactoryTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue(
                     [
-                        QueueConfig::CONSUMER_CONNECTION => self::TEST_CONSUMER_CONNECTION,
                         QueueConfig::CONSUMER_NAME => self::TEST_CONSUMER_NAME,
                         QueueConfig::CONSUMER_QUEUE => self::TEST_CONSUMER_QUEUE,
+                        QueueConfig::CONSUMER_INSTANCE_TYPE => $consumerTypeValue,
                         QueueConfig::CONSUMER_TYPE => QueueConfig::CONSUMER_TYPE_ASYNC,
                         QueueConfig::CONSUMER_HANDLERS => [
                             'topicName' => [
-                                "defaultHandler" => [
+                                [
                                     "type" => $handlerTypeValue,
                                     "method" => self::TEST_CONSUMER_METHOD
                                 ]
                             ]
                         ]
-
                     ]
                 )
             );

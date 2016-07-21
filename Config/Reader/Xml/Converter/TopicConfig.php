@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\MessageQueue\Config\Reader\Xml\Converter;
 
-
 use Magento\Framework\MessageQueue\ConfigInterface;
 use Magento\Framework\MessageQueue\Config\Validator;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\MessageQueue\ConsumerInterface;
 
 /**
  * Converts MessageQueue config from \DOMDocument to array
@@ -21,6 +21,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 {
     const DEFAULT_TYPE = 'amqp';
     const DEFAULT_EXCHANGE = 'magento';
+    const DEFAULT_INSTANCE = ConsumerInterface::class;
 
     /**
      * @var Validator
@@ -135,7 +136,8 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
                     'name' => $queueConfig['consumer'],
                     'queue' => $queueName,
                     'handlers' => [$topicName => $queueConfig['handlers']],
-                    'instance_type' => $queueConfig['consumerInstance'],
+                    'instance_type' => $queueConfig['consumerInstance'] != null
+                        ? $queueConfig['consumerInstance'] : self::DEFAULT_INSTANCE,
                     'consumer_type' => $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? 'sync' : 'async',
                     'max_messages' => $queueConfig['maxMessages'],
                     'connection' => $topicConfig['type']

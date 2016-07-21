@@ -74,7 +74,7 @@ return [
                     ],
                 ]
             ],
-            'instance_type' => null,
+            'instance_type' => 'Magento\Framework\MessageQueue\ConsumerInterface',
             'consumer_type' => 'async',
             'max_messages' => null,
             'connection' => 'amqp',
@@ -142,7 +142,7 @@ return [
                     ],
                 ]
             ],
-            'instance_type' => null,
+            'instance_type' => 'Magento\Framework\MessageQueue\ConsumerInterface',
             'consumer_type' => 'async',
             'max_messages' => null,
             'connection' => 'amqp',
@@ -158,7 +158,7 @@ return [
                     ]
                 ]
             ],
-            'instance_type' => null,
+            'instance_type' => 'Magento\Framework\MessageQueue\ConsumerInterface',
             'consumer_type' => 'async',
             'max_messages' => null,
             'connection' => 'amqp',

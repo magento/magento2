@@ -8,7 +8,6 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\ConfigInterface;
 
@@ -69,11 +68,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
         $this->model->validate('customer.created', [$object, 'password', 'redirect'], true);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Data in topic "customer.created" must be of type "Magento\Customer\Api\Data\CustomerInt
-     */
-    public function testEncodeInvalidMessageObjectType()
+    public function testEncodeValidMessageObjectType()
     {
         $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigDataObjectType());
         $this->model->validate('customer.created', [], true);
@@ -133,6 +128,121 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             ]
+        ];
+    }
+
+    /**
+     * @dataProvider getQueueConfigRequestType
+     */
+    public function testInvalidMessageType($requestType, $message, $expectedResult = null)
+    {
+        $this->configMock->expects($this->any())->method('getTopic')->willReturn($requestType);
+        if ($expectedResult) {
+            $this->setExpectedException('InvalidArgumentException', $expectedResult);
+        }
+        $this->model->validate('topic', $message);
+    }
+
+    public function getQueueConfigRequestType()
+    {
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $customerMockTwo = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        return [
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string'
+                ]],
+                'valid string',
+                null
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string'
+                ]],
+                1,
+                'Data in topic "topic" must be of type "string". "int" given.'
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string[]'
+                ]],
+                ['string1', 'string2'],
+                null
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string[]'
+                ]],
+                [],
+                null
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string[]'
+                ]],
+                'single string',
+                'Data in topic "topic" must be of type "string[]". "string" given.'
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
+                ]],
+                $customerMock,
+                null
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
+                ]],
+                'customer',
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface". "string" given.'
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ]],
+                [$customerMock, $customerMockTwo],
+                null
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ]],
+                [],
+                null
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ]],
+                'customer',
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". "string" given.'
+            ],
+            [
+                [QueueConfig::TOPIC_SCHEMA => [
+                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
+                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ]],
+                $customerMock,
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". '
+            ],
         ];
     }
 }

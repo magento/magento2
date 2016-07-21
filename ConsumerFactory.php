@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\MessageQueue\ConsumerInterface;
 
 /**
  * Class which creates Consumers
@@ -23,11 +24,6 @@ class ConsumerFactory
     private $queueConfig;
 
     /**
-     * @var ConsumerInterface[]
-     */
-    private $consumers;
-
-    /**
      * Object Manager instance
      *
      * @var ObjectManagerInterface
@@ -38,33 +34,15 @@ class ConsumerFactory
     /**
      * Initialize dependencies.
      *
-     * <type name="Magento\Framework\MessageQueue\ConsumerFactory">
-     *     <arguments>
-     *         <argument name="consumers" xsi:type="array">
-     *             <item name="amqp" xsi:type="array">
-     *                 <item name="type" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
-     *                 <item name="connectionName" xsi:type="string">amqp</item>
-     *             </item>
-     *         </argument>
-     *     </arguments>
-     * </type>
-     *
      * @param QueueConfig $queueConfig
      * @param ObjectManagerInterface $objectManager
-     * @param array $consumers Consumer configuration data
      */
     public function __construct(
         QueueConfig $queueConfig,
-        ObjectManagerInterface $objectManager,
-        $consumers = []
+        ObjectManagerInterface $objectManager
     ) {
         $this->queueConfig = $queueConfig;
         $this->objectManager = $objectManager;
-        $this->consumers = [];
-
-        foreach ($consumers as $consumerConfig) {
-            $this->add($consumerConfig['connectionName'], $consumerConfig['type']);
-        }
     }
 
     /**
@@ -82,53 +60,11 @@ class ConsumerFactory
                 new Phrase('Specified consumer "%consumer" is not declared.', ['consumer' => $consumerName])
             );
         }
-        $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
-        $consumer = $this->createConsumer(
-            $consumerConfig[QueueConfig::CONSUMER_CONNECTION],
-            isset($consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE])
-            ? $consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE]
-            : null,
-            $consumerConfigObject
+
+        return $this->objectManager->create(
+            $consumerConfig[QueueConfig::BROKER_CONSUMER_INSTANCE_TYPE],
+            ['configuration' => $this->createConsumerConfiguration($consumerConfig)]
         );
-
-        return $consumer;
-    }
-
-    /**
-     * Add consumer.
-     *
-     * @param string $name
-     * @param string $typeName
-     * @return $this
-     */
-    private function add($name, $typeName)
-    {
-        $this->consumers[$name] = $typeName;
-        return $this;
-    }
-
-    /**
-     * Return an instance of a consumer for a connection name.
-     *
-     * @param string $connectionName
-     * @param string|null $instanceType
-     * @param ConsumerConfigurationInterface $configuration
-     * @return ConsumerInterface
-     * @throws LocalizedException
-     */
-    private function createConsumer($connectionName, $instanceType, $configuration)
-    {
-        if ($instanceType !== null) {
-            $executorObject = $this->objectManager->create($instanceType, ['configuration' => $configuration]);
-        } elseif (isset($this->consumers[$connectionName][$configuration->getType()])) {
-            $typeName = $this->consumers[$connectionName][$configuration->getType()];
-            $executorObject = $this->objectManager->create($typeName, ['configuration' => $configuration]);
-        } else {
-            throw new LocalizedException(
-                new Phrase('Could not find an implementation type for connection "%name".', ['name' => $connectionName])
-            );
-        }
-        return $executorObject;
     }
 
     /**
@@ -139,24 +75,28 @@ class ConsumerFactory
      */
     private function createConsumerConfiguration($consumerConfig)
     {
-        $handlers = [];
+        $topics = [];
         foreach ($consumerConfig[QueueConfig::CONSUMER_HANDLERS] as $topic => $topicHandlers) {
+            $topicCommunicationType = $consumerConfig[QueueConfig::CONSUMER_TYPE] == QueueConfig::CONSUMER_TYPE_SYNC
+                ? ConsumerConfiguration::TYPE_SYNC
+                : ConsumerConfiguration::TYPE_ASYNC;
+            $handlers = [];
             foreach ($topicHandlers as $handlerConfig) {
-                $handlers[$topic][] = [
+                $handlers[] = [
                     $this->objectManager->create($handlerConfig[QueueConfig::CONSUMER_CLASS]),
                     $handlerConfig[QueueConfig::CONSUMER_METHOD]
                 ];
             }
+            $topics[$topic] = [
+                ConsumerConfigurationInterface::TOPIC_HANDLERS => $handlers,
+                ConsumerConfigurationInterface::TOPIC_TYPE => $topicCommunicationType
+            ];
         }
 
         $configData = [
-            ConsumerConfiguration::CONSUMER_NAME => $consumerConfig[QueueConfig::CONSUMER_NAME],
-            ConsumerConfiguration::QUEUE_NAME => $consumerConfig[QueueConfig::CONSUMER_QUEUE],
-            ConsumerConfiguration::CONSUMER_TYPE =>
-                $consumerConfig[QueueConfig::CONSUMER_TYPE] == QueueConfig::CONSUMER_TYPE_SYNC
-                ? ConsumerConfiguration::TYPE_SYNC
-                : ConsumerConfiguration::TYPE_ASYNC,
-            ConsumerConfiguration::HANDLERS => $handlers,
+            ConsumerConfigurationInterface::CONSUMER_NAME => $consumerConfig[QueueConfig::CONSUMER_NAME],
+            ConsumerConfigurationInterface::QUEUE_NAME => $consumerConfig[QueueConfig::CONSUMER_QUEUE],
+            ConsumerConfigurationInterface::TOPICS => $topics
         ];
 
         return $this->objectManager->create(

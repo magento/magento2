@@ -113,7 +113,15 @@ class MessageValidator
      */
     protected function validatePrimitiveType($message, $messageType, $topic)
     {
-        if ($this->getRealType($message) !== $messageType) {
+        $compareType = $messageType;
+        $realType = $this->getRealType($message);
+        if ($realType == 'array' && count($message) == 0) {
+            return;
+        } else if ($realType == 'array' && count($message) > 0) {
+            $realType = $this->getRealType($message[0]);
+            $compareType = preg_replace('/\[\]/', '', $messageType);
+        }
+        if ($realType !== $compareType) {
             throw new InvalidArgumentException(
                 new Phrase(
                     'Data in topic "%topic" must be of type "%expectedType". '
@@ -136,7 +144,16 @@ class MessageValidator
      */
     protected function validateClassType($message, $messageType, $topic)
     {
-        if (!($message instanceof $messageType)) {
+        $origMessage = $message;
+        $compareType = $messageType;
+        $realType = $this->getRealType($message);
+        if ($realType == 'array' && count($message) == 0) {
+            return;
+        } else if ($realType == 'array' && count($message) > 0) {
+            $message = $message[0];
+            $compareType = preg_replace('/\[\]/', '', $messageType);
+        }
+        if (!($message instanceof $compareType)) {
             throw new InvalidArgumentException(
                 new Phrase(
                     'Data in topic "%topic" must be of type "%expectedType". '
@@ -144,7 +161,7 @@ class MessageValidator
                     [
                         'topic' => $topic,
                         'expectedType' => $messageType,
-                        'actualType' => $this->getRealType($message)
+                        'actualType' => $this->getRealType($origMessage)
                     ]
                 )
             );
