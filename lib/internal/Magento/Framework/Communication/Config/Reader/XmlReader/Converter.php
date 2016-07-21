@@ -68,7 +68,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     private function getConfigParser()
     {
-        if ($this->configParser === NULL) {
+        if ($this->configParser === null) {
             $this->configParser = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(\Magento\Framework\Communication\Config\ConfigParser::class);
         }
