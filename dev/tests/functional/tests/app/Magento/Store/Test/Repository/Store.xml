@@ -14,7 +14,6 @@
             <field name="name" xsi:type="string">Default Store View</field>
             <field name="code" xsi:type="string">default</field>
             <field name="is_active" xsi:type="string">Enabled</field>
-            <field name="store_id" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="custom">
@@ -28,12 +27,10 @@
 
         <dataset name="default_store_view">
             <field name="name" xsi:type="string">Default Store View</field>
-            <field name="store_id" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="all_store_views">
             <field name="name" xsi:type="string">All Store Views</field>
-            <field name="store_id" xsi:type="string">0</field>
         </dataset>
 
         <dataset name="german">

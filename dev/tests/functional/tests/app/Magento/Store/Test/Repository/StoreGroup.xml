@@ -12,7 +12,6 @@
                 <item name="dataset" xsi:type="string">main_website</item>
             </field>
             <field name="name" xsi:type="string">Main Website Store</field>
-            <field name="group_id" xsi:type="string">1</field>
             <field name="root_category_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_category</item>
             </field>

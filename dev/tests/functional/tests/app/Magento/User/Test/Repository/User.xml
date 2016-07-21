@@ -14,7 +14,6 @@
             <field name="email" xsi:type="string">email%isolation%@example.com</field>
             <field name="password" xsi:type="string">123123q</field>
             <field name="password_confirmation" xsi:type="string">123123q</field>
-            <field name="user_id" xsi:type="string">1</field>
             <field name="current_password" xsi:type="string">%current_password%</field>
         </dataset>
 
