@@ -227,6 +227,76 @@
             </field>
         </dataset>
 
+        <dataset name="two_new_options_with_empty_sku">
+            <field name="attributes_data" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="array">
+                    <item name="frontend_label" xsi:type="string">two_new_options_title_%isolation%</item>
+                    <item name="frontend_input" xsi:type="string">Dropdown</item>
+                    <item name="label" xsi:type="string">two_new_options_title_%isolation%</item>
+                    <item name="is_required" xsi:type="string">No</item>
+                    <item name="options" xsi:type="array">
+                        <item name="option_key_0" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_1_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">1</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_1" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_2_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">2</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="matrix" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">13</item>
+                    <item name="weight" xsi:type="string">1</item>
+                    <item name="sku" xsi:type="string" />
+                </item>
+                <item name="attribute_key_0:option_key_1" xsi:type="array">
+                    <item name="qty" xsi:type="string">13</item>
+                    <item name="weight" xsi:type="string">2</item>
+                    <item name="sku" xsi:type="string" />
+                </item>
+            </field>
+        </dataset>
+
+        <dataset name="two_new_options_with_parent_sku">
+            <field name="attributes_data" xsi:type="array">
+                <item name="attribute_key_0" xsi:type="array">
+                    <item name="frontend_label" xsi:type="string">two_new_options_title_%isolation%</item>
+                    <item name="frontend_input" xsi:type="string">Dropdown</item>
+                    <item name="label" xsi:type="string">two_new_options_title_%isolation%</item>
+                    <item name="is_required" xsi:type="string">No</item>
+                    <item name="options" xsi:type="array">
+                        <item name="option_key_0" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_1_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">1</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                        <item name="option_key_1" xsi:type="array">
+                            <item name="label" xsi:type="string">option_key_2_%isolation%</item>
+                            <item name="pricing_value" xsi:type="string">2</item>
+                            <item name="include" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </item>
+            </field>
+            <field name="matrix" xsi:type="array">
+                <item name="attribute_key_0:option_key_0" xsi:type="array">
+                    <item name="qty" xsi:type="string">13</item>
+                    <item name="weight" xsi:type="string">1</item>
+                    <item name="sku" xsi:type="string">existing_sku</item>
+                </item>
+                <item name="attribute_key_0:option_key_1" xsi:type="array">
+                    <item name="qty" xsi:type="string">13</item>
+                    <item name="weight" xsi:type="string">2</item>
+                    <item name="sku" xsi:type="string">existing_sku</item>
+                </item>
+            </field>
+        </dataset>
+
         <dataset name="two_searchable_options">
             <field name="attributes_data" xsi:type="array">
                 <item name="attribute_key_0" xsi:type="array">

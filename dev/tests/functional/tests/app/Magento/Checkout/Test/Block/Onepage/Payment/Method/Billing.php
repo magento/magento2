@@ -68,4 +68,14 @@ class Billing extends Form
     {
         return $this->_rootElement->find($this->sameAsShippingCheckbox, Locator::SELECTOR_CSS, 'checkbox')->getValue();
     }
+
+    /**
+     * Unset "Same as shipping" checkbox value.
+     *
+     * @return void
+     */
+    public function unsetSameAsShippingCheckboxValue()
+    {
+        $this->_rootElement->find($this->sameAsShippingCheckbox, Locator::SELECTOR_CSS, 'checkbox')->setValue('No');
+    }
 }
