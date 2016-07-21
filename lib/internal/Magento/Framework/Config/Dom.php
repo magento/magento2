@@ -316,7 +316,7 @@ class Dom
         } catch (\Exception $exception) {
             $errors = self::getXmlErrors($errorFormat);
             libxml_use_internal_errors(false);
-            throw new ValidationSchemaException(implode("\n", $errors));
+            throw new ValidationSchemaException(__(implode("\n", $errors)));
         }
         libxml_set_external_entity_loader(null);
         libxml_use_internal_errors(false);

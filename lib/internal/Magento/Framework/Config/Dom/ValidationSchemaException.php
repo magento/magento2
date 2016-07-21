@@ -5,10 +5,12 @@
  */
 
 /**
- * \Exception that should be thrown by DOM model when incoming xsd is not valid.
+ * Exception that should be thrown by DOM model when incoming xsd is not valid.
  */
 namespace Magento\Framework\Config\Dom;
 
-class ValidationSchemaException extends \InvalidArgumentException
+use Magento\Framework\Exception\LocalizedException;
+
+class ValidationSchemaException extends LocalizedException
 {
 }
