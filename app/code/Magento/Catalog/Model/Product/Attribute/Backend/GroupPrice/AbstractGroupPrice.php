@@ -176,7 +176,8 @@ abstract class AbstractGroupPrice extends Price
                 throw new \Magento\Framework\Exception\LocalizedException(__($this->_getDuplicateErrorMessage()));
             }
 
-            if (!$this->isPositiveOrZero($priceRow['price'])) {
+            if ((!isset($priceRow['price']) || !$this->isPositiveOrZero($priceRow['price']))
+                && (!isset($priceRow['percentage_value']) || !$this->isPositiveOrZero($priceRow['percentage_value']))) {
                 return __('Group price must be a number greater than 0.');
             }
 
