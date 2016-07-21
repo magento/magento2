@@ -19,7 +19,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
-            <data name="configData" xsi:type="string">braintree, braintree_paypal_sale</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_sale, braintree_paypal_skip_order_review</data>
             <data name="paymentAction" xsi:type="string">sale</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="data/items_data/0/qty" xsi:type="string">-</data>
@@ -40,7 +40,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree_paypal</data>
-            <data name="configData" xsi:type="string">braintree, braintree_paypal</data>
+            <data name="configData" xsi:type="string">braintree, braintree_paypal, braintree_paypal_skip_order_review</data>
             <data name="orderButtonsAvailable" xsi:type="string">Back, Send Email, Credit Memo, Hold, Ship, Reorder</data>
             <data name="data/items_data/0/qty" xsi:type="string">2</data>
             <data name="refundData/items_data/0/qty" xsi:type="string">1</data>
