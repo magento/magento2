@@ -3,11 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Api\Data;
 
 /**
- * Class CommentInterface
+ * Interface CommentInterface
+ *
+ * @api
  */
 interface CommentInterface
 {
@@ -25,21 +26,6 @@ interface CommentInterface
      * @return $this
      */
     public function setComment($comment);
-
-    /**
-     * Gets the is-customer-notified flag value for the invoice.
-     *
-     * @return int Is-customer-notified flag value.
-     */
-    public function getIsCustomerNotified();
-
-    /**
-     * Sets the is-customer-notified flag value for the invoice.
-     *
-     * @param int $isCustomerNotified
-     * @return $this
-     */
-    public function setIsCustomerNotified($isCustomerNotified);
 
     /**
      * Gets the is-visible-on-storefront flag value for the invoice.
