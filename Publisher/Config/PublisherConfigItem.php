@@ -29,7 +29,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      *
      * @var bool
      */
-    private $disabled;
+    private $isDisabled;
 
     /**
      * Initialize dependencies.
@@ -54,7 +54,7 @@ class PublisherConfigItem implements PublisherConfigItemInterface
      */
     public function isDisabled()
     {
-        return $this->disabled;
+        return $this->isDisabled;
     }
 
     /**
@@ -66,12 +66,15 @@ class PublisherConfigItem implements PublisherConfigItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Set publisher config item data.
+     *
+     * @param array $data
+     * @return void
      */
     public function setData(array $data)
     {
         $this->topic = $data['topic'];
-        $this->disabled = $data['disabled'];
+        $this->isDisabled = $data['disabled'];
         $this->connection->setData($data['connection']);
     }
 }

@@ -126,7 +126,7 @@ class CompositeReader implements ReaderInterface
      */
     private function sortReaders(array $readers)
     {
-        usort(
+        uasort(
             $readers,
             function ($firstItem, $secondItem) {
                 $firstValue = 0;

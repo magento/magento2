@@ -19,6 +19,7 @@ class CompositeValidator implements ValidatorInterface
 
     /**
      * Validator constructor.
+     *
      * @param ValidatorInterface[] $validators
      */
     public function __construct($validators)
@@ -38,7 +39,11 @@ class CompositeValidator implements ValidatorInterface
         foreach ($this->validators as $validator) {
             if (!$validator instanceof ValidatorInterface) {
                 throw new \LogicException(
-                    'Validator does not implements Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface'
+                    sprintf(
+                        'Validator [%s] does not implements ' .
+                        'Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface',
+                        get_class($validator)
+                    )
                 );
             }
             $validator->validate($configData);

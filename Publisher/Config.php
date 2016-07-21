@@ -10,7 +10,7 @@ use Magento\Framework\Phrase;
 use \Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem\Iterator;
 
 /**
- * {@inheritdoc}
+ * Publisher config provides access data declared in etc/queue_publisher.xml
  */
 class Config implements ConfigInterface
 {

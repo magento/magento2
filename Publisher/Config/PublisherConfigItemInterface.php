@@ -5,9 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config;
 
-
 /**
- * Items of this class represent config items declared in etc/queue_publisher.xsd
+ * Instances of this class represent config items declared in etc/queue_publisher.xsd
  */
 interface PublisherConfigItemInterface
 {
@@ -19,7 +18,7 @@ interface PublisherConfigItemInterface
     public function getTopic();
 
     /**
-     * Get is connection disabled.
+     * Check if connection disabled.
      *
      * @return bool
      */

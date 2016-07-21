@@ -32,7 +32,7 @@ class PublisherConnectionFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface'
+        $instanceName = PublisherConnection::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;
@@ -42,7 +42,7 @@ class PublisherConnectionFactory
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface
+     * @return \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnection
      */
     public function create(array $data = [])
     {

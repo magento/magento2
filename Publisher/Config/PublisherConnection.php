@@ -29,7 +29,7 @@ class PublisherConnection implements PublisherConnectionInterface
      *
      * @var bool
      */
-    private $disabled;
+    private $isDisabled;
 
     /**
      * {@inheritdoc}
@@ -52,7 +52,7 @@ class PublisherConnection implements PublisherConnectionInterface
      */
     public function isDisabled()
     {
-        return $this->disabled;
+        return $this->isDisabled;
     }
 
     /**
@@ -62,6 +62,6 @@ class PublisherConnection implements PublisherConnectionInterface
     {
         $this->name = $data['name'];
         $this->exchange = $data['exchange'];
-        $this->disabled = $data['disabled'];
+        $this->isDisabled = $data['disabled'];
     }
 }

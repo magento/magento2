@@ -32,7 +32,7 @@ class PublisherConfigItemFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem'
+        $instanceName = PublisherConfigItem::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

@@ -25,7 +25,7 @@ interface PublisherConnectionInterface
     public function getExchange();
 
     /**
-     * Get is connection disabled.
+     * Check if connection disabled.
      *
      * @return bool
      */
