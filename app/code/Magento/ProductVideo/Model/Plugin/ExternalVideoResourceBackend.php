@@ -6,7 +6,6 @@
 namespace Magento\ProductVideo\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Media;
 use Magento\Framework\DB\Select;
 use Magento\ProductVideo\Setup\InstallSchema;
 
@@ -47,11 +46,11 @@ class ExternalVideoResourceBackend
     }
 
     /**
-     * @param Media $originalResourceModel
+     * @param Gallery $originalResourceModel
      * @param Select $select
      * @return Select
      */
-    public function afterCreateBatchBaseSelect(Media $originalResourceModel, Select $select)
+    public function afterCreateBatchBaseSelect(Gallery $originalResourceModel, Select $select)
     {
         $select = $select->joinLeft(
             ['value_video' => $originalResourceModel->getTable(InstallSchema::GALLERY_VALUE_VIDEO_TABLE)],
