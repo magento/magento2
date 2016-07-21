@@ -178,9 +178,6 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private function getCommandMock($commandClassName)
     {
-        /**
-         * @var \PHPUnit_Framework_MockObject_MockObject $commandMock
-         */
         $commandMock = $this->getMockBuilder($commandClassName)
             ->disableOriginalConstructor()
             ->getMock();
