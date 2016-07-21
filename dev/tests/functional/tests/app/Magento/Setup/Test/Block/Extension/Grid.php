@@ -55,7 +55,14 @@ class Grid extends AbstractGrid
      *
      * @var string
      */
-    protected $popupLoading = '.popup popup-loading';
+    protected $popupLoading = '.popup.popup-loading';
+
+    /**
+     * 'Not found any extensions' message.
+     *
+     * @var string
+     */
+    protected $notFoundMessage = '.not-found';
 
     /**
      * Click to 'Install' button.
@@ -64,8 +71,6 @@ class Grid extends AbstractGrid
      */
     public function clickInstallButton()
     {
-        $this->waitForElementNotVisible($this->popupLoading);
-        $this->waitForElementVisible($this->installButton, Locator::SELECTOR_XPATH);
         $this->_rootElement->find($this->installButton, Locator::SELECTOR_XPATH)->click();
     }
 
@@ -122,6 +127,20 @@ class Grid extends AbstractGrid
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function findExtensionOnGrid(Extension $extension)
+    {
+        sleep(3);
+
+        if ($this->_rootElement->find($this->notFoundMessage)->isVisible()) {
+            return false;
+        }
+
+        return parent::findExtensionOnGrid($extension);
+    }
+
+    /**
      * Click to Select action
      *
      * @param Extension $extension
@@ -133,5 +152,16 @@ class Grid extends AbstractGrid
             sprintf($this->selectAction, $extension->getExtensionName()),
             Locator::SELECTOR_XPATH
         )->click();
+    }
+
+    /**
+     * Wait loader.
+     *
+     * @return void
+     */
+    public function waitLoader()
+    {
+        $this->waitForElementVisible($this->popupLoading);
+        $this->waitForElementNotVisible($this->popupLoading);
     }
 }

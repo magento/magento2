@@ -110,6 +110,7 @@ abstract class AbstractExtensionTest extends Injectable
         // Open Extension Grid with installed extensions and find installed extension
         $this->setupWizard->open();
         $this->setupWizard->getSetupHome()->clickExtensionManager();
+        $this->setupWizard->getExtensionsGrid()->waitLoader();
         $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extension);
 
         // Click to uninstall extension
@@ -136,6 +137,7 @@ abstract class AbstractExtensionTest extends Injectable
         // Check that extension is uninstalled
         $this->setupWizard->open();
         $this->setupWizard->getSetupHome()->clickExtensionManager();
+        $this->setupWizard->getExtensionsGrid()->waitLoader();
 
         if ($this->setupWizard->getExtensionsGrid()->findExtensionOnGrid($extension)) {
             $this->fail('Extension is not uninstalled!');
