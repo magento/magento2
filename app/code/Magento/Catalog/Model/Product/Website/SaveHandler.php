@@ -38,10 +38,11 @@ class SaveHandler implements ExtensionInterface
     /**
      * Get website ids from extension attributes and persist them
      * @param ProductInterface $product
-     * @param array $additionalData
+     * @param array $arguments
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return ProductInterface
      */
-    public function execute($product, $additionalData = [])
+    public function execute($product, $arguments = [])
     {
         if ($this->storeManager->isSingleStoreMode()) {
             $defaultWebsiteId = $this->storeManager->getDefaultStoreView()->getWebsiteId();
