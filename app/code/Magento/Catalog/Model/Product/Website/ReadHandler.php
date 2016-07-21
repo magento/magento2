@@ -26,10 +26,10 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * @param ProductInterface $product
-     * @param array $arguments
+     * @param array $additionalData
      * @return ProductInterface
      */
-    public function execute($product, $arguments = [])
+    public function execute($product, $additionalData = [])
     {
         if ($product->getExtensionAttributes()->getWebsiteIds() !== null) {
             return $product;
