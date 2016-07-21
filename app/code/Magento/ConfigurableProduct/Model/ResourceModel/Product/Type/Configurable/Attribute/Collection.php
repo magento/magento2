@@ -263,7 +263,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $productAttribute = $item->getProductAttribute();
 
             $itemId = $item->getId();
-            $options = $configurableResource->getAttributeOptions($productAttribute, $this->getProduct()->getId());
+            $options = $configurableResource->getAttributeOptions(
+                $productAttribute,
+                $this->getProduct()->getData(
+                    $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
+                )
+            );
             foreach ($options as $option) {
                 $values[$itemId . ':' . $option['value_index']] = [
                     'value_index' => $option['value_index'],
