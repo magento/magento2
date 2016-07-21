@@ -26,7 +26,7 @@ define(
             {
                 title: 'MasterCard',
                 type: 'MC',
-                pattern: '^5([1-5]\\d*)?$',
+                pattern: '^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$',
                 gaps: [4, 8, 12],
                 lengths: [16],
                 code: {
@@ -49,9 +49,9 @@ define(
             {
                 title: 'Diners',
                 type: 'DN',
-                pattern: '^3((0([0-5]\\d*)?)|[689]\\d*)?$',
+                pattern: '^(3(0[0-5]|095|6|[8-9]))\\d*$',
                 gaps: [4, 10],
-                lengths: [14],
+                lengths: [14, 16, 17, 18, 19],
                 code: {
                     name: 'CVV',
                     size: 3
@@ -60,9 +60,9 @@ define(
             {
                 title: 'Discover',
                 type: 'DI',
-                pattern: '^6(0|01|011\\d*|5\\d*|4|4[4-9]\\d*)?$',
+                pattern: '^(6011(0|[2-4]|74|7[7-9]|8[6-9]|9)|6(4[4-9]|5))\\d*$',
                 gaps: [4, 8, 12],
-                lengths: [16],
+                lengths: [16, 17, 18, 19],
                 code: {
                     name: 'CID',
                     size: 3
@@ -71,9 +71,9 @@ define(
             {
                 title: 'JCB',
                 type: 'JCB',
-                pattern: '^((2|21|213|2131\\d*)|(1|18|180|1800\\d*)|(3|35\\d*))$',
+                pattern: '^35(2[8-9]|[3-8])\\d*$',
                 gaps: [4, 8, 12],
-                lengths: [16],
+                lengths: [16, 17, 18, 19],
                 code: {
                     name: 'CVV',
                     size: 3
@@ -82,7 +82,7 @@ define(
             {
                 title: 'UnionPay',
                 type: 'UN',
-                pattern: '^6(2\\d*)?$',
+                pattern: '^(622(1(2[6-9]|[3-9])|[3-8]|9([[0-1]|2[0-5]))|62[4-6]|628([2-8]))\\d*?$',
                 gaps: [4, 8, 12],
                 lengths: [16, 17, 18, 19],
                 code: {
