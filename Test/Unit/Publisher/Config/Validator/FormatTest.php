@@ -45,9 +45,9 @@ class FormatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missed topic field for publisher pub01.
+     * @expectedExceptionMessage Missing topic field for publisher pub01.
      */
-    public function testValidateMissedTopicName()
+    public function testValidateMissingTopicName()
     {
         $configData = [
             'pub01' => [
@@ -63,9 +63,9 @@ class FormatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missed disabled field for publisher pub01.
+     * @expectedExceptionMessage Missing disabled field for publisher pub01.
      */
-    public function testValidateMissedDisabledField()
+    public function testValidateMissingDisabledField()
     {
         $configData = [
             'pub01' => [
@@ -81,9 +81,9 @@ class FormatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missed connections field for publisher pub01.
+     * @expectedExceptionMessage Missing connections field for publisher pub01.
      */
-    public function testValidateMissedConnectionsField()
+    public function testValidateMissingConnectionsField()
     {
         $configData = [
             'pub01' => [
@@ -112,7 +112,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missed name field for publisher pub01 in connection config.
+     * @expectedExceptionMessage Missing name field for publisher pub01 in connection config.
      */
     public function testValidateInvalidPublisherConnectionName()
     {
@@ -130,7 +130,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missed exchange field for publisher pub01 in connection config.
+     * @expectedExceptionMessage Missing exchange field for publisher pub01 in connection config.
      */
     public function testValidateInvalidConnectionExchange()
     {
@@ -148,7 +148,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missed disabled field for publisher pub01 in connection config.
+     * @expectedExceptionMessage Missing disabled field for publisher pub01 in connection config.
      */
     public function testValidateInvalidConnectionDisabledField()
     {
@@ -166,7 +166,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missed topic field for publisher pub01. Missed disabled field for publisher pub02.
+     * @expectedExceptionMessage Missing topic field for publisher pub01. Missing disabled field for publisher pub02.
      */
     public function testValidateMultipleExceptions()
     {

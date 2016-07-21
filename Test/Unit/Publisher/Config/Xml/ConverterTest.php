@@ -39,7 +39,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Connection name is missed
+     * @expectedExceptionMessage Connection name is missing
      */
     public function testConvertWithException()
     {

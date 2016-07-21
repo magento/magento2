@@ -5,20 +5,16 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config\Validator;
 
-use \Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
-use Magento\Framework\Phrase;
+use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 
 /**
  * Publisher config data validator. Validates that publisher has only one enabled connection at the same time
  */
 class Format implements ValidatorInterface
 {
+
     /**
-     * Validate merged publisher config data.
-     *
-     * @param array $configData
-     * @throws \LogicException
-     * @return void
+     * {@inheritdoc}
      */
     public function validate($configData)
     {
@@ -30,7 +26,7 @@ class Format implements ValidatorInterface
 
             foreach ($requiredPublisherFields as $field) {
                 if (!array_key_exists($field, $publisherData)) {
-                    $errors[] = sprintf('Missed %s field for publisher %s.', $field, $name);
+                    $errors[] = sprintf('Missing %s field for publisher %s.', $field, $name);
                 }
             }
 
@@ -42,7 +38,7 @@ class Format implements ValidatorInterface
             foreach ($publisherData['connections'] as $connectionConfig) {
                 foreach ($requiredConnectionFields as $field) {
                     if (!array_key_exists($field, $connectionConfig)) {
-                        $errors[] = sprintf('Missed %s field for publisher %s in connection config.', $field, $name);
+                        $errors[] = sprintf('Missing %s field for publisher %s in connection config.', $field, $name);
                     }
                 }
             }

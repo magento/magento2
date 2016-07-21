@@ -7,18 +7,18 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Validator;
 
-use \Magento\Framework\MessageQueue\Publisher\Config\Validator\ActiveConnection;
+use \Magento\Framework\MessageQueue\Publisher\Config\Validator\EnabledConnection;
 
-class ActiveConnectionTest extends \PHPUnit_Framework_TestCase
+class EnabledConnectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ActiveConnection
+     * @var EnabledConnection
      */
     private $model;
 
     protected function setUp()
     {
-        $this->model = new ActiveConnection();
+        $this->model = new EnabledConnection();
     }
 
     public function testValidateValidConfig()

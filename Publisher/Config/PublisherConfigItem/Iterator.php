@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem;
 
-use \Magento\Framework\MessageQueue\Publisher\Config\Data;
+use Magento\Framework\MessageQueue\Publisher\Config\Data;
 use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem;
 use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemFactory;
 

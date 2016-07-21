@@ -41,8 +41,8 @@ class CompositeReader implements ReaderInterface
             if (!isset($readerInfo['reader']) || !($readerInfo['reader'] instanceof ReaderInterface)) {
                 throw new \InvalidArgumentException(
                     new Phrase(
-                        'Reader [%name] must implement Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface',
-                        ['name' => $name]
+                        'Reader [%name] must implement %class',
+                        ['name' => $name, 'class' => ReaderInterface::class]
                     )
                 );
             }
