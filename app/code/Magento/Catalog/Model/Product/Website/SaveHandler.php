@@ -47,10 +47,13 @@ class SaveHandler implements ExtensionInterface
             $websiteIds = [$defaultWebsiteId];
         } else {
             $extensionAttributes = $product->getExtensionAttributes();
-            $websiteIds = $extensionAttributes->getWebsiteIds() ?: [];
+            $websiteIds = $extensionAttributes->getWebsiteIds();
         }
 
-        $this->productWebsiteLink->saveWebsiteIds($product, $websiteIds);
+        if ($websiteIds !== null) { 
+            $this->productWebsiteLink->saveWebsiteIds($product, $websiteIds);
+        }
+
         return $product;
     }
 }

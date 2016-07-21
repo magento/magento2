@@ -63,6 +63,23 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->product, $this->saveHandler->execute($this->product, []));
     }
 
+    public function testWithEmptyWebsiteIds()
+    {
+        $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
+            ->getMock();
+        $this->product->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
+
+        $this->productWebsiteLink->expects($this->never())
+            ->method('saveWebsiteIds')
+            ->with($this->product, null);
+
+        $this->assertEquals($this->product, $this->saveHandler->execute($this->product, []));
+    }
+
     public function testWithSingleStoreMode()
     {
         $defaultWebsiteId = 1;
