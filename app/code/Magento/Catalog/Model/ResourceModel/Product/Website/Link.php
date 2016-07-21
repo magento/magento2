@@ -26,7 +26,6 @@ class Link
 
     /**
      * Retrieve associated with product websites ids
-     * 
      * @param $productId
      * @return array
      */

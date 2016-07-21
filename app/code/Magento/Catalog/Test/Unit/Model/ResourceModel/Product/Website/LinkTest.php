@@ -35,7 +35,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->connection =
             $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $this->dbSelect = $this->getMockBuilder(\Zend_Db_Select::class)
+        $this->dbSelect = $this->getMockBuilder(\Magento\Framework\Db\Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connection->expects($this->any())
