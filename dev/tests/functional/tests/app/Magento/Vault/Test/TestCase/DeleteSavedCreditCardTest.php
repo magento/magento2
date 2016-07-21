@@ -82,7 +82,7 @@ class DeleteSavedCreditCardTest extends Injectable
             }
             $this->placeOrder();
         }
-        // Delete credit cards from My Account and verify they are not available on checkout
+        // Delete credit cards from Stored Payment Methods and verify they are not available on checkout
         $paymentsCount = count($payments);
         for($i = 2; $i < $paymentsCount; $i++) {
             $deletedCard = $this->deleteCreditCardFromMyAccount(
@@ -273,7 +273,7 @@ class DeleteSavedCreditCardTest extends Injectable
     protected function useSavedCreditCard($payment)
     {
         $useSavedCreditCardStep = ObjectManager::getInstance()->create(
-            \Magento\Vault\Test\TestStep\UseSavedCreditCardStep::class,
+            \Magento\Vault\Test\TestStep\UseSavedPaymentMethodStep::class,
             ['payment' => $payment]
         );
         $useSavedCreditCardStep->run();
