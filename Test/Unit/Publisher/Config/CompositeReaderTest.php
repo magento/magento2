@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Xml;
+namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config;
 
 use Magento\Framework\MessageQueue\Publisher\Config\CompositeReader;
 use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
