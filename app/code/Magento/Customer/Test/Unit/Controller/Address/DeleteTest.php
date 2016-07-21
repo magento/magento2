@@ -92,7 +92,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
-        $this->context = $objectManager->getObject(\Magento\Framework\App\Action\Context::class,
+        $this->context = $objectManager->getObject(
+            \Magento\Framework\App\Action\Context::class,
             [
                 'request' => $this->request,
                 'messageManager' => $this->messageManager,

@@ -243,7 +243,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             $sizePlaceholder,
             $this->throwException(
                 new \Magento\Framework\Exception\FileSystemException(new \Magento\Framework\Phrase('test'))
-                        ),
+            ),
             $sizePlaceholder
         );
         $this->imageHelper->expects($this->any())->method('getDefaultPlaceholderUrl')->willReturn($placeholderUrl);
@@ -253,5 +253,5 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturnCallback('json_encode');
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());
-        }
+    }
 }

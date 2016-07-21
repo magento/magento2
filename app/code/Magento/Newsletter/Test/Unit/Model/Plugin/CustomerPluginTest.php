@@ -69,7 +69,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
         $customer = $this->getMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $proceed  = function(CustomerInterface $customer, $passwordHash = null) use($customer) {
+        $proceed  = function (CustomerInterface $customer, $passwordHash = null) use ($customer) {
             return $customer;
         };
         /** @var CustomerRepository | \PHPUnit_Framework_MockObject_MockObject $subject */
@@ -85,7 +85,8 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function provideExtensionAttributeDataForAroundSave() {
+    public function provideExtensionAttributeDataForAroundSave()
+    {
         return [
             [true, true] ,
             [false, false]
@@ -95,7 +96,8 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideExtensionAttributeDataForAroundSave
      */
-    public function testAroundSaveWithIsSubscribed($isSubscribed, $subscribeIsCreated) {
+    public function testAroundSaveWithIsSubscribed($isSubscribed, $subscribeIsCreated)
+    {
         $passwordHash = null;
         $customerId = 1;
         /** @var CustomerInterface | \PHPUnit_Framework_MockObject_MockObject $customer */
@@ -124,7 +126,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
                 ->with($customerId);
         }
 
-        $proceed  = function(CustomerInterface $customer, $passwordHash = null) use($customer) {
+        $proceed  = function (CustomerInterface $customer, $passwordHash = null) use ($customer) {
             return $customer;
         };
         /** @var CustomerRepository | \PHPUnit_Framework_MockObject_MockObject $subject */

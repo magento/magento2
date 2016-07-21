@@ -422,6 +422,4 @@ class Http extends Request implements RequestInterface, RequestSafetyInterface
         }
         return $this->isSafeMethod;
     }
-
-
 }

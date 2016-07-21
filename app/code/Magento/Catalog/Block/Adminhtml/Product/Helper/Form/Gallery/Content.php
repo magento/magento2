@@ -139,7 +139,7 @@ class Content extends \Magento\Backend\Block\Widget
             is_array($value['images']) &&
             count($value['images'])
         ) {
-            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);            
+            $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
                 $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
@@ -150,7 +150,8 @@ class Content extends \Magento\Backend\Block\Widget
                     $staticDir = $this->_filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
                     $image['url'] = $this->getImageHelper()->getDefaultPlaceholderUrl('thumbnail');
                     $fileHandler = $staticDir->stat(
-                        $this->getAssetRepo()->createAsset($this->getImageHelper()->getPlaceholder('thumbnail'))->getPath()
+                        $this->getAssetRepo()
+                            ->createAsset($this->getImageHelper()->getPlaceholder('thumbnail'))->getPath()
                     );
                     $image['size'] = $fileHandler['size'];
                     $this->_logger->warning($e);

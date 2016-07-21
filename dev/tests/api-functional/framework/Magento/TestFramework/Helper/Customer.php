@@ -115,7 +115,8 @@ class Customer extends WebapiAbstract
      * @param int $customerId
      * @return array|bool|float|int|string
      */
-    public function updateSampleCustomer(array $additional = [], $customerId) {
+    public function updateSampleCustomer(array $additional = [], $customerId)
+    {
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/" . $customerId,

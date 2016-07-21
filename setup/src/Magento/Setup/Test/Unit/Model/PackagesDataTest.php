@@ -52,7 +52,7 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
         $applicationFactory->expects($this->any())->method('create')->willReturn($application);
         $objectManager->expects($this->any())
             ->method('get')
-            ->with( \Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
+            ->with(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
             ->willReturn($applicationFactory);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
 

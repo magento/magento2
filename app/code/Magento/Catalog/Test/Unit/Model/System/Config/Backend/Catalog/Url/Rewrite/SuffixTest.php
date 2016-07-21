@@ -109,7 +109,9 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveCleanCache()
     {
         $this->suffixModel->setValue('new');
-        $this->suffixModel->setPath(\Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX);
+        $this->suffixModel->setPath(
+            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
+        );
         $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')->withConsecutive(
             [$this->equalTo([
                 \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
@@ -123,7 +125,9 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveWithoutChanges()
     {
         $this->suffixModel->setValue('');
-        $this->suffixModel->setPath(\Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX);
+        $this->suffixModel->setPath(
+            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
+        );
         $this->cacheTypeList->expects($this->never())->method('invalidate');
         $this->suffixModel->afterSave();
     }
@@ -131,7 +135,9 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveProduct()
     {
         $this->suffixModel->setValue('new');
-        $this->suffixModel->setPath(\Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX);
+        $this->suffixModel->setPath(
+            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX
+        );
         $this->cacheTypeList->expects($this->once())->method('invalidate')->with('config');
         $this->suffixModel->afterSave();
     }

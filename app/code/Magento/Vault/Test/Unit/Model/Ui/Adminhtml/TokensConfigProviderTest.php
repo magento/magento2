@@ -263,7 +263,6 @@ class TokensConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityId')
             ->willReturn(self::ENTITY_ID);
 
-
         list($tokenUiComponent, $tokenUiComponentProvider) = $this->getTokenUiComponentProvider($token);
 
         $searchCriteria = $this->getSearchCriteria($customerId, self::ENTITY_ID, self::VAULT_PROVIDER_CODE);

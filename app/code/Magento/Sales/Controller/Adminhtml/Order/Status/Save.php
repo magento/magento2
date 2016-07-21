@@ -27,8 +27,8 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Status
             $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
             if ($isNew) {
                 $statusCode = $data['status'] = $filterManager->stripTags($data['status']);
-            }            
-            $data['label'] = $filterManager->stripTags($data['label']);            
+            }
+            $data['label'] = $filterManager->stripTags($data['label']);
             if (!isset($data['store_labels'])) {
                 $data['store_labels'] = [];
             }
