@@ -102,8 +102,11 @@ class CategoryLink
         }
 
         if (!empty($delete)) {
-            foreach ($delete as $categoryId) {
-                $where = ['product_id = ?' => (int)$product->getId(), 'category_id = ?' => (int)$categoryId];
+            foreach ($delete as $categoryData) {
+                $where = [
+                    'product_id = ?' => (int)$product->getId(),
+                    'category_id = ?' => (int)$categoryData['category_id']
+                ];
                 $connection->delete($this->getCategoryLinkMetadata()->getEntityTable(), $where);
             }
         }

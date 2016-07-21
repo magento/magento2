@@ -25,7 +25,7 @@ class CategoryLinkManagementTest extends WebapiAbstract
         $expected = [
             [
                 'sku' => 'simple333',
-                'position' => '1',
+                'position' => '0',
                 'category_id' => '333',
             ],
         ];
