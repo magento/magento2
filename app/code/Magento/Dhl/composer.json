@@ -16,7 +16,8 @@
         "lib-libxml": "*"
     },
     "suggest": {
-        "magento/module-checkout": "100.2.*"
+        "magento/module-checkout": "100.2.*",
+        "magento/module-rma": "100.2.*"
     },
     "type": "magento2-module",
     "version": "100.2.0-dev",
