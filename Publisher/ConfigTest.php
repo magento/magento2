@@ -48,6 +48,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($connection->isDisabled(), 'Incorrect connection status');
     }
 
+    public function testGetPublisherConnectionWithoutConfiguredExchange()
+    {
+        /** @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface $config */
+        $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class);
+
+        $publisher = $config->getPublisher('topic.message.queue.config.04');
+        $connection = $publisher->getConnection();
+        $this->assertEquals('magento', $connection->getExchange(), 'Incorrect exchange name');
+    }
+
     public function testGetPublishersWithoutEnabledConnection()
     {
         /** @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface $config */
