@@ -7,10 +7,15 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRule\Test\TestCase\DeleteCatalogPriceRuleEntityTest" summary="Delete Catalog Price Rule" ticketId="MAGETWO-25211">
-        <variation name="CatalogRule_Delete_AdminOnly">
+        <variation name="CatalogRule_Delete_AdminOnly_ProductSimple" summary="Assert that Catalog Price Rule is not applied for simple product">
             <data name="catalogPriceRule/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
+            <data name="product" xsi:type="string">catalogProductSimple::simple_for_salesrule_1</data>
+            <data name="productPrice/0/regular" xsi:type="string">100</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleSuccessDeleteMessage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotInGrid" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
         </variation>
     </testCase>
 </config>

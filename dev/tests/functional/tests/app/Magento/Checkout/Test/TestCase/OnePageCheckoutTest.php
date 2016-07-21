@@ -20,9 +20,9 @@ use Magento\Mtf\TestCase\Scenario;
  * 1. Go to Frontend.
  * 2. Add products to the cart.
  * 3. Apply discounts in shopping cart according to dataset.
- * 4. In 'Estimate Shipping and Tax' section specify destination using values from Test Data
- * 5. Click the 'Get a Quote' button
- * 6. In the section appeared select Shipping method, click the 'Update Total' button
+ * 4. In 'Estimate Shipping and Tax' section specify destination using values from Test Data.
+ * 5. Click the 'Get a Quote' button.
+ * 6. In the section appeared select Shipping method, click the 'Update Total' button.
  * 7. Click the 'Proceed to Checkout' button.
  * 8. Select checkout method according to dataset.
  * 9. Fill billing information and select the 'Ship to this address' option.
