@@ -70,5 +70,5 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                 start = parseInt(start, 10);
                 return input.slice(start);
             }
-        }
+        };
     });
