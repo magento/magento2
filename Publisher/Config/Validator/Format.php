@@ -24,10 +24,9 @@ class Format implements ValidatorInterface
         $errors = [];
         foreach ($configData as $name => $publisherData) {
 
-            foreach ($requiredPublisherFields as $field) {
-                if (!array_key_exists($field, $publisherData)) {
-                    $errors[] = sprintf('Missing %s field for publisher %s.', $field, $name);
-                }
+            $diff = array_diff($requiredPublisherFields, array_keys($publisherData));
+            foreach ($diff as $field) {
+                $errors[] = sprintf('Missing %s field for publisher %s.', $field, $name);
             }
 
             if (!array_key_exists('connections', $publisherData) || !is_array($publisherData['connections'])) {
@@ -36,10 +35,9 @@ class Format implements ValidatorInterface
             }
 
             foreach ($publisherData['connections'] as $connectionConfig) {
-                foreach ($requiredConnectionFields as $field) {
-                    if (!array_key_exists($field, $connectionConfig)) {
-                        $errors[] = sprintf('Missing %s field for publisher %s in connection config.', $field, $name);
-                    }
+                $diff = array_diff($requiredConnectionFields, array_keys($connectionConfig));
+                foreach ($diff as $field) {
+                    $errors[] = sprintf('Missing %s field for publisher %s in connection config.', $field, $name);
                 }
             }
         }
