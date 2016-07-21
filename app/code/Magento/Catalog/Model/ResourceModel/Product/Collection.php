@@ -8,11 +8,13 @@
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 
@@ -252,6 +254,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @var GalleryReadHandler
      */
     private $productGalleryReadHandler;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -2092,15 +2100,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
         $attribute = $this->getAttribute('tier_price');
-        if ($attribute->isScopeGlobal()) {
-            $websiteId = 0;
-        } else {
-            if (null !== $this->getStoreId()) {
-                $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
-            }
+        $websiteId = 0;
+        if (!$attribute->isScopeGlobal() && null !== $this->getStoreId()) {
+            $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
         }
-//        var_dump($this->getStoreId());
-//        die;
+
         $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
         $connection = $this->getConnection();
         $columns = [
@@ -2122,10 +2126,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             [$linkField, 'qty']
         );
 
-        if ($websiteId == '0') {
+        if ($websiteId == 0) {
             $select->where('website_id = ?', $websiteId);
         } else {
-            $select->where('website_id IN(?)', ['0', $websiteId]);
+            $select->where('website_id IN(?)', [0, $websiteId]);
         }
 
         foreach ($connection->fetchAll($select) as $row) {
@@ -2191,7 +2195,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             return $this;
         }
 
-        $mediaGalleries = [];
         if (!$this->count()) {
             return $this;
         }
@@ -2202,9 +2205,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->getStoreId(),
             $attribute->getAttributeId()
         );
-        
+
+        $mediaGalleries = [];
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+
         foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $mediaGalleries[$row['entity_id']][] = $row;
+            $mediaGalleries[$row[$linkField]][] = $row;
         }
 
         foreach ($this->getItems() as $item) {
@@ -2214,6 +2220,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->setFlag('media_gallery_added', true);
         return $this;
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 
     /**

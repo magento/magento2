@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
@@ -32,21 +33,29 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
     private $catalogHelper;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Helper\Data $catalogHelper
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Catalog\Helper\Data $catalogHelper
+        \Magento\Catalog\Helper\Data $catalogHelper,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
         $this->eavConfig = $eavConfig;
         $this->catalogHelper = $catalogHelper;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -54,12 +63,13 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
      */
     public function build($productId)
     {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $priceAttribute = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
         $priceSelect = $this->resource->getConnection()->select()
-            ->from(['t' => $priceAttribute->getBackendTable()], 'entity_id')
+            ->from(['t' => $priceAttribute->getBackendTable()], $linkField)
             ->joinInner(
                 ['link' => $this->resource->getTableName('catalog_product_relation')],
-                'link.child_id = t.entity_id',
+                "link.child_id = t.$linkField",
                 []
             )->where('link.parent_id = ? ', $productId)
             ->where('t.attribute_id = ?', $priceAttribute->getAttributeId())

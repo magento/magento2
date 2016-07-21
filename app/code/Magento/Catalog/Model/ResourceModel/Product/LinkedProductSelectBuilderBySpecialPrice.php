@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
@@ -42,12 +43,18 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
     private $localeDate;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Helper\Data $catalogHelper
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -55,7 +62,8 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Helper\Data $catalogHelper,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
@@ -63,6 +71,7 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
         $this->catalogHelper = $catalogHelper;
         $this->dateTime = $dateTime;
         $this->localeDate = $localeDate;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -70,6 +79,7 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
      */
     public function build($productId)
     {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $connection = $this->resource->getConnection();
         $specialPriceAttribute = $this->eavConfig->getAttribute(Product::ENTITY, 'special_price');
         $specialPriceFromDate = $this->eavConfig->getAttribute(Product::ENTITY, 'special_from_date');
@@ -78,22 +88,22 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
         $currentDate = $this->dateTime->formatDate($timestamp, false);
 
         $specialPrice = $connection->select()
-            ->from(['t' => $specialPriceAttribute->getBackendTable()], 'entity_id')
+            ->from(['t' => $specialPriceAttribute->getBackendTable()], $linkField)
             ->joinInner(
                 ['link' => $this->resource->getTableName('catalog_product_relation')],
-                'link.child_id = t.entity_id',
+                "link.child_id = t.{$linkField}",
                 []
             )->joinInner(
                 ['special_from' => $specialPriceFromDate->getBackendTable()],
                 $connection->quoteInto(
-                    't.entity_id = special_from.entity_id AND special_from.attribute_id = ?',
+                    "t.{$linkField} = special_from.{$linkField} AND special_from.attribute_id = ?",
                     $specialPriceFromDate->getAttributeId()
                 ),
                 ''
             )->joinInner(
                 ['special_to' => $specialPriceToDate->getBackendTable()],
                 $connection->quoteInto(
-                    't.entity_id = special_to.entity_id AND special_to.attribute_id = ?',
+                    "t.{$linkField} = special_to.{$linkField} AND special_to.attribute_id = ?",
                     $specialPriceToDate->getAttributeId()
                 ),
                 ''
