@@ -7,53 +7,17 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:include schemaLocation="urn:magento:framework-message-queue:etc/queue_base.xsd" />
-    <xs:include schemaLocation="urn:magento:framework-message-queue:etc/queue_base_deprecated.xsd" />
     <xs:element name="config">
+        <xs:annotation>
+            <xs:documentation>
+                @deprecated
+            </xs:documentation>
+        </xs:annotation>
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="broker" type="brokerType"/>
-                <xs:element name="publisher" type="publisherType">
-                    <xs:annotation>
-                        <xs:documentation>
-                            @deprecated
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="topic" type="topicType">
-                    <xs:annotation>
-                        <xs:documentation>
-                            @deprecated
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="consumer" type="consumerType">
-                    <xs:annotation>
-                        <xs:documentation>
-                            @deprecated
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="bind" type="bindType">
-                    <xs:annotation>
-                        <xs:documentation>
-                            @deprecated
-                        </xs:documentation>
-                    </xs:annotation>
-                </xs:element>
             </xs:choice>
         </xs:complexType>
-        <xs:unique name="topic-unique-name">
-            <xs:selector xpath="topic"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-        <xs:unique name="consumer-unique-name">
-            <xs:selector xpath="consumer"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-        <xs:unique name="publisher-unique-name">
-            <xs:selector xpath="publisher"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
         <xs:unique name="broker-unique-name">
             <xs:selector xpath="broker"/>
             <xs:field xpath="@topic"/>

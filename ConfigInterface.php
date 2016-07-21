@@ -8,6 +8,9 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @deprecated
+ */
 interface ConfigInterface
 {
     const PUBLISHERS = 'publishers';

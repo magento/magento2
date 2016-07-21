@@ -9,6 +9,7 @@
     <xs:complexType name="brokerType">
         <xs:annotation>
             <xs:documentation>
+                @deprecated
                 Broker configuration describes relations for topic, publisher, consumer, queue and exchange server
             </xs:documentation>
         </xs:annotation>
@@ -22,6 +23,7 @@
     <xs:complexType name="brokerQueueType">
         <xs:annotation>
             <xs:documentation>
+                @deprecated
                 Queue element of the broker element
             </xs:documentation>
         </xs:annotation>
@@ -34,6 +36,7 @@
     <xs:simpleType name="instanceType">
         <xs:annotation>
             <xs:documentation>
+                @deprecated
                 Instance is expected in a format "Vendor\Module\Api\ServiceName".
             </xs:documentation>
         </xs:annotation>
@@ -45,6 +48,7 @@
     <xs:simpleType name="handlerType">
         <xs:annotation>
             <xs:documentation>
+                @deprecated
                 Handler is expected in a format "Vendor\Module\Api\ServiceName::methodName".
             </xs:documentation>
         </xs:annotation>

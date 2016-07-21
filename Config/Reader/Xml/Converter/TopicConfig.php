@@ -14,6 +14,8 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 
 /**
  * Converts MessageQueue config from \DOMDocument to array
+ * 
+ * @deprecated 
  */
 class TopicConfig implements \Magento\Framework\Config\ConverterInterface
 {
@@ -304,7 +306,7 @@ class TopicConfig implements \Magento\Framework\Config\ConverterInterface
      */
     protected function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {
-        $item =  $node->attributes->getNamedItem($attributeName);
+        $item = $node->attributes->getNamedItem($attributeName);
         return $item ? $item->nodeValue : $default;
     }
 }

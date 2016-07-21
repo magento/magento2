@@ -10,6 +10,8 @@ use Magento\Framework\Phrase;
 
 /**
  * Converts MessageQueue config from \DOMDocument to array
+ *
+ * @deprecated
  */
 class CompositeConverter implements ConverterInterface
 {

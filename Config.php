@@ -9,6 +9,11 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
+/**
+ * Queue configuration.
+ *
+ * @deprecated
+ */
 class Config implements ConfigInterface
 {
     /**
@@ -25,7 +30,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getExchangeByTopic($topicName)
     {
@@ -36,7 +41,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getQueuesByTopic($topic)
     {
@@ -59,18 +64,22 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getConnectionByTopic($topic)
     {
-        $publisherConfig = $this->getPublisherConfigByTopic($topic);
+        try {
+            $publisherConfig = $this->getPublisherConfigByTopic($topic);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            return null;
+        }
         return isset($publisherConfig[ConfigInterface::PUBLISHER_CONNECTION])
             ? $publisherConfig[ConfigInterface::PUBLISHER_CONNECTION]
             : null;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getConnectionByConsumer($consumer)
     {
@@ -86,7 +95,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getMessageSchemaType($topic)
     {
@@ -97,7 +106,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getConsumerNames()
     {
@@ -106,7 +115,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getConsumer($name)
     {
@@ -115,7 +124,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getBinds()
     {
@@ -123,7 +132,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getPublishers()
     {
@@ -131,7 +140,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getConsumers()
     {
@@ -139,7 +148,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getTopic($name)
     {
@@ -147,7 +156,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getPublisher($name)
     {
@@ -155,7 +164,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getResponseQueueName($topicName)
     {
