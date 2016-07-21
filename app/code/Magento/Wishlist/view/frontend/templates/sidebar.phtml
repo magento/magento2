@@ -14,7 +14,7 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
 <?php if ($wishlistHelper->isAllow()) : ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
-            <strong><?php /* @escapeNotVerified */ echo $block->getTitle(); ?></strong>
+            <strong role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo $block->getTitle(); ?></strong>
             <!-- ko if: wishlist().counter -->
             <span data-bind="text: wishlist().counter" class="counter"></span>
             <!-- /ko -->
