@@ -7,38 +7,25 @@
 namespace Magento\Sales\Api;
 
 /**
- * Class InvoiceCaptureInterface
+ * Class OrderInvoiceInterface
+ *  Should be part of OrderManagementInterface::invoice()
  *
  * @api
  */
-interface InvoiceCaptureInterface
+interface OrderInvoiceInterface
 {
     /**
      * @param int $orderId
+     * @param bool|false $capture
      * @param \Magento\Sales\Api\Data\InvoiceItemCreationInterface[] $items
      * @param bool|false $notify
      * @param Data\InvoiceCommentCreationInterface|null $comment
      * @param Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int
      */
-    public function captureOffline(
+    public function execute(
         $orderId,
-        array $items = [],
-        $notify = false,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
-    );
-
-    /**
-     * @param int $orderId
-     * @param \Magento\Sales\Api\Data\InvoiceItemCreationInterface[] $items
-     * @param bool|false $notify
-     * @param Data\InvoiceCommentCreationInterface|null $comment
-     * @param Data\InvoiceCreationArgumentsInterface|null $arguments
-     * @return int
-     */
-    public function captureOnline(
-        $orderId,
+        $capture = false,
         array $items = [],
         $notify = false,
         \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,

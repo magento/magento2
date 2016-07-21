@@ -19,14 +19,8 @@ interface PaymentAdapterInterface
     /**
      * @param OrderInterface $order
      * @param InvoiceInterface $invoice
+     * @param bool $capture
      * @return OrderInterface
      */
-    public function captureOnline(OrderInterface $order, InvoiceInterface $invoice);
-
-    /**
-     * @param OrderInterface $order
-     * @param InvoiceInterface $invoice
-     * @return OrderInterface
-     */
-    public function captureOffline(OrderInterface $order, InvoiceInterface $invoice);
+    public function pay(OrderInterface $order, InvoiceInterface $invoice, $capture);
 }

@@ -9,11 +9,11 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * Interface StateCheckerInterface
+ * Interface OrderStateResolverInterface
  *
  * @api
  */
-interface StateCheckerInterface
+interface OrderStateResolverInterface
 {
     const IN_PROGRESS = 'order_in_progress';
     const FORCED_CREDITMEMO = 'forced_creditmemo';

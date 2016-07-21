@@ -12,7 +12,7 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 
-class StateChecker implements StateCheckerInterface
+class StateChecker implements OrderStateResolverInterface
 {
     /**
      * @param OrderInterface $order
