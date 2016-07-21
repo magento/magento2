@@ -5,29 +5,26 @@
  */
 namespace Magento\Bundle\Model\Plugin;
 
-use Closure;
+use Magento\Quote\Model\Quote\Item\ToOrderItem;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 
 class QuoteItem
 {
     /**
      * Add bundle attributes to order data
      *
-     * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $subject
-     * @param callable $proceed
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param array $additional
-     * @return \Magento\Sales\Model\Order\Item
+     * @param ToOrderItem $subject
+     * @param OrderItemInterface $orderItem
+     * @param AbstractItem $item
+     * @return OrderItemInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundConvert(
-        \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
-        Closure $proceed,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
-        $additional = []
+    public function afterConvert(
+    	ToOrderItem $subject,
+	    OrderItemInterface $orderItem,
+	    AbstractItem $item
     ) {
-        /** @var $orderItem \Magento\Sales\Model\Order\Item */
-        $orderItem = $proceed($item, $additional);
-
         if ($attributes = $item->getProduct()->getCustomOption('bundle_selection_attributes')) {
             $productOptions = $orderItem->getProductOptions();
             $productOptions['bundle_selection_attributes'] = $attributes->getValue();
