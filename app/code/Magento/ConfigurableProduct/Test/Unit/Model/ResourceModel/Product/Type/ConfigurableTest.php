@@ -8,6 +8,8 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\DB\Select;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -15,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
+    protected $connection;
     /**
      * @var Configurable
      */
@@ -47,6 +50,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
         $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
@@ -91,13 +96,41 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['__sleep', '__wakeup', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock->expects($this->once())
-            ->method('getLinkField')
-            ->willReturn('link');
-        $mainProduct->expects($this->once())
-            ->method('getData')
-            ->with('link')
-            ->willReturn(3);
+            
+            $this->metadataMock->expects($this->once())
+                ->method('getLinkField')
+                ->willReturn('link');
+            $mainProduct->expects($this->once())
+                ->method('getData')
+                ->with('link')
+                ->willReturn(3);
+            
+            $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(false));
+
+
+        $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+
+        $this->connection->method('select')->willReturn($select);
+        $select->method('from')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+
+        $statement  = $this->getMockBuilder(\Zend_Db_Statement::class)->disableOriginalConstructor()->getMock();
+        $select->method('query')->willReturn($statement);
+        $statement->method('fetchAll')->willReturn([1]);
+
+        $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
+    }
+
+    public function testSaveProductsForDuplicate()
+    {
+        $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
+        $mainProduct->expects($this->never())->method('getTypeInstance')->will($this->returnSelf());
+
         $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
     }
 
@@ -106,6 +139,26 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfigurableOptions()
     {
+        $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)->getMock();
+        $scope->expects($this->any())->method('getId')->willReturn(123);
+
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMockForAbstractClass();
+        $scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
+
+        $configurable = $this->getMock(
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
+            [
+                'getTable',
+                'getConnection',
+            ],
+            [
+                $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock(),
+                $this->relation,
+                $scopeResolver
+            ],
+            '',
+            true
+        );
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -172,11 +225,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                     'sku' => 'entity.sku',
                     'product_id' => 'product_entity.entity_id',
                     'attribute_code' => 'attribute.attribute_code',
-                    'option_title' => 'option_value.value',
-                    'super_attribute_label' =>  'attribute_label.value'
+                    'option_title' => null,
+                    'value_index' => 'entity_value.value',
+                    'default_title' => 'default_option_value.value',
                 ]
             )
             ->will($this->returnSelf());
+
         $superAttribute = $this->getMock(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class,
             [
@@ -187,10 +242,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $superAttribute->expects($this->once())
+        $superAttribute->expects($this->any())
             ->method('getBackendTable')
             ->willReturn('getBackendTable value');
-        $superAttribute->expects($this->once())
+        $superAttribute->expects($this->any())
             ->method('getAttributeId')
             ->willReturn('getAttributeId value');
         $attributes = [
@@ -243,31 +298,40 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                         ' AND ',
                         [
                             'option_value.option_id = entity_value.value',
-                            'option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                            'option_value.store_id = ' . 123
                         ]
                     ),
                     []
                 ],
                 [
-                    ['attribute_label' => 'catalog_product_super_attribute_label value'],
+                    ['default_option_value' => 'eav_attribute_option_value value'],
                     implode(
                         ' AND ',
                         [
-                            'super_attribute.product_super_attribute_id = attribute_label.product_super_attribute_id',
-                            'attribute_label.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                            'default_option_value.option_id = entity_value.value',
+                            'default_option_value.store_id = ' . \Magento\Store\Model\Store::DEFAULT_STORE_ID
                         ]
                     ),
                     []
                 ]
             );
-        $select->expects($this->once())
+        $select->expects($this->exactly(2))
             ->method('where')
             ->will($this->returnSelf())
-            ->with(
-                'super_attribute.product_id = ?',
-                'getId value'
+            ->withConsecutive(
+                [
+                    'super_attribute.product_id = ?',
+                    'getId value'
+                ],
+                [
+                    'attribute.attribute_id = ?',
+                    'getAttributeId value'
+                ]
             );
         $readerAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+
+
+        $readerAdapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods([
                 'select',
                 'fetchAll',
@@ -282,6 +346,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->with($select)
             ->willReturn('fetchAll value');
         $configurable->expects($this->exactly(2))
+
+        $configurable->expects($this->any())
             ->method('getConnection')
             ->willReturn($readerAdapter);
         $expectedAttributesOptionsData = [

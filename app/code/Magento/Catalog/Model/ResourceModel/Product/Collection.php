@@ -12,9 +12,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\Store;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 
 /**
  * Product collection
@@ -232,7 +232,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $dateTime;
 
     /**
-     * @var GroupManagementInterface
+     * @var \Magento\Customer\Api\GroupManagementInterface
      */
     protected $_groupManagement;
 
@@ -243,6 +243,15 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     protected $needToAddWebsiteNamesToResult;
 
+    /**
+     * @var Gallery
+     */
+    private $mediaGalleryResource;
+
+    /**
+     * @var GalleryReadHandler
+     */
+    private $productGalleryReadHandler;
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -2086,10 +2095,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($attribute->isScopeGlobal()) {
             $websiteId = 0;
         } else {
-            if ($this->getStoreId()) {
+            if (null !== $this->getStoreId()) {
                 $websiteId = $this->_storeManager->getStore($this->getStoreId())->getWebsiteId();
             }
         }
+//        var_dump($this->getStoreId());
+//        die;
         $linkField = $this->getConnection()->getAutoIncrementField($this->getTable('catalog_product_entity'));
         $connection = $this->getConnection();
         $columns = [
@@ -2165,6 +2176,70 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $this->_priceDataFieldFilters[] = array_merge([$comparisonFormat], $fields);
         return $this;
+    }
+
+    /**
+     * Add media gallery data to loaded items
+     *
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function addMediaGalleryData()
+    {
+        if ($this->getFlag('media_gallery_added')) {
+            return $this;
+        }
+
+        $mediaGalleries = [];
+        if (!$this->count()) {
+            return $this;
+        }
+
+        /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $attribute = $this->getAttribute('media_gallery');
+        $select = $this->getMediaGalleryResource()->createBatchBaseSelect(
+            $this->getStoreId(),
+            $attribute->getAttributeId()
+        );
+        
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $mediaGalleries[$row['entity_id']][] = $row;
+        }
+
+        foreach ($this->getItems() as $item) {
+            $mediaEntries = isset($mediaGalleries[$item->getId()]) ? $mediaGalleries[$item->getId()] : [];
+            $this->getGalleryReadHandler()->addMediaDataToProduct($item, $mediaEntries);
+        }
+
+        $this->setFlag('media_gallery_added', true);
+        return $this;
+    }
+
+    /**
+     * Retrieve GalleryReadHandler
+     *
+     * @return GalleryReadHandler
+     * @deprecated
+     */
+    protected function getGalleryReadHandler()
+    {
+        if ($this->productGalleryReadHandler === null) {
+            $this->productGalleryReadHandler = ObjectManager::getInstance()->get(GalleryReadHandler::class);
+        }
+        return $this->productGalleryReadHandler;
+    }
+
+    /**
+     * @deprecated
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Gallery
+     */
+    private function getMediaGalleryResource()
+    {
+        if (null === $this->mediaGalleryResource) {
+            $this->mediaGalleryResource = ObjectManager::getInstance()->get(Gallery::class);
+        }
+        return $this->mediaGalleryResource;
     }
 
     /**

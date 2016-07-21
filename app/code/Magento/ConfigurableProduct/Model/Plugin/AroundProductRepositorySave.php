@@ -84,8 +84,9 @@ class AroundProductRepositorySave
             $attributeCodes[] = $attributeCode;
         }
         $this->validateProductLinks($attributeCodes, $configurableLinks);
+        $product->getTypeInstance()->resetConfigurableAttributes($product);
 
-        return $subject->get($result->getSku(), false, $result->getStoreId(), true);
+        return $product;
     }
 
     /**

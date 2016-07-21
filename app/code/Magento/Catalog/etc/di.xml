@@ -781,4 +781,15 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface" type="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite" />
+    <type name="Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderComposite">
+        <arguments>
+            <argument name="linkedProductSelectBuilder" xsi:type="array">
+                <item name="basePrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByBasePrice</item>
+                <item name="specialPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderBySpecialPrice</item>
+                <item name="tierPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderByTierPrice</item>
+                <item name="indexPrice" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\LinkedProductSelectBuilderByIndexPrice</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
