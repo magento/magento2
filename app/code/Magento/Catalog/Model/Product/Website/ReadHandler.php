@@ -26,10 +26,11 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * @param ProductInterface $product
-     * @param array $additionalData
+     * @param array $arguments
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return ProductInterface
      */
-    public function execute($product, $additionalData = [])
+    public function execute($product, $arguments = [])
     {
         if ($product->getExtensionAttributes()->getWebsiteIds() !== null) {
             return $product;
