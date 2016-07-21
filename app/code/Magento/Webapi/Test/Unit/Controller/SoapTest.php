@@ -102,7 +102,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->method('getHeaders')
             ->will($this->returnValue(new \Zend\Http\Headers()));
 
-        $appconfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '' , false);
+        $appconfig = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->_requestMock,
             'appConfig',

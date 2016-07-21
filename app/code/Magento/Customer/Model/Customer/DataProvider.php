@@ -342,7 +342,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
             if (isset($config['validation']['file_extensions'])) {
                 $allowedExtensions = explode(',', $config['validation']['file_extensions']);
-                array_walk($allowedExtensions, function(&$value) { $value = strtolower(trim($value)); });
+                array_walk($allowedExtensions, function (&$value) {
+                    $value = strtolower(trim($value));
+                });
             }
 
             $allowedExtensions = implode(' ', $allowedExtensions);

@@ -472,7 +472,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-        /**
+    /**
      * We wan't to ensure that property $_eventPrefix used during event dispatching
      *
      * @param $eventName
@@ -484,7 +484,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $isCalledWithRightPrefix = 0;
         $this->eventDispatcher->expects($this->any())->method('dispatch')->with(
-            $this->callback(function($arg) use (&$isCalledWithRightPrefix, $eventName) {
+            $this->callback(function ($arg) use (&$isCalledWithRightPrefix, $eventName) {
                 $isCalledWithRightPrefix |= ($arg === $eventName);
                 return true;
             }),

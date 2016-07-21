@@ -310,7 +310,6 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($quoteId);
 
-
         $defaultGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
             ->getMock();
         $defaultGroup->expects($this->any())
