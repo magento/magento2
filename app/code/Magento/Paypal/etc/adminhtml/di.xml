@@ -42,6 +42,7 @@
     </type>
     <type name="Magento\Paypal\Model\Payflow\Transparent">
         <arguments>
+            <argument name="paymentTokenFactory" xsi:type="object">Magento\Vault\Model\CreditCardTokenFactory</argument>
             <argument name="data" xsi:type="array">
                 <item name="formBlockType" xsi:type="string">Magento\Paypal\Block\Adminhtml\Payflowpro\CcForm</item>
             </argument>
