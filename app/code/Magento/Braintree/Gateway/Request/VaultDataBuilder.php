@@ -18,9 +18,8 @@ class VaultDataBuilder implements BuilderInterface
     const OPTIONS = 'options';
 
     /**
-     * The option that determines whether the shipping address information
-     * provided with the transaction should be associated with the customer ID specified.
-     * When passed, the payment method will always be stored in the Vault.
+     * The option that determines whether the payment method associated with
+     * the successful transaction should be stored in the Vault.
      */
     const STORE_IN_VAULT_ON_SUCCESS = 'storeInVaultOnSuccess';
 
