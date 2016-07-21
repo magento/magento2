@@ -81,7 +81,6 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-
         $product->expects(static::once())
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);

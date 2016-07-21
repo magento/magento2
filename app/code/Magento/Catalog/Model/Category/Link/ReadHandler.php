@@ -29,7 +29,9 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * ReadHandler constructor.
+     *
      * @param \Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory $categoryLinkFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink
      */
     public function __construct(
