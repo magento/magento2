@@ -9,8 +9,8 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
 
 /**
  * Class InvoiceDocumentFactory
@@ -19,19 +19,32 @@ use Magento\Sales\Api\Data\InvoiceInterface;
  */
 class InvoiceDocumentFactory
 {
+    private $invoiceFactory;
+
+    public function __construct(
+        InvoiceInterfaceFactory $invoiceFactory
+    ) {
+        $this->invoiceFactory = $invoiceFactory;
+    }
+
     /**
-     * @param OrderInterface $order
+     * @param int $orderId
      * @param InvoiceItemCreationInterface[] $items
      * @param InvoiceCommentCreationInterface|null $comment
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
      */
     public function create(
-        $order,
+        $orderId,
         $items = [],
         InvoiceCommentCreationInterface $comment = null,
         InvoiceCreationArgumentsInterface $arguments = null
     ) {
-        return null;
+        /** @var InvoiceInterface $invoice */
+        $invoice = $this->invoiceFactory->create();
+        $invoice->setOrderId($orderId);
+        $invoice->setItems($items);
+        $invoice->setComments([$comment]);
+        return $invoice;
     }
 }

@@ -11,8 +11,8 @@ namespace Magento\Sales\Api\Data;
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
  */
-interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemArgumentInterface,
-    \Magento\Framework\Api\ExtensibleDataInterface
+interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemsArgumentInterface,
+\Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
