@@ -17,13 +17,10 @@ setSettings = function(urlTemplate, codeElement, themeElement) {
         return false;
     }
 
-    codeElement = $('#' + codeElement).val();
-    themeElement = $('#' + themeElement).val();
-
     url = mageTemplate(urlTemplate, {
         data: {
-            'code': codeElement,
-            'theme_id': themeElement
+            'code': $('#' + codeElement).val(),
+            'theme_id': $('#' + themeElement).val()
         }
     });
 
