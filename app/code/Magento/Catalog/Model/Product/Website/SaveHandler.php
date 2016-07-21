@@ -25,6 +25,7 @@ class SaveHandler implements ExtensionInterface
     /**
      * SaveHandler constructor.
      * @param ProductWebsiteLink $productWebsiteLink
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ProductWebsiteLink $productWebsiteLink,

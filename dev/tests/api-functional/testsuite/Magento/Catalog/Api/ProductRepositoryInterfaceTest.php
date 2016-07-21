@@ -159,7 +159,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
-        $this->assertEquals($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"], $websitesData["website_ids"]);
+        $this->assertEquals(
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
+            $websitesData["website_ids"]
+        );
         $this->deleteProduct($productBuilder[ProductInterface::SKU]);
         $this->markAreaAsSecure();
         $website->delete();
@@ -185,7 +188,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
-        $this->assertEquals($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"], $websitesData["website_ids"]);
+        $this->assertEquals(
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
+            $websitesData["website_ids"]
+        );
         $this->deleteProduct($productBuilder[ProductInterface::SKU]);
         $this->markAreaAsSecure();
         $website->delete();
@@ -215,7 +221,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->saveProduct($productBuilder);
-        $this->assertEquals($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"], $websitesData["website_ids"]);
+        $this->assertEquals(
+            $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"],
+            $websitesData["website_ids"]
+        );
         $this->deleteProduct($productBuilder[ProductInterface::SKU]);
         $this->markAreaAsSecure();
         $website->delete();
