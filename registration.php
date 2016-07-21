@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Framework\Component\ComponentRegistrar;
-
-$registrar = new ComponentRegistrar();
-if ($registrar->getPath(ComponentRegistrar::MODULE, 'Magento_TestModuleMessageQueueConfiguration') === null) {
-    ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TestModuleMessageQueueConfiguration', __DIR__);
-}
+\Magento\Framework\Component\ComponentRegistrar::register(
+    \Magento\Framework\Component\ComponentRegistrar::MODULE,
+    'Magento_TestModuleMessageQueueConfiguration',
+    __DIR__
+);
