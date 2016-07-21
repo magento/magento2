@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Braintree\Block\Customer\PayPal\VaultTokenRenderer;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
+
+/** @var VaultTokenRenderer $block */
+
+$payerEmail = $block->escapeHtml($block->getPayerEmail());
+?>
+<tr>
+    <td data-th="<?php echo $block->escapeHtml(__('PayPal Account')); ?>" class="col paypal-account">
+        <img src="<?php /* @noEscape */ echo $block->getIconUrl(); ?>"
+             width="<?php /* @noEscape */ echo $block->getIconWidth(); ?>"
+             height="<?php /* @noEscape */ echo $block->getIconHeight(); ?>"
+             alt="<?php echo $block->escapeHtml(__('PayPal Logo')); ?>"
+        >
+        <span><?php /* @noEscape */ echo $payerEmail; ?></span>
+    </td>
+    <td data-th="<?php echo $block->escapeHtml(__('Actions')); ?>" class="col actions">
+        <form
+            class="form"
+            action="<?php echo $block->escapeUrl($block->getUrl('vault/cards/deleteaction')); ?>"
+            method="post"
+        >
+            <?php echo $block->getBlockHtml('formkey'); ?>
+            <input
+                name="<?php /* @noEscape */ echo PaymentTokenInterface::PUBLIC_HASH; ?>"
+                value="<?php /* @noEscape */ echo $block->getToken()->getPublicHash(); ?>"
+                type="hidden"/>
+            <button type="submit"
+                    class="action delete"
+                    data-mage-init='{
+                                    "Magento_Vault/js/customer_account/deleteWidget":{
+                                        "type": "popup",
+                                        "modalClass": "my-credit-cards-popup",
+                                        "toggleEvent": "click",
+                                        "title": "<?php echo $block->escapeHtml(__('Delete')); ?>",
+                                        "content": "Are you sure you want to delete this PayPal account: <?php /* @noEscape */ echo $payerEmail; ?>?"
+                                    }
+                                }'>
+                <span><?php echo $block->escapeHtml(__('Delete')); ?></span>
+            </button>
+        </form>
+    </td>
+</tr>
