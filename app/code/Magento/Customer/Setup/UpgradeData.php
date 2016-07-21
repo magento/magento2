@@ -91,6 +91,14 @@ class UpgradeData implements UpgradeDataInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.8', '<')) {
+            $setup->getConnection()->update(
+                $setup->getTable('core_config_data'),
+                ['path' => \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE],
+                ['path = ?' => 'general/restriction/autocomplete_on_storefront']
+            );
+        }
+
         if (version_compare($context->getVersion(), '2.0.7', '<')) {
             $this->upgradeVersionTwoZeroSeven($customerSetup);
             $this->upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup);
