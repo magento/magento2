@@ -84,7 +84,7 @@ class KountPaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild()
     {
         $additionalData = [
-                DataAssignObserver::DEVICE_DATA => self::DEVICE_DATA
+            DataAssignObserver::DEVICE_DATA => self::DEVICE_DATA
         ];
 
         $expectedResult = [

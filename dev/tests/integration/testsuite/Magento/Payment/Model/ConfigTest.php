@@ -7,16 +7,22 @@
  */
 namespace Magento\Payment\Model;
 
+use Magento\Payment\Model\Config;
+use Magento\TestFramework\Helper\Bootstrap;
+
+/**
+ * Class ConfigTest
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Payment\Model\Config
+     * @var Config
      */
-    protected $_model = null;
+    private $model = null;
 
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
         $cache = $objectManager->create('Magento\Framework\App\Cache');
         $cache->clean();
@@ -33,26 +39,42 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['fileResolver' => $fileResolverMock]
         );
         $data = $objectManager->create('Magento\Payment\Model\Config\Data', ['reader' => $reader]);
-        $this->_model = $objectManager->create('Magento\Payment\Model\Config', ['dataStorage' => $data]);
+        $this->model = $objectManager->create(Config::class, ['dataStorage' => $data]);
+    }
+
+    /**
+     * @covers \Magento\Payment\Model\Config::getActiveMethods
+     */
+    public function testGetActiveMethods()
+    {
+        $paymentMethods = $this->model->getActiveMethods();
+        static::assertNotEmpty($paymentMethods);
+
+        /** @var \Magento\Payment\Model\MethodInterface $method */
+        foreach ($paymentMethods as $method) {
+            static::assertNotEmpty($method->getCode());
+            static::assertTrue($method->isActive());
+            static::assertEquals(0, $method->getStore());
+        }
     }
 
     public function testGetCcTypes()
     {
         $expected = ['AE' => 'American Express', 'SM' => 'Switch/Maestro', 'SO' => 'Solo'];
-        $ccTypes = $this->_model->getCcTypes();
+        $ccTypes = $this->model->getCcTypes();
         $this->assertEquals($expected, $ccTypes);
     }
 
     public function testGetGroups()
     {
         $expected = ['any_payment' => 'Any Payment Methods', 'offline' => 'Offline Payment Methods'];
-        $groups = $this->_model->getGroups();
+        $groups = $this->model->getGroups();
         $this->assertEquals($expected, $groups);
     }
 
     protected function tearDown()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
         $cache = $objectManager->create('Magento\Framework\App\Cache');
         $cache->clean();
