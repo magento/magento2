@@ -64,7 +64,7 @@ return [
                 ]
             ],
             "max_messages" => null,
-            "instance_type" => null
+            "instance_type" => 'Magento\Framework\MessageQueue\ConsumerInterface'
         ]
     ],
     "binds" => [
