@@ -32,7 +32,6 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClassEmpty()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -57,7 +56,6 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
 
     public function testGetClass()
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -72,7 +70,7 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->once())
             ->method('getFrontendClass')
             ->willReturn('');
-        $attributeMock->expects($this->exactly(2))
+        $attributeMock->expects($this->exactly(3))
             ->method('getValidateRules')
             ->willReturn([
                 'input_validation' => 'alphanumeric',
