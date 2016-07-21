@@ -26,7 +26,7 @@ class Link
 
     /**
      * Retrieve associated with product websites ids
-     * @param $productId
+     * @param int $productId
      * @return array
      */
     public function getWebsiteIdsByProductId($productId)
@@ -77,7 +77,7 @@ class Link
             return true;
         }
 
-        return false; 
+        return false;
     }
 
     /**

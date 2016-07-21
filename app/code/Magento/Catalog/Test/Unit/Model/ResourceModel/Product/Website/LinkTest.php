@@ -101,5 +101,4 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->model->saveWebsiteIds($product, $newWebsiteIds));
     }
-
 }
