@@ -169,6 +169,7 @@ class Product extends AbstractResource
     /**
      * Retrieve product website identifiers
      *
+     * @deprecated 
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */
@@ -302,6 +303,7 @@ class Product extends AbstractResource
     /**
      * Save product website relations
      *
+     * @deprecated 
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */

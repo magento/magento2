@@ -149,13 +149,39 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $website->load('second_website', 'code');
 
         if (!$website->getId()) {
-            $this->fail("Couldn`t save website");
+            $this->fail("Couldn`t load website");
         }
 
         $websitesData = [
             'website_ids' => [
                 $website->getId(),
             ]
+        ];
+        $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
+        $response = $this->updateProduct($productBuilder);
+        $this->assertEquals($response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]["website_ids"], $websitesData["website_ids"]);
+        $this->deleteProduct($productBuilder[ProductInterface::SKU]);
+        $this->markAreaAsSecure();
+        $website->delete();
+    }
+
+    /**
+     * Test removing all website associations
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     */
+    public function testDeleteAllWebsiteAssociations()
+    {
+        $productBuilder[ProductInterface::SKU] = 'unique-simple-azaza';
+        /** @var Website $website */
+        $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Website::class);
+        $website->load('second_website', 'code');
+
+        if (!$website->getId()) {
+            $this->fail("Couldn`t load website");
+        }
+
+        $websitesData = [
+            'website_ids' => []
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
@@ -179,7 +205,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $website->load('test_website', 'code');
 
         if (!$website->getId()) {
-            $this->fail("Couldn`t save website");
+            $this->fail("Couldn`t load website");
         }
         $websitesData = [
             'website_ids' => [
