@@ -148,7 +148,8 @@ class Product extends AbstractResource
 
     /**
      * Product Category table name getter
-     *
+     * 
+     * @deprecated
      * @return string
      */
     public function getProductCategoryTable()
