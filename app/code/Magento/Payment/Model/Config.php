@@ -95,7 +95,6 @@ class Config
             if (isset($data['active'], $data['model']) && (bool)$data['active']) {
                 /** @var MethodInterface $methodModel Actually it's wrong interface */
                 $methodModel = $this->_paymentMethodFactory->create($data['model']);
-                $methodModel->setId($code);
                 $methodModel->setStore(null);
                 if ($methodModel->getConfigData('active', null)) {
                     $methods[$code] = $methodModel;
