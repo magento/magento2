@@ -14,13 +14,12 @@ use Magento\Mtf\Constraint\AbstractAssertForm;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class AssertProductQtyInMiniShoppingCart
- * Assert that product quantity in the mini shopping cart is equals to expected quantity from data set
+ * Assert that product price and qty in mini shopping cart equal to expected price from data set.
  */
-class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
+class AssertProductDataInMiniShoppingCart extends AbstractAssertForm
 {
     /**
-     * Assert that product quantity in the mini shopping cart is equals to expected quantity from data set
+     * Assert that product price and qty in  mini shopping cart are equal to expected price from data set.
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
@@ -42,12 +41,17 @@ class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
             $productName = $product->getName();
             /** @var FixtureInterface $item */
             $checkoutItem = $item->getData();
+            $cartItem = $cmsIndex->getCartSidebarBlock()->getCartItem($product);
 
-            $productsData[$productName] = [
+            $productsData[$productName]['price'] = ['price' => $checkoutItem['price']];
+            $miniCartData[$productName]['price'] = [
+                'price' => $cartItem->getPrice()
+            ];
+            $productsData[$productName]['qty'] = [
                 'qty' => $checkoutItem['qty'],
             ];
-            $miniCartData[$productName] = [
-                'qty' => $cmsIndex->getCartSidebarBlock()->getProductQty($productName),
+            $miniCartData[$productName]['qty'] = [
+                'qty' => $cartItem->getQty(),
             ];
         }
 
@@ -62,6 +66,6 @@ class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
      */
     public function toString()
     {
-        return 'Quantity in the mini shopping cart equals to expected quantity from data set.';
+        return 'Price and qty in mini shopping cart equals to expected price from data set.';
     }
 }
