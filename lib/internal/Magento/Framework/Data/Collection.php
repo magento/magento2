@@ -500,7 +500,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function walk($callback, array $args = [])
     {
-    	$results = [];
+    	 $results = [];
         $useItemCallback = is_string($callback) && strpos($callback, '::') === false;
         foreach ($this->getItems() as $id => $item) {
             $params = $args;
