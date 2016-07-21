@@ -3,19 +3,19 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Consumer;
+namespace Magento\Framework\MessageQueue\Topology;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem\Iterator;
 use Magento\Framework\Phrase;
+use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Iterator;
 
 /**
- * {@inheritdoc}
+ * Topology config provides access data declared in etc/queue_topology.xml
  */
 class Config implements ConfigInterface
 {
     /**
-     * Item iterator.
+     * Exchange config data iterator.
      *
      * @var Iterator
      */
@@ -34,19 +34,19 @@ class Config implements ConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getConsumer($name)
+    public function getExchange($name)
     {
-        $consumer = $this->iterator[$name];
-        if (!$consumer) {
-            throw new LocalizedException(new Phrase("Consumer '%consumer' is not declared.", ['consumer' => $name]));
+        $topology = $this->iterator[$name];
+        if (!$topology) {
+            throw new LocalizedException(new Phrase("Exchange '%exchange' is not declared.", ['exchange' => $name]));
         }
-        return $consumer;
+        return $topology;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConsumers()
+    public function getExchanges()
     {
         return $this->iterator;
     }

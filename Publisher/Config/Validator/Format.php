@@ -8,11 +8,10 @@ namespace Magento\Framework\MessageQueue\Publisher\Config\Validator;
 use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 
 /**
- * Publisher config data validator. Validates that publisher has only one enabled connection at the same time
+ * Publisher config data validator. Validates that publisher config has all required fields.
  */
 class Format implements ValidatorInterface
 {
-
     /**
      * {@inheritdoc}
      */

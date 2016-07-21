@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd" />
+    <xs:element name="config">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="exchangeConfigType" name="exchange" maxOccurs="unbounded" minOccurs="0">
+                    <xs:unique name="unique-binding-id">
+                        <xs:annotation>
+                            <xs:documentation>
+                                Binding id must be unique
+                            </xs:documentation>
+                        </xs:annotation>
+                        <xs:selector xpath="binding"/>
+                        <xs:field xpath="@id"/>
+                    </xs:unique>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:unique name="unique-exchange-name">
+            <xs:annotation>
+                <xs:documentation>
+                    Exchange name must be unique
+                </xs:documentation>
+            </xs:annotation>
+            <xs:selector xpath="exchange"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+    </xs:element>
+
+    <xs:complexType name="bindingType" mixed="true">
+        <xs:sequence>
+            <xs:element type="argumentsType" name="arguments" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <!--queue-->
+        <xs:attribute type="destinationType" name="destinationType" use="optional"/>
+        <!-- queue name -->
+        <xs:attribute type="xs:string" name="destination" use="optional"/>
+        <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
+        <xs:attribute type="xs:string" name="topic" use="optional"/>
+        <!--for topic based exchange binding topic is required -->
+    </xs:complexType>
+
+    <xs:complexType name="exchangeConfigType">
+        <xs:sequence>
+            <xs:element type="bindingType" name="binding" maxOccurs="unbounded" minOccurs="0"/>
+            <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="exchangeType" name="type" use="optional"/>
+        <xs:attribute type="xs:string" name="connection" use="optional"/>
+        <xs:attribute type="xs:boolean" name="durable" use="optional"/>
+        <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
+        <xs:attribute type="xs:boolean" name="internal" use="optional"/>
+    </xs:complexType>
+
+    <xs:simpleType name="exchangeType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="topic" />
+            <!--<xs:enumeration value="fanout" />-->
+            <!--<xs:enumeration value="headers" />-->
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="destinationType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="queue" />
+            <!--<xs:enumeration value="exchange" />-->
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
