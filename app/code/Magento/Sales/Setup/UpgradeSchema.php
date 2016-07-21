@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Setup;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -14,6 +15,11 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
+    /**
+     * @var AdapterInterface
+     */
+    private $salesConnection;
+
     /**
      * {@inheritdoc}
      */
@@ -66,7 +72,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addColumnBaseGrandTotal(SchemaSetupInterface $installer)
     {
-        $connection = $installer->getConnection();
+        $connection = $this->getSalesConnection();
         $connection->addColumn(
             $installer->getTable('sales_invoice_grid'),
             'base_grand_total',
@@ -86,11 +92,25 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function addIndexBaseGrandTotal(SchemaSetupInterface $installer)
     {
-        $connection = $installer->getConnection();
+        $connection = $this->getSalesConnection();
         $connection->addIndex(
             $installer->getTable('sales_invoice_grid'),
             $installer->getIdxName('sales_invoice_grid', ['base_grand_total']),
             ['base_grand_total']
         );
+    }
+
+    /**
+     * @return AdapterInterface
+     */
+    private function getSalesConnection()
+    {
+        if ($this->salesConnection === null) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            /** @var ResourceConnection $resourceConnection */
+            $resourceConnection = $objectManager->get(ResourceConnection::class);
+            $this->salesConnection = $resourceConnection->getConnectionByName('sales');
+        }
+        return $this->salesConnection;
     }
 }
