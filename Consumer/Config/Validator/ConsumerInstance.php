@@ -19,7 +19,7 @@ class ConsumerInstance implements ValidatorInterface
      */
     public function validate($configData)
     {
-        foreach ($configData as $consumerName => $consumerConfig) {
+        foreach ($configData as $consumerConfig) {
             $this->validateConsumerInstance($consumerConfig);
         }
     }

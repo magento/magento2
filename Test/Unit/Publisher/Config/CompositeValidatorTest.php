@@ -59,12 +59,12 @@ class CompositeValidatorTest extends \PHPUnit_Framework_TestCase
         $this->model->validate($expectedValidationData);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Validator does not implements Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface
-     */
     public function testInvalidReaderInstance()
     {
+        $this->setExpectedException(
+            '\LogicException',
+            'Validator does not implements Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface'
+        );
         $validator = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
         $model = new CompositeValidator([$validator]);
         $expectedValidationData = include __DIR__ . '/../../_files/queue_publisher/data_to_validate.php';

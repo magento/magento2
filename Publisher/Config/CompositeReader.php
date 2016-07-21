@@ -97,7 +97,7 @@ class CompositeReader implements ReaderInterface
             'disabled' => false,
         ];
 
-        foreach ($config as $key => &$value) {
+        foreach ($config as &$value) {
             if (!isset($value['connections']) || empty($value['connections'])) {
                 $value['connections']['amqp'] = $default;
                 continue;

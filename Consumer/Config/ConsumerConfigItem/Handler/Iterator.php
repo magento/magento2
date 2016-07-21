@@ -41,6 +41,7 @@ class Iterator implements \Iterator, \ArrayAccess
      * Set data.
      * 
      * @param array $data
+     * @return void
      */
     public function setData(array $data)
     {

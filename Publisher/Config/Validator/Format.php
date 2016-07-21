@@ -22,37 +22,27 @@ class Format implements ValidatorInterface
      */
     public function validate($configData)
     {
+        $requiredPublisherFields = ['topic', 'disabled', 'connections'];
+        $requiredConnectionFields = ['name', 'disabled', 'exchange'];
+
         $errors = [];
         foreach ($configData as $name => $publisherData) {
 
-            if (!array_key_exists('topic', $publisherData)) {
-                $errors[] = sprintf('Missed topic field for publisher %s.', $name);
-            }
-
-            if (!array_key_exists('disabled', $publisherData)) {
-                $errors[] = sprintf('Missed disabled field for publisher %s.', $name);
-            }
-
-            if (!array_key_exists('connections', $publisherData)) {
-                $errors[] = sprintf('Missed connections field for publisher %s.', $name);
-            } else {
-
-                if (!is_array($publisherData['connections'])) {
-                    $errors[] = sprintf('Invalid connections format for publisher %s.', $name);
-                    continue;
+            foreach ($requiredPublisherFields as $field) {
+                if (!array_key_exists($field, $publisherData)) {
+                    $errors[] = sprintf('Missed %s field for publisher %s.', $field, $name);
                 }
+            }
 
-                foreach ($publisherData['connections'] as $connectionConfig) {
-                    if (!array_key_exists('disabled', $connectionConfig)) {
-                        $errors[] = sprintf('Missed disabled field for publisher %s in connection config.', $name);
-                    }
+            if (!array_key_exists('connections', $publisherData) || !is_array($publisherData['connections'])) {
+                $errors[] = sprintf('Invalid connections format for publisher %s.', $name);
+                continue;
+            }
 
-                    if (!array_key_exists('exchange', $connectionConfig)) {
-                        $errors[] = sprintf('Missed exchange field for publisher %s in connection config.', $name);
-                    }
-
-                    if (!array_key_exists('name', $connectionConfig)) {
-                        $errors[] = sprintf('Missed name field for publisher %s in connection config.', $name);
+            foreach ($publisherData['connections'] as $connectionConfig) {
+                foreach ($requiredConnectionFields as $field) {
+                    if (!array_key_exists($field, $connectionConfig)) {
+                        $errors[] = sprintf('Missed %s field for publisher %s in connection config.', $field, $name);
                     }
                 }
             }

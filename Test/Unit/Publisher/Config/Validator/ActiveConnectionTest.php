@@ -47,12 +47,13 @@ class ActiveConnectionTest extends \PHPUnit_Framework_TestCase
         $this->model->validate($configData);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage More than 1 enabled connections configured for publisher pub01. More than 1 enabled connections configured for publisher pub02.
-     */
     public function testValidateMultipleEnabledConnections()
     {
+        $this->setExpectedException(
+            '\LogicException',
+            'More than 1 enabled connections configured for publisher pub01. ' .
+            'More than 1 enabled connections configured for publisher pub02.'
+        );
         $configData = [
             'pub01' => [
                 'topic' => 'pub01',
