@@ -10,6 +10,7 @@ namespace Magento\Sales\Api\Data;
  * Base line item interface for order entities
  *
  * Interface LineItemInterface
+ * @api
  */
 interface LineItemInterface
 {
