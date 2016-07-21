@@ -54,6 +54,7 @@ class ExtensionTest extends AbstractExtensionTest
 
         // Open Extension Grid with extensions to install
         $this->setupWizard->getSetupHome()->clickExtensionManager();
+        $this->setupWizard->getExtensionsGrid()->waitLoader();
         $this->setupWizard->getExtensionsGrid()->clickInstallButton();
 
         // Find extension on grid and install
@@ -78,6 +79,7 @@ class ExtensionTest extends AbstractExtensionTest
         // Open Extension Grid with installed extensions and find installed extension
         $this->setupWizard->open();
         $this->setupWizard->getSetupHome()->clickExtensionManager();
+        $this->setupWizard->getExtensionsGrid()->waitLoader();
         $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extension);
 
         // Check version of installed extension
@@ -108,6 +110,7 @@ class ExtensionTest extends AbstractExtensionTest
         // Open Extension Grid with updated extensions and find updated extension
         $this->setupWizard->open();
         $this->setupWizard->getSetupHome()->clickExtensionManager();
+        $this->setupWizard->getExtensionsGrid()->waitLoader();
         $assertFindExtensionOnGrid->processAssert($this->setupWizard->getExtensionsGrid(), $extension);
 
         // Check version of updated extension

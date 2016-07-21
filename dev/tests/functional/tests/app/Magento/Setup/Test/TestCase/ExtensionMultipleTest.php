@@ -66,6 +66,7 @@ class ExtensionMultipleTest extends AbstractExtensionTest
 
         // Open Extension Grid with extensions to install
         $this->setupWizard->getSetupHome()->clickExtensionManager();
+        $this->setupWizard->getExtensionsGrid()->waitLoader();
         $this->setupWizard->getExtensionsGrid()->clickInstallButton();
 
         // Select several extensions on grid and check it

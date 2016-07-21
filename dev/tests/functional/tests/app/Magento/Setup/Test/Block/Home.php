@@ -31,7 +31,7 @@ class Home extends Block
      *
      * @var string
      */
-    protected $moduleManager = '.setup-home-item-component';
+    protected $moduleManager = '.setup-home-item-module';
 
     /**
      * Click on 'System Upgrade' button.

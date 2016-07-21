@@ -23,13 +23,6 @@ abstract class AbstractGrid extends Block
     protected $nextPageButton = '.action-next';
 
     /**
-     * Grid that contains the list of extensions.
-     *
-     * @var string
-     */
-    protected $dataGrid = '.data-grid';
-
-    /**
      * Container that contains name of the extension.
      *
      * @var string
@@ -62,7 +55,6 @@ abstract class AbstractGrid extends Block
      */
     protected function isExtensionOnGrid($name)
     {
-        $this->waitForElementVisible($this->dataGrid);
         return $this->_rootElement->find(
             sprintf($this->extensionName, $name),
             Locator::SELECTOR_XPATH
@@ -76,9 +68,8 @@ abstract class AbstractGrid extends Block
      */
     protected function clickNextPageButton()
     {
-        $this->waitForElementVisible($this->nextPageButton);
         $nextPageButton = $this->_rootElement->find($this->nextPageButton);
-        if (!$nextPageButton->isDisabled()) {
+        if (!$nextPageButton->isDisabled() && $nextPageButton->isVisible()) {
             $nextPageButton->click();
             return true;
         }
