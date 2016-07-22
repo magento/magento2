@@ -32,7 +32,7 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('deprecatedConfigAsyncBoolConsumer', $consumer->getName());
         $this->assertEquals('deprecated.config.queue.2', $consumer->getQueue());
-        $this->assertEquals('amqp', $consumer->getConnection());
+        $this->assertEquals('deprecatedConnection', $consumer->getConnection());
         $this->assertEquals('Magento\Framework\MessageQueue\ConsumerInterface', $consumer->getConsumerInstance());
         $this->assertEquals(null, $consumer->getMaxMessages());
 
