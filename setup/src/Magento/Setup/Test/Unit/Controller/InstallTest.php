@@ -54,7 +54,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->webLogger = $this->getMock(\Magento\Setup\Model\WebLogger::class, [], [], '', false);
         $installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
         $this->installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
-        $this->progressFactory = $this->getMock(\Magento\Setup\Model\Installer\ProgressFactory::class, [], [], '', false);
+        $this->progressFactory =
+            $this->getMock(\Magento\Setup\Model\Installer\ProgressFactory::class, [], [], '', false);
         $this->sampleDataState = $this->getMock(\Magento\Framework\Setup\SampleData\State::class, [], [], '', false);
         $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
         $this->requestDataConverter = $this->getMock(RequestDataConverter::class, [], [], '', false);
@@ -100,7 +101,7 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->installer->expects($this->never())->method('getInstallInfo');
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $jsonModel = $this->controller->startAction();
-        $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
+        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('messages', $variables);

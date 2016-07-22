@@ -37,8 +37,16 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->subscriber = $this->getMockBuilder(\Magento\Newsletter\Model\Subscriber::class)
-            ->setMethods(['loadByEmail', 'getId', 'delete', 'updateSubscription', 'subscribeCustomerById', 'unsubscribeCustomerById'])
-            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'loadByEmail',
+                    'getId',
+                    'delete',
+                    'updateSubscription',
+                    'subscribeCustomerById',
+                    'unsubscribeCustomerById'
+                ]
+            )->disableOriginalConstructor()
             ->getMock();
         $this->subscriberFactory->expects($this->any())->method('create')->willReturn($this->subscriber);
 

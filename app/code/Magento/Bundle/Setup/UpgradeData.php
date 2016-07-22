@@ -41,7 +41,12 @@ class UpgradeData implements UpgradeDataInterface
             $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
 
             $attributeSetId = $eavSetup->getDefaultAttributeSetId(ProductAttributeInterface::ENTITY_TYPE_CODE);
-            $eavSetup->addAttributeGroup(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeSetId, 'Bundle Items', 16);
+            $eavSetup->addAttributeGroup(
+                ProductAttributeInterface::ENTITY_TYPE_CODE,
+                $attributeSetId,
+                'Bundle Items',
+                16
+            );
 
             $this->upgradePriceType($eavSetup);
             $this->upgradeSkuType($eavSetup);
