@@ -16,4 +16,7 @@
     <broker topic="deprecated.config.sync.bool.topic" type="customConnection" exchange="customExchange">
         <queue consumer="deprecatedConfigSyncBoolConsumer" name="deprecated.config.queue.4"/>
     </broker>
+    <broker topic="overlapping.topic.declaration" type="deprecatedConnection" exchange="deprecatedExchange">
+        <queue consumer="overlappingConsumerDeclaration" name="consumer.config.queue" consumerInstance="Magento\Framework\MessageQueue\BatchConsumer" maxMessages="222" handler="Magento\TestModuleMessageQueueConfiguration\AsyncHandler::methodWithMixedParam"/>
+    </broker>
 </config>

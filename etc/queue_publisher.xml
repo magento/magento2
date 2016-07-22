@@ -19,4 +19,5 @@
     <publisher topic="topic.message.queue.config.04">
         <connection name="amqp1" />
     </publisher>
+    <publisher topic="overlapping.topic.declaration"/>
 </config>

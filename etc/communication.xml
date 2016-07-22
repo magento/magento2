@@ -17,4 +17,7 @@
     <topic name="deprecated.config.sync.bool.topic" schema="Magento\TestModuleMessageQueueConfiguration\SyncHandler::methodWithBoolParam">
         <handler name="handler1" type="Magento\TestModuleMessageQueueConfiguration\SyncHandler" method="methodWithBoolParam"/>
     </topic>
+    <topic name="overlapping.topic.declaration" request="string">
+        <handler name="handler1" type="Magento\TestModuleMessageQueueConfiguration\AsyncHandler" method="methodWithStringParam"/>
+    </topic>
 </config>
