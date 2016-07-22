@@ -173,7 +173,7 @@ main.controller('navigationController',
                 if (typeof $localStorage.titles === 'undefined') {
                     $localStorage.titles = [];
                 }
-                $localStorage.titles['update'] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
                     + $localStorage.moduleName;
                 $rootScope.titles = $localStorage.titles;
             }
