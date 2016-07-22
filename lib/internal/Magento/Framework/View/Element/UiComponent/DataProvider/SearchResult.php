@@ -14,9 +14,11 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ObjectManager;
+
 /**
  * Class SearchResult
  * Generic Search Result
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SearchResult extends AbstractCollection implements Api\Search\SearchResultInterface
 {
@@ -61,7 +63,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
      * @param null|string $identifierName
      * @param null|string $connectionName
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         EntityFactory $entityFactory,
