@@ -106,8 +106,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $serviceMethod = $this->getServiceMethodBySchema($topicNode);
             $requestResponseSchema = $serviceMethod
                 ? $this->reflectionGenerator->extractMethodMetadata(
-                    $serviceMethod['typeName'],
-                    $serviceMethod['methodName']
+                    $serviceMethod['type'],
+                    $serviceMethod['method']
                 )
                 : null;
             $requestSchema = $this->extractTopicRequestSchema($topicNode);
@@ -129,8 +129,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             if ($serviceMethod) {
                 $output[$topicName] = $this->reflectionGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
-                    $serviceMethod['typeName'],
-                    $serviceMethod['methodName'],
+                    $serviceMethod['type'],
+                    $serviceMethod['method'],
                     $handlers
                 );
             } else if ($requestSchema && $responseSchema) {
