@@ -314,9 +314,7 @@ class Eav extends AbstractModifier
             ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER),
             $attributeContainer,
             [
-                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
-                // TODO: Eliminate this in scope of MAGETWO-51364
-                'scopeLabel' => $this->getScopeLabel($attribute),
+                'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER
             ]
         );
 
