@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Validator;
+namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\Validator;
 
 use \Magento\Framework\MessageQueue\Topology\Config\Validator\Format;
 
