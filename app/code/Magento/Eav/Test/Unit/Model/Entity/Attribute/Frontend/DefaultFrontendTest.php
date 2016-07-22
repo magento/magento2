@@ -86,4 +86,36 @@ class DefaultFrontendTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('maximum-length-2', $result);
         $this->assertContains('validate-length', $result);
     }
+
+    public function testGetClassLength()
+    {
+        $attributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getIsRequired',
+                'getFrontendClass',
+                'getValidateRules',
+            ])
+            ->getMock();
+        $attributeMock->expects($this->once())
+            ->method('getIsRequired')
+            ->willReturn(true);
+        $attributeMock->expects($this->once())
+            ->method('getFrontendClass')
+            ->willReturn('');
+        $attributeMock->expects($this->exactly(3))
+            ->method('getValidateRules')
+            ->willReturn([
+                'input_validation' => 'length',
+                'min_text_length' => 1,
+                'max_text_length' => 2,
+            ]);
+
+        $this->model->setAttribute($attributeMock);
+        $result = $this->model->getClass();
+
+        $this->assertContains('minimum-length-1', $result);
+        $this->assertContains('maximum-length-2', $result);
+        $this->assertContains('validate-length', $result);
+    }
 }
