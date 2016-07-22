@@ -39,8 +39,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory
-    )
-    {
+    ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
@@ -109,7 +108,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     private function isUniqueAdminValues(array $optionsValues, array $deletedOptions)
     {
-        $adminValues = array();
+        $adminValues = [];
         foreach ($optionsValues as $optionKey => $values) {
             if (!(isset($deletedOptions[$optionKey]) and $deletedOptions[$optionKey] === '1')) {
                 $adminValues[] = reset($values);
