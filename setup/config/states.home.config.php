@@ -61,13 +61,14 @@ return [
             'id'          => 'root.install',
             'url'         => 'install-extension-grid',
             'templateUrl' => "$base/install-extension-grid",
-            'title'       => "Extensions Grid",
+            'title'       => "Extensions Manager",
             'controller'  => 'installExtensionGridController',
             'nav'         => false,
             'noMenu'      => true,
             'order'       => 1,
             'type'        => 'install',
-            'wrapper'     => 1
+            'wrapper'     => 1,
+            'header'      => 'Ready to Install'
         ],
         [
             'id'          => 'root.update',
