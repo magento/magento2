@@ -82,6 +82,8 @@
     <preference for="Magento\Sales\Model\Spi\ShipmentTrackResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Model\Spi\TransactionResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction"/>
     <preference for="Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface" type="Magento\Sales\Model\ResourceModel\Order\CollectionFactory"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceCommentCreationInterface" type="Magento\Sales\Model\Order\Invoice\CommentCreation"/>
+    <preference for="Magento\Sales\Api\Data\InvoiceItemCreationInterface" type="Magento\Sales\Model\Order\Invoice\ItemCreation"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>

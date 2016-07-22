@@ -11,7 +11,8 @@ namespace Magento\Sales\Api\Data;
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
  */
-interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemsArgumentInterface,
+\Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -258,13 +259,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function getProductId();
 
     /**
-     * Gets the quantity for the invoice item.
-     *
-     * @return float Quantity.
-     */
-    public function getQty();
-
-    /**
      * Gets the row total for the invoice item.
      *
      * @return float|null Row total.
@@ -371,14 +365,6 @@ interface InvoiceItemInterface extends \Magento\Framework\Api\ExtensibleDataInte
      * @return $this
      */
     public function setBasePriceInclTax($amount);
-
-    /**
-     * Sets the quantity for the invoice item.
-     *
-     * @param float $qty
-     * @return $this
-     */
-    public function setQty($qty);
 
     /**
      * Sets the base cost for the invoice item.
