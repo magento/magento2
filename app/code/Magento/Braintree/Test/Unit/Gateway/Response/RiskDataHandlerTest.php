@@ -5,12 +5,12 @@
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
-use Braintree\RiskData;
 use Braintree\Transaction;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Braintree\Gateway\Response\RiskDataHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use Magento\Sales\Model\Order\Payment;
+use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Class RiskDataHandlerTest
@@ -25,99 +25,95 @@ class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
     private $riskDataHandler;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
-    private $subjectReaderMock;
+    private $subjectReader;
 
     /**
      * Set up
      */
     protected function setUp()
     {
-        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+        $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
+            ->setMethods(['readPayment', 'readTransaction'])
             ->getMock();
 
-        $this->riskDataHandler = new RiskDataHandler($this->subjectReaderMock);
+        $this->riskDataHandler = new RiskDataHandler($this->subjectReader);
     }
 
     /**
-     * Run test for handle method
+     * Test for handle method
+     * @covers \Magento\Braintree\Gateway\Response\RiskDataHandler::handle
+     * @param string $riskDecision
+     * @param boolean $isFraud
+     * @dataProvider riskDataProvider
      */
-    public function testHandle()
+    public function testHandle($riskDecision, $isFraud)
     {
-        $paymentData = $this->getPaymentDataObjectMock();
-        $transaction = $this->getBraintreeTransactionMock();
+        /** @var Payment|MockObject $payment */
+        $payment = $this->getMockBuilder(Payment::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setAdditionalInformation', 'setIsFraudDetected'])
+            ->getMock();
+        /** @var PaymentDataObjectInterface|MockObject $paymentDO */
+        $paymentDO = $this->getMock(PaymentDataObjectInterface::class);
+        $paymentDO->expects(self::once())
+            ->method('getPayment')
+            ->willReturn($payment);
+
+        $transaction = Transaction::factory([
+            'riskData' => [
+                'id' => 'test-id',
+                'decision' => $riskDecision
+            ]
+        ]);
 
         $response = [
             'object' => $transaction
         ];
         $handlingSubject = [
-            'payment' =>$paymentData,
+            'payment' => $paymentDO,
         ];
 
-        $this->subjectReaderMock->expects(self::once())
+        $this->subjectReader->expects(static::once())
             ->method('readPayment')
             ->with($handlingSubject)
-            ->willReturn($paymentData);
-        $this->subjectReaderMock->expects(self::once())
+            ->willReturn($paymentDO);
+        $this->subjectReader->expects(static::once())
             ->method('readTransaction')
             ->with($response)
             ->willReturn($transaction);
+
+        $payment->expects(static::at(0))
+            ->method('setAdditionalInformation')
+            ->with(RiskDataHandler::RISK_DATA_ID, 'test-id');
+        $payment->expects(static::at(1))
+            ->method('setAdditionalInformation')
+            ->with(RiskDataHandler::RISK_DATA_DECISION, $riskDecision);
+
+        if (!$isFraud) {
+            $payment->expects(static::never())
+                ->method('setIsFraudDetected');
+        } else {
+            $payment->expects(static::once())
+                ->method('setIsFraudDetected')
+                ->with(true);
+        }
 
         $this->riskDataHandler->handle($handlingSubject, $response);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * Get list of variations to test fraud
+     * @return array
      */
-    private function getBraintreeTransactionMock()
+    public function riskDataProvider()
     {
-        $transaction = \Braintree\Transaction::factory([]);
-        $transaction->_set(
-            'riskData',
-            RiskData::factory(
-                [
-                    'id' => 'test-id',
-                    'decision' => 'test-decision',
-                ]
-            )
-        );
-
-        return $transaction;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getPaymentDataObjectMock()
-    {
-        $mock = $this->getMockBuilder(PaymentDataObjectInterface::class)
-            ->getMockForAbstractClass();
-
-        $mock->expects(static::once())
-            ->method('getPayment')
-            ->willReturn($this->getPaymentMock());
-
-        return $mock;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getPaymentMock()
-    {
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $paymentMock->expects(self::at(0))
-            ->method('setAdditionalInformation')
-            ->with(RiskDataHandler::RISK_DATA_ID, 'test-id');
-        $paymentMock->expects(self::at(1))
-            ->method('setAdditionalInformation')
-            ->with(RiskDataHandler::RISK_DATA_DECISION, 'test-decision');
-
-        return $paymentMock;
+        return [
+            ['decision' => 'Not Evaluated', 'isFraud' => false],
+            ['decision' => 'Approve', 'isFraud' => false],
+            ['decision' => 'Review', 'isFraud' => true],
+        ];
     }
 }
