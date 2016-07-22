@@ -89,7 +89,8 @@ class ScopedTierPriceManagement implements \Magento\Catalog\Api\ScopedProductTie
         $found = false;
 
         foreach ($tierPrices as $item) {
-            $tierPriceWebsite = $tierPrice->getExtensionAttributes() ? $tierPrice->getExtensionAttributes()->getWebsiteId() : 0;
+            $tierPriceWebsite =
+                $tierPrice->getExtensionAttributes() ? $tierPrice->getExtensionAttributes()->getWebsiteId() : 0;
             if ($item->getCustomerGroupId() == $tierPrice->getCustomerGroupId()
                     && $websiteIdentifier == $tierPriceWebsite
                     && $item->getQty() == $tierPrice->getQty()) {
@@ -145,8 +146,8 @@ class ScopedTierPriceManagement implements \Magento\Catalog\Api\ScopedProductTie
             $product,
             $tierPrice->getCustomerGroupId(),
             $tierPrice->getQty(),
-            $websiteIdentifier)
-        ;
+            $websiteIdentifier
+        );
         return true;
     }
 

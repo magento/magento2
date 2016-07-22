@@ -319,6 +319,7 @@ abstract class AbstractGroupPrice extends Price
      * @param \Magento\Catalog\Model\Product $object
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function modifyPriceData($object, $data)
     {
