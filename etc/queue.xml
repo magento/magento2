@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="synchronous.rpc.test" type="amqp" exchange="magento">
+        <queue consumer="synchronousRpcTestConsumer" name="synchronous.rpc.test" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
+    </broker>
+    <broker topic="magento.testModuleSynchronousAmqp.api.serviceInterface.execute" type="amqp" exchange="magento">
+        <queue consumer="RemoteServiceTestConsumer" name="queue.magento.testModuleSynchronousAmqp.api.serviceInterface.execute" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
+    </broker>
+</config>
