@@ -40,7 +40,7 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped("This test relies on *nix shell and should be skipped in Windows environment.");
         }
         parent::setUp();
-        foreach($this->consumers as $consumer) {
+        foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
                 exec("{$this->getConsumerStartCommand($consumer)} > /dev/null &");
             }
