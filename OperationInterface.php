@@ -47,66 +47,92 @@ interface OperationInterface
     public function setId($id);
 
     /**
+     * Get bulk uuid
+     * 
      * @return string
      */
     public function getBulkUuid();
 
     /**
+     * Set bulk uuid
+     * 
      * @param string $bulkId
      * @return $this
      */
     public function setBulkUuid($bulkId);
 
     /**
-     * @return string Message Queue Topic
+     * Message Queue Topic
+     * 
+     * @return string
      */
     public function getTopicName();
 
     /**
+     * Set message queue topic
+     * 
      * @param string $topic
      * @return $this
      */
     public function setTopicName($topic);
 
     /**
-     * @return string Serialized Data
+     * Serialized Data
+     * 
+     * @return string 
      */
     public function getSerializedData();
 
     /**
+     * Set serialized data
+     * 
      * @param string $serializedData
      * @return $this
      */
     public function setSerializedData($serializedData);
 
     /**
-     * @return int OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED
+     * Get operation status
+     * 
+     * OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED
+     * 
+     * @return int 
      */
     public function getStatus();
 
     /**
+     * Set status
+     * 
      * @param int $status
      * @return $this
      */
     public function setStatus($status);
 
     /**
+     * Get result message
+     * 
      * @return string
      */
     public function getResultMessage();
 
     /**
+     * Set result message
+     * 
      * @param string $resultMessage
      * @return $this
      */
     public function setResultMessage($resultMessage);
 
     /**
+     * Get error code
+     * 
      * @return int
      */
     public function getErrorCode();
 
     /**
+     * Set error code
+     * 
      * @param int $errorCode
      * @return $this
      */

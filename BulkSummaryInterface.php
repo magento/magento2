@@ -30,44 +30,60 @@ interface BulkSummaryInterface
     /**#@-*/
 
     /**
+     * Get bulk uuid
+     *
      * @return string
      */
     public function getBulkId();
 
     /**
+     * Set bulk uuid
+     *
      * @param string $bulkUuid
      * @return $this
      */
     public function setBulkId($bulkUuid);
 
     /**
+     * Get bulk description
+     *
      * @return string
      */
     public function getDescription();
 
     /**
+     * Set bulk description
+     *
      * @param string $description
      * @return $this
      */
     public function setDescription($description);
 
     /**
+     * Get bulk scheduled time
+     *
      * @return string
      */
     public function getStartTime();
 
     /**
+     * Set bulk scheduled time
+     *
      * @param string $timestamp
      * @return $this
      */
     public function setStartTime($timestamp);
 
     /**
+     * Get user id
+     *
      * @return int
      */
     public function getUserId();
 
     /**
+     * Set user id
+     *
      * @param int $userId
      * @return $this
      */
