@@ -9,6 +9,9 @@
     <type name="Magento\Framework\MessageQueue\Consumer\Config\Data">
         <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\ConsumerConfigPlugin" />
     </type>
+    <type name="Magento\Framework\MessageQueue\Publisher\Config\Data">
+        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\PublisherConfigPlugin" />
+    </type>
     <type name="Magento\Framework\MessageQueue\QueueRepository">
         <arguments>
             <argument name="queues" xsi:type="array">
