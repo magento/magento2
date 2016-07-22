@@ -14,8 +14,8 @@
         </binding>
     </exchange>
 
-    <exchange name="magento-topic-based-exchange2">
-        <binding id="topicBasedRouting2" topic="anotherTopic2" destination="topic-queue2">
+    <exchange name="magento-topic-based-exchange2" >
+        <binding id="topicBasedRouting2" topic="anotherTopic2" destination="topic-queue2" destinationType="queue">
             <arguments>
                 <argument name="argument1" xsi:type="string">value</argument>
             </arguments>
