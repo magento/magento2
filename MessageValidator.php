@@ -32,7 +32,6 @@ class MessageValidator
         $this->queueConfig = $queueConfig;
     }
 
-
     /**
      * Identify message data schema by topic.
      *

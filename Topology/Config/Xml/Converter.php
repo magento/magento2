@@ -68,28 +68,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
                 switch ($node->nodeName) {
                     case 'binding':
-                        $bindingArguments = [];
-                        $id = $this->getAttributeValue($node, 'id');
-                        if (!$id) {
-                            throw new \InvalidArgumentException('Binding id is missing');
-                        }
-                        $isDisabled = $this->booleanUtils->toBoolean(
-                            $this->getAttributeValue($node, 'disabled', false)
-                        );
-                        foreach ($node->childNodes as $arguments) {
-                            if ($arguments->nodeName != 'arguments' || $arguments->nodeType != XML_ELEMENT_NODE) {
-                                continue;
-                            }
-                            $bindingArguments = $this->processArguments($arguments);
-                        }
-                        $bindings[$id] = [
-                            'id' => $id,
-                            'destinationType' => $this->getAttributeValue($node, 'destinationType', 'queue'),
-                            'destination' => $this->getAttributeValue($node, 'destination'),
-                            'disabled' => $isDisabled,
-                            'topic' => $this->getAttributeValue($node, 'topic'),
-                            'arguments' => $bindingArguments
-                        ];
+                        $bindings = $this->processBindings($node, $bindings);
                         break;
 
                     case 'arguments':
@@ -98,12 +77,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 }
             }
 
+            $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
             $result[$name] = [
                 'name' => $name,
                 'type' => $this->getAttributeValue($exchange, 'type', 'topic'),
                 'connection' => $this->getAttributeValue($exchange, 'connection', 'amqp'),
                 'durable' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'durable', true)),
-                'autoDelete' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'autoDelete', false)),
+                'autoDelete' => $this->booleanUtils->toBoolean($autoDelete),
                 'internal' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'internal', false)),
                 'bindings' => $bindings,
                 'arguments' => $exchangeArguments,
@@ -160,5 +140,36 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $item = $node->attributes->getNamedItem($attributeName);
         return $item ? $item->nodeValue : $default;
+    }
+
+    /**
+     * Parse bindings.
+     *
+     * @param \DOMNode $node
+     * @param array $bindings
+     * @return array
+     */
+    private function processBindings($node, $bindings)
+    {
+        $bindingArguments = [];
+        $id = $this->getAttributeValue($node, 'id');
+        $isDisabled = $this->booleanUtils->toBoolean(
+            $this->getAttributeValue($node, 'disabled', false)
+        );
+        foreach ($node->childNodes as $arguments) {
+            if ($arguments->nodeName != 'arguments' || $arguments->nodeType != XML_ELEMENT_NODE) {
+                continue;
+            }
+            $bindingArguments = $this->processArguments($arguments);
+        }
+        $bindings[$id] = [
+            'id' => $id,
+            'destinationType' => $this->getAttributeValue($node, 'destinationType', 'queue'),
+            'destination' => $this->getAttributeValue($node, 'destination'),
+            'disabled' => $isDisabled,
+            'topic' => $this->getAttributeValue($node, 'topic'),
+            'arguments' => $bindingArguments
+        ];
+        return $bindings;
     }
 }

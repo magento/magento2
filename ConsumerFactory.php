@@ -30,7 +30,6 @@ class ConsumerFactory
      */
     private $objectManager = null;
 
-
     /**
      * Initialize dependencies.
      *

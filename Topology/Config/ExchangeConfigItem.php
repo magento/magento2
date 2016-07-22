@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\MessageQueue\Topology\Config;
+
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
 use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\IteratorFactory;
 
