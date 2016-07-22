@@ -223,6 +223,7 @@
                     <item name="frontName" xsi:type="null" />
                     <item name="router" xsi:type="string">standard</item>
                 </item>
+                <item name="setup" xsi:type="null"/>
             </argument>
             <argument name="default" xsi:type="string">frontend</argument>
         </arguments>
