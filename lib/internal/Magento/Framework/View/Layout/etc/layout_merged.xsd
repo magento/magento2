@@ -44,12 +44,6 @@
         </xs:keyref>
     </xs:element>
 
-    <xs:simpleType name="elementNameType">
-        <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
     <xs:complexType name="layoutType">
         <xs:annotation>
             <xs:documentation>

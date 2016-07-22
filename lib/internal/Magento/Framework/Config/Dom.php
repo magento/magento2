@@ -316,7 +316,8 @@ class Dom
         } catch (\Exception $exception) {
             $errors = self::getXmlErrors($errorFormat);
             libxml_use_internal_errors(false);
-            throw new ValidationSchemaException(__(implode("\n", $errors)));
+            array_unshift($errors, __('Processed schema file: %1', $schema));
+            throw new ValidationSchemaException(__(implode("; ", $errors)));
         }
         libxml_set_external_entity_loader(null);
         libxml_use_internal_errors(false);
