@@ -52,7 +52,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     protected function _getFormat()
     {
         $format = $this->getColumn()->getFormat();
-        if (!$format) {
+        if ($format === null) {
             if (self::$_format === null) {
                 try {
                     self::$_format = $this->_localeDate->getDateFormat(
