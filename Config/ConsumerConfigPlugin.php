@@ -65,7 +65,7 @@ class ConsumerConfigPlugin
         foreach ($this->queueConfig->getConsumers() as $consumerData) {
             $consumerName = $consumerData['name'];
             $handlers = [];
-            foreach ($consumerData['handlers'] as $topic => $topicHandlers) {
+            foreach ($consumerData['handlers'] as $topicHandlers) {
                 foreach ($topicHandlers as $handlerConfig) {
                     $handlers[] = $handlerConfig;
                 }

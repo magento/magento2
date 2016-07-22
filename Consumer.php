@@ -133,26 +133,36 @@ class Consumer implements ConsumerInterface
             if ($messageSchemaType == QueueConfig::TOPIC_SCHEMA_TYPE_METHOD) {
                 foreach ($handlers as $callback) {
                     $result = call_user_func_array($callback, $decodedMessage);
-                    if ($isSync && isset($result)) {
-                        $this->messageValidator->validate($topicName, $result, false);
-                        return $this->messageEncoder->encode($topicName, $result, false);
-                    } else if ($isSync) {
-                        throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
-                    }
+                    return $this->processSyncResponse($topicName, $result);
                 }
             } else {
                 foreach ($handlers as $callback) {
                     $result = call_user_func($callback, $decodedMessage);
-                    if ($isSync && isset($result)) {
-                        $this->messageValidator->validate($topicName, $result, false);
-                        return $this->messageEncoder->encode($topicName, $result, false);
-                    } else if ($isSync) {
-                        throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
+                    if ($isSync) {
+                        return $this->processSyncResponse($topicName, $result);
                     }
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * Validate and encode synchrouns handler output.
+     *
+     * @param string $topicName
+     * @param mixed $result
+     * @return string
+     * @throws LocalizedException
+     */
+    private function processSyncResponse($topicName, $result)
+    {
+        if (isset($result)) {
+            $this->messageValidator->validate($topicName, $result, false);
+            return $this->messageEncoder->encode($topicName, $result, false);
+        } else {
+            throw new LocalizedException(new Phrase('No reply message resulted in RPC.'));
+        }
     }
 
     /**
