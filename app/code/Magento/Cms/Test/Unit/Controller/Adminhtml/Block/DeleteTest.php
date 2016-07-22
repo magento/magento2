@@ -95,6 +95,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+            
         $this->resultRedirectFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->resultRedirectMock);
@@ -114,10 +115,17 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactoryMock);
 
+        $this->cmsBlockFactoryMock = $this->getMockBuilder(\Magento\Cms\Model\BlockFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+    
         $this->deleteController = $this->objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Block\Delete',
             [
                 'context' => $this->contextMock,
+                'cmsBlockFactory' => $this->cmsBlockFactoryMock
+                
             ]
         );
     }
@@ -128,9 +136,8 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturn($this->blockId);
 
-        $this->objectManagerMock->expects($this->once())
+        $this->cmsBlockFactoryMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Cms\Model\Block')
             ->willReturn($this->blockMock);
 
         $this->blockMock->expects($this->once())
@@ -179,11 +186,10 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturn($this->blockId);
 
-        $this->objectManagerMock->expects($this->once())
+        $this->cmsBlockFactoryMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Cms\Model\Block')
             ->willThrowException(new \Exception(__($errorMsg)));
-
+            
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with($errorMsg);
