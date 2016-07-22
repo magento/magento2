@@ -12,7 +12,7 @@
         </arguments>
     </exchange>
 
-    <exchange name="magento-topic-based-exchange2">
+    <exchange name="magento-topic-based-exchange2" type="topic" connection="amqp">
         <arguments>
             <argument name="alternate-exchange" xsi:type="string">magento-log-exchange</argument>
         </arguments>
