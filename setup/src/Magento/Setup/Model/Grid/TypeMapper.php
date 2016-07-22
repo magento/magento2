@@ -35,7 +35,8 @@ class TypeMapper
         ComposerInformation::LANGUAGE_PACKAGE_TYPE => 'Language',
         ComposerInformation::MODULE_PACKAGE_TYPE => 'Module',
         ComposerInformation::METAPACKAGE_PACKAGE_TYPE => 'Metapackage',
-        ComposerInformation::COMPONENT_PACKAGE_TYPE => 'Component'
+        ComposerInformation::COMPONENT_PACKAGE_TYPE => 'Component',
+        ComposerInformation::LIBRARY_PACKAGE_TYPE => 'Library'
     ];
 
     /**
