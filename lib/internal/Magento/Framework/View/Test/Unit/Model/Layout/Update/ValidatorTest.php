@@ -48,10 +48,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $layoutUpdate
-     * @param boolean $isSchemaValid
      * @return Validator
      */
-    protected function _createValidator($layoutUpdate, $isSchemaValid = true)
+    protected function _createValidator($layoutUpdate)
     {
         $params = [
             'xml' => '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
@@ -73,13 +72,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider testIsValidNotSecurityCheckDataProvider
      * @param string $layoutUpdate
-     * @param boolean $isValid
      * @param boolean $expectedResult
      * @param array $messages
      */
-    public function testIsValidNotSecurityCheck($layoutUpdate, $isValid, $expectedResult, $messages)
+    public function testIsValidNotSecurityCheck($layoutUpdate, $expectedResult, $messages)
     {
-        $model = $this->_createValidator($layoutUpdate, $isValid);
+        $model = $this->_createValidator($layoutUpdate);
         $this->assertEquals(
             $expectedResult,
             $model->isValid(
@@ -97,7 +95,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValidNotSecurityCheckDataProvider()
     {
         return [
-            ['test', true, true, []]
+            ['test', true, []]
         ];
     }
 
