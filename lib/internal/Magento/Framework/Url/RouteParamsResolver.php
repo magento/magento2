@@ -153,7 +153,6 @@ class RouteParamsResolver extends \Magento\Framework\DataObject implements Route
     /**
      * Get escaper
      *
-     * @param void
      * @return \Magento\Framework\Escaper
      * @deprecated
      */

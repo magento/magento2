@@ -161,7 +161,6 @@ class Escaper
     /**
      * Get escaper
      *
-     * @param void
      * @return \Magento\Framework\ZendEscaper
      * @deprecated
      */
