@@ -718,14 +718,14 @@ class AccountManagement implements AccountManagementInterface
         try {
             foreach ($customerAddresses as $address) {
                  if ($address->getId()) {
-                    $newAddress = clone $address;
-                    $newAddress->setId(null);
-                    $newAddress->setCustomerId($customer->getId());
-                    $this->addressRepository->save($newAddress);
+                     $newAddress = clone $address;
+                     $newAddress->setId(null);
+                     $newAddress->setCustomerId($customer->getId());
+                     $this->addressRepository->save($newAddress);
                  } else {
-                    $address->setCustomerId($customer->getId());
-                    $this->addressRepository->save($address);
-                }
+                     $address->setCustomerId($customer->getId());
+                     $this->addressRepository->save($address);
+                 }
             }
             $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {

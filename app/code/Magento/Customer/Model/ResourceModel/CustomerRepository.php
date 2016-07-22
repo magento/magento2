@@ -221,6 +221,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      *
      * @param \Magento\Customer\Model\Customer $customerModel
      * @param string|null $passwordHash
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return void
      */
     private function populateCustomerWithSecureData($customerModel, $passwordHash = null)

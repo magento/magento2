@@ -16,8 +16,8 @@ class DeleteRelation
     /**
      * Delete relation (billing and shipping) between customer and address
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return void
+     * @param \Magento\Framework\Model\AbstractModel $address
+     * @param \Magento\Customer\Model\Customer $customer
      */
     public function deleteRelation(
         \Magento\Framework\Model\AbstractModel $address,

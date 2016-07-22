@@ -619,7 +619,7 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($addressCollection);
         $addressCollection->expects($this->once())
             ->method('removeItemByKey')
-            ->with($addressId); 
+            ->with($addressId);
         $this->addressResourceModel->expects($this->once())
             ->method('delete')
             ->with($this->address);

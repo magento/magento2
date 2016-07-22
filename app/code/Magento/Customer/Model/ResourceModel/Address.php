@@ -12,6 +12,11 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class Address
+ * @package Magento\Customer\Model\ResourceModel
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
@@ -134,6 +139,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 
     /**
      * @param \Magento\Customer\Model\Address $address
+     * @return $this
      */
     protected function _afterDelete(\Magento\Framework\DataObject $address)
     {

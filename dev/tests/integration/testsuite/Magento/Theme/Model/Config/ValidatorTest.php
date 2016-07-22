@@ -12,7 +12,8 @@ use Magento\Email\Model\Template;
  */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
-    const TEMPLATE_CODE = 'fixture'; 
+    const TEMPLATE_CODE = 'fixture';
+
     /**
      * @var \Magento\Theme\Model\Design\Config\Validator
      */

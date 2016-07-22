@@ -84,12 +84,17 @@ define([
                 $input = $(input),
                 attributeName;
 
+
             for (attributeName in this.options.attributesField) {
-                $input.attr(attributeName, this.options.attributesField[attributeName])
+                if (this.options.attributesField.hasOwnProperty(attributeName)) {
+                    $input.attr(attributeName, this.options.attributesField[attributeName]);
+                }
             }
 
             for (attributeName in this.options.attributesForm) {
-                $form.attr(attributeName, this.options.attributesForm[attributeName])
+                if (this.options.attributesForm.hasOwnProperty(attributeName)) {
+                    $form.attr(attributeName, this.options.attributesForm[attributeName]);
+                }
             }
 
             $form.append($input);
