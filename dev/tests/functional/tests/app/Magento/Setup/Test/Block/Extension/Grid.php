@@ -131,8 +131,18 @@ class Grid extends AbstractGrid
      */
     public function findExtensionOnGrid(Extension $extension)
     {
-        sleep(3);
+        $this->_rootElement->waitUntil(
+            function () {
+                //TODO: Sleep will be removed after MAGETWO-52137
+                sleep(3);
+                $message = $this->_rootElement->find($this->notFoundMessage)->isVisible();
+                $grid = $this->_rootElement->find($this->dataGrid)->isVisible();
 
+                return ($message && !$grid)
+                    || (!$message && $grid);
+            }
+        );
+        
         if ($this->_rootElement->find($this->notFoundMessage)->isVisible()) {
             return false;
         }
