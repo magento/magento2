@@ -101,6 +101,8 @@ class ExtensionGrid extends AbstractActionController
         $error = '';
         $lastSyncData = [];
         try {
+            $authDataJson = $this->packagesAuth->getAuthJsonData();
+            $this->packagesAuth->checkCredentials($authDataJson['username'], $authDataJson['password']);
             $lastSyncData = $this->packagesData->syncPackagesData();
         } catch (\Exception $e) {
             $error = $e->getMessage();
