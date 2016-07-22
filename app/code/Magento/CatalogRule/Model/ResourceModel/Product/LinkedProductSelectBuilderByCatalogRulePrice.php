@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
 use Magento\Catalog\Model\ResourceModel\Product\LinkedProductSelectBuilderInterface;
@@ -37,24 +38,32 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
     private $localeDate;
 
     /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->storeManager = $storeManager;
         $this->resource = $resourceConnection;
         $this->customerSession = $customerSession;
         $this->dateTime = $dateTime;
         $this->localeDate = $localeDate;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -64,14 +73,23 @@ class LinkedProductSelectBuilderByCatalogRulePrice implements LinkedProductSelec
     {
         $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
         $currentDate = $this->dateTime->formatDate($timestamp, false);
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         return [$this->resource->getConnection()->select()
-            ->from(['t' => $this->resource->getTableName('catalogrule_product_price')], 'product_id')
-            ->joinInner(
-                ['link' => $this->resource->getTableName('catalog_product_relation')],
-                'link.child_id = t.product_id',
-                []
-            )->where('link.parent_id = ? ', $productId)
+                ->from(['parent' => 'catalog_product_entity'], '')
+                ->joinInner(
+                    ['link' => $this->resource->getTableName('catalog_product_relation')],
+                    "link.parent_id = parent.$linkField",
+                    []
+                )->joinInner(
+                    ['child' => 'catalog_product_entity'],
+                    "child.entity_id = link.child_id",
+                    ['entity_id']
+                )->joinInner(
+                    ['t' => $this->resource->getTableName('catalogrule_product_price')],
+                    't.product_id = child.entity_id',
+                    []
+                )->where('parent.entity_id = ? ', $productId)
             ->where('t.website_id = ?', $this->storeManager->getStore()->getWebsiteId())
             ->where('t.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
             ->where('t.rule_date = ?', $currentDate)

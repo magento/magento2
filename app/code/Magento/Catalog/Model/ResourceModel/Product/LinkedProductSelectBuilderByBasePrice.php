@@ -66,12 +66,20 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $priceAttribute = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
         $priceSelect = $this->resource->getConnection()->select()
-            ->from(['t' => $priceAttribute->getBackendTable()], $linkField)
+            ->from(['parent' => 'catalog_product_entity'], '')
             ->joinInner(
                 ['link' => $this->resource->getTableName('catalog_product_relation')],
-                "link.child_id = t.$linkField",
+                "link.parent_id = parent.$linkField",
                 []
-            )->where('link.parent_id = ? ', $productId)
+            )->joinInner(
+                ['child' => 'catalog_product_entity'],
+                "child.entity_id = link.child_id",
+                ['entity_id']
+            )->joinInner(
+                ['t' => $priceAttribute->getBackendTable()],
+                "t.$linkField = child.$linkField",
+                []
+            )->where('parent.entity_id = ? ', $productId)
             ->where('t.attribute_id = ?', $priceAttribute->getAttributeId())
             ->where('t.value IS NOT NULL')
             ->order('t.value ' . Select::SQL_ASC)

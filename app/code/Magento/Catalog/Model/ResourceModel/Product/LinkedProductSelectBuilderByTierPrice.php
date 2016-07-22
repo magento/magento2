@@ -69,16 +69,24 @@ class LinkedProductSelectBuilderByTierPrice implements LinkedProductSelectBuilde
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $priceSelect = $this->resource->getConnection()->select()
-                ->from(['t' => $this->resource->getTableName('catalog_product_entity_tier_price')], $linkField)
-                ->joinInner(
-                    ['link' => $this->resource->getTableName('catalog_product_relation')],
-                    "link.child_id = t.{$linkField}",
-                    []
-                )->where('link.parent_id = ? ', $productId)
-                ->where('t.all_groups = 1 OR customer_group_id = ?', $this->customerSession->getCustomerGroupId())
-                ->where('t.qty = ?', 1)
-                ->order('t.value ' . Select::SQL_ASC)
-                ->limit(1);
+            ->from(['parent' => 'catalog_product_entity'], '')
+            ->joinInner(
+                ['link' => $this->resource->getTableName('catalog_product_relation')],
+                "link.parent_id = parent.$linkField",
+                []
+            )->joinInner(
+                ['child' => 'catalog_product_entity'],
+                "child.entity_id = link.child_id",
+                ['entity_id']
+            )->joinInner(
+                ['t' => $this->resource->getTableName('catalog_product_entity_tier_price')],
+                "t.$linkField = child.$linkField",
+                []
+            )->where('parent.entity_id = ? ', $productId)
+            ->where('t.all_groups = 1 OR customer_group_id = ?', $this->customerSession->getCustomerGroupId())
+            ->where('t.qty = ?', 1)
+            ->order('t.value ' . Select::SQL_ASC)
+            ->limit(1);
 
         $priceSelectDefault = clone $priceSelect;
         $priceSelectDefault->where('t.website_id = ?', self::DEFAULT_WEBSITE_ID);

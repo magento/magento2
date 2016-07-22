@@ -76,8 +76,8 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
                 );
 
                 $this->products[$product->getId()] = $this->collectionFactory->create()
-                    ->addIdFilter($productIds)
-                    ->addPriceData();
+                    ->addAttributeToSelect(['price', 'special_price'])
+                    ->addIdFilter($productIds);
             } else {
                 $this->products[$product->getId()] = $this->configurable->getUsedProducts($product);
             }

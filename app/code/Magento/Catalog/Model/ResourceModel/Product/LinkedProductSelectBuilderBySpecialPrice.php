@@ -87,27 +87,35 @@ class LinkedProductSelectBuilderBySpecialPrice implements LinkedProductSelectBui
         $timestamp = $this->localeDate->scopeTimeStamp($this->storeManager->getStore());
         $currentDate = $this->dateTime->formatDate($timestamp, false);
 
-        $specialPrice = $connection->select()
-            ->from(['t' => $specialPriceAttribute->getBackendTable()], $linkField)
+        $specialPrice = $this->resource->getConnection()->select()
+            ->from(['parent' => 'catalog_product_entity'], '')
             ->joinInner(
                 ['link' => $this->resource->getTableName('catalog_product_relation')],
-                "link.child_id = t.{$linkField}",
+                "link.parent_id = parent.$linkField",
                 []
             )->joinInner(
+                ['child' => 'catalog_product_entity'],
+                "child.entity_id = link.child_id",
+                ['entity_id']
+            )->joinInner(
+                ['t' => $specialPriceAttribute->getBackendTable()],
+                "t.$linkField = child.$linkField",
+                []
+            )->joinLeft(
                 ['special_from' => $specialPriceFromDate->getBackendTable()],
                 $connection->quoteInto(
                     "t.{$linkField} = special_from.{$linkField} AND special_from.attribute_id = ?",
                     $specialPriceFromDate->getAttributeId()
                 ),
                 ''
-            )->joinInner(
+            )->joinLeft(
                 ['special_to' => $specialPriceToDate->getBackendTable()],
                 $connection->quoteInto(
                     "t.{$linkField} = special_to.{$linkField} AND special_to.attribute_id = ?",
                     $specialPriceToDate->getAttributeId()
                 ),
                 ''
-            )->where('link.parent_id = ? ', $productId)
+            )->where('parent.entity_id = ? ', $productId)
             ->where('t.attribute_id = ?', $specialPriceAttribute->getAttributeId())
             ->where('t.value IS NOT NULL')
             ->where(
