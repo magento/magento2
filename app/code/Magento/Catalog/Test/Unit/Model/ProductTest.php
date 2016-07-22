@@ -667,18 +667,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function getIdentitiesProvider()
     {
         $extensionAttributesMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
-            ->getMock();
+            ->disableOriginalConstructor()->setMethods(['getStockItem'])->getMock();
         $stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $extensionAttributesMock->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($stockItemMock);
-        $stockItemMock->expects($this->any())
-            ->method('getIsInStock')
-            ->willReturn(true);
+            ->disableOriginalConstructor()->getMock();
+        $extensionAttributesMock->expects($this->any())->method('getStockItem')->willReturn($stockItemMock);
+        $stockItemMock->expects($this->any())->method('getIsInStock')->willReturn(true);
 
         return [
             'no changes' => [

@@ -135,10 +135,7 @@ class CategoryManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTreeForAllScope()
     {
-
-        $rootCategoryId = null;
         $depth = null;
-        $category = null;
         $categoriesMock = $this->getMock(
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
             [],

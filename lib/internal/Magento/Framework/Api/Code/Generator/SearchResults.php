@@ -21,6 +21,12 @@ class SearchResults extends EntityAbstract
     const ENTITY_TYPE = 'searchResults';
 
     /**
+     * Search result default class
+     * @deprecated
+     */
+    const SEARCH_RESULT = '\\' . \Magento\Framework\Api\SearchResults::class;
+
+    /**
      * Retrieve class properties
      *
      * @return array
