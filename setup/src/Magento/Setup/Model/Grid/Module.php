@@ -124,23 +124,6 @@ class Module
     private function getModuleRequiredBy($name)
     {
         $result = [];
-        $metaPackagesMap = $this->packagesData->getMetaPackagesMap();
-        if (isset($metaPackagesMap[$name])) {
-            $metaPackagesName = $metaPackagesMap[$name];
-            $composerRootRequires = $this->composerInformation->getRootPackage()->getRequires();
-            $result[] = [
-                'name' => $metaPackagesName,
-                'moduleName' => $metaPackagesName,
-                'type' => $this->typeMapper->map(
-                    $metaPackagesMap[$name],
-                    ComposerInformation::METAPACKAGE_PACKAGE_TYPE
-                ),
-                'enable' => true,
-                'version' => isset($composerRootRequires[$metaPackagesName]) ?
-                    $composerRootRequires[$metaPackagesName]->getPrettyConstraint() :''
-            ];
-        }
-
         $modules = $this->packageInfo->getRequiredBy($name);
         foreach ($modules as $moduleName) {
             $packageName = $this->packageInfo->getPackageName($moduleName);

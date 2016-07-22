@@ -178,9 +178,6 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                 ['magento/sample-module-two', 'magento2-module', 'Module'],
             ]);
 
-        $this->packagesDataMock->expects(static::exactly(2))
-            ->method('getMetaPackagesMap')
-            ->willReturn([]);
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getRequiredBy')
             ->willReturn([]);
