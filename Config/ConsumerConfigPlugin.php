@@ -55,7 +55,7 @@ class ConsumerConfigPlugin
     }
 
     /**
-     * Get data from queue config in format compatible with new config data internal structure.
+     * Get data from queue config in format compatible with consumer config data internal structure.
      *
      * @return array
      */
