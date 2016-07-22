@@ -128,20 +128,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getConfig()
     {
-        $configPath = __DIR__ . '/etc/queue.xml';
-        $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
-        $fileResolverMock->expects($this->any())
-            ->method('get')
-            ->willReturn([$configPath => file_get_contents(($configPath))]);
-
-        /** @var \Magento\Framework\MessageQueue\Config\Reader\Xml $xmlReader */
-        $xmlReader = $this->objectManager->create(
-            '\Magento\Framework\MessageQueue\Config\Reader\Xml',
-            ['fileResolver' => $fileResolverMock]
-        );
-
-        $newData = $xmlReader->read();
-
+        $newData = include __DIR__ . '/_files/encoder_queue.php';
         /** @var \Magento\Framework\MessageQueue\Config\Data $configData */
         $configData = $this->objectManager->create('Magento\Framework\MessageQueue\Config\Data');
         $configData->reset();
