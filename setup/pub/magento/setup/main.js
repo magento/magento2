@@ -95,7 +95,7 @@ main.controller('navigationController',
 
         $scope.goToStart = function() {
             if ($state.current.type === 'install') {
-                $state.go('root.landing-install');
+                $state.go('root.install');
             } else if ($state.current.type === 'upgrade') {
                 $state.go('root.upgrade');
             } else if ($state.current.type === 'update') {
