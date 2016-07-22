@@ -19,7 +19,7 @@ class Validate
     /**
      * @param Attribute\Validate $subject
      * @param Json $response
-     * @return array
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(Attribute\Validate $subject, Json $response)
@@ -57,7 +57,7 @@ class Validate
      */
     private function isUniqueAdminValues(array $optionsValues, array $deletedOptions)
     {
-        $adminValues = array();
+        $adminValues = [];
         foreach ($optionsValues as $optionKey => $values) {
             if (!(isset($deletedOptions[$optionKey]) and $deletedOptions[$optionKey] === '1')) {
                 $adminValues[] = reset($values);
