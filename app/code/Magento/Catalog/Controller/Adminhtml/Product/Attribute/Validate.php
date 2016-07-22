@@ -90,13 +90,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
         }
 
-        $options = $this->getRequest()->getParam("option");
-        if (is_array($options)) {
-            if (!$this->isUniqueAdminValues($options['value'], $options['delete'])) {
-                $this->setMessageToResponse($response, [__("The value of Admin must be unique.")]);
-                $response->setError(true);
-            };
-        }
+        $this->checkUniqueOption($response);
+
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
     }
 
@@ -132,5 +127,19 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $messages = reset($messages);
         }
         return $response->setData($messageKey, $messages);
+    }
+
+    /**
+     * @param DataObject $response
+     * @param array|null $options
+     * @return $this
+     */
+    private function checkUniqueOption(DataObject $response, array $options = null)
+    {
+        if (is_array($options) and !$this->isUniqueAdminValues($options['value'], $options['delete'])) {
+            $this->setMessageToResponse($response, [__("The value of Admin must be unique.")]);
+            $response->setError(true);
+        }
+        return $this;
     }
 }
