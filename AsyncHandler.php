@@ -7,6 +7,8 @@ namespace Magento\TestModuleMessageQueueConfiguration;
 
 /**
  * Class for testing asynchronous queue handlers.
+ *
+ * @SuppressWarnings(PHPMD)
  */
 class AsyncHandler
 {
