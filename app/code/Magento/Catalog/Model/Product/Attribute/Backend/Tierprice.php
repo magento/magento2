@@ -116,7 +116,11 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
         $priceRows = array_filter((array)$priceRows);
 
         foreach ($priceRows as $priceRow) {
-            $percentage = isset($priceRow['percentage_value']) ? $priceRow['percentage_value'] : 0 ;
+            $percentage = isset($priceRow['percentage_value']) ? $priceRow['percentage_value'] : 0;
+            if ($percentage == '') {
+                // TODO: MAGETWO-55839
+                continue;
+            }
             if (!is_numeric($percentage) || $percentage < 0 || $percentage > 100) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Percentage value must be a number between 0 and 100.')
