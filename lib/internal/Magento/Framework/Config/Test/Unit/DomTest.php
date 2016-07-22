@@ -8,18 +8,14 @@ namespace Magento\Framework\Config\Test\Unit;
 class DomTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validationStateMock;
 
     protected function setUp()
     {
-        $this->validationStateMock = $this->getMock(
-            '\Magento\Framework\Config\ValidationStateInterface',
-            [],
-            [],
-            '',
-            false
+        $this->validationStateMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Config\ValidationStateInterface::class
         );
         $this->validationStateMock->method('isValidationRequired')
             ->willReturn(true);
@@ -176,7 +172,29 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $domMock->expects($this->once())
             ->method('schemaValidate')
             ->with($schemaFile)
-            ->will($this->returnValue(false));
-        $this->assertEquals(['Unknown validation error'], $dom->validateDomDocument($domMock, $schemaFile));
+            ->willReturn(false);
+        $this->assertEquals(
+            ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+            $dom->validateDomDocument($domMock, $schemaFile)
+        );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
+     */
+    public function testValidateDomDocumentThrowsException()
+    {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $xml = '<root><node id="id1"/><node id="id2"/></root>';
+        $schemaFile = __DIR__ . '/_files/sample.xsd';
+        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
+        $domMock = $this->getMock('DOMDocument', ['schemaValidate'], []);
+        $domMock->expects($this->once())
+            ->method('schemaValidate')
+            ->with($schemaFile)
+            ->willThrowException(new \Exception());
+        $dom->validateDomDocument($domMock, $schemaFile);
     }
 }
