@@ -11,11 +11,15 @@ namespace Magento\Framework\DataObject;
 interface IdentityGeneratorInterface
 {
     /**
+     * Generate id
+     *
      * @return string
      **/
     public function generateId();
     
     /**
+     * Generate id for data
+     *
      * @param string $data
      * @return string
      **/

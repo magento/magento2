@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "39920f2c202d89b91ed6295d828f3598",
-    "content-hash": "54af41ec31e23d1d9fb7da6a9fc77ace",
+    "hash": "ad3de2234f78fd4b353ae6a1b22401fc",
+    "content-hash": "25dcf96ed1d8b12a25111e8b3af61317",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -1052,16 +1052,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.4.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "b4fe3b7387cb323fd15ad5837cae992422c9fa5c"
+                "reference": "fb12163881a98588bcdc4ba820a96e0ff5ad97dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/b4fe3b7387cb323fd15ad5837cae992422c9fa5c",
-                "reference": "b4fe3b7387cb323fd15ad5837cae992422c9fa5c",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/fb12163881a98588bcdc4ba820a96e0ff5ad97dc",
+                "reference": "fb12163881a98588bcdc4ba820a96e0ff5ad97dc",
                 "shasum": ""
             },
             "require": {
@@ -1128,7 +1128,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2016-04-24 00:30:41"
+            "time": "2016-04-24 00:08:55"
         },
         {
             "name": "seld/cli-prompt",
