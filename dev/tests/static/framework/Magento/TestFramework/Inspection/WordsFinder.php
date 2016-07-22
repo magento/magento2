@@ -179,6 +179,8 @@ class WordsFinder
      * @param \SimpleXMLElement $configXml
      * @return \Magento\TestFramework\Inspection\WordsFinder
      * @throws \Magento\TestFramework\Inspection\Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _extractWhitelist(\SimpleXMLElement $configXml)
     {
@@ -281,6 +283,7 @@ class WordsFinder
      * @param  string $file
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _findWords($file)
     {
@@ -288,7 +291,8 @@ class WordsFinder
         $path = $this->getSearchablePath($file);
         $contents = $checkContents ? file_get_contents($file) : '';
         if (isset($this->exclude[$file]) && !empty($this->exclude[$file])) {
-            foreach ($this->exclude[$file] as $stringToEliminate)
+            $excludesPhrases = $this->exclude[$file];
+            foreach ($excludesPhrases as $stringToEliminate)
                 $contents = str_replace($stringToEliminate, "", $contents);
         }
         $foundWords = [];

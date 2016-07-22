@@ -51,13 +51,17 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     private $identifierName;
 
     /**
+     * SearchResult constructor.
      * @param EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
      * @param EventManager $eventManager
-     * @param string $mainTable
-     * @param string $resourceModel
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $mainTable
+     * @param null|string $resourceModel
+     * @param null|string $identifierName
+     * @param null|string $connectionName
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -77,6 +81,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
             $connection = $this->getResourceConnection()->getConnection();
         }
         $this->setMainTable($this->getResourceConnection()->getTableName($mainTable));
+        $this->identifierName = $identifierName;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -95,7 +100,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     private function getResourceConnection()
     {
         if ($this->resourceConnection == null) {
-            $this->resourceConnection = ObjectManager::getInstance()->create(ResourceConnection::class);
+            $this->resourceConnection = ObjectManager::getInstance()->get(ResourceConnection::class);
         }
         return $this->resourceConnection;
     }
@@ -109,6 +114,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     *  Get resource instance
+     *
      * @return ResourceConnection|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getResource()
@@ -186,16 +193,6 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * Retrieve main table
-     *
-     * @return string
-     */
-    public function getMainTable()
-    {
-        return $this->_mainTable;
-    }
-
-    /**
      * Retrieve table name
      *
      * @param string $table
@@ -207,7 +204,9 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
-     * @return string
+     * Get Identifier name
+     *
+     * @return string|bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getIdentifierName()
