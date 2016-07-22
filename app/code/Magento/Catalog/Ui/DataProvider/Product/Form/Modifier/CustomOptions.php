@@ -386,6 +386,7 @@ class CustomOptions extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Fieldset::NAME,
+                                        'collapsible' => true,
                                         'label' => null,
                                         'sortOrder' => 10,
                                         'opened' => true,

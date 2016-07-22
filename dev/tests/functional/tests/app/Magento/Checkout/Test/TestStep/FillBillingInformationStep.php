@@ -24,11 +24,18 @@ class FillBillingInformationStep implements TestStepInterface
     protected $checkoutOnepage;
 
     /**
-     * Address fixture.
+     * Billing Address fixture.
      *
      * @var Address
      */
     protected $billingAddress;
+
+    /**
+     * Shipping Address fixture.
+     *
+     * @var Address
+     */
+    protected $shippingAddress;
 
     /**
      * "Same as Shipping" checkbox value assertion.
@@ -49,16 +56,19 @@ class FillBillingInformationStep implements TestStepInterface
      * @param CheckoutOnepage $checkoutOnepage
      * @param AssertBillingAddressSameAsShippingCheckbox $assertBillingAddressCheckbox
      * @param Address $billingAddress
+     * @param Address $shippingAddress
      * @param string $billingCheckboxState
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertBillingAddressSameAsShippingCheckbox $assertBillingAddressCheckbox,
         Address $billingAddress = null,
+        Address $shippingAddress = null,
         $billingCheckboxState = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->billingAddress = $billingAddress;
+        $this->shippingAddress = $shippingAddress;
         $this->assertBillingAddressCheckbox = $assertBillingAddressCheckbox;
         $this->billingCheckboxState = $billingCheckboxState;
     }
@@ -76,6 +86,9 @@ class FillBillingInformationStep implements TestStepInterface
 
         if ($this->billingAddress) {
             $selectedPaymentMethod = $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock();
+            if ($this->shippingAddress) {
+                $selectedPaymentMethod->getBillingBlock()->unsetSameAsShippingCheckboxValue();
+            }
             $selectedPaymentMethod->getBillingBlock()->fillBilling($this->billingAddress);
         }
     }
