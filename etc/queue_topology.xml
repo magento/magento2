@@ -12,21 +12,15 @@
                 <argument name="argument1" xsi:type="string">value</argument>
             </arguments>
         </binding>
-        <arguments>
-            <argument name="alternate-exchange" xsi:type="string">magento-log-exchange</argument>
-        </arguments>
     </exchange>
 
     <exchange name="magento-topic-based-exchange2">
         <binding id="topicBasedRouting2" topic="anotherTopic2" destination="topic-queue2">
             <arguments>
                 <argument name="argument1" xsi:type="string">value</argument>
-                <argument name="argument2" xsi:type="boolean">true</argument>
-                <argument name="argument3" xsi:type="number">150</argument>
             </arguments>
         </binding>
         <arguments>
-            <argument name="alternate-exchange" xsi:type="string">magento-log-exchange</argument>
             <argument name="arrayValue" xsi:type="array">
                 <item name="element01" xsi:type="string">10</item>
                 <item name="element02" xsi:type="string">20</item>
