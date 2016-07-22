@@ -6,6 +6,7 @@
  */
 
 namespace Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * @codeCoverageIgnore
@@ -83,6 +84,12 @@ class TierPrice extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function getExtensionAttributes()
     {
+        if (empty($this->_getExtensionAttributes())) {
+            $this->setExtensionAttributes(
+                ObjectManager::getInstance()->get('\Magento\Framework\Api\ExtensionAttributesFactory')
+                    ->create('Magento\Catalog\Api\Data\ProductTierPriceInterface')
+            );
+        }
         return $this->_getExtensionAttributes();
     }
 
