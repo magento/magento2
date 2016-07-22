@@ -3,8 +3,6 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ $$ */
-
 define([
     'jquery',
     'mage/backend/validation'
@@ -14,28 +12,30 @@ define([
     return function (config) {
         var _config = jQuery.extend({
             element: null,
-            message: "",
+            message: '',
             uniqueClass: 'required-unique'
         }, config);
 
-        if (typeof _config.element === "string") {
+        if (typeof _config.element === 'string') {
             jQuery.validator.addMethod(
                 _config.element,
 
                 function (value, element) {
                     var inputs = jQuery(element)
-                            .closest("table")
-                            .find('.' + _config.uniqueClass + ":visible"),
+                            .closest('table')
+                            .find('.' + _config.uniqueClass + ':visible'),
                         valuesHash = {},
                         isValid = true;
 
                     inputs.each(function (el) {
                         var inputValue = inputs[el].value;
-                        if (typeof valuesHash[inputValue] !== "undefined") {
+
+                        if (typeof valuesHash[inputValue] !== 'undefined') {
                             isValid = false;
                         }
                         valuesHash[inputValue] = el;
                     });
+
                     return isValid;
                 },
 
