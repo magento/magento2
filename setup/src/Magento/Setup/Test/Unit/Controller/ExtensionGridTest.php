@@ -132,9 +132,21 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
 
     public function testSyncAction()
     {
+        $authDataJson = ['username' => 'admin', 'password' => '12345'];
+
         $this->packagesDataMock->expects($this->once())
             ->method('syncPackagesData')
             ->willReturn($this->lastSyncData);
+        $this->packagesAuthMock->expects($this->once())
+            ->method('getAuthJsonData')
+            ->willReturn($authDataJson);
+        $this->packagesAuthMock->expects($this->once())
+            ->method('checkCredentials')
+            ->with(
+                $authDataJson['username'],
+                $authDataJson['password']
+            );
+
         $jsonModel = $this->controller->syncAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
