@@ -87,8 +87,6 @@ class LogoutTest extends \PHPUnit_Framework_TestCase
         $cookieMetadataFactoryProperty = $refClass->getProperty('cookieMetadataFactory');
         $cookieMetadataFactoryProperty->setAccessible(true);
         $cookieMetadataFactoryProperty->setValue($this->controller, $this->cookieMetadataFactory);
-
-
     }
 
     public function testExecute()

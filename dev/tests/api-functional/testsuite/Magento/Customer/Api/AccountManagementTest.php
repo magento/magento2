@@ -824,11 +824,11 @@ class AccountManagementTest extends WebapiAbstract
         $this->assertEquals($customerData['id'], $this->subscriber->getCustomerId());
         //Manage customer in order to unsubscribe
         $this->customerHelper->updateSampleCustomer(
+            $customerData["id"],
             array_merge(
                 $customerData,
                 ["extension_attributes" => ["is_subscribed" => false]]
-            ),
-            $customerData["id"]
+            )
         );
         $this->initSubscriber();
 

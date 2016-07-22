@@ -210,6 +210,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param Customer|Address $entity
      * @param array $entityData
+     * @return void
      */
     private function overrideFileUploaderData($entity, array &$entityData)
     {
@@ -325,6 +326,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param Type $entityType
      * @param AbstractAttribute $attribute
      * @param array $config
+     * @return void
      */
     private function overrideFileUploaderMetadata(
         Type $entityType,

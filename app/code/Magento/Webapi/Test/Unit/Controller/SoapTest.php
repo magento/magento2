@@ -52,8 +52,8 @@ class SoapTest extends \PHPUnit_Framework_TestCase
      */
     protected $_appStateMock;
 
-
     protected $_appconfig;
+
     /**
      * Set up Controller object.
      */
@@ -108,8 +108,6 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             'appConfig',
             $appconfig
         );
-
-
 
         $this->_soapServerMock->expects($this->any())->method('setWSDL')->will($this->returnSelf());
         $this->_soapServerMock->expects($this->any())->method('setEncoding')->will($this->returnSelf());
