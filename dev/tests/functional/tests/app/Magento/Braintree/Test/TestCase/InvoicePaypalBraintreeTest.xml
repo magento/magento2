@@ -9,7 +9,8 @@
     <testCase name="Magento\Braintree\Test\TestCase\InvoicePayPalBraintreeTest" summary="Capture for order placed within PayPal Braintree">
         <variation name="InvoicePayPalBraintreeTestVariation1" summary="Full capture of order placed within Braintree PayPal" ticketId="MAGETWO-48614">
             <data name="description" xsi:type="string">Full capture of order placed within Braintree PayPal</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar, bundleProduct::bundle_fixed_100_dollar_product</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/1" xsi:type="string">bundleProduct::bundle_fixed_100_dollar_product</data>
             <data name="taxRule" xsi:type="string">us_illinois_tax_rule</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -32,7 +33,7 @@
         </variation>
         <variation name="InvoicePayPalBraintreeTestVariation2" summary="Partial capture for order placed within Braintree PayPal" ticketId="MAGETWO-48615">
             <data name="description" xsi:type="string">Partial capture for order placed within Braintree PayPal</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_100_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_100_dollar</data>
             <data name="taxRule" xsi:type="string">us_illinois_tax_rule</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
