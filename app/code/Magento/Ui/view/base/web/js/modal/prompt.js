@@ -84,7 +84,6 @@ define([
                 $input = $(input),
                 attributeName;
 
-
             for (attributeName in this.options.attributesField) {
                 if (this.options.attributesField.hasOwnProperty(attributeName)) {
                     $input.attr(attributeName, this.options.attributesField[attributeName]);

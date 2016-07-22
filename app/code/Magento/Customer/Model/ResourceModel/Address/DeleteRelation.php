@@ -18,6 +18,7 @@ class DeleteRelation
      *
      * @param \Magento\Framework\Model\AbstractModel $address
      * @param \Magento\Customer\Model\Customer $customer
+     * @return void
      */
     public function deleteRelation(
         \Magento\Framework\Model\AbstractModel $address,
