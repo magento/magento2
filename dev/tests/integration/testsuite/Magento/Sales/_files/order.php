@@ -43,6 +43,8 @@ $order->setIncrementId(
     100
 )->setBaseSubtotal(
     100
+)->setGrandTotal(
+    100
 )->setBaseGrandTotal(
     100
 )->setCustomerIsGuest(
