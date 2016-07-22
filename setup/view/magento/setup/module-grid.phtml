@@ -15,8 +15,9 @@
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3">
-                <div class="admin__control-support-text">
-                    Available modules <span>  {{total}}</span> modules
+                <div class="admin__control-support-text module-summary">
+                    <span class="module-summary-title">Available modules</span>
+                    <span class="module-summary-count">{{total}} modules</span>
                 </div>
             </div>
             <div class="col-xs-9 admin__data-grid-pager-wrap">
@@ -63,20 +64,28 @@
                 <th class="data-grid-th _col-xs">
                     <span></span>
                 </th>
-                <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
-                && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('name')"
+                    ng-class="{'_ascend' : predicate === 'name' && !reverse,
+                               '_descend' : predicate === 'name' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Component Name</span>
                 </th>
-                <th ng-click="order('moduleName')" ng-class="{'_ascend' : predicate === 'moduleName'
-                && !reverse,'_descend' : predicate === 'moduleName' && reverse}" class="data-grid-th _sortable">
+                <th ng-click="order('moduleName')"
+                    ng-class="{'_ascend' : predicate === 'moduleName' && !reverse,
+                               '_descend' : predicate === 'moduleName' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Module Name</span>
                 </th>
-                <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version' &&
-                !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('version')"
+                    ng-class="{'_ascend' : predicate === 'version' && !reverse,
+                               '_descend' : predicate === 'version' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Version</span>
                 </th>
-                <th ng-click="order('vendor')" ng-class="{'_ascend' : predicate === 'vendor'
-                && !reverse,'_descend' : predicate === 'vendor' && reverse}" class="data-grid-th  _sortable">
+                <th ng-click="order('vendor')"
+                    ng-class="{'_ascend' : predicate === 'vendor' && !reverse,
+                               '_descend' : predicate === 'vendor' && reverse}"
+                    class="data-grid-th _sortable">
                     <span>Vendor</span>
                 </th>
                 <th class="data-grid-actions-cell data-grid-th">
@@ -87,7 +96,7 @@
             <tbody>
             <tr ng-repeat="item in modules | orderBy:predicate:reverse
                 | startFrom:(currentPage - 1) * rowLimit | limitTo:rowLimit"
-                >
+                ng-class="{'_odd-row' : $index % 2}">
                 <td class="data-grid-indicator-cell">
                     <span class="component-indicator"
                           ng-class="getIndicatorInfo(item, 'icon')"
@@ -95,54 +104,69 @@
                         ><span>{{getIndicatorInfo(item, 'label')}}</span>
                     </span>
                 </td>
-                <td>
-                    <span ng-show="item.requiredBy.length == 0">&nbsp;&nbsp;</span>
-                    <span ng-show="item.requiredBy.length > 0 && !showDependencies">&#8681;</span>
-                    <span ng-show="item.requiredBy.length > 0 && showDependencies">&#8679;</span>
-                    
-                    <span class="data-grid-data" ng-click="showDependencies = !showDependencies">{{item.name}}</span>
-                    <span ng-show="item.requiredBy.length > 0 && showDependencies">
-                        <br/><br/>
-                        <strong>Products currently using module</strong><br/>
-                        Product Name<br/>
-                        <span class="data-grid-data" ng-repeat="product in item.requiredBy">
-                            <span class="component-indicator"
-                                  ng-class="getIndicatorInfo(product, 'icon')"
-                                  data-label="{{getIndicatorInfo(product, 'label')}}">
-                                <span>{{getIndicatorInfo(product, 'label')}}</span>
-                            </span>
-                            &nbsp;{{product.name}}<br/>
-                        </span>
-                    </span>
+                <td class="col-manager-item-name">
+                    <div class="data-grid-data"
+                          ng-click="showDependencies = !showDependencies"
+                          ng-class="{'_show-dependencies': item.requiredBy.length > 0 && showDependencies,
+                                     '_hide-dependencies': item.requiredBy.length > 0 && !showDependencies,
+                                     '_no-dependencies': item.requiredBy.length == 0}">
+                        {{item.name}}
+                    </div>
+                    <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
+                        <div class="product-modules-title">
+                            Products currently using module
+                        </div>
+                        <div class="product-modules-descriprion">
+                            Product Name
+                        </div>
+                        <ul class="product-modules-list">
+                            <li ng-repeat="product in item.requiredBy">
+                                <span class="component-indicator"
+                                      ng-class="getIndicatorInfo(product, 'icon')"
+                                      data-label="{{getIndicatorInfo(product, 'label')}}">
+                                    <span>{{getIndicatorInfo(product, 'label')}}</span>
+                                </span>
+                                {{product.name}}
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{item.moduleName}}</span>
-                    <span ng-show="item.requiredBy.length > 0 && showDependencies">
-                        <br/><br/>
-                        <br/>
-                        Product Type<br/>
-                        <span class="data-grid-data" ng-repeat="product in item.requiredBy">
-                            {{product.type}}<br/>
-                        </span>
-                    </span>
+                    <div class="data-grid-data">{{item.moduleName}}</div>
+                    <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
+                        <div class="product-modules-title">
+                            &nbsp;
+                        </div>
+                        <div class="product-modules-descriprion">
+                            Product Type
+                        </div>
+                        <ul class="product-modules-list">
+                            <li ng-repeat="product in item.requiredBy">
+                                {{product.type}}
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{item.version}}</span>
-                    <span ng-show="item.requiredBy.length > 0 && showDependencies">
-                        <br/><br/>
-                        <br/>
-                        Version<br/>
-                        <span class="data-grid-data" ng-repeat="product in item.requiredBy">
-                            {{product.version}}<br/>
-                        </span>
-                    </span>
+                    <div class="data-grid-data">{{item.version}}</div>
+                    <div class="product-modules-block" ng-show="item.requiredBy.length > 0 && showDependencies">
+                        <div class="product-modules-title">
+                            &nbsp;
+                        </div>
+                        <div class="product-modules-descriprion">
+                            Version
+                        </div>
+                        <ul class="product-modules-list">
+                            <li ng-repeat="product in item.requiredBy">
+                                {{product.version}}
+                            </li>
+                        </ul>
+                    </div>
                 </td>
                 <td>
                     <span class="data-grid-data">{{item.vendor}}</span>
                 </td>
                 <td class="data-grid-actions-cell">
-                    <!-- "_active" class should be added when .action-select button clicked to the -->
-                    <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(item)}">
                         <button class="action-select"
                                 ng-click="toggleActiveActionsCell(item)"
