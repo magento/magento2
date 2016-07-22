@@ -11,7 +11,7 @@ namespace Magento\Sales\Api\Data;
  * An invoice is a record of the receipt of payment for an order. An invoice item is a purchased item in an invoice.
  * @api
  */
-interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemsArgumentInterface,
+interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemCreationInterface,
 \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
@@ -224,13 +224,6 @@ interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemsArgum
     public function getName();
 
     /**
-     * Gets the order item ID for the invoice item.
-     *
-     * @return int Order item ID.
-     */
-    public function getOrderItemId();
-
-    /**
      * Gets the parent ID for the invoice item.
      *
      * @return int|null Parent ID.
@@ -405,14 +398,6 @@ interface InvoiceItemInterface extends \Magento\Sales\Api\Data\InvoiceItemsArgum
      * @return $this
      */
     public function setProductId($id);
-
-    /**
-     * Sets the order item ID for the invoice item.
-     *
-     * @param int $id
-     * @return $this
-     */
-    public function setOrderItemId($id);
 
     /**
      * Sets the additional data for the invoice item.

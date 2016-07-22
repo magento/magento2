@@ -9,7 +9,8 @@ use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 
 /**
@@ -18,9 +19,9 @@ use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 class InvoiceDocumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceInterfaceFactory
+     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceService
      */
-    private $invoiceFactoryMock;
+    private $invoiceServiceMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceInterface
@@ -38,20 +39,29 @@ class InvoiceDocumentFactoryTest extends \PHPUnit_Framework_TestCase
     private $itemMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|Order
+     */
+    private $orderMock;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCommentCreationInterface
      */
     private $commentMock;
 
     protected function setUp()
     {
-        $this->invoiceFactoryMock = $this->getMockBuilder(InvoiceInterfaceFactory::class)
+        $this->invoiceServiceMock = $this->getMockBuilder(InvoiceService::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->getMock();
+
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->setMethods(['addComment'])
+            ->getMockForAbstractClass();
 
         $this->itemMock = $this->getMockBuilder(InvoiceItemCreationInterface::class)
             ->disableOriginalConstructor()
@@ -61,16 +71,41 @@ class InvoiceDocumentFactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->invoiceDocumentFactory = new InvoiceDocumentFactory($this->invoiceFactoryMock);
+        $this->invoiceDocumentFactory = new InvoiceDocumentFactory($this->invoiceServiceMock);
     }
 
     public function testCreate()
     {
-        $orderId = 1;
-        $this->invoiceFactoryMock->expects($this->once())
-            ->method('create')
+        $orderId = 10;
+        $orderQty = 3;
+        $comment = "Comment!";
+
+        $this->itemMock->expects($this->once())
+            ->method('getOrderItemId')
+            ->willReturn($orderId);
+
+        $this->itemMock->expects($this->once())
+            ->method('getQty')
+            ->willReturn($orderQty);
+
+        $this->invoiceMock->expects($this->once())
+            ->method('addComment')
+            ->with($comment, null, null)
+            ->willReturnSelf();
+
+        $this->invoiceServiceMock->expects($this->once())
+            ->method('prepareInvoice')
+            ->with($this->orderMock, [$orderId => $orderQty])
             ->willReturn($this->invoiceMock);
 
-        $this->assertEquals($this->invoiceMock, $this->invoiceDocumentFactory->create($orderId, [$this->itemMock], $this->commentMock));
+        $this->commentMock->expects($this->once())
+            ->method('getComment')
+            ->willReturn($comment);
+
+        $this->commentMock->expects($this->once())
+            ->method('getIsVisibleOnFront')
+            ->willReturn(false);
+
+        $this->assertEquals($this->invoiceMock, $this->invoiceDocumentFactory->create($this->orderMock, [$this->itemMock], $this->commentMock));
     }
 }

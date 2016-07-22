@@ -10,7 +10,8 @@ use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
 use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Service\InvoiceService;
 
 /**
  * Class InvoiceDocumentFactory
@@ -19,32 +20,61 @@ use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
  */
 class InvoiceDocumentFactory
 {
-    private $invoiceFactory;
+    /**
+     * @var InvoiceService
+     */
+    private $invoiceService;
 
+    /**
+     * InvoiceDocumentFactory constructor.
+     * @param InvoiceService $invoiceService
+     */
     public function __construct(
-        InvoiceInterfaceFactory $invoiceFactory
+        InvoiceService $invoiceService
     ) {
-        $this->invoiceFactory = $invoiceFactory;
+        $this->invoiceService = $invoiceService;
     }
 
     /**
-     * @param int $orderId
+     * @param OrderInterface $order
      * @param InvoiceItemCreationInterface[] $items
      * @param InvoiceCommentCreationInterface|null $comment
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
      */
     public function create(
-        $orderId,
+        OrderInterface $order,
         $items = [],
         InvoiceCommentCreationInterface $comment = null,
         InvoiceCreationArgumentsInterface $arguments = null
     ) {
-        /** @var InvoiceInterface $invoice */
-        $invoice = $this->invoiceFactory->create();
-        $invoice->setOrderId($orderId);
-        $invoice->setItems($items);
-        $invoice->setComments([$comment]);
+
+        $invoiceItems = $this->itemsToArray($items);
+        $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
+
+        if ($comment) {
+            $invoice->addComment(
+                $comment->getComment(),
+                null,
+                $comment->getIsVisibleOnFront()
+            );
+        }
+
         return $invoice;
+    }
+
+    /**
+     * Convert Items To Array
+     *
+     * @param InvoiceItemCreationInterface[] $items
+     * @return array
+     */
+    private function itemsToArray($items = [])
+    {
+        $invoiceItems = [];
+        foreach ($items as $item) {
+            $invoiceItems[$item->getOrderItemId()] = $item->getQty();
+        }
+        return $invoiceItems;
     }
 }
