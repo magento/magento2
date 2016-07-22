@@ -9,7 +9,7 @@
     <testCase name="Magento\Vault\Test\TestCase\ReorderUsingVaultTest" summary="Reorder from Admin with saved within PayPal Payflow Pro credit card">
         <variation name="ReorderUsingVaultPayflowProTestVariation1" summary="Reorder from Admin with saved within PayPal Payflow Pro credit card for Guest Customer" ticketId="MAGETWO-54872">
             <data name="description" xsi:type="string">Reorder from Admin with saved within PayPal Payflow Pro credit card for Guest Customer</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>

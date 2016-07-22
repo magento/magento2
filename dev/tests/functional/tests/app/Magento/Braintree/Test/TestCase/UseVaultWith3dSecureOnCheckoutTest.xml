@@ -9,7 +9,7 @@
     <testCase name="Magento\Braintree\Test\TestCase\UseVaultWith3dSecureOnCheckoutTest" summary="Use saved for Braintree Credit card with 3D secure enabled.">
         <variation name="UseVaultWith3dSecureOnCheckoutTestVariation1" summary="Use saved for Braintree credit card on checkout with 3D Secure" ticketId="MAGETWO-55310">
             <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
