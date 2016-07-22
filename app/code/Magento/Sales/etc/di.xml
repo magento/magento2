@@ -49,6 +49,7 @@
     <preference for="Magento\Sales\Api\InvoiceItemRepositoryInterface" type="Magento\Sales\Api\Data\InvoiceItem\Repository"/>
     <preference for="Magento\Sales\Api\InvoiceRepositoryInterface" type="Magento\Sales\Model\Order\InvoiceRepository"/>
     <preference for="Magento\Sales\Api\InvoiceManagementInterface" type="Magento\Sales\Model\Service\InvoiceService"/>
+    <preference for="Magento\Sales\Api\InvoiceCreationArgumentsInterface" type="Magento\Sales\Model\Order\Invoice\CreationArguments"/>
     <preference for="Magento\Sales\Api\OrderAddressRepositoryInterface" type="Magento\Sales\Model\Order\AddressRepository"/>
     <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement"/>
     <preference for="Magento\Sales\Api\OrderItemRepositoryInterface" type="Magento\Sales\Model\Order\ItemRepository"/>
