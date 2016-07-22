@@ -6,6 +6,8 @@
 
 namespace Magento\Config\Test\Handler\ConfigData;
 
+use Magento\Mtf\Fixture\DataSource;
+use Magento\Config\Test\Fixture\ConfigData\StoreView;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlTransport;
@@ -16,6 +18,13 @@ use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
  */
 class Curl extends AbstractCurl implements ConfigDataInterface
 {
+    /**
+     * FixtureInterface object.
+     *
+     * @var FixtureInterface
+     */
+    private $fixture;
+
     /**
      * Mapping values for data.
      *
@@ -37,6 +46,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
+        $this->fixture = $fixture;
         $data = $this->prepareData($fixture);
         foreach ($data as $scope => $item) {
             $this->applyConfigSettings($item, $scope);
@@ -133,6 +143,24 @@ class Curl extends AbstractCurl implements ConfigDataInterface
      */
     protected function getUrl($section)
     {
-        return $_ENV['app_backend_url'] . 'admin/system_config/save/section/' . $section;
+        return $_ENV['app_backend_url'] . 'admin/system_config/save/section/' . $section . $this->getStoreViewUrl();
+    }
+
+    /**
+     * Get store view url.
+     *
+     * @return string
+     */
+    private function getStoreViewUrl()
+    {
+        $result = '';
+        /** @var StoreView $source */
+        $source = $this->fixture->getDataFieldConfig('store_view')['source'];
+        if ($result === '' && $source instanceof DataSource) {
+            $code = $source->getValue();
+            $result = $code . '/' . $source->getStoreViewEntity()->getData($code . '_id');
+        }
+
+        return $result ? '/' . $result : '';
     }
 }

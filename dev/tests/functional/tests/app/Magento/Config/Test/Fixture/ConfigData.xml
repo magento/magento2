@@ -20,5 +20,6 @@
         <field name="scope_id" is_required="" />
         <field name="path" is_required="" />
         <field name="value" is_required="" />
+        <field name="store_view" source="Magento\Config\Test\Fixture\ConfigData\StoreView" />
     </fixture>
 </config>
