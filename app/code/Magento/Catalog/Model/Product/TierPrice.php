@@ -6,6 +6,7 @@
  */
 
 namespace Magento\Catalog\Model\Product;
+
 use Magento\Framework\App\ObjectManager;
 
 /**

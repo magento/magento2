@@ -121,6 +121,11 @@ class ScopedTierPriceManagement implements \Magento\Catalog\Api\ScopedProductTie
         return true;
     }
 
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice
+     * @throws InputException
+     * @throws \Zend_Validate_Exception
+     */
     protected function validatePrice(\Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice)
     {
         $data = ['qty' => $tierPrice->getQty()];
