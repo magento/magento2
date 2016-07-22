@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('module-grid', ['ngStorage'])
-    .controller('moduleGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state',
-        function ($rootScope, $scope, $http, $localStorage, $state) {
+    .controller('moduleGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state', 'titleService',
+        function ($rootScope, $scope, $http, $localStorage, $state, titleService) {
             $rootScope.modulesProcessed = false;
             $http.get('index.php/moduleGrid/modules').success(function(data) {
                 $scope.modules = data.modules;
@@ -18,8 +18,6 @@ angular.module('module-grid', ['ngStorage'])
             });
 
             $scope.$watch('currentPage + rowLimit', function() {
-                var begin = (($scope.currentPage - 1) * $scope.rowLimit);
-                var end = parseInt(begin) + parseInt(($scope.rowLimit));
                 $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
                 if ($scope.currentPage > $scope.numberOfPages) {
                     $scope.currentPage = $scope.numberOfPages;
@@ -72,26 +70,9 @@ angular.module('module-grid', ['ngStorage'])
                         name: component.moduleName
                     }
                 ];
-                if (component.moduleName) {
-                    $localStorage.moduleName = component.moduleName;
-                } else {
-                    $localStorage.moduleName = component.name;
-                }
-                if ($localStorage.titles[type].indexOf($localStorage.moduleName) < 0 ) {
-                    $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
-                        + $localStorage.moduleName;
-                }
-                $rootScope.titles = $localStorage.titles;
+                titleService.setTitle(type, component.moduleName ? component.moduleName : component.name);
                 $localStorage.componentType = component.type;
                 $state.go('root.readiness-check-'+type);
             };
         }
-    ])
-    .filter('startFrom', function() {
-        return function(input, start) {
-            if(input !== undefined && start !== 'NaN') {
-                start = parseInt(start, 10);
-                return input.slice(start);
-            }
-        }
-    });
+    ]);

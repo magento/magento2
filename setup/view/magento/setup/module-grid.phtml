@@ -31,18 +31,23 @@
                 <div class="admin__data-grid-pager">
                     <button class="action-previous"
                             ng-disabled="currentPage == 1"
-                            ng-click="currentPage = currentPage - 1; start = start - rowLimit"
+                            ng-click="currentPage = currentPage - 1;"
                             type="button"
                         >
                         <span>Previous page</span>
                     </button>
-                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage}}">
+                    <input id="pageCurrent"
+                           class="admin__control-text"
+                           type="number"
+                           value="{{currentPage}}"
+                           ng-model="currentPage"
+                    >
                     <label class="admin__control-support-text" for="pageCurrent">
                         of {{numberOfPages}}
                     </label>
                     <button class="action-next"
                             ng-disabled="currentPage >= numberOfPages"
-                            ng-click="currentPage = currentPage + 1; start = start + rowLimit"
+                            ng-click="currentPage = currentPage + 1;"
                             type="button"
                         >
                         <span>Next page</span>

@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
-    .controller('updateExtensionGridController', ['$scope', '$http', 'ngDialog', '$localStorage', '$rootScope',
-        function ($scope, $http, ngDialog, $localStorage, $rootScope) {
+    .controller('updateExtensionGridController', ['$scope', '$http', 'ngDialog', '$localStorage', 'titleService',
+        function ($scope, $http, ngDialog, $localStorage, titleService) {
             $scope.isHiddenSpinner = false;
 
             $http.get('index.php/updateExtensionGrid/extensions').success(function(data) {
@@ -52,23 +52,7 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                         version: extension.updateVersion
                     }
                 ];
-                if (extension.moduleName) {
-                    $localStorage.moduleName = extension.moduleName;
-                } else {
-                    $localStorage.moduleName = extension.name;
-                }
-                if ($localStorage.titles['update'].indexOf($localStorage.moduleName) < 0 ) {
-                    $localStorage.titles['update'] = 'Update ' + $localStorage.moduleName;
-                }
-                $rootScope.titles = $localStorage.titles;
+                titleService.setTitle('update', extension.name);
                 $scope.nextState();
             };
-        }])
-    .filter('startFrom', function() {
-        return function(input, start) {
-            if (input !== undefined && start !== 'NaN') {
-                start = parseInt(start, 10);
-                return input.slice(start);
-            }
-        };
-    });
+        }]);

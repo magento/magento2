@@ -6,10 +6,11 @@
 'use strict';
 
 angular.module('extension-grid', ['ngStorage'])
-    .controller('extensionGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state',
-        function ($rootScope, $scope, $http, $localStorage, $state) {
+    .controller('extensionGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state', 'titleService',
+        function ($rootScope, $scope, $http, $localStorage, $state, titleService) {
             $rootScope.extensionsProcessed = false;
             $scope.syncError = false;
+            $scope.currentPage = 1;
             $rootScope.isMarketplaceAuthorized = typeof $rootScope.isMarketplaceAuthorized !== 'undefined' ? $rootScope.isMarketplaceAuthorized : false;
 
             $scope.auth = function () {
@@ -43,10 +44,7 @@ angular.module('extension-grid', ['ngStorage'])
             });
 
             $scope.$watch('currentPage + rowLimit', function () {
-                var begin = ($scope.currentPage - 1) * $scope.rowLimit;
-                var end = parseInt(begin) + parseInt($scope.rowLimit);
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
-
                 if ($scope.currentPage > $scope.numberOfPages) {
                     $scope.currentPage = $scope.numberOfPages;
                 }
@@ -128,15 +126,7 @@ angular.module('extension-grid', ['ngStorage'])
                         version: $scope.availableUpdatePackages[extension.name]['latestVersion']
                     }
                 ];
-                if (extension.moduleName) {
-                    $localStorage.moduleName = extension.moduleName;
-                } else {
-                    $localStorage.moduleName = extension.name;
-                }
-                if ($localStorage.titles['update'].indexOf($localStorage.moduleName) < 0 ) {
-                    $localStorage.titles['update'] = 'Update ' + $localStorage.moduleName;
-                }
-                $rootScope.titles = $localStorage.titles;
+                titleService.setTitle('uninstall', extension.moduleName ? extension.moduleName : extension.name);
                 $state.go('root.readiness-check-update');
             };
 
@@ -146,16 +136,8 @@ angular.module('extension-grid', ['ngStorage'])
                         name: extension.name
                     }
                 ];
-                if (extension.moduleName) {
-                    $localStorage.moduleName = extension.moduleName;
-                } else {
-                    $localStorage.moduleName = extension.name;
-                }
-                if ($localStorage.titles['uninstall'].indexOf($localStorage.moduleName) < 0 ) {
-                    $localStorage.titles['uninstall'] = 'Uninstall ' + $localStorage.moduleName;
-                }
-                $rootScope.titles = $localStorage.titles;
-                $localStorage.extensionType = extension.type;
+                titleService.setTitle('uninstall', extension.moduleName ? extension.moduleName : extension.name);
+                $localStorage.componentType = extension.type;
                 $state.go('root.readiness-check-uninstall');
             };
 
@@ -172,12 +154,4 @@ angular.module('extension-grid', ['ngStorage'])
                     });
             };
         }
-    ])
-    .filter('startFrom', function () {
-        return function (input, start) {
-            if (input !== undefined && start !== 'NaN') {
-                start = parseInt(start, 10);
-                return input.slice(start);
-            }
-        }
-    });
+    ]);

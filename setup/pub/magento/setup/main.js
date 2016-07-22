@@ -100,6 +100,8 @@ main.controller('navigationController',
                 $state.go('root.upgrade');
             } else if ($state.current.type === 'update') {
                 $state.go('root.update');
+            } else if ($state.current.type === 'uninstall') {
+                $state.go('root.extension');
             } else {
                 $state.go('root.module');
             }
@@ -107,7 +109,7 @@ main.controller('navigationController',
 
         $scope.goToBackup = function() {
             $state.go('root.create-backup-uninstall');
-        }
+        };
     }
 ])
 .service('navigationService', ['$location', '$state', '$http', '$localStorage',
@@ -161,5 +163,29 @@ main.controller('navigationController',
             });
             return nItem;
         }
-    }
-}]);
+    };
+}])
+.service('titleService', ['$localStorage', '$rootScope',
+    function ($localStorage, $rootScope) {
+        return {
+            setTitle: function(type, moduleName) {
+                $localStorage.moduleName = moduleName;
+                if (typeof $localStorage.titles === 'undefined') {
+                    $localStorage.titles = [];
+                }
+                $localStorage.titles['update'] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                    + $localStorage.moduleName;
+                $rootScope.titles = $localStorage.titles;
+            }
+        };
+    }]
+)
+.filter('startFrom', function () {
+    return function (input, start) {
+        if (input !== undefined && start !== 'NaN') {
+            start = parseInt(start, 10);
+            return input.slice(start);
+        }
+        return 0;
+    };
+});

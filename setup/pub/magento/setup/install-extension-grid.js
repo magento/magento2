@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
-    .controller('installExtensionGridController', ['$scope', '$http', 'ngDialog', '$localStorage', '$rootScope',
-        function ($scope, $http, ngDialog, $localStorage, $rootScope) {
+    .controller('installExtensionGridController', ['$scope', '$http', 'ngDialog', '$localStorage',
+        function ($scope, $http, ngDialog, $localStorage) {
 
         $http.get('index.php/installExtensionGrid/extensions').success(function(data) {
             $scope.error = false;
@@ -169,12 +169,4 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
                 $scope.errorMessage = 'Internal server error';
             });
         };
-    }])
-    .filter('startFrom', function() {
-        return function(input, start) {
-            if (input !== undefined && start !== 'NaN') {
-                start = parseInt(start, 10);
-                return input.slice(start);
-            }
-        }
-    });
+    }]);
