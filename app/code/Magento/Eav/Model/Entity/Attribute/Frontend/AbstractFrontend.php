@@ -158,10 +158,10 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
 
         $textLengthValidateClasses = $this->getTextLengthValidateClasses();
         if (!empty($textLengthValidateClasses)) {
-            $out[] = implode(' ', $textLengthValidateClasses);
+            $out = array_merge($out, $textLengthValidateClasses);
         }
 
-        $out = !empty($out) ? trim(implode(' ', $out)) : '';
+        $out = !empty($out) ? implode(' ', array_unique(array_filter($out))) : '';
         return $out;
     }
 
@@ -190,6 +190,9 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
                     break;
                 case 'url':
                     $class = 'validate-url';
+                    break;
+                case 'length':
+                    $class = 'validate-length';
                     break;
                 default:
                     $class = false;
