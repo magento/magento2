@@ -32,9 +32,6 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-//        if (TESTS_WEB_API_ADAPTER == \Magento\TestFramework\TestCase\WebapiAbstract::ADAPTER_SOAP) {
-//            $this->markTestSkipped('It is enough to execute queue-related tests in scope of REST tests only.');
-//        }
         $this->objectManager = Bootstrap::getObjectManager();
         $this->publisher = $this->objectManager->get(PublisherInterface::class);
         /** @var \Magento\Framework\OsInfo $osInfo */
@@ -43,7 +40,7 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped("This test relies on *nix shell and should be skipped in Windows environment.");
         }
         parent::setUp();
-        foreach($this->consumers as $consumer){
+        foreach($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
                 exec("{$this->getConsumerStartCommand($consumer)} > /dev/null &");
             }
@@ -53,7 +50,7 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        foreach($this->consumers as $consumer) {
+        foreach ($this->consumers as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
                 exec("kill {$consumerProcessId}");
             }
