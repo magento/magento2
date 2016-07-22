@@ -290,11 +290,10 @@ class WordsFinder
         $checkContents = !$this->_isBinaryFile($file);
         $path = $this->getSearchablePath($file);
         $contents = $checkContents ? file_get_contents($file) : '';
-        if (isset($this->exclude[$file]) && !empty($this->exclude[$file])) {
-            $excludesPhrases = $this->exclude[$file];
-            foreach ($excludesPhrases as $stringToEliminate)
+        if (isset($this->exclude[$file]) && !empty($this->exclude[$file]))
+            foreach ($this->exclude[$file] as $stringToEliminate)
                 $contents = str_replace($stringToEliminate, "", $contents);
-        }
+
         $foundWords = [];
         foreach ($this->_words as $word) {
             if (stripos($path, $word) !== false || stripos($contents, $word) !== false) {
