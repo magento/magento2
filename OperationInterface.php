@@ -137,5 +137,4 @@ interface OperationInterface
      * @return $this
      */
     public function setErrorCode($errorCode);
-
 }

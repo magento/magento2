@@ -88,5 +88,4 @@ interface BulkSummaryInterface
      * @return $this
      */
     public function setUserId($userId);
-
 }
