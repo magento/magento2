@@ -8,15 +8,13 @@ namespace Magento\Braintree\Controller\Adminhtml\Order;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Payment\Model\Method\Adapter;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\ReviewPayment;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\TestCase\AbstractBackendController;
-use Magento\Framework\Message\MessageInterface;
-use Braintree\Configuration;
-use Magento\Payment\Model\Method\Adapter;
-use Magento\Payment\Gateway\Command\CommandPoolInterface;
 
 /**
  * Class PaymentReviewTest
@@ -69,7 +67,6 @@ class PaymentReviewTest extends AbstractBackendController
         $orderId = $this->order->getEntityId();
         $this->dispatch('admin/sales/order/reviewPayment/action/accept/order_id/' . $orderId);
 
-        static::assertTrue($this->getResponse()->isRedirect());
         static::assertRedirect(static::stringContains('sales/order/view/order_id/' . $orderId));
         static::assertSessionMessages(
             static::equalTo(['The payment has been accepted.']),
@@ -105,7 +102,6 @@ class PaymentReviewTest extends AbstractBackendController
 
         $this->dispatch('admin/sales/order/reviewPayment/action/deny/order_id/' . $orderId);
 
-        static::assertTrue($this->getResponse()->isRedirect());
         static::assertRedirect(static::stringContains('sales/order/view/order_id/' . $orderId));
         static::assertSessionMessages(
             static::equalTo(['The payment has been denied.']),
