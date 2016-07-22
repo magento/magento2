@@ -96,7 +96,7 @@ class Binding implements BindingInterface
      */
     public function getArguments()
     {
-        // TODO: Implement getArguments() method.
+        return $this->arguments;
     }
 
     /**

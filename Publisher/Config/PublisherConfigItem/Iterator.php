@@ -39,6 +39,7 @@ class Iterator implements \Iterator, \ArrayAccess
     {
         $this->data = $configData->get();
         $this->object = $itemFactory->create();
+        $this->rewind();
     }
 
     /**

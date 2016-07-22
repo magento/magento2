@@ -46,6 +46,7 @@ class Iterator implements \Iterator, \ArrayAccess
     public function setData(array $data)
     {
         $this->data = $data;
+        $this->rewind();
     }
 
     /**
