@@ -5,12 +5,10 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config;
 
-use Magento\Framework\MessageQueue\Consumer\Config\DataInterface;
-
 /**
  * Consumer config data storage. Caches merged config.
  */
-class Data extends \Magento\Framework\Config\Data implements DataInterface
+class Data extends \Magento\Framework\Config\Data
 {
     /**
      * {@inheritdoc}

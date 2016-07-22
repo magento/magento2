@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
 
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemFactory;
-use Magento\Framework\MessageQueue\Consumer\Config\DataInterface;
+use Magento\Framework\MessageQueue\Consumer\Config\Data;
 
 /**
  * Consumer config item iterator.
@@ -31,10 +31,10 @@ class Iterator implements \Iterator, \ArrayAccess
     /**
      * Initialize dependencies.
      *
-     * @param DataInterface $configData
+     * @param Data $configData
      * @param ConsumerConfigItemFactory $itemFactory
      */
-    public function __construct(DataInterface $configData, ConsumerConfigItemFactory $itemFactory)
+    public function __construct(Data $configData, ConsumerConfigItemFactory $itemFactory)
     {
         $this->data = $configData->get();
         $this->object = $itemFactory->create();
