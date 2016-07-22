@@ -61,6 +61,7 @@
     <preference for="Magento\Sales\Api\ShipmentManagementInterface" type="Magento\Sales\Model\Service\ShipmentService"/>
     <preference for="Magento\Sales\Api\ShipmentTrackRepositoryInterface" type="Magento\Sales\Api\Data\ShipmentTrack\Repository"/>
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
+    <preference for="Magento\Sales\Model\Order\Invoice\NotifierInterface" type="Magento\Sales\Model\Order\Invoice\Notifier"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
     <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement" />
@@ -892,6 +893,13 @@
     <type name="Magento\Sales\Model\ResourceModel\Order\Tax\Item">
         <arguments>
             <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Invoice\Notifier">
+        <arguments>
+            <argument name="senders" xsi:type="array">
+                <item name="email" xsi:type="object">Magento\Sales\Model\Order\Invoice\Sender\EmailSender</item>
+            </argument>
         </arguments>
     </type>
 </config>
