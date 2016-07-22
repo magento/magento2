@@ -32,7 +32,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     protected function tearDown()
     {
-        unset($this->integration);
+        $this->integration = null;
         OauthHelper::clearApiAccessCredentials();
         parent::tearDown();
     }
