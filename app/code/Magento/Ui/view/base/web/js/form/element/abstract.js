@@ -24,7 +24,7 @@ define([
             tooltipTpl: 'ui/form/element/helper/tooltip',
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset',
             'input_type': 'input',
-            placeholder: '',
+            placeholder: false,
             description: '',
             labelVisible: true,
             label: '',
@@ -114,6 +114,8 @@ define([
             _.extend(this, {
                 uid: uid,
                 noticeId: 'notice-' + uid,
+                errorId: 'error-' + uid,
+                warningId: 'warning-' + uid,
                 inputName: utils.serializeName(name.join('.')),
                 valueUpdate: valueUpdate
             });
@@ -436,6 +438,23 @@ define([
          */
         userChanges: function () {
             this.valueChangedByUser = true;
+        },
+
+        /**
+         * Returns correct id for 'aria-describedby' accessibility attribute
+         *
+         * @returns {String}
+         */
+        setDescriptionId: function () {
+            var id = false;
+
+            if(this.error().length > 0) {
+                id = this.errorId;
+            } else if (this.notice) {
+                id = this.noticeId;
+            }
+
+            return id;
         }
     });
 });

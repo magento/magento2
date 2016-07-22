@@ -5,7 +5,18 @@
  */
 -->
 <div class="choice field">
-    <input type="checkbox" class="checkbox" data-bind="checked: value, attr: { id: uid, disabled: disabled, name: inputName }, hasFocus: focused">
+    <input type="checkbox"
+           class="checkbox"
+           data-bind="
+           checked: value,
+           attr: {
+                id: uid,
+                disabled: disabled,
+                name: inputName,
+                'aria-describedby': setDescriptionId(),
+                'aria-required': required
+                },
+           hasFocus: focused">
 
     <label class="label" data-bind="checked: value, attr: { for: uid }">
         <span data-bind="text: description || label"></span>

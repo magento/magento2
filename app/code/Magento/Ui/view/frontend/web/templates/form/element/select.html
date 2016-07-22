@@ -9,7 +9,8 @@
         name: inputName,
         id: uid,
         disabled: disabled,
-        'aria-describedby': noticeId,
+        'aria-describedby': setDescriptionId(),
+        'aria-required': required,
         placeholder: placeholder
     },
     hasFocus: focused,

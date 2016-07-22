@@ -11,7 +11,9 @@
     attr: {
         name: inputName,
         placeholder: placeholder,
-        'aria-describedby': noticeId,
+        'aria-describedby': setDescriptionId(),
+        'aria-required': required,
         id: uid,
-        disabled: disabled
+        disabled: disabled,
+        'aria-invalid': error().length ? true : 'false'
     }" />
