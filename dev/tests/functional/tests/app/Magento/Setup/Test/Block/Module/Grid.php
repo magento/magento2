@@ -28,14 +28,14 @@ class Grid extends Block
      *
      * @var string
      */
-    protected $componentName = '//table//*//span[contains(text(), \'%s\')]';
+    protected $componentName = '//table//*//div[contains(text(), \'%s\')]';
 
     /**
      * Select path.
      *
      * @var string
      */
-    protected $select = '//span[contains(text(), \'%s\')]//..//..//td//div[contains(@class, \'action-select\')]';
+    protected $select = '//div[contains(text(), \'%s\')]//..//..//td//div[contains(@class, \'action-select\')]';
 
     /**
      * Next button selector.
