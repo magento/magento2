@@ -73,4 +73,4 @@ $addressThree->setData($addressThreeData);
 $customer->addAddress($addressThree);
 
 $customer->save();
-$customerRegistry->remove($customer->getId()); 
+$customerRegistry->remove($customer->getId());

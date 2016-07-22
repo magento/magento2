@@ -134,6 +134,7 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
      * @param Customer $customer
      * @param Address $address
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      */
     private function updateAddressCollection(CustomerModel $customer, CustomerAddressModel $address)
     {

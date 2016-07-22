@@ -1621,8 +1621,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method("save")
             ->withConsecutive(
-                array($this->logicalNot($this->identicalTo($existingAddress))),
-                array($this->identicalTo($nonExistingAddress))
+                [$this->logicalNot($this->identicalTo($existingAddress))],
+                [$this->identicalTo($nonExistingAddress)]
             );
 
         $existingAddress
