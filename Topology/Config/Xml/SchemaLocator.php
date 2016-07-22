@@ -31,7 +31,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $this->schema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/topology.xsd');
+        $this->schema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/topology_merged.xsd');
         $this->perFileSchema = $urnResolver->getRealPath('urn:magento:framework-message-queue:etc/topology.xsd');
     }
 

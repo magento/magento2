@@ -24,7 +24,7 @@ class Format implements ValidatorInterface
 
             $diff = array_diff($requiredFields, array_keys($data));
             foreach ($diff as $field) {
-                $errors[] = sprintf('Missing %s field for topology %s.', $field, $name);
+                $errors[] = sprintf('Missing [%s] field for exchange %s.', $field, $name);
             }
 
             if (!array_key_exists('bindings', $data) || !is_array($data['bindings'])) {
@@ -35,13 +35,13 @@ class Format implements ValidatorInterface
             foreach ($data['bindings'] as $bindingConfig) {
                 $diff = array_diff($requiredBindingFields, array_keys($bindingConfig));
                 foreach ($diff as $field) {
-                    $errors[] = sprintf('Missing %s field for binding %s in exchange config.', $field, $name);
+                    $errors[] = sprintf('Missing [%s] field for binding %s in exchange config.', $field, $name);
                 }
             }
         }
 
         if (!empty($errors)) {
-            throw new \LogicException(implode(' ', $errors));
+            throw new \LogicException(implode(PHP_EOL, $errors));
         }
     }
 }

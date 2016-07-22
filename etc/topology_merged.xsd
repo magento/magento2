@@ -10,7 +10,7 @@
     <xs:element name="config">
         <xs:complexType>
             <xs:sequence>
-                <xs:element type="exchangeConfigType" name="exchange" maxOccurs="unbounded" minOccurs="0">
+                <xs:element type="exchangeConfigType" name="exchange" maxOccurs="unbounded" minOccurs="1">
                     <xs:unique name="unique-binding-id">
                         <xs:annotation>
                             <xs:documentation>
@@ -39,8 +39,8 @@
             <xs:element type="argumentsType" name="arguments" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute type="xs:string" name="id" use="required"/>
-        <xs:attribute type="destinationType" name="destinationType" use="optional"/>
-        <xs:attribute type="xs:string" name="destination" use="optional"/>
+        <xs:attribute type="destinationType" name="destinationType" use="required"/>
+        <xs:attribute type="xs:string" name="destination" use="required"/>
         <xs:attribute type="xs:boolean" name="disabled" use="optional"/>
         <xs:attribute type="xs:string" name="topic" use="optional"/>
     </xs:complexType>
@@ -51,8 +51,8 @@
             <xs:element type="bindingType" name="binding" maxOccurs="unbounded" minOccurs="0"/>
         </xs:choice>
         <xs:attribute type="xs:string" name="name" use="required"/>
-        <xs:attribute type="exchangeType" name="type" use="optional"/>
-        <xs:attribute type="xs:string" name="connection" use="optional"/>
+        <xs:attribute type="exchangeType" name="type" use="required"/>
+        <xs:attribute type="xs:string" name="connection" use="required"/>
         <xs:attribute type="xs:boolean" name="durable" use="optional"/>
         <xs:attribute type="xs:boolean" name="autoDelete" use="optional"/>
         <xs:attribute type="xs:boolean" name="internal" use="optional"/>

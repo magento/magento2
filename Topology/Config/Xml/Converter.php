@@ -7,12 +7,19 @@ namespace Magento\Framework\MessageQueue\Topology\Config\Xml;
 
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\Config\Converter\Dom\Flat as FlatConverter;
+use Magento\Framework\Config\Dom\ArrayNodeConfig;
+use Magento\Framework\Config\Dom\NodePathMatcher;
 
 /**
  * Converts MessageQueue topology config from \DOMDocument to array
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @var FlatConverter
+     */
+    private $converter;
 
     /**
      * Boolean value converter.
@@ -29,25 +36,15 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $argumentInterpreter;
 
     /**
-     * Argument parser.
-     *
-     * @var ArgumentParser
-     */
-    private $argumentParser;
-
-    /**
      * Initialize dependencies.
      *
      * @param BooleanUtils $booleanUtils
-     * @param ArgumentParser $argumentParser
      * @param InterpreterInterface $argumentInterpreter
      */
     public function __construct(
         BooleanUtils $booleanUtils,
-        ArgumentParser $argumentParser,
         InterpreterInterface $argumentInterpreter
     ) {
-        $this->argumentParser = $argumentParser;
         $this->booleanUtils = $booleanUtils;
         $this->argumentInterpreter = $argumentInterpreter;
     }
@@ -106,14 +103,28 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'type' => $this->getAttributeValue($exchange, 'type', 'topic'),
                 'connection' => $this->getAttributeValue($exchange, 'connection', 'amqp'),
                 'durable' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'durable', true)),
-                'autoDelete' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'autoDelete', true)),
-                'internal' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'internal', true)),
+                'autoDelete' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'autoDelete', false)),
+                'internal' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'internal', false)),
                 'bindings' => $bindings,
                 'arguments' => $exchangeArguments,
 
             ];
         }
         return $result;
+    }
+
+    /**
+     * Retrieve instance of XML converter
+     *
+     * @return FlatConverter
+     */
+    private function getConverter()
+    {
+        if (!$this->converter) {
+            $arrayNodeConfig = new ArrayNodeConfig(new NodePathMatcher(), ['argument(/item)+' => 'name']);
+            $this->converter = new FlatConverter($arrayNodeConfig);
+        }
+        return $this->converter;
     }
 
     /**
@@ -131,7 +142,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 continue;
             }
             $argumentName = $argumentNode->attributes->getNamedItem('name')->nodeValue;
-            $argumentData = $this->argumentParser->parse($argumentNode);
+            $argumentData = $this->getConverter()->convert($argumentNode, 'argument');
             $output[$argumentName] = $this->argumentInterpreter->evaluate($argumentData);
         }
         return $output;
