@@ -90,7 +90,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unset($this->_physicalThemeId);
-        unset($this->_virtualThemeId);
+        $this->_physicalThemeId = null;
+        $this->_virtualThemeId = null;
     }
 }
