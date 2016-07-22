@@ -140,6 +140,8 @@
     </repository>
 
     <repository class="Magento\Catalog\Test\Repository\CatalogProductSimple">
-        <field name="id" xsi:type="number">1</field>
+        <dataset name="sample_data_simple_product">
+            <field name="id" xsi:type="number">1</field>
+        </dataset>
     </repository>
 </config>
