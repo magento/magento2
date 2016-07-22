@@ -220,5 +220,14 @@
                 <item name="value" xsi:type="number">0</item>
             </field>
         </dataset>
+
+        <dataset name="zero_subtotal_checkout">
+            <field name="payment/zero_subtotal_checkout/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
     </repository>
 </config>
