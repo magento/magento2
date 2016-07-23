@@ -107,7 +107,7 @@ class CategoryLink
      */
     private function processCategoryLinks($newCategoryPositions, &$oldCategoryPositions)
     {
-        $result = [];
+        $result = ['changed' => [], 'updated' => []];
         foreach ($newCategoryPositions as $newCategoryPosition) {
             $key = array_search(
                 $newCategoryPosition['category_id'],
@@ -216,17 +216,17 @@ class CategoryLink
     /**
      * Analyse category links for update or/and delete
      *
-     * @param $deleteUpdate
-     * @param $insertUpdate
+     * @param array $deleteUpdate
+     * @param array $insertUpdate
      * @return array
      */
     private function analyseUndatedLinks($deleteUpdate, $insertUpdate)
     {
-        $delete = isset($deleteUpdate['changed']) ? $deleteUpdate['changed'] : [];
-        $insert = isset($insertUpdate['changed']) ? $insertUpdate['changed'] : [];
-        $insert = isset($deleteUpdate['updated']) ? array_merge_recursive($insert, $deleteUpdate['updated']) : $insert;
-        $insert = isset($insertUpdate['updated']) ? array_merge_recursive($insert, $insertUpdate['updated']) : $insert;
+        $delete = $deleteUpdate['changed'] ? : [];
+        $insert = $insertUpdate['changed'] ? : [];
+        $insert = array_merge_recursive($insert, $deleteUpdate['updated']);
+        $insert = array_merge_recursive($insert, $insertUpdate['updated']);
 
-        return array($delete, $insert);
+        return [$delete, $insert];
     }
 }

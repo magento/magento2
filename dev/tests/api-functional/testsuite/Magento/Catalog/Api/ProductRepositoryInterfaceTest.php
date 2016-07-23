@@ -405,38 +405,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $filename1 = 'tiny1' . time() . '.jpg';
         $filename2 = 'tiny2' . time() . '.jpeg';
         $productData = $this->getSimpleProductData();
-        $productData['media_gallery_entries'] = [
-            [
-                'position' => 1,
-                'media_type' => 'image',
-                'disabled' => true,
-                'label' => 'tiny1',
-                'types' => [],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename1,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
-            [
-                'position' => 2,
-                'media_type' => 'image',
-                'disabled' => false,
-                'label' => 'tiny2',
-                'types' => ['image', 'small_image'],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename2,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
-        ];
+        $productData['media_gallery_entries'] = $this->getMediaGalleryData($filename1, $encodedImage, $filename2);
         $response = $this->saveProduct($productData);
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(2, count($mediaGalleryEntries));
         $id = $mediaGalleryEntries[0]['id'];
-        foreach ($mediaGalleryEntries as &$entry) { unset($entry['id']); }
+        foreach ($mediaGalleryEntries as &$entry)
+        {
+            unset($entry['id']);
+        }
         $expectedValue = [
             [
                 'label' => 'tiny1',
@@ -910,5 +888,41 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [];
         $response = $this->updateProduct($response);
         $this->assertEquals([], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]);
+    }
+
+    /**
+     * @param $filename1
+     * @param $encodedImage
+     * @param $filename2
+     * @return array
+     */
+    private function getMediaGalleryData($filename1, $encodedImage, $filename2)
+    {
+        return [
+            [
+                'position' => 1,
+                'media_type' => 'image',
+                'disabled' => true,
+                'label' => 'tiny1',
+                'types' => [],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename1,
+                    'base64_encoded_data' => $encodedImage,
+                ]
+            ],
+            [
+                'position' => 2,
+                'media_type' => 'image',
+                'disabled' => false,
+                'label' => 'tiny2',
+                'types' => ['image', 'small_image'],
+                'content' => [
+                    'type' => 'image/jpeg',
+                    'name' => $filename2,
+                    'base64_encoded_data' => $encodedImage,
+                ]
+            ],
+        ];
     }
 }
