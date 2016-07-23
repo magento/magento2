@@ -232,10 +232,8 @@ class Product extends AbstractResource
      */
     public function getCategoryIds($product)
     {
-        $result =  array_map(function ($value) {
-            return isset($value['category_id']) ? $value['category_id'] : null;
-        }, $this->getProductCategoryLink()->getCategoryLinks($product));
-        return $result;
+        $result = $this->getProductCategoryLink()->getCategoryLinks($product);
+        return array_column($result, 'category_id');
     }
 
     /**
@@ -351,7 +349,7 @@ class Product extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated
      */
     protected function _saveCategories(\Magento\Framework\DataObject $object)
