@@ -2725,10 +2725,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * If $condition integer or string - exact value will be filtered ('eq' condition)
      *
      * If $condition is array is - one of the following structures is expected:
-     * - array("from" => $fromValue, "to" => $toValue)
      * - array("eq" => $equalValue)
      * - array("neq" => $notEqualValue)
      * - array("like" => $likeValue)
+     * - array("nlike" => $notLikeValue)
      * - array("in" => array($inValues))
      * - array("nin" => array($notInValues))
      * - array("notnull" => $valueIsNotNull)
@@ -2739,8 +2739,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * - array("lteq" => $lessOrEqualValue)
      * - array("finset" => $valueInSet)
      * - array("regexp" => $regularExpression)
+     * - array("from" => $fromValue)
+     * - array("to" => $toValue)
      * - array("seq" => $stringValue)
      * - array("sneq" => $stringValue)
+     * - array("ntoa" => $stringValue)
      *
      * If non matched - sequential array is expected and OR conditions
      * will be built using above mentioned structure
@@ -2753,26 +2756,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function prepareSqlCondition($fieldName, $condition)
     {
         $conditionKeyMap = [
-            'eq'            => "{{fieldName}} = ?",
-            'neq'           => "{{fieldName}} != ?",
-            'like'          => "{{fieldName}} LIKE ?",
-            'nlike'         => "{{fieldName}} NOT LIKE ?",
-            'in'            => "{{fieldName}} IN(?)",
-            'nin'           => "{{fieldName}} NOT IN(?)",
-            'is'            => "{{fieldName}} IS ?",
-            'notnull'       => "{{fieldName}} IS NOT NULL",
-            'null'          => "{{fieldName}} IS NULL",
-            'gt'            => "{{fieldName}} > ?",
-            'lt'            => "{{fieldName}} < ?",
-            'gteq'          => "{{fieldName}} >= ?",
-            'lteq'          => "{{fieldName}} <= ?",
-            'finset'        => "FIND_IN_SET(?, {{fieldName}})",
-            'regexp'        => "{{fieldName}} REGEXP ?",
-            'from'          => "{{fieldName}} >= ?",
-            'to'            => "{{fieldName}} <= ?",
-            'seq'           => null,
-            'sneq'          => null,
-            'ntoa'          => "INET_NTOA({{fieldName}}) LIKE ?",
+            self::SQL_CONDITION_EQ            => "{{fieldName}} = ?",
+            self::SQL_CONDITION_NEQ           => "{{fieldName}} != ?",
+            self::SQL_CONDITION_LIKE          => "{{fieldName}} LIKE ?",
+            self::SQL_CONDITION_NOT_LIKE      => "{{fieldName}} NOT LIKE ?",
+            self::SQL_CONDITION_IN            => "{{fieldName}} IN(?)",
+            self::SQL_CONDITION_NOT_IN        => "{{fieldName}} NOT IN(?)",
+            self::SQL_CONDITION_IS            => "{{fieldName}} IS ?",
+            self::SQL_CONDITION_NOT_NULL      => "{{fieldName}} IS NOT NULL",
+            self::SQL_CONDITION_NULL          => "{{fieldName}} IS NULL",
+            self::SQL_CONDITION_GT            => "{{fieldName}} > ?",
+            self::SQL_CONDITION_LT            => "{{fieldName}} < ?",
+            self::SQL_CONDITION_GTEQ          => "{{fieldName}} >= ?",
+            self::SQL_CONDITION_LTEQ          => "{{fieldName}} <= ?",
+            self::SQL_CONDITION_FINSET        => "FIND_IN_SET(?, {{fieldName}})",
+            self::SQL_CONDITION_REGEXP        => "{{fieldName}} REGEXP ?",
+            self::SQL_CONDITION_FROM          => "{{fieldName}} >= ?",
+            self::SQL_CONDITION_TO            => "{{fieldName}} <= ?",
+            self::SQL_CONDITION_SEQ           => null,
+            self::SQL_CONDITION_SNEQ          => null,
+            self::SQL_CONDITION_NTOA          => "INET_NTOA({{fieldName}}) LIKE ?",
         ];
 
         $query = '';

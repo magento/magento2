@@ -73,6 +73,30 @@ interface AdapterInterface
     const ERROR_ASYMMETRIC_COMMIT_MESSAGE = 'Asymmetric transaction commit.';
 
     /**
+     * Sql conditions
+     */
+    const SQL_CONDITION_EQ = 'eq';
+    const SQL_CONDITION_NEQ = 'neq';
+    const SQL_CONDITION_LIKE = 'like';
+    const SQL_CONDITION_NOT_LIKE = 'nlike';
+    const SQL_CONDITION_IN = 'in';
+    const SQL_CONDITION_NOT_IN = 'nin';
+    const SQL_CONDITION_IS = 'is';
+    const SQL_CONDITION_NOT_NULL = 'notnull';
+    const SQL_CONDITION_NULL = 'null';
+    const SQL_CONDITION_GT = 'gt';
+    const SQL_CONDITION_LT = 'lt';
+    const SQL_CONDITION_GTEQ = 'gteq';
+    const SQL_CONDITION_LTEQ = 'lteq';
+    const SQL_CONDITION_FINSET = 'finset';
+    const SQL_CONDITION_REGEXP = 'regexp';
+    const SQL_CONDITION_FROM = 'from';
+    const SQL_CONDITION_TO = 'to';
+    const SQL_CONDITION_SEQ = 'seq';
+    const SQL_CONDITION_SNEQ = 'sneq';
+    const SQL_CONDITION_NTOA = 'ntoa';
+
+    /**
      * Begin new DB transaction for connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
