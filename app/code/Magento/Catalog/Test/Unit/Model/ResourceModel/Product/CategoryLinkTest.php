@@ -72,10 +72,10 @@ class CategoryLinkTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $categoryEntityMetadata->expects($this->any())->method('getEntityTable')->willReturn('category_entity_table');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnMap(
-          [
-              [\Magento\Catalog\Api\Data\CategoryLinkInterface::class, $categoryLinkMetadata],
-              [\Magento\Catalog\Api\Data\CategoryInterface::class, $categoryEntityMetadata],
-          ]
+            [
+                [\Magento\Catalog\Api\Data\CategoryLinkInterface::class, $categoryLinkMetadata],
+                [\Magento\Catalog\Api\Data\CategoryInterface::class, $categoryEntityMetadata],
+            ]
         );
     }
 
@@ -97,7 +97,7 @@ class CategoryLinkTest extends \PHPUnit_Framework_TestCase
                 ['category_id' => 3, 'position' => 10],
                 ['category_id' => 4, 'position' => 20],
             ],
-            $this->model->getCategoryLinks($product, [3,4])
+            $this->model->getCategoryLinks($product, [3, 4])
         );
     }
 
