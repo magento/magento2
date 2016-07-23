@@ -194,13 +194,9 @@ class CategoryLink
 
         $connection = $this->resourceConnection->getConnection();
 
-        $select = $connection->select()->from(
-            $categoryMetadata->getEntityTable(),
-            'entity_id'
-        )->where(
-            'entity_id IN(?)',
-            array_column($links, 'category_id')
-        );
+        $select = $connection->select();
+        $select->from($categoryMetadata->getEntityTable(), 'entity_id');
+        $select->where('entity_id IN(?)', array_column($links, 'category_id'));
 
         $result = $connection->fetchCol($select);
         $validLinks = array_map(function ($categoryId) use ($links) {
