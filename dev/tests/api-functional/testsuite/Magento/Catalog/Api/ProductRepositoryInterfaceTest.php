@@ -218,10 +218,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->saveProduct($productData);
 
-        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "related",
-                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0, "extension_attributes" => []];
-        $productWithRelatedData =  [
+        $productLinkData = [
+            "sku" => "product_simple_with_related_500",
+            "link_type" => "related",
+            "linked_product_sku" => "product_simple_500",
+            "linked_product_type" => "simple",
+            "position" => 0,
+            "extension_attributes" => []
+        ];
+        $productWithRelatedData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -242,10 +247,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information
-        $productLinkData = ["sku" => "product_simple_with_related_500", "link_type" => "upsell",
-                            "linked_product_sku" => "product_simple_500", "linked_product_type" => "simple",
-                            "position" => 0, "extension_attributes" => []];
-        $productWithUpsellData =  [
+        $productLinkData = [
+            "sku" => "product_simple_with_related_500",
+            "link_type" => "upsell",
+            "linked_product_sku" => "product_simple_500",
+            "linked_product_type" => "simple",
+            "position" => 0,
+            "extension_attributes" => []
+        ];
+        $productWithUpsellData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -265,7 +275,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals($productLinkData, $links[0]);
 
         // Remove link
-        $productWithNoLinkData =  [
+        $productWithNoLinkData = [
             ProductInterface::SKU => "product_simple_with_related_500",
             ProductInterface::NAME => "Product Simple with Related 500",
             ProductInterface::VISIBILITY => 4,
@@ -464,14 +474,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
-        $expectedValue = [[
-            'label' => 'tiny1_new_label',
-            'media_type' => 'image',
-            'position' => 1,
-            'disabled' => false,
-            'types' => ['image', 'small_image'],
-            'file' => '/t/i/' . $filename1,
-        ]];
+        $expectedValue = [
+            [
+                'label' => 'tiny1_new_label',
+                'media_type' => 'image',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+                'file' => '/t/i/' . $filename1,
+            ]
+        ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
@@ -497,7 +509,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::SKU => 'simple', //sku from fixture
         ];
         $product = $this->getSimpleProductData($productData);
-        $response =  $this->updateProduct($product);
+        $response = $this->updateProduct($product);
 
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
         $this->assertArrayHasKey(ProductInterface::NAME, $response);
@@ -528,7 +540,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response =  $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->_webApiCall($serviceInfo, $requestData);
         return $response;
     }
 
@@ -850,6 +862,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $extensionAttributes = $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY];
         $this->assertArrayHasKey(self::KEY_CATEGORY_LINKS, $extensionAttributes);
         $this->assertEquals([['category_id' => 333, 'position' => 0]], $extensionAttributes[self::KEY_CATEGORY_LINKS]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksNullOrNotExists()
+    {
+        $response = $this->getProduct('simple333');
         // update product without category_link or category_link is null
         $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = null;
         $response = $this->updateProduct($response);
@@ -863,6 +883,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [['category_id' => 333, 'position' => 0]],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
         );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksPosistion()
+    {
+        $response = $this->getProduct('simple333');
         // update category_link position
         $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [
             ['category_id' => 333, 'position' => 10]
@@ -872,6 +900,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [['category_id' => 333, 'position' => 10]],
             $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]
         );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_product.php
+     */
+    public function testUpdateProductCategoryLinksUnassign()
+    {
+        $response = $this->getProduct('simple333');
         // unassign category_links from product
         $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [];
         $response = $this->updateProduct($response);

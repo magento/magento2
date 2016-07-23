@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
@@ -39,82 +40,53 @@ class CategoryLink
     }
 
     /**
-     * @param ProductInterface $product
-     * @return array
-     */
-    public function getCategoryLinks(ProductInterface $product)
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $select = $connection->select();
-        $select->from($this->getCategoryLinkMetadata()->getEntityTable(), ['category_id', 'position']);
-        $select->where('product_id = ?', (int)$product->getId());
-        $result = $connection->fetchAll($select);
-        return $result;
-    }
-
-    /**
-     * Save product category links and return affected category_ids
+     * Retrieve product category links by ProductInterface and category identifiers
      *
      * @param ProductInterface $product
      * @param array $categoryIds
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function saveCategoryLinks(ProductInterface $product, array $categoryIds = [])
+    public function getCategoryLinks(ProductInterface $product, array $categoryIds = [])
     {
-        $newCategoryPositions = array_map(function ($categoryData) {
-            if (is_array($categoryData)) {
-                return $categoryData;
-            } else {
-                return ['category_id' => (int)$categoryData, 'position' => 0];
-            }
-        }, $categoryIds);
+        $connection = $this->resourceConnection->getConnection();
 
-        $oldCategoryPositions = $this->getCategoryLinks($product);
+        $select = $connection->select();
+        $select->from($this->getCategoryLinkMetadata()->getEntityTable(), ['category_id', 'position']);
+        $select->where('product_id = ?', (int)$product->getId());
 
-        $insertUpdate = $this->processCategoryLinks($newCategoryPositions, $oldCategoryPositions);
-        $deleteUpdate = $this->processCategoryLinks($oldCategoryPositions, $newCategoryPositions);
+        if (!empty($categoryIds)) {
+            $select->where('category_id IN(?)', $categoryIds);
+        }
+
+        $result = $connection->fetchAll($select);
+
+        return $result;
+    }
+
+    /**
+     * Save product category links and return affected category identifiers
+     *
+     * @param ProductInterface $product
+     * @param array $categoryLinks
+     * @return array
+     */
+    public function saveCategoryLinks(ProductInterface $product, array $categoryLinks = [])
+    {
+        $categoryLinks = $this->verifyCategoryLinks($categoryLinks);
+        $oldCategoryLinks = $this->getCategoryLinks($product);
+
+        $insertUpdate = $this->processCategoryLinks($categoryLinks, $oldCategoryLinks);
+        $deleteUpdate = $this->processCategoryLinks($oldCategoryLinks, $categoryLinks);
 
         $delete = isset($deleteUpdate['changed']) ? $deleteUpdate['changed'] : [];
         $insert = isset($insertUpdate['changed']) ? $insertUpdate['changed'] : [];
         $insert = isset($deleteUpdate['updated']) ? array_merge_recursive($insert, $deleteUpdate['updated']) : $insert;
         $insert = isset($insertUpdate['updated']) ? array_merge_recursive($insert, $insertUpdate['updated']) : $insert;
 
-        $connection = $this->resourceConnection->getConnection();
-        if (!empty($insert)) {
-            $data = [];
-            foreach ($insert as $categoryLink) {
-                $data[] = [
-                    'category_id' => (int)$categoryLink['category_id'],
-                    'product_id' => (int)$product->getId(),
-                    'position' => $categoryLink['position'],
-                ];
-
-            }
-            if ($data) {
-                $connection->insertOnDuplicate(
-                    $this->getCategoryLinkMetadata()->getEntityTable(),
-                    $data,
-                    ['position']
-                );
-            }
-        }
-
-        if (!empty($delete)) {
-            foreach ($delete as $categoryData) {
-                $where = [
-                    'product_id = ?' => (int)$product->getId(),
-                    'category_id = ?' => (int)$categoryData['category_id']
-                ];
-                $connection->delete($this->getCategoryLinkMetadata()->getEntityTable(), $where);
-            }
-        }
-        $result =  array_map(function ($value) {
-            return isset($value['category_id']) ? $value['category_id'] : null;
-        }, array_merge($insert, $delete));
-
-        return $result;
+        return array_merge(
+            $this->updateCategoryLinks($product, $insert),
+            $this->deleteCategoryLinks($product, $delete)
+        );
     }
 
     /**
@@ -144,18 +116,103 @@ class CategoryLink
                 $newCategoryPosition['category_id'],
                 array_column($oldCategoryPositions, 'category_id')
             );
+
             if ($key === false) {
                 $result['changed'][] = $newCategoryPosition;
-            } else {
-                if ($oldCategoryPositions[$key]['position'] == $newCategoryPosition['position']) {
-                    continue;
-                } else {
-                    $result['updated'][] = $newCategoryPositions[$key];
-                    unset($oldCategoryPositions[$key]);
-                }
+            } elseif ($oldCategoryPositions[$key]['position'] != $newCategoryPosition['position']) {
+                $result['updated'][] = $newCategoryPositions[$key];
+                unset($oldCategoryPositions[$key]);
             }
         }
 
         return $result;
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $insertLinks
+     * @return array
+     */
+    private function updateCategoryLinks(ProductInterface $product, array $insertLinks)
+    {
+        if (empty($insertLinks)) {
+            return [];
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+
+        $data = [];
+        foreach ($insertLinks as $categoryLink) {
+            $data[] = [
+                'category_id' => (int)$categoryLink['category_id'],
+                'product_id' => (int)$product->getId(),
+                'position' => $categoryLink['position'],
+            ];
+        }
+
+        if ($data) {
+            $connection->insertOnDuplicate(
+                $this->getCategoryLinkMetadata()->getEntityTable(),
+                $data,
+                ['position']
+            );
+        }
+
+        return array_column($insertLinks, 'category_id');
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @param array $deleteLinks
+     * @return array
+     */
+    private function deleteCategoryLinks(ProductInterface $product, array $deleteLinks)
+    {
+        if (empty($deleteLinks)) {
+            return [];
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+        $connection->delete($this->getCategoryLinkMetadata()->getEntityTable(), [
+            'product_id = ?' => (int)$product->getId(),
+            'category_id IN(?)' => array_column($deleteLinks, 'category_id')
+        ]);
+
+        return array_column($deleteLinks, 'category_id');
+    }
+
+    /**
+     * Verify category links identifiers and return valid
+     *
+     * @param array $links
+     * @return array
+     */
+    private function verifyCategoryLinks(array $links)
+    {
+        if (empty($links)) {
+            return [];
+        }
+
+        $categoryMetadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+
+        $connection = $this->resourceConnection->getConnection();
+
+        $select = $connection->select()->from(
+            $categoryMetadata->getEntityTable(),
+            'entity_id'
+        )->where(
+            'entity_id IN(?)',
+            array_column($links, 'category_id')
+        );
+
+        $result = $connection->fetchCol($select);
+        $validLinks = array_map(function ($categoryId) use ($links) {
+            $key = array_search($categoryId, array_column($links, 'category_id'));
+            if ($key !== false) {
+                return $links[$key];
+            }
+        }, $result);
+
+        return $validLinks;
     }
 }
