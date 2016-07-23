@@ -263,14 +263,6 @@ class Product extends AbstractResource
      */
     protected function _beforeSave(\Magento\Framework\DataObject $object)
     {
-        /**
-         * Check if declared category ids in object data.
-         */
-        if ($object->hasCategoryIds()) {
-            $categoryIds = $this->_catalogCategory->verifyIds($object->getCategoryIds());
-            $object->setCategoryIds($categoryIds);
-        }
-
         $self = parent::_beforeSave($object);
         /**
          * Try detect product id by sku if id is not declared
@@ -359,24 +351,11 @@ class Product extends AbstractResource
      *
      * @param \Magento\Framework\DataObject $object
      * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity
+     * @deprecated
      */
     protected function _saveCategories(\Magento\Framework\DataObject $object)
     {
-        /**
-         * If category ids data is not declared we haven't do manipulations
-         */
-        if (!$object->hasCategoryIds()) {
-            return $this;
-        }
-
-        $object->setIsChangedCategories(false);
-        $affectedCategoryIds = $this->getProductCategoryLink()->saveCategoryLinks($object, $object->getCategoryIds());
-        if (!empty($affectedCategoryIds)) {
-            $object->setAffectedCategoryIds($affectedCategoryIds);
-            $object->setIsChangedCategories(true);
-        }
-
         return $this;
     }
 
