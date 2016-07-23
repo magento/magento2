@@ -78,10 +78,7 @@ class CategoryLink
         $insertUpdate = $this->processCategoryLinks($categoryLinks, $oldCategoryLinks);
         $deleteUpdate = $this->processCategoryLinks($oldCategoryLinks, $categoryLinks);
 
-        $delete = isset($deleteUpdate['changed']) ? $deleteUpdate['changed'] : [];
-        $insert = isset($insertUpdate['changed']) ? $insertUpdate['changed'] : [];
-        $insert = isset($deleteUpdate['updated']) ? array_merge_recursive($insert, $deleteUpdate['updated']) : $insert;
-        $insert = isset($insertUpdate['updated']) ? array_merge_recursive($insert, $insertUpdate['updated']) : $insert;
+        list($delete, $insert) = $this->analyseUndatedLinks($deleteUpdate, $insertUpdate);
 
         return array_merge(
             $this->updateCategoryLinks($product, $insert),
@@ -182,7 +179,7 @@ class CategoryLink
     }
 
     /**
-     * Verify category links identifiers and return valid
+     * Verify category links identifiers and return valid links
      *
      * @param array $links
      * @return array
@@ -214,5 +211,22 @@ class CategoryLink
         }, $result);
 
         return $validLinks;
+    }
+
+    /**
+     * Analyse category links for update or/and delete
+     *
+     * @param $deleteUpdate
+     * @param $insertUpdate
+     * @return array
+     */
+    private function analyseUndatedLinks($deleteUpdate, $insertUpdate)
+    {
+        $delete = isset($deleteUpdate['changed']) ? $deleteUpdate['changed'] : [];
+        $insert = isset($insertUpdate['changed']) ? $insertUpdate['changed'] : [];
+        $insert = isset($deleteUpdate['updated']) ? array_merge_recursive($insert, $deleteUpdate['updated']) : $insert;
+        $insert = isset($insertUpdate['updated']) ? array_merge_recursive($insert, $insertUpdate['updated']) : $insert;
+
+        return array($delete, $insert);
     }
 }

@@ -436,9 +436,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(2, count($mediaGalleryEntries));
         $id = $mediaGalleryEntries[0]['id'];
-        foreach ($mediaGalleryEntries as &$entry) {
-            unset($entry['id']);
-        }
+        foreach ($mediaGalleryEntries as &$entry) { unset($entry['id']); }
         $expectedValue = [
             [
                 'label' => 'tiny1',

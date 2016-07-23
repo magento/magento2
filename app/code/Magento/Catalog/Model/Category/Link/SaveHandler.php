@@ -49,7 +49,7 @@ class SaveHandler implements ExtensionInterface
         $entity->setIsChangedCategories(false);
 
         $extensionAttributes = $entity->getExtensionAttributes();
-        if ($extensionAttributes === null && !$entity->hasData('category_ids')) {
+        if ($extensionAttributes === null && !$entity->hasCategoryIds()) {
             return $entity;
         }
 
@@ -77,7 +77,7 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
-     * @param $entity
+     * @param object $entity
      * @return array
      */
     private function getCategoryLinksPositions($entity)

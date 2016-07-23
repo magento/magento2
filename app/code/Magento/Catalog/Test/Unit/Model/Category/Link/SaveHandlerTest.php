@@ -34,6 +34,11 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     private $hydrator;
 
     /**
+     * @var HydratorPool|MockObject
+     */
+    private $hydratorPool;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -42,26 +47,32 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->hydrator = $this->getMockBuilder(HydratorInterface::class)->getMockForAbstractClass();
-        $hydratorPool = $this->getMockBuilder(HydratorPool::class)
+        $this->hydratorPool = $this->getMockBuilder(HydratorPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $hydratorPool->expects(static::once())
-            ->method('getHydrator')
-            ->with(CategoryLinkInterface::class)
-            ->willReturn($this->hydrator);
-        $this->saveHandler = new SaveHandler($this->productCategoryLink, $hydratorPool);
+        $this->saveHandler = new SaveHandler($this->productCategoryLink, $this->hydratorPool);
     }
 
-    public function testExecute()
+    /**
+     * @param array $categoryIds
+     * @param array $categoryLinks
+     * @param array $existCategoryLinks
+     * @param array $expectedCategoryLinks
+     * @param array $affectedIds
+     *
+     * @dataProvider getCategoryDataProvider
+     */
+    public function testExecute($categoryIds, $categoryLinks, $existCategoryLinks, $expectedCategoryLinks, $affectedIds)
     {
-        $categoryLinks = [
-            ['category_id' => 3, 'position' => 10],
-            ['category_id' => 4, 'position' => 20]
-        ];
-
-        $this->hydrator->expects(static::any())
-            ->method('extract')
-            ->willReturnArgument(0);
+        if ($categoryLinks) {
+            $this->hydrator->expects(static::any())
+                ->method('extract')
+                ->willReturnArgument(0);
+            $this->hydratorPool->expects(static::once())
+                ->method('getHydrator')
+                ->with(CategoryLinkInterface::class)
+                ->willReturn($this->hydrator);
+        }
 
         $extensionAttributes = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->disableOriginalConstructor()
@@ -73,15 +84,129 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes'])
+            ->setMethods(
+                [
+                    'getExtensionAttributes',
+                    'setAffectedCategoryIds',
+                    'setIsChangedCategories',
+                    'getCategoryIds'
+                ]
+            )
             ->getMock();
+        $product->expects(static::at(0))->method('setIsChangedCategories')->with(false);
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
+        $product->expects(static::any())
+            ->method('getCategoryIds')
+            ->willReturn($categoryIds);
 
         $this->productCategoryLink->expects(static::any())
             ->method('saveCategoryLinks')
-            ->with($product, $categoryLinks);
+            ->with($product, $expectedCategoryLinks)
+            ->willReturn($affectedIds);
+
+        if (!empty($affectedIds)) {
+            $product->expects(static::once())
+                ->method('setAffectedCategoryIds')
+                ->with($affectedIds);
+            $product->expects(static::exactly(2))->method('setIsChangedCategories');
+        }
+
+        $this->productCategoryLink->expects(static::any())
+            ->method('getCategoryLinks')
+            ->with($product, $categoryIds)
+            ->willReturn($existCategoryLinks);
+
+        $entity = $this->saveHandler->execute($product);
+        static::assertSame($product, $entity);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategoryDataProvider()
+    {
+        return [
+            [
+                [3, 4, 5], //model category_ids
+                null, // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10],
+                    ['category_id' => 4, 'position' => 20],
+                ],
+                [
+                    ['category_id' => 3, 'position' => 10],
+                    ['category_id' => 4, 'position' => 20],
+                    ['category_id' => 5, 'position' => 0],
+                ],
+                [3,4,5], //affected category_ids
+            ],
+            [
+                [3, 4], //model category_ids
+                [], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10],
+                    ['category_id' => 4, 'position' => 20],
+                ],
+                [],
+                [3,4], //affected category_ids
+            ],
+            [
+                [], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 20],
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10],
+                    ['category_id' => 4, 'position' => 20],
+                ],
+                [
+                    ['category_id' => 3, 'position' => 20],
+                ],
+                [3,4], //affected category_ids
+            ],
+            [
+                [3], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 20],
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10],
+                ],
+                [
+                    ['category_id' => 3, 'position' => 20],
+                ],
+                [3], //affected category_ids
+            ],
+            [
+                [], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 10],
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10],
+                ],
+                [
+                    ['category_id' => 3, 'position' => 10],
+                ],
+                [], //affected category_ids
+            ],
+        ];
+    }
+
+    public function testExecuteWithoutProcess()
+    {
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getExtensionAttributes', 'hasCategoryIds'])
+            ->getMock();
+        $product->expects(static::once())
+            ->method('getExtensionAttributes')
+            ->willReturn(null);
+        $product->expects(static::any())
+            ->method('hasCategoryIds')
+            ->willReturn(false);
 
         $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
