@@ -167,6 +167,9 @@ class Login extends \Magento\Framework\Model\AbstractModel
 
         if ($this->_customerSession->loginById($customer->getId())) {
             $this->_customerSession->regenerateId();
+            $this->_customerSession->setLoggedAsCustomerAdmindId(
+                $this->getAdminId()
+            );
         }
 
         $this->setUsed(1)->save();
