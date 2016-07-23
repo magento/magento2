@@ -34,6 +34,10 @@ class Curl extends Conditions implements CatalogRuleInterface
             'type' => 'Magento\CatalogRule\Model\Rule\Condition\Product',
             'attribute' => 'category_ids',
         ],
+        'Attribute' => [
+            'type' => 'Magento\CatalogRule\Model\Rule\Condition\Product',
+            'attribute' => 'attribute_id',
+        ],
     ];
 
     /**
