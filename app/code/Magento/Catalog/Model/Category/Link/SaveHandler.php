@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\Category\Link;
 
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
+use Magento\Catalog\Model\Indexer\Product\Category;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
@@ -23,6 +24,11 @@ class SaveHandler implements ExtensionInterface
      * @var \Magento\Framework\EntityManager\HydratorPool
      */
     private $hydratorPool;
+
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    private $indexerRegistry;
 
     /**
      * SaveHandler constructor.
@@ -71,6 +77,11 @@ class SaveHandler implements ExtensionInterface
         if (!empty($affectedCategoryIds)) {
             $entity->setAffectedCategoryIds($affectedCategoryIds);
             $entity->setIsChangedCategories(true);
+        }
+
+        $productCategoryIndexer = $this->getIndexerRegistry()->get(Category::INDEXER_ID);
+        if (!$productCategoryIndexer->isScheduled()) {
+            $productCategoryIndexer->reindexRow($entity->getId());
         }
 
         return $entity;
@@ -126,5 +137,19 @@ class SaveHandler implements ExtensionInterface
         $result = array_merge($result, $oldCategoryPositions);
 
         return $result;
+    }
+
+    /**
+     * Retrieve indexer registry instance
+     *
+     * @return \Magento\Framework\Indexer\IndexerRegistry
+     */
+    private function getIndexerRegistry()
+    {
+        if (null === $this->indexerRegistry) {
+            $this->indexerRegistry = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Indexer\IndexerRegistry');
+        }
+        return $this->indexerRegistry;
     }
 }
