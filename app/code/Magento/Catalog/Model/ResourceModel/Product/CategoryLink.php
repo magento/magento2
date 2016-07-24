@@ -154,6 +154,7 @@ class CategoryLink
                 ['position']
             );
         }
+
         $product->setCategoryIds(array_column($insertLinks, 'category_id'));
 
         return array_column($insertLinks, 'category_id');
