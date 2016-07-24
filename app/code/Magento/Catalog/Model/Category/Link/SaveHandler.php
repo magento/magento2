@@ -26,25 +26,17 @@ class SaveHandler implements ExtensionInterface
     private $hydratorPool;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
-     */
-    private $indexerRegistry;
-
-    /**
      * SaveHandler constructor.
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink
      * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
-     * @param \Magento\Framework\Indexer\IndexerRegistry $inexerRegistry
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink,
-        \Magento\Framework\EntityManager\HydratorPool $hydratorPool,
-        \Magento\Framework\Indexer\IndexerRegistry $inexerRegistry
+        \Magento\Framework\EntityManager\HydratorPool $hydratorPool
     ) {
         $this->productCategoryLink = $productCategoryLink;
         $this->hydratorPool = $hydratorPool;
-        $this->indexerRegistry = $inexerRegistry;
     }
 
     /**
@@ -80,11 +72,6 @@ class SaveHandler implements ExtensionInterface
         if (!empty($affectedCategoryIds)) {
             $entity->setAffectedCategoryIds($affectedCategoryIds);
             $entity->setIsChangedCategories(true);
-
-            $productCategoryIndexer = $this->indexerRegistry->get(Category::INDEXER_ID);
-            if (!$productCategoryIndexer->isScheduled()) {
-                $productCategoryIndexer->reindexRow($entity->getId());
-            }
         }
 
         return $entity;

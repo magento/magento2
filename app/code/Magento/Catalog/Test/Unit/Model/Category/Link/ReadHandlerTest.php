@@ -66,6 +66,14 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ['category_id' => 3, 'position' => 10],
             ['category_id' => 4, 'position' => 20]
         ];
+        $dtoCategoryLinks = [];
+        foreach ($categoryLinks as $key => $categoryLink) {
+            $dtoCategoryLinks[$key] = $this->getMockBuilder(\Magento\Catalog\Api\Data\CategoryLinkInterface::class)
+                ->getMockForAbstractClass();
+            $this->categoryLinkFactory->expects(static::at($key))
+                ->method('create')
+                ->willReturn($dtoCategoryLinks[$key]);
+        }
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -76,6 +84,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
+        $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with($dtoCategoryLinks);
 
         $product->expects(static::once())
             ->method('getExtensionAttributes')
@@ -89,6 +98,36 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getCategoryLinks')
             ->with($product)
             ->willReturn($categoryLinks);
+
+        $entity = $this->readHandler->execute($product);
+        static::assertSame($product, $entity);
+    }
+
+    public function testExecuteNullExtensionAttributes()
+    {
+        $product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getExtensionAttributes', 'setExtensionAttributes'])
+            ->getMock();
+
+        $extensionAttributes = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setCategoryLinks'])
+            ->getMockForAbstractClass();
+        $extensionAttributes->expects(static::once())->method('setCategoryLinks')->with(null);
+
+        $product->expects(static::once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
+
+        $product->expects(static::once())
+            ->method('setExtensionAttributes')
+            ->with($extensionAttributes);
+
+        $this->productCategoryLink->expects(static::any())
+            ->method('getCategoryLinks')
+            ->with($product)
+            ->willReturn([]);
 
         $entity = $this->readHandler->execute($product);
         static::assertSame($product, $entity);

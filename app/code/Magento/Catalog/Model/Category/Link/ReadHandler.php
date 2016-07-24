@@ -65,7 +65,7 @@ class ReadHandler implements ExtensionInterface
         }
 
         $extensionAttributes = $entity->getExtensionAttributes();
-        $extensionAttributes->setCategoryLinks($categoryLinks);
+        $extensionAttributes->setCategoryLinks(!empty($categoryLinks) ? $categoryLinks : null);
         $entity->setExtensionAttributes($extensionAttributes);
 
         return $entity;
