@@ -8,9 +8,12 @@
 
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductExtensionFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as Status;
 
@@ -173,6 +176,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $appStateMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttrbutes;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -186,6 +199,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->extensionAttrbutes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
+            ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->stockItemFactoryMock = $this->getMock(
             'Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory',
             ['create'],
@@ -346,7 +364,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->productLinkRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductLinkRepositoryInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
+        $this->extensionAttributesFactory = $this->getMockBuilder(ExtensionAttributesFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -356,6 +376,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'context' => $contextMock,
                 'catalogProductType' => $this->productTypeInstanceMock,
                 'productFlatIndexerProcessor' => $this->productFlatProcessor,
+                'extensionFactory' => $this->extensionAttributesFactory,
                 'productPriceIndexerProcessor' => $this->productPriceProcessor,
                 'catalogProductOptionFactory' => $optionFactory,
                 'storeManager' => $storeManager,
@@ -405,7 +426,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $expectedStoreIds = [1, 2, 3];
         $websiteIds = ['test'];
-        $this->resource->expects($this->once())->method('getWebsiteIds')->will($this->returnValue($websiteIds));
+        $this->model->setWebsiteIds($websiteIds);
         $this->website->expects($this->once())->method('getStoreIds')->will($this->returnValue($expectedStoreIds));
         $this->assertEquals($expectedStoreIds, $this->model->getStoreIds());
     }
@@ -417,13 +438,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->model->unsStoreId();
         $this->store->expects($this->once())->method('getId')->will($this->returnValue(5));
         $this->assertEquals(5, $this->model->getStoreId());
-    }
-
-    public function testGetWebsiteIds()
-    {
-        $expected = ['test'];
-        $this->resource->expects($this->once())->method('getWebsiteIds')->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->model->getWebsiteIds());
     }
 
     public function testGetCategoryCollection()
@@ -679,17 +693,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1]],
             ],
-            'new product' => [
-                ['catalog_product_1', 'catalog_category_product_1'],
-                null,
-                [
-                    'id' => 1,
-                    'name' => 'value',
-                    'category_ids' => [1],
-                    'affected_category_ids' => [1],
-                    'is_changed_categories' => true
-                ]
-            ],
+            'new product' => $this->getNewProductProviderData(),
             'status and category change' => [
                 [0 => 'catalog_product_1', 1 => 'catalog_category_product_1', 2 => 'catalog_category_product_2'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 2],
@@ -707,18 +711,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 1],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [7], 'status' => 2],
             ],
-            'status changed, category unassigned' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_5'],
-                ['id' => 1, 'name' => 'value', 'category_ids' => [5], 'status' => 2],
-                [
-                    'id' => 1,
-                    'name' => 'value',
-                    'category_ids' => [],
-                    'status' => 1,
-                    'is_changed_categories' => true,
-                    'affected_category_ids' => [5]
-                ],
-            ],
+            'status changed, category unassigned' => $this->getStatusAndCategoryChangesData(),
             'no status changes' => [
                 [0 => 'catalog_product_1'],
                 ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
@@ -758,17 +751,63 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                     'stock_data' => ['is_in_stock' => true],
                 ],
             ],
-            'stock status changes' => [
-                [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
-                ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
-                [
-                    'id' => 1,
-                    'name' => 'value',
-                    'category_ids' => [1],
-                    'status' => 1,
-                    'stock_data' => ['is_in_stock' => false],
-                    ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
-                ],
+            'stock status changes' => $this->getStatusStockProviderData($extensionAttributesMock),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getStatusAndCategoryChangesData()
+    {
+        return [
+            [0 => 'catalog_product_1', 1 => 'catalog_category_product_5'],
+            ['id' => 1, 'name' => 'value', 'category_ids' => [5], 'status' => 2],
+            [
+                'id' => 1,
+                'name' => 'value',
+                'category_ids' => [],
+                'status' => 1,
+                'is_changed_categories' => true,
+                'affected_category_ids' => [5]
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getNewProductProviderData()
+    {
+        return [
+            ['catalog_product_1', 'catalog_category_product_1'],
+            null,
+            [
+                'id' => 1,
+                'name' => 'value',
+                'category_ids' => [1],
+                'affected_category_ids' => [1],
+                'is_changed_categories' => true
+            ]
+        ];
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $extensionAttributesMock
+     * @return array
+     */
+    private function getStatusStockProviderData($extensionAttributesMock)
+    {
+        return [
+            [0 => 'catalog_product_1', 1 => 'catalog_category_product_1'],
+            ['id' => 1, 'name' => 'value', 'category_ids' => [1], 'status' => 1],
+            [
+                'id' => 1,
+                'name' => 'value',
+                'category_ids' => [1],
+                'status' => 1,
+                'stock_data' => ['is_in_stock' => false],
+                ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => $extensionAttributesMock,
             ],
         ];
     }

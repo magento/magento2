@@ -6,6 +6,8 @@
 namespace Magento\Catalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link as ProductWebsiteLink;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product entity resource model
@@ -173,28 +175,19 @@ class Product extends AbstractResource
     /**
      * Retrieve product website identifiers
      *
+     * @deprecated
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */
     public function getWebsiteIds($product)
     {
-        $connection = $this->getConnection();
-
         if ($product instanceof \Magento\Catalog\Model\Product) {
             $productId = $product->getEntityId();
         } else {
             $productId = $product;
         }
 
-        $select = $connection->select()->from(
-            $this->getProductWebsiteTable(),
-            'website_id'
-        )->where(
-            'product_id = ?',
-            (int)$productId
-        );
-
-        return $connection->fetchCol($select);
+        return $this->getProductWebsiteLink()->getWebsiteIdsByProductId($productId);
     }
 
     /**
@@ -299,46 +292,24 @@ class Product extends AbstractResource
     /**
      * Save product website relations
      *
+     * @deprecated
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
     protected function _saveWebsiteIds($product)
     {
-        if ($this->_storeManager->isSingleStoreMode()) {
-            $id = $this->_storeManager->getDefaultStoreView()->getWebsiteId();
-            $product->setWebsiteIds([$id]);
-        }
-        $websiteIds = $product->getWebsiteIds();
-
-        $oldWebsiteIds = [];
-
-        $product->setIsChangedWebsites(false);
-
-        $connection = $this->getConnection();
-
-        $oldWebsiteIds = $this->getWebsiteIds($product);
-
-        $insert = array_diff($websiteIds, $oldWebsiteIds);
-        $delete = array_diff($oldWebsiteIds, $websiteIds);
-
-        if (!empty($insert)) {
-            $data = [];
-            foreach ($insert as $websiteId) {
-                $data[] = ['product_id' => (int)$product->getEntityId(), 'website_id' => (int)$websiteId];
+        if ($product->hasWebsiteIds()) {
+            if ($this->_storeManager->isSingleStoreMode()) {
+                $id = $this->_storeManager->getDefaultStoreView()->getWebsiteId();
+                $product->setWebsiteIds([$id]);
             }
-            $connection->insertMultiple($this->getProductWebsiteTable(), $data);
-        }
+            $websiteIds = $product->getWebsiteIds();
+            $product->setIsChangedWebsites(false);
+            $changed = $this->getProductWebsiteLink()->saveWebsiteIds($product, $websiteIds);
 
-        if (!empty($delete)) {
-            foreach ($delete as $websiteId) {
-                $condition = ['product_id = ?' => (int)$product->getEntityId(), 'website_id = ?' => (int)$websiteId];
-
-                $connection->delete($this->getProductWebsiteTable(), $condition);
+            if ($changed) {
+                $product->setIsChangedWebsites(true);
             }
-        }
-
-        if (!empty($insert) || !empty($delete)) {
-            $product->setIsChangedWebsites(true);
         }
 
         return $this;
@@ -654,6 +625,16 @@ class Product extends AbstractResource
     }
 
     /**
+     * @deprecated
+     * @return ProductWebsiteLink
+     */
+    private function getProductWebsiteLink()
+    {
+        return ObjectManager::getInstance()->get(ProductWebsiteLink::class);
+    }
+
+    /**
+     * @deprecated
      * @return \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
      */
     private function getProductCategoryLink()
