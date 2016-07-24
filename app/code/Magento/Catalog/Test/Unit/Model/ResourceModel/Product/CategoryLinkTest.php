@@ -111,7 +111,9 @@ class CategoryLinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->prepareAdapter();
         $this->prepareMetadata();
-        $product = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')->getMockForAbstractClass();
+        $product = $this->getMockBuilder('Magento\Catalog\Api\Data\ProductInterface')
+            ->setMethods(['setCategoryIds'])
+            ->getMockForAbstractClass();
         $product->expects($this->any())->method('getId')->willReturn(1);
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
