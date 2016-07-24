@@ -40,11 +40,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     private $hydratorPool;
 
     /**
-     * @var IndexerRegistry|MockObject
-     */
-    private $indexerRegistry;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -56,14 +51,10 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->hydratorPool = $this->getMockBuilder(HydratorPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->saveHandler = new SaveHandler(
             $this->productCategoryLink,
-            $this->hydratorPool,
-            $this->indexerRegistry
+            $this->hydratorPool
         );
     }
 
@@ -125,15 +116,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
                 ->method('setAffectedCategoryIds')
                 ->with($affectedIds);
             $product->expects(static::exactly(2))->method('setIsChangedCategories');
-
-            $indexer = $this->getMockBuilder('Magento\Framework\Indexer\IndexerInterface')
-                ->getMockForAbstractClass();
-            $indexer->expects(static::once())->method('isScheduled')->willReturn(false);
-            $indexer->expects(static::once())->method('reindexRow')->with($product->getId());
-            $this->indexerRegistry->expects(static::any())
-                ->method('get')
-                ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
-                ->willReturn($indexer);
         }
 
         $this->productCategoryLink->expects(static::any())
