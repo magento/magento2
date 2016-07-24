@@ -990,7 +990,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // unassign category_links from product
         $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [];
         $response = $this->updateProduct($response);
-        $this->assertEquals([], $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS]);
+        $this->assertArrayNotHasKey(self::KEY_CATEGORY_LINKS, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
     }
 
     /**
