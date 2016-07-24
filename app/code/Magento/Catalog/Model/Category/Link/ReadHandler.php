@@ -59,7 +59,7 @@ class ReadHandler implements ExtensionInterface
             $this->dataObjectHelper->populateWithArray(
                 $categoryLink,
                 $categoryData,
-                '\Magento\Catalog\Api\Data\CategoryLinkInterface'
+                \Magento\Catalog\Api\Data\CategoryLinkInterface::class
             );
             $categoryLinks[] = $categoryLink;
         }

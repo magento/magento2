@@ -5,7 +5,9 @@
  */
 namespace Magento\Catalog\Test\Unit\Model\Category\Link;
 
+use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\CategoryLinkInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Category\Link\ReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\Api\DataObjectHelper;
@@ -66,10 +68,14 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ['category_id' => 3, 'position' => 10],
             ['category_id' => 4, 'position' => 20]
         ];
+
         $dtoCategoryLinks = [];
         foreach ($categoryLinks as $key => $categoryLink) {
-            $dtoCategoryLinks[$key] = $this->getMockBuilder(\Magento\Catalog\Api\Data\CategoryLinkInterface::class)
+            $dtoCategoryLinks[$key] = $this->getMockBuilder(CategoryLinkInterface::class)
                 ->getMockForAbstractClass();
+            $this->dataObjectHelper->expects(static::at($key))
+                ->method('populateWithArray')
+                ->with($dtoCategoryLinks[$key], $categoryLink, CategoryLinkInterface::class);
             $this->categoryLinkFactory->expects(static::at($key))
                 ->method('create')
                 ->willReturn($dtoCategoryLinks[$key]);
@@ -80,7 +86,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getExtensionAttributes', 'setExtensionAttributes'])
             ->getMock();
 
-        $extensionAttributes = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
@@ -110,7 +116,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getExtensionAttributes', 'setExtensionAttributes'])
             ->getMock();
 
-        $extensionAttributes = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryLinks'])
             ->getMockForAbstractClass();
