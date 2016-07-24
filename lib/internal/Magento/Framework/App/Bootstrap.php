@@ -244,29 +244,82 @@ class Bootstrap
      * Runs an application
      *
      * @param \Magento\Framework\AppInterface $application
+     * @param bool $alwaysHandleExceptions Whether to handle exceptions regardless of developer mode setting
      * @return void
      */
-    public function run(AppInterface $application)
+    public function run(AppInterface $application, $alwaysHandleExceptions = true)
+    {
+        $prelaunchSuccessful = $this->preLaunch($application);
+        if (!$prelaunchSuccessful) {
+            return;
+        }
+
+        // If ignoring exceptions, don't wrap in a try/catch block so that PHP/Xdebug can output a clean backtrace
+        if ($this->isDeveloperMode()
+            && $this->ignoreExceptionsInDeveloperMode()
+            // Certain entry points such as get.php and static.php should always be handled by the try/catch block
+            // below since any exceptions should return a 404 header
+            && !$alwaysHandleExceptions
+        ) {
+            Profiler::start('magento');
+            $response = $application->launch();
+            $response->sendResponse();
+            Profiler::stop('magento');
+        } else {
+            try {
+                try {
+                    Profiler::start('magento');
+                    $response = $application->launch();
+                    $response->sendResponse();
+                    Profiler::stop('magento');
+                } catch (\Exception $e) {
+                    Profiler::stop('magento');
+                    if (!$application->catchException($this, $e)) {
+                        throw $e;
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->terminate($e);
+            }
+        }
+    }
+
+    /**
+     * Initialize prelaunch sequence to prepare for launching application
+     *
+     * All code is being run within a try/catch block (even if $this->ignoreExceptionsInDeveloperMode() is true), as
+     * this prelaunch code may throw exceptions that must be handled by \Magento\Framework\AppInterface::catchException
+     *
+     * @param AppInterface $application
+     * @return boolean
+     */
+    protected function preLaunch(AppInterface $application)
     {
         try {
             try {
-                \Magento\Framework\Profiler::start('magento');
+                \Magento\Framework\Profiler::start('magento_prelaunch');
+                /**
+                 * It is necessary to initialize error handler even when in developer mode as certain methods require
+                 * errors to be converted into catchable exceptions.
+                 * For example @see \Magento\Framework\View\Model\Layout\Update\Validator::isValid
+                 */
                 $this->initErrorHandler();
                 $this->initObjectManager();
                 $this->assertMaintenance();
                 $this->assertInstalled();
-                $response = $application->launch();
-                $response->sendResponse();
-                \Magento\Framework\Profiler::stop('magento');
+                \Magento\Framework\Profiler::stop('magento_prelaunch');
             } catch (\Exception $e) {
-                \Magento\Framework\Profiler::stop('magento');
+                \Magento\Framework\Profiler::stop('magento_prelaunch');
                 if (!$application->catchException($this, $e)) {
                     throw $e;
                 }
+                return false;
             }
         } catch (\Exception $e) {
             $this->terminate($e);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -442,5 +495,18 @@ class Bootstrap
             echo $message;
         }
         exit(1);
+    }
+
+    /**
+     * Whether to handle exceptions in developer mode or to allow PHP to handle display of exceptions
+     *
+     * Xdebug provides very detailed stack traces that can assist a developer in troubleshooting an exception. If a
+     * developer has Xdebug installed and enabled, we should assume that they want to let Xdebug handle exceptions.
+     *
+     * @return bool
+     */
+    public function ignoreExceptionsInDeveloperMode()
+    {
+        return (function_exists('xdebug_is_enabled') && xdebug_is_enabled());
     }
 }
