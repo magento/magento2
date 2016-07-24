@@ -35,13 +35,16 @@ class SaveHandler implements ExtensionInterface
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink
      * @param \Magento\Framework\EntityManager\HydratorPool $hydratorPool
+     * @param \Magento\Framework\Indexer\IndexerRegistry $inexerRegistry
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink,
-        \Magento\Framework\EntityManager\HydratorPool $hydratorPool
+        \Magento\Framework\EntityManager\HydratorPool $hydratorPool,
+        \Magento\Framework\Indexer\IndexerRegistry $inexerRegistry
     ) {
         $this->productCategoryLink = $productCategoryLink;
         $this->hydratorPool = $hydratorPool;
+        $this->indexerRegistry = $inexerRegistry;
     }
 
     /**
@@ -77,11 +80,11 @@ class SaveHandler implements ExtensionInterface
         if (!empty($affectedCategoryIds)) {
             $entity->setAffectedCategoryIds($affectedCategoryIds);
             $entity->setIsChangedCategories(true);
-        }
 
-        $productCategoryIndexer = $this->getIndexerRegistry()->get(Category::INDEXER_ID);
-        if (!$productCategoryIndexer->isScheduled()) {
-            $productCategoryIndexer->reindexRow($entity->getId());
+            $productCategoryIndexer = $this->indexerRegistry->get(Category::INDEXER_ID);
+            if (!$productCategoryIndexer->isScheduled()) {
+                $productCategoryIndexer->reindexRow($entity->getId());
+            }
         }
 
         return $entity;
@@ -137,19 +140,5 @@ class SaveHandler implements ExtensionInterface
         $result = array_merge($result, $oldCategoryPositions);
 
         return $result;
-    }
-
-    /**
-     * Retrieve indexer registry instance
-     *
-     * @return \Magento\Framework\Indexer\IndexerRegistry
-     */
-    private function getIndexerRegistry()
-    {
-        if (null === $this->indexerRegistry) {
-            $this->indexerRegistry = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Indexer\IndexerRegistry');
-        }
-        return $this->indexerRegistry;
     }
 }
