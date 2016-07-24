@@ -94,7 +94,7 @@
 
                             this.ge = new Ext.tree.TreeEditor(tree, {
                                 allowBlank:false,
-                                blankText:'<?php /* @escapeNotVerified */ echo __('A name is required.') ?>',
+                                blankText:'<?php /* @escapeNotVerified */ echo $block->escapeQuote('A name is required.') ?>',
                                 selectOnFocus:true,
                                 cls:'folder'
                             });
@@ -253,13 +253,13 @@
 
                         addGroup : function() {
                             prompt({
-                                content: "<?php /* @escapeNotVerified */ echo __('Please enter a new group name.') ?>",
+                                content: "<?php /* @escapeNotVerified */ echo $block->escapeQuote('Please enter a new group name.') ?>",
                                 value: "",
                                 actions: {
                                     confirm: function (group_name) {
                                         group_name = group_name.strip();
                                         if( group_name == '' ) {
-                                            self.addGroup();
+                                            editSet.addGroup();
                                         } else if( group_name != false && group_name != null && group_name != '' ) {
 
                                             if (!editSet.validateGroupName(group_name, 0)) {
@@ -302,7 +302,7 @@
                             }
                             for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                                 if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                    errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists".') ?>';
+                                    errorText = '<?php /* @escapeNotVerified */ echo $block->escapeQuote('An attribute group named "/name/" already exists.') ?>';
                                     alert({
                                         content: errorText.replace("/name/",name)
                                     });
@@ -400,7 +400,7 @@
                         rightRemove : function(tree, nodeThis, node) {
                             if( nodeThis.firstChild == null && node.id != 'empty' ) {
                                 var newNode = new Ext.tree.TreeNode({
-                                    text : '<?php /* @escapeNotVerified */ echo __('Empty') ?>',
+                                    text : '<?php /* @escapeNotVerified */ echo $block->escapeQuote('Empty') ?>',
                                     id : 'empty',
                                     cls : 'folder',
                                     is_user_defined : 1,
