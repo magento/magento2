@@ -36,6 +36,7 @@ class ExtensionMultipleTest extends AbstractExtensionTest
      * @param RepoCredentials $repoCredentials
      * @param BackupOptions $backupOptions
      * @param Extension[] $extensions
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function test(
         FixtureFactory $fixtureFactory,

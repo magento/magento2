@@ -379,6 +379,7 @@ class PackagesData
      * Get all metapackages
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getMetaPackagesMap()
     {
