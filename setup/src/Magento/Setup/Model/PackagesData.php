@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Composer\ComposerInformation;
@@ -379,7 +378,6 @@ class PackagesData
      * Get all metapackages
      *
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function getMetaPackagesMap()
     {
@@ -390,7 +388,7 @@ class PackagesData
                 if ($package['type'] == ComposerInformation::METAPACKAGE_PACKAGE_TYPE
                     && isset($package['require'])
                 ) {
-                    foreach ($package['require'] as $key => $requirePackage) {
+                    foreach (array_keys($package['require']) as $key) {
                         $this->metapackagesMap[$key] = $package['name'];
                     }
                 }
