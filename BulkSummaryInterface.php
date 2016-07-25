@@ -17,6 +17,8 @@ interface BulkSummaryInterface
     const DESCRIPTION = 'description';
     const START_TIME = 'start_time';
     const USER_ID = 'user_id';
+    const OPERATION = 'operation';
+    const ENTITY_TYPE = 'entity_type';
     /**#@-*/
 
     /**#@+
@@ -58,6 +60,36 @@ interface BulkSummaryInterface
      * @return $this
      */
     public function setDescription($description);
+
+    /**
+     * Get bulk operation name
+     *
+     * @return string
+     */
+    public function getOperation();
+
+    /**
+     * Set bulk operation name
+     *
+     * @param string $operation
+     * @return $this
+     */
+    public function setOperation($operation);
+
+    /**
+     * Get bulk entity type
+     *
+     * @return string
+     */
+    public function getEntityType();
+
+    /**
+     * Set bulk entity type
+     *
+     * @param string $entityType
+     * @return $this
+     */
+    public function setEntityType($entityType);
 
     /**
      * Get bulk scheduled time
