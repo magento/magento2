@@ -30,5 +30,6 @@
 
     <exchange name="overlappingDeprecatedExchange" type="topic" connection="overlappingDeprecatedConnection">
         <binding id="binding1" topic="overlapping.topic.declaration" destinationType="queue" destination="topology.config.queue" />
+        <binding id="binding2" topic="deprecated.config.async.string.topic" destinationType="queue" destination="topology.config.queue" />
     </exchange>
 </config>
