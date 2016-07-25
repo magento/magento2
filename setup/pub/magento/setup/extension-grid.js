@@ -7,8 +7,8 @@
 
 angular.module('extension-grid', ['ngStorage'])
     .controller('extensionGridController', [
-        '$rootScope', '$scope', '$http', '$localStorage', '$state','titleService', 'authService',
-        function ($rootScope, $scope, $http, $localStorage, $state, titleService, authService) {
+        '$rootScope', '$scope', '$http', '$localStorage', '$state','titleService', 'authService', 'paginationService',
+        function ($rootScope, $scope, $http, $localStorage, $state, titleService, authService, paginationService) {
             authService.checkMarketplaceAuthorized();
             $rootScope.extensionsProcessed = false;
             $scope.syncError = false;
@@ -37,12 +37,7 @@ angular.module('extension-grid', ['ngStorage'])
                 $rootScope.extensionsProcessed = true;
             });
 
-            $scope.$watch('currentPage + rowLimit', function () {
-                $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
-                if ($scope.currentPage > $scope.numberOfPages) {
-                    $scope.currentPage = $scope.numberOfPages;
-                }
-            });
+            paginationService.initWatchers($scope);
 
             $scope.isOutOfSync = false;
             $scope.isHiddenSpinner = true;

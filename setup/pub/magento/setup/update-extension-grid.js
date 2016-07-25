@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
-    .controller('updateExtensionGridController', ['$scope', '$http', '$localStorage', 'titleService',
-        function ($scope, $http, $localStorage, titleService) {
+    .controller('updateExtensionGridController', ['$scope', '$http', '$localStorage', 'titleService', 'paginationService',
+        function ($scope, $http, $localStorage, titleService, paginationService) {
             $scope.isHiddenSpinner = false;
 
             $http.get('index.php/updateExtensionGrid/extensions').success(function(data) {
@@ -19,20 +19,11 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                 $scope.total = data.total;
                 $scope.currentPage = 1;
                 $scope.rowLimit = 20;
-                $scope.start = 0;
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
                 $scope.isHiddenSpinner = true;
             });
 
-            $scope.recalculatePagination = function(currentPage, rowLimit) {
-                $scope.currentPage = parseInt(currentPage, 10);
-                $scope.rowLimit = parseInt(rowLimit, 10);
-                $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
-                if ($scope.currentPage > $scope.numberOfPages) {
-                    $scope.currentPage = $scope.numberOfPages;
-                }
-                $scope.start = ($scope.currentPage - 1) * $scope.rowLimit;
-            };
+            paginationService.initWatchers($scope);
 
             $scope.predicate = 'name';
             $scope.reverse = false;
@@ -51,4 +42,5 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                 titleService.setTitle('update', extension.name);
                 $scope.nextState();
             };
-        }]);
+        }
+    ]);
