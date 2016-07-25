@@ -44,4 +44,13 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Amqp\Model\Topology\BindingInstallerInterface" type="Magento\Amqp\Model\Topology\BindingInstaller" />
+    <type name="Magento\Amqp\Model\Topology\BindingInstaller">
+        <arguments>
+            <argument name="installers" xsi:type="array">
+                <item name="queue" xsi:type="object">Magento\Amqp\Model\Topology\BindingInstallerType\Queue</item>
+                <item name="exchange" xsi:type="object">Magento\Amqp\Model\Topology\BindingInstallerType\Exchange</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
