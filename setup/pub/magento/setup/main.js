@@ -4,7 +4,7 @@
  */
 
 'use strict';
-var main = angular.module('main', ['ngStorage']);
+var main = angular.module('main', ['ngStorage', 'ngDialog']);
 main.controller('navigationController',
         ['$scope', '$state', '$rootScope', '$window', 'navigationService', '$localStorage',
             function ($scope, $state, $rootScope, $window, navigationService, $localStorage) {
