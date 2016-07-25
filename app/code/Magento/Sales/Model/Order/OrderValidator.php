@@ -7,7 +7,6 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 
 /**
@@ -16,20 +15,6 @@ use Magento\Sales\Model\Order;
  */
 class OrderValidator implements OrderValidatorInterface
 {
-    /**
-     * @var OrderItemValidatorInterface
-     */
-    private $orderItemValidator;
-
-    /**
-     * OrderValidator constructor.
-     * @param OrderItemValidatorInterface $orderItemValidator
-     */
-    public function __construct(OrderItemValidatorInterface $orderItemValidator)
-    {
-        $this->orderItemValidator = $orderItemValidator;
-    }
-
     /**
      * Retrieve order invoice availability
      *
@@ -46,9 +31,9 @@ class OrderValidator implements OrderValidatorInterface
         ) {
             return false;
         };
-        /** @var OrderItemInterface $item */
+        /** @var \Magento\Sales\Model\Order\Item $item */
         foreach ($order->getItems() as $item) {
-            if ($this->orderItemValidator->canInvoice($item) && !$item->getLockedDoInvoice()) {
+            if ($item->getQtyToInvoice() > 0 && !$item->getLockedDoInvoice()) {
                 return true;
             }
         }

@@ -75,10 +75,10 @@ class InvoiceValidator implements InvoiceValidatorInterface
                 }
             }
             if ($qtys) {
-                $messages[] = 'Order does not contain item(s) existed in invoice';
+                $messages[] = 'Order does not contain item(s) existed in invoice.';
             }
         }
-        if ($totalQty <= 0) {
+        if (!$qtys && $totalQty <= 0) {
             $messages[] = 'You can\'t create an invoice without products.';
         }
         return $messages;

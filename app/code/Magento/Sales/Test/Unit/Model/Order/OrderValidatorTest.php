@@ -24,11 +24,6 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\OrderItemValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $orderItemValidatorMock;
-
-    /**
      * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $orderMock;
@@ -42,11 +37,6 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderItemValidatorMock = $this->getMockBuilder('Magento\Sales\Model\Order\OrderItemValidatorInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['canInvoice'])
-            ->getMockForAbstractClass();
-
         $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getStatus', 'getItems'])
@@ -54,13 +44,10 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
 
         $this->orderItemMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderItemInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getLockedDoInvoice'])
+            ->setMethods(['getQtyToInvoice', 'getLockedDoInvoice'])
             ->getMockForAbstractClass();
 
-        $this->model = $this->objectManager->getObject(
-            'Magento\Sales\Model\Order\OrderValidator',
-            ['orderItemValidator' => $this->orderItemValidatorMock]
-        );
+        $this->model = new \Magento\Sales\Model\Order\OrderValidator();
     }
 
     /**
@@ -113,13 +100,13 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $canInvoiceItem
+     * @param float $qtyToInvoice
      * @param bool|null $itemLockedDoInvoice
      * @param bool $expectedResult
      *
      * @dataProvider canInvoiceDataProvider
      */
-    public function testCanInvoice($canInvoiceItem, $itemLockedDoInvoice, $expectedResult)
+    public function testCanInvoice($qtyToInvoice, $itemLockedDoInvoice, $expectedResult)
     {
         $this->orderMock->expects($this->any())
             ->method('getState')
@@ -129,10 +116,9 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getItems')
             ->willReturn($items);
-        $this->orderItemValidatorMock->expects($this->once())
-            ->method('canInvoice')
-            ->with($this->orderItemMock)
-            ->willReturn($canInvoiceItem);
+        $this->orderItemMock->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn($qtyToInvoice);
         $this->orderItemMock->expects($this->any())
             ->method('getLockedDoInvoice')
             ->willReturn($itemLockedDoInvoice);
@@ -151,9 +137,10 @@ class OrderValidatorTest extends \PHPUnit_Framework_TestCase
     public function canInvoiceDataProvider()
     {
         return [
-            [false, null, false],
-            [true, true, false],
-            [true, false, true],
+            [0, null, false],
+            [-1, null, false],
+            [1, true, false],
+            [0.5, false, true],
         ];
     }
 }
