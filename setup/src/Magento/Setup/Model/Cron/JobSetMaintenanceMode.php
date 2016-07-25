@@ -40,8 +40,6 @@ class JobSetMaintenanceMode extends AbstractJob
         $params = []
     ) {
         $this->command = $command;
-        $this->output = $output;
-        $this->status = $status;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
@@ -54,7 +52,7 @@ class JobSetMaintenanceMode extends AbstractJob
     public function execute()
     {
         if ($this->command instanceof MaintenanceDisableCommand && $this->command->isSetAddressInfo()) {
-            /** Maintenance mode should not be unset from updater application if it was set manually by the admin */
+            // Maintenance mode should not be unset from updater application if it was set manually by the admin
             throw new \RuntimeException(
                 $this->getExceptionMessage(
                     'Magento maintenance mode was not disabled. It can be disabled from the Magento Backend.'
