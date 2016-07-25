@@ -123,6 +123,7 @@ class ScopedTierPriceManagement implements \Magento\Catalog\Api\ScopedProductTie
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice
+     * @return void
      * @throws InputException
      * @throws \Zend_Validate_Exception
      */
