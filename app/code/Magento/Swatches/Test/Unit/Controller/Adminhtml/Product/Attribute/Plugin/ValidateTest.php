@@ -53,6 +53,10 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         $controller->afterExecute($subject, $response);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
     public function providerData()
     {
         return [
