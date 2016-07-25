@@ -17,11 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobSetMaintenanceMode extends AbstractJob
 {
     /**
-     * @var string $cmdString
-     */
-    protected $cmdString;
-
-    /**
      * Constructor
      *
      * @param AbstractSetupCommand $command
@@ -40,8 +35,6 @@ class JobSetMaintenanceMode extends AbstractJob
         $params = []
     ) {
         $this->command = $command;
-        $this->output = $output;
-        $this->status = $status;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
@@ -54,7 +47,7 @@ class JobSetMaintenanceMode extends AbstractJob
     public function execute()
     {
         if ($this->command instanceof MaintenanceDisableCommand && $this->command->isSetAddressInfo()) {
-            /** Maintenance mode should not be unset from updater application if it was set manually by the admin */
+            // Maintenance mode should not be unset from updater application if it was set manually by the admin
             throw new \RuntimeException(
                 $this->getExceptionMessage(
                     'Magento maintenance mode was not disabled. It can be disabled from the Magento Backend.'
@@ -63,7 +56,7 @@ class JobSetMaintenanceMode extends AbstractJob
         }
 
         try {
-            // prepare the arguments to invoke Symfony run()
+            // Prepare the arguments to invoke Symfony run()
             $arguments['command'] = $this->getCommand();
             $this->command->run(new ArrayInput($arguments), $this->output);
         } catch (\Exception $e) {
@@ -92,6 +85,6 @@ class JobSetMaintenanceMode extends AbstractJob
      */
     private function getCommand()
     {
-        return $this->getName() == 'setup:maintenance:enable' ? 'maintenance:enable' : 'maintenance:disable';
+        return $this->getName() === 'setup:maintenance:enable' ? 'maintenance:enable' : 'maintenance:disable';
     }
 }
