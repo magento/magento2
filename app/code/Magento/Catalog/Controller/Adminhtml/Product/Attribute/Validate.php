@@ -90,7 +90,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
         }
 
-        $this->checkUniqueOption($response);
+        $this->checkUniqueOption($response, $this->getRequest()->getParam("option"));
 
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
     }
