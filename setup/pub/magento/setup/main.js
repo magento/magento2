@@ -260,6 +260,20 @@ main.controller('navigationController',
         };
     }]
 )
+.service('paginationService', [
+    function () {
+        return {
+            initWatchers: function ($scope) {
+                $scope.$watch('currentPage + rowLimit', function () {
+                    $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
+                    if ($scope.currentPage > $scope.numberOfPages) {
+                        $scope.currentPage = $scope.numberOfPages;
+                    }
+                });
+            }
+        };
+    }
+])
 .filter('startFrom', function () {
     return function (input, start) {
         if (input !== undefined && start !== 'NaN') {

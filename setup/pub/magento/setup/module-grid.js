@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('module-grid', ['ngStorage'])
-    .controller('moduleGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state', 'titleService',
-        function ($rootScope, $scope, $http, $localStorage, $state, titleService) {
+    .controller('moduleGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state', 'titleService', 'paginationService',
+        function ($rootScope, $scope, $http, $localStorage, $state, titleService, paginationService) {
             $rootScope.modulesProcessed = false;
             $http.get('index.php/moduleGrid/modules').success(function(data) {
                 $scope.modules = data.modules;
@@ -17,12 +17,7 @@ angular.module('module-grid', ['ngStorage'])
                 $rootScope.modulesProcessed = true;
             });
 
-            $scope.$watch('currentPage + rowLimit', function() {
-                $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
-                if ($scope.currentPage > $scope.numberOfPages) {
-                    $scope.currentPage = $scope.numberOfPages;
-                }
-            });
+            paginationService.initWatchers($scope);
 
             $scope.selectedComponent = null;
 
