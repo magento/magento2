@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue\Topology\Config;
 
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingInterface;
-use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\IteratorFactory;
+use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\IteratorFactory;
 
 /**
  * {@inheritdoc}

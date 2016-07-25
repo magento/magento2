@@ -13,6 +13,7 @@ use Magento\Framework\MessageQueue\ConfigInterface;
 
 /**
  * @covers Magento\Framework\MessageQueue\MessageValidator
+ * @SuppressWarnings(PHPMD)
  */
 class MessageValidatorTest extends \PHPUnit_Framework_TestCase
 {

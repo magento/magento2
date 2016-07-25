@@ -97,7 +97,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'internal' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'internal', false)),
                 'bindings' => $bindings,
                 'arguments' => $exchangeArguments,
-
             ];
         }
         return $result;
