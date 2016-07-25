@@ -144,11 +144,11 @@
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(item)}">
                             <li ng-class="{'hide': item.enable}"
                                 ng-mousedown="enableDisable('enable', item)">
-                                <a class="action-menu-item">Enable</a>
+                                <a class="action-menu-item item-enable">Enable</a>
                             </li>
                             <li ng-class="{'hide': !item.enable}"
                                 ng-mousedown="enableDisable('disable', item)">
-                                <a class="action-menu-item">Disable</a>
+                                <a class="action-menu-item item-disable">Disable</a>
                             </li>
                         </ul>
                     </div>
