@@ -78,7 +78,7 @@ class CategoryLink
         $insertUpdate = $this->processCategoryLinks($categoryLinks, $oldCategoryLinks);
         $deleteUpdate = $this->processCategoryLinks($oldCategoryLinks, $categoryLinks);
 
-        list($delete, $insert) = $this->analyseUndatedLinks($deleteUpdate, $insertUpdate);
+        list($delete, $insert) = $this->analyseUpdatedLinks($deleteUpdate, $insertUpdate);
 
         return array_merge(
             $this->updateCategoryLinks($product, $insert),
@@ -216,7 +216,7 @@ class CategoryLink
      * @param array $insertUpdate
      * @return array
      */
-    private function analyseUndatedLinks($deleteUpdate, $insertUpdate)
+    private function analyseUpdatedLinks($deleteUpdate, $insertUpdate)
     {
         $delete = $deleteUpdate['changed'] ? : [];
         $insert = $insertUpdate['changed'] ? : [];
