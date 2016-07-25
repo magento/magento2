@@ -17,11 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobSetMaintenanceMode extends AbstractJob
 {
     /**
-     * @var string $cmdString
-     */
-    protected $cmdString;
-
-    /**
      * Constructor
      *
      * @param AbstractSetupCommand $command
@@ -61,7 +56,7 @@ class JobSetMaintenanceMode extends AbstractJob
         }
 
         try {
-            // prepare the arguments to invoke Symfony run()
+            // Prepare the arguments to invoke Symfony run()
             $arguments['command'] = $this->getCommand();
             $this->command->run(new ArrayInput($arguments), $this->output);
         } catch (\Exception $e) {
@@ -90,6 +85,6 @@ class JobSetMaintenanceMode extends AbstractJob
      */
     private function getCommand()
     {
-        return $this->getName() == 'setup:maintenance:enable' ? 'maintenance:enable' : 'maintenance:disable';
+        return $this->getName() === 'setup:maintenance:enable' ? 'maintenance:enable' : 'maintenance:disable';
     }
 }
