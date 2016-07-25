@@ -50,6 +50,8 @@ class TypeMapper
     }
 
     /**
+     * Retrieve package type for a grid.
+     *
      * @param string $packageName
      * @param string $packageType
      * @return string
