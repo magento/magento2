@@ -90,7 +90,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $connection = $this->getAttributeValue($exchange, 'connection', $this->defaultValue->getConnection());
             $result[$name] = [
                 'name' => $name,
-                'type' => $this->getAttributeValue($exchange, 'type', 'topic'),
+                'type' => $this->getAttributeValue($exchange, 'type'),
                 'connection' => $connection,
                 'durable' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'durable', true)),
                 'autoDelete' => $this->booleanUtils->toBoolean($autoDelete),
@@ -145,7 +145,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param mixed $default
      * @return string|null
      */
-    protected function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
+    private function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {
         $item = $node->attributes->getNamedItem($attributeName);
         return $item ? $item->nodeValue : $default;
@@ -173,7 +173,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $bindings[$id] = [
             'id' => $id,
-            'destinationType' => $this->getAttributeValue($node, 'destinationType', 'queue'),
+            'destinationType' => $this->getAttributeValue($node, 'destinationType'),
             'destination' => $this->getAttributeValue($node, 'destination'),
             'disabled' => $isDisabled,
             'topic' => $this->getAttributeValue($node, 'topic'),

@@ -42,8 +42,8 @@ trait SortedList
                 return $firstValue < $secondValue ? -1 : 1;
             }
         );
-        foreach ($array as $name => $readerInfo) {
-            if (!isset($readerInfo[$key]) || !($readerInfo[$key] instanceof $instanceType)) {
+        foreach ($array as $name => $arrayItem) {
+            if (!isset($arrayItem[$key]) || !($arrayItem[$key] instanceof $instanceType)) {
                 throw new \InvalidArgumentException(
                     new Phrase(
                         'Object [%name] must implement %class',
@@ -51,7 +51,7 @@ trait SortedList
                     )
                 );
             }
-            $output[] = $readerInfo[$key];
+            $output[$name] = $arrayItem[$key];
         }
 
         return $output;

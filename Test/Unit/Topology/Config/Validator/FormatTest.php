@@ -34,7 +34,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
                     'bind01' => [
                         'id' => 'bind01',
                         'topic' => 'bind01',
-                        'destinationType' => 'bind01',
+                        'destinationType' => 'queue',
                         'destination' => 'bind01',
                         'disabled' => false,
                         'arguments' => ['some' => 'arguments'],

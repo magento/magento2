@@ -18,7 +18,7 @@ return [
     'ex02' => [
         'name' => 'ex02',
         'type' => 'topic',
-        'connection' => 'con02',
+        'connection' => 'amqp',
         'durable' => true,
         'autoDelete' => false,
         'internal' => false,
@@ -28,7 +28,7 @@ return [
     'ex03' => [
         'name' => 'ex03',
         'type' => 'topic',
-        'connection' => 'con03',
+        'connection' => 'amqp',
         'durable' => false,
         'autoDelete' => true,
         'internal' => true,

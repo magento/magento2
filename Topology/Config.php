@@ -7,11 +7,11 @@ namespace Magento\Framework\MessageQueue\Topology;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Iterator as ExchangeIterator;
-use \Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\Iterator as QueueIterator;
+use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Iterator as ExchangeIterator;
+use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\Iterator as QueueIterator;
 
 /**
- * Topology config provides access data declared in etc/queue_topology.xml
+ * Topology config provides access to data declared in etc/queue_topology.xml
  */
 class Config implements ConfigInterface
 {

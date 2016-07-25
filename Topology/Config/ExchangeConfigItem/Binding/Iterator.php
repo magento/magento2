@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding;
 
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding;
@@ -15,7 +14,7 @@ use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\BindingFac
 class Iterator implements \Iterator, \ArrayAccess
 {
     /**
-     * Topology config item.
+     * Exchange binding config.
      *
      * @var Binding
      */

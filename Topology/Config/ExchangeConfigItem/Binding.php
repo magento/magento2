@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem;
 
 /**
- * Instances of this class represent config binding binging items declared in etc/queue_topology.xsd
+ * Instances of this class represent config binding items declared in etc/queue_topology.xsd
  */
 class Binding implements BindingInterface
 {

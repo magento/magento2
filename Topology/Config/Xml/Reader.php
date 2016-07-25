@@ -22,7 +22,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem implements Read
         '/config/exchange/binding' => 'id',
         '/config/exchange/binding/arguments/argument' => 'name',
         '/config/exchange/binding/arguments/argument(/item)+' => 'name',
-
     ];
 
     /**

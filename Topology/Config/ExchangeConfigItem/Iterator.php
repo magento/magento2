@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem;
 
 use Magento\Framework\MessageQueue\Topology\Config\Data;
@@ -16,7 +15,7 @@ use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemFactory;
 class Iterator implements \Iterator, \ArrayAccess
 {
     /**
-     * Topology config item.
+     * Exchange config.
      *
      * @var ExchangeConfigItem
      */
