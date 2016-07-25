@@ -9,33 +9,26 @@ class QuoteItemProductOption
 {
     /**
      * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $subject
-     * @param callable $proceed
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param array $additional
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem
      * @return \Magento\Sales\Model\Order\Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundConvert(
+    public function beforeConvert(
         \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
-        \Closure $proceed,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
-        $additional = []
+        \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem
     ) {
-        /** @var $orderItem \Magento\Sales\Model\Order\Item */
-        $orderItem = $proceed($item, $additional);
-
-        if (is_array($item->getOptions())) {
-            foreach ($item->getOptions() as $itemOption) {
+        if (is_array($quoteItem->getOptions())) {
+            foreach ($quoteItem->getOptions() as $itemOption) {
                 $code = explode('_', $itemOption->getCode());
+
                 if (isset($code[1]) && is_numeric($code[1])) {
-                    $option = $item->getProduct()->getOptionById($code[1]);
+                    $option = $quoteItem->getProduct()->getOptionById($code[1]);
+
                     if ($option && $option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FILE) {
                         try {
-                            $option->groupFactory(
-                                $option->getType()
-                            )->setQuoteItemOption(
-                                $itemOption
-                            )->copyQuoteToOrder();
+                            $option->groupFactory($option->getType())
+                                ->setQuoteItemOption($itemOption)
+                                ->copyQuoteToOrder();
                         } catch (\Exception $e) {
                             continue;
                         }
@@ -43,6 +36,5 @@ class QuoteItemProductOption
                 }
             }
         }
-        return $orderItem;
     }
 }

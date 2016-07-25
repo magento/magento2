@@ -17,12 +17,7 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\ToOrderItem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
@@ -30,23 +25,18 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
     {
         $this->orderItemMock = $this->getMock('Magento\Sales\Model\Order\Item', [], [], '', false);
         $this->quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
-        $orderItem = $this->orderItemMock;
         $this->subjectMock = $this->getMock('Magento\Quote\Model\Quote\Item\ToOrderItem', [], [], '', false);
-        $this->closureMock = function () use ($orderItem) {
-            return $orderItem;
-        };
         $this->model = new \Magento\Catalog\Model\Plugin\QuoteItemProductOption();
     }
 
-    public function testAroundItemToOrderItemEmptyOptions()
+    public function testBeforeItemToOrderItemEmptyOptions()
     {
         $this->quoteItemMock->expects($this->exactly(2))->method('getOptions')->will($this->returnValue([]));
 
-        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock);
-        $this->assertSame($this->orderItemMock, $orderItem);
+        $this->assertNull($this->model->beforeConvert($this->subjectMock, $this->quoteItemMock));
     }
 
-    public function testAroundItemToOrderItemWithOptions()
+    public function testBeforeItemToOrderItemWithOptions()
     {
         $itemOption = $this->getMock(
             'Magento\Quote\Model\Quote\Item\Option',
@@ -74,7 +64,6 @@ class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteItemMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
 
-        $orderItem = $this->model->aroundConvert($this->subjectMock, $this->closureMock, $this->quoteItemMock);
-        $this->assertSame($this->orderItemMock, $orderItem);
+        $this->assertNull($this->model->beforeConvert($this->subjectMock, $this->quoteItemMock));
     }
 }
