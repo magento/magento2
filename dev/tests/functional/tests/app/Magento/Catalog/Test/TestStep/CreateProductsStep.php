@@ -60,7 +60,7 @@ class CreateProductsStep implements TestStepInterface
     public function run()
     {
         $products = [];
-        $productsDataSets = explode(',', $this->products);
+        $productsDataSets = is_array($this->products) ? $this->products : explode(',', $this->products);
         foreach ($productsDataSets as $key => $productDataSet) {
             $productDataSet = explode('::', $productDataSet);
             $fixtureClass = $productDataSet[0];
