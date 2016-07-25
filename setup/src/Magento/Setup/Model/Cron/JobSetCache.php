@@ -50,7 +50,7 @@ class JobSetCache extends AbstractJob
     }
 
     /**
-     * Execute set cache comand
+     * Execute set cache command
      *
      * @return void
      */
