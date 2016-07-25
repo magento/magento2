@@ -7,6 +7,8 @@ namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin;
 
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
+use Magento\Eav\Model\Entity\Attribute\SetFactory;
+use Magento\Framework\App\ObjectManager;
 
 class AttributeSet
 {
@@ -14,6 +16,11 @@ class AttributeSet
 	 * @var bool
 	 */
 	private $requiresReindex;
+
+	/**
+	 * @var SetFactory
+	 */
+	private $setFactory;
 
 	/**
      * @var Processor
@@ -53,6 +60,20 @@ class AttributeSet
     }
 
 	/**
+	 * Return attribute set factory
+	 *
+	 * @return SetFactory
+	 * @deprecated
+	 */
+    private function getAttributeSetFactory()
+    {
+    	if ($this->setFactory === null) {
+    		$this->setFactory = ObjectManager::getInstance()->get(SetFactory::class);
+	    }
+	    return $this->setFactory;
+    }
+
+	/**
 	 * @param Set $subject
 	 *
 	 * @return bool
@@ -60,7 +81,8 @@ class AttributeSet
 	public function beforeSave(Set $subject) {
 		$this->requiresReindex = false;
 		if ( $subject->getId() ) {
-			$originalSet = clone $subject;
+			/** @var Set $originalSet */
+			$originalSet = $this->getAttributeSetFactory()->create();
 			$originalSet->initFromSkeleton($subject->getId());
 			$originalAttributeCodes = array_flip( $this->_attributeFilter->filter( $originalSet ) );
 			$subjectAttributeCodes  = array_flip( $this->_attributeFilter->filter( $subject ) );
