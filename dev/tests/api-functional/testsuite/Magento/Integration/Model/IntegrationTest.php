@@ -13,7 +13,6 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /** @var  \Magento\Integration\Model\Integration */
     protected $integration;
 
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
