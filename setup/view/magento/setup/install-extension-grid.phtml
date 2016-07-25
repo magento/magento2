@@ -13,7 +13,7 @@
         </span>
     </div>
 </div>
-<div ng-controller="authDialogController" class="admin__data-grid-outer-wrap">
+<div  class="admin__data-grid-outer-wrap">
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3">
@@ -154,8 +154,11 @@
     </div>
 </div>
 <!-- loading indicator overlay and loader -->
-<div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
-    <div class="grid-loader"></div>
+<div ng-show="!isHiddenSpinner" class="loading-mask ng-scope" data-role="loader">
+    <div class="popup popup-loading">
+        <div class="popup-inner">
+            <img alt="Loading..." src="<?php echo $this->basePath() ?>/pub/images/loader-1.gif">
+            Please wait...
+        </div>
+    </div>
 </div>
-<div ng-controller="authDialogController" ng-show="edited===true"
-     ng-include="'index.php/marketplace/popup-auth'" style="display: inline-block"></div>

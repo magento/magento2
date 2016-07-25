@@ -165,6 +165,86 @@ main.controller('navigationController',
         }
     };
 }])
+.service('authService', ['$localStorage', '$rootScope', '$state', '$http', 'ngDialog',
+    function ($localStorage, $rootScope, $state, $http, ngDialog) {
+        return {
+            checkMarketplaceAuthorized: function() {
+                $rootScope.isMarketplaceAuthorized = typeof $rootScope.isMarketplaceAuthorized !== 'undefined'
+                    ? $rootScope.isMarketplaceAuthorized : false;
+                if ($rootScope.isMarketplaceAuthorized == false) {
+                    this.goToAuthPage();
+                }
+            },
+            goToAuthPage: function() {
+                if ($state.current.type === 'upgrade') {
+                    $state.go('root.upgrade');
+                } else {
+                    $state.go('root.extension-auth');
+                }
+            },
+            reset: function (context) {
+                var self = this;
+                return $http.post('index.php/marketplace/remove-credentials', [])
+                    .success(function (response) {
+                        if (response.success) {
+                            $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
+                            context.success();
+                        }
+                    })
+                    .error(function (data) {
+                    });
+            },
+            checkAuth: function(context) {
+                return $http.post('index.php/marketplace/check-auth', [])
+                    .success(function (response) {
+                        if (response.success) {
+                            $rootScope.isMarketplaceAuthorized  = $localStorage.isMarketplaceAuthorized = true;
+                            $localStorage.marketplaceUsername = response.data.username;
+                            context.success(response);
+                        } else {
+                            $rootScope.isMarketplaceAuthorized  = $localStorage.isMarketplaceAuthorized = false;
+                            context.fail(response);
+                        }
+                    })
+                    .error(function() {
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = false;
+                        context.error();
+                    });
+            },
+            openAuthDialog: function(scope) {
+                return $http.get('index.php/marketplace/popup-auth').success(function (data) {
+                    scope.isHiddenSpinner = true;
+                    ngDialog.open({
+                        scope: scope,
+                        template: data,
+                        plain: true,
+                        showClose: false,
+                        controller: 'authDialogController'
+                    });
+                });
+            },
+            closeAuthDialog: function() {
+                return ngDialog.close();
+            },
+            saveAuthJson: function (context) {
+                return $http.post('index.php/marketplace/save-auth-json', context.user)
+                    .success(function (response) {
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = response.success;
+                        $localStorage.marketplaceUsername = context.user.username;
+                        if (response.success) {
+                            context.success(response);
+                        } else {
+                            context.fail(response);
+                        }
+                    })
+                    .error(function (data) {
+                        $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized = false;
+                        context.error(data);
+                    });
+            }
+    };
+    }]
+)
 .service('titleService', ['$localStorage', '$rootScope',
     function ($localStorage, $rootScope) {
         return {

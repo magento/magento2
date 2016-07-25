@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
-    .controller('updateExtensionGridController', ['$scope', '$http', 'ngDialog', '$localStorage', 'titleService',
-        function ($scope, $http, ngDialog, $localStorage, titleService) {
+    .controller('updateExtensionGridController', ['$scope', '$http', '$localStorage', 'titleService',
+        function ($scope, $http, $localStorage, titleService) {
             $scope.isHiddenSpinner = false;
 
             $http.get('index.php/updateExtensionGrid/extensions').success(function(data) {
@@ -23,10 +23,6 @@ angular.module('update-extension-grid', ['ngStorage', 'clickOut'])
                 $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
                 $scope.isHiddenSpinner = true;
             });
-
-            $scope.open = function() {
-                ngDialog.open({ scope: $scope, template: 'authDialog', showClose: false, controller: 'authDialogController' });
-            };
 
             $scope.recalculatePagination = function(currentPage, rowLimit) {
                 $scope.currentPage = parseInt(currentPage, 10);
