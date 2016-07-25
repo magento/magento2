@@ -58,7 +58,7 @@ class ObjectManagerProvider
     {
         if (null === $this->objectManager) {
             $initParams = $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM);
-            $factory = $this->bootstrap->createObjectManagerFactory(BP, $initParams);
+            $factory = $this->getObjectManagerFactory($initParams);
             $this->objectManager = $factory->create($initParams);
             if (PHP_SAPI == 'cli') {
                 $this->createCliCommands();
