@@ -44,6 +44,9 @@ class BindingInstaller implements BindingInstallerInterface
      */
     private function getInstaller($type)
     {
+        if (!isset($this->installers[$type])) {
+            throw new \InvalidArgumentException(sprintf('Installer type [%s] is not configured', $type));
+        }
         return $this->installers[$type];
     }
 }
