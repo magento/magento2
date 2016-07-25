@@ -13,7 +13,7 @@ namespace Magento\Sales\Api\Data;
  * @api
  */
 interface InvoiceCommentInterface extends
-\Magento\Framework\Api\ExtensibleDataInterface, \Magento\Sales\Api\Data\CommentInterface
+\Magento\Framework\Api\ExtensibleDataInterface, \Magento\Sales\Api\Data\InvoiceCommentCreationInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -72,6 +72,13 @@ interface InvoiceCommentInterface extends
      * @return $this
      */
     public function setEntityId($entityId);
+
+    /**
+     * Gets the is-customer-notified flag value for the invoice.
+     *
+     * @return int Is-customer-notified flag value.
+     */
+    public function getIsCustomerNotified();
 
     /**
      * Gets the parent ID for the invoice.
