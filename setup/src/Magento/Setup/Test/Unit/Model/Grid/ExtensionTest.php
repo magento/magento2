@@ -70,8 +70,16 @@ class ExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('getInstalledPackages')
             ->willReturn(
                 [
-                    'magento/package-1' => ['name' => 'magento/package-1', 'type' => 'magento2-module', 'version' => '1.0.0'],
-                    'magento/package-2' => ['name' => 'magento/package-2', 'type' => 'magento2-module', 'version' => '1.0.1'],
+                    'magento/package-1' => [
+                        'name' => 'magento/package-1',
+                        'type' => 'magento2-module',
+                        'version' => '1.0.0'
+                    ],
+                    'magento/package-2' => [
+                        'name' => 'magento/package-2',
+                        'type' => 'magento2-module',
+                        'version' => '1.0.1'
+                    ],
                 ]
             );
         $this->packagesDataMock->expects($this->once())

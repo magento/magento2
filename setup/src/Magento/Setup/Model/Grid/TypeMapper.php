@@ -49,6 +49,11 @@ class TypeMapper
         $this->composerInformation = $composerInformation;
     }
 
+    /**
+     * @param string $packageName
+     * @param string $packageType
+     * @return string
+     */
     public function map($packageName, $packageType)
     {
         if (in_array($packageName, $this->getRootRequires())

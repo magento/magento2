@@ -179,6 +179,7 @@ class JobFactory
      *
      * @param ObjectManagerInterface $objectManager
      * @param Command $command
+     * @return void
      */
     private function prepareCommand(
         ObjectManagerInterface $objectManager,
