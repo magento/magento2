@@ -183,7 +183,6 @@ main.controller('navigationController',
                 }
             },
             reset: function (context) {
-                var self = this;
                 return $http.post('index.php/marketplace/remove-credentials', [])
                     .success(function (response) {
                         if (response.success) {
