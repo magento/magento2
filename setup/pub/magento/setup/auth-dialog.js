@@ -4,9 +4,9 @@
  */
 
 'use strict';
-angular.module('auth-dialog', ['ngStorage', 'ngDialog'])
-    .controller('authDialogController', ['$rootScope', '$scope', '$state', '$http', 'ngDialog', '$localStorage', 'authService',
-        function ($rootScope, $scope, $state, $http, ngDialog, $localStorage, authService) {
+angular.module('auth-dialog', ['ngStorage'])
+    .controller('authDialogController', ['$rootScope', '$scope', '$state', '$http', '$localStorage', 'authService',
+        function ($rootScope, $scope, $state, $http, $localStorage, authService) {
             $scope.user = {
                 username : $localStorage.marketplaceUsername ? $localStorage.marketplaceUsername : '',
                 password : '',
