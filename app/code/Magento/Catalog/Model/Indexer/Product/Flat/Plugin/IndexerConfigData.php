@@ -24,7 +24,7 @@ class IndexerConfigData
      * Around get handler
      *
      * @param \Magento\Indexer\Model\Config\Data $subject
-     * @param callable $proceed
+     * @param mixed $data
      * @param string $path
      * @param string $default
      *
@@ -32,14 +32,12 @@ class IndexerConfigData
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      */
-    public function aroundGet(
+    public function afterGet(
         \Magento\Indexer\Model\Config\Data $subject,
-        \Closure $proceed,
+        $data,
         $path = null,
         $default = null
     ) {
-        $data = $proceed($path, $default);
-
         if (!$this->_state->isFlatEnabled()) {
             $indexerId = \Magento\Catalog\Model\Indexer\Product\Flat\Processor::INDEXER_ID;
             if (!$path && isset($data[$indexerId])) {
