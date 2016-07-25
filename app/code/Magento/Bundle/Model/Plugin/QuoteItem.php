@@ -21,9 +21,9 @@ class QuoteItem
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterConvert(
-    	ToOrderItem $subject,
-	    OrderItemInterface $orderItem,
-	    AbstractItem $item
+        ToOrderItem $subject,
+        OrderItemInterface $orderItem,
+        AbstractItem $item
     ) {
         if ($attributes = $item->getProduct()->getCustomOption('bundle_selection_attributes')) {
             $productOptions = $orderItem->getProductOptions();

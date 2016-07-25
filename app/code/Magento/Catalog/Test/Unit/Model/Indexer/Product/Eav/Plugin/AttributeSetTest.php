@@ -14,92 +14,92 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class AttributeSetTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var AttributeSet
-	 */
-	private $model;
+    /**
+     * @var AttributeSet
+     */
+    private $model;
 
-	/**
-	 * @var Processor|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $eavProcessorMock;
+    /**
+     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavProcessorMock;
 
-	/**
-	 * @var IndexableAttributeFilter|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $filterMock;
+    /**
+     * @var IndexableAttributeFilter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $filterMock;
 
-	/**
-	 * @var Set|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $subjectMock;
+    /**
+     * @var Set|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectMock;
 
-	/**
-	 * @var SetFactory|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $setFactoryMock;
+    /**
+     * @var SetFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $setFactoryMock;
 
-	/**
-	 * @var Set|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $originalSetMock;
+    /**
+     * @var Set|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $originalSetMock;
 
-	public function setUp()
-	{
-		$this->filterMock = $this->getMock(IndexableAttributeFilter::class, [], [], '', false);
-		$this->subjectMock = $this->getMock(Set::class, [], [], '', false);
-		$this->eavProcessorMock = $this->getMock(Processor::class, [], [], '', false);
-		$this->setFactoryMock = $this->getMock(SetFactory::class, [], [], '', false);
-	}
+    public function setUp()
+    {
+        $this->filterMock = $this->getMock(IndexableAttributeFilter::class, [], [], '', false);
+        $this->subjectMock = $this->getMock(Set::class, [], [], '', false);
+        $this->eavProcessorMock = $this->getMock(Processor::class, [], [], '', false);
+        $this->setFactoryMock = $this->getMock(SetFactory::class, [], [], '', false);
+    }
 
-	public function testBeforeSave()
-	{
-		$setId = 1;
-		$this->originalSetMock = $this->getMock(Set::class, [], [], '', false);
-		$this->originalSetMock->expects($this->once())->method('initFromSkeleton')->with($setId);
+    public function testBeforeSave()
+    {
+        $setId = 1;
+        $this->originalSetMock = $this->getMock(Set::class, [], [], '', false);
+        $this->originalSetMock->expects($this->once())->method('initFromSkeleton')->with($setId);
 
-		$this->setFactoryMock->expects($this->once())->method('create')->willReturn($this->originalSetMock);
+        $this->setFactoryMock->expects($this->once())->method('create')->willReturn($this->originalSetMock);
 
-		$this->model = (new ObjectManager($this))
-			->getObject(
-				AttributeSet::class,
-				[
-					'indexerEavProcessor' => $this->eavProcessorMock,
-					'filter' => $this->filterMock,
-					'setFactory' => $this->setFactoryMock
-				]
-			);
+        $this->model = (new ObjectManager($this))
+            ->getObject(
+                AttributeSet::class,
+                [
+                    'indexerEavProcessor' => $this->eavProcessorMock,
+                    'filter' => $this->filterMock,
+                    'setFactory' => $this->setFactoryMock
+                ]
+            );
 
-		$this->filterMock->expects($this->exactly(2))
-			->method('filter')
-			->willReturnMap(
-				[
-					[$this->originalSetMock, [1, 2, 3]],
-					[$this->subjectMock, [1, 2]]
-				]
-			);
+        $this->filterMock->expects($this->exactly(2))
+            ->method('filter')
+            ->willReturnMap(
+                [
+                    [$this->originalSetMock, [1, 2, 3]],
+                    [$this->subjectMock, [1, 2]]
+                ]
+            );
 
-		$this->subjectMock->expects($this->exactly(2))
-		                  ->method('getId')
-		                  ->willReturn($setId);
+        $this->subjectMock->expects($this->exactly(2))
+                          ->method('getId')
+                          ->willReturn($setId);
 
-		$this->model->beforeSave($this->subjectMock);
-	}
+        $this->model->beforeSave($this->subjectMock);
+    }
 
     public function testAfterSave()
     {
-    	$this->eavProcessorMock->expects($this->once())->method('markIndexerAsInvalid');
+        $this->eavProcessorMock->expects($this->once())->method('markIndexerAsInvalid');
 
-	    $this->model = (new ObjectManager($this))
-		    ->getObject(
-			    AttributeSet::class,
-			    [
-				    'indexerEavProcessor' => $this->eavProcessorMock,
-				    'filter' => $this->filterMock,
-				    'requiresReindex' => true
-			    ]
-		    );
+        $this->model = (new ObjectManager($this))
+            ->getObject(
+                AttributeSet::class,
+                [
+                    'indexerEavProcessor' => $this->eavProcessorMock,
+                    'filter' => $this->filterMock,
+                    'requiresReindex' => true
+                ]
+            );
 
-	    $this->assertSame($this->subjectMock, $this->model->afterSave($this->subjectMock, $this->subjectMock));
+        $this->assertSame($this->subjectMock, $this->model->afterSave($this->subjectMock, $this->subjectMock));
     }
 }

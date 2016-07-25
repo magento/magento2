@@ -14,12 +14,12 @@ use Magento\Catalog\Model\Indexer\Category\Product;
 
 class StoreGroupTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var GroupModel|\PHPUnit_Framework_MockObject_MockObject
-	 */
-	private $groupMock;
+    /**
+     * @var GroupModel|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $groupMock;
 
-	/**
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
      */
     protected $indexerMock;
@@ -113,16 +113,16 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundSaveWithoutChanges()
     {
-	    $this->groupMock = $this->getMock(
-		    GroupModel::class,
-		    [ 'dataHasChangedFor', 'isObjectNew', '__wakeup' ],
-		    [ ],
-		    '',
-		    false
-	    );
-	    $this->groupMock->expects($this->exactly(2))
-	                    ->method('dataHasChangedFor')
-	                    ->willReturnMap([['root_category_id', false], ['website_id', false]]);
+        $this->groupMock = $this->getMock(
+            GroupModel::class,
+            [ 'dataHasChangedFor', 'isObjectNew', '__wakeup' ],
+            [ ],
+            '',
+            false
+        );
+        $this->groupMock->expects($this->exactly(2))
+                        ->method('dataHasChangedFor')
+                        ->willReturnMap([['root_category_id', false], ['website_id', false]]);
         $this->groupMock->expects($this->never())->method('isObjectNew');
 
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock ));

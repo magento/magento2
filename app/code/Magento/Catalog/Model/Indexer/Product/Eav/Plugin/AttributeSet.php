@@ -12,17 +12,17 @@ use Magento\Framework\App\ObjectManager;
 
 class AttributeSet
 {
-	/**
-	 * @var bool
-	 */
-	private $requiresReindex;
+    /**
+     * @var bool
+     */
+    private $requiresReindex;
 
-	/**
-	 * @var SetFactory
-	 */
-	private $setFactory;
+    /**
+     * @var SetFactory
+     */
+    private $setFactory;
 
-	/**
+    /**
      * @var Processor
      */
     protected $_indexerEavProcessor;
@@ -59,37 +59,37 @@ class AttributeSet
         return $result;
     }
 
-	/**
-	 * Return attribute set factory
-	 *
-	 * @return SetFactory
-	 * @deprecated
-	 */
+    /**
+     * Return attribute set factory
+     *
+     * @return SetFactory
+     * @deprecated
+     */
     private function getAttributeSetFactory()
     {
-    	if ($this->setFactory === null) {
-    		$this->setFactory = ObjectManager::getInstance()->get(SetFactory::class);
-	    }
-	    return $this->setFactory;
+        if ($this->setFactory === null) {
+            $this->setFactory = ObjectManager::getInstance()->get(SetFactory::class);
+        }
+        return $this->setFactory;
     }
 
-	/**
-	 * @param Set $subject
-	 *
-	 * @return bool
-	 */
-	public function beforeSave(Set $subject) {
-		$this->requiresReindex = false;
-		if ( $subject->getId() ) {
-			/** @var Set $originalSet */
-			$originalSet = $this->getAttributeSetFactory()->create();
-			$originalSet->initFromSkeleton($subject->getId());
-			$originalAttributeCodes = array_flip( $this->_attributeFilter->filter( $originalSet ) );
-			$subjectAttributeCodes  = array_flip( $this->_attributeFilter->filter( $subject ) );
-			$this->requiresReindex  = (bool) count( array_merge(
-				array_diff_key( $subjectAttributeCodes, $originalAttributeCodes ),
-				array_diff_key( $originalAttributeCodes, $subjectAttributeCodes )
-			) );
-		}
-	}
+    /**
+     * @param Set $subject
+     *
+     * @return bool
+     */
+    public function beforeSave(Set $subject) {
+        $this->requiresReindex = false;
+        if ( $subject->getId() ) {
+            /** @var Set $originalSet */
+            $originalSet = $this->getAttributeSetFactory()->create();
+            $originalSet->initFromSkeleton($subject->getId());
+            $originalAttributeCodes = array_flip( $this->_attributeFilter->filter( $originalSet ) );
+            $subjectAttributeCodes  = array_flip( $this->_attributeFilter->filter( $subject ) );
+            $this->requiresReindex  = (bool) count( array_merge(
+                array_diff_key( $subjectAttributeCodes, $originalAttributeCodes ),
+                array_diff_key( $originalAttributeCodes, $subjectAttributeCodes )
+            ) );
+        }
+    }
 }
