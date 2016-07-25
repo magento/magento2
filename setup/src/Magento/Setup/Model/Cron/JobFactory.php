@@ -5,6 +5,13 @@
  */
 namespace Magento\Setup\Model\Cron;
 
+use Magento\Backend\Console\Command\CacheDisableCommand;
+use Magento\Backend\Console\Command\CacheEnableCommand;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Console\Command\ModuleDisableCommand;
+use Magento\Setup\Console\Command\ModuleEnableCommand;
+use Magento\Setup\Console\Command\UpgradeCommand;
+use Symfony\Component\Console\Command\Command;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -56,12 +63,14 @@ class JobFactory
         $logStream = fopen($cronStatus->getLogFilePath(), 'a+');
         $streamOutput = new MultipleStreamOutput([$statusStream, $logStream]);
         $objectManagerProvider = $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider');
-        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+        /** @var ObjectManagerInterface $objectManager */
         $objectManager = $objectManagerProvider->get();
         switch ($name) {
             case self::JOB_UPGRADE:
+                $cmd = $this->serviceLocator->get(UpgradeCommand::class);
+                $this->prepareCommand($objectManager, $cmd);
                 return new JobUpgrade(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
+                    $cmd,
                     $objectManagerProvider,
                     $streamOutput,
                     $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
@@ -113,8 +122,10 @@ class JobFactory
                 );
                 break;
             case self::JOB_MODULE_ENABLE:
+                $cmd = $this->serviceLocator->get(ModuleEnableCommand::class);
+                $this->prepareCommand($objectManager, $cmd);
                 return new JobModule(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
+                    $cmd,
                     $objectManagerProvider,
                     $streamOutput,
                     $cronStatus,
@@ -123,8 +134,10 @@ class JobFactory
                 );
                 break;
             case self::JOB_MODULE_DISABLE:
+                $cmd = $this->serviceLocator->get(ModuleDisableCommand::class);
+                $this->prepareCommand($objectManager, $cmd);
                 return new JobModule(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleDisableCommand'),
+                    $cmd,
                     $objectManagerProvider,
                     $streamOutput,
                     $cronStatus,
@@ -133,16 +146,48 @@ class JobFactory
                 );
                 break;
             case self::JOB_ENABLE_CACHE:
-                $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheEnableCommand');
-                return new JobSetCache($cmd, $objectManagerProvider, $streamOutput, $cronStatus, $name, $params);
+                $cmd = $objectManager->get(CacheEnableCommand::class);
+                $this->prepareCommand($objectManager, $cmd);
+                return new JobSetCache(
+                    $cmd,
+                    $objectManagerProvider,
+                    $streamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
                 break;
             case self::JOB_DISABLE_CACHE:
-                $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheDisableCommand');
-                return new JobSetCache($cmd, $objectManagerProvider, $streamOutput, $cronStatus, $name);
+                $cmd = $objectManager->get(CacheDisableCommand::class);
+                $this->prepareCommand($objectManager, $cmd);
+                return new JobSetCache(
+                    $cmd,
+                    $objectManagerProvider,
+                    $streamOutput,
+                    $cronStatus,
+                    $name
+                );
                 break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
                 break;
+        }
+    }
+
+    /**
+     * Prepare command, set application if needed
+     *
+     * @param ObjectManagerInterface $objectManager
+     * @param Command $command
+     */
+    private function prepareCommand(
+        ObjectManagerInterface $objectManager,
+        Command $command
+    ) {
+        if (null === $command->getApplication()) {
+            $command->setApplication(
+                $objectManager->get(\Magento\Framework\Console\Cli::class)
+            );
         }
     }
 }
