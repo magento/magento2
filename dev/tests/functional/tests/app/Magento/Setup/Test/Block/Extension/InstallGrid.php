@@ -26,8 +26,7 @@ class InstallGrid extends AbstractGrid
      *
      * @var string
      */
-    protected $extensionSelectVersion = "//tr[td/*[contains(text(), '%s')]]"
-        . "//*[contains(@class, 'data-grid-data')]//select";
+    protected $extensionSelectVersion = "//tr[td/*[contains(text(), '%s')]]//*[contains(@id, 'selectedVersion')]";
 
     /**
      * Checkbox for select extension.

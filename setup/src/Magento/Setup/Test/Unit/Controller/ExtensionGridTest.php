@@ -113,11 +113,11 @@ class ExtensionGridTest extends \PHPUnit_Framework_TestCase
         $this->packagesAuthMock->expects($this->once())
              ->method('getAuthJsonData')
              ->willReturn(
-            [
-                'username' => 'someusername',
-                'password' => 'somepassword'
-            ]
-        );
+                 [
+                     'username' => 'someusername',
+                     'password' => 'somepassword'
+                 ]
+             );
 
         $jsonModel = $this->controller->extensionsAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
