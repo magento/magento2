@@ -34,7 +34,7 @@ class OrderValidator implements OrderValidatorInterface
      * Retrieve order invoice availability
      *
      * @param OrderInterface $order
-     * @return array
+     * @return bool
      */
     public function canInvoice(OrderInterface $order)
     {

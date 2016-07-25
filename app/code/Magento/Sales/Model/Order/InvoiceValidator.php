@@ -12,7 +12,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Interface InvoiceValidatorInterface
- *
  */
 class InvoiceValidator implements InvoiceValidatorInterface
 {
@@ -38,11 +37,10 @@ class InvoiceValidator implements InvoiceValidatorInterface
     public function validate(InvoiceInterface $invoice, OrderInterface $order)
     {
         $messages = $this->checkQtyAvailability($invoice, $order);
-        if (!$invoice->getTotalQty()) {
-            $messages[] = __('You can\'t create an invoice without products.');
-        }
+
         if (!$this->orderValidator->canInvoice($order)) {
-            $messages[] = __('The order does not allow an invoice to be created.');
+            $messages[] = sprintf('The order in status %s does not allow an invoice to be created.',
+                $order->getStatus());
         }
         return $messages;
     }
@@ -63,16 +61,25 @@ class InvoiceValidator implements InvoiceValidatorInterface
             $qtys[$item->getOrderItemId()] = $item->getQty();
         }
 
+        $totalQty = 0;
         if ($qtys) {
             /** @var \Magento\Sales\Model\Order\Item $orderItem */
             foreach ($order->getItems() as $orderItem) {
-                if (isset($qtys[$orderItem->getId()])
-                    && $qtys[$orderItem->getId()] > $orderItem->getQtyToInvoice()
-                    && !$orderItem->isDummy()
-                ) {
-                    $messages[] =  __('We found an invalid quantity to invoice item "%1".', $orderItem->getName());
+                if (isset($qtys[$orderItem->getId()])) {
+                    if ($qtys[$orderItem->getId()] > $orderItem->getQtyToInvoice() && !$orderItem->isDummy()) {
+                        $messages[] = sprintf('Quantity to invoice must not be greater than uninvoiced quantity for product SKU: %s.',
+                            $orderItem->getSku());
+                    }
+                    $totalQty += $qtys[$orderItem->getId()];
+                    unset($qtys[$orderItem->getId()]);
                 }
             }
+            if ($qtys) {
+                $messages[] = 'Order does not contain item(s) existed in invoice';
+            }
+        }
+        if ($totalQty <= 0) {
+            $messages[] = 'You can\'t create an invoice without products.';
         }
         return $messages;
     }

@@ -15,10 +15,10 @@ class OrderItemValidator implements OrderItemValidatorInterface
 {
     /**
      * @param OrderItemInterface $item
-     * @return boolean
+     * @return bool
      */
     public function canInvoice(OrderItemInterface $item)
     {
-        $item->getQtyToInvoice() > 0;
+        return $item->getQtyToInvoice() > 0;
     }
 }
