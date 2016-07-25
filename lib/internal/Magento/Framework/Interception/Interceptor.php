@@ -130,7 +130,7 @@ trait Interceptor
                 // Call 'around' listener
                 $code = $currentPluginInfo[DefinitionInterface::LISTENER_AROUND];
                 $pluginInfo = $pluginList->getNext($type, $method, $code);
-                $pluginInstance = $this->pluginList->getPlugin($type, $code);
+                $pluginInstance = $pluginList->getPlugin($type, $code);
                 $pluginMethod = 'around' . $capMethod;
                 $result = $pluginInstance->$pluginMethod($subject, $next, ...array_values($arguments));
             } else {
