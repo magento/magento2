@@ -9,8 +9,7 @@ angular.module('start-updater', ['ngStorage'])
 
         $scope.type = $state.current.type;
         $scope.buttonText = $scope.type.charAt(0).toUpperCase() + $scope.type.slice(1);
-        $scope.successPageAction = $state.current.type + ($scope.endsWith($state.current.type, 'e')  ? 'd' : 'ed');
-        $localStorage.successPageAction = $scope.successPageAction;
+        $localStorage.successPageAction = $state.current.type;
 
         if ($localStorage.packages) {
             $scope.packages = $localStorage.packages;
@@ -53,5 +52,5 @@ angular.module('start-updater', ['ngStorage'])
             } else {
                 $state.go('root.create-backup-' + $state.current.type);
             }
-        }
+        };
     }]);

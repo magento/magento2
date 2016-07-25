@@ -94,21 +94,21 @@ main.controller('navigationController',
         };
 
         $scope.goToStart = function() {
-            if ($state.current.type === 'install') {
-                $state.go('root.install');
-            } else if ($state.current.type === 'upgrade') {
-                $state.go('root.upgrade');
-            } else if ($state.current.type === 'update') {
-                $state.go('root.update');
-            } else if ($state.current.type === 'uninstall') {
-                $state.go('root.extension');
-            } else {
-                $state.go('root.module');
-            }
+            $scope.goToAction($state.current.type);
         };
 
         $scope.goToBackup = function() {
             $state.go('root.create-backup-uninstall');
+        };
+
+        $scope.goToAction = function(action) {
+            if (['install', 'upgrade', 'update'].indexOf(action) !== -1) {
+                $state.go('root.' + action);
+            } else if (action === 'uninstall') {
+                $state.go('root.extension');
+            } else {
+                $state.go('root.module');
+            }
         };
     }
 ])
