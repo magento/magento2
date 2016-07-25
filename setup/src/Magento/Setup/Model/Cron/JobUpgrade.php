@@ -65,8 +65,11 @@ class JobUpgrade extends AbstractJob
             $this->queue->addJobs(
                 [['name' => JobFactory::JOB_STATIC_REGENERATE, 'params' => []]]
             );
+//            $this->queue->addJobs(
+//                [['name' => \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE, 'params' => ['enable' => false]]]
+//            );
             $this->queue->addJobs(
-                [['name' => \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE, 'params' => ['enable' => false]]]
+                [['name' => \Magento\Setup\Model\Cron\JobFactory::JOB_MAINTENANCE_MODE_DISABLE, 'params' => []]]
             );
             $this->params['command'] = 'setup:upgrade';
             $this->command->run(new ArrayInput($this->params), $this->output);

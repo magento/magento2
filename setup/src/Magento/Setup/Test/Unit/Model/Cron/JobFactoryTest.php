@@ -8,6 +8,8 @@ namespace Magento\Setup\Test\Unit\Model\Cron;
 use Magento\Setup\Model\Cron\JobFactory;
 use Magento\Backend\Console\Command\CacheDisableCommand;
 use Magento\Backend\Console\Command\CacheEnableCommand;
+use Magento\Setup\Console\Command\MaintenanceDisableCommand;
+use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 
 class JobFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,6 +43,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $moduleRegistryUninstaller = $this->getMock('Magento\Setup\Model\ModuleRegistryUninstaller', [], [], '', false);
         $moduleEnabler = $this->getMock('Magento\Setup\Console\Command\ModuleEnableCommand', [], [], '', false);
         $moduleDisabler = $this->getMock('Magento\Setup\Console\Command\ModuleDisableCommand', [], [], '', false);
+        $maintenanceDisabler = $this->getMock(MaintenanceDisableCommand::class, [], [], '', false);
+        $maintenanceEnabler = $this->getMock(MaintenanceEnableCommand::class, [], [], '', false);
 
         $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
         $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
@@ -54,6 +58,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             ['Magento\Setup\Model\ModuleRegistryUninstaller', $moduleRegistryUninstaller],
             ['Magento\Setup\Console\Command\ModuleDisableCommand', $moduleDisabler],
             ['Magento\Setup\Console\Command\ModuleEnableCommand', $moduleEnabler],
+            [MaintenanceDisableCommand::class, $maintenanceDisabler],
+            [MaintenanceEnableCommand::class, $maintenanceEnabler],
             ['Magento\Setup\Model\Cron\Queue', $queue]
         ];
 
@@ -135,11 +141,12 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheEnable()
     {
-        $cacheEnableCommandMock = $this->getCommandMock(CacheEnableCommand::class);
         $valueMap = [
             [
                 CacheEnableCommand::class,
-                $cacheEnableCommandMock
+                $this->getMockBuilder(CacheEnableCommand::class)
+                    ->disableOriginalConstructor()
+                    ->getMock()
             ]
         ];
 
@@ -155,11 +162,12 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheDisable()
     {
-        $cacheDisableCommandMock = $this->getCommandMock(CacheDisableCommand::class);
         $valueMap = [
             [
                 'Magento\Backend\Console\Command\CacheDisableCommand',
-                $cacheDisableCommandMock
+                $this->getMockBuilder(CacheDisableCommand::class)
+                    ->disableOriginalConstructor()
+                    ->getMock()
             ]
         ];
         $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
@@ -170,28 +178,20 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * Get command mock
-     *
-     * @param string $commandClassName
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getCommandMock($commandClassName)
+    public function testMaintenanceModeEnable()
     {
-        $commandMock = $this->getMockBuilder($commandClassName)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cliApplicationMock = $this->getMockBuilder(\Magento\Framework\Console\Cli::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $commandMock->expects($this->once())
-            ->method('getApplication')
-            ->willReturn(null);
-        $commandMock->expects($this->once())
-            ->method('setApplication')
-            ->willReturn($cliApplicationMock);
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\JobSetMaintenanceMode',
+            $this->jobFactory->create(JobFactory::JOB_MAINTENANCE_MODE_ENABLE, [])
+        );
+    }
 
-        return $commandMock;
+    public function testMaintenanceModeDisable()
+    {
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\JobSetMaintenanceMode',
+            $this->jobFactory->create(JobFactory::JOB_MAINTENANCE_MODE_DISABLE, [])
+        );
     }
 }
 
