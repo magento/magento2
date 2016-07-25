@@ -104,6 +104,7 @@ class ValidateTest extends AttributeTest
             'resultPageFactory' => $this->resultPageFactoryMock,
             'resultJsonFactory' => $this->resultJsonFactoryMock,
             'layoutFactory' => $this->layoutFactoryMock,
+            'multipleAttributeList' => ['select' => 'option']
         ]);
     }
 
@@ -152,20 +153,21 @@ class ValidateTest extends AttributeTest
      * @dataProvider provideUniqueData
      * @param array $options
      * @param boolean $isError
+     * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function testUniqueValidation(array $options, $isError)
     {
-        $countFunctionCalls = ($isError) ? 5 : 4;
+        $countFunctionCalls = ($isError) ? 6 : 5;
         $this->requestMock->expects($this->exactly($countFunctionCalls))
             ->method('getParam')
             ->willReturnMap([
-                ['frontend_label', null, 'test_frontend_label'],
+                ['frontend_label', null, null],
                 ['attribute_code', null, "test_attribute_code"],
                 ['new_attribute_set_name', null, 'test_attribute_set_name'],
                 ['option', null, $options],
                 ['message_key', null, Validate::DEFAULT_MESSAGE_KEY]
             ]);
-
+        
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn($this->attributeMock);
