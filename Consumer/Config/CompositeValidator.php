@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
  */
 class CompositeValidator implements ValidatorInterface
 {
+    use \Magento\Framework\MessageQueue\Config\SortedList;
     /**
      * @var ValidatorInterface[]
      */
@@ -25,19 +26,7 @@ class CompositeValidator implements ValidatorInterface
      */
     public function __construct(array $validators)
     {
-        $this->validators = [];
-        $validators = $this->sortValidators($validators);
-        foreach ($validators as $name => $validatorInfo) {
-            if (!isset($validatorInfo['validator']) || !($validatorInfo['validator'] instanceof ValidatorInterface)) {
-                throw new \InvalidArgumentException(
-                    new Phrase(
-                        'Validator "%name" must implement "%validatorInterface"',
-                        ['name' => $name, 'validatorInterface' => ValidatorInterface::class]
-                    )
-                );
-            }
-            $this->validators[$name] = $validatorInfo['validator'];
-        }
+        $this->validators = $this->sort($validators, ValidatorInterface::class, 'validator');
     }
 
     /**
@@ -48,35 +37,5 @@ class CompositeValidator implements ValidatorInterface
         foreach ($this->validators as $validator) {
             $validator->validate($configData);
         }
-    }
-
-    /**
-     * Sort validators according to param 'sortOrder'
-     *
-     * @param array $validators
-     * @return array
-     */
-    private function sortValidators(array $validators)
-    {
-        usort(
-            $validators,
-            function ($firstItem, $secondItem) {
-                $firstValue = 0;
-                $secondValue = 0;
-                if (isset($firstItem['sortOrder'])) {
-                    $firstValue = intval($firstItem['sortOrder']);
-                }
-
-                if (isset($secondItem['sortOrder'])) {
-                    $secondValue = intval($secondItem['sortOrder']);
-                }
-
-                if ($firstValue == $secondValue) {
-                    return 0;
-                }
-                return $firstValue < $secondValue ? -1 : 1;
-            }
-        );
-        return $validators;
     }
 }

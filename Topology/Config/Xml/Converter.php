@@ -10,6 +10,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Config\Converter\Dom\Flat as FlatConverter;
 use Magento\Framework\Config\Dom\ArrayNodeConfig;
 use Magento\Framework\Config\Dom\NodePathMatcher;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Converts MessageQueue topology config from \DOMDocument to array
@@ -36,17 +37,25 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $argumentInterpreter;
 
     /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValue;
+
+    /**
      * Initialize dependencies.
      *
      * @param BooleanUtils $booleanUtils
      * @param InterpreterInterface $argumentInterpreter
+     * @param DefaultValueProvider $defaultValueProvider
      */
     public function __construct(
         BooleanUtils $booleanUtils,
-        InterpreterInterface $argumentInterpreter
+        InterpreterInterface $argumentInterpreter,
+        DefaultValueProvider $defaultValueProvider
     ) {
         $this->booleanUtils = $booleanUtils;
         $this->argumentInterpreter = $argumentInterpreter;
+        $this->defaultValue = $defaultValueProvider;
     }
 
     /**
@@ -78,10 +87,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
 
             $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
+            $connection = $this->getAttributeValue($exchange, 'connection', $this->defaultValue->getConnection());
             $result[$name] = [
                 'name' => $name,
                 'type' => $this->getAttributeValue($exchange, 'type', 'topic'),
-                'connection' => $this->getAttributeValue($exchange, 'connection', 'amqp'),
+                'connection' => $connection,
                 'durable' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'durable', true)),
                 'autoDelete' => $this->booleanUtils->toBoolean($autoDelete),
                 'internal' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'internal', false)),

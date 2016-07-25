@@ -6,19 +6,13 @@
 namespace Magento\Framework\MessageQueue\Publisher\Config\Xml;
 
 use Magento\Framework\Stdlib\BooleanUtils;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Converts MessageQueue publishers config from \DOMDocument to array
  */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
-    /**
-     * Default exchange name
-     *
-     * @var string
-     */
-    private static $defaultExchange = 'magento';
-
     /**
      * Boolean value converter.
      *
@@ -27,13 +21,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $booleanUtils;
 
     /**
+     * Default value provider.
+     *
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
+    /**
      * Initialize dependencies.
      *
      * @param BooleanUtils $booleanUtils
+     * @param DefaultValueProvider $defaultValueProvider
      */
-    public function __construct(BooleanUtils $booleanUtils)
+    public function __construct(BooleanUtils $booleanUtils, DefaultValueProvider $defaultValueProvider)
     {
         $this->booleanUtils = $booleanUtils;
+        $this->defaultValueProvider = $defaultValueProvider;
     }
 
     /**
@@ -56,7 +59,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 if (!$connectionName) {
                     throw new \InvalidArgumentException('Connection name is missing');
                 }
-                $exchangeName = $this->getAttributeValue($connectionConfig, 'exchange', self::$defaultExchange);
+                $exchangeName = $this->getAttributeValue(
+                    $connectionConfig, 'exchange',
+                    $this->defaultValueProvider->getExchange()
+                );
                 $isDisabled = $this->getAttributeValue($connectionConfig, 'disabled', false);
                 $connections[$connectionName] = [
                     'name' => $connectionName,

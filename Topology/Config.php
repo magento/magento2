@@ -7,7 +7,8 @@ namespace Magento\Framework\MessageQueue\Topology;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Iterator;
+use \Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Iterator as ExchangeIterator;
+use \Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\Iterator as QueueIterator;
 
 /**
  * Topology config provides access data declared in etc/queue_topology.xml
@@ -17,18 +18,27 @@ class Config implements ConfigInterface
     /**
      * Exchange config data iterator.
      *
-     * @var Iterator
+     * @var ExchangeIterator
      */
-    private $iterator;
+    private $exchangeIterator;
+
+    /**
+     * Exchange config data iterator.
+     *
+     * @var ExchangeIterator
+     */
+    private $queueIterator;
 
     /**
      * Initialize dependencies.
      *
-     * @param Iterator $iterator
+     * @param ExchangeIterator $exchangeIterator
+     * @param QueueIterator $queueIterator
      */
-    public function __construct(Iterator $iterator)
+    public function __construct(ExchangeIterator $exchangeIterator, QueueIterator $queueIterator)
     {
-        $this->iterator = $iterator;
+        $this->exchangeIterator = $exchangeIterator;
+        $this->queueIterator = $queueIterator;
     }
 
     /**
@@ -36,7 +46,7 @@ class Config implements ConfigInterface
      */
     public function getExchange($name)
     {
-        $topology = $this->iterator[$name];
+        $topology = $this->exchangeIterator[$name];
         if (!$topology) {
             throw new LocalizedException(new Phrase("Exchange '%exchange' is not declared.", ['exchange' => $name]));
         }
@@ -48,6 +58,33 @@ class Config implements ConfigInterface
      */
     public function getExchanges()
     {
-        return $this->iterator;
+        return $this->exchangeIterator;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQueue($name, $connection)
+    {
+        $key = $name . '-' . $connection;
+        $queue = $this->queueIterator[$key];
+        if (!$queue) {
+            throw new LocalizedException(
+                new Phrase("Queue '%queue' is not declared in connection.",
+                    [
+                        'queue' => $name,
+                        'connection' => $connection]
+                )
+            );
+        }
+        return $queue;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getQueues()
+    {
+        return $this->queueIterator;
     }
 }

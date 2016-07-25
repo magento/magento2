@@ -5,8 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue\Consumer\Config\Xml;
 
-use Magento\Framework\MessageQueue\Config\Validator;
-use Magento\Framework\MessageQueue\ConfigInterface;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\Communication\Config\ConfigParser;
 
@@ -18,11 +17,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * @var string
      */
-    private static $defaultConnection = 'amqp';
-
-    /**
-     * @var string
-     */
     private static $defaultInstance = ConsumerInterface::class;
 
     /**
@@ -31,13 +25,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $configParser;
 
     /**
+     * Default value provider.
+     *
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
+    /**
      * Initialize dependencies.
      *
      * @param ConfigParser $configParser
+     * @param DefaultValueProvider $defaultValueProvider
      */
-    public function __construct(ConfigParser $configParser)
+    public function __construct(ConfigParser $configParser, DefaultValueProvider $defaultValueProvider)
     {
         $this->configParser = $configParser;
+        $this->defaultValueProvider = $defaultValueProvider;
     }
 
     /**
@@ -62,7 +65,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'connection' => $this->getAttributeValue(
                     $consumerNode,
                     'connection',
-                    self::$defaultConnection
+                    $this->defaultValueProvider->getConnection()
                 ),
                 'maxMessages' => $this->getAttributeValue($consumerNode, 'maxMessages')
             ];

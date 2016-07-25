@@ -12,6 +12,8 @@ use Magento\Framework\Phrase;
  */
 class CompositeReader implements ReaderInterface
 {
+    use \Magento\Framework\MessageQueue\Config\SortedList;
+
     /**
      * Config validator.
      *
@@ -35,19 +37,7 @@ class CompositeReader implements ReaderInterface
     public function __construct(ValidatorInterface $validator, array $readers)
     {
         $this->validator = $validator;
-        $this->readers = [];
-        $readers = $this->sortReaders($readers);
-        foreach ($readers as $name => $readerInfo) {
-            if (!isset($readerInfo['reader']) || !($readerInfo['reader'] instanceof ReaderInterface)) {
-                throw new \InvalidArgumentException(
-                    new Phrase(
-                        'Reader [%name] must implement %class',
-                        ['name' => $name, 'class' => ReaderInterface::class]
-                    )
-                );
-            }
-            $this->readers[] = $readerInfo['reader'];
-        }
+        $this->readers = $this->sort($readers, ReaderInterface::class, 'reader');
     }
 
     /**
@@ -64,35 +54,5 @@ class CompositeReader implements ReaderInterface
         }
         $this->validator->validate($result);
         return $result;
-    }
-
-    /**
-     * Sort readers according to param 'sortOrder'
-     *
-     * @param array $readers
-     * @return array
-     */
-    private function sortReaders(array $readers)
-    {
-        uasort(
-            $readers,
-            function ($firstItem, $secondItem) {
-                $firstValue = 0;
-                $secondValue = 0;
-                if (isset($firstItem['sortOrder'])) {
-                    $firstValue = intval($firstItem['sortOrder']);
-                }
-
-                if (isset($secondItem['sortOrder'])) {
-                    $secondValue = intval($secondItem['sortOrder']);
-                }
-
-                if ($firstValue == $secondValue) {
-                    return 0;
-                }
-                return $firstValue < $secondValue ? -1 : 1;
-            }
-        );
-        return $readers;
     }
 }

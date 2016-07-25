@@ -6,12 +6,14 @@
 namespace Magento\Framework\MessageQueue\Publisher\Config;
 
 use Magento\Framework\Phrase;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
  * Composite reader for publisher config.
  */
 class CompositeReader implements ReaderInterface
 {
+    use \Magento\Framework\MessageQueue\Config\SortedList;
     /**
      * Config validator.
      *
@@ -27,27 +29,25 @@ class CompositeReader implements ReaderInterface
     private $readers;
 
     /**
+     * @var DefaultValueProvider
+     */
+    private $defaultValueProvider;
+
+    /**
      * Initialize dependencies.
      *
      * @param ValidatorInterface $validator
+     * @param DefaultValueProvider $defaultValueProvider
      * @param array $readers
      */
-    public function __construct(ValidatorInterface $validator, array $readers)
-    {
+    public function __construct(
+        ValidatorInterface $validator,
+        DefaultValueProvider $defaultValueProvider,
+        array $readers
+    ) {
         $this->validator = $validator;
-        $this->readers = [];
-        $readers = $this->sortReaders($readers);
-        foreach ($readers as $name => $readerInfo) {
-            if (!isset($readerInfo['reader']) || !($readerInfo['reader'] instanceof ReaderInterface)) {
-                throw new \InvalidArgumentException(
-                    new Phrase(
-                        'Reader [%name] must implement %class',
-                        ['name' => $name, 'class' => ReaderInterface::class]
-                    )
-                );
-            }
-            $this->readers[] = $readerInfo['reader'];
-        }
+        $this->readers = $this->sort($readers, ReaderInterface::class, 'reader');
+        $this->defaultValueProvider = $defaultValueProvider;
     }
 
     /**
@@ -91,15 +91,16 @@ class CompositeReader implements ReaderInterface
      */
     private function addDefaultConnection(array $config)
     {
+        $defaultConnectionName = $this->defaultValueProvider->getConnection();
         $default = [
-            'name' => 'amqp',
-            'exchange' => 'magento',
+            'name' => $defaultConnectionName,
+            'exchange' => $this->defaultValueProvider->getExchange(),
             'disabled' => false,
         ];
 
         foreach ($config as &$value) {
             if (!isset($value['connections']) || empty($value['connections'])) {
-                $value['connections']['amqp'] = $default;
+                $value['connections'][$defaultConnectionName] = $default;
                 continue;
             }
 
@@ -112,39 +113,9 @@ class CompositeReader implements ReaderInterface
                 }
             }
             if (!$hasActiveConnection) {
-                $value['connections']['amqp'] = $default;
+                $value['connections'][$defaultConnectionName] = $default;
             }
         }
         return $config;
-    }
-
-    /**
-     * Sort readers according to param 'sortOrder'
-     *
-     * @param array $readers
-     * @return array
-     */
-    private function sortReaders(array $readers)
-    {
-        uasort(
-            $readers,
-            function ($firstItem, $secondItem) {
-                $firstValue = 0;
-                $secondValue = 0;
-                if (isset($firstItem['sortOrder'])) {
-                    $firstValue = intval($firstItem['sortOrder']);
-                }
-
-                if (isset($secondItem['sortOrder'])) {
-                    $secondValue = intval($secondItem['sortOrder']);
-                }
-
-                if ($firstValue == $secondValue) {
-                    return 0;
-                }
-                return $firstValue < $secondValue ? -1 : 1;
-            }
-        );
-        return $readers;
     }
 }

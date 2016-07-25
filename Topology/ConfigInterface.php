@@ -7,6 +7,7 @@ namespace Magento\Framework\MessageQueue\Topology;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItemInterface;
+use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
 
 /**
  * Topology config interface provides access data declared in etc/queue_topology.xml
@@ -28,4 +29,21 @@ interface ConfigInterface
      * @return ExchangeConfigItemInterface[]
      */
     public function getExchanges();
+
+    /**
+     * Get queue by name and connection
+     *
+     * @param string $name
+     * @param string $connection
+     * @return QueueConfigItemInterface
+     * @throws LocalizedException
+     */
+    public function getQueue($name, $connection);
+
+    /**
+     * Get list of all queues declared in the system.
+     *
+     * @return QueueConfigItemInterface[]
+     */
+    public function getQueues();
 }
