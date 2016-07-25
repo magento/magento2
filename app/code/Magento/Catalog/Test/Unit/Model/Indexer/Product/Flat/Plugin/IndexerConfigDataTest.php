@@ -42,19 +42,16 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
      * @param mixed $default
      * @param array $inputData
      * @param array $outputData
-     * @dataProvider aroundGetDataProvider
+     * @dataProvider afterGetDataProvider
      */
-    public function testAroundGet($isFlat, $path, $default, $inputData, $outputData)
+    public function testAfterGet($isFlat, $path, $default, $inputData, $outputData)
     {
-        $closureMock = function () use ($inputData) {
-            return $inputData;
-        };
         $this->_stateMock->expects($this->once())->method('isFlatEnabled')->will($this->returnValue($isFlat));
 
-        $this->assertEquals($outputData, $this->model->aroundGet($this->subjectMock, $closureMock, $path, $default));
+        $this->assertEquals($outputData, $this->model->afterGet($this->subjectMock, $inputData, $path, $default));
     }
 
-    public function aroundGetDataProvider()
+    public function afterGetDataProvider()
     {
         $flatIndexerData = [
             'indexer_id' => 'catalog_product_flat',
