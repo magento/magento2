@@ -3,8 +3,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Amqp\Model;
+
 use \Magento\Amqp\Model\Topology\ExchangeInstaller;
 use \Magento\Amqp\Model\Topology\QueueInstaller;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
@@ -91,7 +91,6 @@ class Topology
         }
         return $this->topologyConfig;
     }
-
 
     /**
      * Get exchange installer.

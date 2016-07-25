@@ -18,6 +18,7 @@ interface BindingInstallerInterface
      *
      * @param AMQPChannel $channel
      * @param BindingInterface $binding
+     * @param string $exchangeName
      * @return void
      */
     public function install(AMQPChannel $channel, BindingInterface $binding, $exchangeName);

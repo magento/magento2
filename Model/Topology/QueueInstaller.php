@@ -19,6 +19,7 @@ class QueueInstaller
      *
      * @param \PhpAmqpLib\Channel\AMQPChannel $channel
      * @param QueueConfigItemInterface $queue
+     * @return void
      */
     public function install(\PhpAmqpLib\Channel\AMQPChannel $channel, QueueConfigItemInterface $queue)
     {

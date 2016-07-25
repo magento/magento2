@@ -34,6 +34,7 @@ class ExchangeInstaller
      *
      * @param \PhpAmqpLib\Channel\AMQPChannel $channel
      * @param ExchangeConfigItemInterface $exchange
+     * @return void
      */
     public function install(\PhpAmqpLib\Channel\AMQPChannel $channel, ExchangeConfigItemInterface $exchange)
     {
