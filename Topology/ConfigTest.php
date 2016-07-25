@@ -45,7 +45,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $bindingArguments = $binding->getArguments();
         $expectedArguments = ['argument1' => 'value'];
         $this->assertEquals($expectedArguments, $bindingArguments);
-
     }
 
     public function testGetExchangeByNameWithDefaultValues()
