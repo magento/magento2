@@ -14,6 +14,7 @@ use Magento\Framework\Phrase;
 class CompositeValidator implements ValidatorInterface
 {
     use \Magento\Framework\MessageQueue\Config\SortedList;
+
     /**
      * @var ValidatorInterface[]
      */

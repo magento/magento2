@@ -15,6 +15,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
 class CompositeReader implements ReaderInterface
 {
     use \Magento\Framework\MessageQueue\Config\SortedList;
+
     /**
      * @var ValidatorInterface
      */

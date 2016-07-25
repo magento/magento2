@@ -27,8 +27,8 @@ class DefaultValueProvider
     /**
      * Initialize dependencies.
      *
-     * @param $connection
-     * @param $exchange
+     * @param string $connection
+     * @param string $exchange
      */
     public function __construct($connection = 'amqp', $exchange = 'magento')
     {

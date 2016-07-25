@@ -8,7 +8,6 @@ namespace Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem;
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem;
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemFactory;
 
-
 /**
  * Queue config item iterator.
  */

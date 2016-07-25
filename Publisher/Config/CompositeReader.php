@@ -14,6 +14,7 @@ use Magento\Framework\MessageQueue\DefaultValueProvider;
 class CompositeReader implements ReaderInterface
 {
     use \Magento\Framework\MessageQueue\Config\SortedList;
+
     /**
      * Config validator.
      *

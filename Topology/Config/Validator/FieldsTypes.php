@@ -81,8 +81,22 @@ class FieldsTypes implements ValidatorInterface
             }
         }
 
+        $this->validateBindings($exchangeName, $exchangeConfig, $bindingFields);
+    }
+
+    /**
+     * Validate binding config.
+     *
+     * @param string $exchangeName
+     * @param array $exchangeConfig
+     * @param array $bindingFields
+     * @return void
+     * @throws \LogicException
+     */
+    private function validateBindings($exchangeName, $exchangeConfig, $bindingFields)
+    {
         foreach ($bindingFields as $bindFieldName => $bindExpectedType) {
-            foreach ($exchangeConfig['bindings'] as $bindingId => $bindingConfig) {
+            foreach ($exchangeConfig['bindings'] as $bindingConfig) {
                 $actualType = gettype($bindingConfig[$bindFieldName]);
                 if ($actualType !== $bindExpectedType['type']) {
                     throw new \LogicException(

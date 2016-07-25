@@ -3,12 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem;
+
 use Magento\Framework\MessageQueue\Topology\Config\Data;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
+use Magento\Framework\Phrase;
 
 class DataMapper
 {
@@ -51,6 +52,11 @@ class DataMapper
         $this->queueNameBuilder = $queueNameBuilder;
     }
 
+    /**
+     * Get mapped config data.
+     *
+     * @return array
+     */
     public function getMappedData()
     {
         if (null === $this->mappedData) {
@@ -98,7 +104,7 @@ class DataMapper
             $topic = $this->communicationConfig->getTopic($topicName);
             $isSync = (bool)$topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
         } catch (LocalizedException $e) {
-            throw new LocalizedException(__('Error while checking if topic is synchronous'));
+            throw new LocalizedException(new Phrase('Error while checking if topic is synchronous'));
         }
         return $isSync;
     }

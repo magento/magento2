@@ -70,10 +70,12 @@ class Config implements ConfigInterface
         $queue = $this->queueIterator[$key];
         if (!$queue) {
             throw new LocalizedException(
-                new Phrase("Queue '%queue' is not declared in connection.",
+                new Phrase(
+                    "Queue '%queue' is not declared in connection.",
                     [
                         'queue' => $name,
-                        'connection' => $connection]
+                        'connection' => $connection
+                    ]
                 )
             );
         }
