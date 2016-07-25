@@ -11,8 +11,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Console\Command\ModuleDisableCommand;
 use Magento\Setup\Console\Command\ModuleEnableCommand;
 use Magento\Setup\Console\Command\UpgradeCommand;
-use Symfony\Component\Console\Command\Command;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Setup\Console\Command\MaintenanceDisableCommand;
+use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 
 /**
  * Factory class to create jobs
@@ -32,6 +33,8 @@ class JobFactory
     const JOB_STATIC_REGENERATE = 'setup:static:regenerate';
     const JOB_ENABLE_CACHE = 'setup:cache:enable';
     const JOB_DISABLE_CACHE = 'setup:cache:disable';
+    const JOB_MAINTENANCE_MODE_ENABLE = 'setup:maintenance:enable';
+    const JOB_MAINTENANCE_MODE_DISABLE = 'setup:maintenance:disable';
 
     /**
      * @var ServiceLocatorInterface
@@ -67,10 +70,8 @@ class JobFactory
         $objectManager = $objectManagerProvider->get();
         switch ($name) {
             case self::JOB_UPGRADE:
-                $cmd = $this->serviceLocator->get(UpgradeCommand::class);
-                $this->prepareCommand($objectManager, $cmd);
                 return new JobUpgrade(
-                    $cmd,
+                    $this->serviceLocator->get(UpgradeCommand::class),
                     $objectManagerProvider,
                     $streamOutput,
                     $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
@@ -122,10 +123,8 @@ class JobFactory
                 );
                 break;
             case self::JOB_MODULE_ENABLE:
-                $cmd = $this->serviceLocator->get(ModuleEnableCommand::class);
-                $this->prepareCommand($objectManager, $cmd);
                 return new JobModule(
-                    $cmd,
+                    $this->serviceLocator->get(ModuleEnableCommand::class),
                     $objectManagerProvider,
                     $streamOutput,
                     $cronStatus,
@@ -134,10 +133,8 @@ class JobFactory
                 );
                 break;
             case self::JOB_MODULE_DISABLE:
-                $cmd = $this->serviceLocator->get(ModuleDisableCommand::class);
-                $this->prepareCommand($objectManager, $cmd);
                 return new JobModule(
-                    $cmd,
+                    $this->serviceLocator->get(ModuleDisableCommand::class),
                     $objectManagerProvider,
                     $streamOutput,
                     $cronStatus,
@@ -146,10 +143,8 @@ class JobFactory
                 );
                 break;
             case self::JOB_ENABLE_CACHE:
-                $cmd = $objectManager->get(CacheEnableCommand::class);
-                $this->prepareCommand($objectManager, $cmd);
                 return new JobSetCache(
-                    $cmd,
+                    $objectManager->get(CacheEnableCommand::class),
                     $objectManagerProvider,
                     $streamOutput,
                     $cronStatus,
@@ -158,36 +153,37 @@ class JobFactory
                 );
                 break;
             case self::JOB_DISABLE_CACHE:
-                $cmd = $objectManager->get(CacheDisableCommand::class);
-                $this->prepareCommand($objectManager, $cmd);
                 return new JobSetCache(
-                    $cmd,
+                    $objectManager->get(CacheDisableCommand::class),
                     $objectManagerProvider,
                     $streamOutput,
                     $cronStatus,
                     $name
                 );
                 break;
+            case self::JOB_MAINTENANCE_MODE_ENABLE:
+                return new JobSetMaintenanceMode(
+                    $this->serviceLocator->get(MaintenanceEnableCommand::class),
+                    $objectManagerProvider,
+                    $streamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
+                break;
+            case self::JOB_MAINTENANCE_MODE_DISABLE:
+                return new JobSetMaintenanceMode(
+                    $this->serviceLocator->get(MaintenanceDisableCommand::class),
+                    $objectManagerProvider,
+                    $streamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
+                break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
                 break;
-        }
-    }
-
-    /**
-     * Prepare command, set application if needed
-     *
-     * @param ObjectManagerInterface $objectManager
-     * @param Command $command
-     */
-    private function prepareCommand(
-        ObjectManagerInterface $objectManager,
-        Command $command
-    ) {
-        if (null === $command->getApplication()) {
-            $command->setApplication(
-                $objectManager->get(\Magento\Framework\Console\Cli::class)
-            );
         }
     }
 }
