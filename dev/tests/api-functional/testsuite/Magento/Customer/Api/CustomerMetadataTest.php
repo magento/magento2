@@ -74,7 +74,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::REQUIRED         => true,
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [],
-                    AttributeMetadata::FRONTEND_CLASS   => ' required-entry',
+                    AttributeMetadata::FRONTEND_CLASS   => 'required-entry',
                     AttributeMetadata::USER_DEFINED     => false,
                     AttributeMetadata::SORT_ORDER       => 40,
                     AttributeMetadata::FRONTEND_LABEL   => 'First Name',
@@ -134,7 +134,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::OPTIONS          => [
                         ['label' => 'Main Website', 'value' => '1'],
                     ],
-                    AttributeMetadata::FRONTEND_CLASS   => ' required-entry',
+                    AttributeMetadata::FRONTEND_CLASS   => 'required-entry',
                     AttributeMetadata::USER_DEFINED     => false,
                     AttributeMetadata::SORT_ORDER       => 10,
                     AttributeMetadata::FRONTEND_LABEL   => 'Associate to Website',

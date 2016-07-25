@@ -30,9 +30,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['bad-code', ''],
-            ['city', ' required-entry'],
+            ['city', 'required-entry'],
             ['company', ''],
-            ['country_id', ' required-entry'],
+            ['country_id', 'required-entry'],
             ['fax', ''],
             ['firstname', 'required-entry'],
             ['lastname', 'required-entry'],
