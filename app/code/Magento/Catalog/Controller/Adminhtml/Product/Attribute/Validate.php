@@ -23,6 +23,11 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     protected $layoutFactory;
 
     /**
+     * @var array
+     */
+    private $multipleAttributeList;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -31,6 +36,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param array $multipleAttributeList
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -38,11 +44,13 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        array $multipleAttributeList = []
     ) {
         parent::__construct($context, $attributeLabelCache, $coreRegistry, $resultPageFactory);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->multipleAttributeList = $multipleAttributeList;
     }
 
     /**
@@ -90,7 +98,15 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
         }
 
-        $this->checkUniqueOption($response, $this->getRequest()->getParam("option"));
+        $multipleOption = $this->getRequest()->getParam("frontend_input");
+        $multipleOption = is_null($multipleOption) ? 'select' : $multipleOption;
+
+        if (isset($this->multipleAttributeList[$multipleOption]) && !is_null($multipleOption)) {
+            $this->checkUniqueOption(
+                $response,
+                $this->getRequest()->getParam($this->multipleAttributeList[$multipleOption])
+            );
+        }
 
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
     }
