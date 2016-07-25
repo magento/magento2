@@ -6,13 +6,13 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Sales\Model\Order\OrderStateResolver;
+use Magento\Sales\Model\Order\StateResolver;
 use Magento\Sales\Model\Order;
 
 /**
  * Class StateCheckerTest
  */
-class StateCheckerTest extends \PHPUnit_Framework_TestCase
+class StateResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Order
@@ -20,7 +20,7 @@ class StateCheckerTest extends \PHPUnit_Framework_TestCase
     private $orderMock;
 
     /**
-     * @var OrderStateResolver
+     * @var StateResolver
      */
     private $orderStateResolver;
 
@@ -30,7 +30,7 @@ class StateCheckerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderStateResolver = new OrderStateResolver();
+        $this->orderStateResolver = new StateResolver();
     }
 
     public function testStateComplete()
@@ -65,7 +65,7 @@ class StateCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testStateProcessing()
     {
-        $arguments = [OrderStateResolver::IN_PROGRESS];
+        $arguments = [StateResolver::IN_PROGRESS];
         $this->orderMock->expects($this->once())
             ->method('isCanceled')
             ->willReturn(true);

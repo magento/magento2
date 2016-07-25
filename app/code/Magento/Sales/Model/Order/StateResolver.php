@@ -15,7 +15,7 @@ use Magento\Sales\Model\Order;
 /**
  * Class OrderStateResolver
  */
-class OrderStateResolver implements OrderStateResolverInterface
+class StateResolver implements OrderStateResolverInterface
 {
     /**
      * @param OrderInterface $order
