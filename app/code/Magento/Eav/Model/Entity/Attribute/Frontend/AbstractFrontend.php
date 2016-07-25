@@ -155,11 +155,13 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
         if ($inputRuleClass) {
             $out[] = $inputRuleClass;
         }
-        if (!empty($out)) {
-            $out = implode(' ', $out);
-        } else {
-            $out = '';
+
+        $textLengthValidateClasses = $this->getTextLengthValidateClasses();
+        if (!empty($textLengthValidateClasses)) {
+            $out[] = implode(' ', $textLengthValidateClasses);
         }
+
+        $out = !empty($out) ? trim(implode(' ', $out)) : '';
         return $out;
     }
 
@@ -195,6 +197,31 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
             }
         }
         return $class;
+    }
+
+    /**
+     * Retrieve validation classes by min_text_length and max_text_length rules
+     *
+     * @return array
+     */
+    private function getTextLengthValidateClasses()
+    {
+        $classes = [];
+
+        if ($this->_getInputValidateClass()) {
+            $validateRules = $this->getAttribute()->getValidateRules();
+            if (!empty($validateRules['min_text_length'])) {
+                $classes[] = 'minimum-length-' . $validateRules['min_text_length'];
+            }
+            if (!empty($validateRules['max_text_length'])) {
+                $classes[] = 'maximum-length-' . $validateRules['max_text_length'];
+            }
+            if (!empty($classes)) {
+                $classes[] = 'validate-length';
+            }
+        }
+
+        return $classes;
     }
 
     /**
