@@ -21,40 +21,8 @@
                     <span>{{total}}</span> products
                 </div>
             </div>
-            <div class="col-xs-9 admin__data-grid-pager-wrap">
-                <select id="perPage" class="admin__control-select" ng-model="rowLimit">
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                </select>
-                <label class="admin__control-support-text">per page</label>
-                <div class="admin__data-grid-pager">
-                    <button class="action-previous"
-                            ng-disabled="currentPage == 1"
-                            ng-click="currentPage = currentPage - 1;"
-                            type="button"
-                    >
-                        <span>Previous page</span>
-                    </button>
-                    <input id="pageCurrent"
-                           class="admin__control-text"
-                           type="number"
-                           value="{{currentPage}}"
-                           ng-model="currentPage"
-                    >
-                    <label class="admin__control-support-text" for="pageCurrent">
-                        of {{numberOfPages}}
-                    </label>
-                    <button class="action-next"
-                            ng-disabled="currentPage >= numberOfPages"
-                            ng-click="currentPage = currentPage + 1;"
-                            type="button"
-                    >
-                        <span>Next page</span>
-                    </button>
-                </div>
+            <div class="col-xs-9 admin__data-grid-pager-wrap"
+                 ng-include="'/setup/pub/magento/setup/view/pagination.html'">
             </div>
         </div>
     </div>
