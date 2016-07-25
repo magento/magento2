@@ -34,7 +34,9 @@ class PaymentAdapter implements PaymentAdapterInterface
         \Magento\Sales\Api\Data\InvoiceInterface $invoice,
         $capture
     ) {
-        $this->registerInvoiceItems($invoice->getItems());
+        $this->calculateOrderItemsTotals(
+            $invoice->getItems()
+        );
 
         if ($this->canCapture($order, $invoice)) {
             if ($capture) {
@@ -67,14 +69,13 @@ class PaymentAdapter implements PaymentAdapterInterface
     }
 
     /**
-     * Registers Invoice in given Order (calculates totals of order
-     * items according to invoice items).
+     * Calculates totals of Order Items according to given Invoice Items.
      *
      * @param \Magento\Sales\Api\Data\InvoiceItemInterface[] $items
      *
      * @return void
      */
-    private function registerInvoiceItems(array $items)
+    private function calculateOrderItemsTotals(array $items)
     {
         foreach ($items as $item) {
             if ($item->isDeleted()) {
