@@ -28,16 +28,26 @@ class PackagesDataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->composerInformation = $this->getMock('\Magento\Framework\Composer\ComposerInformation', [], [], '', false);
+        $this->composerInformation = $this->getMock(ComposerInformation::class, [], [], '', false);
         $this->composerInformation->expects($this->any())->method('getInstalledMagentoPackages')->willReturn(
             [
-                'magento/package-1' => ['name' => 'magento/package-1', 'type' => 'magento2-module', 'version'=> '1.0.0'],
-                'magento/package-2' => ['name' => 'magento/package-2', 'type' => 'magento2-module', 'version'=> '1.0.1']
+                'magento/package-1' => [
+                    'name' => 'magento/package-1',
+                    'type' => 'magento2-module',
+                    'version'=> '1.0.0'
+                ],
+                'magento/package-2' => [
+                    'name' => 'magento/package-2',
+                    'type' => 'magento2-module',
+                    'version'=> '1.0.1'
+                ]
             ]
         );
 
-        $this->composerInformation->expects($this->any())->method('getRootRepositories')->willReturn(['repo1', 'repo2']);
-        $this->composerInformation->expects($this->any())->method('getPackagesTypes')->willReturn(['magento2-module']);
+        $this->composerInformation->expects($this->any())->method('getRootRepositories')
+            ->willReturn(['repo1', 'repo2']);
+        $this->composerInformation->expects($this->any())->method('getPackagesTypes')
+            ->willReturn(['magento2-module']);
         $rootPackage = $this->getMock(RootPackage::class, [], ['magento/project', '2.1.0', '2']);
         $rootPackage->expects($this->any())
             ->method('getRequires')
