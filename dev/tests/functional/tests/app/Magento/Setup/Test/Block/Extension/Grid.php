@@ -134,7 +134,7 @@ class Grid extends AbstractGrid
         $this->_rootElement->waitUntil(
             function () {
                 //TODO: Sleep will be removed after MAGETWO-52137
-                sleep(3);
+                sleep(5);
                 $message = $this->_rootElement->find($this->notFoundMessage)->isVisible();
                 $grid = $this->_rootElement->find($this->dataGrid)->isVisible();
 
