@@ -108,7 +108,7 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('overlappingConsumerDeclaration', $consumer->getName());
         $this->assertEquals('consumer.config.queue', $consumer->getQueue());
-        $this->assertEquals('consumer.config.connection', $consumer->getConnection());
+        $this->assertEquals('amqp', $consumer->getConnection());
         $this->assertEquals('Magento\Framework\MessageQueue\ConsumerInterface', $consumer->getConsumerInstance());
         $this->assertEquals(null, $consumer->getMaxMessages());
 

@@ -43,7 +43,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($publisher->isDisabled(), 'Incorrect publisher state');
         /** @var \Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface $connection */
         $connection = $publisher->getConnection();
-        $this->assertEquals('amqp1', $connection->getName(), 'Incorrect connection name');
+        $this->assertEquals('amqp', $connection->getName(), 'Incorrect connection name');
         $this->assertEquals('magento2', $connection->getExchange(), 'Incorrect exchange name');
         $this->assertFalse($connection->isDisabled(), 'Incorrect connection status');
     }

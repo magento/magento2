@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $exchange = $config->getExchange('magento-topic-based-exchange1');
         $this->assertEquals('magento-topic-based-exchange1', $exchange->getName());
         $this->assertEquals('topic', $exchange->getType());
-        $this->assertEquals('customConnection', $exchange->getConnection());
+        $this->assertEquals('amqp', $exchange->getConnection());
         $exchangeArguments = $exchange->getArguments();
         $expectedArguments = ['alternate-exchange' => 'magento-log-exchange'];
         $this->assertEquals($expectedArguments, $exchangeArguments);

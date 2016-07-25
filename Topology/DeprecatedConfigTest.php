@@ -65,7 +65,7 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
         $topology = $config->getExchange('overlappingDeprecatedExchange');
         $this->assertEquals('overlappingDeprecatedExchange', $topology->getName());
         $this->assertEquals('topic', $topology->getType());
-        $this->assertEquals('overlappingDeprecatedConnection', $topology->getConnection());
+        $this->assertEquals('db', $topology->getConnection());
         $this->assertEquals(true, $topology->isDurable());
         $this->assertEquals(false, $topology->isAutoDelete());
         $this->assertEquals(false, $topology->isInternal());
