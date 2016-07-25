@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
-    .controller('installExtensionGridController', ['$scope', '$http', 'ngDialog', '$localStorage',
-        function ($scope, $http, ngDialog, $localStorage) {
+    .controller('installExtensionGridController', ['$scope', '$http', '$localStorage', 'authService',
+        function ($scope, $http, $localStorage, authService) {
 
         $http.get('index.php/installExtensionGrid/extensions').success(function(data) {
             $scope.error = false;
@@ -26,10 +26,6 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
             $scope.start = 0;
             $scope.numberOfPages = Math.ceil($scope.total / $scope.rowLimit);
         });
-
-        $scope.open = function() {
-            ngDialog.open({ scope: $scope, template: 'authDialog', showClose: false, controller: 'authDialogController' });
-        };
 
         $scope.recalculatePagination = function(currentPage, rowLimit) {
             $scope.currentPage = parseInt(currentPage, 10);
@@ -107,66 +103,66 @@ angular.module('install-extension-grid', ['ngStorage', 'clickOut'])
 
         $scope.isHiddenSpinner = true;
         $scope.installAll = function() {
-            $scope.checkAuth();
-            $localStorage.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
-            if ($localStorage.isMarketplaceAuthorized === false) {
-                $scope.open();
-            } else {
-                if ($scope.getObjectSize($scope.selectedExtensions) > 0) {
-                    $scope.error = false;
-                    $scope.errorMessage = '';
-                    $localStorage.packages = $scope.selectedExtensions;
-                } else {
-                    $scope.error = true;
-                    $scope.errorMessage = 'Please select at least one extension';
-                }
+            $scope.isHiddenSpinner = false;
+            authService.checkAuth({
+                success: function(response) {
+                    $scope.isHiddenSpinner = true;
+                    if ($scope.getObjectSize($scope.selectedExtensions) > 0) {
+                        $scope.error = false;
+                        $scope.errorMessage = '';
+                        $localStorage.packages = $scope.selectedExtensions;
+                    } else {
+                        $scope.error = true;
+                        $scope.errorMessage = 'Please select at least one extension';
+                    }
 
-                if (!$scope.error) {
-                    $scope.nextState();
+                    if (!$scope.error) {
+                        $scope.nextState();
+                    }
+                },
+                fail: function(response) {
+                    authService.openAuthDialog($scope);
+                },
+                error: function() {
+                    $scope.isHiddenSpinner = true;
+                    $scope.error = true;
+                    $scope.errorMessage = 'Internal server error';
                 }
-            }
+            });
         };
 
         $scope.install = function(extension) {
-            $scope.checkAuth();
-            $localStorage.isMarketplaceAuthorized = typeof $localStorage.isMarketplaceAuthorized !== 'undefined' ? $localStorage.isMarketplaceAuthorized : false;
-            if ($localStorage.isMarketplaceAuthorized === false) {
-                $scope.open();
-            } else {
-                if (extension === 'undefined') {
+            $scope.isHiddenSpinner = false;
+            authService.checkAuth({
+                success: function(response) {
+                    $scope.isHiddenSpinner = true;
+                    if (extension === 'undefined') {
+                        $scope.error = true;
+                        $scope.errorMessage = 'No extensions for install';
+                    } else {
+                        $localStorage.packages = [
+                            {
+                                name: extension.name,
+                                version: extension.version
+                            }
+                        ];
+                        $localStorage.moduleName = extension.name;
+                        $scope.error = false;
+                        $scope.errorMessage = '';
+                    }
+
+                    if (!$scope.error) {
+                        $scope.nextState();
+                    }
+                },
+                fail: function(response) {
+                    authService.openAuthDialog($scope);
+                },
+                error: function() {
+                    $scope.isHiddenSpinner = true;
                     $scope.error = true;
-                    $scope.errorMessage = 'No extensions for install';
-                } else {
-                    $localStorage.packages = [
-                        {
-                            name: extension.name,
-                            version: extension.version
-                        }
-                    ];
-                    $localStorage.moduleName = extension.name;
-                    $scope.error = false;
-                    $scope.errorMessage = '';
+                    $scope.errorMessage = 'Internal server error';
                 }
-
-                if (!$scope.error) {
-                    $scope.nextState();
-                }
-            }
-        };
-
-        $scope.checkAuth = function() {
-            $http.post('index.php/marketplace/check-auth', [])
-            .success(function (response) {
-                if (response.success) {
-                    $localStorage.isMarketplaceAuthorized = true;
-                } else {
-                    $localStorage.isMarketplaceAuthorized = false;
-                }
-            })
-            .error(function() {
-                $localStorage.isMarketplaceAuthorized = false;
-                $scope.error = true;
-                $scope.errorMessage = 'Internal server error';
             });
         };
     }]);

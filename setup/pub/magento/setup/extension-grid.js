@@ -6,20 +6,14 @@
 'use strict';
 
 angular.module('extension-grid', ['ngStorage'])
-    .controller('extensionGridController', ['$rootScope', '$scope', '$http', '$localStorage', '$state', 'titleService',
-        function ($rootScope, $scope, $http, $localStorage, $state, titleService) {
+    .controller('extensionGridController', [
+        '$rootScope', '$scope', '$http', '$localStorage', '$state','titleService', 'authService',
+        function ($rootScope, $scope, $http, $localStorage, $state, titleService, authService) {
+            authService.checkMarketplaceAuthorized();
             $rootScope.extensionsProcessed = false;
             $scope.syncError = false;
             $scope.currentPage = 1;
-            $rootScope.isMarketplaceAuthorized = typeof $rootScope.isMarketplaceAuthorized !== 'undefined' ? $rootScope.isMarketplaceAuthorized : false;
 
-            $scope.auth = function () {
-                if ($rootScope.isMarketplaceAuthorized == false) {
-                    $state.go('root.extension-auth');
-                }
-            };
-
-            $scope.auth();
             $http.get('index.php/extensionGrid/extensions').success(function (data) {
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
@@ -53,6 +47,15 @@ angular.module('extension-grid', ['ngStorage'])
             $scope.isOutOfSync = false;
             $scope.isHiddenSpinner = true;
             $scope.selectedExtension = null;
+
+            $scope.reset = function () {
+                authService.reset({
+                    success: function() {
+                        $scope.logout = true;
+                        authService.checkMarketplaceAuthorized();
+                    }
+                })
+            };
 
             $scope.isActiveActionsCell = function(extension) {
                 return $scope.selectedExtension === extension;
@@ -139,19 +142,6 @@ angular.module('extension-grid', ['ngStorage'])
                 titleService.setTitle('uninstall', extension.moduleName ? extension.moduleName : extension.name);
                 $localStorage.componentType = extension.type;
                 $state.go('root.readiness-check-uninstall');
-            };
-
-            $scope.reset = function () {
-                $http.post('index.php/marketplace/remove-credentials', [])
-                    .success(function (response) {
-                        if (response.success) {
-                            $scope.logout = true;
-                            $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
-                            $scope.auth();
-                        }
-                    })
-                    .error(function (data) {
-                    });
             };
         }
     ]);

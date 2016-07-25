@@ -5,8 +5,8 @@
 
 'use strict';
 angular.module('marketplace-credentials', ['ngStorage'])
-    .controller('MarketplaceCredentialsController', ['$scope', '$state', '$http', '$localStorage', '$rootScope', '$sce',
-        function ($scope, $state, $http, $localStorage, $rootScope, $sce) {
+    .controller('MarketplaceCredentialsController', ['$scope', '$state', '$http', '$localStorage', '$rootScope', '$sce', 'authService',
+        function ($scope, $state, $http, $localStorage, $rootScope, $sce, authService) {
             $scope.showCredsForm = false;
             $scope.user = {
                 username : $localStorage.marketplaceUsername ? $localStorage.marketplaceUsername : '',
@@ -17,29 +17,24 @@ angular.module('marketplace-credentials', ['ngStorage'])
             $scope.errors = false;
 
             $scope.checkAuth = function() {
-                if (!$rootScope.authRequest || !$rootScope.isMarketplaceAuthorized) {
+                if (!$rootScope.isMarketplaceAuthorized) {
                     $scope.isHiddenSpinner = false;
-                    $http.post('index.php/marketplace/check-auth', [])
-                        .success(function (response) {
-                            if (response.success) {
-                                $localStorage.marketplaceUsername = $scope.user.username = response.data.username;
-                                $localStorage.isMarketplaceAuthorized = true;
-                                $scope.nextState();
-                            } else {
-                                $localStorage.isMarketplaceAuthorized = false;
-                                $scope.showCredsForm = true;
-                            }
+                    authService.checkAuth({
+                        success: function(response) {
                             $scope.isHiddenSpinner = true;
-                            $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
-                            $rootScope.authRequest = true;
-                        })
-                        .error(function() {
+                            $scope.user.username = response.data.username;
+                            $scope.nextState();
+                        },
+                        fail: function(response) {
                             $scope.isHiddenSpinner = true;
-                            $localStorage.isMarketplaceAuthorized = false;
+                            $scope.showCredsForm = true;
+                        },
+                        error: function() {
+                            $scope.isHiddenSpinner = true;
                             $scope.errors = true;
-                        });
+                        }
+                    });
                 } else {
-                    $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
                     $scope.nextState();
                 }
             };
@@ -65,29 +60,26 @@ angular.module('marketplace-credentials', ['ngStorage'])
             $scope.saveAuthJson = function () {
                 if ($scope.auth.$valid) {
                     $scope.isHiddenSpinner = false;
-                    $http.post('index.php/marketplace/save-auth-json', $scope.user)
-                        .success(function (data) {
-                            $scope.saveAuthJson.result = data;
-                            if ($scope.saveAuthJson.result.success) {
-                                $scope.logout = false;
-                                $localStorage.isMarketplaceAuthorized = true;
-                                $scope.errors = false;
-                                $scope.nextState();
-                            } else {
-                                $localStorage.isMarketplaceAuthorized = false;
-                                $scope.errors = true;
-                            }
+                    authService.saveAuthJson({
+                        user: $scope.user,
+                        success: function(response) {
                             $scope.isHiddenSpinner = true;
-                            $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
-                            $localStorage.marketplaceUsername = $scope.user.username;
-                        })
-                        .error(function (data) {
+                            $scope.saveAuthJson.result = response;
+                            $scope.logout = false;
+                            $scope.errors = false;
+                            $scope.nextState();
+                        },
+                        fail: function(response) {
                             $scope.isHiddenSpinner = true;
-                            $scope.saveAuthJson.failed = data;
-                            $localStorage.isMarketplaceAuthorized = false;
+                            $scope.saveAuthJson.result = response;
                             $scope.errors = true;
-
-                        });
+                        },
+                        error: function(data) {
+                            $scope.isHiddenSpinner = true;
+                            $scope.errors = true;
+                            $scope.saveAuthJson.failed = data;
+                        }
+                    });
                 } else {
                     $scope.validate();
                 }
