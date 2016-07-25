@@ -18,10 +18,11 @@ interface BulkManagementInterface
      * @param string $bulkUuid
      * @param OperationInterface[] $operations
      * @param string $description
+     * @param string $entityType
      * @param int $userId
      * @return boolean
      */
-    public function scheduleBulk($bulkUuid, array $operations, $description, $userId = null);
+    public function scheduleBulk($bulkUuid, array $operations, $description, $entityType, $userId = null);
     
     /**
      * Delete bulk
