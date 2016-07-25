@@ -138,8 +138,7 @@ class Grid extends AbstractGrid
                 $message = $this->_rootElement->find($this->notFoundMessage)->isVisible();
                 $grid = $this->_rootElement->find($this->dataGrid)->isVisible();
 
-                return ($message && !$grid)
-                    || (!$message && $grid);
+                return ($message && !$grid) || (!$message && $grid);
             }
         );
         
