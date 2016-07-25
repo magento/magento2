@@ -57,4 +57,61 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $arguments);
         $this->assertCount(0, $arguments);
     }
+
+    public function testGetTopologyOverlapWithQueueConfig()
+    {
+        /** @var \Magento\Framework\MessageQueue\Topology\ConfigInterface $config */
+        $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Topology\ConfigInterface::class);
+        $topology = $config->getExchange('overlappingDeprecatedExchange');
+        $this->assertEquals('overlappingDeprecatedExchange', $topology->getName());
+        $this->assertEquals('topic', $topology->getType());
+        $this->assertEquals('overlappingDeprecatedConnection', $topology->getConnection());
+        $this->assertEquals(true, $topology->isDurable());
+        $this->assertEquals(false, $topology->isAutoDelete());
+        $this->assertEquals(false, $topology->isInternal());
+
+        $arguments = $topology->getArguments();
+        $this->assertInternalType('array', $arguments);
+        $this->assertCount(0, $arguments);
+
+        // Verify bindings
+        $bindings = $topology->getBindings();
+        $this->assertInstanceOf(BindingIterator::class, $bindings);
+        $this->assertCount(3, $bindings);
+
+        // Note that connection was changed for this binding during merge with topology config
+        // since we do not support exchanges with the same names on different connections
+        $bindingId = 'queue--consumer.config.queue--overlapping.topic.declaration';
+        $this->assertArrayHasKey($bindingId, $bindings);
+        $binding = $bindings[$bindingId];
+        $this->assertEquals('queue', $binding->getDestinationType());
+        $this->assertEquals('consumer.config.queue', $binding->getDestination());
+        $this->assertEquals(false, $binding->isDisabled());
+        $this->assertEquals('overlapping.topic.declaration', $binding->getTopic());
+        $arguments = $binding->getArguments();
+        $this->assertInternalType('array', $arguments);
+        $this->assertCount(0, $arguments);
+
+        $bindingId = 'binding1';
+        $this->assertArrayHasKey($bindingId, $bindings);
+        $binding = $bindings[$bindingId];
+        $this->assertEquals('queue', $binding->getDestinationType());
+        $this->assertEquals('topology.config.queue', $binding->getDestination());
+        $this->assertEquals(false, $binding->isDisabled());
+        $this->assertEquals('overlapping.topic.declaration', $binding->getTopic());
+        $arguments = $binding->getArguments();
+        $this->assertInternalType('array', $arguments);
+        $this->assertCount(0, $arguments);
+
+        $bindingId = 'binding2';
+        $this->assertArrayHasKey($bindingId, $bindings);
+        $binding = $bindings[$bindingId];
+        $this->assertEquals('queue', $binding->getDestinationType());
+        $this->assertEquals('topology.config.queue', $binding->getDestination());
+        $this->assertEquals(false, $binding->isDisabled());
+        $this->assertEquals('deprecated.config.async.string.topic', $binding->getTopic());
+        $arguments = $binding->getArguments();
+        $this->assertInternalType('array', $arguments);
+        $this->assertCount(0, $arguments);
+    }
 }
