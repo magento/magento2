@@ -53,8 +53,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             /** Valid configurations */
             'valid' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="100"/>
-                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="connection2"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
                     <consumer name="consumer5" queue="queue4"/>
@@ -63,8 +63,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'non unique consumer name' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="100"/>
-                    <consumer name="consumer1" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="connection2"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer1" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
                     <consumer name="consumer5" queue="queue4"/>
@@ -75,8 +75,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'invalid handler format' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClass1::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="100"/>
-                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethod2" consumerInstance="consumerClass2" connection="connection2"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClass1::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethod2" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
                     <consumer name="consumer5" queue="queue4"/>
@@ -90,8 +90,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'invalid maxMessages format' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="ABC"/>
-                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="connection2"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="ABC"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
                     <consumer name="consumer5" queue="queue4"/>
@@ -102,8 +102,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'unexpected element' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="100"/>
-                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="connection2"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
                     <unexpected name="consumer5" queue="queue4"/>
@@ -114,8 +114,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ],
             'unexpected attribute' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="100"/>
-                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="connection2"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
                     <consumer name="consumer5" queue="queue4" unexpected=""/>

@@ -21,16 +21,31 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     protected $configParserMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $defaultConfigProviderMock;
+
+    /**
      * Initialize parameters
      */
     protected function setUp()
     {
+        $this->defaultConfigProviderMock = $this->getMock(
+            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
         $this->configParserMock = $this->getMock(ConfigParser::class, [], [], '', false, false);
-        $this->converter = new Converter($this->configParserMock);
+        $this->converter = new Converter($this->configParserMock, $this->defaultConfigProviderMock);
+
     }
 
     public function testConvert()
     {
+        $this->defaultConfigProviderMock->expects($this->any())->method('getConnection')->willReturn('amqp');
         $this->configParserMock->expects($this->any())->method('parseServiceMethod')->willReturnArgument(0);
         $fixtureDir = __DIR__ . '/../../../_files/queue_consumer';
         $xmlFile = $fixtureDir . '/valid.xml';

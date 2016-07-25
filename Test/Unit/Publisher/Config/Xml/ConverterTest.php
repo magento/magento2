@@ -16,11 +16,24 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     private $converter;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $defaultConfigProviderMock;
+
+    /**
      * Initialize parameters
      */
     protected function setUp()
     {
-        $this->converter = new Converter(new BooleanUtils());
+        $this->defaultConfigProviderMock = $this->getMock(
+            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
+        $this->converter = new Converter(new BooleanUtils(), $this->defaultConfigProviderMock);
     }
 
     public function testConvert()
@@ -29,6 +42,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $xmlFile = $fixtureDir . '/valid.xml';
         $dom = new \DOMDocument();
         $dom->load($xmlFile);
+        $this->defaultConfigProviderMock->expects($this->any())->method('getExchange')->willReturn('magento');
         $result = $this->converter->convert($dom);
 
         $expectedData = include($fixtureDir . '/valid.php');

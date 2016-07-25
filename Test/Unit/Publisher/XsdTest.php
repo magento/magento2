@@ -54,13 +54,12 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'valid' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="topic.message.queue.config.01">
-                        <connection name="amqp1" exchange="magento2" />
-                        <connection name="amqp2" exchange="magento2" disabled="true" />
-                        <connection name="amqp3" exchange="magento3" disabled="true" />
+                        <connection name="amqp" exchange="magento2" />
+                        <connection name="db" exchange="magento2" disabled="true" />
                     </publisher>
                     <publisher topic="topic.message.queue.config.02">
-                        <connection name="amqp1" exchange="magento2" disabled="true"/>
-                        <connection name="amqp2" exchange="magento2" disabled="true" />
+                        <connection name="amqp" exchange="magento2" disabled="true"/>
+                        <connection name="db" exchange="magento2" disabled="true" />
                     </publisher>
                     <publisher topic="topic.message.queue.config.03" disabled="true" />
                 </config>',
@@ -69,10 +68,10 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'non unique publisher topic' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="topic.message.queue.config.01">
-                        <connection name="amqp1" exchange="magento2" />
+                        <connection name="amqp" exchange="magento2" />
                     </publisher>
                     <publisher topic="topic.message.queue.config.01">
-                        <connection name="amqp1" exchange="magento2" disabled="true"/>
+                        <connection name="amqp" exchange="magento2" disabled="true"/>
                     </publisher>
                 </config>',
                 [
@@ -82,18 +81,18 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'non unique publisher connection name' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="topic.message.queue.config.01">
-                        <connection name="amqp1" exchange="magento2" />
-                        <connection name="amqp1" exchange="magento2" />
+                        <connection name="amqp" exchange="magento2" />
+                        <connection name="amqp" exchange="magento2" />
                     </publisher>
                 </config>',
                 [
-                    "Element 'connection': Duplicate key-sequence ['amqp1'] in unique identity-constraint 'unique-connection-name'."
+                    "Element 'connection': Duplicate key-sequence ['amqp'] in unique identity-constraint 'unique-connection-name'."
                 ],
             ],
             'missed required publisher attribute' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher disabled="false">
-                        <connection name="amqp1" exchange="magento2" />                        
+                        <connection name="amqp" exchange="magento2" />                        
                     </publisher>
                 </config>',
                 [
@@ -122,7 +121,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'unexpected connection element' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="topic.message.queue.config.03" disabled="true">
-                        <connection name="amqp1" exchange="magento2" />
+                        <connection name="amqp" exchange="magento2" />
                         <unexpected name="10">20</unexpected>
                     </publisher>
                 </config>',
@@ -141,7 +140,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'unexpected connection attribute' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="topic.message.queue.config.03" disabled="true">
-                        <connection name="amqp1" exchange="magento2" unexpected="10"/>
+                        <connection name="amqp" exchange="magento2" unexpected="10"/>
                     </publisher>
                 </config>',
                 [
@@ -151,7 +150,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'invalid connection attribute value' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="topic.message.queue.config.03" disabled="true">
-                        <connection name="amqp1" exchange="magento2" disabled="disabled"/>
+                        <connection name="amqp" exchange="magento2" disabled="disabled"/>
                     </publisher>
                 </config>',
                 [
@@ -161,7 +160,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             'invalid publisher attribute value' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="topic.message.queue.config.03" disabled="disabled">
-                        <connection name="amqp1" exchange="magento2" />
+                        <connection name="amqp" exchange="magento2" />
                     </publisher>
                 </config>',
                 [

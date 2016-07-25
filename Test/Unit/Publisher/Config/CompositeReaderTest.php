@@ -37,6 +37,11 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
     private $readerThreeMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $defaultConfigProviderMock;
+
+    /**
      * Initialize parameters
      */
     protected function setUp()
@@ -45,9 +50,18 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
         $this->readerOneMock = $this->getMock(ReaderInterface::class);
         $this->readerTwoMock = $this->getMock(ReaderInterface::class);
         $this->readerThreeMock = $this->getMock(ReaderInterface::class);
+        $this->defaultConfigProviderMock = $this->getMock(
+            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
 
         $this->reader = new CompositeReader(
             $this->validatorMock,
+            $this->defaultConfigProviderMock,
             [
                 'readerTwo' => ['sortOrder' => 20, 'reader' => $this->readerTwoMock],
                 'readerOne' => ['sortOrder' => 10, 'reader' => $this->readerOneMock],
@@ -58,6 +72,9 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
+        $this->defaultConfigProviderMock->expects($this->any())->method('getConnection')->willReturn('amqp');
+        $this->defaultConfigProviderMock->expects($this->any())->method('getExchange')->willReturn('magento');
+
         $dataOne = include __DIR__ . '/../../_files/queue_publisher/reader_one.php';
         $dataTwo = include __DIR__ . '/../../_files/queue_publisher/reader_two.php';
         $expectedValidationData = include __DIR__ . '/../../_files/queue_publisher/data_to_validate.php';
@@ -75,13 +92,13 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
             'top04' => [
                 'topic' => 'top04',
                 'disabled' => false,
-                'connection' => ['name' => 'con02', 'disabled' => false, 'exchange' => 'magento2'],
+                'connection' => ['name' => 'db', 'disabled' => false, 'exchange' => 'magento2'],
             ],
             //two disabled connections are ignored
             'top05' => [
                 'topic' => 'top05',
                 'disabled' => false,
-                'connection' => ['name' => 'con01', 'exchange' => 'exch01', 'disabled' => false],
+                'connection' => ['name' => 'amqp', 'exchange' => 'exch01', 'disabled' => false],
             ],
             //added default connection if not declared
             'top06' => [
@@ -104,9 +121,13 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\InvalidArgumentException',
-            'Reader [reader] must implement Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface'
+            'Object [reader] must implement Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface'
         );
         $readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
-        new CompositeReader($this->validatorMock, ['reader' => ['sortOrder' => 20, 'reader' => $readerMock]]);
+        new CompositeReader(
+            $this->validatorMock,
+            $this->defaultConfigProviderMock,
+            ['reader' => ['sortOrder' => 20, 'reader' => $readerMock]]
+        );
     }
 }

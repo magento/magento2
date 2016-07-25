@@ -22,13 +22,26 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     private $interpreter;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $defaultConfigProviderMock;
+
+    /**
      * Initialize parameters
      */
     protected function setUp()
     {
+        $this->defaultConfigProviderMock = $this->getMock(
+            \Magento\Framework\MessageQueue\DefaultValueProvider::class,
+            [],
+            [],
+            '',
+            false,
+            false
+        );
         $this->interpreter = $this->getMock(InterpreterInterface::class);
-        $this->converter = new Converter(new BooleanUtils(), $this->interpreter);
-
+        $this->converter = new Converter(new BooleanUtils(), $this->interpreter, $this->defaultConfigProviderMock);
+        $this->defaultConfigProviderMock->expects($this->any())->method('getConnection')->willReturn('amqp');
     }
 
     public function testConvert()

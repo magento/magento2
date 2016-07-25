@@ -51,7 +51,7 @@ trait SortedList
                     )
                 );
             }
-            $output = $readerInfo[$key];
+            $output[] = $readerInfo[$key];
         }
 
         return $output;

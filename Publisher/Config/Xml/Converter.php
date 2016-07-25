@@ -60,7 +60,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     throw new \InvalidArgumentException('Connection name is missing');
                 }
                 $exchangeName = $this->getAttributeValue(
-                    $connectionConfig, 'exchange',
+                    $connectionConfig,
+                    'exchange',
                     $this->defaultValueProvider->getExchange()
                 );
                 $isDisabled = $this->getAttributeValue($connectionConfig, 'disabled', false);
