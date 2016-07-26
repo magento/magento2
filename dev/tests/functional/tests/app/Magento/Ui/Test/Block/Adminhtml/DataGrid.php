@@ -99,10 +99,12 @@ class DataGrid extends Grid
      */
     protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
 
+    // @codingStandardsIgnoreStart
     /**
      * @var string
      */
-    protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
+    private $cellByHeader = "//td[count(//th[span[.='%s']][not(ancestor::*[@class='sticky-header'])]/preceding-sibling::th)+1]";
+    // @codingStandardsIgnoreEnd
 
     /**
      * @var string
