@@ -414,14 +414,17 @@ class Price
         $prices = [];
         foreach ($tierPrices as $price) {
             $extensionAttributes = $price->getExtensionAttributes();
+            $websiteId = $extensionAttributes && $extensionAttributes->getWebsiteId()
+                ? $extensionAttributes->getWebsiteId()
+                : $websiteId;
             $prices[] = [
-                'website_id' => $extensionAttributes ? $extensionAttributes->getWebsiteId() : $websiteId,
+                'website_id' => $websiteId,
                 'cust_group' => $price->getCustomerGroupId(),
                 'website_price' => $price->getValue(),
                 'price' => $price->getValue(),
                 'all_groups' => ($price->getCustomerGroupId() == $allGroupsId),
                 'price_qty' => $price->getQty(),
-                'percentage_value' => $extensionAttributes ? $extensionAttributes->getPercentageValue() : 0
+                'percentage_value' => $extensionAttributes ? $extensionAttributes->getPercentageValue() : null
             ];
         }
         $product->setData('tier_price', $prices);
