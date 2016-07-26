@@ -121,6 +121,15 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
 
+                $subscriber = $this->_subscriberFactory->create()->loadByEmail($email);
+                if ($subscriber->getId()
+                    && $subscriber->getSubscriberStatus() == \Magento\Newsletter\Model\Subscriber::STATUS_SUBSCRIBED
+                ) {
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('This email address is already subscribed.')
+                    );
+                }
+
                 $status = $this->_subscriberFactory->create()->subscribe($email);
                 if ($status == \Magento\Newsletter\Model\Subscriber::STATUS_NOT_ACTIVE) {
                     $this->messageManager->addSuccess(__('The confirmation request has been sent.'));
