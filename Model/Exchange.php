@@ -14,6 +14,9 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterf
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Exchange implements ExchangeInterface
 {
     const RPC_CONNECTION_TIMEOUT = 30;
