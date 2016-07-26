@@ -69,10 +69,6 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
         $runValidateAmount,
         $result
     ) {
-        $closureMock = function () {
-            return false;
-        };
-
         $this->productMock->expects($this->once())->method('getId')->willReturn('product_id');
         $this->configurableMock->expects($this->once())->method('getParentIdsByChild')->with('product_id')
             ->willReturn($parentsIds);
@@ -83,7 +79,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $result,
-            $this->validation->aroundValidate($this->ruleMock, $closureMock, $this->productMock)
+            $this->validation->afterValidate($this->ruleMock, false, $this->productMock)
         );
     }
 
