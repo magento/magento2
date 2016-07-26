@@ -211,7 +211,7 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $string = htmlspecialchars_decode($string);
         $connection = $this->getConnection();
         $table = $this->getMainTable();
-        $translate = htmlspecialchars($translate, ENT_QUOTES);
+        $translate = $this->htmlSpecialCharsTranslation($translate);
 
         if ($locale === null) {
             $locale = $this->_localeResolver->getLocale();
@@ -264,6 +264,17 @@ class StringUtils extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $this;
+    }
+
+    /**
+     * Converting special characters in translation to HTML entities
+     *
+     * @param $translate
+     * @return string
+     */
+    public function htmlSpecialCharsTranslation($translate)
+    {
+        return htmlspecialchars($translate, ENT_QUOTES);
     }
 
     /**
