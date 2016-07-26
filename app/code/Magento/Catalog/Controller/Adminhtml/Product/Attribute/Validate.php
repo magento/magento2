@@ -154,7 +154,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     private function checkUniqueOption(DataObject $response, array $options = null)
     {
-        if (is_array($options) and !$this->isUniqueAdminValues($options['value'], $options['delete'])) {
+        if (is_array($options) && !$this->isUniqueAdminValues($options['value'], $options['delete'])) {
             $this->setMessageToResponse($response, [__("The value of Admin must be unique.")]);
             $response->setError(true);
         }
