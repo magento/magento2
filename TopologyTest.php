@@ -34,8 +34,8 @@ class TopologyTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedConfig
      * @param array $bindingConfig
      */
-   public function testTopologyInstallation(array $expectedConfig, array $bindingConfig)
-   {
+    public function testTopologyInstallation(array $expectedConfig, array $bindingConfig)
+    {
         $name = $expectedConfig['name'];
         $this->assertArrayHasKey($name, $this->declaredExchanges);
         $this->assertEquals(
@@ -54,10 +54,11 @@ class TopologyTest extends \PHPUnit_Framework_TestCase
             $bindings,
             'Invalid exchange bindings configuration: ' . $name
         );
-   }
+    }
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
    public function exchangeDataProvider()
    {
