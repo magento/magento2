@@ -18,6 +18,8 @@ use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
  * A MessageQueue Publisher to handle publishing a message.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Publisher implements PublisherInterface
 {

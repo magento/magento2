@@ -7,9 +7,8 @@
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\MessageValidator;
-use Magento\Framework\MessageQueue\ConfigInterface;
 
 /**
  * @covers Magento\Framework\MessageQueue\MessageValidator
@@ -20,21 +19,21 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
     /** @var MessageValidator */
     protected $model;
 
-    /** @var ConfigInterface */
-    protected $configMock;
+    /** @var CommunicationConfig|\PHPUnit_Framework_MockObject_MockObject */
+    protected $communicationConfigMock;
 
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->configMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConfigInterface')
+        $this->model = $objectManager->getObject(MessageValidator::class);
+        $this->communicationConfigMock = $this->getMockBuilder(CommunicationConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = $objectManager->getObject(
-            'Magento\Framework\MessageQueue\MessageValidator',
-            [
-                'queueConfig' => $this->configMock,
-            ]
+        $objectManager->setBackwardCompatibleProperty(
+            $this->model,
+            'communicationConfig',
+            $this->communicationConfigMock
         );
     }
 
@@ -49,7 +48,9 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateValidObjectType()
     {
-        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigDataObjectType());
+        $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
+            $this->getQueueConfigDataObjectType()
+        );
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -60,7 +61,9 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateValidMethodType()
     {
-        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigDataMethodType());
+        $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
+            $this->getQueueConfigDataMethodType()
+        );
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -71,7 +74,9 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testEncodeValidMessageObjectType()
     {
-        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigDataObjectType());
+        $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
+            $this->getQueueConfigDataObjectType()
+        );
         $this->model->validate('customer.created', [], true);
     }
 
@@ -81,53 +86,53 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testEncodeInvalidMessageMethodType()
     {
-        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigDataMethodType());
+        $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
+            $this->getQueueConfigDataMethodType()
+        );
         $this->model->validate('customer.created', [1, 2, 3], true);
     }
 
     /**
      * Data provider for queue config of object type
+     *
      * @return array
      */
     private function getQueueConfigDataObjectType()
     {
         return [
-            QueueConfig::TOPIC_SCHEMA => [
-                QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
-            ]
+            CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+            CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface'
         ];
     }
 
     /**
      * Data provider for queue config of method type
+     *
      * @return array
      */
     private function getQueueConfigDataMethodType()
     {
         return [
-            QueueConfig::TOPIC_SCHEMA => [
-                QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_METHOD,
-                QueueConfig::TOPIC_SCHEMA_VALUE => [
-                    [
-                        'param_name' => 'customer',
-                        'param_position' => 0,
-                        'is_required' => true,
-                        'param_type' => 'Magento\Customer\Api\Data\CustomerInterface',
-                    ],
-                    [
-                        'param_name' => 'password',
-                        'param_position' => 1,
-                        'is_required' => false,
-                        'param_type' => 'string',
-                    ],
-                    [
-                        'param_name' => 'redirectUrl',
-                        'param_position' => 2,
-                        'is_required' => false,
-                        'param_type' => 'string',
-                    ],
-                ]
+            CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_METHOD,
+            CommunicationConfig::TOPIC_REQUEST => [
+                [
+                    'param_name' => 'customer',
+                    'param_position' => 0,
+                    'is_required' => true,
+                    'param_type' => 'Magento\Customer\Api\Data\CustomerInterface',
+                ],
+                [
+                    'param_name' => 'password',
+                    'param_position' => 1,
+                    'is_required' => false,
+                    'param_type' => 'string',
+                ],
+                [
+                    'param_name' => 'redirectUrl',
+                    'param_position' => 2,
+                    'is_required' => false,
+                    'param_type' => 'string',
+                ],
             ]
         ];
     }
@@ -137,7 +142,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidMessageType($requestType, $message, $expectedResult = null)
     {
-        $this->configMock->expects($this->any())->method('getTopic')->willReturn($requestType);
+        $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn($requestType);
         if ($expectedResult) {
             $this->setExpectedException('InvalidArgumentException', $expectedResult);
         }
@@ -157,90 +162,90 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
 
         return [
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string'
+                ],
                 'valid string',
                 null
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string'
+                ],
                 1,
                 'Data in topic "topic" must be of type "string". "int" given.'
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string[]'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string[]'
+                ],
                 ['string1', 'string2'],
                 null
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string[]'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string[]'
+                ],
                 [],
                 null
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'string[]'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string[]'
+                ],
                 'single string',
                 'Data in topic "topic" must be of type "string[]". "string" given.'
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface'
+                ],
                 $customerMock,
                 null
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface'
+                ],
                 'customer',
                 'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface". "string" given.'
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
                 [$customerMock, $customerMockTwo],
                 null
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
                 [],
                 null
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
                 'customer',
                 'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". "string" given.'
             ],
             [
-                [QueueConfig::TOPIC_SCHEMA => [
-                    QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                    QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface[]'
-                ]],
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
                 $customerMock,
                 'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". '
             ],

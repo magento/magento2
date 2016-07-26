@@ -6,22 +6,23 @@
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\MessageQueue\MessageEncoder;
 
 /**
  * Test class for Magento\Framework\MessageQueue\MessageEncoder
  */
 class MessageEncoderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\MessageQueue\MessageEncoder */
+    /** @var MessageEncoder */
     protected $encoder;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Framework\MessageQueue\Config\Data|\PHPUnit_Framework_MockObject_MockObject */
-    protected $configMock;
+    /** @var CommunicationConfig|\PHPUnit_Framework_MockObject_MockObject */
+    protected $communicationConfigMock;
 
     /** @var \Magento\Framework\Webapi\ServiceOutputProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $dataObjectEncoderMock;
@@ -30,19 +31,21 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->configMock = $this->getMockBuilder('Magento\Framework\MessageQueue\ConfigInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->dataObjectEncoderMock = $this->getMockBuilder('Magento\Framework\Webapi\ServiceOutputProcessor')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $this->encoder = $this->objectManager->getObject(
-            'Magento\Framework\MessageQueue\MessageEncoder',
-            [
-                'queueConfig' => $this->configMock,
-                'dataObjectEncoder' => $this->dataObjectEncoderMock
-            ]
+            MessageEncoder::class,
+            ['dataObjectEncoder' => $this->dataObjectEncoderMock]
+        );
+        $this->communicationConfigMock = $this->getMockBuilder(CommunicationConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager->setBackwardCompatibleProperty(
+            $this->encoder,
+            'communicationConfig',
+            $this->communicationConfigMock
         );
         parent::setUp();
     }
@@ -72,7 +75,9 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncodeInvalidMessage()
     {
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
-        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigData());
+        $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
+            $this->getQueueConfigData()
+        );
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -92,7 +97,9 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     public function testEncodeInvalidMessageArray()
     {
         $exceptionMessage = 'Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data"';
-        $this->configMock->expects($this->any())->method('getTopic')->willReturn($this->getQueueConfigData());
+        $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
+            $this->getQueueConfigData()
+        );
         $object = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -107,15 +114,14 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Data provider for queue config
+     *
      * @return array
      */
     private function getQueueConfigData()
     {
         return [
-            QueueConfig::TOPIC_SCHEMA => [
-                QueueConfig::TOPIC_SCHEMA_TYPE => QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT,
-                QueueConfig::TOPIC_SCHEMA_VALUE => 'Magento\Customer\Api\Data\CustomerInterface'
-            ]
+            CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+            CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface'
         ];
     }
 }

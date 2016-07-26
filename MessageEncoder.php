@@ -116,17 +116,19 @@ class MessageEncoder
         if ($topicConfig === null) {
             throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
         }
-        $requestSchema = [
-            'schema_type' => $topicConfig[CommunicationConfig::TOPIC_REQUEST_TYPE],
-            'schema_value' => $topicConfig[CommunicationConfig::TOPIC_REQUEST]
-        ];
-        $responseSchema = [
-            'schema_type' => isset($topicConfig[CommunicationConfig::TOPIC_RESPONSE])
-                ? CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS
-                : null,
-            'schema_value' => $topicConfig[CommunicationConfig::TOPIC_RESPONSE]
-        ];
-        return $requestType ? $requestSchema : $responseSchema;
+        if ($requestType) {
+            return [
+                'schema_type' => $topicConfig[CommunicationConfig::TOPIC_REQUEST_TYPE],
+                'schema_value' => $topicConfig[CommunicationConfig::TOPIC_REQUEST]
+            ];
+        } else {
+            return [
+                'schema_type' => isset($topicConfig[CommunicationConfig::TOPIC_RESPONSE])
+                    ? CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS
+                    : null,
+                'schema_value' => $topicConfig[CommunicationConfig::TOPIC_RESPONSE]
+            ];
+        }
     }
 
     /**
