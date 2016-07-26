@@ -99,9 +99,9 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         }
 
         $multipleOption = $this->getRequest()->getParam("frontend_input");
-        $multipleOption = is_null($multipleOption) ? 'select' : $multipleOption;
+        $multipleOption = null == $multipleOption ? 'select' : $multipleOption;
 
-        if (isset($this->multipleAttributeList[$multipleOption]) && !is_null($multipleOption)) {
+        if (isset($this->multipleAttributeList[$multipleOption]) && !(null == ($multipleOption))) {
             $this->checkUniqueOption(
                 $response,
                 $this->getRequest()->getParam($this->multipleAttributeList[$multipleOption])
