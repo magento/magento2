@@ -16,8 +16,8 @@
     <div class="actions-toolbar">
         <div class="secondary">
             <button type="button" id="btn-remove<%- data._index_ %>" class="action remove"
-               title="<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Remove Recipent')) ?>">
-               <span><?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Remove')) ?></span>
+               title="<?php echo $block->escapeHtmlAttr(__('Remove Recipent')) ?>">
+               <span><?php echo $block->escapeHtml(__('Remove')) ?></span>
             </button>
         </div>
     </div>
