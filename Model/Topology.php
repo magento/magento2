@@ -20,6 +20,7 @@ class Topology
 {
     /**
      * Type of exchange
+     *
      * @deprecated
      */
     const TOPIC_EXCHANGE = 'topic';
@@ -31,6 +32,7 @@ class Topology
 
     /**
      * Durability for exchange and queue
+     *
      * @deprecated
      */
     const IS_DURABLE = true;
@@ -128,6 +130,9 @@ class Topology
     {
         try {
             foreach ($this->getTopologyConfig()->getQueues() as $queue) {
+                if ($queue->getConnection() != self::AMQP_CONNECTION) {
+                    continue;
+                }
                 $this->getQueueInstaller()->install($this->amqpConfig->getChannel(), $queue);
             }
             foreach ($this->getTopologyConfig()->getExchanges() as $exchange) {

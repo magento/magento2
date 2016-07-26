@@ -14,7 +14,7 @@ use PhpAmqpLib\Channel\AMQPChannel;
 class BindingInstaller implements BindingInstallerInterface
 {
     /**
-     * @var array|BindingInstallerInterface[]
+     * @var BindingInstallerInterface[]
      */
     private $installers;
 

@@ -68,10 +68,14 @@ class TopologyTest extends \PHPUnit_Framework_TestCase
     public function testInstall()
     {
         $queue = $this->getMock(QueueConfigItemInterface::class);
+        $queue->expects($this->once())->method('getConnection')->willReturn('amqp');
+        $queueNonAmqp = $this->getMock(QueueConfigItemInterface::class);
+        $queueNonAmqp->expects($this->once())->method('getConnection')->willReturn('db');
+
         $channel = $this->getMock(AMQPChannel::class, [], [], '', false, false);
         $this->amqpConfig->expects($this->any())->method('getChannel')->willReturn($channel);
 
-        $this->topologyConfig->expects($this->once())->method('getQueues')->willReturn([$queue]);
+        $this->topologyConfig->expects($this->once())->method('getQueues')->willReturn([$queue, $queueNonAmqp]);
         $this->queueInstaller->expects($this->once())->method('install')->with($channel, $queue);
 
         $exchange = $this->getMock(ExchangeConfigItemInterface::class);
@@ -85,6 +89,7 @@ class TopologyTest extends \PHPUnit_Framework_TestCase
     public function testInstallWithNotAmqpConnection()
     {
         $queue = $this->getMock(QueueConfigItemInterface::class);
+        $queue->expects($this->once())->method('getConnection')->willReturn('amqp');
         $channel = $this->getMock(AMQPChannel::class, [], [], '', false, false);
         $this->amqpConfig->expects($this->any())->method('getChannel')->willReturn($channel);
 
