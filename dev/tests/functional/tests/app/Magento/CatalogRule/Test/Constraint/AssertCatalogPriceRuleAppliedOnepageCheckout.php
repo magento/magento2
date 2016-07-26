@@ -61,7 +61,7 @@ class AssertCatalogPriceRuleAppliedOnepageCheckout extends AbstractConstraint
         )->run();
         $actualPrices['grand_total'] = $checkoutOnepage->getReviewBlock()->getGrandTotal();
         $actualPrices['sub_total'] = $checkoutOnepage->getReviewBlock()->getSubtotal();
-        $expectedPrices['grand_total'] = $cartPrice['grand_total'] + $cartPrice['shipping_price'];
+        $expectedPrices['grand_total'] = $cartPrice['grand_total'];
         $expectedPrices['sub_total'] = $cartPrice['sub_total'];
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedPrices,

@@ -69,6 +69,12 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $escaperMock = $this->getMock(\Magento\Framework\ZendEscaper::class, [], [], '', false);
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $objectManager->setBackwardCompatibleProperty($this->routeParamsResolverMock, 'escaper', $escaperMock);
+
         $this->routeParamsPreprocessorMock = $this->getMockForAbstractClass(
             'Magento\Framework\Url\RouteParamsPreprocessorInterface',
             [],
@@ -143,6 +149,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $modelProperty->setAccessible(true);
         $modelProperty->setValue($model, $this->urlModifier);
+
+        $zendEscaper = new \Magento\Framework\ZendEscaper();
+        $escaper = new \Magento\Framework\Escaper();
+        $objectManager->setBackwardCompatibleProperty($escaper, 'escaper', $zendEscaper);
+        $objectManager->setBackwardCompatibleProperty($model, 'escaper', $escaper);
 
         return $model;
     }
@@ -338,12 +349,20 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'string query' => [
-                'foo=bar', 'foo=bar', 'http://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor',
+                'foo=bar',
+                'foo=bar',
+                'http://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor',
             ],
             'array query' => [
-                ['foo' => 'bar'], 'foo=bar', 'http://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor',
+                ['foo' => 'bar'],
+                'foo=bar',
+                'http://localhost/index.php/catalog/product/view/id/100/?foo=bar#anchor',
             ],
-            'without query' => [false, '', 'http://localhost/index.php/catalog/product/view/id/100/#anchor'],
+            'without query' => [
+                false,
+                '',
+                'http://localhost/index.php/catalog/product/view/id/100/#anchor'
+            ],
         ];
     }
 
@@ -421,7 +440,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      * @param string $url
      * @dataProvider getRebuiltUrlDataProvider
      */
-    public function testGetRebuiltUrl($url)
+    public function testGetRebuiltUrl($inputUrl, $outputUrl)
     {
         $requestMock = $this->getRequestMock();
         $model = $this->getUrlModel([
@@ -436,7 +455,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->queryParamsResolverMock->expects($this->once())->method('getQuery')
             ->will($this->returnValue('query=123'));
 
-        $this->assertEquals($url, $model->getRebuiltUrl($url));
+        $this->assertEquals($outputUrl, $model->getRebuiltUrl($inputUrl));
     }
 
     public function testGetRedirectUrl()
@@ -489,9 +508,18 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     public function getRebuiltUrlDataProvider()
     {
         return [
-            'with port' => ['https://example.com:88/index.php/catalog/index/view?query=123#hash'],
-            'without port' => ['https://example.com/index.php/catalog/index/view?query=123#hash'],
-            'http' => ['http://example.com/index.php/catalog/index/view?query=123#hash']
+            'with port' => [
+                'https://example.com:88/index.php/catalog/index/view?query=123#hash',
+                'https://example.com:88/index.php/catalog/index/view?query=123#hash'
+            ],
+            'without port' => [
+                'https://example.com/index.php/catalog/index/view?query=123#hash',
+                'https://example.com/index.php/catalog/index/view?query=123#hash'
+            ],
+            'http' => [
+                'http://example.com/index.php/catalog/index/view?query=123#hash',
+                'http://example.com/index.php/catalog/index/view?query=123#hash'
+            ]
         ];
     }
 

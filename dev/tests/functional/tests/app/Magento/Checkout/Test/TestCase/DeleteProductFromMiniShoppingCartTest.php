@@ -65,11 +65,11 @@ class DeleteProductFromMiniShoppingCartTest extends Injectable
     /**
      * Run test add products to shopping cart
      *
-     * @param string $products
+     * @param array $products
      * @param int $deletedProductIndex
      * @return array
      */
-    public function test($products, $deletedProductIndex)
+    public function test(array $products, $deletedProductIndex)
     {
         // Preconditions
         $products = $this->prepareProducts($products);
@@ -89,10 +89,10 @@ class DeleteProductFromMiniShoppingCartTest extends Injectable
     /**
      * Create products
      *
-     * @param string $productList
+     * @param array $productList
      * @return InjectableFixture[]
      */
-    protected function prepareProducts($productList)
+    protected function prepareProducts(array $productList)
     {
         $productsStep = ObjectManager::getInstance()->create(
             'Magento\Catalog\Test\TestStep\CreateProductsStep',
