@@ -193,7 +193,7 @@ class Tierprice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupPr
     /**
      * Check whether price has percentage value.
      *
-     * @param $priceRow
+     * @param array $priceRow
      * @return null
      */
     private function getPercentage($priceRow)

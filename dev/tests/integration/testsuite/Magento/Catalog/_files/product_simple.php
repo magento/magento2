@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
+
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
@@ -43,7 +45,7 @@ $tierPrices[] = $tierPriceFactory->create(
     ]
 );
 /** @var  $tpExtensionAttributes */
-$tpExtensionAttributesFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory::class);
+$tpExtensionAttributesFactory = $objectManager->create(ProductTierPriceExtensionFactory::class);
 $tpExtensionAttributes = $tpExtensionAttributesFactory->create()->setPercentageValue(50);
 
 $tierPrices[] = $tierPriceFactory->create(
