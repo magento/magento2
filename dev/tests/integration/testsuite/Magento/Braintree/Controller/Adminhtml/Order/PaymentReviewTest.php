@@ -65,7 +65,7 @@ class PaymentReviewTest extends AbstractBackendController
     public function testExecuteAccept()
     {
         $orderId = $this->order->getEntityId();
-        $this->dispatch('admin/sales/order/reviewPayment/action/accept/order_id/' . $orderId);
+        $this->dispatch('backend/sales/order/reviewPayment/action/accept/order_id/' . $orderId);
 
         static::assertRedirect(static::stringContains('sales/order/view/order_id/' . $orderId));
         static::assertSessionMessages(
@@ -100,7 +100,7 @@ class PaymentReviewTest extends AbstractBackendController
             ->with($payment)
             ->willReturn(true);
 
-        $this->dispatch('admin/sales/order/reviewPayment/action/deny/order_id/' . $orderId);
+        $this->dispatch('backend/sales/order/reviewPayment/action/deny/order_id/' . $orderId);
 
         static::assertRedirect(static::stringContains('sales/order/view/order_id/' . $orderId));
         static::assertSessionMessages(
