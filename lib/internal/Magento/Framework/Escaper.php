@@ -8,13 +8,18 @@ namespace Magento\Framework;
 /**
  * Magento escape methods
  */
-class Escaper extends \Zend\Escaper\Escaper
+class Escaper
 {
     /**
-     * Escape html entities
+     * @var \Magento\Framework\ZendEscaper
+     */
+    private $escaper;
+
+    /**
+     * Escape HTML entities
      *
-     * @param  string|array $data
-     * @param  array $allowedTags
+     * @param string|array $data
+     * @param array $allowedTags
      * @return string|array
      */
     public function escapeHtml($data, $allowedTags = null)
@@ -25,13 +30,13 @@ class Escaper extends \Zend\Escaper\Escaper
                 $result[] = $this->escapeHtml($item);
             }
         } elseif (strlen($data)) {
-            if (is_array($allowedTags) and !empty($allowedTags)) {
+            if (is_array($allowedTags) && !empty($allowedTags)) {
                 $allowed = implode('|', $allowedTags);
                 $result = preg_replace('/<([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)>/si', '##$1$2$3##', $data);
-                $result = htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
+                $result = htmlspecialchars($result, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
                 $result = preg_replace('/##([\/\s\r\n]*)(' . $allowed . ')([\/\s\r\n]*)##/si', '<$1$2$3>', $result);
             } else {
-                $result = htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+                $result = htmlspecialchars($data, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
             }
         } else {
             $result = $data;
@@ -40,14 +45,62 @@ class Escaper extends \Zend\Escaper\Escaper
     }
 
     /**
-     * Escape html entities in url
+     * Escape a string for the HTML attribute context
      *
-     * @param string $data
+     * @param string $string
+     * @param boolean $escapeSingleQuote
      * @return string
      */
-    public function escapeUrl($data)
+    public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
-        return htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false);
+        if ($escapeSingleQuote) {
+            return $this->getEscaper()->escapeHtmlAttr($string);
+        }
+        return htmlspecialchars($string, ENT_COMPAT, 'UTF-8', false);
+    }
+
+    /**
+     * Escape URL
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeUrl($string)
+    {
+        return $this->escapeHtml($this->escapeXssInUrl($string));
+    }
+
+    /**
+     * Encode URL
+     *
+     * @param string $string
+     * @return string
+     */
+    public function encodeUrlParam($string)
+    {
+        return $this->getEscaper()->escapeUrl($string);
+    }
+
+    /**
+     * Escape string for the JavaScript context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeJs($string)
+    {
+        return $this->getEscaper()->escapeJs($string);
+    }
+
+    /**
+     * Escape string for the CSS context
+     *
+     * @param string $string
+     * @return string
+     */
+    public function escapeCss($string)
+    {
+        return $this->getEscaper()->escapeCss($string);
     }
 
     /**
@@ -56,6 +109,7 @@ class Escaper extends \Zend\Escaper\Escaper
      * @param string|array $data
      * @param string $quote
      * @return string|array
+     * @deprecated
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -76,6 +130,7 @@ class Escaper extends \Zend\Escaper\Escaper
      *
      * @param string $data
      * @return string
+     * @deprecated
      */
     public function escapeXssInUrl($data)
     {
@@ -93,6 +148,7 @@ class Escaper extends \Zend\Escaper\Escaper
      * @param string $data
      * @param bool $addSlashes
      * @return string
+     * @deprecated
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -100,5 +156,20 @@ class Escaper extends \Zend\Escaper\Escaper
             $data = addslashes($data);
         }
         return htmlspecialchars($data, ENT_QUOTES, null, false);
+    }
+
+    /**
+     * Get escaper
+     *
+     * @return \Magento\Framework\ZendEscaper
+     * @deprecated
+     */
+    private function getEscaper()
+    {
+        if ($this->escaper == null) {
+            $this->escaper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\ZendEscaper::class);
+        }
+        return $this->escaper;
     }
 }

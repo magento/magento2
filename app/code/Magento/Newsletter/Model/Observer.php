@@ -5,8 +5,6 @@
  */
 namespace Magento\Newsletter\Model;
 
-use Magento\Cron\Model\Schedule;
-
 /**
  * Newsletter module observer
  *
@@ -36,7 +34,6 @@ class Observer
      * Scheduled send handler
      *
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function scheduledSend()
     {
