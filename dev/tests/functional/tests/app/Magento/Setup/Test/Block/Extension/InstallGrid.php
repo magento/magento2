@@ -57,7 +57,7 @@ class InstallGrid extends AbstractGrid
         );
 
         if ($select->isVisible()) {
-            $select->setValue($extension->getVersion());
+            $select->setValue('Version ' . $extension->getVersion());
         }
 
         $this->_rootElement->find(
