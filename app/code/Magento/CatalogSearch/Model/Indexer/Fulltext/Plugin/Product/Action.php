@@ -14,45 +14,34 @@ class Action extends AbstractPlugin
      * Reindex on product attribute mass change
      *
      * @param \Magento\Catalog\Model\Product\Action $subject
-     * @param \Closure $closure
+     * @param \Magento\Catalog\Model\Product\Action $action
      * @param array $productIds
-     * @param array $attrData
-     * @param int $storeId
      * @return \Magento\Catalog\Model\Product\Action
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundUpdateAttributes(
+    public function afterUpdateAttributes(
         \Magento\Catalog\Model\Product\Action $subject,
-        \Closure $closure,
-        array $productIds,
-        array $attrData,
-        $storeId
+        \Magento\Catalog\Model\Product\Action $action,
+        array $productIds
     ) {
-        $result = $closure($productIds, $attrData, $storeId);
         $this->reindexList(array_unique($productIds));
-        return $result;
+        return $action;
     }
 
     /**
      * Reindex on product websites mass change
      *
      * @param \Magento\Catalog\Model\Product\Action $subject
-     * @param \Closure $closure
+     * @param null $result
      * @param array $productIds
-     * @param array $websiteIds
-     * @param string $type
-     * @return \Magento\Catalog\Model\Product\Action
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundUpdateWebsites(
+    public function afterUpdateWebsites(
         \Magento\Catalog\Model\Product\Action $subject,
-        \Closure $closure,
-        array $productIds,
-        array $websiteIds,
-        $type
+        $result,
+        array $productIds
     ) {
-        $result = $closure($productIds, $websiteIds, $type);
         $this->reindexList(array_unique($productIds));
-        return $result;
     }
 }

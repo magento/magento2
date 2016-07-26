@@ -395,7 +395,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     {
         $storeName = ($websiteId == 0)
             ? ImportAdvancedPricing::VALUE_ALL_WEBSITES
-            : $this->_storeManager->getWebsite($websiteId)->getName();
+            : $this->_storeManager->getWebsite($websiteId)->getCode();
+        $currencyCode = '';
         if ($websiteId == 0) {
             $currencyCode = $this->_storeManager->getWebsite($websiteId)->getBaseCurrencyCode();
         }

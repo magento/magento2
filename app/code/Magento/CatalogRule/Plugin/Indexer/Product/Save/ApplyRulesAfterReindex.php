@@ -26,15 +26,11 @@ class ApplyRulesAfterReindex
      * Apply catalog rules after product resource model save
      *
      * @param \Magento\Catalog\Model\Product $subject
-     * @param callable $proceed
-     * @return \Magento\Catalog\Model\Product
+     * @return void
      */
-    public function aroundReindex(
-        \Magento\Catalog\Model\Product $subject,
-        callable $proceed
+    public function afterReindex(
+        \Magento\Catalog\Model\Product $subject
     ) {
-        $proceed();
         $this->productRuleProcessor->reindexRow($subject->getId());
-        return;
     }
 }
