@@ -43,7 +43,7 @@ interface ConsumerConfigurationInterface
      *
      * @return string
      * @deprecated
-     * @see ConsumerConfigurationInterface::getConsumerType
+     * @see \Magento\Framework\Communication\ConfigInterface::getTopic
      */
     public function getType();
 
@@ -79,14 +79,4 @@ interface ConsumerConfigurationInterface
      * @return QueueInterface
      */
     public function getQueue();
-
-    /**
-     * Get handler type (sync/async) based on topic.
-     *
-     * TODO: Move out from current interface
-     *
-     * @param string $topicName
-     * @return string
-     */
-    public function getConsumerType($topicName);
 }

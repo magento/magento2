@@ -142,14 +142,6 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getConsumerType($topicName)
-    {
-        return $this->getTopicConfig($topicName)[self::TOPIC_TYPE];
-    }
-
-    /**
      * Get topic configuration for current consumer.
      * @param string $topicName
      * @return array

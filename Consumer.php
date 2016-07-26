@@ -66,6 +66,11 @@ class Consumer implements ConsumerInterface
     private $consumerConfig;
 
     /**
+     * @var CommunicationConfig
+     */
+    private $communicationConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
@@ -150,7 +155,7 @@ class Consumer implements ConsumerInterface
     }
 
     /**
-     * Validate and encode synchrouns handler output.
+     * Validate and encode synchronous handler output.
      *
      * @param string $topicName
      * @param mixed $result
@@ -194,10 +199,10 @@ class Consumer implements ConsumerInterface
             try {
                 $this->resource->getConnection()->beginTransaction();
                 $topicName = $message->getProperties()['topic_name'];
-                $consumerType = $this->configuration->getConsumerType($topicName);
+                $topicConfig = $this->getCommunicationConfig()->getTopic($topicName);
                 $this->messageController->lock($message, $this->configuration->getConsumerName());
 
-                if ($consumerType == 'sync') {
+                if ($topicConfig[CommunicationConfig::TOPIC_IS_SYNCHRONOUS]) {
                     $responseBody = $this->dispatchMessage($message, true);
                     $responseMessage = $this->envelopeFactory->create(
                         ['body' => $responseBody, 'properties' => $message->getProperties()]
@@ -239,5 +244,21 @@ class Consumer implements ConsumerInterface
             $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
         }
         return $this->consumerConfig;
+    }
+
+    /**
+     * Get communication config.
+     *
+     * @return CommunicationConfig
+     *
+     * @deprecated
+     */
+    private function getCommunicationConfig()
+    {
+        if ($this->communicationConfig === null) {
+            $this->communicationConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CommunicationConfig::class);
+        }
+        return $this->communicationConfig;
     }
 }
