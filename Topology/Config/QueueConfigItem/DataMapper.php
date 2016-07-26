@@ -65,30 +65,57 @@ class DataMapper
                 $connection = $exchange['connection'];
                 foreach ($exchange['bindings'] as $binding) {
                     if ($binding['destinationType'] === 'queue') {
-                        $topicName = $binding['topic'];
-                        if ($this->isSynchronousModeTopic($topicName)) {
-                            $callbackQueueName = $this->queueNameBuilder->getQueueName($topicName);
-                            $this->mappedData[$callbackQueueName . '-' . $connection] = [
-                                'name' => $callbackQueueName,
-                                'connection' => $connection,
-                                'durable' => true,
-                                'autoDelete' => false,
-                                'arguments' => [],
-                            ];
-                        }
-                        $queueName = $binding['destination'];
-                        $this->mappedData[$queueName . '-' . $connection] = [
-                            'name' => $queueName,
-                            'connection' => $connection,
-                            'durable' => true,
-                            'autoDelete' => false,
-                            'arguments' => [],
-                        ];
+                        $queueItems = $this->createQueueItem($binding['destination'], $binding['topic'], $connection);
+                        $this->mappedData = array_merge($this->mappedData, $queueItems);
                     }
                 }
             }
         }
         return $this->mappedData;
+    }
+
+    /**
+     * Create queue config item.
+     *
+     * @param string $name
+     * @param string $topic
+     * @param string $connection
+     * @return array
+     */
+    private function createQueueItem($name, $topic, $connection)
+    {
+        $output = [];
+        if ($this->isWildcard($topic)) {
+            $topicList = $this->processWildcard($topic);
+            foreach ($topicList as $topicName) {
+                $callbackQueueName = $this->queueNameBuilder->getQueueName($topicName);
+                $output[$callbackQueueName . '-' . $connection] = [
+                    'name' => $callbackQueueName,
+                    'connection' => $connection,
+                    'durable' => true,
+                    'autoDelete' => false,
+                    'arguments' => [],
+                ];
+            }
+        } elseif ($this->isSynchronousModeTopic($topic)) {
+            $callbackQueueName = $this->queueNameBuilder->getQueueName($topic);
+            $output[$callbackQueueName . '-' . $connection] = [
+                'name' => $callbackQueueName,
+                'connection' => $connection,
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => [],
+            ];
+        }
+
+        $output[$name . '-' . $connection] = [
+            'name' => $name,
+            'connection' => $connection,
+            'durable' => true,
+            'autoDelete' => false,
+            'arguments' => [],
+        ];
+        return $output;
     }
 
     /**
@@ -107,5 +134,57 @@ class DataMapper
             throw new LocalizedException(new Phrase('Error while checking if topic is synchronous'));
         }
         return $isSync;
+    }
+
+    /**
+     * Check if topic is wildcard.
+     *
+     * @param string $topicName
+     * @return bool
+     */
+    private function isWildcard($topicName)
+    {
+        return strpos($topicName, '*') !== false || strpos($topicName, '#') !== false;
+    }
+
+    /**
+     * Generate topics list based on wildcards.
+     *
+     * @param array $wildcard
+     * @return array
+     */
+    private function processWildcard($wildcard)
+    {
+        $topicDefinitions = array_filter($this->communicationConfig->getTopics(), function ($item) {
+            return (bool)$item[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
+        });
+
+        $topics = [];
+        $pattern = $this->buildWildcardPattern($wildcard);
+        foreach (array_keys($topicDefinitions) as $topicName) {
+            if (preg_match($pattern, $topicName)) {
+                $topics[$topicName] = $topicName;
+            }
+        }
+        return $topics;
+    }
+
+    /**
+     * Construct perl regexp pattern for matching topic names from wildcard key.
+     *
+     * @param string $wildcardKey
+     * @return string
+     */
+    private function buildWildcardPattern($wildcardKey)
+    {
+        $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
+        $pattern = str_replace('#', '.+', $pattern);
+        $pattern = str_replace('*', '[^\.]+', $pattern);
+        if (strpos($wildcardKey, '#') == strlen($wildcardKey)) {
+            $pattern .= '/';
+        } else {
+            $pattern .= '$/';
+        }
+        return $pattern;
     }
 }
