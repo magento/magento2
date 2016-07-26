@@ -24,7 +24,7 @@ class StoreView extends DataSource
     private $storeViewEntity;
 
     /**
-     * Value for set.
+     * Value for set. [website|store]
      *
      * @var string
      */
@@ -71,7 +71,7 @@ class StoreView extends DataSource
     }
 
     /**
-     * Get value for set.
+     * Get code of store view entity to apply [website|store].
      *
      * @return string
      */
