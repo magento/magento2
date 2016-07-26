@@ -123,6 +123,7 @@ function setCustomErrorHandler()
                 sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
                 $errNo
             );
-        }
+        },
+        E_ALL
     );
 }
