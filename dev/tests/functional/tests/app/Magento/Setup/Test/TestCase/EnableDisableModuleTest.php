@@ -121,9 +121,6 @@ class EnableDisableModuleTest extends Injectable
         // Return to "Web Setup Wizard"
         $this->setupWizard->getSuccessMessage()->clickBackToSetup();
 
-        // Click "Module Manager" button
-        $this->setupWizard->getSetupHome()->clickModuleManager();
-
         // Find appropriate Module in the Grid
         $assertModuleInGrid->processAssert($this->setupWizard, $module->getModuleName());
 
