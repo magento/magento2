@@ -60,8 +60,8 @@ class TopologyTest extends \PHPUnit_Framework_TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-   public function exchangeDataProvider()
-   {
+    public function exchangeDataProvider()
+    {
        return [
            'magento-topic-based-exchange1' => [
                'exchangeConfig' => [
@@ -160,5 +160,5 @@ class TopologyTest extends \PHPUnit_Framework_TestCase
                ]
            ],
        ];
-   }
+    }
 }
