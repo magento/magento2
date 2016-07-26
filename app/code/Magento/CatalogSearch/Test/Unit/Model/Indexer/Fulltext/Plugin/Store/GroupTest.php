@@ -56,7 +56,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
      * @param bool $websiteChanged
      * @param int $invalidateCounter
      * @return void
-     * @dataProvider aroundSaveDataProvider
+     * @dataProvider beforeAfterSaveDataProvider
      */
     public function testBeforeAfterSave($isObjectNew, $websiteChanged, $invalidateCounter)
     {
@@ -86,7 +86,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public function beforeAfterSaveDataProvider()
     {
         return [
             [false, false, 0],

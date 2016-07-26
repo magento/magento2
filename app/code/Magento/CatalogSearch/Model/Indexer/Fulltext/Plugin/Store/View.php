@@ -11,25 +11,43 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin;
 class View extends AbstractPlugin
 {
     /**
+     * @var bool
+     */
+    private $needInvalidation;
+
+    /**
+     * Check if indexer requires invalidation after store view save
+     *
+     * @param \Magento\Store\Model\ResourceModel\Store $subject
+     * @param \Magento\Framework\Model\AbstractModel $store
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeSave(
+        \Magento\Store\Model\ResourceModel\Store $subject,
+        \Magento\Framework\Model\AbstractModel $store
+    ) {
+        $this->needInvalidation = $store->isObjectNew();
+    }
+
+    /**
      * Invalidate indexer on store view save
      *
      * @param \Magento\Store\Model\ResourceModel\Store $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $store
-     *
+     * @param \Magento\Store\Model\ResourceModel\Store $result
      * @return \Magento\Store\Model\ResourceModel\Store
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         \Magento\Store\Model\ResourceModel\Store $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $store
+        \Magento\Store\Model\ResourceModel\Store $result
     ) {
-        $needInvalidation = $store->isObjectNew();
-        $result = $proceed($store);
-        if ($needInvalidation) {
+        if ($this->needInvalidation) {
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
+
         return $result;
     }
 
