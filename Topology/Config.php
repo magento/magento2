@@ -64,27 +64,6 @@ class Config implements ConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getQueue($name, $connection)
-    {
-        $key = $name . '-' . $connection;
-        $queue = $this->queueIterator[$key];
-        if (!$queue) {
-            throw new LocalizedException(
-                new Phrase(
-                    "Queue '%queue' is not declared in connection.",
-                    [
-                        'queue' => $name,
-                        'connection' => $connection
-                    ]
-                )
-            );
-        }
-        return $queue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getQueues()
     {
         return $this->queueIterator;

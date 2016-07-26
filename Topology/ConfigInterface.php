@@ -31,16 +31,6 @@ interface ConfigInterface
     public function getExchanges();
 
     /**
-     * Get queue by name and connection
-     *
-     * @param string $name
-     * @param string $connection
-     * @return QueueConfigItemInterface
-     * @throws LocalizedException
-     */
-    public function getQueue($name, $connection);
-
-    /**
      * Get list of all queues declared in the system.
      *
      * @return QueueConfigItemInterface[]
