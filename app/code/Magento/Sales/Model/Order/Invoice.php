@@ -777,7 +777,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Return invoice comments
      *
-     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]
+     * @return \Magento\Sales\Api\Data\InvoiceCommentInterface[]|null
      */
     public function getComments()
     {
@@ -805,7 +805,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_total_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalRefunded()
     {
@@ -815,7 +815,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns discount_description
      *
-     * @return string
+     * @return string|null
      */
     public function getDiscountDescription()
     {
@@ -833,7 +833,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getBaseCurrencyCode()
     {
@@ -843,7 +843,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountAmount()
     {
@@ -853,7 +853,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_grand_total
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseGrandTotal()
     {
@@ -863,7 +863,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -873,7 +873,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_shipping_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingAmount()
     {
@@ -883,7 +883,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_shipping_discount_tax_compensation_amnt
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingDiscountTaxCompensationAmnt()
     {
@@ -893,7 +893,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_shipping_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingInclTax()
     {
@@ -903,7 +903,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_shipping_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingTaxAmount()
     {
@@ -913,7 +913,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_subtotal
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseSubtotal()
     {
@@ -923,7 +923,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_subtotal_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseSubtotalInclTax()
     {
@@ -933,7 +933,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTaxAmount()
     {
@@ -943,7 +943,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_to_global_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseToGlobalRate()
     {
@@ -953,7 +953,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns base_to_order_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseToOrderRate()
     {
@@ -963,7 +963,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns billing_address_id
      *
-     * @return int
+     * @return int|null
      */
     public function getBillingAddressId()
     {
@@ -973,7 +973,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns can_void_flag
      *
-     * @return int
+     * @return int|null
      */
     public function getCanVoidFlag()
     {
@@ -983,7 +983,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns created_at
      *
-     * @return string
+     * @return string|null
      */
     public function getCreatedAt()
     {
@@ -1001,7 +1001,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountAmount()
     {
@@ -1011,7 +1011,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns email_sent
      *
-     * @return int
+     * @return int|null
      */
     public function getEmailSent()
     {
@@ -1021,7 +1021,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns global_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getGlobalCurrencyCode()
     {
@@ -1031,7 +1031,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns grand_total
      *
-     * @return float
+     * @return float|null
      */
     public function getGrandTotal()
     {
@@ -1041,7 +1041,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -1051,7 +1051,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns is_used_for_refund
      *
-     * @return int
+     * @return int|null
      */
     public function getIsUsedForRefund()
     {
@@ -1061,7 +1061,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns order_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getOrderCurrencyCode()
     {
@@ -1081,7 +1081,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns shipping_address_id
      *
-     * @return int
+     * @return int|null
      */
     public function getShippingAddressId()
     {
@@ -1091,7 +1091,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns shipping_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingAmount()
     {
@@ -1101,7 +1101,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns shipping_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingDiscountTaxCompensationAmount()
     {
@@ -1111,7 +1111,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns shipping_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingInclTax()
     {
@@ -1121,7 +1121,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns shipping_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingTaxAmount()
     {
@@ -1131,7 +1131,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns state
      *
-     * @return int
+     * @return int|null
      */
     public function getState()
     {
@@ -1141,7 +1141,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns store_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getStoreCurrencyCode()
     {
@@ -1151,7 +1151,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns store_id
      *
-     * @return int
+     * @return int|null
      */
     public function getStoreId()
     {
@@ -1161,7 +1161,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns store_to_base_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getStoreToBaseRate()
     {
@@ -1171,7 +1171,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns store_to_order_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getStoreToOrderRate()
     {
@@ -1181,7 +1181,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns subtotal
      *
-     * @return float
+     * @return float|null
      */
     public function getSubtotal()
     {
@@ -1191,7 +1191,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns subtotal_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getSubtotalInclTax()
     {
@@ -1201,7 +1201,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getTaxAmount()
     {
@@ -1221,7 +1221,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns transaction_id
      *
-     * @return string
+     * @return string|null
      */
     public function getTransactionId()
     {
@@ -1242,7 +1242,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Returns updated_at
      *
-     * @return string
+     * @return string|null
      */
     public function getUpdatedAt()
     {
