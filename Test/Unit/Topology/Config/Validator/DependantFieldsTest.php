@@ -7,7 +7,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\Validator;
 
 use \Magento\Framework\MessageQueue\Topology\Config\Validator\DependentFields;
 
-class DependentFieldsTest extends \PHPUnit_Framework_TestCase
+class DependantFieldsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DependentFields
