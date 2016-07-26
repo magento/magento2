@@ -201,7 +201,9 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     public function addUpdate($update)
     {
-        $this->updates[] = $update;
+        if (!in_array($update, $this->updates)) {
+            $this->updates[] = $update;
+        }
         return $this;
     }
 
