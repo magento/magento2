@@ -26,7 +26,9 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
@@ -52,7 +54,9 @@
                 <item name="is_in_stock" xsi:type="string">Out of Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
@@ -82,7 +86,9 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
@@ -108,7 +114,9 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="array">
+                    <item name="dataset" xsi:type="string">default</item>
+                </item>
             </field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
