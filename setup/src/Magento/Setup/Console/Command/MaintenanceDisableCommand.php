@@ -42,7 +42,6 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
         return '<info>Disabled maintenance mode</info>';
     }
 
-
     /**
      * Return if IP addresses effective for maintenance mode were set
      *

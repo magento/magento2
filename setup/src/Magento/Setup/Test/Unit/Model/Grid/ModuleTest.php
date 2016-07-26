@@ -19,6 +19,7 @@ use Magento\Setup\Model\PackagesData;
 
 /**
  * Class ModuleTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ModuleTest extends \PHPUnit_Framework_TestCase
 {

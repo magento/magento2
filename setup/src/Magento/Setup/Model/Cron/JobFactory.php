@@ -59,6 +59,7 @@ class JobFactory
      * @return AbstractJob
      * @throws \RuntimeException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function create($name, array $params = [])
     {
