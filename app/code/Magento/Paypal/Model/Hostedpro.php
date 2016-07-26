@@ -312,7 +312,7 @@ class Hostedpro extends Direct
         $store = $this->_storeManager->getStore($storeId);
         return $this->_urlBuilder->getUrl(
             $path,
-            ["_store" => $store, "_secure" => $secure === null ? $store->isCurrentlySecure() : $secure]
+            ["_secure" => $secure === null ? $store->isCurrentlySecure() : $secure]
         );
     }
 }
