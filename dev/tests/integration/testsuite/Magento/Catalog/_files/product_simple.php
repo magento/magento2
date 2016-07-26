@@ -88,7 +88,7 @@ $tierPrices[] = $tierPriceFactory->create(
     ]
 );
 /** @var  $tpExtensionAttributes */
-$tpExtensionAttributesFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory::class);
+$tpExtensionAttributesFactory = $objectManager->create(ProductTierPriceExtensionFactory::class);
 $tpExtensionAttributes = $tpExtensionAttributesFactory->create()->setPercentageValue(50);
 
 $tierPrices[] = $tierPriceFactory->create(
