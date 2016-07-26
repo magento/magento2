@@ -404,7 +404,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
 
-        $this->_layoutValidator->expects($this->once())
+        $this->_layoutValidator->expects($this->any())
             ->method('getMessages')
             ->willReturn(['testMessage1', 'testMessage2']);
 
