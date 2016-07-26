@@ -15,6 +15,22 @@ class Attribute extends AbstractPlugin
     private $config;
 
     /**
+     * @var boolean
+     */
+    private $deleteNeedInvalidation;
+
+    /**
+     * @var boolean
+     */
+    private $saveNeedInvalidation;
+
+    /**
+     * @var boolean
+     */
+    private $saveIsNew;
+
+
+    /**
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Search\Request\Config $config
      */
@@ -27,32 +43,44 @@ class Attribute extends AbstractPlugin
     }
 
     /**
-     * Invalidate indexer on attribute save (searchable flag change)
+     * Check for needed indexer invalidation on attribute save (searchable flag change)
      *
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
-     * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $attribute
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Attribute
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function beforeSave(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,
-        \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $attribute
     ) {
-        $isNew = $attribute->isObjectNew();
-        $needInvalidation = (
+        $this->saveIsNew = $attribute->isObjectNew();
+        $this->saveNeedInvalidation = (
                 $attribute->dataHasChangedFor('is_searchable')
                 || $attribute->dataHasChangedFor('is_filterable')
                 || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
-            ) && !$isNew;
+            ) && ! $this->saveIsNew;
+        return [$attribute];
+    }
 
-        $result = $proceed($attribute);
-        if ($needInvalidation) {
+    /**
+     * Invalidate indexer on attribute save (searchable flag change)
+     *
+     * @param \Magento\Framework\Model\AbstractModel $subject
+     * @param \Magento\Framework\Model\AbstractModel $result
+     *
+     * @return \Magento\Framework\Model\AbstractModel
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterSave(
+        \Magento\Framework\Model\AbstractModel $subject,
+        \Magento\Framework\Model\AbstractModel $result
+    ) {
+        if ($this->saveNeedInvalidation) {
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
-        if ($isNew || $needInvalidation) {
+        if ($this->saveIsNew || $this->saveNeedInvalidation) {
             $this->config->reset();
         }
 
@@ -60,26 +88,38 @@ class Attribute extends AbstractPlugin
     }
 
     /**
-     * Invalidate indexer on searchable attribute delete
+     * Check for needed indexer invalidation on searchable attribute delete
      *
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
-     * @param \Closure $proceed
      * @param \Magento\Framework\Model\AbstractModel $attribute
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Attribute
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
+    public function beforeDelete(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,
-        \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $attribute
     ) {
-        $needInvalidation = !$attribute->isObjectNew() && $attribute->getIsSearchable();
-        $result = $proceed($attribute);
-        if ($needInvalidation) {
+        $this->deleteNeedInvalidation = !$attribute->isObjectNew() && $attribute->getIsSearchable();
+        return [$attribute];
+    }
+
+    /**
+     * Invalidate indexer on searchable attribute delete
+     *
+     * @param \Magento\Framework\Model\AbstractModel $subject
+     * @param \Magento\Framework\Model\AbstractModel $result
+     *
+     * @return \Magento\Framework\Model\AbstractModel
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterDelete(
+        \Magento\Framework\Model\AbstractModel $subject,
+        \Magento\Framework\Model\AbstractModel $result
+    ) {
+        if ($this->deleteNeedInvalidation) {
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
-
         return $result;
     }
 }

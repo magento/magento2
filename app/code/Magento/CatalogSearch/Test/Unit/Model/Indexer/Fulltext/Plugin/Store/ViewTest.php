@@ -55,9 +55,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      * @param bool $isObjectNew
      * @param int $invalidateCounter
      * @return void
-     * @dataProvider aroundSaveDataProvider
+     * @dataProvider beforeAfterSaveDataProvider
      */
-    public function testAroundSave($isObjectNew, $invalidateCounter)
+    public function testBeforeAfterSave($isObjectNew, $invalidateCounter)
     {
         $viewMock = $this->getMock(
             'Magento\Store\Model\Store',
@@ -76,16 +76,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
         $this->prepareIndexer($invalidateCounter);
 
+        $this->model->beforeSave($this->subjectMock, $viewMock);
         $this->assertEquals(
             $this->subjectMock,
-            $this->model->aroundSave($this->subjectMock, $closureMock, $viewMock)
+            $this->model->afterSave($this->subjectMock, $this->subjectMock)
         );
     }
 
     /**
      * @return array
      */
-    public function aroundSaveDataProvider()
+    public function beforeAfterSaveDataProvider()
     {
         return [
             [false, 0],
