@@ -9,9 +9,10 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\ExchangeInterface;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
-use Magento\Framework\Phrase;
 use PhpAmqpLib\Message\AMQPMessage;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfigInterface;
+use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
+use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 
 class Exchange implements ExchangeInterface
 {
@@ -21,11 +22,6 @@ class Exchange implements ExchangeInterface
      * @var Config
      */
     private $amqpConfig;
-
-    /**
-     * @var QueueConfig
-     */
-    private $queueConfig;
 
     /**
      * @var CommunicationConfigInterface
@@ -38,12 +34,24 @@ class Exchange implements ExchangeInterface
     private $rpcConnectionTimeout;
 
     /**
+     * @var PublisherConfig
+     */
+    private $publisherConfig;
+
+    /**
+     * @var ResponseQueueNameBuilder
+     */
+    private $responseQueueNameBuilder;
+
+    /**
      * Initialize dependencies.
      *
      * @param Config $amqpConfig
      * @param QueueConfig $queueConfig
      * @param CommunicationConfigInterface $communicationConfig
      * @param int $rpcConnectionTimeout
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Config $amqpConfig,
@@ -52,7 +60,6 @@ class Exchange implements ExchangeInterface
         $rpcConnectionTimeout = self::RPC_CONNECTION_TIMEOUT
     ) {
         $this->amqpConfig = $amqpConfig;
-        $this->queueConfig = $queueConfig;
         $this->communicationConfig = $communicationConfig;
         $this->rpcConnectionTimeout = $rpcConnectionTimeout;
     }
@@ -66,7 +73,7 @@ class Exchange implements ExchangeInterface
         $isSync = $topicData[CommunicationConfigInterface::TOPIC_IS_SYNCHRONOUS];
 
         $channel = $this->amqpConfig->getChannel();
-        $exchange = $this->queueConfig->getExchangeByTopic($topic);
+        $exchange = $this->getPublisherConfig()->getPublisher($topic)->getConnection()->getExchange();
         $responseBody = null;
 
         $msg = new AMQPMessage($envelope->getBody(), $envelope->getProperties());
@@ -85,7 +92,7 @@ class Exchange implements ExchangeInterface
             if ($envelope->getProperties()['reply_to']) {
                 $replyTo = $envelope->getProperties()['reply_to'];
             } else {
-                $replyTo = $this->queueConfig->getResponseQueueName($topic);
+                $replyTo = $this->getResponseQueueNameBuilder()->getQueueName($topic);
             }
             $channel->basic_consume(
                 $replyTo,
@@ -113,6 +120,36 @@ class Exchange implements ExchangeInterface
             $channel->basic_publish($msg, $exchange, $topic);
         }
         return $responseBody;
+    }
 
+    /**
+     * Get publisher config.
+     *
+     * @return PublisherConfig
+     *
+     * @deprecated
+     */
+    private function getPublisherConfig()
+    {
+        if ($this->publisherConfig === null) {
+            $this->publisherConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(PublisherConfig::class);
+        }
+        return $this->publisherConfig;
+    }
+
+    /**
+     * Get response queue name builder.
+     *
+     * @return ResponseQueueNameBuilder
+     *
+     * @deprecated
+     */
+    private function getResponseQueueNameBuilder()
+    {
+        if ($this->responseQueueNameBuilder === null) {
+            $this->responseQueueNameBuilder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(ResponseQueueNameBuilder::class);
+        }
+        return $this->responseQueueNameBuilder;
     }
 }
