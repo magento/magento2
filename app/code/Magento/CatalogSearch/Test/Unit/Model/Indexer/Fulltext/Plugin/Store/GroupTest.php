@@ -58,7 +58,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @dataProvider aroundSaveDataProvider
      */
-    public function testAroundSave($isObjectNew, $websiteChanged, $invalidateCounter)
+    public function testBeforeAfterSave($isObjectNew, $websiteChanged, $invalidateCounter)
     {
         $groupMock = $this->getMock(
             'Magento\Store\Model\Group',
@@ -73,17 +73,13 @@ class GroupTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($websiteChanged));
         $groupMock->expects($this->once())->method('isObjectNew')->will($this->returnValue($isObjectNew));
 
-        $closureMock = function (\Magento\Store\Model\Group $object) use ($groupMock) {
-            $this->assertEquals($object, $groupMock);
-            return $this->subjectMock;
-        };
-
         $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
         $this->prepareIndexer($invalidateCounter);
 
+        $this->model->beforeSave($this->subjectMock, $groupMock);
         $this->assertEquals(
             $this->subjectMock,
-            $this->model->aroundSave($this->subjectMock, $closureMock, $groupMock)
+            $this->model->afterSave($this->subjectMock, $this->subjectMock)
         );
     }
 

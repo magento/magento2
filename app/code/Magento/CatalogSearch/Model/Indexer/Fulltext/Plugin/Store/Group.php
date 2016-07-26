@@ -11,23 +11,38 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin;
 class Group extends AbstractPlugin
 {
     /**
+     * @var bool
+     */
+    private $needInvalidation;
+
+    /**
+     * Check if indexer requires invalidation after store group save
+     *
+     * @param \Magento\Store\Model\ResourceModel\Group $subject
+     * @param \Magento\Framework\Model\AbstractModel $group
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeSave(
+        \Magento\Store\Model\ResourceModel\Group $subject,
+        \Magento\Framework\Model\AbstractModel $group
+    ) {
+        $this->needInvalidation = !$group->isObjectNew() && $group->dataHasChangedFor('website_id');
+    }
+
+    /**
      * Invalidate indexer on store group save
      *
      * @param \Magento\Store\Model\ResourceModel\Group $subject
-     * @param \Closure $proceed
-     * @param \Magento\Framework\Model\AbstractModel $group
-     *
+     * @param \Magento\Store\Model\ResourceModel\Group $result
      * @return \Magento\Store\Model\ResourceModel\Group
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         \Magento\Store\Model\ResourceModel\Group $subject,
-        \Closure $proceed,
-        \Magento\Framework\Model\AbstractModel $group
+        \Magento\Store\Model\ResourceModel\Group $result
     ) {
-        $needInvalidation = !$group->isObjectNew() && $group->dataHasChangedFor('website_id');
-        $result = $proceed($group);
-        if ($needInvalidation) {
+        if ($this->needInvalidation) {
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }
 
