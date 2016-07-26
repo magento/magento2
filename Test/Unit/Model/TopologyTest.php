@@ -15,7 +15,7 @@ use Magento\Framework\MessageQueue\Topology\ConfigInterface as TopologyConfig;
 use Magento\Amqp\Model\Config as AmqpConfig;
 use PhpAmqpLib\Channel\AMQPChannel;
 
-class QueueInstallerTest extends \PHPUnit_Framework_TestCase
+class TopologyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectManager

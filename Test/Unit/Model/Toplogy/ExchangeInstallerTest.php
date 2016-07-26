@@ -30,7 +30,6 @@ class ExchangeInstallerTest extends \PHPUnit_Framework_TestCase
         $exchange->expects($this->once())->method('getArguments')->willReturn(['some' => 'value']);
         $exchange->expects($this->once())->method('getBindings')->willReturn(['bind01' => $binding]);
 
-
         $channel->expects($this->once())
             ->method('exchange_declare')
             ->with('magento', 'topic', false, true, false, false, false, ['some' => ['S', 'value']], null);
