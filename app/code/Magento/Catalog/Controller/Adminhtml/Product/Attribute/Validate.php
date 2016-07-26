@@ -55,6 +55,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
