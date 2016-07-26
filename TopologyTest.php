@@ -62,103 +62,103 @@ class TopologyTest extends \PHPUnit_Framework_TestCase
      */
     public function exchangeDataProvider()
     {
-       return [
-           'magento-topic-based-exchange1' => [
-               'exchangeConfig' => [
-                   'name' => 'magento-topic-based-exchange1',
-                   'vhost' => '/',
-                   'type' => 'topic',
-                   'durable' => true,
-                   'auto_delete' => false,
-                   'internal' => false,
-                   'arguments' => [
-                       'alternate-exchange' => 'magento-log-exchange'
-                   ],
-               ],
-               'bindingConfig' => [
-                   [
-                       'source' => 'magento-topic-based-exchange1',
-                       'vhost' => '/',
-                       'destination' => 'topic-queue1',
-                       'destination_type' => 'queue',
-                       'routing_key' => 'anotherTopic1',
-                       'arguments' => [
-                           'argument1' => 'value'
-                       ],
-                   ],
-               ]
-           ],
-           'magento-topic-based-exchange2' => [
-               'exchangeConfig' => [
-                   'name' => 'magento-topic-based-exchange2',
-                   'vhost' => '/',
-                   'type' => 'topic',
-                   'durable' => true,
-                   'auto_delete' => false,
-                   'internal' => false,
-                   'arguments' => [
-                       'alternate-exchange' => 'magento-log-exchange',
-                       'arrayValue' => ['10', '20']
-                   ],
-               ],
-               'bindingConfig' => [
-                   [
-                       'source' => 'magento-topic-based-exchange2',
-                       'vhost' => '/',
-                       'destination' => 'topic-queue2',
-                       'destination_type' => 'queue',
-                       'routing_key' => 'anotherTopic2',
-                       'arguments' => [
-                           'argument1' => 'value',
-                           'argument2' => true,
-                           'argument3' => '150',
-                       ],
-                   ],
-               ]
-           ],
-           'magento-topic-based-exchange3' => [
-               'exchangeConfig' => [
-                   'name' => 'magento-topic-based-exchange3',
-                   'vhost' => '/',
-                   'type' => 'topic',
-                   'durable' => false,
-                   'auto_delete' => true,
-                   'internal' => true,
-                   'arguments' => [],
-               ],
-               'bindingConfig' => [],
-           ],
-           'magento-topic-based-exchange4' => [
-               'exchangeConfig' => [
-                   'name' => 'magento-topic-based-exchange4',
-                   'vhost' => '/',
-                   'type' => 'topic',
-                   'durable' => true,
-                   'auto_delete' => false,
-                   'internal' => false,
-                   'arguments' => [],
-               ],
-               'bindingConfig' => [
-                   [
-                       'source' => 'magento-topic-based-exchange4',
-                       'vhost' => '/',
-                       'destination' => 'topic-queue1',
-                       'destination_type' => 'queue',
-                       'routing_key' => '#',
-                       'arguments' => [
-                           'test' => 'one'
-                       ],
-                   ],
-                   [
-                       'source' => 'magento-topic-based-exchange4',
-                       'vhost' => '/',
-                       'destination' => 'topic-queue2',
-                       'destination_type' => 'queue',
-                       'routing_key' => '*.*.*',
-                       'arguments' => [],
-                   ],
-               ]
-           ],
-       ];
+        return [
+            'magento-topic-based-exchange1' => [
+                'exchangeConfig' => [
+                    'name' => 'magento-topic-based-exchange1',
+                    'vhost' => '/',
+                    'type' => 'topic',
+                    'durable' => true,
+                    'auto_delete' => false,
+                    'internal' => false,
+                    'arguments' => [
+                        'alternate-exchange' => 'magento-log-exchange'
+                    ],
+                ],
+                'bindingConfig' => [
+                    [
+                        'source' => 'magento-topic-based-exchange1',
+                        'vhost' => '/',
+                        'destination' => 'topic-queue1',
+                        'destination_type' => 'queue',
+                        'routing_key' => 'anotherTopic1',
+                        'arguments' => [
+                            'argument1' => 'value'
+                        ],
+                    ],
+                ]
+            ],
+            'magento-topic-based-exchange2' => [
+                'exchangeConfig' => [
+                    'name' => 'magento-topic-based-exchange2',
+                    'vhost' => '/',
+                    'type' => 'topic',
+                    'durable' => true,
+                    'auto_delete' => false,
+                    'internal' => false,
+                    'arguments' => [
+                        'alternate-exchange' => 'magento-log-exchange',
+                        'arrayValue' => ['10', '20']
+                    ],
+                ],
+                'bindingConfig' => [
+                    [
+                        'source' => 'magento-topic-based-exchange2',
+                        'vhost' => '/',
+                        'destination' => 'topic-queue2',
+                        'destination_type' => 'queue',
+                        'routing_key' => 'anotherTopic2',
+                        'arguments' => [
+                            'argument1' => 'value',
+                            'argument2' => true,
+                            'argument3' => '150',
+                        ],
+                    ],
+                ]
+            ],
+            'magento-topic-based-exchange3' => [
+                'exchangeConfig' => [
+                    'name' => 'magento-topic-based-exchange3',
+                    'vhost' => '/',
+                    'type' => 'topic',
+                    'durable' => false,
+                    'auto_delete' => true,
+                    'internal' => true,
+                    'arguments' => [],
+                ],
+                'bindingConfig' => [],
+            ],
+            'magento-topic-based-exchange4' => [
+                'exchangeConfig' => [
+                    'name' => 'magento-topic-based-exchange4',
+                    'vhost' => '/',
+                    'type' => 'topic',
+                    'durable' => true,
+                    'auto_delete' => false,
+                    'internal' => false,
+                    'arguments' => [],
+                ],
+                'bindingConfig' => [
+                    [
+                        'source' => 'magento-topic-based-exchange4',
+                        'vhost' => '/',
+                        'destination' => 'topic-queue1',
+                        'destination_type' => 'queue',
+                        'routing_key' => '#',
+                        'arguments' => [
+                            'test' => 'one'
+                        ],
+                    ],
+                    [
+                        'source' => 'magento-topic-based-exchange4',
+                        'vhost' => '/',
+                        'destination' => 'topic-queue2',
+                        'destination_type' => 'queue',
+                        'routing_key' => '*.*.*',
+                        'arguments' => [],
+                    ],
+                ]
+            ],
+        ];
     }
 }
