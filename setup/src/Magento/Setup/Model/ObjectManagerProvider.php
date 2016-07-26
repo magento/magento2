@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Application;
 use Magento\Framework\Console\CommandListInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -78,7 +78,7 @@ class ObjectManagerProvider
         $commandList = $this->objectManager->create(CommandListInterface::class);
         foreach ($commandList->getCommands() as $command) {
             $command->setApplication(
-                $this->serviceLocator->get(Cli::class)
+                $this->serviceLocator->get(Application::class)
             );
         }
     }

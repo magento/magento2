@@ -14,7 +14,7 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Console\CommandListInterface;
 use Symfony\Component\Console\Command\Command;
-use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Application;
 
 /**
  * Class ObjectManagerProviderTest
@@ -54,7 +54,10 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap(
                 [
                     [InitParamListener::BOOTSTRAP_PARAM, $initParams],
-                    [Cli::class, $this->getMockBuilder(Cli::class)->disableOriginalConstructor()->getMock()],
+                    [
+                        Application::class,
+                        $this->getMockBuilder(Application::class)->disableOriginalConstructor()->getMock(),
+                    ],
                 ]
             );
 
