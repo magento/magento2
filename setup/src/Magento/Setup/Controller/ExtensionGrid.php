@@ -70,15 +70,15 @@ class ExtensionGrid extends AbstractActionController
         $error = '';
         $lastSyncData = [];
         $authDetails = $this->packagesAuth->getAuthJsonData();
+        $extensions = [];
         if ($authDetails) {
             try {
                 $lastSyncData = $this->packagesData->syncPackagesData();
+                $extensions = $this->gridExtension->getList();
             } catch (\Exception $e) {
                 $error = $e->getMessage();
             }
         }
-
-        $extensions = $this->gridExtension->getList();
 
         return new JsonModel(
             [

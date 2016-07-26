@@ -18,6 +18,11 @@ angular.module('extension-grid', ['ngStorage'])
                 $scope.extensions = data.extensions;
                 $scope.total = data.total;
 
+                if (data.error !== '') {
+                    $scope.syncError = true;
+                    $scope.ErrorMessage = data.error;
+                }
+
                 if (typeof data.lastSyncData.lastSyncDate === 'undefined') {
                     $scope.isOutOfSync = true;
                     $scope.countOfUpdate = 0;
