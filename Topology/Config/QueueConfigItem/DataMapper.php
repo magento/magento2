@@ -11,6 +11,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 use Magento\Framework\Phrase;
 
+/**
+ * Topology queue config data mapper.
+ */
 class DataMapper
 {
     /**
