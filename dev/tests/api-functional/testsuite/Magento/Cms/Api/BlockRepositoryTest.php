@@ -255,6 +255,7 @@ class BlockRepositoryTest extends WebapiAbstract
             $cmsBlocks['first']->getIdentifier()
         );
     }
+
     /**
      * @return BlockInterface[]
      */
