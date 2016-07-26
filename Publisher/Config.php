@@ -34,11 +34,13 @@ class Config implements ConfigInterface
     /**
      * {@inheritdoc}
      */
-    public function getPublisher($name)
+    public function getPublisher($topic)
     {
-        $publisher = $this->iterator[$name];
+        $publisher = $this->iterator[$topic];
         if (!$publisher) {
-            throw new LocalizedException(new Phrase("Publisher '%publisher' is not declared.", ['publisher' => $name]));
+            throw new LocalizedException(
+                new Phrase("Publisher '%publisher' is not declared.", ['publisher' => $topic])
+            );
         }
         return $publisher;
     }

@@ -5,10 +5,11 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class Consumer used to process a single message, unlike batch consumer.
@@ -50,11 +51,6 @@ class Consumer implements ConsumerInterface
     private $queueRepository;
 
     /**
-     * @var \Magento\Framework\MessageQueue\ConfigInterface
-     */
-    private $queueConfig;
-
-    /**
      * @var EnvelopeFactory
      */
     private $envelopeFactory;
@@ -63,6 +59,11 @@ class Consumer implements ConsumerInterface
      * @var MessageValidator
      */
     private $messageValidator;
+
+    /**
+     * @var ConsumerConfig
+     */
+    private $consumerConfig;
 
     /**
      * Initialize dependencies.
@@ -76,6 +77,8 @@ class Consumer implements ConsumerInterface
      * @param MessageController $messageController
      * @param MessageValidator $messageValidator
      * @param EnvelopeFactory $envelopeFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CallbackInvoker $invoker,
@@ -93,7 +96,6 @@ class Consumer implements ConsumerInterface
         $this->resource = $resource;
         $this->configuration = $configuration;
         $this->queueRepository = $queueRepository;
-        $this->queueConfig = $queueConfig;
         $this->messageController = $messageController;
         $this->messageValidator = $messageValidator;
         $this->envelopeFactory = $envelopeFactory;
@@ -130,7 +132,7 @@ class Consumer implements ConsumerInterface
 
         if (isset($decodedMessage)) {
             $messageSchemaType = $this->configuration->getMessageSchemaType($topicName);
-            if ($messageSchemaType == QueueConfig::TOPIC_SCHEMA_TYPE_METHOD) {
+            if ($messageSchemaType == CommunicationConfig::TOPIC_REQUEST_TYPE_METHOD) {
                 foreach ($handlers as $callback) {
                     $result = call_user_func_array($callback, $decodedMessage);
                     return $this->processSyncResponse($topicName, $result);
@@ -174,7 +176,8 @@ class Consumer implements ConsumerInterface
     private function sendResponse(EnvelopeInterface $envelope)
     {
         $messageProperties = $envelope->getProperties();
-        $connectionName = $this->queueConfig->getConnectionByTopic($messageProperties['topic_name']);
+        $connectionName = $this->getConsumerConfig()
+            ->getConsumer($this->configuration->getConsumerName())->getConnection();
         $queue = $this->queueRepository->get($connectionName, $messageProperties['reply_to']);
         $queue->push($envelope);
     }
@@ -221,5 +224,20 @@ class Consumer implements ConsumerInterface
                 $queue->reject($message, false, $e->getMessage());
             }
         };
+    }
+
+    /**
+     * Get consumer config.
+     *
+     * @return ConsumerConfig
+     *
+     * @deprecated
+     */
+    private function getConsumerConfig()
+    {
+        if ($this->consumerConfig === null) {
+            $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
+        }
+        return $this->consumerConfig;
     }
 }

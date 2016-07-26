@@ -6,9 +6,9 @@
 namespace Magento\Framework\MessageQueue;
 
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
-use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class MessageValidator to validate message with topic schema
@@ -17,20 +17,9 @@ use Magento\Framework\Phrase;
 class MessageValidator
 {
     /**
-     * @var QueueConfig
+     * @var CommunicationConfig
      */
-    private $queueConfig;
-
-    /**
-     * Initialize dependencies.
-     *
-     * @param QueueConfig $queueConfig
-     */
-    public function __construct(
-        QueueConfig $queueConfig
-    ) {
-        $this->queueConfig = $queueConfig;
-    }
+    private $communicationConfig;
 
     /**
      * Identify message data schema by topic.
@@ -42,13 +31,21 @@ class MessageValidator
      */
     protected function getTopicSchema($topic, $requestType)
     {
-        $topicConfig = $this->queueConfig->getTopic($topic);
+        $topicConfig = $this->getCommunicationConfig()->getTopic($topic);
         if ($topicConfig === null) {
             throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
         }
-        return $requestType
-            ? $topicConfig[QueueConfig::TOPIC_SCHEMA]
-            : $topicConfig[QueueConfig::TOPIC_RESPONSE_SCHEMA];
+        $requestSchema = [
+            'schema_type' => $topicConfig[CommunicationConfig::TOPIC_REQUEST_TYPE],
+            'schema_value' => $topicConfig[CommunicationConfig::TOPIC_REQUEST]
+        ];
+        $responseSchema = [
+            'schema_type' => isset($topicConfig[CommunicationConfig::TOPIC_RESPONSE]) 
+                ? CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS 
+                : null,
+            'schema_value' => $topicConfig[CommunicationConfig::TOPIC_RESPONSE]
+        ];
+        return $requestType ? $requestSchema : $responseSchema;
     }
 
     /**
@@ -63,18 +60,18 @@ class MessageValidator
     public function validate($topic, $message, $requestType = true)
     {
         $topicSchema = $this->getTopicSchema($topic, $requestType);
-        if ($topicSchema[QueueConfig::TOPIC_SCHEMA_TYPE] == QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT) {
-            $messageDataType = $topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE];
+        if ($topicSchema['schema_type'] == CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS) {
+            $messageDataType = $topicSchema['schema_value'];
             $this->validateMessage($message, $messageDataType, $topic);
         } else {
             /** Validate message according to the method signature associated with the message topic */
             $message = (array)$message;
             $isIndexedArray = array_keys($message) === range(0, count($message) - 1);
-            foreach ($topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE] as $methodParameterMeta) {
-                $paramName = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_NAME];
-                $paramType = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_TYPE];
+            foreach ($topicSchema['schema_value'] as $methodParameterMeta) {
+                $paramName = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_NAME];
+                $paramType = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_TYPE];
                 if ($isIndexedArray) {
-                    $paramPosition = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_POSITION];
+                    $paramPosition = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
                         $this->validateMessage($message[$paramPosition], $paramType, $topic);
                     }
@@ -175,5 +172,22 @@ class MessageValidator
     {
         $type = is_object($message) ? get_class($message) : gettype($message);
         return $type == "integer" ? "int" : $type;
+    }
+
+    /**
+     * Get communication config.
+     *
+     * @return CommunicationConfig
+     *
+     * @deprecated
+     */
+    private function getCommunicationConfig()
+    {
+        if ($this->communicationConfig === null) {
+            $this->communicationConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                CommunicationConfig::class
+            );
+        }
+        return $this->communicationConfig;
     }
 }

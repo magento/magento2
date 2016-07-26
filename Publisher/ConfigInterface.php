@@ -14,13 +14,13 @@ use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface
 interface ConfigInterface
 {
     /**
-     * Get publisher configuration by publisher name.
+     * Get publisher configuration by topic.
      *
-     * @param string $name
+     * @param string $topic
      * @return PublisherConfigItemInterface
      * @throws LocalizedException
      */
-    public function getPublisher($name);
+    public function getPublisher($topic);
 
     /**
      * Get list of all publishers declared in the system.

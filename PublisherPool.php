@@ -8,6 +8,7 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
+use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
  * Publishers pool.
@@ -34,11 +35,9 @@ class PublisherPool implements PublisherInterface
     protected $communicationConfig;
 
     /**
-     * All of the merged queue config information
-     *
-     * @var QueueConfig
+     * @var PublisherConfig
      */
-    private $queueConfig;
+    private $publisherConfig;
 
     /**
      * Initialize dependencies.
@@ -46,6 +45,8 @@ class PublisherPool implements PublisherInterface
      * @param CommunicationConfig $communicationConfig
      * @param QueueConfig $queueConfig
      * @param string[] $publishers
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         CommunicationConfig $communicationConfig,
@@ -53,7 +54,6 @@ class PublisherPool implements PublisherInterface
         array $publishers
     ) {
         $this->communicationConfig = $communicationConfig;
-        $this->queueConfig = $queueConfig;
         $this->initializePublishers($publishers);
     }
 
@@ -62,18 +62,12 @@ class PublisherPool implements PublisherInterface
      */
     public function publish($topicName, $data)
     {
-        /* read the topic configuration for the publisher name */
-        $publisherName = $this->getPublisherNameForTopic($topicName);
-        $publisherConfig = $this->getPublisherConfig($publisherName);
-        $topic = $this->queueConfig->getTopic($topicName);
-        $type = $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS] ? self::MODE_SYNC : self::MODE_ASYNC;
-        /** @var PublisherInterface $publisher */
-        $publisher = $this->getPublisherForConnectionNameAndType(
-            $type,
-            $publisherConfig[QueueConfig::PUBLISHER_CONNECTION]
-        );
+        $publisherType = $this->communicationConfig->getTopic($topicName)[CommunicationConfig::TOPIC_IS_SYNCHRONOUS]
+            ? self::MODE_SYNC
+            : self::MODE_ASYNC;
+        $connectionName = $this->getPublisherConfig()->getPublisher($topicName)->getConnection()->getName();
+        $publisher = $this->getPublisherForConnectionNameAndType($publisherType, $connectionName);
         return $publisher->publish($topicName, $data);
-
     }
 
     /**
@@ -117,38 +111,6 @@ class PublisherPool implements PublisherInterface
     }
 
     /**
-     * Return the publisher name given a topic.
-     *
-     * @param string $topicName
-     * @return string
-     * @throws \LogicException
-     */
-    private function getPublisherNameForTopic($topicName)
-    {
-        $topicConfig = $this->queueConfig->getTopic($topicName);
-        if ($topicConfig === null) {
-            throw new \LogicException(sprintf('Specified topic "%s" is not declared.', $topicName));
-        }
-        return $topicConfig[QueueConfig::TOPIC_PUBLISHER];
-    }
-
-    /**
-     * Returns the publisher configuration information.
-     *
-     * @param string $publisherName
-     * @return array
-     * @throws \LogicException
-     */
-    private function getPublisherConfig($publisherName)
-    {
-        $publisherConfig = $this->queueConfig->getPublisher($publisherName);
-        if ($publisherConfig === null) {
-            throw new \LogicException(sprintf('Specified publisher "%s" is not declared.', $publisherName));
-        }
-        return $publisherConfig;
-    }
-
-    /**
      * Return an instance of a publisher for a connection name.
      *
      * @param string $type
@@ -173,5 +135,20 @@ class PublisherPool implements PublisherInterface
             );
         }
         return $this->publishers[$type][$connectionName];
+    }
+
+    /**
+     * Get publisher config.
+     *
+     * @return PublisherConfig
+     *
+     * @deprecated
+     */
+    private function getPublisherConfig()
+    {
+        if ($this->publisherConfig === null) {
+            $this->publisherConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(PublisherConfig::class);
+        }
+        return $this->publisherConfig;
     }
 }

@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Webapi\ServicePayloadConverterInterface;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class which provides encoding and decoding capabilities for MessageQueue messages.
@@ -17,11 +18,6 @@ class MessageEncoder
 {
     const DIRECTION_ENCODE = 'encode';
     const DIRECTION_DECODE = 'decode';
-
-    /**
-     * @var QueueConfig
-     */
-    private $queueConfig;
 
     /**
      * @var \Magento\Framework\Webapi\ServiceOutputProcessor
@@ -44,6 +40,11 @@ class MessageEncoder
     private $jsonDecoder;
 
     /**
+     * @var CommunicationConfig
+     */
+    private $communicationConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param QueueConfig $queueConfig
@@ -51,6 +52,8 @@ class MessageEncoder
      * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
      * @param \Magento\Framework\Webapi\ServiceOutputProcessor $dataObjectEncoder
      * @param \Magento\Framework\Webapi\ServiceInputProcessor $dataObjectDecoder
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         QueueConfig $queueConfig,
@@ -59,7 +62,6 @@ class MessageEncoder
         \Magento\Framework\Webapi\ServiceOutputProcessor $dataObjectEncoder,
         \Magento\Framework\Webapi\ServiceInputProcessor $dataObjectDecoder
     ) {
-        $this->queueConfig = $queueConfig;
         $this->dataObjectEncoder = $dataObjectEncoder;
         $this->dataObjectDecoder = $dataObjectDecoder;
         $this->jsonEncoder = $jsonEncoder;
@@ -110,13 +112,21 @@ class MessageEncoder
      */
     protected function getTopicSchema($topic, $requestType)
     {
-        $topicConfig = $this->queueConfig->getTopic($topic);
+        $topicConfig = $this->getCommunicationConfig()->getTopic($topic);
         if ($topicConfig === null) {
             throw new LocalizedException(new Phrase('Specified topic "%topic" is not declared.', ['topic' => $topic]));
         }
-        return $requestType
-            ? $topicConfig[QueueConfig::TOPIC_SCHEMA]
-            : $topicConfig[QueueConfig::TOPIC_RESPONSE_SCHEMA];
+        $requestSchema = [
+            'schema_type' => $topicConfig[CommunicationConfig::TOPIC_REQUEST_TYPE],
+            'schema_value' => $topicConfig[CommunicationConfig::TOPIC_REQUEST]
+        ];
+        $responseSchema = [
+            'schema_type' => isset($topicConfig[CommunicationConfig::TOPIC_RESPONSE])
+                ? CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS
+                : null,
+            'schema_value' => $topicConfig[CommunicationConfig::TOPIC_RESPONSE]
+        ];
+        return $requestType ? $requestSchema : $responseSchema;
     }
 
     /**
@@ -132,7 +142,7 @@ class MessageEncoder
     protected function convertMessage($topic, $message, $direction, $requestType)
     {
         $topicSchema = $this->getTopicSchema($topic, $requestType);
-        if ($topicSchema[QueueConfig::TOPIC_SCHEMA_TYPE] == QueueConfig::TOPIC_SCHEMA_TYPE_OBJECT) {
+        if ($topicSchema['schema_type'] == CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS) {
             /** Convert message according to the data interface associated with the message topic */
             $messageDataType = $topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE];
             try {
@@ -151,12 +161,12 @@ class MessageEncoder
             $isIndexedArray = array_keys($message) === range(0, count($message) - 1);
             $convertedMessage = [];
             /** Message schema type is defined by method signature */
-            foreach ($topicSchema[QueueConfig::TOPIC_SCHEMA_VALUE] as $methodParameterMeta) {
-                $paramName = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_NAME];
-                $paramType = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_TYPE];
+            foreach ($topicSchema['schema_value'] as $methodParameterMeta) {
+                $paramName = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_NAME];
+                $paramType = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_TYPE];
                 if ($isIndexedArray) {
                     /** Encode parameters according to their positions in method signature */
-                    $paramPosition = $methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_POSITION];
+                    $paramPosition = $methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
                         $convertedMessage[$paramName] = $this->getConverter($direction)
                             ->convertValue($message[$paramPosition], $paramType);
@@ -170,7 +180,7 @@ class MessageEncoder
                 }
 
                 /** Ensure that all required params were passed */
-                if ($methodParameterMeta[QueueConfig::SCHEMA_METHOD_PARAM_IS_REQUIRED]
+                if ($methodParameterMeta[CommunicationConfig::SCHEMA_METHOD_PARAM_IS_REQUIRED]
                     && !isset($convertedMessage[$paramName])
                 ) {
                     throw new LocalizedException(
@@ -198,5 +208,21 @@ class MessageEncoder
     protected function getConverter($direction)
     {
         return ($direction == self::DIRECTION_ENCODE) ? $this->dataObjectEncoder : $this->dataObjectDecoder;
+    }
+
+    /**
+     * Get communication config.
+     *
+     * @return CommunicationConfig
+     *
+     * @deprecated
+     */
+    private function getCommunicationConfig()
+    {
+        if ($this->communicationConfig === null) {
+            $this->communicationConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CommunicationConfig::class);
+        }
+        return $this->communicationConfig;
     }
 }

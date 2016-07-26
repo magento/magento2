@@ -9,6 +9,7 @@ use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\ConnectionLostException;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 
 /**
  * Class BatchConsumer
@@ -20,11 +21,6 @@ class BatchConsumer implements ConsumerInterface
      * @var ConsumerConfigurationInterface
      */
     private $configuration;
-
-    /**
-     * @var MessageQueueConfig
-     */
-    private $messageQueueConfig;
 
     /**
      * @var MessageEncoder
@@ -57,6 +53,11 @@ class BatchConsumer implements ConsumerInterface
     private $messageController;
 
     /**
+     * @var ConsumerConfig
+     */
+    private $consumerConfig;
+
+    /**
      * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
      *
      * @return MessageController
@@ -82,6 +83,8 @@ class BatchConsumer implements ConsumerInterface
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
      * @param int $interval
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         MessageQueueConfig $messageQueueConfig,
@@ -92,7 +95,6 @@ class BatchConsumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         $interval = 5
     ) {
-        $this->messageQueueConfig = $messageQueueConfig;
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
         $this->mergerFactory = $mergerFactory;
@@ -108,7 +110,7 @@ class BatchConsumer implements ConsumerInterface
     {
         $queueName = $this->configuration->getQueueName();
         $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->messageQueueConfig->getConnectionByConsumer($consumerName);
+        $connectionName = $this->getConsumerConfig()->getConsumer($consumerName)->getConnection();
 
         $queue = $this->queueRepository->get($connectionName, $queueName);
         $merger = $this->mergerFactory->create($consumerName);
@@ -305,5 +307,20 @@ class BatchConsumer implements ConsumerInterface
             }
         }
         return [$toProcess, $toAcknowledge];
+    }
+    
+    /**
+     * Get consumer config.
+     *
+     * @return ConsumerConfig
+     *
+     * @deprecated
+     */
+    private function getConsumerConfig()
+    {
+        if ($this->consumerConfig === null) {
+            $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
+        }
+        return $this->consumerConfig;
     }
 }

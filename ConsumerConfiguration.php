@@ -6,6 +6,8 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Value class which stores the configuration
@@ -35,9 +37,14 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     private $queueRepository;
 
     /**
-     * @var MessageQueueConfig
+     * @var ConsumerConfig
      */
-    private $messageQueueConfig;
+    private $consumerConfig;
+
+    /**
+     * @var CommunicationConfig
+     */
+    private $communicationConfig;
 
     /**
      * Initialize dependencies.
@@ -45,12 +52,13 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * @param QueueRepository $queueRepository
      * @param MessageQueueConfig $messageQueueConfig
      * @param array $data configuration data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(QueueRepository $queueRepository, MessageQueueConfig $messageQueueConfig, $data = [])
     {
         $this->data = $data;
         $this->queueRepository = $queueRepository;
-        $this->messageQueueConfig = $messageQueueConfig;
     }
 
     /**
@@ -121,7 +129,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     public function getQueue()
     {
-        $connectionName = $this->messageQueueConfig->getConnectionByConsumer($this->getConsumerName());
+        $connectionName = $this->getConsumerConfig()->getConsumer($this->getConsumerName())->getConnection();
         return $this->queueRepository->get($connectionName, $this->getQueueName());
     }
 
@@ -130,7 +138,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     public function getMessageSchemaType($topicName)
     {
-        return $this->messageQueueConfig->getMessageSchemaType($topicName);
+        return $this->getCommunicationConfig()->getTopic($topicName)[CommunicationConfig::TOPIC_REQUEST_TYPE];
     }
 
     /**
@@ -166,5 +174,36 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
             return null;
         }
         return $this->data[$key];
+    }
+
+    /**
+     * Get consumer config.
+     *
+     * @return ConsumerConfig
+     *
+     * @deprecated
+     */
+    private function getConsumerConfig()
+    {
+        if ($this->consumerConfig === null) {
+            $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
+        }
+        return $this->consumerConfig;
+    }
+
+    /**
+     * Get communication config.
+     *
+     * @return CommunicationConfig
+     *
+     * @deprecated
+     */
+    private function getCommunicationConfig()
+    {
+        if ($this->communicationConfig === null) {
+            $this->communicationConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CommunicationConfig::class);
+        }
+        return $this->communicationConfig;
     }
 }
