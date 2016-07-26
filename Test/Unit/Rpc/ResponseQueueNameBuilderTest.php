@@ -9,9 +9,9 @@ use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
 
 class ResponseQueueNameBuilderTest extends \PHPUnit_Framework_TestCase
 {
-   public function testGetQueueName()
-   {
-       $model = new ResponseQueueNameBuilder();
-       $this->assertEquals('responseQueue.topic.01', $model->getQueueName('topic.01'));
-   }
+    public function testGetQueueName()
+    {
+        $model = new ResponseQueueNameBuilder();
+        $this->assertEquals('responseQueue.topic.01', $model->getQueueName('topic.01'));
+    }
 }
