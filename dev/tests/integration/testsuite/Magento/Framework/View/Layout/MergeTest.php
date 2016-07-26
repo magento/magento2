@@ -424,4 +424,14 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->load();
     }
+
+    /**
+     * @expectedException \Magento\Framework\Config\Dom\ValidationException
+     */
+    public function testLayoutUpdateFileIsNotValid()
+    {
+        $this->_appState->expects($this->once())->method('getMode')->willReturn(State::MODE_DEVELOPER);
+
+        $this->_model->addPageHandles(['default']);
+    }
 }

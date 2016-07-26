@@ -5,9 +5,11 @@
  */
 namespace Magento\Framework\View\Model\Layout;
 
+use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\View\Model\Layout\Update\Validator;
+use Magento\Framework\Config\Dom\ValidationException;
 
 /**
  * Layout merge model
@@ -737,10 +739,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             foreach ($libXmlErrors as $error) {
                 $errors[] = "{$error->message} Line: {$error->line}";
             }
-
-            $this->logger->info(
-                sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors))
-            );
+            $error = sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors));
+            $this->logger->info($error);
+            if ($this->appState->getMode() === State::MODE_DEVELOPER) {
+                throw new ValidationException($error);
+            }
         }
     }
 
