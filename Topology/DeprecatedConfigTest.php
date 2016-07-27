@@ -31,7 +31,7 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
         $topology = $config->getExchange('deprecatedExchange');
         $this->assertEquals('deprecatedExchange', $topology->getName());
         $this->assertEquals('topic', $topology->getType());
-        $this->assertEquals('deprecatedConnection', $topology->getConnection());
+        $this->assertEquals('db', $topology->getConnection());
         $this->assertEquals(true, $topology->isDurable());
         $this->assertEquals(false, $topology->isAutoDelete());
         $this->assertEquals(false, $topology->isInternal());
