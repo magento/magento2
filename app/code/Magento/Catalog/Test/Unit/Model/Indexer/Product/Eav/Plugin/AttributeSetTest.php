@@ -15,6 +15,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AttributeSetTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @var AttributeSet
      */
     private $model;
@@ -50,6 +55,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
         $this->subjectMock = $this->getMock(Set::class, [], [], '', false);
         $this->eavProcessorMock = $this->getMock(Processor::class, [], [], '', false);
         $this->setFactoryMock = $this->getMock(SetFactory::class, [], [], '', false);
+        $this->objectManager = new ObjectManager($this);
     }
 
     public function testBeforeSave()
@@ -59,9 +65,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
         $this->originalSetMock->expects($this->once())->method('initFromSkeleton')->with($setId);
 
         $this->setFactoryMock->expects($this->once())->method('create')->willReturn($this->originalSetMock);
-
-        $this->model = (new ObjectManager($this))
-            ->getObject(
+        $this->model = $this->objectManager->getObject(
                 AttributeSet::class,
                 [
                     'indexerEavProcessor' => $this->eavProcessorMock,
@@ -90,7 +94,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
     {
         $this->eavProcessorMock->expects($this->once())->method('markIndexerAsInvalid');
 
-        $this->model = (new ObjectManager($this))
+        $this->model = $this->objectManager
             ->getObject(
                 AttributeSet::class,
                 [

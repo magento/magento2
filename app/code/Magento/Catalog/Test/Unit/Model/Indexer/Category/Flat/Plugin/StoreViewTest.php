@@ -30,11 +30,6 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     protected $indexerRegistryMock;
 
     /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
@@ -57,9 +52,6 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->closureMock = function () {
-            return false;
-        };
         $this->subjectMock = $this->getMock('Magento\Store\Model\ResourceModel\Store', [], [], '', false);
         $this->indexerRegistryMock = $this->getMock(
             'Magento\Framework\Indexer\IndexerRegistry',
@@ -71,7 +63,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->model = new StoreView($this->indexerRegistryMock, $this->stateMock);
     }
 
-    public function testAfterSaveNewObject()
+    public function testBeforeAndAfterSaveNewObject()
     {
         $this->mockConfigFlatEnabled();
         $this->mockIndexerMethods();
@@ -83,13 +75,14 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             false
         );
         $storeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
+        $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
             $this->subjectMock,
             $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock)
         );
     }
 
-    public function testAfterSaveHasChanged()
+    public function testBeforeAndAfterSaveHasChanged()
     {
         $storeMock = $this->getMock(
             'Magento\Store\Model\Store',
@@ -98,13 +91,14 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
             $this->subjectMock,
             $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock)
         );
     }
 
-    public function testAfterSaveNoNeed()
+    public function testBeforeAndAfterSaveNoNeed()
     {
         $this->mockConfigFlatEnabledNeever();
         $storeMock = $this->getMock(
@@ -114,6 +108,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
             $this->subjectMock,
             $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock));

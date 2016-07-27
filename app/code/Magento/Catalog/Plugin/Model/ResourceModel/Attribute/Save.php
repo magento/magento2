@@ -33,6 +33,8 @@ class Save
     }
 
     /**
+     * Invalidate full page cache after saving attribute
+     *
      * @param Attribute $subject
      * @param Attribute $result
      * @return Attribute $result

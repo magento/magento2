@@ -54,7 +54,6 @@ class AroundProductRepositorySave
      *
      * Pay attention that in this code we mostly work with original product object to process stock item data,
      * not with received result (saved product) because it is already contains new empty stock item object.
-     * Now "after plugins" can receive arguments of original method - plugin is rewritten to "after"
      *
      * @param ProductRepositoryInterface $subject
      * @param ProductInterface $result

@@ -65,10 +65,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
             ->method('setPostValue')
             ->with('key', $convertedData);
 
-        $this->assertEquals(
-            [$this->requestMock],
-            $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock)
-        );
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
     public function beforeDispatchDataProvider()
@@ -88,9 +85,6 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->never())
             ->method('setPostValue');
 
-        $this->assertEquals(
-            [$this->requestMock],
-            $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock)
-        );
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }

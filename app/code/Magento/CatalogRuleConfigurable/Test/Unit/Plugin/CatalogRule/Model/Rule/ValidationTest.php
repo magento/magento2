@@ -63,7 +63,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      * @dataProvider dataProviderForValidateWithValidConfigurableProduct
      * @return void
      */
-    public function testAroundValidateWithValidConfigurableProduct(
+    public function testAfterValidateWithValidConfigurableProduct(
         $parentsIds,
         $validationResult,
         $runValidateAmount,

@@ -13,6 +13,11 @@ use Magento\Catalog\Model\Indexer\Category\Product;
 class StoreGroup
 {
     /**
+     * @var bool
+     */
+    private $needInvalidating;
+
+    /**
      * @var IndexerRegistry
      */
     protected $indexerRegistry;
@@ -26,18 +31,31 @@ class StoreGroup
     }
 
     /**
+     * Check if need invalidate flat category indexer
+     *
+     * @param AbstractDb $subject
+     * @param AbstractModel $group
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeSave(AbstractDb $subject, AbstractModel $group)
+    {
+        $this->needInvalidating = $this->validate($group);
+    }
+
+    /**
      * Invalidate flat product
      *
      * @param AbstractDb $subject
      * @param AbstractDb $objectResource
-     * @param AbstractModel $group
-     * @return mixed
+     *
+     * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $group)
+    public function afterSave(AbstractDb $subject, AbstractDb $objectResource)
     {
-        $needInvalidating = $this->validate($group);
-        if ($needInvalidating) {
+        if ($this->needInvalidating) {
             $this->indexerRegistry->get(Product::INDEXER_ID)->invalidate();
         }
 

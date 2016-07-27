@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
 use Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\Group as GroupModel;
@@ -22,25 +23,32 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
      */
-    protected $indexerMock;
+    private $indexerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|Group
      */
-    protected $subject;
+    private $subject;
 
     /**
      * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
      * @var StoreGroup
      */
-    protected $model;
+    private $model;
 
     protected function setUp()
     {
+        $this->groupMock = $this->getMock(
+            GroupModel::class,
+            [ 'dataHasChangedFor', 'isObjectNew', '__wakeup' ],
+            [ ],
+            '',
+            false
+        );
         $this->indexerMock = $this->getMockForAbstractClass(
             IndexerInterface::class,
             [],
@@ -59,46 +67,34 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->model = new StoreGroup($this->indexerRegistryMock);
+        $this->model = (new ObjectManager($this))->getObject(StoreGroup::class, ['indexerRegistry' => $this->indexerRegistryMock]);
     }
 
     /**
      * @param array $valueMap
      * @dataProvider changedDataProvider
      */
-    public function testAroundSave($valueMap)
+    public function testBeforeAndAfterSave($valueMap)
     {
         $this->mockIndexerMethods();
-        $groupMock = $this->getMock(
-            GroupModel::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->willReturnMap($valueMap);
-        $groupMock->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->willReturnMap($valueMap);
+        $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(false);
 
-        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $groupMock));
+        $this->model->beforeSave($this->subject, $this->groupMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock));
     }
 
     /**
      * @param array $valueMap
      * @dataProvider changedDataProvider
      */
-    public function testAroundSaveNotNew($valueMap)
+    public function testBeforeAndAfterSaveNotNew($valueMap)
     {
-        $groupMock = $this->getMock(
-            GroupModel::class,
-            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->willReturnMap($valueMap);
-        $groupMock->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->groupMock->expects($this->exactly(2))->method('dataHasChangedFor')->willReturnMap($valueMap);
+        $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(true);
 
-        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $groupMock));
+        $this->model->beforeSave($this->subject, $this->groupMock);
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock));
     }
 
     public function changedDataProvider()
@@ -111,20 +107,14 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testAroundSaveWithoutChanges()
+    public function testBeforeAndAfterSaveWithoutChanges()
     {
-        $this->groupMock = $this->getMock(
-            GroupModel::class,
-            [ 'dataHasChangedFor', 'isObjectNew', '__wakeup' ],
-            [ ],
-            '',
-            false
-        );
         $this->groupMock->expects($this->exactly(2))
-                        ->method('dataHasChangedFor')
-                        ->willReturnMap([['root_category_id', false], ['website_id', false]]);
+            ->method('dataHasChangedFor')
+            ->willReturnMap([['root_category_id', false], ['website_id', false]]);
         $this->groupMock->expects($this->never())->method('isObjectNew');
 
+        $this->model->beforeSave($this->subject, $this->groupMock);
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock ));
     }
 

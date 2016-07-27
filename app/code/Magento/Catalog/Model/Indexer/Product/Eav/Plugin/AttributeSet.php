@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav\Plugin;
 
-use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\Entity\Attribute\Set as EavAttributeSet;
 use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
 use Magento\Framework\App\ObjectManager;
@@ -43,23 +43,6 @@ class AttributeSet
     }
 
     /**
-     * Invalidate EAV indexer if attribute set has indexable attributes changes
-     *
-     * @param Set $subject
-     * @param Set $result
-     * @return Set
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterSave(Set $subject, Set $result)
-    {
-        if ($this->requiresReindex) {
-            $this->_indexerEavProcessor->markIndexerAsInvalid();
-        }
-        return $result;
-    }
-
-    /**
      * Return attribute set factory
      *
      * @return SetFactory
@@ -74,14 +57,17 @@ class AttributeSet
     }
 
     /**
-     * @param Set $subject
+     * Check whether is needed to invalidate EAV indexer
+     *
+     * @param EavAttributeSet $subject
      *
      * @return bool
      */
-    public function beforeSave(Set $subject) {
+    public function beforeSave(EavAttributeSet $subject)
+    {
         $this->requiresReindex = false;
         if ( $subject->getId() ) {
-            /** @var Set $originalSet */
+            /** @var EavAttributeSet $originalSet */
             $originalSet = $this->getAttributeSetFactory()->create();
             $originalSet->initFromSkeleton($subject->getId());
             $originalAttributeCodes = array_flip( $this->_attributeFilter->filter( $originalSet ) );
@@ -91,5 +77,22 @@ class AttributeSet
                 array_diff_key( $originalAttributeCodes, $subjectAttributeCodes )
             ) );
         }
+    }
+
+    /**
+     * Invalidate EAV indexer if attribute set has indexable attributes changes
+     *
+     * @param EavAttributeSet $subject
+     * @param EavAttributeSet $result
+     * @return EavAttributeSet
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterSave(EavAttributeSet $subject, EavAttributeSet $result)
+    {
+        if ($this->requiresReindex) {
+            $this->_indexerEavProcessor->markIndexerAsInvalid();
+        }
+        return $result;
     }
 }

@@ -40,7 +40,6 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             AbstractItem::class, [], '', false, false, true, ['getProduct']
         );
         $this->subjectMock = $this->getMock(ToOrderItem::class, [], [], '', false);
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Product $productMock */
         $this->productMock = $this->getMock(Product::class, [], [], '', false);
         $this->model = new \Magento\Bundle\Model\Plugin\QuoteItem();
     }
@@ -66,9 +65,9 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             ->willReturn($attributeValue);
 
         $this->productMock->expects($this->once())
-                          ->method('getCustomOption')
-                          ->with('bundle_selection_attributes')
-                          ->willReturn($bundleAttribute);
+            ->method('getCustomOption')
+            ->with('bundle_selection_attributes')
+            ->willReturn($bundleAttribute);
         $this->quoteItemMock->expects($this->once())->method('getProduct')->willReturn( $this->productMock );
 
         $this->orderItemMock->expects($this->once())->method('getProductOptions')->willReturn($productOptions);
@@ -85,7 +84,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             ->with('bundle_selection_attributes')->willReturn(false);
 
         $this->quoteItemMock->expects($this->once())->method('getProduct')
-            ->will($this->returnValue($this->productMock));
+            ->willReturn($this->productMock);
         $this->orderItemMock->expects($this->never())->method('setProductOptions');
 
         $orderItem = $this->model->afterConvert($this->subjectMock, $this->orderItemMock, $this->quoteItemMock);

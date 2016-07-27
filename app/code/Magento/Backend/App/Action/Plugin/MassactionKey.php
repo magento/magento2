@@ -18,7 +18,7 @@ class MassactionKey
      * @param AbstractAction $subject
      * @param RequestInterface $request
      *
-     * @return array
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(AbstractAction $subject, RequestInterface $request)
@@ -28,7 +28,6 @@ class MassactionKey
             $postData = $request->getPost($key);
             $value = is_array($postData) ? $postData : explode(',', $postData);
             $request->setPostValue($key, $value ? $value : null);
-        }
-        return [$request];
+        };
     }
 }

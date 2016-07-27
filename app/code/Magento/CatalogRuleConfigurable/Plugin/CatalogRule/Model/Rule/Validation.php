@@ -30,6 +30,8 @@ class Validation
     }
 
     /**
+     * Define if it is needed to apply rule if parent configurable product match conditions
+     *
      * @param Rule $rule
      * @param bool $validateResult
      * @param DataObject|Product $product

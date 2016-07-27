@@ -7,6 +7,7 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Indexer\Model\Config\Data;
 
 class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
@@ -30,7 +31,7 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
     {
         $this->stateMock = $this->getMock(State::class, ['isFlatEnabled'], [], '', false);
         $this->subjectMock = $this->getMock(Data::class, [], [], '', false);
-        $this->model = new IndexerConfigData($this->stateMock);
+        $this->model = (new ObjectManager($this))->getObject(IndexerConfigData::class, ['state' => $this->stateMock]);
     }
 
     /**

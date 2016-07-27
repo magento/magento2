@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\Group as GroupModel;
 
@@ -74,10 +75,14 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->model = new StoreGroup($this->indexerRegistryMock, $this->stateMock);
+        $this->model = (new ObjectManager($this))
+            ->getObject(
+                StoreGroup::class,
+                ['indexerRegistry' => $this->indexerRegistryMock, 'state' => $this->stateMock]
+            );
     }
 
-    public function testAroundSave()
+    public function testBeforeAndAfterSave()
     {
         $this->stateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
         $this->indexerMock->expects($this->once())->method('invalidate');
@@ -90,13 +95,14 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
 	        ->with('root_category_id')
 	        ->willReturn(true);
         $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(false);
+        $this->model->beforeSave($this->subjectMock, $this->groupMock);
         $this->assertSame(
         	$this->subjectMock,
 	        $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->groupMock)
         );
     }
 
-    public function testAroundSaveNotNew()
+    public function testBeforeAndAfterSaveNotNew()
     {
         $this->stateMock->expects($this->never())->method('isFlatEnabled');
         $this->groupMock->expects($this->once())
@@ -104,6 +110,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
 	        ->with('root_category_id')
 	        ->willReturn(true);
         $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(true);
+        $this->model->beforeSave($this->subjectMock, $this->groupMock);
         $this->assertSame(
         	$this->subjectMock,
 	        $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->groupMock)

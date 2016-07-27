@@ -13,6 +13,11 @@ use Magento\Catalog\Model\Indexer\Category\Flat\State;
 class StoreGroup
 {
     /**
+     * @var bool
+     */
+    private $needInvalidating;
+
+    /**
      * @var IndexerRegistry
      */
     protected $indexerRegistry;
@@ -44,19 +49,31 @@ class StoreGroup
     }
 
     /**
+     * Check if need invalidate flat category indexer
+     *
+     * @param AbstractDb $subject
+     * @param AbstractModel $group
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeSave(AbstractDb $subject, AbstractModel $group)
+    {
+        $this->needInvalidating = $this->validate($group);
+    }
+
+    /**
      * Invalidate flat category indexer if root category changed for store group
      *
      * @param AbstractDb $subject
      * @param AbstractDb $objectResource
-     * @param AbstractModel $group
      *
      * @return AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(AbstractDb $subject, AbstractDb $objectResource, AbstractModel $group)
+    public function afterSave(AbstractDb $subject, AbstractDb $objectResource)
     {
-        $needInvalidating = $this->validate($group);
-        if ($needInvalidating && $this->state->isFlatEnabled()) {
+        if ($this->needInvalidating && $this->state->isFlatEnabled()) {
             $this->indexerRegistry->get(State::INDEXER_ID)->invalidate();
         }
 
