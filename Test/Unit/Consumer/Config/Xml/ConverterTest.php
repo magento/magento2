@@ -46,7 +46,12 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     public function testConvert()
     {
         $this->defaultConfigProviderMock->expects($this->any())->method('getConnection')->willReturn('amqp');
-        $this->configParserMock->expects($this->any())->method('parseServiceMethod')->willReturnArgument(0);
+        $this->configParserMock->expects($this->any())->method('parseServiceMethod')->willReturnCallback(
+            function ($handler) {
+                $parsedHandler = explode('::', $handler);
+                return ['typeName' => $parsedHandler[0], 'methodName' => $parsedHandler[1]];
+            }
+        );
         $fixtureDir = __DIR__ . '/../../../_files/queue_consumer';
         $xmlFile = $fixtureDir . '/valid.xml';
         $dom = new \DOMDocument();

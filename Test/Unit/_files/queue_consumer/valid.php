@@ -10,7 +10,10 @@ return [
         'queue' => 'queue1',
         'consumerInstance' => 'consumerClass1',
         'handlers' => [
-            0 => 'handlerClassOne::handlerMethodOne',
+            0 => [
+                'type' => 'handlerClassOne',
+                'method' => 'handlerMethodOne'
+            ],
         ],
         'connection' => 'connection1',
         'maxMessages' => '100',
@@ -20,7 +23,10 @@ return [
         'queue' => 'queue2',
         'consumerInstance' => 'consumerClass2',
         'handlers' => [
-            0 => 'handlerClassTwo::handlerMethodTwo',
+            0 => [
+                'type' => 'handlerClassTwo',
+                'method' => 'handlerMethodTwo'
+            ],
         ],
         'connection' => 'connection2',
         'maxMessages' => null,
@@ -30,7 +36,10 @@ return [
         'queue' => 'queue3',
         'consumerInstance' => 'consumerClass3',
         'handlers' => [
-            0 => 'handlerClassThree::handlerMethodThree',
+            0 => [
+                'type' => 'handlerClassThree',
+                'method' => 'handlerMethodThree'
+            ],
         ],
         'connection' => 'amqp',
         'maxMessages' => null,
@@ -40,7 +49,10 @@ return [
         'queue' => 'queue4',
         'consumerInstance' => 'Magento\Framework\MessageQueue\ConsumerInterface',
         'handlers' => [
-            0 => 'handlerClassFour::handlerMethodFour',
+            0 => [
+                'type' => 'handlerClassFour',
+                'method' => 'handlerMethodFour'
+            ],
         ],
         'connection' => 'amqp',
         'maxMessages' => null,
