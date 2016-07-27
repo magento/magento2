@@ -42,12 +42,12 @@ class Attribute extends AbstractPlugin
     }
 
     /**
-     * Check for needed indexer invalidation on attribute save (searchable flag change)
+     * Check if indexer invalidation is needed on attribute save (searchable flag change)
      *
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
      * @param \Magento\Framework\Model\AbstractModel $attribute
      *
-     * @return array
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
@@ -60,7 +60,6 @@ class Attribute extends AbstractPlugin
                 || $attribute->dataHasChangedFor('is_filterable')
                 || $attribute->dataHasChangedFor('is_visible_in_advanced_search')
             ) && ! $this->saveIsNew;
-        return [$attribute];
     }
 
     /**
@@ -87,12 +86,12 @@ class Attribute extends AbstractPlugin
     }
 
     /**
-     * Check for needed indexer invalidation on searchable attribute delete
+     * Check if indexer invalidation is needed on searchable attribute delete
      *
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
      * @param \Magento\Framework\Model\AbstractModel $attribute
      *
-     * @return array
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDelete(
@@ -100,7 +99,6 @@ class Attribute extends AbstractPlugin
         \Magento\Framework\Model\AbstractModel $attribute
     ) {
         $this->deleteNeedInvalidation = !$attribute->isObjectNew() && $attribute->getIsSearchable();
-        return [$attribute];
     }
 
     /**

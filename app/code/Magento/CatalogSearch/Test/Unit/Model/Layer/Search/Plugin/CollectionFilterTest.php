@@ -13,9 +13,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Model\Query;
 
-/**
- * Class CollectionFilterTest
- */
 class CollectionFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
