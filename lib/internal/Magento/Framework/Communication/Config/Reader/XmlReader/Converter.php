@@ -106,8 +106,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $serviceMethod = $this->getServiceMethodBySchema($topicNode);
             $requestResponseSchema = $serviceMethod
                 ? $this->reflectionGenerator->extractMethodMetadata(
-                    $serviceMethod['type'],
-                    $serviceMethod['method']
+                    $serviceMethod[ConfigParser::TYPE_NAME],
+                    $serviceMethod[ConfigParser::METHOD_NAME]
                 )
                 : null;
             $requestSchema = $this->extractTopicRequestSchema($topicNode);
@@ -129,8 +129,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             if ($serviceMethod) {
                 $output[$topicName] = $this->reflectionGenerator->generateTopicConfigForServiceMethod(
                     $topicName,
-                    $serviceMethod['type'],
-                    $serviceMethod['method'],
+                    $serviceMethod[ConfigParser::TYPE_NAME],
+                    $serviceMethod[ConfigParser::METHOD_NAME],
                     $handlers
                 );
             } else if ($requestSchema && $responseSchema) {
@@ -239,12 +239,24 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $topicName = $topicAttributes->getNamedItem('name')->nodeValue;
         $serviceMethod = $topicAttributes->getNamedItem('schema')->nodeValue;
+        return $this->parseServiceMethod($serviceMethod, $topicName);
+    }
+
+    /**
+     * Parse service method name, also ensure that it exists.
+     *
+     * @param string $serviceMethod
+     * @param string $topicName
+     * @return array Contains class name and method name
+     */
+    protected function parseServiceMethod($serviceMethod, $topicName)
+    {
         $parsedServiceMethod = $this->getConfigParser()->parseServiceMethod($serviceMethod);
         $this->xmlValidator->validateServiceMethod(
             $serviceMethod,
             $topicName,
-            $parsedServiceMethod['type'],
-            $parsedServiceMethod['method']
+            $parsedServiceMethod[ConfigParser::TYPE_NAME],
+            $parsedServiceMethod[ConfigParser::METHOD_NAME]
         );
         return $parsedServiceMethod;
     }
