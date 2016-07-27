@@ -17,11 +17,21 @@ use Magento\Mtf\Fixture\DataSource;
 class StoreView extends DataSource
 {
     /**
+     * Code of website.
+     */
+    const WEBSITE_CODE = 'website';
+
+    /**
+     * Code of store view.
+     */
+    const STORE_CODE = 'store';
+
+    /**
      * Store View or Website fixture.
      *
      * @var Store|Website
      */
-    private $storeViewEntity;
+    private $scope;
 
     /**
      * Value for set. [website|store]
@@ -31,6 +41,20 @@ class StoreView extends DataSource
     private $value;
 
     /**
+     * Fixture Factory instance.
+     *
+     * @var FixtureFactory
+     */
+    private $fixtureFactory;
+
+    /**
+     * Rough fixture field data.
+     *
+     * @var array|null
+     */
+    private $fixtureData = null;
+
+    /**
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
@@ -38,36 +62,66 @@ class StoreView extends DataSource
      */
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
+        $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
-        if (isset($data['dataset'])) {
-            /** @var Store $store */
-            $store = $fixtureFactory->createByCode('store', ['dataset' => $data['dataset']]);
-            if (!$store->hasData('store_id')) {
-                $store->persist();
-            }
-            $this->storeViewEntity = $store;
-            $this->value = $data['value'];
-            $this->data = $store->getWebsiteId();
-            if ($data['value'] == 'store') {
-                $this->data .= '/' . $store->getGroupId() . '/' . $store->getName();
-            } elseif ($data['value'] == 'website') {
-                $this->storeViewEntity = $this->storeViewEntity
-                    ->getDataFieldConfig('group_id')['source']->getStoreGroup()
-                    ->getDataFieldConfig('website_id')['source']->getWebsite();
-            }
-        } else {
-            $this->data = null;
-        }
+        $this->fixtureData = $data;
     }
 
     /**
-     * Return Store View entity fixture.
+     * Return prepared data set.
+     *
+     * @param string $key [optional]
+     * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getData($key = null)
+    {
+        if ($this->data === null) {
+            if (isset($this->fixtureData['dataset'])) {
+                /** @var Store $store */
+                $store = $this->fixtureFactory->createByCode('store', ['dataset' => $this->fixtureData['dataset']]);
+                if (!$store->hasData('store_id')) {
+                    $store->persist();
+                }
+
+                // Definition of scope by param 'value'
+                if ($this->fixtureData['value'] == self::STORE_CODE) {
+                    $this->scope = $store;
+                } elseif ($this->fixtureData['value'] == self::WEBSITE_CODE) {
+                    $this->scope = $this->scope
+                        ->getDataFieldConfig('group_id')['source']->getStoreGroup()
+                        ->getDataFieldConfig('website_id')['source']->getWebsite();
+                }
+            } elseif (isset($this->fixtureData['fixture'])) {
+                $this->scope = $this->fixtureData['fixture'];
+            } else {
+                $this->data = null;
+            }
+
+            // Separately strategy for Store or Website scope.
+            if ($this->scope instanceof Store) {
+                $this->data = $this->scope->getWebsiteId()
+                    . '/' . $this->scope->getGroupId()
+                    . '/' . $this->scope->getName();
+                $this->value = self::STORE_CODE;
+            } elseif ($this->scope instanceof Website) {
+                $this->data = $this->scope->getName();
+                $this->value = self::WEBSITE_CODE;
+            }
+        }
+
+        return parent::getData($key);
+    }
+
+    /**
+     * Return Store View or Website fixture.
      *
      * @return Store|Website
      */
-    public function getStoreViewEntity()
+    public function getScope()
     {
-        return $this->storeViewEntity;
+        return $this->scope;
     }
 
     /**

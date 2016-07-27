@@ -159,7 +159,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
         if (isset($data['section'][key($data['section'])]['store_view'])) {
             $source = $this->fixture->getDataFieldConfig('store_view')['source'];
             $code = $source->getValue();
-            $result = $code . '/' . $source->getStoreViewEntity()->getData($code . '_id');
+            $result = $code . '/' . $source->getScope()->getData($code . '_id');
         }
 
         return $result ? '/' . $result : '';
