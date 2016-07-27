@@ -27,8 +27,24 @@ class AssertSelectSeveralExtensions extends AbstractConstraint
         $extensions = $grid->selectSeveralExtensions($extensions);
         \PHPUnit_Framework_Assert::assertEmpty(
             $extensions,
-            'Next extensions are not found on the grid: ' . implode(', ', $extensions)
+            'Next extensions are not found on the grid: ' . $this->getExtensionsNames($extensions)
         );
+    }
+
+    /**
+     * Get names of extensions.
+     *
+     * @param Extension[] $extensions
+     * @return string
+     */
+    protected function getExtensionsNames(array $extensions)
+    {
+        $result = [];
+        foreach ($extensions as $extension) {
+            $result[] = $extension->getExtensionName();
+        }
+
+        return implode(', ', $result);
     }
 
     /**
