@@ -127,7 +127,10 @@ class Place extends Payment
             );
         } catch (\Exception $exception) {
             $result->setData('error', true);
-            $result->setData('error_messages', __('Unable to place order. Please try again later.'));
+            $result->setData(
+                'error_messages',
+                __('An error occurred on the server. Please try to place the order again.')
+            );
         }
         if ($response instanceof Http) {
             $response->representJson($this->jsonHelper->jsonEncode($result));
