@@ -139,7 +139,7 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $this->assertTrue($response);
             }
         }
-        unset($this->customerRepository);
+        $this->customerRepository = null;
     }
 
     /**
