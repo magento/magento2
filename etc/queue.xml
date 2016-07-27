@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="multi.topic.queue.topic.c" type="amqp" exchange="magento">
+        <queue consumer="queue.for.multiple.topics.test.c" name="queue.for.multiple.topics.test.c"/>
+        <queue consumer="mixed.sync.and.async.queue.consumer" name="mixed.sync.and.async.queue"/>
+    </broker>
+    <broker topic="multi.topic.queue.topic.d" type="amqp" exchange="magento">
+        <queue consumer="queue.for.multiple.topics.test.d" name="queue.for.multiple.topics.test.d"/>
+    </broker>
+    <broker topic="mtmh.topic.1" type="amqp" exchange="magento">
+        <queue consumer="mtmh.queue.1.consumer" name="mtmh.queue.1" handler="Magento\TestModuleAsyncAmqpOldConfig\Model\CustomHandler::processMixed"/>
+    </broker>
+    <broker topic="mtmh.topic.2" type="amqp" exchange="magento">
+        <queue consumer="mtmh.queue.2.consumer" name="mtmh.queue.2"/>
+    </broker>
+</config>
+
+
+
+
+
