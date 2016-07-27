@@ -19,7 +19,7 @@ class Grid extends AbstractGrid
      *
      * @var string
      */
-    protected $installButton = "//button[contains(@href, '#install-extension-grid')]";
+    protected $installButton = "//button[contains(@class, 'goInstall')]";
 
     /**
      * Select action of extension on the grid.
