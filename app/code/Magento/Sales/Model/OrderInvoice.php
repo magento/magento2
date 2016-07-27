@@ -1,26 +1,38 @@
 <?php
+
 /**
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model;
 
-use Magento\Sales\Api\Data;
 use Magento\Sales\Api\OrderInvoiceInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
+use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceValidatorInterface;
-use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
-use Magento\Sales\Model\Order\InvoiceNotifierInterface;
+use Magento\Sales\Model\Order\OrderStateResolverInterface;
 use Magento\Sales\Model\Order\Config;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Model\Order\InvoiceRepository;
+use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class InvoiceService
+ */
 class OrderInvoice implements OrderInvoiceInterface
 {
-    const STATE_PAID = 2;
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * @var InvoiceDocumentFactory
@@ -38,24 +50,9 @@ class OrderInvoice implements OrderInvoiceInterface
     private $paymentAdapter;
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
-
-    /**
      * @var OrderStateResolverInterface
      */
     private $orderStateResolver;
-
-    /**
-     * @var InvoiceNotifierInterface
-     */
-    private $invoiceNotifier;
 
     /**
      * @var Config
@@ -63,68 +60,64 @@ class OrderInvoice implements OrderInvoiceInterface
     private $config;
 
     /**
-     * @var ResourceConnection
+     * @var InvoiceRepository
      */
-    private $resourceConnection;
+    private $invoiceRepository;
 
     /**
-     * InvoiceCapture constructor.
-     *
+     * @var NotifierInterface
+     */
+    private $notifierInterface;
+
+    /**
+     * InvoiceOffline constructor.
+     * @param ResourceConnection $resourceConnection
+     * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceDocumentFactory $invoiceDocumentFactory
      * @param InvoiceValidatorInterface $invoiceValidator
      * @param PaymentAdapterInterface $paymentAdapter
-     * @param OrderRepositoryInterface $orderRepository
-     * @param InvoiceRepositoryInterface $invoiceRepository
      * @param OrderStateResolverInterface $orderStateResolver
-     * @param InvoiceNotifierInterface $invoiceNotifier
      * @param Config $config
-     * @param ResourceConnection $resourceConnection
+     * @param InvoiceRepository $invoiceRepository
+     * @param NotifierInterface $notifierInterface
      */
     public function __construct(
+        ResourceConnection $resourceConnection,
+        OrderRepositoryInterface $orderRepository,
         InvoiceDocumentFactory $invoiceDocumentFactory,
         InvoiceValidatorInterface $invoiceValidator,
         PaymentAdapterInterface $paymentAdapter,
-        OrderRepositoryInterface $orderRepository,
-        InvoiceRepositoryInterface $invoiceRepository,
         OrderStateResolverInterface $orderStateResolver,
-        InvoiceNotifierInterface $invoiceNotifier,
         Config $config,
-        ResourceConnection $resourceConnection
+        InvoiceRepository $invoiceRepository,
+        NotifierInterface $notifierInterface
     ) {
+        $this->resourceConnection = $resourceConnection;
+        $this->orderRepository = $orderRepository;
         $this->invoiceDocumentFactory = $invoiceDocumentFactory;
         $this->invoiceValidator = $invoiceValidator;
         $this->paymentAdapter = $paymentAdapter;
-        $this->orderRepository = $orderRepository;
-        $this->invoiceRepository = $invoiceRepository;
         $this->orderStateResolver = $orderStateResolver;
-        $this->invoiceNotifier = $invoiceNotifier;
         $this->config = $config;
-        $this->resourceConnection = $resourceConnection;
+        $this->invoiceRepository = $invoiceRepository;
+        $this->notifierInterface = $notifierInterface;
     }
 
-    /**
-     * @param int $orderId
-     * @param bool|false $capture
-     * @param \Magento\Sales\Api\Data\InvoiceItemCreationInterface[] $items
-     * @param bool|false $notify
-     * @param Data\InvoiceCommentCreationInterface|null $comment
-     * @param Data\InvoiceCreationArgumentsInterface|null $arguments
-     * @return int
-     */
     public function execute(
         $orderId,
         $capture = false,
         array $items = [],
         $notify = false,
+        $appendComment = false,
         \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
         \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
     ) {
-        $connection = $this->resourceConnection->getConnectionByName('sales');
+        $connection = $this->resourceConnection->getConnection('sales');
         $order = $this->orderRepository->get($orderId);
         $invoice = $this->invoiceDocumentFactory->create($order, $items, $comment, $arguments);
         $errorMessages = $this->invoiceValidator->validate($invoice, $order);
         if (!empty($errorMessages)) {
-//            throw new SalesDocumentValidationException($messages);
+            throw new LocalizedException(__("Sales Document Validation Error", $errorMessages));
         }
         $connection->beginTransaction();
         try {
@@ -133,17 +126,20 @@ class OrderInvoice implements OrderInvoiceInterface
                 $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
             );
             $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $invoice->setState(self::STATE_PAID);
+            $invoice->setState(InvoiceInterface::STATE_PAID);
             $this->invoiceRepository->save($invoice);
             $this->orderRepository->save($order);
             $connection->commit();
         } catch (\Exception $e) {
             // log original exception
             $connection->rollBack();
+            throw new LocalizedException(__("Sales Operation Failed", $errorMessages));
             // throw new SalesOperationFailedException
         }
         if ($notify) {
-            $this->invoiceNotifier->notify($order, $invoice, $comment);
+            $this->notifierInterface->notify($order, $invoice, $comment);
         }
+
     }
 }
+

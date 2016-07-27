@@ -77,7 +77,7 @@ class PayOperation
      *
      * @return void
      */
-    private function calculateOrderItemsTotals(array $items)
+    private function calculateOrderItemsTotals($items)
     {
         foreach ($items as $item) {
             if ($item->isDeleted()) {

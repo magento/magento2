@@ -202,6 +202,15 @@ interface InvoiceInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
     const COMMENTS = 'comments';
 
     /**
+     * Invoice states
+     */
+    const STATE_OPEN = 1;
+
+    const STATE_PAID = 2;
+
+    const STATE_CANCELED = 3;
+
+    /**
      * Gets the base currency code for the invoice.
      *
      * @return string|null Base currency code.
