@@ -65,7 +65,7 @@ class CaptureCommandTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBaseCurrency', 'getConfig', 'setState', 'setStatus', '__wakeup'])
+            ->setMethods(['getBaseCurrency', 'getConfig', 'setState', 'setStatus'])
             ->getMock();
 
         $this->order->expects(static::once())
