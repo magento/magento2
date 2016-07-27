@@ -44,6 +44,7 @@ class Validator
      * @param string $schemaMethod
      * @param string $topicName
      * @return void
+     * @throws \LogicException
      */
     public function validateSchemaMethodType($schemaType, $schemaMethod, $topicName)
     {
@@ -67,6 +68,7 @@ class Validator
      * @param string $methodName
      * @param string $consumerName
      * @return void
+     * @throws \LogicException
      */
     public function validateHandlerType($serviceName, $methodName, $consumerName)
     {
@@ -160,6 +162,7 @@ class Validator
      * @param string $responseSchema
      * @param string $topicName
      * @return void
+     * @throws \LogicException
      */
     public function validateResponseSchemaType($responseSchema, $topicName)
     {
@@ -183,6 +186,7 @@ class Validator
      * @param string $schema
      * @param string $topicName
      * @return void
+     * @throws \LogicException
      */
     public function validateSchemaType($schema, $topicName)
     {

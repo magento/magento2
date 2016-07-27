@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config;
 
-use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
 
 /**
@@ -13,8 +12,6 @@ use Magento\Framework\MessageQueue\DefaultValueProvider;
  */
 class CompositeReader implements ReaderInterface
 {
-    use \Magento\Framework\MessageQueue\Config\SortedList;
-
     /**
      * Config validator.
      *
@@ -39,7 +36,7 @@ class CompositeReader implements ReaderInterface
      *
      * @param ValidatorInterface $validator
      * @param DefaultValueProvider $defaultValueProvider
-     * @param array $readers
+     * @param ReaderInterface[] $readers
      */
     public function __construct(
         ValidatorInterface $validator,
@@ -47,7 +44,7 @@ class CompositeReader implements ReaderInterface
         array $readers
     ) {
         $this->validator = $validator;
-        $this->readers = $this->sort($readers, ReaderInterface::class, 'reader');
+        $this->readers = $readers;
         $this->defaultValueProvider = $defaultValueProvider;
     }
 

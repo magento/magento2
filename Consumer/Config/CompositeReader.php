@@ -14,8 +14,6 @@ use Magento\Framework\MessageQueue\Consumer\Config\ValidatorInterface;
  */
 class CompositeReader implements ReaderInterface
 {
-    use \Magento\Framework\MessageQueue\Config\SortedList;
-
     /**
      * @var ValidatorInterface
      */
@@ -30,12 +28,12 @@ class CompositeReader implements ReaderInterface
      * Initialize dependencies.
      *
      * @param ValidatorInterface $validator
-     * @param array $readers
+     * @param ReaderInterface[] $readers
      */
     public function __construct(ValidatorInterface $validator, array $readers)
     {
         $this->validator = $validator;
-        $this->readers = $this->sort($readers, ReaderInterface::class, 'reader');
+        $this->readers = $readers;
     }
 
     /**

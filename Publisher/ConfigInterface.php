@@ -19,6 +19,7 @@ interface ConfigInterface
      * @param string $topic
      * @return PublisherConfigItemInterface
      * @throws LocalizedException
+     * @throws \LogicException
      */
     public function getPublisher($topic);
 
@@ -26,6 +27,7 @@ interface ConfigInterface
      * Get list of all publishers declared in the system.
      * 
      * @return PublisherConfigItemInterface[]
+     * @throws \LogicException
      */
     public function getPublishers();
 }

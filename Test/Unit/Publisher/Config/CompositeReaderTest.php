@@ -63,9 +63,9 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
             $this->validatorMock,
             $this->defaultConfigProviderMock,
             [
-                'readerTwo' => ['sortOrder' => 20, 'reader' => $this->readerTwoMock],
-                'readerOne' => ['sortOrder' => 10, 'reader' => $this->readerOneMock],
-                'readerThree' => ['sortOrder' => 10, 'reader' => $this->readerThreeMock],
+                'readerOne' => $this->readerOneMock,
+                'readerThree' => $this->readerThreeMock,
+                'readerTwo' => $this->readerTwoMock,
             ]
         );
     }
@@ -115,19 +115,5 @@ class CompositeReaderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expectedData, $data);
-    }
-
-    public function testInvalidReaderInstance()
-    {
-        $this->setExpectedException(
-            '\InvalidArgumentException',
-            'Object [reader] must implement Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface'
-        );
-        $readerMock = $this->getMock(\Magento\Framework\Config\ReaderInterface::class);
-        new CompositeReader(
-            $this->validatorMock,
-            $this->defaultConfigProviderMock,
-            ['reader' => ['sortOrder' => 20, 'reader' => $readerMock]]
-        );
     }
 }

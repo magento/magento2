@@ -145,6 +145,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * Get topic configuration for current consumer.
      * @param string $topicName
      * @return array
+     * @throws \LogicException
      */
     private function getTopicConfig($topicName)
     {

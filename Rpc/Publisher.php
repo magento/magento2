@@ -34,11 +34,6 @@ class Publisher implements PublisherInterface
     private $envelopeFactory;
 
     /**
-     * @var \Magento\Amqp\Model\Config
-     */
-    private $amqpConfig;
-
-    /**
      * @var MessageEncoder
      */
     private $messageEncoder;
@@ -80,7 +75,6 @@ class Publisher implements PublisherInterface
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
-        $this->amqpConfig = $amqpConfig;
         $this->messageEncoder = $messageEncoder;
         $this->messageValidator = $messageValidator;
     }
@@ -108,23 +102,6 @@ class Publisher implements PublisherInterface
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $responseMessage = $exchange->enqueue($topicName, $envelope);
         return $this->messageEncoder->decode($topicName, $responseMessage, false);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function publishToQueue(EnvelopeInterface $message, $data, $queue)
-    {
-        $messageProperties = $message->getProperties();
-        $msg = new AMQPMessage(
-            $data,
-            [
-                'correlation_id' => $messageProperties['correlation_id'],
-                'delivery_mode' => 2,
-                'message_id' => $messageProperties['message_id']
-            ]
-        );
-        $this->amqpConfig->getChannel()->basic_publish($msg, '', $queue);
     }
 
     /**

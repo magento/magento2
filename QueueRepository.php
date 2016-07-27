@@ -39,6 +39,7 @@ class QueueRepository
      * @param string $connectionName
      * @param string $queueName
      * @return QueueInterface
+     * @throws \LogicException
      */
     public function get($connectionName, $queueName)
     {

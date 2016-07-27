@@ -44,6 +44,7 @@ interface ConsumerConfigurationInterface
      * @return string
      * @deprecated
      * @see \Magento\Framework\Communication\ConfigInterface::getTopic
+     * @throws \LogicException
      */
     public function getType();
 
@@ -59,6 +60,7 @@ interface ConsumerConfigurationInterface
      *
      * @param string $topicName
      * @return callback[]
+     * @throws \LogicException
      */
     public function getHandlers($topicName);
 

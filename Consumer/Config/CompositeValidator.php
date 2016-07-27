@@ -13,8 +13,6 @@ use Magento\Framework\Phrase;
  */
 class CompositeValidator implements ValidatorInterface
 {
-    use \Magento\Framework\MessageQueue\Config\SortedList;
-
     /**
      * @var ValidatorInterface[]
      */
@@ -23,11 +21,11 @@ class CompositeValidator implements ValidatorInterface
     /**
      * Initialize dependencies.
      *
-     * @param array $validators
+     * @param ValidatorInterface[] $validators
      */
     public function __construct(array $validators)
     {
-        $this->validators = $this->sort($validators, ValidatorInterface::class, 'validator');
+        $this->validators = $validators;
     }
 
     /**

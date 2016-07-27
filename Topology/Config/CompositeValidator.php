@@ -33,6 +33,7 @@ class CompositeValidator implements ValidatorInterface
      * @param array $configData
      * @throws \LogicException
      * @return void
+     * @throws \LogicException
      */
     public function validate($configData)
     {

@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Config;
+namespace Magento\Framework\MessageQueue\Config\Consumer;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 
@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
  *
  * @deprecated 
  */
-class ConsumerConfigPlugin
+class ConfigReaderPlugin
 {
     /**
      * @var QueueConfig
@@ -32,24 +32,19 @@ class ConsumerConfigPlugin
     /**
      * Read values from queue config and make them available via consumer config.
      * 
-     * @param \Magento\Framework\MessageQueue\Consumer\Config\Data $subject
+     * @param \Magento\Framework\MessageQueue\Consumer\Config\CompositeReader $subject
      * @param \Closure $proceed
-     * @param string|null $path
-     * @param mixed|null $default
-     * @return mixed
+     * @param string|null $scope
+     * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGet(
-        \Magento\Framework\MessageQueue\Consumer\Config\Data $subject,
+    public function aroundRead(
+        \Magento\Framework\MessageQueue\Consumer\Config\CompositeReader $subject,
         \Closure $proceed,
-        $path = null,
-        $default = null
+        $scope = null
     ) {
-        $consumerConfigData = $proceed($path, $default);
-        if ($path !== null || $default !== null) {
-            return $consumerConfigData;
-        }
+        $consumerConfigData = $proceed($scope);
         $consumerConfigDataFromQueueConfig = $this->getConsumerConfigDataFromQueueConfig();
         return array_merge($consumerConfigDataFromQueueConfig, $consumerConfigData);
     }

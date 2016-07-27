@@ -20,6 +20,7 @@ interface ConfigInterface
      * @param string $name
      * @return ExchangeConfigItemInterface
      * @throws LocalizedException
+     * @throws \LogicException
      */
     public function getExchange($name);
 
@@ -27,6 +28,7 @@ interface ConfigInterface
      * Get list of all exchanges declared in the system.
      * 
      * @return ExchangeConfigItemInterface[]
+     * @throws \LogicException
      */
     public function getExchanges();
 
@@ -34,6 +36,7 @@ interface ConfigInterface
      * Get list of all queues declared in the system.
      *
      * @return QueueConfigItemInterface[]
+     * @throws \LogicException
      */
     public function getQueues();
 }

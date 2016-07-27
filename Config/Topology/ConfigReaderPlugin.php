@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue\Config;
+namespace Magento\Framework\MessageQueue\Config\Topology;
 
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 
@@ -12,7 +12,7 @@ use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
  *
  * @deprecated
  */
-class TopologyConfigPlugin
+class ConfigReaderPlugin
 {
     /**
      * @var QueueConfig
@@ -32,24 +32,19 @@ class TopologyConfigPlugin
     /**
      * Read values from queue config and make them available via topology config.
      *
-     * @param \Magento\Framework\MessageQueue\Topology\Config\Data $subject
+     * @param \Magento\Framework\MessageQueue\Topology\Config\CompositeReader $subject
      * @param \Closure $proceed
-     * @param string|null $path
-     * @param mixed|null $default
-     * @return mixed
+     * @param string|null $scope
+     * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGet(
-        \Magento\Framework\MessageQueue\Topology\Config\Data $subject,
+    public function aroundRead(
+        \Magento\Framework\MessageQueue\Topology\Config\CompositeReader $subject,
         \Closure $proceed,
-        $path = null,
-        $default = null
+        $scope = null
     ) {
-        $topologyConfigData = $proceed($path, $default);
-        if ($path !== null || $default !== null) {
-            return $topologyConfigData;
-        }
+        $topologyConfigData = $proceed($scope);
         $topologyConfigDataFromQueueConfig = $this->getTopologyConfigDataFromQueueConfig();
         foreach ($topologyConfigDataFromQueueConfig as $exchangeName => $exchangeConfig) {
             if (isset($topologyConfigData[$exchangeName])) {

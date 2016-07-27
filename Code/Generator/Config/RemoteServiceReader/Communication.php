@@ -53,6 +53,7 @@ class Communication implements \Magento\Framework\Config\ReaderInterface
      *
      * @param string|null $scope
      * @return array
+     * @throws \LogicException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
