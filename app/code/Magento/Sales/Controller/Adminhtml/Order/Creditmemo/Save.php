@@ -34,6 +34,27 @@ class Save extends \Magento\Backend\App\Action
     protected $resultForwardFactory;
 
     /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resource;
+
+    /**
+     * @var \Magento\Sales\Model\Order\PaymentAdapterInterface
+     */
+    private $paymentAdapter;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
+     */
+    private $invoiceRepository;
+
+    /**
+     * Save constructor.
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param CreditmemoSender $creditmemoSender
@@ -67,6 +88,9 @@ class Save extends \Magento\Backend\App\Action
         if (!empty($data['comment_text'])) {
             $this->_getSession()->setCommentText($data['comment_text']);
         }
+
+        $connection = $this->getResource()->getConnection('sales');
+        $connection->beginTransaction();
         try {
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
@@ -102,7 +126,24 @@ class Save extends \Magento\Backend\App\Action
                 $creditmemoManagement = $this->_objectManager->create(
                     'Magento\Sales\Api\CreditmemoManagementInterface'
                 );
-                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline'], !empty($data['send_email']));
+                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline']);
+
+                $order = $this->getPaymentAdapter()->refund(
+                    $creditmemo,
+                    $creditmemo->getOrder(),
+                    !(bool)$data['do_offline']
+                );
+                $this->getOrderRepository()->save($order);
+                $invoice = $creditmemo->getInvoice();
+                if ($invoice) {
+                    $invoice->setIsUsedForRefund(true);
+                    $invoice->setBaseTotalRefunded(
+                        $invoice->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
+                    );
+                    $creditmemo->setInvoiceId($invoice->getId());
+                    $this->getInvoiceRepository()->save($creditmemo->getInvoice());
+                }
+                $connection->commit();
 
                 if (!empty($data['send_email'])) {
                     $this->creditmemoSender->send($creditmemo);
@@ -120,11 +161,69 @@ class Save extends \Magento\Backend\App\Action
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
+            $connection->rollBack();
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             $this->messageManager->addError(__('We can\'t save the credit memo right now.'));
+            $connection->rollBack();
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
         return $resultRedirect;
+    }
+
+    /**
+     * @return \Magento\Sales\Model\Order\PaymentAdapterInterface
+     *
+     * @deprecated
+     */
+    private function getPaymentAdapter()
+    {
+        if ($this->paymentAdapter === null) {
+            $this->paymentAdapter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Model\Order\PaymentAdapterInterface::class);
+        }
+        return $this->paymentAdapter;
+    }
+
+    /**
+     * @return \Magento\Framework\App\ResourceConnection|mixed
+     *
+     * @deprecated
+     */
+    private function getResource()
+    {
+        if ($this->resource === null) {
+            $this->resource = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\ResourceConnection::class);
+        }
+        return $this->resource;
+    }
+
+    /**
+     * @return \Magento\Sales\Api\OrderRepositoryInterface
+     *
+     * @deprecated
+     */
+    private function getOrderRepository()
+    {
+        if ($this->orderRepository === null) {
+            $this->orderRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Api\OrderRepositoryInterface::class);
+        }
+        return $this->orderRepository;
+    }
+
+    /**
+     * @return \Magento\Sales\Api\InvoiceRepositoryInterface
+     *
+     * @deprecated
+     */
+    private function getInvoiceRepository()
+    {
+        if ($this->invoiceRepository === null) {
+            $this->invoiceRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Sales\Api\OrderRepositoryInterface::class);
+        }
+        return $this->invoiceRepository;
     }
 }
