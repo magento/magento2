@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Store\Test\Repository\Store">
         <dataset name="default">
+            <field name="store_id" xsi:type="string">%id%</field>
             <field name="group_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -26,10 +27,12 @@
         </dataset>
 
         <dataset name="default_store_view">
+            <field name="store_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">Default Store View</field>
         </dataset>
 
         <dataset name="all_store_views">
+            <field name="store_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">All Store Views</field>
         </dataset>
 

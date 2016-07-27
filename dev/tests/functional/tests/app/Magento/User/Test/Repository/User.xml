@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\User\Test\Repository\User">
         <dataset name="default">
+            <field name="user_id" xsi:type="string">%id%</field>
             <field name="username" xsi:type="string">admin</field>
             <field name="firstname" xsi:type="string">FirstName%isolation%</field>
             <field name="lastname" xsi:type="string">LastName%isolation%</field>
