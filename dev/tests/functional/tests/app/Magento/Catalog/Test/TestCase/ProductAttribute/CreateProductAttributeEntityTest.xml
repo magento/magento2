@@ -177,7 +177,7 @@
             <data name="attributeValue" xsi:type="array">
                 <item name="country" xsi:type="string">United States</item>
                 <item name="tax" xsi:type="string">10</item>
-                <item name="website/dataset" xsi:type="string">all_websites</item>
+                <item name="website" xsi:type="string">All Websites USD</item>
                 <item name="state" xsi:type="string">*</item>
             </data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />

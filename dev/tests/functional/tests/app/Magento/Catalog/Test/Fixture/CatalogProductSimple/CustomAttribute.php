@@ -23,28 +23,20 @@ class CustomAttribute extends DataSource
     private $attribute;
 
     /**
-     * @var FixtureFactory
-     */
-    private $fixtureFactory;
-
-    /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param mixed $data
      */
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data)
     {
-        $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
         if (is_array($data) && isset($data['dataset'])) {
             /** @var CatalogProductAttribute $data */
             $data = $fixtureFactory->createByCode('catalogProductAttribute', ['dataset' => $data['dataset']]);
         }
-        if (is_array($data) && isset($data['value']) && !is_array($data['value'])) {
+        if (is_array($data) && isset($data['value'])) {
             $this->data['value'] = $data['value'];
-            $data = $data['attribute'];
-        } elseif (is_array($data) && isset($data['value']) && is_array($data['value'])) {
-            $this->data['value'] = $this->getWebsiteData($data['value']);
             $data = $data['attribute'];
         } else {
             $this->data['value'] = $this->getDefaultAttributeValue($data);
@@ -103,26 +95,5 @@ class CustomAttribute extends DataSource
     {
         $label = $attribute->getFrontendLabel();
         return strtolower(preg_replace('@[\W\s]+@', '_', $label));
-    }
-
-    /**
-     * Get website data.
-     *
-     * @param array $data
-     * @return array
-     */
-    private function getWebsiteData(array &$data)
-    {
-        foreach ($data as $key => $value) {
-            if (strpos($key, '/dataset') !== false) {
-                list($code) = explode("/", $key);
-                /** @var \Magento\Store\Test\Fixture\Website $website */
-                $website = $this->fixtureFactory->createByCode($code, ['dataset' => $value]);
-                unset($data[$key]);
-                $data[$code] = $website->getName() . " USD";
-            }
-        }
-
-        return $data;
     }
 }

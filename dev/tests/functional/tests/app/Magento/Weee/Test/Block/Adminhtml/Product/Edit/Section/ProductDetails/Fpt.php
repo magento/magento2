@@ -49,6 +49,18 @@ class Fpt extends SimpleElement
     private $state = '[name$="[state]"]';
 
     /**
+     * Fields mapping.
+     *
+     * @var array
+     */
+    private $fields = [
+        'country' => 'select',
+        'website' => 'select',
+        'tax' => 'input',
+        'state' => 'select'
+    ];
+
+    /**
      * Fill Fixed Product Tax form.
      *
      * @param string|array $value
@@ -60,9 +72,7 @@ class Fpt extends SimpleElement
             $this->find($this->buttonFormLocator)->click();
         }
         foreach ((array)$value as $name => $data) {
-            $element = $name === 'tax'
-                ? $this->find($this->$name, Locator::SELECTOR_CSS, 'input')
-                : $this->find($this->$name, Locator::SELECTOR_CSS, 'select');
+            $element = $this->find($this->$name, Locator::SELECTOR_CSS, $this->fields[$name]);
 
             if ($element->isVisible()) {
                 $element->setValue($data);
