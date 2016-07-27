@@ -147,7 +147,7 @@ class Curl extends AbstractCurl implements WebsiteInterface
      * @return void
      * @throws \Exception
      */
-    private function setConfiguration($data)
+    private function setConfiguration(array $data)
     {
         $configData = [
             'web/unsecure/base_link_url' => [

@@ -72,8 +72,7 @@ class StoreView extends DataSource
      *
      * @param string $key [optional]
      * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Exception
      */
     public function getData($key = null)
     {
@@ -85,33 +84,52 @@ class StoreView extends DataSource
                     $store->persist();
                 }
 
-                // Definition of scope by param 'value'
-                if ($this->fixtureData['value'] == self::STORE_CODE) {
-                    $this->scope = $store;
-                } elseif ($this->fixtureData['value'] == self::WEBSITE_CODE) {
-                    $this->scope = $this->scope
-                        ->getDataFieldConfig('group_id')['source']->getStoreGroup()
-                        ->getDataFieldConfig('website_id')['source']->getWebsite();
-                }
+                $this->prepareScope($store);
             } elseif (isset($this->fixtureData['fixture'])) {
                 $this->scope = $this->fixtureData['fixture'];
             } else {
-                $this->data = null;
+                throw new \Exception('Parameters "dataset" and "fixture" aren\'t identify.');
             }
 
-            // Separately strategy for Store or Website scope.
-            if ($this->scope instanceof Store) {
-                $this->data = $this->scope->getWebsiteId()
-                    . '/' . $this->scope->getGroupId()
-                    . '/' . $this->scope->getName();
-                $this->value = self::STORE_CODE;
-            } elseif ($this->scope instanceof Website) {
-                $this->data = $this->scope->getName();
-                $this->value = self::WEBSITE_CODE;
-            }
+            $this->prepareData();
         }
 
         return parent::getData($key);
+    }
+
+    /**
+     * Prepare scope.
+     *
+     * @param Store $store
+     * @return void
+     */
+    private function prepareScope(Store $store)
+    {
+        if ($this->fixtureData['value'] == self::STORE_CODE) {
+            $this->scope = $store;
+        } elseif ($this->fixtureData['value'] == self::WEBSITE_CODE) {
+            $this->scope = $this->scope
+                ->getDataFieldConfig('group_id')['source']->getStoreGroup()
+                ->getDataFieldConfig('website_id')['source']->getWebsite();
+        }
+    }
+
+    /**
+     * Prepare data.
+     *
+     * @return void
+     */
+    private function prepareData()
+    {
+        if ($this->scope instanceof Store) {
+            $this->data = $this->scope->getWebsiteId()
+                . '/' . $this->scope->getGroupId()
+                . '/' . $this->scope->getName();
+            $this->value = self::STORE_CODE;
+        } elseif ($this->scope instanceof Website) {
+            $this->data = $this->scope->getName();
+            $this->value = self::WEBSITE_CODE;
+        }
     }
 
     /**
