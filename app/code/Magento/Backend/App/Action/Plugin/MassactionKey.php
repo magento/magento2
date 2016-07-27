@@ -28,6 +28,6 @@ class MassactionKey
             $postData = $request->getPost($key);
             $value = is_array($postData) ? $postData : explode(',', $postData);
             $request->setPostValue($key, $value ? $value : null);
-        };
+        }
     }
 }
