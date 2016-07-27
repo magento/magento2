@@ -129,7 +129,7 @@ angular.module('extension-grid', ['ngStorage'])
                         version: $scope.availableUpdatePackages[extension.name]['latestVersion']
                     }
                 ];
-                titleService.setTitle('uninstall', extension.moduleName ? extension.moduleName : extension.name);
+                titleService.setTitle('update', extension.moduleName ? extension.moduleName : extension.name);
                 $state.go('root.readiness-check-update');
             };
 
