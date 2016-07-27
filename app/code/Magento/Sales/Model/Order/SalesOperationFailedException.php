@@ -9,8 +9,8 @@ namespace Magento\Sales\Model\Order;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class SalesDocumentValidationException
+ * Class SalesOperationFailedException
  */
-class SalesDocumentValidationException extends LocalizedException
+class SalesOperationFailedException extends LocalizedException
 {
 }

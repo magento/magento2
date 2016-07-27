@@ -14,10 +14,12 @@ use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceValidatorInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\Order\Config as OrderConfig;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\Order\InvoiceRepository;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order\SalesDocumentValidationException;
+use Magento\Sales\Model\Order\SalesOperationFailedException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class InvoiceService
@@ -55,7 +57,7 @@ class OrderInvoice implements OrderInvoiceInterface
     private $orderStateResolver;
 
     /**
-     * @var Config
+     * @var OrderConfig
      */
     private $config;
 
@@ -70,16 +72,22 @@ class OrderInvoice implements OrderInvoiceInterface
     private $notifierInterface;
 
     /**
-     * InvoiceOffline constructor.
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * OrderInvoice constructor.
      * @param ResourceConnection $resourceConnection
      * @param OrderRepositoryInterface $orderRepository
      * @param InvoiceDocumentFactory $invoiceDocumentFactory
      * @param InvoiceValidatorInterface $invoiceValidator
      * @param PaymentAdapterInterface $paymentAdapter
      * @param OrderStateResolverInterface $orderStateResolver
-     * @param Config $config
+     * @param OrderConfig $config
      * @param InvoiceRepository $invoiceRepository
      * @param NotifierInterface $notifierInterface
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
@@ -88,9 +96,10 @@ class OrderInvoice implements OrderInvoiceInterface
         InvoiceValidatorInterface $invoiceValidator,
         PaymentAdapterInterface $paymentAdapter,
         OrderStateResolverInterface $orderStateResolver,
-        Config $config,
+        OrderConfig $config,
         InvoiceRepository $invoiceRepository,
-        NotifierInterface $notifierInterface
+        NotifierInterface $notifierInterface,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->orderRepository = $orderRepository;
@@ -101,6 +110,7 @@ class OrderInvoice implements OrderInvoiceInterface
         $this->config = $config;
         $this->invoiceRepository = $invoiceRepository;
         $this->notifierInterface = $notifierInterface;
+        $this->logger = $logger;
     }
 
     public function execute(
@@ -117,7 +127,7 @@ class OrderInvoice implements OrderInvoiceInterface
         $invoice = $this->invoiceDocumentFactory->create($order, $items, $comment, $arguments);
         $errorMessages = $this->invoiceValidator->validate($invoice, $order);
         if (!empty($errorMessages)) {
-            throw new LocalizedException(__("Sales Document Validation Error", $errorMessages));
+            //throw new SalesDocumentValidationException(__("Sales Document Validation Error", $errorMessages));
         }
         $connection->beginTransaction();
         try {
@@ -131,10 +141,9 @@ class OrderInvoice implements OrderInvoiceInterface
             $this->orderRepository->save($order);
             $connection->commit();
         } catch (\Exception $e) {
-            // log original exception
+            $this->logger->critical($e->getMessage());
             $connection->rollBack();
-            throw new LocalizedException(__("Sales Operation Failed", $errorMessages));
-            // throw new SalesOperationFailedException
+            throw new SalesOperationFailedException(__("Sales Operation Failed", $errorMessages));
         }
         if ($notify) {
             $this->notifierInterface->notify($order, $invoice, $comment);
