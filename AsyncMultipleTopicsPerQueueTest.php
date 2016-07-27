@@ -3,11 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue;
-
-use Magento\Framework\MessageQueue\QueueTestCaseAbstract;
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class AsyncMultipleTopicsPerQueueTest extends QueueTestCaseAbstract
 {
@@ -36,14 +32,8 @@ class AsyncMultipleTopicsPerQueueTest extends QueueTestCaseAbstract
      */
     private $topics = ['multi.topic.queue.topic.c', 'multi.topic.queue.topic.d'];
 
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
     protected function tearDown()
     {
-        parent::tearDown();
         unlink($this->tmpPath);
     }
 
@@ -68,8 +58,7 @@ class AsyncMultipleTopicsPerQueueTest extends QueueTestCaseAbstract
         sleep(20);
 
         //assertions
-        foreach ($this->topics as $item)
-        {
+        foreach ($this->topics as $item) {
             $this->assertContains($this->uniqueID[$item] . "_" . $item, file_get_contents($this->tmpPath));
         }
     }

@@ -5,9 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\QueueTestCaseAbstract;
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
-
 class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 {
     /**
@@ -30,14 +27,8 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
      */
     protected $groups = ['group1'];
 
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
     protected function tearDown()
     {
-        parent::tearDown();
         unlink($this->tmpPath);
     }
 
@@ -62,8 +53,7 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
         sleep(20);
 
         // Verify that asynchronous messages were processed
-        foreach ($this->groups as $item)
-        {
+        foreach ($this->groups as $item) {
             $this->assertContains($item, file_get_contents($this->tmpPath));
         }
     }

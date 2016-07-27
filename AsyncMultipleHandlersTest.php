@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\QueueTestCaseAbstract;
@@ -95,10 +94,8 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
         sleep(20);
 
         //assertions
-        foreach ($this->expectedValues as $item)
-        {
+        foreach ($this->expectedValues as $item) {
             $this->assertContains($item, file_get_contents($this->tmpPath));
         }
     }
-
 }
