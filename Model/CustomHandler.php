@@ -5,15 +5,8 @@
  */
 namespace Magento\TestModuleAsyncAmqp\Model;
 
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
-
 class CustomHandler
 {
-    /**
-     * @var \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
-     */
-    private $asyncTestData;
-
     /**
      * @param \Magento\TestModuleAsyncAmqp\Model\AsyncTestData $simpleDataItem
      */
@@ -21,7 +14,8 @@ class CustomHandler
     {
         file_put_contents(
             $simpleDataItem->getTextFilePath(),
-            'custom-string-' . $simpleDataItem->getValue() . PHP_EOL, FILE_APPEND
+            'custom-string-' . $simpleDataItem->getValue() . PHP_EOL,
+            FILE_APPEND
         );
     }
 
@@ -33,7 +27,8 @@ class CustomHandler
         foreach ($simpleDataItems as $objItem) {
             file_put_contents(
                 $objItem->getTextFilePath(),
-                'custom-array-' . $objItem->getValue() . PHP_EOL, FILE_APPEND
+                'custom-array-' . $objItem->getValue() . PHP_EOL,
+                FILE_APPEND
             );
         }
     }
@@ -48,7 +43,8 @@ class CustomHandler
         foreach ($simpleDataItems as $simpleDataItem) {
             file_put_contents(
                 $simpleDataItem->getTextFilePath(),
-                'custom-mixed-' . $simpleDataItem->getValue() . PHP_EOL, FILE_APPEND
+                'custom-mixed-' . $simpleDataItem->getValue() . PHP_EOL,
+                FILE_APPEND
             );
         }
     }

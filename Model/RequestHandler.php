@@ -5,15 +5,8 @@
  */
 namespace Magento\TestModuleAsyncAmqp\Model;
 
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
-
 class RequestHandler
 {
-    /**
-     * @var \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
-     */
-    private $asyncTestData;
-
     /**
      * @param \Magento\TestModuleAsyncAmqp\Model\AsyncTestData $simpleDataItem
      */
@@ -21,7 +14,8 @@ class RequestHandler
     {
         file_put_contents(
             $simpleDataItem->getTextFilePath(),
-            'InvokedFromRequestHandler-' . $simpleDataItem->getValue() . PHP_EOL, FILE_APPEND
+            'InvokedFromRequestHandler-' . $simpleDataItem->getValue() . PHP_EOL,
+            FILE_APPEND
         );
     }
 }
