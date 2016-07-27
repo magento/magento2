@@ -73,8 +73,12 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
      */
     protected function getConsumerStartCommand($consumer)
     {
-        $magentoCli = BP . '/bin/magento';
-        $consumerStartCommand = "php {$magentoCli} queue:consumers:start -vvv " . $consumer;
+        $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
+        $params['MAGE_DIRS']['base']['path'] = BP;
+        $params = 'TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
+        $binDirectory = realpath(TESTS_TEMP_DIR . '/../bin/');
+        $magentoCli = $binDirectory . '/magento';
+        $consumerStartCommand = $params . " php {$magentoCli} queue:consumers:start -vvv " . $consumer;
         return $consumerStartCommand;
     }
 }
