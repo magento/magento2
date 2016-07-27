@@ -6,14 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\MessageQueue\Consumer\Config\Data">
-        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\ConsumerConfigPlugin" />
+    <type name="Magento\Framework\MessageQueue\Consumer\Config\CompositeReader">
+        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Consumer\ConfigReaderPlugin" />
     </type>
-    <type name="Magento\Framework\MessageQueue\Publisher\Config\Data">
-        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\PublisherConfigPlugin" />
+    <type name="Magento\Framework\MessageQueue\Publisher\Config\CompositeReader">
+        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Publisher\ConfigReaderPlugin" />
     </type>
-    <type name="Magento\Framework\MessageQueue\Topology\Config\Data">
-        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\TopologyConfigPlugin" />
+    <type name="Magento\Framework\MessageQueue\Topology\Config\CompositeReader">
+        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Topology\ConfigReaderPlugin" />
     </type>
     <type name="Magento\Framework\MessageQueue\QueueRepository">
         <arguments>
