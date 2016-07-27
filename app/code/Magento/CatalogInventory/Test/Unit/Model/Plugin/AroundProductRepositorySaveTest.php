@@ -92,7 +92,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             $this->stockConfiguration
         );
 
-        $this->savedProduct = $savedProduct = $this->getMockBuilder(ProductInterface::class)
+        $this->savedProduct = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getExtensionAttributes', 'getStoreId'])
             ->getMockForAbstractClass();
 
