@@ -16,6 +16,11 @@
             <argument name="attributeLabelCache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload">
+        <arguments>
+            <argument name="fileUploadName" xsi:type="string">image</argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
         <arguments>
             <argument name="imageTypes" xsi:type="array">

@@ -20,17 +20,27 @@ class Upload extends \Magento\Backend\App\Action
     protected $imageUploader;
 
     /**
+     * Name of variable to upload
+     *
+     * @var string
+     */
+    protected $fileUploadName;
+
+    /**
      * Upload constructor.
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Catalog\Model\ImageUploader $imageUploader
+     * @param string $file
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Catalog\Model\ImageUploader $imageUploader
+        \Magento\Catalog\Model\ImageUploader $imageUploader,
+        $fileUploadName
     ) {
         parent::__construct($context);
         $this->imageUploader = $imageUploader;
+        $this->fileUploadName = $fileUploadName;
     }
 
     /**
@@ -51,7 +61,7 @@ class Upload extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $result = $this->imageUploader->saveFileToTmpDir('image');
+            $result = $this->imageUploader->saveFileToTmpDir($this->fileUploadName);
 
             $result['cookie'] = [
                 'name' => $this->_getSession()->getName(),
