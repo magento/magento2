@@ -8,6 +8,7 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
 use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\Modal;
 
 /**
  * Order actions block.
@@ -118,6 +119,18 @@ class Actions extends Block
      * @var string
      */
     protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
+     * 'Accept' payment button
+     * @var string
+     */
+    private $acceptPayment = '#accept_payment';
+
+    /**
+     * 'Deny' payment button
+     * @var string
+     */
+    private $denyPayment = '#deny_payment';
 
     /**
      * Ship order.
@@ -262,5 +275,31 @@ class Actions extends Block
     public function isActionButtonVisible($buttonName)
     {
         return $this->_rootElement->find(sprintf($this->button, $buttonName), Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Accept order
+     * @return void
+     */
+    public function accept()
+    {
+        $this->_rootElement->find($this->acceptPayment)->click();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var Modal $modal */
+        $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);
+        $modal->acceptAlert();
+    }
+
+    /**
+     * Deny order
+     * @return void
+     */
+    public function deny()
+    {
+        $this->_rootElement->find($this->denyPayment)->click();
+        $element = $this->browser->find($this->confirmModal);
+        /** @var Modal $modal */
+        $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);
+        $modal->acceptAlert();
     }
 }
