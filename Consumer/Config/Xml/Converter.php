@@ -8,6 +8,7 @@ namespace Magento\Framework\MessageQueue\Consumer\Config\Xml;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\Communication\Config\ConfigParser;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Converts MessageQueue consumers config from \DOMDocument to array
@@ -61,7 +62,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     'consumerInstance',
                     self::$defaultInstance
                 ),
-                'handlers' => $handler ? [$this->configParser->parseServiceMethod($handler)] : [],
+                'handlers' => $handler ? [$this->parseHandler($handler)] : [],
                 'connection' => $this->getAttributeValue(
                     $consumerNode,
                     'connection',
@@ -81,9 +82,24 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param mixed $default
      * @return string|null
      */
-    protected function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
+    private function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {
         $item = $node->attributes->getNamedItem($attributeName);
         return $item ? $item->nodeValue : $default;
+    }
+
+    /**
+     * Parse service method callback to become compatible with handlers format.
+     *
+     * @param array $handler
+     * @return array
+     */
+    private function parseHandler($handler)
+    {
+        $parseServiceMethod = $this->configParser->parseServiceMethod($handler);
+        return [
+            CommunicationConfig::HANDLER_TYPE => $parseServiceMethod[ConfigParser::TYPE_NAME],
+            CommunicationConfig::HANDLER_METHOD => $parseServiceMethod[ConfigParser::METHOD_NAME]
+        ];
     }
 }

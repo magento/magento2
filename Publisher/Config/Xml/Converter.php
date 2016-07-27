@@ -90,7 +90,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * @param mixed $default
      * @return string|null
      */
-    protected function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
+    private function getAttributeValue(\DOMNode $node, $attributeName, $default = null)
     {
         $item = $node->attributes->getNamedItem($attributeName);
         return $item ? $item->nodeValue : $default;
