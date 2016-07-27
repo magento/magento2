@@ -11,7 +11,8 @@
         value: value,
         name: inputName,
         placeholder: placeholder,
-        'aria-describedby': setDescriptionId(),
+        'aria-describedby': getDescriptionId(),
         'aria-required': required,
+        'aria-invalid': error() ? true : 'false',
         disabled: disabled
     }" />

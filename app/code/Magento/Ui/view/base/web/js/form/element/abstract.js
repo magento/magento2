@@ -84,7 +84,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn isDifferedFromDefault')
+            this.observe('error disabled focused preview visible value warn notice isDifferedFromDefault')
                 .observe('isUseDefault')
                 .observe({
                     'required': !!rules['required-entry']
@@ -115,7 +115,6 @@ define([
                 uid: uid,
                 noticeId: 'notice-' + uid,
                 errorId: 'error-' + uid,
-                warningId: 'warning-' + uid,
                 inputName: utils.serializeName(name.join('.')),
                 valueUpdate: valueUpdate
             });
@@ -443,14 +442,14 @@ define([
         /**
          * Returns correct id for 'aria-describedby' accessibility attribute
          *
-         * @returns {String}
+         * @returns {Boolean|String}
          */
-        setDescriptionId: function () {
+        getDescriptionId: function () {
             var id = false;
 
-            if(this.error().length > 0) {
+            if (this.error()) {
                 id = this.errorId;
-            } else if (this.notice) {
+            } else if (this.notice()) {
                 id = this.noticeId;
             }
 

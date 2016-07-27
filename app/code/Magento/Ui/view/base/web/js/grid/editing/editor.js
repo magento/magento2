@@ -486,7 +486,7 @@ define([
         },
 
         /**
-         * Counts number of invalid fields accros all active records.
+         * Counts number of invalid fields across all active records.
          *
          * @returns {Number}
          */
@@ -500,6 +500,15 @@ define([
             this.errorsCount = errorsCount;
 
             return errorsCount;
+        },
+
+        /**
+         * Translatable error message text.
+         *
+         * @param {String}
+         */
+        countErrorsMessage: function () {
+            return $t('There are {placeholder} messages requires your attention.'). replace('{placeholder}', this.countErrors());
         },
 
         /**

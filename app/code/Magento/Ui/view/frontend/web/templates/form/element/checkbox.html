@@ -13,8 +13,9 @@
                 id: uid,
                 disabled: disabled,
                 name: inputName,
-                'aria-describedby': setDescriptionId(),
-                'aria-required': required
+                'aria-describedby': getDescriptionId(),
+                'aria-required': required,
+                'aria-invalid': error() ? true : 'false'
                 },
            hasFocus: focused">
 
