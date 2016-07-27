@@ -68,11 +68,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         );
         $viewMock->expects($this->once())->method('isObjectNew')->will($this->returnValue($isObjectNew));
 
-        $closureMock = function (\Magento\Store\Model\Store $object) use ($viewMock) {
-            $this->assertEquals($object, $viewMock);
-            return $this->subjectMock;
-        };
-
         $this->indexerMock->expects($this->exactly($invalidateCounter))->method('invalidate');
         $this->prepareIndexer($invalidateCounter);
 
