@@ -57,7 +57,9 @@ class Fpt extends SimpleElement
         }
         foreach ((array)$value as $name => $data) {
             $element = $this->find(
-                $this->fields[$name]['selector'], Locator::SELECTOR_CSS, $this->fields[$name]['type']
+                $this->fields[$name]['selector'],
+                Locator::SELECTOR_CSS,
+                $this->fields[$name]['type']
             );
 
             if ($element->isVisible()) {
