@@ -13,6 +13,8 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class which provides encoding and decoding capabilities for MessageQueue messages.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MessageEncoder
 {
