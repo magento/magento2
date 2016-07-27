@@ -27,7 +27,7 @@ abstract class AbstractGrid extends Block
      *
      * @var string
      */
-    protected $dataGrid = '.admin__data-grid-outer-wrap';
+    protected $dataGrid = '#installExtensionGrid';
 
     /**
      * Container that contains name of the extension.

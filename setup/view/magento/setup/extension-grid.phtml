@@ -34,14 +34,16 @@
                 <div class="item-title">Products<br />Ready to Install</div>
                 <div class="item-install">
                     <button ui-sref="root.install" href="#install-extension-grid"
-                            ng-class="{'disabled' : !enabledInstall}"
+                            ng-class="{'disabled' : !enabledInstall, 'goInstall' : enabledInstall}"
                             type="button" class="btn">
                         Review and Install
                     </button>
                 </div>
             </li>
             <li class="item col-m-4">
-                <div ng-hide="isOutOfSync" class="item-title item-date-title">Last Refresh at {{lastSyncTime}} on </div>
+                <div ng-hide="isOutOfSync"
+                     class="item-title item-date-title"
+                >Last Refresh at {{lastSyncTime}} on </div>
                 <div ng-hide="isOutOfSync" class="item-date">
                     {{lastSyncDate}}
                 </div>
@@ -64,10 +66,14 @@
 
 <div class="row" ng-show="$root.isMarketplaceAuthorized && extensionsProcessed && total == 0">
     <label class="form-label not-found">
-        <b>You haven't purchased any extensions yet. Visit  <a href="https://marketplace.magento.com">Marketplace</a> for purchasing extensions.</b><br/>
+        <b>You haven't purchased any extensions yet. Visit <a href="https://marketplace.magento.com">Marketplace</a> 
+            for purchasing extensions.</b><br/>
     </label>
 </div>
-<div class="admin__data-grid-outer-wrap" ng-show="$root.isMarketplaceAuthorized && extensionsProcessed && total > 0">
+<div class="admin__data-grid-outer-wrap"
+     ng-show="$root.isMarketplaceAuthorized && extensionsProcessed && total > 0"
+     id="extensionGrid"
+>
     <div class="admin__data-grid-header">
         <div class="admin__data-grid-header-row row row-gutter">
             <div class="col-xs-3 module-summary">
