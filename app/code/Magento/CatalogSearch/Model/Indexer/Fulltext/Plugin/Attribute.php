@@ -67,15 +67,15 @@ class Attribute extends AbstractPlugin
     /**
      * Invalidate indexer on attribute save (searchable flag change)
      *
-     * @param \Magento\Framework\Model\AbstractModel $subject
-     * @param \Magento\Framework\Model\AbstractModel $result
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $result
      *
-     * @return \Magento\Framework\Model\AbstractModel
+     * @return \Magento\Catalog\Model\ResourceModel\Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterSave(
-        \Magento\Framework\Model\AbstractModel $subject,
-        \Magento\Framework\Model\AbstractModel $result
+        \Magento\Catalog\Model\ResourceModel\Attribute $subject,
+        \Magento\Catalog\Model\ResourceModel\Attribute $result
     ) {
         if ($this->saveNeedInvalidation) {
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
@@ -107,15 +107,15 @@ class Attribute extends AbstractPlugin
     /**
      * Invalidate indexer on searchable attribute delete
      *
-     * @param \Magento\Framework\Model\AbstractModel $subject
-     * @param \Magento\Framework\Model\AbstractModel $result
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $result
      *
-     * @return \Magento\Framework\Model\AbstractModel
+     * @return \Magento\Catalog\Model\ResourceModel\Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterDelete(
-        \Magento\Framework\Model\AbstractModel $subject,
-        \Magento\Framework\Model\AbstractModel $result
+        \Magento\Catalog\Model\ResourceModel\Attribute $subject,
+        \Magento\Catalog\Model\ResourceModel\Attribute $result
     ) {
         if ($this->deleteNeedInvalidation) {
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();

@@ -26,7 +26,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeMock;
 
@@ -103,8 +103,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveNoInvalidation()
     {
         $this->assertEquals(
-            $this->attributeMock,
-            $this->model->afterSave($this->attributeMock, $this->attributeMock)
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock)
         );
     }
 
@@ -126,8 +126,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('reset');
 
         $this->assertEquals(
-            $this->attributeMock,
-            $model->afterSave($this->attributeMock, $this->attributeMock)
+            $this->subjectMock,
+            $model->afterSave($this->subjectMock, $this->subjectMock)
         );
     }
 
@@ -148,8 +148,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testAfterDeleteNoInvalidation()
     {
         $this->assertEquals(
-            $this->attributeMock,
-            $this->model->afterDelete($this->attributeMock, $this->attributeMock)
+            $this->subjectMock,
+            $this->model->afterDelete($this->subjectMock, $this->subjectMock)
         );
     }
 
@@ -168,8 +168,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         $this->prepareIndexer();
 
         $this->assertEquals(
-            $this->attributeMock,
-            $model->afterDelete($this->attributeMock, $this->attributeMock)
+            $this->subjectMock,
+            $model->afterDelete($this->subjectMock, $this->subjectMock)
         );
     }
 
