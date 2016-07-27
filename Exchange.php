@@ -50,6 +50,7 @@ class Exchange implements ExchangeInterface
      *
      * @param Config $amqpConfig
      * @param PublisherConfig $publisherConfig
+     * @param ResponseQueueNameBuilder $responseQueueNameBuilder
      * @param CommunicationConfigInterface $communicationConfig
      * @param int $rpcConnectionTimeout
      */
@@ -112,7 +113,7 @@ class Exchange implements ExchangeInterface
                     $channel->wait(null, false, $this->rpcConnectionTimeout);
                 } catch (\PhpAmqpLib\Exception\AMQPTimeoutException $e) {
                     throw new LocalizedException(
-                        __(
+                        new \Magento\Framework\Phrase(
                             "RPC call failed, connection timed out after %time_out.",
                             ['time_out' => $this->rpcConnectionTimeout]
                         )

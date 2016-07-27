@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Amqp\Test\Unit\Model\Topology\BindingInstallerType;
+namespace Magento\Framework\Amqp\Test\Unit\Topology\BindingInstallerType;
 
 use Magento\Framework\Amqp\Topology\BindingInstallerType\Queue;
 use PhpAmqpLib\Channel\AMQPChannel;

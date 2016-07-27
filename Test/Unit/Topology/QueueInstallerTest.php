@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Amqp\Test\Unit\Model\Topology;
+namespace Magento\Framework\Amqp\Test\Unit\Topology;
 
 use Magento\Framework\Amqp\Topology\QueueInstaller;
 use Magento\Framework\MessageQueue\Topology\Config\QueueConfigItemInterface;
