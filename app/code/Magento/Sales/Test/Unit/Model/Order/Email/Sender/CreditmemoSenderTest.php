@@ -176,7 +176,10 @@ class CreditmemoSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->creditmemoResourceMock->expects($this->once())
+            $this->creditmemoResourceMock->expects($this->at(0))
+                ->method('saveAttribute')
+                ->with($this->creditmemoMock, 'email_sent');
+            $this->creditmemoResourceMock->expects($this->at(1))
                 ->method('saveAttribute')
                 ->with($this->creditmemoMock, 'send_email');
 

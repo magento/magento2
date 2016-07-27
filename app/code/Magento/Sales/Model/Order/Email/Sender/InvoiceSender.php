@@ -126,6 +126,9 @@ class InvoiceSender extends Sender
                 $this->invoiceResource->saveAttribute($invoice, ['send_email', 'email_sent']);
                 return true;
             }
+        } else {
+            $invoice->setEmailSent(null);
+            $this->invoiceResource->saveAttribute($invoice, 'email_sent');
         }
 
         $this->invoiceResource->saveAttribute($invoice, 'send_email');

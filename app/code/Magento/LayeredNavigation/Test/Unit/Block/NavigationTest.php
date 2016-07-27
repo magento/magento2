@@ -71,8 +71,6 @@ class NavigationTest extends \PHPUnit_Framework_TestCase
         $stateHtml = 'I feel good';
         $this->filterListMock->expects($this->any())->method('getFilters')->will($this->returnValue([]));
         $this->layoutMock->expects($this->at(0))->method('getChildName')
-            ->with(null, 'renderer');
-        $this->layoutMock->expects($this->at(1))->method('getChildName')
             ->with(null, 'state')
             ->will($this->returnValue('state block'));
 

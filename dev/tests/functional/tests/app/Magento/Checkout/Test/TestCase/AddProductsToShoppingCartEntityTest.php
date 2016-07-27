@@ -85,11 +85,11 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Run test add products to shopping cart
      *
-     * @param string $productsData
+     * @param array $productsData
      * @param array $cart
      * @return array
      */
-    public function test($productsData, array $cart)
+    public function test(array $productsData, array $cart)
     {
         // Preconditions
         $products = $this->prepareProducts($productsData);
@@ -104,10 +104,10 @@ class AddProductsToShoppingCartEntityTest extends Injectable
     /**
      * Create products
      *
-     * @param string $productList
+     * @param array $productList
      * @return array
      */
-    protected function prepareProducts($productList)
+    protected function prepareProducts(array $productList)
     {
         $addToCartStep = ObjectManager::getInstance()->create(
             'Magento\Catalog\Test\TestStep\CreateProductsStep',

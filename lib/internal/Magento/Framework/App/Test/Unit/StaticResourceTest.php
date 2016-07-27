@@ -58,6 +58,11 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
     protected function setUp()
     {
         $this->state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
@@ -67,6 +72,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
         $this->configLoader = $this->getMock(
             'Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false
         );
@@ -193,6 +199,12 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
 
     public function testCatchExceptionDeveloperMode()
     {
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->with('Psr\Log\LoggerInterface')
+            ->willReturn($this->logger);
+        $this->logger->expects($this->once())
+            ->method('critical');
         $bootstrap = $this->getMockBuilder(Bootstrap::class)->disableOriginalConstructor()->getMock();
         $bootstrap->expects($this->once())->method('isDeveloperMode')->willReturn(true);
         $exception = new \Exception('Error: nothing works');
