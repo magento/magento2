@@ -145,7 +145,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->willReturn($options);
 
         if ($withEmpty) {
-            array_unshift($options, ['label' => '', 'value' => '']);
+            array_unshift($options, ['label' => ' ', 'value' => '']);
         }
 
         $this->assertEquals($options, $this->_model->getSpecificOptions($optionIds, $withEmpty));
