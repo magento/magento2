@@ -16,6 +16,7 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Class which creates Consumers
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConsumerFactory
 {
