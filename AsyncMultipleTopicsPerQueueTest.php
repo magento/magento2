@@ -35,6 +35,7 @@ class AsyncMultipleTopicsPerQueueTest extends QueueTestCaseAbstract
     protected function tearDown()
     {
         unlink($this->tmpPath);
+        parent::tearDown();
     }
 
     /**

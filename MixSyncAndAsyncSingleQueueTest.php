@@ -30,6 +30,7 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
     protected function tearDown()
     {
         unlink($this->tmpPath);
+        parent::tearDown();
     }
 
     public function testMixSyncAndAsyncSingleQueue()
