@@ -6,6 +6,8 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
+use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\OrderInvoiceInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -113,21 +115,42 @@ class OrderInvoice implements OrderInvoiceInterface
         $this->logger = $logger;
     }
 
+    /**
+     * @param int $orderId
+     * @param bool $capture
+     * @param array $items
+     * @param bool $notify
+     * @param bool $appendComment
+     * @param \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|null $comment
+     * @param \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface|null $arguments
+     * @return int|null
+     * @throws \Magento\Sales\Model\Order\SalesDocumentValidationException
+     * @throws \Magento\Sales\Model\Order\SalesOperationFailedException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \DomainException
+     */
     public function execute(
         $orderId,
         $capture = false,
         array $items = [],
         $notify = false,
         $appendComment = false,
-        \Magento\Sales\Api\Data\InvoiceCommentCreationInterface $comment = null,
-        \Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface $arguments = null
+        InvoiceCommentCreationInterface $comment = null,
+        InvoiceCreationArgumentsInterface $arguments = null
     ) {
         $connection = $this->resourceConnection->getConnection('sales');
         $order = $this->orderRepository->get($orderId);
-        $invoice = $this->invoiceDocumentFactory->create($order, $items, $comment, $arguments);
+        $invoice = $this->invoiceDocumentFactory->create(
+            $order,
+            $items,
+            $comment,
+            ($appendComment && $notify),
+            $arguments
+        );
         $errorMessages = $this->invoiceValidator->validate($invoice, $order);
         if (!empty($errorMessages)) {
-            //throw new SalesDocumentValidationException(__("Sales Document Validation Error", $errorMessages));
+            throw new SalesDocumentValidationException(__("Sales Document Validation Error", $errorMessages));
         }
         $connection->beginTransaction();
         try {
@@ -141,14 +164,16 @@ class OrderInvoice implements OrderInvoiceInterface
             $this->orderRepository->save($order);
             $connection->commit();
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical($e);
             $connection->rollBack();
-            throw new SalesOperationFailedException(__("Sales Operation Failed", $errorMessages));
+            throw new SalesOperationFailedException(__("Sales Operation Failed", $e->getMessage()));
         }
         if ($notify) {
+            if (!$appendComment) {
+                $comment = null;
+            }
             $this->notifierInterface->notify($order, $invoice, $comment);
         }
-
+        return $invoice->getEntityId();
     }
 }
-

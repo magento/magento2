@@ -19,6 +19,7 @@ interface OrderInvoiceInterface
      * @param bool|false $capture
      * @param \Magento\Sales\Api\Data\InvoiceItemCreationInterface[] $items
      * @param bool|false $notify
+     * @param bool|false $appendComment
      * @param Data\InvoiceCommentCreationInterface|null $comment
      * @param Data\InvoiceCreationArgumentsInterface|null $arguments
      * @return int

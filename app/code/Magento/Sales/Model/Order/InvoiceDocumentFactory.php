@@ -37,8 +37,9 @@ class InvoiceDocumentFactory
 
     /**
      * @param OrderInterface $order
-     * @param InvoiceItemCreationInterface[] $items
+     * @param array $items
      * @param InvoiceCommentCreationInterface|null $comment
+     * @param bool $appendComment
      * @param InvoiceCreationArgumentsInterface|null $arguments
      * @return InvoiceInterface
      */
@@ -46,6 +47,7 @@ class InvoiceDocumentFactory
         OrderInterface $order,
         $items = [],
         InvoiceCommentCreationInterface $comment = null,
+        $appendComment = false,
         InvoiceCreationArgumentsInterface $arguments = null
     ) {
 
@@ -55,7 +57,7 @@ class InvoiceDocumentFactory
         if ($comment) {
             $invoice->addComment(
                 $comment->getComment(),
-                null,
+                $appendComment,
                 $comment->getIsVisibleOnFront()
             );
         }
