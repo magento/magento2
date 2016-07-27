@@ -13,6 +13,9 @@ use Magento\Framework\Phrase;
  */
 class ConfigParser
 {
+    const TYPE_NAME = 'typeName';
+    const METHOD_NAME = 'methodName';
+
     /**
      * Parse service method name.
      *
@@ -34,6 +37,6 @@ class ConfigParser
         }
         $className = $matches[1];
         $methodName = $matches[2];
-        return ['type' => $className, 'method' => $methodName];
+        return [self::TYPE_NAME => $className, self::METHOD_NAME => $methodName];
     }
 }
