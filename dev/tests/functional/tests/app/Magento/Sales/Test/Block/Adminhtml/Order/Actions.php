@@ -121,18 +121,6 @@ class Actions extends Block
     protected $confirmModal = '.confirm._show[data-role=modal]';
 
     /**
-     * 'Accept' payment button
-     * @var string
-     */
-    private $acceptPayment = '#accept_payment';
-
-    /**
-     * 'Deny' payment button
-     * @var string
-     */
-    private $denyPayment = '#deny_payment';
-
-    /**
      * Ship order.
      *
      * @return void
@@ -283,7 +271,8 @@ class Actions extends Block
      */
     public function accept()
     {
-        $this->_rootElement->find($this->acceptPayment)->click();
+        $acceptPayment = '#accept_payment';
+        $this->_rootElement->find($acceptPayment)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var Modal $modal */
         $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);
@@ -296,7 +285,8 @@ class Actions extends Block
      */
     public function deny()
     {
-        $this->_rootElement->find($this->denyPayment)->click();
+        $denyPayment = '#deny_payment';
+        $this->_rootElement->find($denyPayment)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var Modal $modal */
         $modal = $this->blockFactory->create(Modal::class, ['element' => $element]);
