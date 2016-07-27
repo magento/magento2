@@ -29,7 +29,6 @@ class Attribute extends AbstractPlugin
      */
     private $saveIsNew;
 
-
     /**
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Framework\Search\Request\Config $config
