@@ -5,8 +5,8 @@
  */
 namespace Magento\Amqp\Model;
 
-use Magento\Amqp\Model\Topology\ExchangeInstaller;
-use Magento\Amqp\Model\Topology\QueueInstaller;
+use Magento\Framework\Amqp\Topology\ExchangeInstaller;
+use Magento\Framework\Amqp\Topology\QueueInstaller;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Topology\ConfigInterface as TopologyConfig;
@@ -15,6 +15,8 @@ use Magento\Framework\MessageQueue\Topology\ConfigInterface as TopologyConfig;
  * Class Topology creates topology for Amqp messaging
  *
  * @package Magento\Amqp\Model
+ *
+ * @deprecated
  */
 class Topology
 {
@@ -53,12 +55,12 @@ class Topology
     private $topologyConfig;
 
     /**
-     * @var \Magento\Amqp\Model\Topology\ExchangeInstaller
+     * @var \Magento\Framework\Amqp\Topology\ExchangeInstaller
      */
     private $exchangeInstaller;
 
     /**
-     * @var \Magento\Amqp\Model\Topology\QueueInstaller
+     * @var \Magento\Framework\Amqp\Topology\QueueInstaller
      */
     private $queueInstaller;
 
