@@ -26,7 +26,6 @@
 
         <dataset name="default_subcategory">
             <field name="id" xsi:type="string">%id%</field>
-            <field name="parent_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">DefaultSubcategory%isolation%</field>
             <field name="url_key" xsi:type="string">default-subcategory-%isolation%</field>
             <field name="parent_id" xsi:type="array">
@@ -48,6 +47,7 @@
         </dataset>
 
         <dataset name="root_category">
+            <field name="parent_id" xsi:type="string">%id%</field>
             <field name="name" xsi:type="string">RootCategory%isolation%</field>
             <field name="is_active" xsi:type="string">Yes</field>
             <field name="include_in_menu" xsi:type="string">Yes</field>
