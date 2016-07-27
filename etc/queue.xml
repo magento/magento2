@@ -12,4 +12,7 @@
     <broker topic="magento.testModuleSynchronousAmqp.api.serviceInterface.execute" type="amqp" exchange="magento">
         <queue consumer="RemoteServiceTestConsumer" name="queue.magento.testModuleSynchronousAmqp.api.serviceInterface.execute" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
     </broker>
+    <broker topic="sync.topic.for.mixed.sync.and.async.queue" type="amqp" exchange="magento">
+        <queue consumer="mixed.sync.and.async.queue.consumer" name="mixed.sync.and.async.queue" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
+    </broker>
 </config>
