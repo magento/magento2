@@ -75,7 +75,7 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
     {
         $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
         $params['MAGE_DIRS']['base']['path'] = BP;
-        $params = 'TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
+        $params = 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
         $binDirectory = realpath(TESTS_TEMP_DIR . '/../bin/');
         $magentoCli = $binDirectory . '/magento';
         $consumerStartCommand = $params . " php {$magentoCli} queue:consumers:start -vvv " . $consumer;
