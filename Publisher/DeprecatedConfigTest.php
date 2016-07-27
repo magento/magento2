@@ -47,7 +47,7 @@ class DeprecatedConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $publisher->isDisabled());
 
         $connection = $publisher->getConnection();
-        $this->assertEquals('customConnection', $connection->getName());
+        $this->assertEquals('amqp', $connection->getName());
         $this->assertEquals('customExchange', $connection->getExchange());
         $this->assertEquals(false, $connection->isDisabled());
     }
