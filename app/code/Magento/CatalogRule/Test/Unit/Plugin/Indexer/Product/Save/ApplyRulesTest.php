@@ -65,7 +65,7 @@ class ApplyRulesTest extends \PHPUnit_Framework_TestCase
 
         $this->productRuleProcessor->expects($this->once())->method('reindexRow')->willReturnSelf();
 
-        $this->assertEquals(
+        $this->assertSame(
             $this->subject,
             $this->plugin->afterSave($this->subject, $this->subject, $this->model)
         );
