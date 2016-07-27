@@ -69,17 +69,17 @@ define(
             isNewAddressAdded: ko.observable(false),
             saveInAddressBook: 1,
             quoteIsVirtual: quote.isVirtual(),
+            fieldsetName: 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset',
 
             /**
              * @return {exports}
              */
             initialize: function () {
                 var self = this,
-                    hasNewAddress,
-                    fieldsetName = 'checkout.steps.shipping-step.shippingAddress.shipping-address-fieldset';
+                    hasNewAddress;
 
                 this._super();
-                shippingRatesValidator.initFields(fieldsetName);
+                shippingRatesValidator.initFields(this.fieldsetName);
 
                 if (!quote.isVirtual()) {
                     stepNavigator.registerStep(
@@ -239,7 +239,8 @@ define(
                 var shippingAddress,
                     addressData,
                     loginFormSelector = 'form[data-role=email-with-possible-login]',
-                    emailValidationResult = customer.isLoggedIn();
+                    emailValidationResult = customer.isLoggedIn(),
+                    fieldset;
 
                 if (!quote.shippingMethod()) {
                     this.errorValidationMessage($.mage.__('Please specify a shipping method.'));
@@ -256,16 +257,26 @@ define(
                     this.source.set('params.invalid', false);
                     this.source.trigger('shippingAddress.data.validate');
 
+                    // In case of form is invalid
+                    // get first error and focus it
+                    if (this.source.get('params.invalid')) {
+                        fieldset = registry.get(this.fieldsetName);
+                        if (fieldset && typeof fieldset.elems === 'function') {
+                            this._focusFormErrors(fieldset.elems());
+                        }
+                    }
+
                     if (this.source.get('shippingAddress.custom_attributes')) {
                         this.source.trigger('shippingAddress.custom_attributes.data.validate');
                     }
 
-                    if (this.source.get('params.invalid') ||
-                        !quote.shippingMethod().method_code ||
-                        !quote.shippingMethod().carrier_code ||
-                        !emailValidationResult
-                    ) {
-                        return false;
+                    if (emailValidationResult) {
+                        if (this.source.get('params.invalid') ||
+                            !quote.shippingMethod().method_code ||
+                            !quote.shippingMethod().carrier_code
+                        ) {
+                            return false;
+                        }
                     }
 
                     shippingAddress = quote.shippingAddress();
@@ -302,6 +313,39 @@ define(
                 }
 
                 return true;
+            },
+
+            /**
+             * Recursive check collection of elements for errors and set related focus
+             *
+             * @param collection
+             * @returns {boolean}
+             * @private
+             */
+            _focusFormErrors: function (collection) {
+                var i,
+                    item,
+                    skipCheck = false;
+
+                for (i in collection) {
+                    if (!collection.hasOwnProperty(i)) {
+                        continue;
+                    }
+
+                    item = collection[i];
+                    if (typeof item.elems === 'function') {
+                        skipCheck = this._focusFormErrors(item.elems());
+                    }
+
+                    if (!skipCheck) {
+                        if (typeof item.error === 'function' && item.error() && typeof item.focused === 'function') {
+                            item.focused(true);
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
             }
         });
     }
