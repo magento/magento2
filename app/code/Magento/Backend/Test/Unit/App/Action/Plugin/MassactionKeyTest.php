@@ -47,13 +47,11 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
-     *
      * @param $postData array|string
      * @param array $convertedData
-     * @dataProvider aroundDispatchDataProvider
+     * @dataProvider beforeDispatchDataProvider
      */
-    public function testAroundDispatchWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
+    public function testBeforeDispatchWhenMassactionPrepareKeyRequestExists($postData, $convertedData)
     {
         $this->requestMock->expects($this->at(0))
             ->method('getPost')
@@ -73,7 +71,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function aroundDispatchDataProvider()
+    public function beforeDispatchDataProvider()
     {
         return [
             'post_data_is_array' => [['key'], ['key']],
@@ -81,10 +79,7 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @covers \Magento\Backend\App\Action\Plugin\MassactionKey::aroundDispatch
-     */
-    public function testAroundDispatchWhenMassactionPrepareKeyRequestNotExists()
+    public function testBeforeDispatchWhenMassactionPrepareKeyRequestNotExists()
     {
         $this->requestMock->expects($this->once())
             ->method('getPost')
