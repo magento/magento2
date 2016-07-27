@@ -21,43 +21,27 @@ class Fpt extends SimpleElement
     private $buttonFormLocator = '[data-action="add_new_row"]';
 
     /**
-     * Locator for country.
-     *
-     * @var string
-     */
-    private $country = '[name$="[country]"]';
-
-    /**
-     * Locator for tax.
-     *
-     * @var string
-     */
-    private $tax = '[name$="[value]"]';
-
-    /**
-     * Locator for website id.
-     *
-     * @var string
-     */
-    private $website = '[name$="[website_id]"]';
-
-    /**
-     * Locator for state.
-     *
-     * @var string
-     */
-    private $state = '[name$="[state]"]';
-
-    /**
      * Fields mapping.
      *
      * @var array
      */
     private $fields = [
-        'country' => 'select',
-        'website' => 'select',
-        'tax' => 'input',
-        'state' => 'select'
+        'country' => [
+            'type' => 'select',
+            'selector' => '[name$="[country]"]'
+        ],
+        'website' => [
+            'type' => 'select',
+            'selector' => '[name$="[website_id]"]'
+        ],
+        'tax' => [
+            'type' => 'input',
+            'selector' => '[name$="[value]"]'
+        ],
+        'state' => [
+            'type' => 'select',
+            'selector' => '[name$="[state]"]'
+        ]
     ];
 
     /**
@@ -72,7 +56,9 @@ class Fpt extends SimpleElement
             $this->find($this->buttonFormLocator)->click();
         }
         foreach ((array)$value as $name => $data) {
-            $element = $this->find($this->$name, Locator::SELECTOR_CSS, $this->fields[$name]);
+            $element = $this->find(
+                $this->fields[$name]['selector'], Locator::SELECTOR_CSS, $this->fields[$name]['type']
+            );
 
             if ($element->isVisible()) {
                 $element->setValue($data);

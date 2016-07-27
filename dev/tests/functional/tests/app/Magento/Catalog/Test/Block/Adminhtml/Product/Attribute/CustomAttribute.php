@@ -101,7 +101,7 @@ class CustomAttribute extends SimpleElement
     private function getElementByClass($class)
     {
         $element = null;
-        foreach ($this->classReferences as $key => $reference) {
+        foreach (array_keys($this->classReferences) as $key) {
             if (strpos($class, $key) !== false) {
                 return $this->classReferences[$class];
             }
