@@ -33,25 +33,25 @@ class CachedMetadata implements MetadataInterface
     protected $metadata;
 
     /**
-     * @deplacated
+     * @deprecated
      * @var array
      */
     protected $attributeMetadataCache = [];
 
     /**
-     * @deplacated
+     * @deprecated
      * @var array
      */
     protected $attributesCache = [];
 
     /**
-     * @deplacated
+     * @deprecated
      * @var \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      */
     protected $allAttributeMetadataCache = null;
 
     /**
-     * @deplacated
+     * @deprecated
      * @var \Magento\Customer\Api\Data\AttributeMetadataInterface[]
      */
     protected $customAttributesMetadataCache = null;
