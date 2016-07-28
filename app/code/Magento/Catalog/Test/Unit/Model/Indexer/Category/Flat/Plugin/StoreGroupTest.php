@@ -91,14 +91,14 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             ->with(State::INDEXER_ID)
             ->willReturn($this->indexerMock);
         $this->groupMock->expects($this->once())
-	        ->method('dataHasChangedFor')
-	        ->with('root_category_id')
-	        ->willReturn(true);
+            ->method('dataHasChangedFor')
+            ->with('root_category_id')
+            ->willReturn(true);
         $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(false);
         $this->model->beforeSave($this->subjectMock, $this->groupMock);
         $this->assertSame(
-        	$this->subjectMock,
-	        $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->groupMock)
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->groupMock)
         );
     }
 
@@ -106,14 +106,14 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     {
         $this->stateMock->expects($this->never())->method('isFlatEnabled');
         $this->groupMock->expects($this->once())
-	        ->method('dataHasChangedFor')
-	        ->with('root_category_id')
-	        ->willReturn(true);
+            ->method('dataHasChangedFor')
+            ->with('root_category_id')
+            ->willReturn(true);
         $this->groupMock->expects($this->once())->method('isObjectNew')->willReturn(true);
         $this->model->beforeSave($this->subjectMock, $this->groupMock);
         $this->assertSame(
-        	$this->subjectMock,
-	        $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->groupMock)
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->groupMock)
         );
     }
 }

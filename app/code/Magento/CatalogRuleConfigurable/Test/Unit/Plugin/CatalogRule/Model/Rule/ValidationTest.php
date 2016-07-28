@@ -45,7 +45,6 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-
         $this->ruleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
         $this->ruleConditionsMock = $this->getMock('Magento\Rule\Model\Condition\Combine', [], [], '', false);
         $this->productMock = $this->getMock('Magento\Framework\DataObject', ['getId']);
