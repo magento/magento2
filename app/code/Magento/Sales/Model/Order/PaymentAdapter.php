@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\CreditmemoInterface;
@@ -12,7 +11,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 class PaymentAdapter implements PaymentAdapterInterface
 {
     /**
-     * @var CreditmemoRefundOperation
+     * @var \Magento\Sales\Model\Order\Creditmemo\RefundOperation
      */
     private $refundOperation;
 

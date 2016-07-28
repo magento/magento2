@@ -53,7 +53,6 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['refund'])
             ->getMockForAbstractClass();
 
-
         $this->priceCurrencyMock = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')
             ->disableOriginalConstructor()
             ->setMethods(['round'])
