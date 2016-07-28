@@ -5,35 +5,51 @@
  */
 namespace Magento\Catalog\Model\Plugin;
 
+use Magento\Quote\Model\Quote\Item\ToOrderItem as QuoteToOrderItem;
+use Magento\Quote\Model\Quote\Item\AbstractItem as AbstractQuoteItem;
+use Magento\Catalog\Model\Product\Option as ProductOption;
+
+/**
+ * Plugin for Magento\Quote\Model\Quote\Item\ToOrderItem
+ */
 class QuoteItemProductOption
 {
     /**
-     * @param \Magento\Quote\Model\Quote\Item\ToOrderItem $subject
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem
-     * @return \Magento\Sales\Model\Order\Item
+     * Perform preparations for custom options
+     *
+     * @param QuoteToOrderItem $subject
+     * @param AbstractQuoteItem $quoteItem
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeConvert(
-        \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $quoteItem
+        QuoteToOrderItem $subject,
+        AbstractQuoteItem $quoteItem
     ) {
-        if (is_array($quoteItem->getOptions())) {
-            foreach ($quoteItem->getOptions() as $itemOption) {
-                $code = explode('_', $itemOption->getCode());
+        if (!is_array($quoteItem->getOptions())) {
+            return;
+        }
 
-                if (isset($code[1]) && is_numeric($code[1])) {
-                    $option = $quoteItem->getProduct()->getOptionById($code[1]);
+        foreach ($quoteItem->getOptions() as $itemOption) {
+            $code = explode('_', $itemOption->getCode());
 
-                    if ($option && $option->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_FILE) {
-                        try {
-                            $option->groupFactory($option->getType())
-                                ->setQuoteItemOption($itemOption)
-                                ->copyQuoteToOrder();
-                        } catch (\Exception $e) {
-                            continue;
-                        }
-                    }
-                }
+            if (!isset($code[1]) || !is_numeric($code[1])) {
+                continue;
+            }
+
+            $option = $quoteItem->getProduct()->getOptionById($code[1]);
+
+            if (!$option || $option->getType() != ProductOption::OPTION_TYPE_FILE) {
+                continue;
+            }
+
+            try {
+                $option->groupFactory($option->getType())
+                    ->setQuoteItemOption($itemOption)
+                    ->copyQuoteToOrder();
+            } catch (\Exception $e) {
+                continue;
             }
         }
     }

@@ -10,6 +10,9 @@ use Magento\CatalogSearch\Model\Source\Weight;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Fieldset;
 
+/**
+ * Plugin for Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Front
+ */
 class FrontTabPlugin
 {
     /**
