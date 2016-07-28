@@ -14,6 +14,9 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\DataObject;
 use Magento\Catalog\Model\Product\Option as ProductOption;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class QuoteItemProductOptionTest extends \PHPUnit_Framework_TestCase
 {
     /**
