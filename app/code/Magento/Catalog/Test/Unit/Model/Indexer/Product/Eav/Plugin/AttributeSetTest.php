@@ -84,8 +84,8 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->subjectMock->expects($this->exactly(2))
-                          ->method('getId')
-                          ->willReturn($setId);
+            ->method('getId')
+            ->willReturn($setId);
 
         $this->model->beforeSave($this->subjectMock);
     }

@@ -61,21 +61,23 @@ class AttributeSet
      *
      * @param EavAttributeSet $subject
      *
-     * @return bool
+     * @return void
      */
     public function beforeSave(EavAttributeSet $subject)
     {
         $this->requiresReindex = false;
-        if ( $subject->getId() ) {
+        if ($subject->getId()) {
             /** @var EavAttributeSet $originalSet */
             $originalSet = $this->getAttributeSetFactory()->create();
             $originalSet->initFromSkeleton($subject->getId());
-            $originalAttributeCodes = array_flip( $this->_attributeFilter->filter( $originalSet ) );
-            $subjectAttributeCodes  = array_flip( $this->_attributeFilter->filter( $subject ) );
-            $this->requiresReindex  = (bool) count( array_merge(
-                array_diff_key( $subjectAttributeCodes, $originalAttributeCodes ),
-                array_diff_key( $originalAttributeCodes, $subjectAttributeCodes )
-            ) );
+            $originalAttributeCodes = array_flip($this->_attributeFilter->filter($originalSet));
+            $subjectAttributeCodes  = array_flip($this->_attributeFilter->filter($subject));
+            $this->requiresReindex  = (bool)count(
+                array_merge(
+                    array_diff_key($subjectAttributeCodes, $originalAttributeCodes),
+                    array_diff_key($originalAttributeCodes, $subjectAttributeCodes)
+                )
+            );
         }
     }
 

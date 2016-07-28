@@ -82,7 +82,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())
             ->method('dataHasChangedFor')
             ->with('group_id')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->model->beforeSave($this->subject, $this->storeMock);
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
     }
@@ -92,31 +92,12 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())
             ->method('dataHasChangedFor')
             ->with('group_id')
-            ->will($this->returnValue(false)
-        );
+            ->willReturn(false);
         $this->model->beforeSave($this->subject, $this->storeMock);
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
     }
 
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\Indexer\State
-     */
-    protected function getStateMock()
-    {
-        $stateMock = $this->getMock(
-            'Magento\Indexer\Model\Indexer\State',
-            ['setStatus', 'save', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $stateMock->expects($this->once())->method('setStatus')->with('invalid')->will($this->returnSelf());
-        $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
-
-        return $stateMock;
-    }
-
-    protected function mockIndexerMethods()
+    private function mockIndexerMethods()
     {
         $this->indexerMock->expects($this->once())->method('invalidate');
         $this->indexerRegistryMock->expects($this->once())

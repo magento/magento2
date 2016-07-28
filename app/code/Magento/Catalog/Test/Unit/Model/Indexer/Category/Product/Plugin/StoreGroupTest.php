@@ -44,8 +44,8 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     {
         $this->groupMock = $this->getMock(
             GroupModel::class,
-            [ 'dataHasChangedFor', 'isObjectNew', '__wakeup' ],
-            [ ],
+            ['dataHasChangedFor', 'isObjectNew', '__wakeup'],
+            [],
             '',
             false
         );
@@ -67,7 +67,8 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->model = (new ObjectManager($this))->getObject(StoreGroup::class, ['indexerRegistry' => $this->indexerRegistryMock]);
+        $this->model = (new ObjectManager($this))
+            ->getObject(StoreGroup::class, ['indexerRegistry' => $this->indexerRegistryMock]);
     }
 
     /**
@@ -118,7 +119,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock ));
     }
 
-    protected function mockIndexerMethods()
+    private function mockIndexerMethods()
     {
         $this->indexerMock->expects($this->once())->method('invalidate');
         $this->indexerRegistryMock->expects($this->once())
