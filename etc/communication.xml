@@ -24,4 +24,8 @@
     <topic name="mtmh.topic.2" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData[]">
         <handler name="mtmh.handler.2" type="Magento\TestModuleAsyncAmqp\Model\CustomHandler" method="processArray"/>
     </topic>
+
+    <topic name="segment1.segment2.segment3.wildcard" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData"/>
+    <topic name="segment2.segment3.wildcard" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData"/>
+    <topic name="not.matching.wildcard.topic" request="Magento\TestModuleAsyncAmqp\Model\AsyncTestData"/>
 </config>

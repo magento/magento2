@@ -10,4 +10,8 @@
     <publisher topic="multi.topic.queue.topic.d"/>
     <publisher topic="mtmh.topic.1"/>
     <publisher topic="mtmh.topic.2"/>
+
+    <publisher topic="segment1.segment2.segment3.wildcard"/>
+    <publisher topic="segment2.segment3.wildcard"/>
+    <publisher topic="not.matching.wildcard.topic"/>
 </config>
