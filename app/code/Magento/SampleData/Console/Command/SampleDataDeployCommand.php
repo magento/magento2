@@ -17,6 +17,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Composer\Console\Application;
 use Composer\Console\ApplicationFactory;
+use Magento\Setup\Model\PackagesAuth;
 
 /**
  * Command for deployment of Sample Data
@@ -79,6 +80,7 @@ class SampleDataDeployCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->updateMemoryLimit();
+        $this->createAuthFile();
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
@@ -104,6 +106,25 @@ class SampleDataDeployCommand extends Command
             }
         } else {
             $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
+        }
+    }
+
+    /**
+     * Create new auth.json file if it doesn't exist.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    private function createAuthFile()
+    {
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::COMPOSER_HOME);
+        
+        if (!$directory->isExist(PackagesAuth::PATH_TO_AUTH_FILE)) {
+            try {
+                $directory->writeFile(PackagesAuth::PATH_TO_AUTH_FILE, '{}');
+            } catch (\Exception $e) {
+                throw new \Exception('Error in writing Auth file. Please check permissions for writing.');
+            }
         }
     }
 
