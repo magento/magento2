@@ -9,10 +9,4 @@
     <broker topic="synchronous.rpc.test.deprecated" type="amqp" exchange="magento">
         <queue consumer="synchronousRpcTestConsumer.deprecated" name="synchronous.rpc.test.deprecated" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
     </broker>
-    <broker topic="magento.testModuleSynchronousAmqp.api.serviceInterface.execute.deprecated" type="amqp" exchange="magento">
-        <queue consumer="RemoteServiceTestConsumer.deprecated" name="queue.magento.testModuleSynchronousAmqp.api.serviceInterface.execute.deprecated" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
-    </broker>
-    <broker topic="sync.topic.for.mixed.sync.and.async.queue.deprecated" type="amqp" exchange="magento">
-        <queue consumer="mixed.sync.and.async.queue.consumer.deprecated" name="mixed.sync.and.async.queue.deprecated" consumerInstance="Magento\Framework\MessageQueue\Rpc\Consumer"/>
-    </broker>
 </config>
