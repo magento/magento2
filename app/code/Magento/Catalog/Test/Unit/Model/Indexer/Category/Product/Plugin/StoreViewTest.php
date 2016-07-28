@@ -71,7 +71,7 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
     public function testAroundSaveNewObject()
     {
         $this->mockIndexerMethods();
-        $this->storeMock->expects($this->once())->method('isObjectNew')->will($this->returnValue(true));
+        $this->storeMock->expects($this->once())->method('isObjectNew')->willReturn(true);
         $this->model->beforeSave($this->subject, $this->storeMock);
         $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
     }
@@ -103,6 +103,6 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
     }
 }
