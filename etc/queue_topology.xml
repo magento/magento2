@@ -7,13 +7,13 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
     <exchange name="magento" connection="amqp" type="topic">
-        <binding id="binding1" topic="multi.topic.queue.topic.c" destinationType="queue" destination="queue.for.multiple.topics.test.c"/>
-        <binding id="binding2" topic="multi.topic.queue.topic.c" destinationType="queue" destination="mixed.sync.and.async.queue"/>
-        <binding id="binding3" topic="multi.topic.queue.topic.d" destinationType="queue" destination="queue.for.multiple.topics.test.d"/>
-        <binding id="binding4" topic="mtmh.topic.1" destinationType="queue" destination="mtmh.queue.1"/>
-        <binding id="binding5" topic="mtmh.topic.1" destinationType="queue" destination="mtmh.queue.2"/>
-        <binding id="binding6" topic="mtmh.topic.2" destinationType="queue" destination="mtmh.queue.1"/>
-        <binding id="binding7" topic="mtmh.topic.2" destinationType="queue" destination="mtmh.queue.2"/>
+        <binding id="async.binding1" topic="multi.topic.queue.topic.c" destinationType="queue" destination="queue.for.multiple.topics.test.c"/>
+        <binding id="async.binding2" topic="multi.topic.queue.topic.c" destinationType="queue" destination="mixed.sync.and.async.queue"/>
+        <binding id="async.binding3" topic="multi.topic.queue.topic.d" destinationType="queue" destination="queue.for.multiple.topics.test.d"/>
+        <binding id="async.binding4" topic="mtmh.topic.1" destinationType="queue" destination="mtmh.queue.1"/>
+        <binding id="async.binding5" topic="mtmh.topic.1" destinationType="queue" destination="mtmh.queue.2"/>
+        <binding id="async.binding6" topic="mtmh.topic.2" destinationType="queue" destination="mtmh.queue.1"/>
+        <binding id="async.binding7" topic="mtmh.topic.2" destinationType="queue" destination="mtmh.queue.2"/>
     </exchange>
 </config>
 
