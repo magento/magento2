@@ -9,7 +9,7 @@
     <testCase name="Magento\Braintree\Test\TestCase\SaveUseDeleteVaultForPaypalBraintreeTest" summary="Saves vault for PayPal Braintree on checkout, uses it during checkout, deletes it from My Account">
         <variation name="SaveUseDeleteVaultForPaypalBraintreeTestVariation1" summary="Saves vault for PayPal Braintree on checkout, uses it during checkout, deletes it from My Account" ticketId="MAGETWO-54838, MAGETWO-54843, MAGETWO-54844">
             <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
