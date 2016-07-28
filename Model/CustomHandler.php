@@ -5,10 +5,12 @@
  */
 namespace Magento\TestModuleAsyncAmqp\Model;
 
+use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
+
 class CustomHandler
 {
     /**
-     * @param \Magento\TestModuleAsyncAmqp\Model\AsyncTestData $simpleDataItem
+     * @param asyncTestData $simpleDataItem
      */
     public function process($simpleDataItem)
     {
@@ -20,7 +22,7 @@ class CustomHandler
     }
 
     /**
-     * @param \Magento\TestModuleAsyncAmqp\Model\AsyncTestData[] $simpleDataItems
+     * @param asyncTestData[] $simpleDataItems
      */
     public function processArray($simpleDataItems)
     {
@@ -38,9 +40,17 @@ class CustomHandler
      */
     public function processMixed($simpleDataItems)
     {
-        /** @var \Magento\TestModuleAsyncAmqp\Model\AsyncTestData[] $simpleDataItems */
-        $simpleDataItems = (array)$simpleDataItems;
+        /** @var asyncTestData[] $simpleDataItems */
+        $simpleDataItems = is_array($simpleDataItems) ? $simpleDataItems : [$simpleDataItems];
         foreach ($simpleDataItems as $simpleDataItem) {
+            if (!($simpleDataItem instanceof AsyncTestData)) {
+                file_put_contents(
+                    $simpleDataItem->getTextFilePath(),
+                    'Invalid data item given. Was expected instance of ' . AsyncTestData::class . PHP_EOL,
+                    FILE_APPEND
+                );
+                continue;
+            }
             file_put_contents(
                 $simpleDataItem->getTextFilePath(),
                 'custom-mixed-' . $simpleDataItem->getValue() . PHP_EOL,

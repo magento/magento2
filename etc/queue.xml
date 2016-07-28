@@ -13,12 +13,6 @@
     <broker topic="multi.topic.queue.topic.d.deprecated" type="amqp" exchange="magento">
         <queue consumer="queue.for.multiple.topics.test.d.deprecated" name="queue.for.multiple.topics.test.d.deprecated"/>
     </broker>
-    <broker topic="mtmh.topic.1.deprecated" type="amqp" exchange="magento">
-        <queue consumer="mtmh.queue.1.consumer.deprecated" name="mtmh.queue.1.deprecated" handler="Magento\TestModuleAsyncAmqpOldConfig\Model\CustomHandler::processMixed"/>
-    </broker>
-    <broker topic="mtmh.topic.2.deprecated" type="amqp" exchange="magento">
-        <queue consumer="mtmh.queue.2.consumer.deprecated" name="mtmh.queue.2.deprecated"/>
-    </broker>
 </config>
 
 
