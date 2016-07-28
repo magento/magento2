@@ -474,6 +474,7 @@
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface" type="\Magento\Catalog\Model\Product\Option\Value" />
     <preference for="Magento\Catalog\Api\Data\CustomOptionInterface" type="Magento\Catalog\Model\CustomOptions\CustomOption" />
     <preference for="Magento\Catalog\Api\Data\ProductOptionInterface" type="Magento\Catalog\Model\ProductOption" />
+    <preference for="Magento\Catalog\Api\Data\CategoryLinkInterface" type="Magento\Catalog\Model\CategoryLink" />
     <virtualType name="Magento\Catalog\Model\ResourceModel\Attribute\Collection" type="Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection">
     </virtualType>
     <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
@@ -583,6 +584,10 @@
                         <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\CategoryLinkInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_product</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -593,14 +598,20 @@
                     <item name="read" xsi:type="array">
                         <item name="optionReader" xsi:type="string">Magento\Catalog\Model\Product\Option\ReadHandler</item>
                         <item name="mediaGalleryRead" xsi:type="string">Magento\Catalog\Model\Product\Gallery\ReadHandler</item>
+                        <item name="categoryProductLinksRead" xsi:type="string">Magento\Catalog\Model\Category\Link\ReadHandler</item>
+                        <item name="websiteReader" xsi:type="string">Magento\Catalog\Model\Product\Website\ReadHandler</item>
                     </item>
                     <item name="create" xsi:type="array">
                         <item name="custom_options" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
                         <item name="mediaGalleryCreate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\CreateHandler</item>
+                        <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
+                        <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
                         <item name="optionUpdater" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
                         <item name="mediaGalleryUpdate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\UpdateHandler</item>
+                        <item name="categoryProductLinksSave" xsi:type="string">Magento\Catalog\Model\Category\Link\SaveHandler</item>
+                        <item name="websitePersistor" xsi:type="string">Magento\Catalog\Model\Product\Website\SaveHandler</item>
                     </item>
                 </item>
             </argument>
