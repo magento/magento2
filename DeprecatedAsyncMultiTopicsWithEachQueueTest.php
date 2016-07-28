@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-class AsyncMultipleTopicsPerQueueTest extends QueueTestCaseAbstract
+class DeprecatedAsyncMultiTopicsWithEachQueueTest extends QueueTestCaseAbstract
 {
     /**
      * @var String
@@ -25,12 +25,15 @@ class AsyncMultipleTopicsPerQueueTest extends QueueTestCaseAbstract
     /**
      * @var string[]
      */
-    protected $consumers = ['queue.for.multiple.topics.test.c', 'queue.for.multiple.topics.test.d'];
+    protected $consumers = [
+        'queue.for.multiple.topics.test.c.deprecated',
+        'queue.for.multiple.topics.test.d.deprecated'
+    ];
 
     /**
      * @var string[]
      */
-    private $topics = ['multi.topic.queue.topic.c', 'multi.topic.queue.topic.d'];
+    private $topics = ['multi.topic.queue.topic.c.deprecated', 'multi.topic.queue.topic.d.deprecated'];
 
     protected function tearDown()
     {

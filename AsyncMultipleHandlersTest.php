@@ -26,8 +26,6 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
     protected $consumers = [
         'mtmh.queue.1.consumer',
         'mtmh.queue.2.consumer',
-        'mtmh.queue.3.consumer',
-        'mtmh.queue.4.consumer'
     ];
 
     /**

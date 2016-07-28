@@ -13,7 +13,10 @@ class MultipleTopicsPerQueueTest extends QueueTestCaseAbstract
     /**
      * {@inheritdoc}
      */
-    protected $consumers = ['queue.for.multiple.topics.test'];
+    protected $consumers = [
+        'queue.for.multiple.topics.test.a',
+        'queue.for.multiple.topics.test.b'
+    ];
 
     /**
      * Verify that Queue Framework supports multiple topics per queue.
