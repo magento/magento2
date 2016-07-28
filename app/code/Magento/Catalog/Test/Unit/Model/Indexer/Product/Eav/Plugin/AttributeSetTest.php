@@ -54,7 +54,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
         $this->filterMock = $this->getMock(IndexableAttributeFilter::class, [], [], '', false);
         $this->subjectMock = $this->getMock(Set::class, [], [], '', false);
         $this->eavProcessorMock = $this->getMock(Processor::class, [], [], '', false);
-        $this->setFactoryMock = $this->getMock(SetFactory::class, [], [], '', false);
+        $this->setFactoryMock = $this->getMock(SetFactory::class, ['create'], [], '', false);
         $this->objectManager = new ObjectManager($this);
     }
 
