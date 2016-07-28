@@ -116,7 +116,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
         $this->groupMock->expects($this->never())->method('isObjectNew');
 
         $this->model->beforeSave($this->subject, $this->groupMock);
-        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock ));
+        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->groupMock));
     }
 
     private function mockIndexerMethods()

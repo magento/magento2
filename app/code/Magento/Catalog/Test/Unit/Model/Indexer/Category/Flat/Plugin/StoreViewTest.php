@@ -111,7 +111,8 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
             $this->subjectMock,
-            $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock));
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $storeMock)
+        );
     }
 
     protected function mockIndexerMethods()

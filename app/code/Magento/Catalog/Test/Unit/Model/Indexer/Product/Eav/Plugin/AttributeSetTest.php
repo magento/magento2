@@ -66,13 +66,13 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
 
         $this->setFactoryMock->expects($this->once())->method('create')->willReturn($this->originalSetMock);
         $this->model = $this->objectManager->getObject(
-                AttributeSet::class,
-                [
-                    'indexerEavProcessor' => $this->eavProcessorMock,
-                    'filter' => $this->filterMock,
-                    'setFactory' => $this->setFactoryMock
-                ]
-            );
+            AttributeSet::class,
+            [
+                'indexerEavProcessor' => $this->eavProcessorMock,
+                'filter' => $this->filterMock,
+                'setFactory' => $this->setFactoryMock
+            ]
+        );
 
         $this->filterMock->expects($this->exactly(2))
             ->method('filter')

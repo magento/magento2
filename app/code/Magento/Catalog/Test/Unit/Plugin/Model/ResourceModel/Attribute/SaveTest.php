@@ -37,7 +37,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $this->config = $this->getMock(Config::class, ['isEnabled'], [], '', false);
         $this->typeList = $this->getMockForAbstractClass(
-            TypeListInterface::class, [], '', false, false, true, ['invalidate']
+            TypeListInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['invalidate']
         );
         $this->subjectMock = $this->getMock(Attribute::class, [], [], '', false);
         $this->save = new Save($this->config, $this->typeList);

@@ -34,10 +34,22 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItemMock = $this->getMockForAbstractClass(
-            OrderItemInterface::class, [], '', false, false, true, ['getProductOptions', 'setProductOptions']
+            OrderItemInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getProductOptions', 'setProductOptions']
         );
         $this->quoteItemMock = $this->getMockForAbstractClass(
-            AbstractItem::class, [], '', false, false, true, ['getProduct']
+            AbstractItem::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getProduct']
         );
         $this->subjectMock = $this->getMock(ToOrderItem::class, [], [], '', false);
         $this->productMock = $this->getMock(Product::class, [], [], '', false);
@@ -68,7 +80,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomOption')
             ->with('bundle_selection_attributes')
             ->willReturn($bundleAttribute);
-        $this->quoteItemMock->expects($this->once())->method('getProduct')->willReturn( $this->productMock );
+        $this->quoteItemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
 
         $this->orderItemMock->expects($this->once())->method('getProductOptions')->willReturn($productOptions);
         $this->orderItemMock->expects($this->once())->method('setProductOptions')->with($expectedOptions);

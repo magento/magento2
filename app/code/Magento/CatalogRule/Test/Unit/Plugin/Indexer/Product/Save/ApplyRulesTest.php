@@ -31,8 +31,8 @@ class ApplyRulesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->productRuleProcessor = $this->getMockBuilder(
-            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class)
+        $this->productRuleProcessor = $this
+            ->getMockBuilder(\Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
