@@ -12,9 +12,9 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
 
 /**
- * Prepare Store View entity.
+ * Prepare Section entity.
  */
-class StoreView extends DataSource
+class Section extends DataSource
 {
     /**
      * Code of website.
@@ -34,11 +34,11 @@ class StoreView extends DataSource
     private $scope;
 
     /**
-     * Value for set. [website|store]
+     * Scope type. [website|store]
      *
      * @var string
      */
-    private $value;
+    private $scopeType;
 
     /**
      * Fixture Factory instance.
@@ -53,6 +53,13 @@ class StoreView extends DataSource
      * @var array|null
      */
     private $fixtureData = null;
+
+    /**
+     * Scope data.
+     *
+     * @var array|null
+     */
+    private $scopeData = null;
 
     /**
      * @constructor
@@ -72,29 +79,43 @@ class StoreView extends DataSource
      *
      * @param string $key [optional]
      * @return mixed
-     * @throws \Exception
      */
     public function getData($key = null)
     {
         if ($this->data === null) {
-            if (isset($this->fixtureData['dataset'])) {
-                /** @var Store $store */
-                $store = $this->fixtureFactory->createByCode('store', ['dataset' => $this->fixtureData['dataset']]);
-                if (!$store->hasData('store_id')) {
-                    $store->persist();
-                }
-
-                $this->prepareScope($store);
-            } elseif (isset($this->fixtureData['fixture'])) {
-                $this->scope = $this->fixtureData['fixture'];
-            } else {
-                throw new \Exception('Parameters "dataset" and "fixture" aren\'t identify.');
+            if (isset($this->fixtureData['scope'])) {
+                $this->scopeData = $this->fixtureData['scope'];
+                $this->prepareScopeData();
+                $this->prepareScopeType();
+                unset($this->fixtureData['scope']);
             }
-
-            $this->prepareData();
+            $this->data = $this->fixtureData;
         }
 
         return parent::getData($key);
+    }
+
+    /**
+     * Prepare scope data.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function prepareScopeData()
+    {
+        if (isset($this->scopeData['dataset'])) {
+            /** @var Store $store */
+            $store = $this->fixtureFactory->createByCode('store', ['dataset' => $this->scopeData['dataset']]);
+            if (!$store->hasData('store_id')) {
+                $store->persist();
+            }
+
+            $this->setScope($store);
+        } elseif (isset($this->scopeData['fixture'])) {
+            $this->scope = $this->scopeData['fixture'];
+        } else {
+            throw new \Exception('Parameters "dataset" and "fixture" aren\'t identify.');
+        }
     }
 
     /**
@@ -103,11 +124,11 @@ class StoreView extends DataSource
      * @param Store $store
      * @return void
      */
-    private function prepareScope(Store $store)
+    private function setScope(Store $store)
     {
-        if ($this->fixtureData['value'] == self::STORE_CODE) {
+        if ($this->scopeData['value'] == self::STORE_CODE) {
             $this->scope = $store;
-        } elseif ($this->fixtureData['value'] == self::WEBSITE_CODE) {
+        } elseif ($this->scopeData['value'] == self::WEBSITE_CODE) {
             $this->scope = $this->scope
                 ->getDataFieldConfig('group_id')['source']->getStoreGroup()
                 ->getDataFieldConfig('website_id')['source']->getWebsite();
@@ -115,20 +136,16 @@ class StoreView extends DataSource
     }
 
     /**
-     * Prepare data.
+     * Prepare scope type.
      *
      * @return void
      */
-    private function prepareData()
+    private function prepareScopeType()
     {
         if ($this->scope instanceof Store) {
-            $this->data = $this->scope->getWebsiteId()
-                . '/' . $this->scope->getGroupId()
-                . '/' . $this->scope->getName();
-            $this->value = self::STORE_CODE;
+            $this->scopeType = self::STORE_CODE;
         } elseif ($this->scope instanceof Website) {
-            $this->data = $this->scope->getName();
-            $this->value = self::WEBSITE_CODE;
+            $this->scopeType = self::WEBSITE_CODE;
         }
     }
 
@@ -143,12 +160,12 @@ class StoreView extends DataSource
     }
 
     /**
-     * Get code of store view entity to apply [website|store].
+     * Get get scope type [website|store].
      *
      * @return string
      */
-    public function getValue()
+    public function getScopeType()
     {
-        return $this->value;
+        return $this->scopeType;
     }
 }

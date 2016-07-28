@@ -6,12 +6,13 @@
 
 namespace Magento\Config\Test\Handler\ConfigData;
 
-use Magento\Mtf\Fixture\DataSource;
-use Magento\Config\Test\Fixture\ConfigData\StoreView;
+use Magento\Config\Test\Fixture\ConfigData\Section;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Store\Test\Fixture\Website;
 
 /**
  * Setting config.
@@ -131,7 +132,8 @@ class Curl extends AbstractCurl implements ConfigDataInterface
 
         if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
-            throw new \Exception("Configuration settings are not applied! Url: $url");
+            throw new \Exception("Configuration settings are not applied! Url: $url \n"
+                . "data: " . print_r($data, true));
         }
     }
 
@@ -154,12 +156,13 @@ class Curl extends AbstractCurl implements ConfigDataInterface
     private function getStoreViewUrl()
     {
         $result = '';
-        $data = $this->fixture->getData();
-        /** @var StoreView $source */
-        if (isset($data['section'][key($data['section'])]['store_view'])) {
-            $source = $this->fixture->getDataFieldConfig('store_view')['source'];
-            $code = $source->getValue();
-            $result = $code . '/' . $source->getScope()->getData($code . '_id');
+        /** @var Section $source */
+        $source = $this->fixture->getDataFieldConfig('section')['source'];
+        /** @var Store|Website $scope */
+        $scope = $source->getScope();
+        if ($scope !== null) {
+            $code = $source->getScopeType();
+            $result = $code . '/' . $scope->getData($code . '_id');
         }
 
         return $result ? '/' . $result : '';
