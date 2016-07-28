@@ -20,6 +20,12 @@ use Magento\Setup\Model\PackagesData;
 class Module
 {
     /**
+     * Const for unknown package name and version
+     */
+    const UNKNOWN_PACKAGE_NAME = 'unknown';
+    const UNKNOWN_VERSION = '—';
+
+    /**
      * @var ComposerInformation
      */
     private $composerInformation;
@@ -128,11 +134,11 @@ class Module
         foreach ($modules as $moduleName) {
             $packageName = $this->packageInfo->getPackageName($moduleName);
             $result[] = [
-                'name' => $packageName ?: 'unknown',
+                'name' => $packageName ?: self::UNKNOWN_PACKAGE_NAME,
                 'moduleName' => $moduleName,
                 'type' => $this->typeMapper->map($packageName, ComposerInformation::MODULE_PACKAGE_TYPE),
                 'enable' => $this->moduleList->has($moduleName),
-                'version' => $this->packageInfo->getVersion($moduleName) ?: '—'
+                'version' => $this->packageInfo->getVersion($moduleName) ?: self::UNKNOWN_VERSION
             ];
         }
 
@@ -151,10 +157,10 @@ class Module
         foreach ($allModules as $module) {
             $packageName = $this->packageInfo->getPackageName($module);
             $name = $packageName ?: $module;
-            $modules[$name]['name'] = $packageName ?: 'unknown';
+            $modules[$name]['name'] = $packageName ?: self::UNKNOWN_PACKAGE_NAME;
             $modules[$name]['moduleName'] = $module;
             $modules[$name]['type'] = ComposerInformation::MODULE_PACKAGE_TYPE;
-            $modules[$name]['version'] = $this->packageInfo->getVersion($module) ?: '—';
+            $modules[$name]['version'] = $this->packageInfo->getVersion($module) ?: self::UNKNOWN_VERSION;
         }
 
         return $modules;
