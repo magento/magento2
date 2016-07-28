@@ -19,13 +19,15 @@ class QuoteItemProductOption
      *
      * @param QuoteToOrderItem $subject
      * @param AbstractQuoteItem $quoteItem
+     * @param array $data
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeConvert(
         QuoteToOrderItem $subject,
-        AbstractQuoteItem $quoteItem
+        AbstractQuoteItem $quoteItem,
+        $data = []
     ) {
         if (!is_array($quoteItem->getOptions())) {
             return;
