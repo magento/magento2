@@ -27,11 +27,6 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
     protected $orderCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $loggerMock;
-
-    /**
      * @var ObjectManager
      */
     protected $objectManager;
@@ -65,11 +60,8 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface');
-
         $this->model = new CleanExpiredOrders(
             $this->storesConfigMock,
-            $this->loggerMock,
             $this->collectionFactoryMock
         );
     }
@@ -94,10 +86,13 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->exactly(2))->method('where')->willReturnSelf();
         $this->orderCollectionMock->expects($this->exactly(2))->method('getSelect')->willReturn($selectMock);
 
-        $this->loggerMock->expects($this->never())->method('error');
         $this->model->execute();
     }
 
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Error500
+     */
     public function testExecuteWithException()
     {
         $schedule = [
@@ -121,9 +116,6 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
         $this->orderCollectionMock->expects($this->once())
             ->method('walk')
             ->willThrowException(new \Exception($exceptionMessage));
-        $this->loggerMock->expects($this->once())
-            ->method('error')
-            ->with('Error cancelling deprecated orders: ' . $exceptionMessage);
 
         $this->model->execute();
     }

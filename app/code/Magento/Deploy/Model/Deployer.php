@@ -17,6 +17,7 @@ use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
+use Psr\Log\LoggerInterface;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\App\ObjectManager;
 
@@ -80,6 +81,11 @@ class Deployer
      * @var Minification
      */
     private $minification;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * Constructor
@@ -166,7 +172,7 @@ class Deployer
                     );
                     $fileManager->createRequireJsConfigAsset();
                     foreach ($appFiles as $info) {
-                        list($fileArea, $fileTheme, , $module, $filePath) = $info;
+                        list($fileArea, $fileTheme, , $module, $filePath, $fullPath) = $info;
                         if (($fileArea == $area || $fileArea == 'base') &&
                             ($fileTheme == '' || $fileTheme == $themePath ||
                                 in_array(
@@ -174,9 +180,9 @@ class Deployer
                                     $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
                         ) {
-                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module);
+                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module, $fullPath);
                             if ($compiledFile !== '') {
-                                $this->deployFile($compiledFile, $area, $themePath, $locale, $module);
+                                $this->deployFile($compiledFile, $area, $themePath, $locale, $module, $fullPath);
                             }
                         }
                     }
@@ -321,6 +327,7 @@ class Deployer
      * @param string $themePath
      * @param string $locale
      * @param string $module
+     * @param string|null $fullPath
      * @return string
      * @throws \InvalidArgumentException
      * @throws LocalizedException
@@ -328,7 +335,7 @@ class Deployer
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function deployFile($filePath, $area, $themePath, $locale, $module)
+    private function deployFile($filePath, $area, $themePath, $locale, $module, $fullPath = null)
     {
         $compiledFile = '';
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
@@ -368,7 +375,13 @@ class Deployer
             }
             $this->count++;
         } catch (ContentProcessorException $exception) {
-            throw $exception;
+            $pathInfo = $fullPath ?: $filePath;
+            $errorMessage =  __('Compilation from source: ') . $pathInfo
+                . PHP_EOL . $exception->getMessage();
+            $this->errorCount++;
+            $this->output->write(PHP_EOL . PHP_EOL . $errorMessage . PHP_EOL, true);
+
+            $this->getLogger()->critical($errorMessage);
         } catch (\Exception $exception) {
             $this->output->write('.');
             $this->verboseLog($exception->getTraceAsString());
@@ -408,5 +421,20 @@ class Deployer
         if ($this->output->isVerbose()) {
             $this->output->writeln($message);
         }
+    }
+
+    /**
+     * Retrieves LoggerInterface instance
+     * 
+     * @return LoggerInterface
+     * @deprecated 
+     */
+    private function getLogger()
+    {
+        if (!$this->logger) {
+            $this->logger = $this->objectManager->get(LoggerInterface::class);
+        }
+
+        return $this->logger;
     }
 }

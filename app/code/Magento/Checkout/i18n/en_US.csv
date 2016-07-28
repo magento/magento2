@@ -40,7 +40,7 @@ Checkout,Checkout
 "This quote item does not exist.","This quote item does not exist."
 "Display number of items in cart","Display number of items in cart"
 "Display item quantities","Display item quantities"
-"Unable to place order. Please try again later.","Unable to place order. Please try again later."
+"An error occurred on the server. Please try to place the order again.","An error occurred on the server. Please try to place the order again."
 "Shipping address is not set","Shipping address is not set"
 "Unable to save address. Please check input data.","Unable to save address. Please check input data."
 "Carrier with such method not found: %1, %2","Carrier with such method not found: %1, %2"

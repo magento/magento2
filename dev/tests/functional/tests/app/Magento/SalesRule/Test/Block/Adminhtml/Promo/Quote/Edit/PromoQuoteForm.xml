@@ -61,13 +61,9 @@
             <discount_qty />
             <discount_step />
             <apply_to_shipping>
-                <selector>//div[input[@name='apply_to_shipping']]/label</selector>
-                <strategy>xpath</strategy>
                 <input>switcher</input>
             </apply_to_shipping>
             <stop_rules_processing>
-                <selector>//div[input[@name='stop_rules_processing']]/label</selector>
-                <strategy>xpath</strategy>
                 <input>switcher</input>
             </stop_rules_processing>
             <simple_free_shipping>

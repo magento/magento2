@@ -13,7 +13,6 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /** @var  \Magento\Integration\Model\Integration */
     protected $integration;
 
-
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -32,7 +31,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     protected function tearDown()
     {
-        unset($this->integration);
+        $this->integration = null;
         OauthHelper::clearApiAccessCredentials();
         parent::tearDown();
     }
