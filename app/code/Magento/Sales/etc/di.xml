@@ -63,6 +63,7 @@
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
+    <preference for="Magento\Sales\Model\Order\PaymentAdapterInterface" type="Magento\Sales\Model\Order\PaymentAdapter"/>
     <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement" />
     <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item"/>
@@ -421,7 +422,6 @@
         <arguments>
             <argument name="relationProcessors" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation</item>
-                <item name="creditmemo_refund" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund</item>
             </argument>
         </arguments>
     </virtualType>
