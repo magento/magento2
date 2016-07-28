@@ -494,6 +494,7 @@ class AdvancedPricing extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Field::NAME,
+                                        'component' => 'Magento_Catalog/js/price-input',
                                         'formElement' => Input::NAME,
                                         'dataType' => Price::NAME,
                                         'label' => __('Price'),
@@ -506,6 +507,9 @@ class AdvancedPricing extends AbstractModifier
                                             'required-entry' => true,
                                             'validate-greater-than-zero' => true,
                                             'validate-number' => true,
+                                        ],
+                                        'imports' => [
+                                            'priceValue' => '${ $.provider }:data.product.price',
                                         ],
                                     ],
                                 ],
