@@ -6,18 +6,18 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
-    <broker topic="multi.topic.queue.topic.c" type="amqp" exchange="magento">
-        <queue consumer="queue.for.multiple.topics.test.c" name="queue.for.multiple.topics.test.c"/>
-        <queue consumer="mixed.sync.and.async.queue.consumer" name="mixed.sync.and.async.queue"/>
+    <broker topic="multi.topic.queue.topic.c.deprecated" type="amqp" exchange="magento">
+        <queue consumer="queue.for.multiple.topics.test.c.deprecated" name="queue.for.multiple.topics.test.c.deprecated"/>
+        <queue consumer="mixed.sync.and.async.queue.consumer.deprecated" name="mixed.sync.and.async.queue.deprecated"/>
     </broker>
-    <broker topic="multi.topic.queue.topic.d" type="amqp" exchange="magento">
-        <queue consumer="queue.for.multiple.topics.test.d" name="queue.for.multiple.topics.test.d"/>
+    <broker topic="multi.topic.queue.topic.d.deprecated" type="amqp" exchange="magento">
+        <queue consumer="queue.for.multiple.topics.test.d.deprecated" name="queue.for.multiple.topics.test.d.deprecated"/>
     </broker>
-    <broker topic="mtmh.topic.1" type="amqp" exchange="magento">
-        <queue consumer="mtmh.queue.1.consumer" name="mtmh.queue.1" handler="Magento\TestModuleAsyncAmqpOldConfig\Model\CustomHandler::processMixed"/>
+    <broker topic="mtmh.topic.1.deprecated" type="amqp" exchange="magento">
+        <queue consumer="mtmh.queue.1.consumer.deprecated" name="mtmh.queue.1.deprecated" handler="Magento\TestModuleAsyncAmqpOldConfig\Model\CustomHandler::processMixed"/>
     </broker>
-    <broker topic="mtmh.topic.2" type="amqp" exchange="magento">
-        <queue consumer="mtmh.queue.2.consumer" name="mtmh.queue.2"/>
+    <broker topic="mtmh.topic.2.deprecated" type="amqp" exchange="magento">
+        <queue consumer="mtmh.queue.2.consumer.deprecated" name="mtmh.queue.2.deprecated"/>
     </broker>
 </config>
 
