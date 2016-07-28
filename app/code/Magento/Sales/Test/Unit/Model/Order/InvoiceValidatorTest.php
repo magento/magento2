@@ -88,7 +88,7 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateCanNotInvoiceOrder()
     {
         $orderStatus = 'Test Status';
-        $expectedResult = [sprintf('The order in status %s does not allow an invoice to be created.', $orderStatus)];
+        $expectedResult = [__('An invoice cannot be created when an order has a status of %1.', $orderStatus)];
         $invoiceItemMock = $this->getInvoiceItemMock(1, 1);
         $this->invoiceMock->expects($this->once())
             ->method('getItems')
@@ -114,8 +114,8 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
     public function testValidateInvoiceQtyBiggerThanOrder()
     {
         $orderItemId = 1;
-        $message = 'Quantity to invoice must not be greater than uninvoiced quantity for product SKU: %s.';
-        $expectedResult = [sprintf($message, $orderItemId)];
+        $message = 'The quantity to invoice must not be greater than the uninvoiced quantity for product SKU "%1".';
+        $expectedResult = [__($message, $orderItemId)];
         $invoiceItemMock = $this->getInvoiceItemMock($orderItemId, 2);
         $this->invoiceMock->expects($this->once())
             ->method('getItems')
@@ -137,7 +137,7 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateNoOrderItems()
     {
-        $expectedResult = ['Order does not contain item(s) existed in invoice.'];
+        $expectedResult = [__('The invoice contains one or more items that are not part of the original order.')];
         $invoiceItemMock = $this->getInvoiceItemMock(1, 1);
         $this->invoiceMock->expects($this->once())
             ->method('getItems')
@@ -158,7 +158,7 @@ class InvoiceValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateNoInvoiceItems()
     {
-        $expectedResult = ['You can\'t create an invoice without products.'];
+        $expectedResult = [__('You can\'t create an invoice without products.')];
         $orderItemId = 1;
         $invoiceItemMock = $this->getInvoiceItemMock($orderItemId, 0);
         $this->invoiceMock->expects($this->once())

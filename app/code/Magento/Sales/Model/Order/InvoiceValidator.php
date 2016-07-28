@@ -39,8 +39,8 @@ class InvoiceValidator implements InvoiceValidatorInterface
         $messages = $this->checkQtyAvailability($invoice, $order);
 
         if (!$this->orderValidator->canInvoice($order)) {
-            $messages[] = sprintf(
-                'The order in status %s does not allow an invoice to be created.',
+            $messages[] = __(
+                'An invoice cannot be created when an order has a status of %1.',
                 $order->getStatus()
             );
         }
@@ -69,8 +69,8 @@ class InvoiceValidator implements InvoiceValidatorInterface
             foreach ($order->getItems() as $orderItem) {
                 if (isset($qtys[$orderItem->getId()])) {
                     if ($qtys[$orderItem->getId()] > $orderItem->getQtyToInvoice() && !$orderItem->isDummy()) {
-                        $messages[] = sprintf(
-                            'Quantity to invoice must not be greater than uninvoiced quantity for product SKU: %s.',
+                        $messages[] = __('The quantity to invoice must not be greater than the uninvoiced quantity'
+                                . ' for product SKU "%1".',
                             $orderItem->getSku()
                         );
                     }
@@ -79,11 +79,11 @@ class InvoiceValidator implements InvoiceValidatorInterface
                 }
             }
             if ($qtys) {
-                $messages[] = 'Order does not contain item(s) existed in invoice.';
+                $messages[] = __('The invoice contains one or more items that are not part of the original order.');
             }
         }
         if (!$qtys && $totalQty <= 0) {
-            $messages[] = 'You can\'t create an invoice without products.';
+            $messages[] = __('You can\'t create an invoice without products.');
         }
         return $messages;
     }
