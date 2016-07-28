@@ -1,10 +1,8 @@
 <?php
 /**
- *
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryListInterface;
@@ -24,22 +22,22 @@ class CategoryList implements CategoryListInterface
     /**
      * @var CollectionFactory
      */
-    protected $categoryCollectionFactory;
+    private $categoryCollectionFactory;
 
     /**
      * @var JoinProcessorInterface
      */
-    protected $extensionAttributesJoinProcessor;
+    private $extensionAttributesJoinProcessor;
 
     /**
      * @var CategorySearchResultsInterfaceFactory
      */
-    protected $categorySearchResultsFactory;
+    private $categorySearchResultsFactory;
 
     /**
      * @var CategoryRepositoryInterface
      */
-    protected $categoryRepository;
+    private $categoryRepository;
 
     /**
      * @param CollectionFactory $categoryCollectionFactory
@@ -100,6 +98,8 @@ class CategoryList implements CategoryListInterface
     }
 
     /**
+     * Add filter group to collection
+     *
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
