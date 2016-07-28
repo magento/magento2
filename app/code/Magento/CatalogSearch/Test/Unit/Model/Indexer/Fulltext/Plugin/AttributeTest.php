@@ -95,7 +95,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->with('is_searchable')
             ->willReturn(true);
         $this->assertEquals(
-            [$this->attributeMock],
+            null,
             $this->model->beforeSave($this->subjectMock, $this->attributeMock)
         );
     }
@@ -140,7 +140,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getIsSearchable')
             ->willReturn(true);
         $this->assertEquals(
-            [$this->attributeMock],
+            null,
             $this->model->beforeDelete($this->subjectMock, $this->attributeMock)
         );
     }
