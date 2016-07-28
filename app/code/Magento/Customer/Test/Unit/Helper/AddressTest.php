@@ -147,39 +147,33 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->helper->canShowConfig('key2'));
     }
 
-    /**
-     * @param $attrCode
-     * @param $attrClass
-     * @param $customAttrClass
-     * @param $result
-     * @dataProvider getAttributeValidationClassDataProvider
-     */
-    public function testGetAttributeValidationClass($attrCode, $attrClass, $customAttrClass, $result)
+    public function testGetAttributeValidationClass()
     {
-        $attributeMock = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')->getMock();
-        $attributeMock->expects($this->any())->method('getFrontendClass')->will($this->returnValue($attrClass));
+        $attributeCode = 'attr_code';
+        $attributeClass = 'Attribute_Class';
 
-        $customAttrMock = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')->getMock();
-        $customAttrMock->expects($this->any())->method('isVisible')->will($this->returnValue(true));
-        $customAttrMock->expects($this->any())->method('getFrontendClass')->will($this->returnValue($customAttrClass));
-
-        $this->customerMetadataService->expects($this->any())
-            ->method('getAttributeMetadata')
-            ->will($this->returnValue($customAttrMock));
+        $attributeMock = $this->getMockBuilder('Magento\Customer\Api\Data\AttributeMetadataInterface')
+            ->getMockForAbstractClass();
+        $attributeMock->expects($this->once())
+            ->method('getFrontendClass')
+            ->willReturn($attributeClass);
 
         $this->addressMetadataService->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValue($attributeMock));
+            ->willReturn($attributeMock);
 
-        $this->assertEquals($result, $this->helper->getAttributeValidationClass($attrCode));
+        $this->assertEquals($attributeClass, $this->helper->getAttributeValidationClass($attributeCode));
     }
 
-    public function getAttributeValidationClassDataProvider()
+    public function testGetAttributeValidationClassWithNoAttribute()
     {
-        return [
-            ['attr_code', 'Attribute_Class', '', 'Attribute_Class'],
-            ['firstname', 'Attribute_Class', 'Attribute2_Class', 'Attribute2_Class'],
-        ];
+        $attrCode = 'attr_code';
+
+        $this->addressMetadataService->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->willReturn(null);
+
+        $this->assertEquals('', $this->helper->getAttributeValidationClass($attrCode));
     }
 
     /**
