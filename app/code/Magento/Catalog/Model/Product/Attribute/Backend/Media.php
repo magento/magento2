@@ -372,4 +372,19 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             );
         }
     }
+
+    /**
+     * @deprecated
+     * @param string $key
+     * @param string[] &$image
+     * @return string
+     */
+    protected function findDefaultValue($key, &$image)
+    {
+        if (isset($image[$key . '_default'])) {
+            return $image[$key . '_default'];
+        }
+
+        return '';
+    }
 }
