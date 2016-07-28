@@ -109,7 +109,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             /** @var ResourceConnection $resourceConnection */
             $resourceConnection = $objectManager->get(ResourceConnection::class);
-            $this->salesConnection = $resourceConnection->getConnectionByName('sales');
+            try {
+                $this->salesConnection = $resourceConnection->getConnectionByName('sales');
+            } catch (\DomainException $e) {
+                $this->salesConnection = $resourceConnection->getConnection();
+            }
         }
         return $this->salesConnection;
     }
