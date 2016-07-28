@@ -66,7 +66,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function _construct()
     {
         parent::_construct();
-        $this->setErrorText($this->escapeJsQuote(__('Please select items.')));
+        $this->setErrorText($this->escapeHtml(__('Please select items.')));
     }
 
     /**

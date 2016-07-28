@@ -191,7 +191,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_THEME_ID => $this->_getCurrentTheme()->getId(),
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE
                     ]
-                ) . "', null, null,'" . $this->escapeQuote(
+                ) . "', null, null,'" . $this->escapeJs(
                     __('Upload Images'),
                     true
                 ) . "');",
@@ -219,7 +219,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                         Storage::PARAM_THEME_ID => $this->_getCurrentTheme()->getId(),
                         Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT
                     ]
-                ) . "', null, null,'" . $this->escapeQuote(
+                ) . "', null, null,'" . $this->escapeJs(
                     __('Upload Fonts'),
                     true
                 ) . "');",

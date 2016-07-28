@@ -64,7 +64,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->varDirectory->delete('generation');
-        unset($this->_generator);
+        $this->_generator = null;
     }
 
     protected function _clearDocBlock($classBody)
