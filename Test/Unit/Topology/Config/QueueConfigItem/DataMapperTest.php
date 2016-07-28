@@ -74,7 +74,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'ex02' => [
-                'name' => 'ex01',
+                'name' => 'ex02',
                 'type' => 'exchange',
                 'connection' => 'amqp',
                 'durable' => true,
@@ -166,7 +166,26 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
                         'arguments' => ['some' => 'arguments'],
                     ],
                 ],
-            ]
+            ],
+            'ex02' => [
+                'name' => 'ex02',
+                'type' => 'topic',
+                'connection' => 'amqp',
+                'durable' => true,
+                'internal' => false,
+                'autoDelete' => false,
+                'arguments' => ['some' => 'argument'],
+                'bindings' => [
+                    'bind01' => [
+                        'id' => 'bind01',
+                        'topic' => '#.some.*',
+                        'destinationType' => 'queue',
+                        'destination' => 'some.queue',
+                        'disabled' => false,
+                        'arguments' => ['some' => 'arguments'],
+                    ],
+                ],
+            ],
         ];
 
         $communicationData = [
@@ -177,6 +196,7 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
             'topic05.05' =>  ['name' => 'topic05.05', 'is_synchronous' => true],
             'topic06.06.06' =>  ['name' => 'topic06.06.06', 'is_synchronous' => false],
             'topic07' =>  ['name' => 'topic07', 'is_synchronous' => false],
+            'topic08.part2.some.test' =>  ['name' => 'topic08.part2.some.test', 'is_synchronous' => true],
         ];
 
         $this->communicationConfig->expects($this->once())
@@ -230,6 +250,13 @@ class DataMapperTest extends \PHPUnit_Framework_TestCase
             ],
             'responseQueue.topic05.05-amqp' => [
                 'name' => 'responseQueue.topic05.05',
+                'connection' => 'amqp',
+                'durable' => true,
+                'autoDelete' => false,
+                'arguments' => [],
+            ],
+            'responseQueue.topic08.part2.some.test-amqp' => [
+                'name' => 'responseQueue.topic08.part2.some.test',
                 'connection' => 'amqp',
                 'durable' => true,
                 'autoDelete' => false,

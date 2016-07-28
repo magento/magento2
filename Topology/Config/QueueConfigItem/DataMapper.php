@@ -68,7 +68,7 @@ class DataMapper
                 $connection = $exchange['connection'];
                 foreach ($exchange['bindings'] as $binding) {
                     if ($binding['destinationType'] === 'queue') {
-                        $queueItems = $this->createQueueItem($binding['destination'], $binding['topic'], $connection);
+                        $queueItems = $this->createQueueItems($binding['destination'], $binding['topic'], $connection);
                         $this->mappedData = array_merge($this->mappedData, $queueItems);
                     }
                 }
@@ -85,23 +85,19 @@ class DataMapper
      * @param string $connection
      * @return array
      */
-    private function createQueueItem($name, $topic, $connection)
+    private function createQueueItems($name, $topic, $connection)
     {
         $output = [];
-        if ($this->isWildcard($topic)) {
-            $topicList = $this->processWildcard($topic);
-            foreach ($topicList as $topicName) {
-                $callbackQueueName = $this->queueNameBuilder->getQueueName($topicName);
-                $output[$callbackQueueName . '-' . $connection] = [
-                    'name' => $callbackQueueName,
-                    'connection' => $connection,
-                    'durable' => true,
-                    'autoDelete' => false,
-                    'arguments' => [],
-                ];
-            }
-        } elseif ($this->isSynchronousModeTopic($topic)) {
-            $callbackQueueName = $this->queueNameBuilder->getQueueName($topic);
+        $synchronousTopics = [];
+
+        if (strpos($topic, '*') !== false || strpos($topic, '#') !== false) {
+            $synchronousTopics = $this->matchSynchronousTopics($topic);
+        } elseif ($this->isSynchronousTopic($topic)) {
+            $synchronousTopics[$topic] = $topic;
+        }
+
+        foreach ($synchronousTopics as $topicName) {
+            $callbackQueueName = $this->queueNameBuilder->getQueueName($topicName);
             $output[$callbackQueueName . '-' . $connection] = [
                 'name' => $callbackQueueName,
                 'connection' => $connection,
@@ -128,7 +124,7 @@ class DataMapper
      * @return bool
      * @throws LocalizedException
      */
-    private function isSynchronousModeTopic($topicName)
+    private function isSynchronousTopic($topicName)
     {
         try {
             $topic = $this->communicationConfig->getTopic($topicName);
@@ -140,27 +136,19 @@ class DataMapper
     }
 
     /**
-     * Check if topic is wildcard.
-     *
-     * @param string $topicName
-     * @return bool
-     */
-    private function isWildcard($topicName)
-    {
-        return strpos($topicName, '*') !== false || strpos($topicName, '#') !== false;
-    }
-
-    /**
      * Generate topics list based on wildcards.
      *
-     * @param array $wildcard
+     * @param string $wildcard
      * @return array
      */
-    private function processWildcard($wildcard)
+    private function matchSynchronousTopics($wildcard)
     {
-        $topicDefinitions = array_filter($this->communicationConfig->getTopics(), function ($item) {
-            return (bool)$item[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
-        });
+        $topicDefinitions = array_filter(
+            $this->communicationConfig->getTopics(),
+            function ($item) {
+                return (bool)$item[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
+            }
+        );
 
         $topics = [];
         $pattern = $this->buildWildcardPattern($wildcard);
@@ -183,11 +171,7 @@ class DataMapper
         $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
         $pattern = str_replace('#', '.+', $pattern);
         $pattern = str_replace('*', '[^\.]+', $pattern);
-        if (strpos($wildcardKey, '#') == strlen($wildcardKey)) {
-            $pattern .= '/';
-        } else {
-            $pattern .= '$/';
-        }
+        $pattern .= strpos($wildcardKey, '#') == strlen($wildcardKey) ? '/' : '$/';
         return $pattern;
     }
 }
