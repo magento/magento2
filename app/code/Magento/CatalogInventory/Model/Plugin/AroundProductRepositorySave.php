@@ -16,6 +16,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AroundProductRepositorySave
 {
     /**

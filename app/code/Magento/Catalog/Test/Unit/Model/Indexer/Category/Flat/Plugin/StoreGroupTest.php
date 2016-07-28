@@ -48,7 +48,7 @@ class StoreGroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->indexerMock = $this->getMockForAbstractClass(
-        	IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,

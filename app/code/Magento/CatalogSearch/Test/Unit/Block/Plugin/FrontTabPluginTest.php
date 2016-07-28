@@ -14,6 +14,9 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\View\Element\AbstractBlock;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FrontTabPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**

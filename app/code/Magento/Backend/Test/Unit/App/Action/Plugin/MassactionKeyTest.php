@@ -33,7 +33,13 @@ class MassactionKeyTest extends \PHPUnit_Framework_TestCase
         };
         $this->subjectMock = $this->getMock('Magento\Backend\App\AbstractAction', [], [], '', false);
         $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class, [], '', false, false, true, ['getPost', 'setPostValue']
+            RequestInterface::class,
+            [],
+            '',
+            false,
+            false,
+            true,
+            ['getPost', 'setPostValue']
         );
 
         $objectManager = new ObjectManager($this);
