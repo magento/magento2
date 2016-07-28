@@ -427,6 +427,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Config\Dom\ValidationException
+     * @expectedExceptionMessageRegExp /_mergeFiles\/layout\/file_wrong\.xml\' is not valid/
      */
     public function testLayoutUpdateFileIsNotValid()
     {

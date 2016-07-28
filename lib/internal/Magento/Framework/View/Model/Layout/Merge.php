@@ -701,7 +701,19 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             /** @var $fileXml \Magento\Framework\View\Layout\Element */
             $fileXml = $this->_loadXmlString($fileStr);
             if (!$fileXml instanceof \Magento\Framework\View\Layout\Element) {
-                $this->_logXmlErrors($file->getFilename(), libxml_get_errors());
+                $xmlErrors = $this->getXmlErrors(libxml_get_errors());
+                $this->logXmlErrors($file->getFilename(), $xmlErrors);
+                if ($this->appState->getMode() === State::MODE_DEVELOPER) {
+                    throw new ValidationException(
+                        new \Magento\Framework\Phrase(
+                            "Theme layout update file '%1' is not valid.\n%2",
+                            [
+                                $file->getFilename(),
+                                implode("\n", $xmlErrors)
+                            ]
+                        )
+                    );
+                }
                 libxml_clear_errors();
                 continue;
             }
@@ -729,22 +741,31 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Log xml errors to system log
      *
      * @param string $fileName
-     * @param array $libXmlErrors
+     * @param array $xmlErrors
      * @return void
      */
-    protected function _logXmlErrors($fileName, $libXmlErrors)
+    private function logXmlErrors($fileName, $xmlErrors)
+    {
+        $this->logger->info(
+            sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $xmlErrors))
+        );
+    }
+
+    /**
+     * Get formatted xml errors
+     *
+     * @param array $libXmlErrors
+     * @return array
+     */
+    private function getXmlErrors($libXmlErrors)
     {
         $errors = [];
         if (count($libXmlErrors)) {
             foreach ($libXmlErrors as $error) {
                 $errors[] = "{$error->message} Line: {$error->line}";
             }
-            $error = sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $errors));
-            $this->logger->info($error);
-            if ($this->appState->getMode() === State::MODE_DEVELOPER) {
-                throw new ValidationException($error);
-            }
         }
+        return $errors;
     }
 
     /**
