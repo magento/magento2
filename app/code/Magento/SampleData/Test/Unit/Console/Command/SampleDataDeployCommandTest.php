@@ -17,6 +17,9 @@ use Symfony\Component\Console\Input\ArrayInputFactory;
 use Composer\Console\ApplicationFactory;
 use Composer\Console\Application;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
