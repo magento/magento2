@@ -7,11 +7,5 @@ define([
 ], function (Abstract) {
     'use strict';
 
-    return Abstract.extend({
-        defaults: {
-            priceValue: '',
-            showFallbackReset: false,
-            valueUpdate: 'afterkeydown'
-        }
-    });
+    return Abstract.extend({});
 });
