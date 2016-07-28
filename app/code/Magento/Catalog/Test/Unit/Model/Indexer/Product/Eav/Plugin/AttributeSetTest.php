@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet\IndexableAttributeFilter;
-use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\Entity\Attribute\Set as EavAttributeSet;
 use Magento\Eav\Model\Entity\Attribute\SetFactory;
 use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet;
@@ -35,7 +35,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
     private $filterMock;
 
     /**
-     * @var Set|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttributeSet|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectMock;
 
@@ -45,14 +45,14 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
     private $setFactoryMock;
 
     /**
-     * @var Set|\PHPUnit_Framework_MockObject_MockObject
+     * @var EavAttributeSet|\PHPUnit_Framework_MockObject_MockObject
      */
     private $originalSetMock;
 
     public function setUp()
     {
         $this->filterMock = $this->getMock(IndexableAttributeFilter::class, [], [], '', false);
-        $this->subjectMock = $this->getMock(Set::class, [], [], '', false);
+        $this->subjectMock = $this->getMock(EavAttributeSet::class, [], [], '', false);
         $this->eavProcessorMock = $this->getMock(Processor::class, [], [], '', false);
         $this->setFactoryMock = $this->getMock(SetFactory::class, ['create'], [], '', false);
         $this->objectManager = new ObjectManager($this);
@@ -61,7 +61,7 @@ class AttributeSetTest extends \PHPUnit_Framework_TestCase
     public function testBeforeSave()
     {
         $setId = 1;
-        $this->originalSetMock = $this->getMock(Set::class, [], [], '', false);
+        $this->originalSetMock = $this->getMock(EavAttributeSet::class, [], [], '', false);
         $this->originalSetMock->expects($this->once())->method('initFromSkeleton')->with($setId);
 
         $this->setFactoryMock->expects($this->once())->method('create')->willReturn($this->originalSetMock);
