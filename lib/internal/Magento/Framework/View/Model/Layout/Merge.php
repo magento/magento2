@@ -702,7 +702,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $fileXml = $this->_loadXmlString($fileStr);
             if (!$fileXml instanceof \Magento\Framework\View\Layout\Element) {
                 $xmlErrors = $this->getXmlErrors(libxml_get_errors());
-                $this->logXmlErrors($file->getFilename(), $xmlErrors);
+                $this->_logXmlErrors($file->getFilename(), $xmlErrors);
                 if ($this->appState->getMode() === State::MODE_DEVELOPER) {
                     throw new ValidationException(
                         new \Magento\Framework\Phrase(
@@ -744,7 +744,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param array $xmlErrors
      * @return void
      */
-    private function logXmlErrors($fileName, $xmlErrors)
+    protected function _logXmlErrors($fileName, $xmlErrors)
     {
         $this->logger->info(
             sprintf("Theme layout update file '%s' is not valid.\n%s", $fileName, implode("\n", $xmlErrors))
