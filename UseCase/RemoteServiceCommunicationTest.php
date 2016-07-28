@@ -3,11 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue\UseCase;
 
-use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
-use \Magento\TestModuleSynchronousAmqp\Api\ServiceInterface;
+use Magento\TestModuleSynchronousAmqp\Api\ServiceInterface;
 
 class RemoteServiceCommunicationTest extends QueueTestCaseAbstract
 {

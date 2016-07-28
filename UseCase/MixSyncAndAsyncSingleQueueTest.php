@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\UseCase;
 
-use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
-
 class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 {
     /**

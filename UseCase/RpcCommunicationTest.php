@@ -3,10 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue\UseCase;
-
-use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 
 class RpcCommunicationTest extends QueueTestCaseAbstract
 {

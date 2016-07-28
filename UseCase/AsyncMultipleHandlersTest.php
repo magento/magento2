@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\MessageQueue\UseCase;
 
-use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
