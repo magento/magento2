@@ -21,6 +21,7 @@ use Magento\Setup\Model\PackagesAuth;
 
 /**
  * Command for deployment of Sample Data
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SampleDataDeployCommand extends Command
 {
