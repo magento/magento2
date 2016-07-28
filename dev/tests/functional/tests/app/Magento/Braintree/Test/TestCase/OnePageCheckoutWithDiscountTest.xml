@@ -9,7 +9,7 @@
     <testCase name="Magento\SalesRule\Test\TestCase\OnePageCheckoutWithDiscountTest" summary="Checkout with Braintree credit card on Storefront with discount applied during checkout">
         <variation name="OnePageCheckoutWithDiscountTestVariation1" summary="Checkout with Braintree credit card on Storefront with discount applied during checkout" ticketId="MAGETWO-55319">
             <data name="description" xsi:type="string">Use saved for Braintree credit card on checkout</data>
-            <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
+            <data name="products/0" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups</data>
             <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
