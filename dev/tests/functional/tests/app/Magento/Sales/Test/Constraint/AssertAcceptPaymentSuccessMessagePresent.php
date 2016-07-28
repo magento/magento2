@@ -10,6 +10,9 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Class AssertAcceptPaymentSuccessMessagePresent
+ *
+ * Constraint checks success message on the order page
+ * after accepting order payment
  */
 class AssertAcceptPaymentSuccessMessagePresent extends AbstractConstraint
 {

@@ -10,6 +10,9 @@ use Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator;
 
 /**
  * Class ChangeOrderStatusToPaymentReviewStep
+ *
+ * This step changes order status via WEB API to "Payment Review", because Kount service always
+ * return "Review" status for sandbox transactions.
  */
 class ChangeOrderStatusToPaymentReviewStep implements TestStepInterface
 {

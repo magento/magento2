@@ -10,8 +10,8 @@
         <variation name="OnePageCheckoutBraintreeAcceptPaymentVariation1" summary="Registered Checkout with Braintree Credit Card with Review Kount status" ticketId="MAGETWO-56023">
             <data name="products" xsi:type="string">catalogProductSimple::product_10_dollar</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
-            <data name="checkoutMethod" xsi:type="string">login</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="checkoutMethod" xsi:type="string">guest</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="payment/method" xsi:type="string">braintree</data>

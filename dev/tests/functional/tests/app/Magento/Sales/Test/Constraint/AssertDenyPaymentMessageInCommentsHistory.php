@@ -11,6 +11,8 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Class AssertDenyPaymentMessageInCommentsHistory
+ *
+ * Constraint checks deny payment message in order comments history
  */
 class AssertDenyPaymentMessageInCommentsHistory extends AbstractConstraint
 {

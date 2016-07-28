@@ -11,6 +11,8 @@ use Magento\Sales\Test\Page\Adminhtml\SalesOrderView;
 
 /**
  * Class AssertAcceptPaymentMessageInCommentsHistory
+ *
+ * Constraint checks accept payment message in order comments history
  */
 class AssertAcceptPaymentMessageInCommentsHistory extends AbstractConstraint
 {

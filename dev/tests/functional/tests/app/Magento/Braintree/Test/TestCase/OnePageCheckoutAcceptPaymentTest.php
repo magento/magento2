@@ -9,6 +9,10 @@ use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Class OnePageCheckoutAcceptPaymentTest
+ *
+ * This scenario places order via Braintree payment with
+ * enabled Advanced Fraud protection and accept payment for placed order
+ * to future processing
  */
 class OnePageCheckoutAcceptPaymentTest extends Scenario
 {
@@ -19,7 +23,6 @@ class OnePageCheckoutAcceptPaymentTest extends Scenario
 
     /**
      * Runs one page checkout test.
-     *
      * @return void
      */
     public function test()
