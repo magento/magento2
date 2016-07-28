@@ -8,12 +8,12 @@ namespace Magento\Framework\MessageQueue\UseCase;
 class AsyncMultipleTopicsWithEachQueueTest extends QueueTestCaseAbstract
 {
     /**
-     * @var String
+     * @var string
      */
     protected $tmpPath;
 
     /**
-     * @var String[]
+     * @var string[]
      */
     protected $uniqueID;
 

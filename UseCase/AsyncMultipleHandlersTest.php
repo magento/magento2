@@ -10,12 +10,12 @@ use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
 {
     /**
-     * @var String
+     * @var string
      */
     protected $tmpPath;
 
     /**
-     * @var String
+     * @var string
      */
     protected $expectedMessages;
 

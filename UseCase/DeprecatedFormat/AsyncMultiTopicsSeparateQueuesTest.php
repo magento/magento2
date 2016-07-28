@@ -10,12 +10,12 @@ use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
 {
     /**
-     * @var String
+     * @var string
      */
     protected $tmpPath;
 
     /**
-     * @var String[]
+     * @var string[]
      */
     protected $uniqueID;
 

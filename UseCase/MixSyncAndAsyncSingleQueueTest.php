@@ -8,7 +8,7 @@ namespace Magento\Framework\MessageQueue\UseCase;
 class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 {
     /**
-     * @var String
+     * @var string
      */
     protected $tmpPath;
 
