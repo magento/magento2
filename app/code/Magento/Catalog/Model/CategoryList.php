@@ -104,7 +104,7 @@ class CategoryList implements CategoryListInterface
      * @param Collection $collection
      * @return void
      */
-    protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
+    private function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
         $filters = $filterGroup->getFilters();
         if ($filters) {
