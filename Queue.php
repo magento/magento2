@@ -157,7 +157,9 @@ class Queue implements QueueInterface
         $channel->basic_reject($properties['delivery_tag'], $requeue);
         // @codingStandardsIgnoreEnd
         if ($rejectionMessage !== null) {
-            $this->logger->critical(new \Magento\Framework\Phrase('Message has been rejected: %1', $rejectionMessage));
+            $this->logger->critical(
+                new \Magento\Framework\Phrase('Message has been rejected: %message', ['message' => $rejectionMessage])
+            );
         }
     }
 
