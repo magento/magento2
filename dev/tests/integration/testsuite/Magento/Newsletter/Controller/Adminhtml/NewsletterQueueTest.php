@@ -33,7 +33,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
         )->getMessages(
             true
         );
-        unset($this->_model);
+        $this->_model = null;
     }
 
     /**

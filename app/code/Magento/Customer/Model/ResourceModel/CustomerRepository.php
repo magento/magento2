@@ -207,7 +207,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $this->addressRepository->deleteById($addressId);
             }
         }
-
+        $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
@@ -221,6 +221,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
      *
      * @param \Magento\Customer\Model\Customer $customerModel
      * @param string|null $passwordHash
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @return void
      */
     private function populateCustomerWithSecureData($customerModel, $passwordHash = null)

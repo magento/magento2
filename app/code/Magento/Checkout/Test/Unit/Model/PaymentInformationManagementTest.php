@@ -70,7 +70,7 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedExceptionMessage Unable to place order. Please try again later.
+     * @expectedExceptionMessage An error occurred on the server. Please try to place the order again.
      * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()

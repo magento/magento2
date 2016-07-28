@@ -130,7 +130,7 @@ class Main extends \Magento\Backend\Block\Template
                 \Magento\Backend\Block\Widget\Button::class,
                 [
                     'label' => __('Delete'),
-                    'onclick' => 'deleteConfirm(\'' . $this->escapeJsQuote(
+                    'onclick' => 'deleteConfirm(\'' . $this->escapeJs(
                         __(
                             'You are about to delete all products in this attribute set. '
                             . 'Are you sure you want to do that?'

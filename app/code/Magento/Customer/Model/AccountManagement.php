@@ -727,6 +727,7 @@ class AccountManagement implements AccountManagementInterface
                     $this->addressRepository->save($address);
                 }
             }
+            $this->customerRegistry->remove($customer->getId());
         } catch (InputException $e) {
             $this->customerRepository->delete($customer);
             throw $e;

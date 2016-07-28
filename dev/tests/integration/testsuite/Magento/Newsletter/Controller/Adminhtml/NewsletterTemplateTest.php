@@ -36,10 +36,9 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         /**
          * Unset messages
          */
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Backend\Model\Session::class
-        )->destroy();
-        unset($this->_model);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session::class)
+            ->destroy();
+        $this->_model = null;
     }
 
     /**
