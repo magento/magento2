@@ -792,4 +792,25 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="category_id" xsi:type="object">Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CategoryFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessorComposite" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\ProductRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Magento\Catalog\Model\Product\Api\SearchCriteria\CollectionProcessorComposite</argument>
+        </arguments>
+    </type>
 </config>
