@@ -5,12 +5,10 @@
  */
 namespace Magento\TestModuleAsyncAmqp\Model;
 
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
-
 class CustomHandler
 {
     /**
-     * @param asyncTestData $simpleDataItem
+     * @param AsyncTestData $simpleDataItem
      */
     public function process($simpleDataItem)
     {
@@ -22,7 +20,7 @@ class CustomHandler
     }
 
     /**
-     * @param asyncTestData[] $simpleDataItems
+     * @param AsyncTestData[] $simpleDataItems
      */
     public function processArray($simpleDataItems)
     {
@@ -40,7 +38,7 @@ class CustomHandler
      */
     public function processMixed($simpleDataItems)
     {
-        /** @var asyncTestData[] $simpleDataItems */
+        /** @var AsyncTestData[] $simpleDataItems */
         $simpleDataItems = is_array($simpleDataItems) ? $simpleDataItems : [$simpleDataItems];
         foreach ($simpleDataItems as $simpleDataItem) {
             if (!($simpleDataItem instanceof AsyncTestData)) {
