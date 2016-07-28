@@ -18,9 +18,9 @@ class PaymentAdapter implements PaymentAdapterInterface
 
     /**
      * PaymentAdapter constructor.
-     * @param \Magento\Sales\Model\Order\CreditmemoRefundOperation $refundOperation
+     * @param \Magento\Sales\Model\Order\Creditmemo\RefundOperation $refundOperation
      */
-    public function __construct(\Magento\Sales\Model\Order\CreditmemoRefundOperation $refundOperation)
+    public function __construct(\Magento\Sales\Model\Order\Creditmemo\RefundOperation $refundOperation)
     {
         $this->refundOperation = $refundOperation;
     }

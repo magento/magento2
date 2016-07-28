@@ -3,13 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Sales\Model\Order;
+namespace Magento\Sales\Model\Order\Creditmemo;
 
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Creditmemo;
 
-class CreditmemoRefundOperation
+class RefundOperation
 {
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
@@ -79,7 +79,9 @@ class CreditmemoRefundOperation
 
             if ($online) {
                 $order->setTotalOnlineRefunded($order->getTotalOnlineRefunded() + $creditmemo->getGrandTotal());
-                $order->setBaseTotalOnlineRefunded($order->getBaseTotalOnlineRefunded() + $creditmemo->getBaseGrandTotal());
+                $order->setBaseTotalOnlineRefunded(
+                    $order->getBaseTotalOnlineRefunded() + $creditmemo->getBaseGrandTotal()
+                );
             } else {
                 $order->setTotalOfflineRefunded($order->getTotalOfflineRefunded() + $creditmemo->getGrandTotal());
                 $order->setBaseTotalOfflineRefunded(
