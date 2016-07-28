@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\UseCase;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -42,7 +42,7 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
         parent::setUp();
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
-                exec("{$this->getConsumerStartCommand($consumer)} > /dev/null &");
+                exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
             }
         }
     }
@@ -68,17 +68,38 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Get CLI command for starting specified consumer.
+     *
      * @param string $consumer
+     * @param bool $withEnvVariables
      * @return string
      */
-    protected function getConsumerStartCommand($consumer)
+    protected function getConsumerStartCommand($consumer, $withEnvVariables = false)
     {
-        $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
-        $params['MAGE_DIRS']['base']['path'] = BP;
-        $params = 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
         $binDirectory = realpath(TESTS_TEMP_DIR . '/../bin/');
         $magentoCli = $binDirectory . '/magento';
-        $consumerStartCommand = $params . " php {$magentoCli} queue:consumers:start -vvv " . $consumer;
+        $consumerStartCommand = "php {$magentoCli} queue:consumers:start -vvv " . $consumer;
+        if ($withEnvVariables) {
+            $params = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getAppInitParams();
+            $params['MAGE_DIRS']['base']['path'] = BP;
+            $params = 'INTEGRATION_TEST_PARAMS="' . urldecode(http_build_query($params)) . '"';
+            $consumerStartCommand = $params . ' ' . $consumerStartCommand;
+        }
         return $consumerStartCommand;
+    }
+
+    /**
+     * Wait for asynchronous handlers to log data to file.
+     *
+     * @param int $expectedLinesCount
+     * @param string $logFilePath
+     */
+    protected function waitForAsynchronousResult($expectedLinesCount, $logFilePath)
+    {
+        $i = 0;
+        do {
+            sleep(1);
+            $actualCount = file_exists($logFilePath) ? count(file($logFilePath)) : 0;
+        } while (($expectedLinesCount !== $actualCount) && ($i++ < 30));
     }
 }

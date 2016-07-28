@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\UseCase\DeprecatedFormat;
 
-use Magento\Framework\MessageQueue\QueueTestCaseAbstract;
+use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 
 class RpcCommunicationTest extends QueueTestCaseAbstract
 {
     /**
      * {@inheritdoc}
      */
-    protected $consumers = ['synchronousRpcTestConsumer'];
+    protected $consumers = ['synchronousRpcTestConsumer.deprecated'];
 
     /**
      * Verify that RPC call based on Rabbit MQ is processed correctly.
@@ -23,7 +23,7 @@ class RpcCommunicationTest extends QueueTestCaseAbstract
     public function testSynchronousRpcCommunication()
     {
         $input = 'Input value';
-        $response = $this->publisher->publish('synchronous.rpc.test', $input);
+        $response = $this->publisher->publish('synchronous.rpc.test.deprecated', $input);
         $this->assertEquals($input . ' processed by RPC handler', $response);
     }
 }

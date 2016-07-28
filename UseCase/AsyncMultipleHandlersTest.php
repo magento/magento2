@@ -3,9 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\UseCase;
 
-use Magento\Framework\MessageQueue\QueueTestCaseAbstract;
+use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
@@ -88,8 +88,7 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
             $this->publisher->publish($topic, $message);
         }
 
-        // Give some time for processing of asynchronous messages
-        sleep(20);
+        $this->waitForAsynchronousResult(count($this->expectedValues), $this->tmpPath);
 
         //assertions
         foreach ($this->expectedValues as $item) {

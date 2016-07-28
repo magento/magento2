@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\UseCase;
 
-use Magento\Framework\MessageQueue\QueueTestCaseAbstract;
+use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 
 class MultipleTopicsPerQueueTest extends QueueTestCaseAbstract
 {

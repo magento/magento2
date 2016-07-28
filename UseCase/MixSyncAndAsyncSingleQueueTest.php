@@ -3,9 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\UseCase;
 
-class DeprecatedMixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
+use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
+
+class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 {
     /**
      * @var String
@@ -20,15 +22,12 @@ class DeprecatedMixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
     /**
      * {@inheritdoc}
      */
-    protected $consumers = [
-        'mixed.sync.and.async.queue.consumer.deprecated',
-        'queue.for.multiple.topics.test.c.deprecated'
-    ];
+    protected $consumers = ['mixed.sync.and.async.queue.consumer'];
 
     /**
      * @var string[]
      */
-    protected $groups = ['group1'];
+    protected $messages = ['message1', 'message2', 'message3'];
 
     protected function tearDown()
     {
@@ -42,22 +41,21 @@ class DeprecatedMixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
         $this->msgObject = $this->objectManager->create('Magento\TestModuleAsyncAmqp\Model\AsyncTestData');
 
         // Publish asynchronous messages
-        foreach ($this->groups as $item) {
+        foreach ($this->messages as $item) {
             $this->msgObject->setValue($item);
             $this->msgObject->setTextFilePath($this->tmpPath);
-            $this->publisher->publish('multi.topic.queue.topic.c.deprecated', $this->msgObject);
+            $this->publisher->publish('multi.topic.queue.topic.c', $this->msgObject);
         }
 
         // Publish synchronous message to the same queue
         $input = 'Input value';
-        $response = $this->publisher->publish('sync.topic.for.mixed.sync.and.async.queue.deprecated', $input);
+        $response = $this->publisher->publish('sync.topic.for.mixed.sync.and.async.queue', $input);
         $this->assertEquals($input . ' processed by RPC handler', $response);
 
-        // Give some time for processing of asynchronous messages
-        sleep(20);
+        $this->waitForAsynchronousResult(count($this->messages), $this->tmpPath);
 
         // Verify that asynchronous messages were processed
-        foreach ($this->groups as $item) {
+        foreach ($this->messages as $item) {
             $this->assertContains($item, file_get_contents($this->tmpPath));
         }
     }

@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\UseCase;
 
-use \Magento\Framework\MessageQueue\QueueTestCaseAbstract;
+use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 use \Magento\TestModuleSynchronousAmqp\Api\ServiceInterface;
 
-class DeprecatedRemoteServiceCommunicationTest extends QueueTestCaseAbstract
+class RemoteServiceCommunicationTest extends QueueTestCaseAbstract
 {
     /**
      * {@inheritdoc}
      */
-    protected $consumers = ['RemoteServiceTestConsumer.deprecated'];
+    protected $consumers = ['RemoteServiceTestConsumer'];
 
     public function testRemoteServiceCommunication()
     {

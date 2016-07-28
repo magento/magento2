@@ -3,9 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\MessageQueue;
+namespace Magento\Framework\MessageQueue\UseCase\DeprecatedFormat;
 
-class DeprecatedAsyncMultiTopicsWithEachQueueTest extends QueueTestCaseAbstract
+use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
+
+class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
 {
     /**
      * @var String
@@ -58,8 +60,7 @@ class DeprecatedAsyncMultiTopicsWithEachQueueTest extends QueueTestCaseAbstract
             $this->publisher->publish($topic, $this->msgObject);
         }
 
-        // Give some time for processing of asynchronous messages
-        sleep(20);
+        $this->waitForAsynchronousResult(count($this->uniqueID), $this->tmpPath);
 
         //assertions
         foreach ($this->topics as $item) {
