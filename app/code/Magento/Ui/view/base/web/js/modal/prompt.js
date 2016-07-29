@@ -16,6 +16,8 @@ define([
         options: {
             modalClass: 'prompt',
             promptField: '[data-role="promptField"]',
+            attributesForm: {},
+            attributesField: {},
             value: '',
             actions: {
 
@@ -63,13 +65,40 @@ define([
         _create: function () {
             this.options.focus = this.options.promptField;
             this._super();
-            this.modal.find(this.options.modalContent).append(
-                '<div class="prompt-message">' +
-                    '<input data-role="promptField" id="prompt-field" class="admin__control-text" type="text"/>' +
-                '</div>'
-            );
+            this.modal.find(this.options.modalContent).append(this.getFieldTemplate());
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
             this.openModal();
+        },
+
+        /**
+         * Field template getter.
+         *
+         * @returns {Object} Field template
+         */
+        getFieldTemplate: function () {
+            var input = '<input data-role="promptField" id="prompt-field" class="admin__control-text" type="text"/>',
+                form = '<form/>',
+                wrapper = '<div class="prompt-message"/>',
+                $wrapper = $(wrapper),
+                $form = $(form),
+                $input = $(input),
+                attributeName;
+
+            for (attributeName in this.options.attributesField) {
+                if (this.options.attributesField.hasOwnProperty(attributeName)) {
+                    $input.attr(attributeName, this.options.attributesField[attributeName]);
+                }
+            }
+
+            for (attributeName in this.options.attributesForm) {
+                if (this.options.attributesForm.hasOwnProperty(attributeName)) {
+                    $form.attr(attributeName, this.options.attributesForm[attributeName]);
+                }
+            }
+
+            $form.append($input);
+
+            return $wrapper.append($form);
         },
 
         /**
@@ -77,6 +106,11 @@ define([
          */
         _renderModal: function () {
             this._super();
+
+            if (this.options.label) {
+                this.element.append(this.options.label);
+            }
+
             this.element.wrap('<label for="prompt-field"></label>');
         },
 
@@ -105,7 +139,7 @@ define([
                 value = this.modal.find(this.options.promptField).val();
                 this.options.actions.confirm(value);
             } else {
-                this.options.actions.cancel();
+                this.options.actions.cancel.call(this, result);
             }
             this.options.actions.always();
             this.element.bind('promptclosed', _.bind(this._remove, this));
