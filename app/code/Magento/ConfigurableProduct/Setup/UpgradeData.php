@@ -3,20 +3,20 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\ConfigurableProduct\Setup;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Eav\Setup\EavSetup;
-use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\Setup\InstallDataInterface;
+use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Eav\Setup\EavSetup;
+use Magento\Eav\Setup\EavSetupFactory;
 
 /**
+ * Upgrade Data script
  * @codeCoverageIgnore
  */
-class InstallData implements InstallDataInterface
+class UpgradeData implements UpgradeDataInterface
 {
     /**
      * EAV setup factory
@@ -38,36 +38,28 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritdoc}
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        /** @var EavSetup $eavSetup */
-        $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
-        $attributes = [
-            'country_of_manufacture',
-            'minimal_price',
-            'msrp',
-            'msrp_display_actual_price_type',
-            'price',
-            'special_price',
-            'special_from_date',
-            'special_to_date',
-            'weight',
-            'color'
-        ];
-        foreach ($attributes as $attributeCode) {
+        $setup->startSetup();
+        if (version_compare($context->getVersion(), '2.2.0') < 0) {
+            /** @var EavSetup $eavSetup */
+            $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
             $relatedProductTypes = explode(
                 ',',
-                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, 'apply_to')
+                $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'tier_price', 'apply_to')
             );
-            if (!in_array(Configurable::TYPE_CODE, $relatedProductTypes)) {
-                $relatedProductTypes[] = Configurable::TYPE_CODE;
+            $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
+            if($key !== false) {
+                unset($relatedProductTypes[$key]);
                 $eavSetup->updateAttribute(
                     \Magento\Catalog\Model\Product::ENTITY,
-                    $attributeCode,
+                    'tier_price',
                     'apply_to',
                     implode(',', $relatedProductTypes)
                 );
             }
         }
+
+        $setup->endSetup();
     }
 }
