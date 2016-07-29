@@ -37,4 +37,26 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertNotContains($data, $responseBody);
         $this->assertContains(htmlspecialchars($data, ENT_COMPAT, 'UTF-8', false), $responseBody);
     }
+
+    /**
+     * @magentoDataFixture Magento/CatalogSearch/_files/query_redirect.php
+     */
+    public function testRedirect()
+    {
+        $this->dispatch('/catalogsearch/result/?q=query_text');
+        $responseBody = $this->getResponse();
+
+        $this->assertTrue($responseBody->isRedirect());
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogSearch/_files/query_redirect.php
+     */
+    public function testNoRedirectIfCurrentUrlAndRedirectTermAreSame()
+    {
+        $this->dispatch('/catalogsearch/result/?q=query_text&cat=41');
+        $responseBody = $this->getResponse();
+
+        $this->assertFalse($responseBody->isRedirect());
+    }
 }
