@@ -6,18 +6,22 @@
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity;
 
+/**
+ * Class QuantityTest
+ */
 class QuantityTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity */
-    protected $quantity;
+    /** @var Quantity */
+    private $quantity;
 
     protected function setUp()
     {
         $this->quantity = new Quantity();
         
-        $contextStub = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
+        $contextStub = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextStub->method('retrieveMessageTemplate')->willReturn(null);

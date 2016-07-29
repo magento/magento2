@@ -5,9 +5,11 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
+/**
+ * Class Quantity
+ */
 class Quantity extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
