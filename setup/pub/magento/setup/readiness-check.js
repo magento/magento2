@@ -32,7 +32,7 @@ angular.module('readiness-check', [])
                 break;
             case 'enable':
             case 'disable':
-                $scope.componentDependency.enabled = $localStorage.packages[0].is_composer_package;
+                $scope.componentDependency.enabled = $localStorage.packages[0].isComposerPackage;
                 $scope.dependencyUrl = 'index.php/dependency-check/enable-disable-dependency-check';
                 if ($localStorage.packages) {
                     $scope.componentDependency.packages = {

@@ -63,7 +63,7 @@ angular.module('module-grid', ['ngStorage'])
                 $localStorage.packages = [
                     {
                         name: component.moduleName,
-                        is_composer_package: component.name !== 'unknown',
+                        isComposerPackage: component.name !== 'unknown',
                     }
                 ];
                 titleService.setTitle(type, component.moduleName ? component.moduleName : component.name);
