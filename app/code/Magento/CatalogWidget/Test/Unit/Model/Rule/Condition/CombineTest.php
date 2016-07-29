@@ -35,6 +35,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $arguments['conditionFactory'] = $this->conditionFactory;
+        $arguments['excludedAttributes'] = ['excluded_attribute'];
 
         $this->condition = $objectManagerHelper->getObject(
             'Magento\CatalogWidget\Model\Rule\Condition\Combine',
@@ -56,6 +57,7 @@ class CombineTest extends \PHPUnit_Framework_TestCase
         $attributeOptions = [
             'sku' => 'SKU',
             'category' => 'Category',
+            'excluded_attribute' => 'Excluded attribute',
         ];
         $productCondition = $this->getMockBuilder('\Magento\CatalogWidget\Model\Rule\Condition\Product')
             ->setMethods(['loadAttributeOptions', 'getAttributeOption'])
