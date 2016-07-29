@@ -12,15 +12,24 @@ use Magento\Sales\Model\Order\Creditmemo;
 class RefundOperation
 {
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     private $priceCurrency;
 
     /**
+     * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
-    public function __construct(\Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency)
-    {
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+    ) {
+        $this->eventManager = $context->getEventDispatcher();
         $this->priceCurrency = $priceCurrency;
     }
 
@@ -35,6 +44,18 @@ class RefundOperation
         if ($creditmemo->getState() == Creditmemo::STATE_REFUNDED
             && $creditmemo->getOrderId() == $order->getEntityId()
         ) {
+            foreach ($creditmemo->getItems() as $item) {
+                if ($item->isDeleted()) {
+                    continue;
+                }
+                $item->setCreditMemo($creditmemo);
+                if ($item->getQty() > 0) {
+                    $item->register();
+                } else {
+                    $item->isDeleted(true);
+                }
+            }
+
             $baseOrderRefund = $this->priceCurrency->round(
                 $order->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
             );
@@ -96,6 +117,8 @@ class RefundOperation
             if ($online) {
                 $order->getPayment()->refund($creditmemo);
             }
+
+            $this->eventManager->dispatch('sales_order_creditmemo_refund', ['creditmemo' => $creditmemo]);
         }
 
         return $order;

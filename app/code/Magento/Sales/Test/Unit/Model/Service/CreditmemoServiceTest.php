@@ -53,6 +53,11 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
     protected $creditmemoService;
 
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
      * SetUp
      */
     protected function setUp()
@@ -93,6 +98,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)->getMockForAbstractClass();
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->creditmemoService = $objectManager->getObject(
             'Magento\Sales\Model\Service\CreditmemoService',
@@ -198,21 +204,69 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testRefund()
     {
-        $creditMemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->setMethods(['getId', 'getOrder', 'getBaseGrandTotal', 'getAllItems', 'setDoTransaction'])
+        $creditMemoMock = $this->getMockBuilder('Magento\Sales\Api\Data\CreditmemoInterface')
+            ->setMethods(['getId', 'getOrder', 'getBaseGrandTotal', 'getInvoice'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
         $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+
         $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
-        $itemMock = $this->getMockBuilder(
-            Item::class
-        )->disableOriginalConstructor()->getMock();
-        $creditMemoMock->expects($this->once())->method('getAllItems')->willReturn([$itemMock]);
-        $itemMock->expects($this->once()) -> method('setCreditMemo')->with($creditMemoMock);
-        $itemMock->expects($this->once()) -> method('getQty')->willReturn(1);
-        $itemMock->expects($this->once()) -> method('register');
-        $creditMemoMock->expects($this->once())->method('setDoTransaction')->with(false);
+        $orderMock->expects($this->once())->method('getBaseTotalRefunded')->willReturn(0);
+        $orderMock->expects($this->once())->method('getBaseTotalPaid')->willReturn(10);
+        $creditMemoMock->expects($this->once())->method('getBaseGrandTotal')->willReturn(10);
+
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('round')
+            ->willReturnArgument(0);
+
+        // Set payment adapter dependency
+        $paymentAdapterMock = $this->getMock('Magento\Sales\Model\Order\PaymentAdapterInterface', [], [], '', false);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->creditmemoService,
+            'paymentAdapter',
+            $paymentAdapterMock
+        );
+
+        // Set resource dependency
+        $resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', ['getConnection'], [], '', false);
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->creditmemoService,
+            'resource',
+            $resourceMock
+        );
+
+        // Set order repository dependency
+        $orderRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['save'])
+            ->getMockForAbstractClass();
+        $this->objectManagerHelper->setBackwardCompatibleProperty(
+            $this->creditmemoService,
+            'orderRepository',
+            $orderRepositoryMock
+        );
+
+        $adapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['beginTransaction', 'commit', 'rollBack'])
+            ->getMockForAbstractClass();
+        $resourceMock->expects($this->once())->method('getConnection')->with('sales')->willReturn($adapterMock);
+        $adapterMock->expects($this->once())->method('beginTransaction');
+        $paymentAdapterMock->expects($this->once())
+            ->method('refund')
+            ->with($creditMemoMock, $orderMock, false)
+            ->willReturn($orderMock);
+        $orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($orderMock);
+        $creditMemoMock->expects($this->once())
+            ->method('getInvoice')
+            ->willReturn(null);
+        $adapterMock->expects($this->once())->method('commit');
+        $this->creditmemoRepositoryMock->expects($this->once())
+            ->method('save');
+
         $this->assertSame($creditMemoMock, $this->creditmemoService->refund($creditMemoMock, true));
     }
 

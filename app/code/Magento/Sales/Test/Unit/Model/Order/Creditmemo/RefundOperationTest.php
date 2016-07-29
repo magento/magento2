@@ -37,6 +37,11 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
      */
     private $priceCurrencyMock;
 
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eventManagerMock;
+
     protected function setUp()
     {
         $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
@@ -58,7 +63,21 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['round'])
             ->getMockForAbstractClass();
 
+        $contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+            ->disableOriginalConstructor()
+            ->setMethods(['getEventDispatcher'])
+            ->getMock();
+
+        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $contextMock->expects($this->once())
+            ->method('getEventDispatcher')
+            ->willReturn($this->eventManagerMock);
+
         $this->subject = new \Magento\Sales\Model\Order\Creditmemo\RefundOperation(
+            $contextMock,
             $this->priceCurrencyMock
         );
     }
@@ -132,6 +151,9 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn($orderId);
+
+        $this->registerItems();
+
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnArgument(0);
@@ -155,6 +177,13 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->never())
             ->method('getPayment');
 
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch')
+            ->with(
+                'sales_order_creditmemo_refund',
+                ['creditmemo' => $this->creditmemoMock]
+            );
+
         $this->assertEquals(
             $this->orderMock,
             $this->subject->execute($this->creditmemoMock, $this->orderMock, false)
@@ -177,6 +206,9 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn($orderId);
+
+        $this->registerItems();
+
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnArgument(0);
@@ -326,5 +358,37 @@ class RefundOperationTest extends \PHPUnit_Framework_TestCase
                 ->method($summands['creditmemo']['method'])
                 ->willReturn($summands['creditmemo']['amount']);
         }
+    }
+
+    private function registerItems()
+    {
+        $item1 = $this->getCreditmemoItemMock();
+        $item1->expects($this->once())->method('isDeleted')->willReturn(true);
+        $item1->expects($this->never())->method('setCreditMemo');
+
+        $item2 = $this->getCreditmemoItemMock();
+        $item2->expects($this->at(0))->method('isDeleted')->willReturn(false);
+        $item2->expects($this->once())->method('setCreditMemo')->with($this->creditmemoMock);
+        $item2->expects($this->once())->method('getQty')->willReturn(0);
+        $item2->expects($this->at(3))->method('isDeleted')->with(true);
+        $item2->expects($this->never())->method('register');
+
+        $item3 = $this->getCreditmemoItemMock();
+        $item3->expects($this->once())->method('isDeleted')->willReturn(false);
+        $item3->expects($this->once())->method('setCreditMemo')->with($this->creditmemoMock);
+        $item3->expects($this->once())->method('getQty')->willReturn(1);
+        $item3->expects($this->once())->method('register');
+
+        $this->creditmemoMock->expects($this->any())
+            ->method('getItems')
+            ->willReturn([$item1, $item2, $item3]);
+    }
+
+    private function getCreditmemoItemMock()
+    {
+        return $this->getMockBuilder('Magento\Sales\Api\Data\CreditmemoItemInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['isDeleted', 'setCreditMemo', 'getQty', 'register'])
+            ->getMockForAbstractClass();
     }
 }
