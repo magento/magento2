@@ -17,7 +17,7 @@ define([
         },
 
         /**
-         * Use magento validation widget for the form object
+         * Uses Magento's validation widget for the form object.
          * @private
          */
         _create: function () {
@@ -27,7 +27,7 @@ define([
                 radioCheckboxClosest: this.options.radioCheckboxClosest,
 
                 /**
-                 * Use catalogAddToCart widget as submit handler
+                 * Uses catalogAddToCart widget as submit handler.
                  * @param {Object} form
                  * @returns {Boolean}
                  */
