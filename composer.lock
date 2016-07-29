@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ad3de2234f78fd4b353ae6a1b22401fc",
-    "content-hash": "25dcf96ed1d8b12a25111e8b3af61317",
+    "hash": "9341127dac76c707c7e20a605b0a194e",
+    "content-hash": "d85d123648d39c22dc02674569b8aaee",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3232,17 +3232,17 @@
             "time": "2015-06-14 21:17:01"
         },
         {
-            "name": "fabpot/php-cs-fixer",
-            "version": "v1.11.5",
+            "name": "friendsofphp/php-cs-fixer",
+            "version": "v1.11.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "d3d08b76753092a232a4d8c3b94095ac06898719"
+                "reference": "41dc93abd2937a85a3889e28765231d574d2bac8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/d3d08b76753092a232a4d8c3b94095ac06898719",
-                "reference": "d3d08b76753092a232a4d8c3b94095ac06898719",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/41dc93abd2937a85a3889e28765231d574d2bac8",
+                "reference": "41dc93abd2937a85a3889e28765231d574d2bac8",
                 "shasum": ""
             },
             "require": {
@@ -3287,8 +3287,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "abandoned": "friendsofphp/php-cs-fixer",
-            "time": "2016-07-06 22:49:35"
+            "time": "2016-07-22 06:46:28"
         },
         {
             "name": "lusitanian/oauth",
