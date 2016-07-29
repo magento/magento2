@@ -17,8 +17,7 @@ var config = {
             priceOptionFile:        'Magento_Catalog/js/price-option-file',
             priceOptions:           'Magento_Catalog/js/price-options',
             priceUtils:             'Magento_Catalog/js/price-utils',
-            catalogAddToCart:       'Magento_Catalog/js/catalog-add-to-cart',
-            productValidate:        'Magento_Catalog/js/validate-product'
+            catalogAddToCart:       'Magento_Catalog/js/catalog-add-to-cart'
         }
     }
 };

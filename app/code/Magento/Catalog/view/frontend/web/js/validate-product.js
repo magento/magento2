@@ -7,28 +7,37 @@ define([
     'mage/mage',
     'Magento_Catalog/product/view/validation',
     'catalogAddToCart'
-], function($) {
-    "use strict";
+], function ($) {
+    'use strict';
 
     $.widget('mage.productValidate', {
-
         options: {
             bindSubmit: false,
             radioCheckboxClosest: '.nested'
         },
 
-        _create: function() {
-            var self = this;
+        /**
+         * Use magento validation widget for the form object
+         * @private
+         */
+        _create: function () {
+            var bindSubmit = this.options.bindSubmit;
 
-            this.element.mage('validation', {
+            this.element.validation({
                 radioCheckboxClosest: this.options.radioCheckboxClosest,
 
+                /**
+                 * Use catalogAddToCart widget as submit handler
+                 * @param {Object} form
+                 * @returns {Boolean}
+                 */
                 submitHandler: function (form) {
-                    var widget = $(form).catalogAddToCart({
-                        bindSubmit: self.options.bindSubmit
+                    var jqForm = $(form).catalogAddToCart({
+                        bindSubmit: bindSubmit
                     });
 
-                    widget.catalogAddToCart('submitForm', $(form));
+                    jqForm.catalogAddToCart('submitForm', jqForm);
+
                     return false;
                 }
             });
