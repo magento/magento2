@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model\ResourceModel;
+
 use Magento\Framework\App\ResourceConnection;
 
 /**
@@ -18,9 +19,7 @@ class StoreWebsiteRelation
      * StoreWebsiteRelation constructor.
      * @param ResourceConnection $resource
      */
-    public function __construct(
-      ResourceConnection $resource
-    ) {
+    public function __construct(ResourceConnection $resource) {
         $this->resource = $resource;
     }
 

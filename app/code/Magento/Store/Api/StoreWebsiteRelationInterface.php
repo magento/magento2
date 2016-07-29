@@ -13,8 +13,7 @@ interface StoreWebsiteRelationInterface
 {
     /**
      * Get assigned to website store
-     *
-     * @param $websiteId
+     * @param int $websiteId
      * @return array
      */
     public function getStoreByWebsiteId($websiteId);
