@@ -114,10 +114,9 @@ class InterfaceValidator
                     if (count($pluginMethodParameters) > 1) {
                         // remove result
                         array_shift($pluginMethodParameters);
-                        $matchedParameters = array_intersect_key($originMethodParameters, $pluginMethodParameters);
                         $this->validateMethodsParameters(
                             $pluginMethodParameters,
-                            $matchedParameters,
+                            $originMethodParameters,
                             $pluginClass,
                             $pluginMethod->getName()
                         );
