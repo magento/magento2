@@ -14,6 +14,8 @@ use Magento\Framework\View;
 /**
  * A generic layout response can be used for rendering any kind of layout
  * So it comprises a response body from the layout elements it has and sets it to the HTTP response
+ *
+ * @api
  */
 class Layout extends AbstractResult
 {

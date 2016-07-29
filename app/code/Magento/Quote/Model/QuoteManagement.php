@@ -349,7 +349,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order = $this->submit($quote);
 
         if (null == $order) {
-            throw new LocalizedException(__('Unable to place order. Please try again later.'));
+            throw new LocalizedException(
+                __('An error occurred on the server. Please try to place the order again.')
+            );
         }
 
         $this->checkoutSession->setLastQuoteId($quote->getId());
@@ -536,6 +538,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($shippingAddress);
             $shipping->setCustomerAddressData($shippingAddress);
+            $shipping->setCustomerAddressId($shippingAddress->getId());
         }
 
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
@@ -550,6 +553,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($billingAddress);
             $billing->setCustomerAddressData($billingAddress);
+            $billing->setCustomerAddressId($billingAddress->getId());
         }
         if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
             $shipping->setIsDefaultBilling(true);

@@ -648,10 +648,10 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             'id',
             'lastname',
         ];
-        sort($expectedInAfter);
         $actualInAfterOnly = array_keys($inAfterOnly);
-        sort($actualInAfterOnly);
-        $this->assertEquals($expectedInAfter, $actualInAfterOnly);
+        foreach ($expectedInAfter as $item) {
+            $this->assertContains($item, $actualInAfterOnly);
+        }
     }
 
     /**
@@ -888,7 +888,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     public function testSaveNewAddressDefaults()
     {
         $customerId = 1;
-
         /** @var $addressShipping \Magento\Customer\Api\Data\AddressInterface */
         $addressShipping = $this->_expectedAddresses[0]->setId(null);
         $addressShipping->setIsDefaultShipping(true)->setIsDefaultBilling(false)->setCustomerId($customerId);
@@ -903,7 +902,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $addressShippingExpected = $this->addressRepository->save($addressShipping);
         $addressBillingExpected = $this->addressRepository->save($addressBilling);
-
+        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
+        $customerRegistry = $this->objectManager->get('Magento\Customer\Model\CustomerRegistry');
+        $customerRegistry->remove(1);
         // Call api under test
         $shippingResponse = $this->accountManagement->getDefaultShippingAddress($customerId);
         $billingResponse = $this->accountManagement->getDefaultBillingAddress($customerId);

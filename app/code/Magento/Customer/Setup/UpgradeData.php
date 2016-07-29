@@ -53,6 +53,7 @@ class UpgradeData implements UpgradeDataInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -88,6 +89,14 @@ class UpgradeData implements UpgradeDataInterface
             $setup->getConnection()->delete(
                 $setup->getTable('customer_form_attribute'),
                 ['form_code = ?' => 'checkout_register']
+            );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.8', '<')) {
+            $setup->getConnection()->update(
+                $setup->getTable('core_config_data'),
+                ['path' => \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE],
+                ['path = ?' => 'general/restriction/autocomplete_on_storefront']
             );
         }
 

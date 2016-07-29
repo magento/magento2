@@ -181,7 +181,10 @@ class InvoiceSenderTest extends AbstractSenderTest
                 );
             }
         } else {
-            $this->invoiceResourceMock->expects($this->once())
+            $this->invoiceResourceMock->expects($this->at(0))
+                ->method('saveAttribute')
+                ->with($this->invoiceMock, 'email_sent');
+            $this->invoiceResourceMock->expects($this->at(1))
                 ->method('saveAttribute')
                 ->with($this->invoiceMock, 'send_email');
 

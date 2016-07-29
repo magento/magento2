@@ -138,6 +138,11 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     private $extensionAttributesJoinProcessorMock;
 
     /**
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerDataFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -180,7 +185,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getById']
+            ['getById', 'save']
         );
         $this->objectCopyServiceMock = $this->getMock(
             'Magento\Framework\DataObject\Copy',
@@ -273,7 +278,13 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->customerDataFactoryMock = $this->getMock(
+            'Magento\Customer\Api\Data\CustomerInterfaceFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->quote = (new ObjectManager($this))
             ->getObject(
                 'Magento\Quote\Model\Quote',
@@ -295,7 +306,8 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
                     'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                     'customerRepository' => $this->customerRepositoryMock,
                     'objectCopyService' => $this->objectCopyServiceMock,
-                    'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
+                    'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                    'customerDataFactory' => $this->customerDataFactoryMock
                 ]
             );
     }
@@ -549,13 +561,30 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerRepositoryMock->expects($this->once())
+        $requestMock = $this->getMock(
+            '\Magento\Framework\DataObject'
+        );
+
+        $this->extensibleDataObjectConverterMock->expects($this->any())
+            ->method('toFlatArray')
+            ->will($this->returnValue(['customer_id' => $customerId]));
+
+        $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->will($this->returnValue($customerMock));
-        $customerMock->expects($this->once())
+        $this->customerDataFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($customerMock));
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('save')
+            ->will($this->returnValue($customerMock));
+        $customerMock->expects($this->any())
             ->method('getAddresses')
             ->will($this->returnValue($addresses));
-
+        $this->objectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($this->equalTo(['customer_id' => $customerId]))
+            ->will($this->returnValue($requestMock));
         $result = $this->quote->setCustomerAddressData([$addressMock]);
         $this->assertInstanceOf('Magento\Quote\Model\Quote', $result);
         $this->assertEquals($customerResultMock, $this->quote->getCustomer());

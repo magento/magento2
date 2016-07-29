@@ -12,10 +12,22 @@ use Magento\Email\Model\Template;
  */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
+    const TEMPLATE_CODE = 'fixture';
+
     /**
      * @var \Magento\Theme\Model\Design\Config\Validator
      */
     private $model;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $templateFactoryMock;
+
+    /**
+     * @var \Magento\Email\Model\Template
+     */
+    private $templateModel;
 
     protected function setUp()
     {
@@ -26,16 +38,30 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $objectManager->get('Magento\Framework\App\State')
             ->setAreaCode(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
 
-        $this->model = $objectManager->get('Magento\Theme\Model\Design\Config\Validator');
+        $this->templateFactoryMock = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->templateModel = $objectManager->create(\Magento\Email\Model\Template::class);
+        $this->templateModel->load(self::TEMPLATE_CODE, 'template_code');
+
+        $this->model = $objectManager->create(
+            'Magento\Theme\Model\Design\Config\Validator',
+            [ 'templateFactory' => $this->templateFactoryMock ]
+        );
     }
 
     /**
      * @magentoDataFixture Magento/Email/Model/_files/email_template.php
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Incorrect configuration for email_header_template. Template body has a reference to
+     * @expectedExceptionMessage The email_header_template contains an incorrect configuration. The template has a
      */
     public function testValidateHasRecursiveReference()
     {
+        $this->templateFactoryMock->expects($this->once())
+            ->method("create")
+            ->willReturn($this->templateModel);
+
         $fieldConfig = [
             'path' => 'design/email/header_template',
             'fieldset' => 'other_settings/email',
@@ -73,6 +99,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateNoRecursiveReference()
     {
+        $this->templateFactoryMock->expects($this->once())
+            ->method("create")
+            ->willReturn($this->templateModel);
+        
         $fieldConfig = [
             'path' => 'design/email/footer_template',
             'fieldset' => 'other_settings/email',

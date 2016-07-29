@@ -64,6 +64,7 @@ $orderStoreDate = $block->formatDate(
                     <th><?php /* @escapeNotVerified */ echo __('Order Status') ?></th>
                     <td><span id="order_status"><?php /* @escapeNotVerified */ echo $_order->getStatusLabel() ?></span></td>
                 </tr>
+                <?php echo $block->getChildHtml(); ?>
                 <?php if ($block->isSingleStoreMode() == false):?>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('Purchased From') ?></th>

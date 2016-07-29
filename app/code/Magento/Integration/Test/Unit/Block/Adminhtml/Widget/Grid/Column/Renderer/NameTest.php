@@ -101,7 +101,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
             [
                 'http://myurl',
                 'Custom Integration',
-                'Custom Integration<span class="icon-error"><span>Integration not secure</span></span>'
+                'Custom Integration<span class="security-notice"><span>Integration not secure</span></span>'
             ]
         ];
     }

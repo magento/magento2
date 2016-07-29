@@ -12,6 +12,8 @@ use Magento\Framework\ObjectManagerInterface;
  * A factory that knows how to create a "page" result
  * Requires an instance of controller action in order to impose page type,
  * which is by convention is determined from the controller action class
+ *
+ * @api
  */
 class PageFactory
 {

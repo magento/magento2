@@ -265,6 +265,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $assetMockOne->expects($this->exactly(2))
             ->method('getUrl')
             ->willReturn($assetUrl);
+        $assetMockOne->expects($this->atLeastOnce())->method('getContentType')->willReturn($groupOne['type']);
 
         $groupAssetsOne = [$assetMockOne, $assetMockOne];
 
@@ -287,6 +288,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $assetMockTwo->expects($this->once())
             ->method('getUrl')
             ->willThrowException($exception);
+        $assetMockTwo->expects($this->atLeastOnce())->method('getContentType')->willReturn($groupTwo['type']);
 
         $groupAssetsTwo = [$assetMockTwo];
 

@@ -14,7 +14,7 @@ namespace Magento\Quote\Test\Unit\Observer\Frontend\Quote\Address;
 class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
+     * @var \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver
      */
     protected $model;
 
@@ -26,7 +26,17 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $customerSession;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $customerVatMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressRepository;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -172,6 +182,11 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomer')
             ->will($this->returnValue($this->customerMock));
 
+        $this->addressRepository = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
+        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->customerMock->expects($this->any())->method('getStoreId')->will($this->returnValue($this->storeId));
 
         $this->model = new \Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver(
@@ -179,7 +194,9 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
             $this->customerVatMock,
             $this->vatValidatorMock,
             $this->customerDataFactoryMock,
-            $this->groupManagementMock
+            $this->groupManagementMock,
+            $this->addressRepository,
+            $this->customerSession
         );
     }
 
@@ -318,5 +335,76 @@ class CollectTotalsObserverTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->customerMock);
         $this->model->execute($this->observerMock);
+    }
+
+    public function testDispatchWithEmptyShippingAddress()
+    {
+        $customerCountryCode = "DE";
+        $customerVat = "123123123";
+        $defaultShipping = 1;
+
+        $customerAddress = $this->getMock(\Magento\Customer\Api\Data\AddressInterface::class);
+        $customerAddress->expects($this->once())
+            ->method("getCountryId")
+            ->willReturn($customerCountryCode);
+
+        $customerAddress->expects($this->once())
+            ->method("getVatId")
+            ->willReturn($customerVat);
+        $this->addressRepository->expects($this->once())
+            ->method("getById")
+            ->with($defaultShipping)
+            ->willReturn($customerAddress);
+
+        $this->customerMock->expects($this->atLeastOnce())
+            ->method("getDefaultShipping")
+            ->willReturn($defaultShipping);
+
+        $this->vatValidatorMock->expects($this->once())
+            ->method('isEnabled')
+            ->with($this->quoteAddressMock, $this->storeId)
+            ->will($this->returnValue(true));
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getCountryId')
+            ->will($this->returnValue(null));
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getVatId')
+            ->will($this->returnValue(null));
+
+        $this->customerVatMock->expects($this->once())
+            ->method('isCountryInEU')
+            ->with($customerCountryCode)
+            ->willReturn(true);
+
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomerGroupId')
+            ->will($this->returnValue('customerGroupId'));
+        $validationResult = ['some' => 'result'];
+        $this->customerVatMock->expects($this->once())
+            ->method('getCustomerGroupIdBasedOnVatNumber')
+            ->with($customerCountryCode, $validationResult, $this->storeId)
+            ->will($this->returnValue('customerGroupId'));
+        $this->customerSession->expects($this->once())
+            ->method("setCustomerGroupId")
+            ->with('customerGroupId');
+
+        $this->vatValidatorMock->expects($this->once())
+            ->method('validate')
+            ->with($this->quoteAddressMock, $this->storeId)
+            ->will($this->returnValue($validationResult));
+
+        /** Assertions */
+        $this->quoteAddressMock->expects($this->once())
+            ->method('setPrevQuoteCustomerGroupId')
+            ->with('customerGroupId');
+
+        $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('customerGroupId');
+        $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
+        $this->customerDataFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->customerMock);
+        $this->model->execute($this->observerMock);
+
     }
 }

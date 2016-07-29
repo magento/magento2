@@ -8,8 +8,8 @@
 
 namespace Magento\Payment\Test\Unit\Model;
 
-use Magento\Payment\Model\Method\Free;
-use \Magento\Payment\Model\MethodList;
+use Magento\Payment\Model\MethodList;
+use Magento\Payment\Model\Method\AbstractMethod;
 
 class MethodListTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,6 +68,12 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
 
         $this->specificationFactoryMock->expects($this->atLeastOnce())
             ->method('create')
+            ->with([
+                AbstractMethod::CHECK_USE_CHECKOUT,
+                AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX
+            ])
             ->will($this->returnValue($compositeMock));
 
         $storeMethods = [$methodMock];

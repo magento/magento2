@@ -80,6 +80,7 @@
     <preference for="Magento\Sales\Model\Spi\ShipmentResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment"/>
     <preference for="Magento\Sales\Model\Spi\ShipmentTrackResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Model\Spi\TransactionResourceInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction"/>
+    <preference for="Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface" type="Magento\Sales\Model\ResourceModel\Order\CollectionFactory"/>
     <type name="Magento\Sales\Model\ResourceModel\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>

@@ -313,13 +313,12 @@ class Widget
                     $value = $parameters[$name]->getValue();
                 }
             }
-            if ($value) {
-                $directive .= sprintf(' %s="%s"', $name, $value);
+            if (isset($value)) {
+                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeQuote($value));
             }
         }
 
         $directive .= $this->getWidgetPageVarName($params);
-
         $directive .= '}}';
 
         if ($asIs) {

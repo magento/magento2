@@ -24,7 +24,7 @@ class Stock extends AbstractExtensibleModel implements StockInterface
      *
      * @var string
      */
-    protected $eventPrefix = 'cataloginventory_stock';
+    protected $_eventPrefix = 'cataloginventory_stock';
 
     /**
      * Parameter name in event

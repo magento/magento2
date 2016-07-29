@@ -1024,6 +1024,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $addresses = (array)$this->getCustomer()->getAddresses();
         $addresses[] = $address;
         $this->getCustomer()->setAddresses($addresses);
+        $this->updateCustomerData($this->customerRepository->save($this->getCustomer()));
         return $this;
     }
 

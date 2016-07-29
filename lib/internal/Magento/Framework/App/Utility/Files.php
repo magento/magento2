@@ -890,6 +890,16 @@ class Files
                         throw new \UnexpectedValueException("Could not parse theme static file '$file'");
                     }
                 }
+
+                if (!$files) {
+                    $result[] = [
+                        $themeArea,
+                        $themePackage->getVendor() . '/' . $themePackage->getName(),
+                        null,
+                        null,
+                        null,
+                    ];
+                }
             }
         }
     }

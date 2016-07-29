@@ -321,7 +321,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         $customerDataAttributes = $this->dataObjectProcessor->buildOutputDataArray(
             $customer,
-            '\Magento\Customer\Api\Data\CustomerInterface'
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         foreach ($customerDataAttributes as $attributeCode => $attributeData) {
@@ -1340,7 +1340,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Return Password Confirmation
+     * Return Password
      *
      * @return string
      */

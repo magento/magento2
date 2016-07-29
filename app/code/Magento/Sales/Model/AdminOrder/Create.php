@@ -1739,9 +1739,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if ($this->getBillingAddress()->getSaveInAddressBook()) {
             $this->_prepareCustomerAddress($this->getQuote()->getCustomer(), $this->getBillingAddress());
+            $address = $this->getBillingAddress()->setCustomerId($this->getQuote()->getCustomer()->getId());
+            $this->setBillingAddress($address);
         }
         if (!$this->getQuote()->isVirtual() && $this->getShippingAddress()->getSaveInAddressBook()) {
             $this->_prepareCustomerAddress($this->getQuote()->getCustomer(), $this->getShippingAddress());
+            $address = $this->getShippingAddress()->setCustomerId($this->getQuote()->getCustomer()->getId());
+            $this->setShippingAddress($address);
         }
         $this->getQuote()->updateCustomerData($this->getQuote()->getCustomer());
 

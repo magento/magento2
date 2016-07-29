@@ -7,6 +7,7 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -124,7 +125,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer view file action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface|void
      * @throws NotFoundException
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
@@ -151,7 +152,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
         $directory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $fileName = 'customer' . '/' . ltrim($file, '/');
+        $fileName = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
         if (!$directory->isFile($fileName)
             && !$this->_objectManager->get('Magento\MediaStorage\Helper\File\Storage')->processStorageFile($path)
@@ -175,7 +176,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
                     $contentType = 'application/octet-stream';
                     break;
             }
-            $stat = $directory->stat($path);
+            $stat = $directory->stat($fileName);
             $contentLength = $stat['size'];
             $contentModify = $stat['mtime'];
 

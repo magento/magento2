@@ -281,6 +281,9 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method("remove")
+            ->with($customerId);
         $address->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId)
@@ -428,6 +431,20 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $passwordHash = 'ukfa4sdfa56s5df02asdf4rt';
 
+        $customerSecureData = $this->getMock(
+            'Magento\Customer\Model\Data\CustomerSecure',
+            [
+                'getRpToken',
+                'getRpTokenCreatedAt',
+                'getPasswordHash',
+                'getFailuresNum',
+                'getFirstFailure',
+                'getLockExpires',
+            ],
+            [],
+            '',
+            false
+        );
         $region = $this->getMockForAbstractClass('Magento\Customer\Api\Data\RegionInterface', [], '', false);
         $address = $this->getMockForAbstractClass(
             'Magento\Customer\Api\Data\AddressInterface',
@@ -491,6 +508,42 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setAddresses'
             ]
         );
+        $customerModel->expects($this->atLeastOnce())
+            ->method('setRpToken')
+            ->with(null);
+        $customerModel->expects($this->atLeastOnce())
+            ->method('setRpTokenCreatedAt')
+            ->with(null);
+        $customerModel->expects($this->atLeastOnce())
+            ->method('setPasswordHash')
+            ->with($passwordHash);
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('remove')
+            ->with($customerId);
+
+        $this->customerRegistry->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($customerSecureData);
+        $customerSecureData->expects($this->never())
+            ->method('getRpToken')
+            ->willReturn('rpToken');
+        $customerSecureData->expects($this->never())
+            ->method('getRpTokenCreatedAt')
+            ->willReturn('rpTokenCreatedAt');
+        $customerSecureData->expects($this->never())
+            ->method('getPasswordHash')
+            ->willReturn('passwordHash');
+        $customerSecureData->expects($this->once())
+            ->method('getFailuresNum')
+            ->willReturn('failuresNum');
+        $customerSecureData->expects($this->once())
+            ->method('getFirstFailure')
+            ->willReturn('firstFailure');
+        $customerSecureData->expects($this->once())
+            ->method('getLockExpires')
+            ->willReturn('lockExpires');
+
         $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -527,6 +580,10 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerAttributesMetaData->expects($this->at(2))
             ->method('setAddresses')
             ->with([$address]);
+        $customerAttributesMetaData
+            ->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn($customerId);
         $this->extensibleDataObjectConverter->expects($this->once())
             ->method('toNestedArray')
             ->with($customerAttributesMetaData, [], '\Magento\Customer\Api\Data\CustomerInterface')
@@ -551,16 +608,13 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($storeId);
         $customerModel->expects($this->once())
             ->method('setId')
-            ->with(null);
+            ->with($customerId);
         $customerModel->expects($this->once())
             ->method('getAttributeSetId')
             ->willReturn(null);
         $customerModel->expects($this->once())
             ->method('setAttributeSetId')
             ->with(\Magento\Customer\Api\CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
-        $customerModel->expects($this->once())
-            ->method('setPasswordHash')
-            ->with($passwordHash);
         $customerModel->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
@@ -770,7 +824,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 
@@ -798,7 +852,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistry->expects($this->once())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 

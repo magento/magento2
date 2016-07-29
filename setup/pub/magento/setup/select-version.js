@@ -181,6 +181,7 @@ angular.module('select-version', ['ngStorage'])
                     $scope.packages.splice(1, $scope.totalForGrid);
                 }
             }
+            $localStorage.moduleName = '';
             $localStorage.packages = $scope.packages;
             $scope.nextState();
         };

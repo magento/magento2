@@ -83,7 +83,8 @@ class Validator
                     if (isset($params['config_path']) && $params['config_path'] == $data['config_path']) {
                         throw new LocalizedException(
                             __(
-                                "Incorrect configuration for %templateName. Template body has a reference to itself",
+                                "The %templateName contains an incorrect configuration. The template has " .
+                                "a reference to itself. Either remove or change the reference.",
                                 ["templateName" => $name]
                             )
                         );

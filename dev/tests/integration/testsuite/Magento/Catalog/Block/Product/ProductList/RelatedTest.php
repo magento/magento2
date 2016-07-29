@@ -32,6 +32,14 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
         $block->setLayout($objectManager->get('Magento\Framework\View\LayoutInterface'));
         $block->setTemplate('Magento_Catalog::product/list/items.phtml');
         $block->setType('related');
+        $block->addChild('addto', '\Magento\Catalog\Block\Product\ProductList\Item\Container');
+        $block->getChildBlock(
+            'addto'
+        )->addChild(
+            'compare',
+            '\Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare',
+            ['template' => 'Magento_Catalog::product/list/addto/compare.phtml']
+        );
 
         $html = $block->toHtml();
         $this->assertNotEmpty($html);

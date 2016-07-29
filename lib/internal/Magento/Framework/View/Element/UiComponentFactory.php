@@ -17,6 +17,8 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 
 /**
  * Class UiComponentFactory
+ *
+ * @api
  */
 class UiComponentFactory extends DataObject
 {
