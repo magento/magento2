@@ -17,6 +17,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
+ * Plugin for Magento\Catalog\Api\ProductRepositoryInterface
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AroundProductRepositorySave
@@ -61,11 +63,18 @@ class AroundProductRepositorySave
      * @param ProductRepositoryInterface $subject
      * @param ProductInterface $result
      * @param ProductInterface $product
+     * @param bool $saveOptions
      * @return ProductInterface
      * @throws CouldNotSaveException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(ProductRepositoryInterface $subject, ProductInterface $result, ProductInterface $product)
-    {
+    public function afterSave(
+        ProductRepositoryInterface $subject,
+        ProductInterface $result,
+        ProductInterface $product,
+        $saveOptions = false
+    ) {
         /* @var StockItemInterface $stockItem */
         $stockItem = $this->getStockItemToBeUpdated($product);
         if (null === $stockItem) {
