@@ -616,10 +616,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->deleteById($sku));
     }
 
-    /**
-     * @dataProvider fieldName
-     */
-    public function testGetList($fieldName)
+    public function testGetList()
     {
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface', [], [], '', false);
         $attributeCode = 'attribute_code';
@@ -1237,16 +1234,5 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
-    }
-
-    /**
-     * @return array
-     */
-    public function fieldName()
-    {
-        return [
-            ['category_id'],
-            ['field']
-        ];
     }
 }

@@ -11,6 +11,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 {
