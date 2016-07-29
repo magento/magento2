@@ -3,7 +3,6 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -14,7 +13,9 @@ use Magento\CatalogImportExport\Model\Import\Product\Validator\Quantity;
  */
 class QuantityTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Quantity */
+    /**
+     * @var Quantity
+     */
     private $quantity;
 
     protected function setUp()
