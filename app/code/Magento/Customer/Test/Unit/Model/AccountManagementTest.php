@@ -547,7 +547,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->with($storeId)
             ->willReturn($storeMock);
-
         $exception = new \Magento\Framework\Exception\LocalizedException(
             new \Magento\Framework\Phrase('Exception message')
         );
@@ -1622,8 +1621,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method("save")
             ->withConsecutive(
-                array($this->logicalNot($this->identicalTo($existingAddress))),
-                array($this->identicalTo($nonExistingAddress))
+                [$this->logicalNot($this->identicalTo($existingAddress))],
+                [$this->identicalTo($nonExistingAddress)]
             );
 
         $existingAddress
