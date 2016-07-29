@@ -29,7 +29,8 @@ return [
             'Magento\Setup\Controller\Install',
             'Magento\Setup\Controller\Success',
             'Magento\Setup\Controller\Modules',
-            'Magento\Setup\Controller\ComponentGrid',
+            'Magento\Setup\Controller\ModuleGrid',
+            'Magento\Setup\Controller\ExtensionGrid',
             'Magento\Setup\Controller\StartUpdater',
             'Magento\Setup\Controller\UpdaterSuccess',
             'Magento\Setup\Controller\BackupActionItems',
@@ -39,6 +40,7 @@ return [
             'Magento\Setup\Controller\Marketplace',
             'Magento\Setup\Controller\SystemConfig',
             'Magento\Setup\Controller\InstallExtensionGrid',
+            'Magento\Setup\Controller\UpdateExtensionGrid',
             'Magento\Setup\Controller\MarketplaceCredentials',
             'Magento\Setup\Controller\Session'
         ],
