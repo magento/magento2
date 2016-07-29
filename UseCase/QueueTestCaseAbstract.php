@@ -55,7 +55,9 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
             // try to remove before failing the test
             unlink($this->logFilePath);
             if (file_exists($this->logFilePath)) {
-                $this->fail("Precondition failed: test log ({$this->logFilePath}) cannot be deleted before test execution.");
+                $this->fail(
+                    "Precondition failed: test log ({$this->logFilePath}) cannot be deleted before test execution."
+                );
             }
         }
     }
