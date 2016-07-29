@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
     <consumer name="queue.for.multiple.topics.test.c" queue="queue.for.multiple.topics.test.c"/>
     <consumer name="queue.for.multiple.topics.test.d" queue="queue.for.multiple.topics.test.d"/>
+    <consumer name="queue.for.multiple.topics.test.y" queue="queue.for.multiple.topics.test.y"/>
+    <consumer name="queue.for.multiple.topics.test.z" queue="queue.for.multiple.topics.test.z"/>
     <consumer name="mixed.sync.and.async.queue.consumer" queue="mixed.sync.and.async.queue"/>
     <consumer name="mtmh.queue.1.consumer" queue="mtmh.queue.1" handler="Magento\TestModuleAsyncAmqp\Model\CustomHandler::processMixed"/>
     <consumer name="mtmh.queue.2.consumer" queue="mtmh.queue.2"/>

@@ -5,14 +5,12 @@
  */
 namespace Magento\TestModuleAsyncAmqp\Model;
 
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
-
 class WildCardHandler
 {
     /**
-     * @param asyncTestData $simpleDataItem
+     * @param AsyncTestData $simpleDataItem
      */
-    public function methodOne($simpleDataItem)
+    public function methodOne(AsyncTestData $simpleDataItem)
     {
         file_put_contents(
             $simpleDataItem->getTextFilePath(),
@@ -22,9 +20,9 @@ class WildCardHandler
     }
     
     /**
-     * @param asyncTestData $simpleDataItem
+     * @param AsyncTestData $simpleDataItem
      */
-    public function methodTwo($simpleDataItem)
+    public function methodTwo(AsyncTestData $simpleDataItem)
     {
         file_put_contents(
             $simpleDataItem->getTextFilePath(),
@@ -34,9 +32,9 @@ class WildCardHandler
     }
 
     /**
-     * @param asyncTestData $simpleDataItem
+     * @param AsyncTestData $simpleDataItem
      */
-    public function methodThree($simpleDataItem)
+    public function methodThree(AsyncTestData $simpleDataItem)
     {
         file_put_contents(
             $simpleDataItem->getTextFilePath(),
@@ -46,9 +44,9 @@ class WildCardHandler
     }
 
     /**
-     * @param asyncTestData $simpleDataItem
+     * @param AsyncTestData $simpleDataItem
      */
-    public function methodFour($simpleDataItem)
+    public function methodFour(AsyncTestData $simpleDataItem)
     {
         file_put_contents(
             $simpleDataItem->getTextFilePath(),

@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
     <publisher topic="multi.topic.queue.topic.c"/>
     <publisher topic="multi.topic.queue.topic.d"/>
+    <publisher topic="multi.topic.queue.topic.y"/>
+    <publisher topic="multi.topic.queue.topic.z"/>
     <publisher topic="mtmh.topic.1"/>
     <publisher topic="mtmh.topic.2"/>
 

@@ -14,6 +14,8 @@
         <binding id="async.binding5" topic="mtmh.topic.1" destinationType="queue" destination="mtmh.queue.2"/>
         <binding id="async.binding6" topic="mtmh.topic.2" destinationType="queue" destination="mtmh.queue.1"/>
         <binding id="async.binding7" topic="mtmh.topic.2" destinationType="queue" destination="mtmh.queue.2"/>
+        <binding id="async.binding8" topic="multi.topic.queue.topic.y" destinationType="queue" destination="queue.for.multiple.topics.test.y"/>
+        <binding id="async.binding9" topic="multi.topic.queue.topic.z" destinationType="queue" destination="queue.for.multiple.topics.test.z"/>
 
         <binding id="wildCardBinding1" topic="#.wildcard" destinationType="queue" destination="wildcard.queue.one"/>
         <binding id="wildCardBinding2" topic="*.*.segment3.wildcard" destinationType="queue" destination="wildcard.queue.two"/>
