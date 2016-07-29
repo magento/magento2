@@ -29,6 +29,11 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
      */
     protected $publisher;
 
+    /**
+     * @var string
+     */
+    protected $logFilePath;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -44,6 +49,15 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
                 exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
             }
         }
+
+        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        if (file_exists($this->logFilePath)) {
+            // try to remove before failing the test
+            unlink($this->logFilePath);
+            if (file_exists($this->logFilePath)) {
+                $this->fail("Precondition failed: test log ({$this->logFilePath}) cannot be deleted before test execution.");
+            }
+        }
     }
 
     protected function tearDown()
@@ -53,6 +67,9 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
                 exec("kill {$consumerProcessId}");
             }
+        }
+        if (file_exists($this->logFilePath)) {
+            unlink($this->logFilePath);
         }
     }
 

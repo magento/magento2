@@ -8,11 +8,6 @@ namespace Magento\Framework\MessageQueue\UseCase;
 class AsyncMultipleTopicsWithEachQueueTest extends QueueTestCaseAbstract
 {
     /**
-     * @var string
-     */
-    protected $tmpPath;
-
-    /**
      * @var string[]
      */
     protected $uniqueID;
@@ -25,18 +20,12 @@ class AsyncMultipleTopicsWithEachQueueTest extends QueueTestCaseAbstract
     /**
      * @var string[]
      */
-    protected $consumers = ['queue.for.multiple.topics.test.c', 'queue.for.multiple.topics.test.d'];
+    protected $consumers = ['queue.for.multiple.topics.test.y', 'queue.for.multiple.topics.test.z'];
 
     /**
      * @var string[]
      */
-    private $topics = ['multi.topic.queue.topic.c', 'multi.topic.queue.topic.d'];
-
-    protected function tearDown()
-    {
-        unlink($this->tmpPath);
-        parent::tearDown();
-    }
+    private $topics = ['multi.topic.queue.topic.y', 'multi.topic.queue.topic.z'];
 
     /**
      * Verify that Queue Framework processes multiple asynchronous topics sent to the same queue.
@@ -45,21 +34,20 @@ class AsyncMultipleTopicsWithEachQueueTest extends QueueTestCaseAbstract
      */
     public function testAsyncMultipleTopicsPerQueue()
     {
-        $this->tmpPath = TESTS_TEMP_DIR . "/testAsyncMultipleTopicsPerQueue.txt";
         $this->msgObject = $this->objectManager->create('Magento\TestModuleAsyncAmqp\Model\AsyncTestData');
 
         foreach ($this->topics as $topic) {
             $this->uniqueID[$topic] = md5(uniqid($topic));
             $this->msgObject->setValue($this->uniqueID[$topic] . "_" . $topic);
-            $this->msgObject->setTextFilePath($this->tmpPath);
+            $this->msgObject->setTextFilePath($this->logFilePath);
             $this->publisher->publish($topic, $this->msgObject);
         }
 
-        $this->waitForAsynchronousResult(count($this->uniqueID), $this->tmpPath);
+        $this->waitForAsynchronousResult(count($this->uniqueID), $this->logFilePath);
 
         //assertions
         foreach ($this->topics as $item) {
-            $this->assertContains($this->uniqueID[$item] . "_" . $item, file_get_contents($this->tmpPath));
+            $this->assertContains($this->uniqueID[$item] . "_" . $item, file_get_contents($this->logFilePath));
         }
     }
 }

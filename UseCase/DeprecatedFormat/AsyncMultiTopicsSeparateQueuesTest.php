@@ -10,11 +10,6 @@ use Magento\Framework\MessageQueue\UseCase\QueueTestCaseAbstract;
 class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
 {
     /**
-     * @var string
-     */
-    protected $tmpPath;
-
-    /**
      * @var string[]
      */
     protected $uniqueID;
@@ -37,12 +32,6 @@ class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
      */
     private $topics = ['multi.topic.queue.topic.c.deprecated', 'multi.topic.queue.topic.d.deprecated'];
 
-    protected function tearDown()
-    {
-        unlink($this->tmpPath);
-        parent::tearDown();
-    }
-
     /**
      * Verify that Queue Framework processes multiple asynchronous topics sent to the same queue.
      *
@@ -50,21 +39,20 @@ class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
      */
     public function testAsyncMultipleTopicsPerQueue()
     {
-        $this->tmpPath = TESTS_TEMP_DIR . "/testAsyncMultipleTopicsPerQueue.txt";
         $this->msgObject = $this->objectManager->create('Magento\TestModuleAsyncAmqp\Model\AsyncTestData');
 
         foreach ($this->topics as $topic) {
             $this->uniqueID[$topic] = md5(uniqid($topic));
             $this->msgObject->setValue($this->uniqueID[$topic] . "_" . $topic);
-            $this->msgObject->setTextFilePath($this->tmpPath);
+            $this->msgObject->setTextFilePath($this->logFilePath);
             $this->publisher->publish($topic, $this->msgObject);
         }
 
-        $this->waitForAsynchronousResult(count($this->uniqueID), $this->tmpPath);
+        $this->waitForAsynchronousResult(count($this->uniqueID), $this->logFilePath);
 
         //assertions
         foreach ($this->topics as $item) {
-            $this->assertContains($this->uniqueID[$item] . "_" . $item, file_get_contents($this->tmpPath));
+            $this->assertContains($this->uniqueID[$item] . "_" . $item, file_get_contents($this->logFilePath));
         }
     }
 }

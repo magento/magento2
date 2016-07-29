@@ -12,11 +12,6 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
     /**
      * @var string
      */
-    protected $tmpPath;
-
-    /**
-     * @var string
-     */
     protected $expectedMessages;
 
     /**
@@ -47,17 +42,6 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
         'mixed-mtmh.topic.2-2'
     ];
 
-    protected function setUp()
-    {
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-        unlink($this->tmpPath);
-    }
-
     /**
      * Verify that Queue Framework supports multiple topics per queue.
      *
@@ -66,8 +50,6 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
      */
     public function testAsynchronousRpcCommunication()
     {
-        $this->tmpPath = TESTS_TEMP_DIR . "/testAsynchronousRpcCommunication.txt";
-
         foreach ($this->topicValueMap as $topic => $data) {
             $message = null;
             if (is_array($data)) {
@@ -75,23 +57,23 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
                     /** @var AsyncTestData $testObject */
                     $testObject = $this->objectManager->create(AsyncTestData::class);
                     $testObject->setValue($value);
-                    $testObject->setTextFilePath($this->tmpPath);
+                    $testObject->setTextFilePath($this->logFilePath);
                     $message[$key] = $testObject;
                 }
             } else {
                 $testObject = $this->objectManager->create(AsyncTestData::class);
                 $testObject->setValue($data);
-                $testObject->setTextFilePath($this->tmpPath);
+                $testObject->setTextFilePath($this->logFilePath);
                 $message = $testObject;
             }
             $this->publisher->publish($topic, $message);
         }
 
-        $this->waitForAsynchronousResult(count($this->expectedValues), $this->tmpPath);
+        $this->waitForAsynchronousResult(count($this->expectedValues), $this->logFilePath);
 
         //assertions
         foreach ($this->expectedValues as $item) {
-            $this->assertContains($item, file_get_contents($this->tmpPath));
+            $this->assertContains($item, file_get_contents($this->logFilePath));
         }
     }
 }

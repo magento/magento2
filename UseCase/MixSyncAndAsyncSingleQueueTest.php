@@ -8,11 +8,6 @@ namespace Magento\Framework\MessageQueue\UseCase;
 class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 {
     /**
-     * @var string
-     */
-    protected $tmpPath;
-
-    /**
      * @var \Magento\TestModuleAsyncAmqp\Model\AsyncTestData
      */
     protected $msgObject;
@@ -27,21 +22,14 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
      */
     protected $messages = ['message1', 'message2', 'message3'];
 
-    protected function tearDown()
-    {
-        unlink($this->tmpPath);
-        parent::tearDown();
-    }
-
     public function testMixSyncAndAsyncSingleQueue()
     {
-        $this->tmpPath = TESTS_TEMP_DIR . "/testMixSyncAndAsyncSingleQueue.txt";
         $this->msgObject = $this->objectManager->create('Magento\TestModuleAsyncAmqp\Model\AsyncTestData');
 
         // Publish asynchronous messages
         foreach ($this->messages as $item) {
             $this->msgObject->setValue($item);
-            $this->msgObject->setTextFilePath($this->tmpPath);
+            $this->msgObject->setTextFilePath($this->logFilePath);
             $this->publisher->publish('multi.topic.queue.topic.c', $this->msgObject);
         }
 
@@ -50,11 +38,11 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
         $response = $this->publisher->publish('sync.topic.for.mixed.sync.and.async.queue', $input);
         $this->assertEquals($input . ' processed by RPC handler', $response);
 
-        $this->waitForAsynchronousResult(count($this->messages), $this->tmpPath);
+        $this->waitForAsynchronousResult(count($this->messages), $this->logFilePath);
 
         // Verify that asynchronous messages were processed
         foreach ($this->messages as $item) {
-            $this->assertContains($item, file_get_contents($this->tmpPath));
+            $this->assertContains($item, file_get_contents($this->logFilePath));
         }
     }
 }

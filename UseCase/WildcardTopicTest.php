@@ -10,11 +10,6 @@ use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 class WildcardTopicTest extends QueueTestCaseAbstract
 {
     /**
-     * @var string
-     */
-    protected $tmpPath;
-
-    /**
      * @var string[]
      */
     protected $consumers = [
@@ -23,20 +18,6 @@ class WildcardTopicTest extends QueueTestCaseAbstract
         'wildcard.queue.three.consumer',
         'wildcard.queue.four.consumer',
     ];
-
-    protected function setUp()
-    {
-        $this->tmpPath = TESTS_TEMP_DIR . "/testWildcardTopicTest.txt";
-        parent::setUp();
-    }
-
-    protected function tearDown()
-    {
-        if (file_exists($this->tmpPath)) {
-            unlink($this->tmpPath);
-        };
-        parent::tearDown();
-    }
 
     /**
      * @param string $topic
@@ -50,14 +31,14 @@ class WildcardTopicTest extends QueueTestCaseAbstract
         $testObject = $this->generateTestObject();
         $this->publisher->publish($topic, $testObject);
 
-        $this->waitForAsynchronousResult(count($matchingQueues), $this->tmpPath);
+        $this->waitForAsynchronousResult(count($matchingQueues), $this->logFilePath);
 
-        $this->assertTrue(file_exists($this->tmpPath), "No handlers invoked (log file was not created).");
+        $this->assertTrue(file_exists($this->logFilePath), "No handlers invoked (log file was not created).");
         foreach ($nonMatchingQueues as $queueName) {
-            $this->assertNotContains($queueName, file_get_contents($this->tmpPath));
+            $this->assertNotContains($queueName, file_get_contents($this->logFilePath));
         }
         foreach ($matchingQueues as $queueName) {
-            $this->assertContains($queueName, file_get_contents($this->tmpPath));
+            $this->assertContains($queueName, file_get_contents($this->logFilePath));
         }
     }
 
@@ -82,7 +63,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
         $testObject = $this->generateTestObject();
         $this->publisher->publish('not.matching.wildcard.topic', $testObject);
         sleep(2);
-        $this->assertFalse(file_exists($this->tmpPath), "No log file must be created for non-matching topic.");
+        $this->assertFalse(file_exists($this->logFilePath), "No log file must be created for non-matching topic.");
     }
 
     /**
@@ -92,7 +73,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
     {
         $testObject = $this->objectManager->create(AsyncTestData::class);
         $testObject->setValue('||Message Contents||');
-        $testObject->setTextFilePath($this->tmpPath);
+        $testObject->setTextFilePath($this->logFilePath);
         return $testObject;
     }
 }
