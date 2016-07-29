@@ -641,7 +641,7 @@ class Product extends AbstractResource
     {
         if (null === $this->productCategoryLink) {
             $this->productCategoryLink = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\ResourceModel\Product\CategoryLink');
+                ->get(\Magento\Catalog\Model\ResourceModel\Product\CategoryLink::class);
         }
         return $this->productCategoryLink;
     }
