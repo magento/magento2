@@ -146,7 +146,7 @@ class InvoiceService implements InvoiceManagementInterface
             } elseif (empty($qtys)) {
                 $qty = $orderItem->getQtyToInvoice();
             } else {
-                continue;
+                $qty = 0;
             }
             $totalQty += $qty;
             $this->setInvoiceItemQuantity($item, $qty);
