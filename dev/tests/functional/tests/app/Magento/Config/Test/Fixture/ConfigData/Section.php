@@ -63,11 +63,11 @@ class Section extends DataSource
 
     /**
      * Level of scope for set.
-     * If 'scope_type' = 'website', then 'level_of_set' MUST be 'website' only.
+     * If 'scope_type' = 'website', then 'set_level' MUST be 'website' only.
      *
-     * @var array|null
+     * @var string
      */
-    private $levelOfSet = null;
+    private $setLevel = null;
 
     /**
      * @constructor
@@ -94,7 +94,7 @@ class Section extends DataSource
             if (isset($this->fixtureData['scope']['scope_type'])) {
                 $this->scopeData = $this->fixtureData['scope'];
                 $this->scopeType = $this->fixtureData['scope']['scope_type'];
-                $this->levelOfSet = $this->fixtureData['scope']['level_of_set'];
+                $this->setLevel = $this->fixtureData['scope']['set_level'];
                 $this->prepareScopeData();
                 unset($this->fixtureData['scope']);
             }
@@ -138,10 +138,10 @@ class Section extends DataSource
      */
     private function prepareScope()
     {
-        if ($this->levelOfSet == self::STORE_CODE && $this->scopeType == self::WEBSITE_CODE) {
-            throw new \Exception('Store level can\'t set by ["scope_type" = "website"].');
-        } elseif ($this->levelOfSet == self::WEBSITE_CODE && $this->scopeType == self::STORE_CODE) {
-            $this->scopeType = $this->levelOfSet;
+        if ($this->setLevel == self::STORE_CODE && $this->scopeType == self::WEBSITE_CODE) {
+            throw new \Exception('Store level can\'t set to ["scope_type" = "website"].');
+        } elseif ($this->setLevel == self::WEBSITE_CODE && $this->scopeType == self::STORE_CODE) {
+            $this->scopeType = $this->setLevel;
             $this->scope = $this->scope
                 ->getDataFieldConfig('group_id')['source']->getStoreGroup()
                 ->getDataFieldConfig('website_id')['source']->getWebsite();
