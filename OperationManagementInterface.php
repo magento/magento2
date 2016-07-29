@@ -16,9 +16,10 @@ interface OperationManagementInterface
      *
      * @param int $operationId
      * @param int $status
-     * @param string $message property to update Result Message
-     * @param string $data serialized data object of failed message
+     * @param int|null $errorCode
+     * @param string|null $message property to update Result Message
+     * @param string|null $data serialized data object of failed message
      * @return boolean
      */
-    public function changeOperationStatus($operationId, $status, $message = null, $data = null);
+    public function changeOperationStatus($operationId, $status, $errorCode = null, $message = null, $data = null);
 }
