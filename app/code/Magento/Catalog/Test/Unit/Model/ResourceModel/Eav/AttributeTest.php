@@ -101,6 +101,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->will($this->returnValue($dbAdapterMock));
 
+        $attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $objectManager->getObject(
                 'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
@@ -110,9 +114,15 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
                     'indexerEavProcessor' => $this->_eavProcessor,
                     'resource' => $this->resourceMock,
                     'data' => ['id' => 1],
-                    'eavConfig' => $this->eavConfigMock
+                    'eavConfig' => $this->eavConfigMock,
+                    'attributeCache' => $attributeCacheMock
                 ]
         );
+
+        $reflection = new \ReflectionClass(get_class($this->_model));
+        $reflectionProperty = $reflection->getProperty('attributeCache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->_model, $attributeCacheMock);
     }
 
     public function testIndexerAfterSaveAttribute()

@@ -40,7 +40,7 @@ use Magento\Catalog\Model\Product;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel
+class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Prefix of model events names
@@ -586,5 +586,13 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             }
         }
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIdentities()
+    {
+        return ['price'];
     }
 }

@@ -59,7 +59,7 @@ class Proxy extends \Magento\Framework\Translate\Inline implements
      */
     public function __sleep()
     {
-        return ['_subject', '_isShared'];
+        return ['subject', 'isShared'];
     }
 
     /**

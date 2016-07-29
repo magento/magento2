@@ -129,7 +129,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->stockHelperMock
             ->expects($this->once())
-            ->method('addInStockFilterToCollection')
+            ->method('addIsInStockFilterToCollection')
             ->with($this->productCollection);
         $this->assertInstanceOf(
             'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',

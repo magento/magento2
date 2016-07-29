@@ -404,7 +404,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->_items[$itemId] = $item;
@@ -865,5 +865,31 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     public function hasFlag($flag)
     {
         return array_key_exists($flag, $this->_flags);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function __sleep()
+    {
+        $properties = array_keys(get_object_vars($this));
+        $properties = array_diff(
+            $properties,
+            [
+                '_entityFactory',
+            ]
+        );
+        return $properties;
+    }
+
+    /**
+     * Init not serializable fields
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_entityFactory = $objectManager->get(EntityFactoryInterface::class);
     }
 }

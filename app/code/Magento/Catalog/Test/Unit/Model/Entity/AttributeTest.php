@@ -9,6 +9,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Entity;
 
 use Magento\Catalog\Model\Entity\Attribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -126,6 +127,10 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private $dateTimeFormatter;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -196,26 +201,38 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('getEventDispatcher')
             ->willReturn($this->eventDispatcher);
 
-        $this->attribute = new Attribute(
-            $this->contextMock,
-            $this->registryMock,
-            $this->extensionAttributesFactory,
-            $this->attributeValueFactoryMock,
-            $this->configMock,
-            $this->typeFactoryMock,
-            $this->storeManagerMock,
-            $this->helperMock,
-            $this->universalFactoryMock,
-            $this->attributeOptionFactoryMock,
-            $this->dataObjectProcessorMock,
-            $this->dataObjectHelperMock,
-            $this->timezoneMock,
-            $this->reservedAttributeListMock,
-            $this->resolverMock,
-            $this->dateTimeFormatter,
-            $this->lockValidatorMock,
-            $this->resourceMock
+        $attributeCacheMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\AttributeCache::class)
+        ->disableOriginalConstructor()
+        ->getMock();
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->attribute = $objectManagerHelper->getObject(
+            Attribute::class,
+            [
+                'context' => $this->contextMock,
+                'registry' => $this->registryMock,
+                'extensionFactory' => $this->extensionAttributesFactory,
+                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'eavConfig' => $this->configMock,
+                'typeFactory' => $this->typeFactoryMock,
+                'storeManager' => $this->storeManagerMock,
+                'helper' => $this->helperMock,
+                'universalFactory' => $this->universalFactoryMock,
+                'attributeOptionFactory' => $this->attributeOptionFactoryMock,
+                'dataObjectProcessor' => $this->dataObjectProcessorMock,
+                'dataObjectHelper' => $this->dataObjectHelperMock,
+                'timezone' => $this->timezoneMock,
+                'reservedAttributeList' => $this->reservedAttributeListMock,
+                'resolver' => $this->resolverMock,
+                'dateTimeFormatter' => $this->dateTimeFormatter,
+                'resource' => $this->resourceMock,
+                'attributeCache' => $attributeCacheMock
+            ]
         );
+
+        $reflection = new \ReflectionClass(get_class($this->attribute));
+        $reflectionProperty = $reflection->getProperty('attributeCache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->attribute, $attributeCacheMock);
     }
 
     public function testAfterSaveEavCache()

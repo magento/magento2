@@ -134,6 +134,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $product = $this->getProductById($option->getProductId());
         try {
             $this->configurableTypeResource->saveProducts($product, []);
+            $this->configurableType->resetConfigurableAttributes($product);
         } catch (\Exception $exception) {
             throw new StateException(
                 __('Cannot delete variations from product: %1', $option->getProductId())

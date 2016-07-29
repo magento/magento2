@@ -9,6 +9,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
+use Magento\Store\Model\Store;
 
 /**
  * Catalog product media gallery attribute backend resource
@@ -134,6 +135,23 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function createBaseLoadSelect($entityId, $storeId, $attributeId)
     {
+        $select =  $this->createBatchBaseSelect($storeId, $attributeId);
+
+        $select = $select->where(
+            'entity.entity_id = ?',
+            $entityId
+        );
+        return $select;
+    }
+
+    /**
+     * @param int $storeId
+     * @param int $attributeId
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function createBatchBaseSelect($storeId, $attributeId)
+    {
         $connection = $this->getConnection();
 
         $positionCheckSql = $connection->getCheckSql(
@@ -161,7 +179,6 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 [
                     $mainTableAlias . '.value_id = value.value_id',
                     $connection->quoteInto('value.store_id = ?', (int)$storeId),
-                    $connection->quoteInto('value.entity_id = ?', (int)$entityId)
                 ]
             ),
             ['label', 'position', 'disabled']
@@ -171,8 +188,7 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ' AND ',
                 [
                     $mainTableAlias . '.value_id = default_value.value_id',
-                    'default_value.store_id = 0',
-                    $connection->quoteInto('default_value.entity_id = ?', (int)$entityId)
+                    $connection->quoteInto('default_value.store_id = ?', Store::DEFAULT_STORE_ID),
                 ]
             ),
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
@@ -181,11 +197,9 @@ class Media extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $attributeId
         )->where(
             $mainTableAlias . '.disabled = 0'
-        )->where(
-            'entity.entity_id = ?',
-            $entityId
-        )
-            ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
+        )->order(
+            $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
+        );
 
         return $select;
     }
