@@ -79,8 +79,9 @@ class Index extends \Magento\Framework\App\Action\Action
             } else {
                 $query->saveIncrementalPopularity();
 
-                if ($query->getRedirect()) {
-                    $this->getResponse()->setRedirect($query->getRedirect());
+                $redirect = $query->getRedirect();
+                if ($redirect && $this->_url->getCurrentUrl() !== $redirect) {
+                    $this->getResponse()->setRedirect($redirect);
                     return;
                 }
             }
