@@ -131,7 +131,7 @@
         <step name="deleteStoredPayment" module="Magento_Vault" />
     </scenario>
     <scenario name="OnePageCheckoutAcceptPaymentTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Config" next="createProducts"/>
+        <step name="setupConfiguration" module="Magento_Config" next="createProduct"/>
         <step name="createProduct" module="Magento_Catalog" next="addProductsToTheCart"/>
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout"/>
         <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer"/>
@@ -146,7 +146,7 @@
         <step name="acceptPayment" module="Magento_Braintree"/>
     </scenario>
     <scenario name="OnePageCheckoutDenyPaymentTest" firstStep="setupConfiguration">
-        <step name="setupConfiguration" module="Magento_Config" next="createProducts"/>
+        <step name="setupConfiguration" module="Magento_Config" next="createProduct"/>
         <step name="createProduct" module="Magento_Catalog" next="addProductsToTheCart"/>
         <step name="addProductsToTheCart" module="Magento_Checkout" next="proceedToCheckout"/>
         <step name="proceedToCheckout" module="Magento_Checkout" next="createCustomer"/>
