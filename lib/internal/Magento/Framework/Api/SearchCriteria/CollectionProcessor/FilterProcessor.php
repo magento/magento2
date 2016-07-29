@@ -54,6 +54,7 @@ class FilterProcessor implements CollectionProcessorInterface
      *
      * @param FilterGroup $filterGroup
      * @param AbstractDb $collection
+     * @return void
      */
     private function addFilterGroupToCollection(
         FilterGroup $filterGroup,
@@ -66,12 +67,12 @@ class FilterProcessor implements CollectionProcessorInterface
             $customFilter = $this->getCustomFilterForField($filter->getField());
             if ($customFilter) {
                 $isApplied = $customFilter->apply($filter, $collection);
-            } 
-            
+            }
+
             if (!$isApplied) {
-                $field = $this->getFieldMapping($filter->getField());
-                $fields[$field] = $filter->getValue();
-                $conditions[$field] = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+                $fields[] = $this->getFieldMapping($filter->getField());
+                $conditions[] = [$condition => $filter->getValue()];
             }
         }
         

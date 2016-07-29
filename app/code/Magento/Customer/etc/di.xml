@@ -320,6 +320,15 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessorComposite</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Customer\Model\Group\Api\SearchCriteria\CollectionProcessor\FilterProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="fieldMapping" xsi:type="array">
+                <item name="code" xsi:type="string">customer_group_code</item>
+                <item name="id" xsi:type="string">customer_group_id</item>
+                <item name="tax_class_name" xsi:type="string">class_name</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Customer\Model\Group\Api\SearchCriteria\CollectionProcessor\SortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
         <arguments>
             <argument name="fieldMapping" xsi:type="array">
@@ -335,7 +344,7 @@
     <virtualType name="Magento\Customer\Model\Group\Api\SearchCriteria\CollectionProcessorComposite" type="Magento\Framework\Api\SearchCriteria\CollectionProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="filters" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="filters" xsi:type="object">Magento\Customer\Model\Group\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
                 <item name="sorting" xsi:type="object">Magento\Customer\Model\Group\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
                 <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
             </argument>

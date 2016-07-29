@@ -19,6 +19,7 @@ interface CollectionProcessorInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @param AbstractDb $collection
      * @throws \InvalidArgumentException
+     * @return void
      */
     public function process(SearchCriteriaInterface $searchCriteria, AbstractDb $collection);
 }

@@ -54,6 +54,7 @@ class FilterProcessor implements CollectionProcessorInterface
      *
      * @param FilterGroup $filterGroup
      * @param AbstractDb $collection
+     * @return void
      */
     private function addFilterGroupToCollection(
         FilterGroup $filterGroup,
@@ -78,7 +79,6 @@ class FilterProcessor implements CollectionProcessorInterface
             $collection->addFieldToFilter($fields);
         }
     }
-
 
     /**
      * Return custom filters for field if exists

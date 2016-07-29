@@ -67,6 +67,7 @@ class SortingProcessor implements CollectionProcessorInterface
      *
      * @param SortOrder[] $sortOrders
      * @param AbstractDb $collection
+     * @return void
      */
     private function applyOrders(array $sortOrders, AbstractDb $collection)
     {
@@ -84,10 +85,12 @@ class SortingProcessor implements CollectionProcessorInterface
      * Apply default orders to collection
      *
      * @param AbstractDb $collection
+     * @return void
      */
     private function applyDefaultOrders(AbstractDb $collection)
     {
         foreach ($this->defaultOrders as $field => $direction) {
+            $field = $this->getFieldMapping($field);
             $order = $direction == SortOrder::SORT_ASC
                 ? Collection::SORT_ORDER_ASC
                 : Collection::SORT_ORDER_DESC;
