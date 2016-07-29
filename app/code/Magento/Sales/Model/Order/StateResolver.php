@@ -1,13 +1,9 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: akaplya
- * Date: 20.07.16
- * Time: 15:03
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Sales\Model\Order;
-
 
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
@@ -25,7 +21,7 @@ class StateResolver implements OrderStateResolverInterface
     public function getStateForOrder(OrderInterface $order, array $arguments = [])
     {
         /** @var  $order Order|OrderInterface */
-        $orderState = Order::STATE_NEW;
+        $orderState = $order->getState() === Order::STATE_PROCESSING ? Order::STATE_PROCESSING : Order::STATE_NEW;
         if (!$order->isCanceled() && !$order->canUnhold() && !$order->canInvoice() && !$order->canShip()) {
             if (0 == $order->getBaseGrandTotal() || $order->canCreditmemo()) {
                 if ($order->getState() !== Order::STATE_COMPLETE) {
@@ -40,9 +36,8 @@ class StateResolver implements OrderStateResolverInterface
             }
         }
         if ($order->getState() == Order::STATE_NEW && in_array(self::IN_PROGRESS, $arguments)) {
-                $orderState = Order::STATE_PROCESSING;
+            $orderState = Order::STATE_PROCESSING;
         }
         return $orderState;
     }
 }
-
