@@ -62,6 +62,14 @@ class Section extends DataSource
     private $scopeData = null;
 
     /**
+     * Level of scope for set.
+     * If 'scope_type' = 'website', then 'level_of_set' MUST be 'website' only.
+     *
+     * @var array|null
+     */
+    private $levelOfSet = null;
+
+    /**
      * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
@@ -83,10 +91,11 @@ class Section extends DataSource
     public function getData($key = null)
     {
         if ($this->data === null) {
-            if (isset($this->fixtureData['scope'])) {
+            if (isset($this->fixtureData['scope']['scope_type'])) {
                 $this->scopeData = $this->fixtureData['scope'];
+                $this->scopeType = $this->fixtureData['scope']['scope_type'];
+                $this->levelOfSet = $this->fixtureData['scope']['level_of_set'];
                 $this->prepareScopeData();
-                $this->prepareScopeType();
                 unset($this->fixtureData['scope']);
             }
             $this->data = $this->fixtureData;
@@ -101,51 +110,41 @@ class Section extends DataSource
      * @return void
      * @throws \Exception
      */
-    public function prepareScopeData()
+    private function prepareScopeData()
     {
         if (isset($this->scopeData['dataset'])) {
-            /** @var Store $store */
-            $store = $this->fixtureFactory->createByCode('store', ['dataset' => $this->scopeData['dataset']]);
-            if (!$store->hasData('store_id')) {
-                $store->persist();
+            /** @var Store|Website $store */
+            $this->scope = $this->fixtureFactory->createByCode(
+                $this->scopeType,
+                ['dataset' => $this->scopeData['dataset']]
+            );
+            if (!$this->scope->hasData($this->scopeType . '_id')) {
+                $this->scope->persist();
             }
-
-            $this->setScope($store);
         } elseif (isset($this->scopeData['fixture'])) {
             $this->scope = $this->scopeData['fixture'];
         } else {
             throw new \Exception('Parameters "dataset" and "fixture" aren\'t identify.');
         }
+
+        $this->prepareScope();
     }
 
     /**
      * Prepare scope.
      *
-     * @param Store $store
      * @return void
+     * @throws \Exception
      */
-    private function setScope(Store $store)
+    private function prepareScope()
     {
-        if ($this->scopeData['value'] == self::STORE_CODE) {
-            $this->scope = $store;
-        } elseif ($this->scopeData['value'] == self::WEBSITE_CODE) {
+        if ($this->levelOfSet == self::STORE_CODE && $this->scopeType == self::WEBSITE_CODE) {
+            throw new \Exception('Store level can\'t set by ["scope_type" = "website"].');
+        } elseif ($this->levelOfSet == self::WEBSITE_CODE && $this->scopeType == self::STORE_CODE) {
+            $this->scopeType = $this->levelOfSet;
             $this->scope = $this->scope
                 ->getDataFieldConfig('group_id')['source']->getStoreGroup()
                 ->getDataFieldConfig('website_id')['source']->getWebsite();
-        }
-    }
-
-    /**
-     * Prepare scope type.
-     *
-     * @return void
-     */
-    private function prepareScopeType()
-    {
-        if ($this->scope instanceof Store) {
-            $this->scopeType = self::STORE_CODE;
-        } elseif ($this->scope instanceof Website) {
-            $this->scopeType = self::WEBSITE_CODE;
         }
     }
 

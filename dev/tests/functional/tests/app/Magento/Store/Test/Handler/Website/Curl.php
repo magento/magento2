@@ -153,7 +153,7 @@ class Curl extends AbstractCurl implements WebsiteInterface
             'web/unsecure/base_link_url' => [
                 'value' => '{{unsecure_base_url}}websites/' . $data['website']['code'] . '/'
             ],
-            'scope' => ['fixture' => $this->fixture]
+            'scope' => ['fixture' => $this->fixture, 'scope_type' => 'website', 'level_of_set' => 'website']
         ];
 
         $configFixture = $this->fixtureFactory->createByCode('configData', ['data' => $configData]);

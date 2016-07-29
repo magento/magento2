@@ -132,7 +132,7 @@ class Curl extends AbstractCurl implements ConfigDataInterface
 
         if (strpos($response, 'data-ui-id="messages-message-success"') === false) {
             $this->_eventManager->dispatchEvent(['curl_failed'], [$response]);
-            throw new \Exception("Configuration settings are not applied! Url: $url \n"
+            throw new \Exception("Configuration settings are not applied! Url: $url" . PHP_EOL
                 . "data: " . print_r($data, true));
         }
     }
