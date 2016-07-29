@@ -32,7 +32,7 @@ class JobSetCacheTest extends \PHPUnit_Framework_TestCase
         ];
         $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        
+
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $command = $this->getMock($commandClass, [], [], '', false);
