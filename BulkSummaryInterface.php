@@ -24,10 +24,9 @@ interface BulkSummaryInterface
      * Bulk statuses constants
      */
     const NOT_STARTED = 0;
-    const IN_PROGRESS_SUCCESS = 1;
-    const IN_PROGRESS_FAILED = 2;
-    const FINISHED_SUCCESSFULLY = 3;
-    const FINISHED_WITH_FAILURE = 4;
+    const IN_PROGRESS = 1;
+    const FINISHED_SUCCESSFULLY = 2;
+    const FINISHED_WITH_FAILURE = 3;
     /**#@-*/
 
     /**

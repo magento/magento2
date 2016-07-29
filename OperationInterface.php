@@ -25,10 +25,10 @@ interface OperationInterface
     /**#@+
      * Status types
      */
-    const STATUS_TYPE_OPEN = 0;
     const STATUS_TYPE_COMPLETE = 1;
     const STATUS_TYPE_RETRIABLY_FAILED = 2;
     const STATUS_TYPE_NOT_RETRIABLY_FAILED = 3;
+    const STATUS_TYPE_OPEN = 4;
     /**#@-*/
     
     /**
