@@ -162,7 +162,7 @@ class Login extends \Magento\Framework\Model\AbstractModel
         $customer = $this->getCustomer();
 
         if (!$customer->getId()) {
-            throw new Exception(__("Customer are no longer exist."), 1);
+            throw new \Exception(__("Customer are no longer exist."), 1);
         }
 
         if ($this->_customerSession->loginById($customer->getId())) {

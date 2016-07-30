@@ -27,7 +27,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
         try {
             $login->authenticateCustomer();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         }
 
