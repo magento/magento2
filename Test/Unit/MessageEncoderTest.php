@@ -31,7 +31,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->dataObjectEncoderMock = $this->getMockBuilder('Magento\Framework\Webapi\ServiceOutputProcessor')
+        $this->dataObjectEncoderMock = $this->getMockBuilder(\Magento\Framework\Webapi\ServiceOutputProcessor::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

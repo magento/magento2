@@ -47,7 +47,7 @@ return [
     'consumer4' => [
         'name' => 'consumer4',
         'queue' => 'queue4',
-        'consumerInstance' => 'Magento\Framework\MessageQueue\ConsumerInterface',
+        'consumerInstance' => \Magento\Framework\MessageQueue\ConsumerInterface::class,
         'handlers' => [
             0 => [
                 'type' => 'handlerClassFour',
@@ -60,7 +60,7 @@ return [
     'consumer5' => [
         'name' => 'consumer5',
         'queue' => 'queue5',
-        'consumerInstance' => 'Magento\Framework\MessageQueue\ConsumerInterface',
+        'consumerInstance' => \Magento\Framework\MessageQueue\ConsumerInterface::class,
         'handlers' => [],
         'connection' => 'amqp',
         'maxMessages' => null,

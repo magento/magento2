@@ -34,7 +34,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem implements Read
         \Magento\Framework\Config\ValidationStateInterface $validationState,
         $fileName = 'queue_topology.xml',
         $idAttributes = [],
-        $domDocumentClass = 'Magento\Framework\Config\Dom',
+        $domDocumentClass = \Magento\Framework\Config\Dom::class,
         $defaultScope = 'global'
     ) {
         parent::__construct(

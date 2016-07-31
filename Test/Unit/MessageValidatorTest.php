@@ -151,11 +151,11 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function getQueueConfigRequestType()
     {
-        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $customerMockTwo = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+        $customerMockTwo = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -204,7 +204,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
-                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface'
+                    CommunicationConfig::TOPIC_REQUEST => \Magento\Customer\Api\Data\CustomerInterface::class
                 ],
                 $customerMock,
                 null
@@ -212,7 +212,7 @@ class MessageValidatorTest extends \PHPUnit_Framework_TestCase
             [
                 [
                     CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
-                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface'
+                    CommunicationConfig::TOPIC_REQUEST => \Magento\Customer\Api\Data\CustomerInterface::class
                 ],
                 'customer',
                 'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface". "string" given.'
