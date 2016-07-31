@@ -7,13 +7,15 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\Communication\Config;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MessageEncoderTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Framework\MessageQueue\MessageEncoder */
+    /** @var MessageEncoder */
     protected $encoder;
 
     /** @var \Magento\Framework\ObjectManagerInterface */
@@ -22,9 +24,11 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->encoder = $this->objectManager->create(
-            \Magento\Framework\MessageQueue\MessageEncoder::class,
-            ['queueConfig' => $this->getConfig()]
+        $this->encoder = $this->objectManager->create(MessageEncoder::class);
+        $this->setBackwardCompatibleProperty(
+            $this->encoder,
+            'communicationConfig',
+            $this->getConfig()
         );
         parent::setUp();
     }
@@ -127,32 +131,16 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Framework\MessageQueue\ConfigInterface
+     * @return \Magento\Framework\MessageQueue\Config
      */
     protected function getConfig()
     {
-        $configPath = __DIR__ . '/etc/queue.xml';
-        $fileResolverMock = $this->getMock(\Magento\Framework\Config\FileResolverInterface::class);
-        $fileResolverMock->expects($this->any())
-            ->method('get')
-            ->willReturn([$configPath => file_get_contents(($configPath))]);
-
-        /** @var \Magento\Framework\MessageQueue\Config\Reader\Xml $xmlReader */
-        $xmlReader = $this->objectManager->create(
-            \Magento\Framework\MessageQueue\Config\Reader\Xml::class,
-            ['fileResolver' => $fileResolverMock]
-        );
-
-        $newData = $xmlReader->read();
-
-        /** @var \Magento\Framework\MessageQueue\Config\Data $configData */
-        $configData = $this->objectManager->create(\Magento\Framework\MessageQueue\Config\Data::class);
+        $newData = include __DIR__ . '/_files/encoder_communication.php';
+        /** @var \Magento\Framework\Communication\Config\Data $configData */
+        $configData = $this->objectManager->create(\Magento\Framework\Communication\Config\Data::class);
         $configData->reset();
         $configData->merge($newData);
-        $config = $this->objectManager->create(
-            \Magento\Framework\MessageQueue\ConfigInterface::class,
-            ['queueConfigData' => $configData]
-        );
+        $config = $this->objectManager->create(Config::class, ['configData' => $configData]);
 
         return $config;
     }
@@ -213,5 +201,21 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     }
 }
 JSON;
+    }
+
+    /**
+     * Set mocked property
+     *
+     * @param object $object
+     * @param string $propertyName
+     * @param object $propertyValue
+     * @return void
+     */
+    public function setBackwardCompatibleProperty($object, $propertyName, $propertyValue)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $reflectionProperty = $reflection->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $propertyValue);
     }
 }

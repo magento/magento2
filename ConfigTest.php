@@ -62,7 +62,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         return $this->getConfigInstance(
             [
-                __DIR__ . '/_files/valid_queue.xml',
                 __DIR__ . '/_files/valid_new_queue.xml'
             ]
         );
@@ -91,10 +90,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn($content);
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $deprecatedConverter = $objectManager->create(
-            \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\DeprecatedFormat::class
-        );
-
         $topicConverter = $objectManager->create(
             \Magento\Framework\MessageQueue\Config\Reader\Xml\Converter\TopicConfig::class,
             [
@@ -106,7 +101,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             \Magento\Framework\MessageQueue\Config\Reader\Xml\CompositeConverter::class,
             [
                 'converters' => [
-                    ['converter' => $deprecatedConverter, 'sortOrder' => 10],
                     ['converter' => $topicConverter, 'sortOrder' => 10]
                 ]
             ]
