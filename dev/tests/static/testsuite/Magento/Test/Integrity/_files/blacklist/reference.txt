@@ -114,3 +114,4 @@ DoubleColon
 \Magento\Test\Di\WrappedClass\Logger
 \Magento\TestModuleMessageQueueConfiguration\AsyncHandler
 \Magento\TestModuleMessageQueueConfiguration\SyncHandler
+\Magento\TestModuleAsyncAmqp\Model\AsyncTestData
