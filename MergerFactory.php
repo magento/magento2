@@ -33,6 +33,7 @@ class MergerFactory
     /**
      * @param string $consumerName
      * @return MergerInterface
+     * @throws \LogicException
      */
     public function create($consumerName)
     {

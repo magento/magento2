@@ -6,21 +6,25 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
+use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
  * Value class which stores the configuration
  */
 class ConsumerConfiguration implements ConsumerConfigurationInterface
 {
-    const CONSUMER_NAME = "consumer_name";
+    /**
+     * @deprecated
+     * @see ConsumerConfigurationInterface::TOPIC_TYPE
+     */
     const CONSUMER_TYPE = "consumer_type";
-    const QUEUE_NAME = "queue_name";
-    const MAX_MESSAGES = "max_messages";
-    const SCHEMA_TYPE = "schema_type";
-    const HANDLERS = 'handlers';
 
-    const TYPE_SYNC = 'sync';
-    const TYPE_ASYNC = 'async';
+    /**
+     * @deprecated
+     * @see ConsumerConfigurationInterface::TOPIC_HANDLERS
+     */
+    const HANDLERS = 'handlers';
 
     /**
      * @var array
@@ -33,9 +37,14 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
     private $queueRepository;
 
     /**
-     * @var MessageQueueConfig
+     * @var ConsumerConfig
      */
-    private $messageQueueConfig;
+    private $consumerConfig;
+
+    /**
+     * @var CommunicationConfig
+     */
+    private $communicationConfig;
 
     /**
      * Initialize dependencies.
@@ -43,12 +52,13 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      * @param QueueRepository $queueRepository
      * @param MessageQueueConfig $messageQueueConfig
      * @param array $data configuration data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(QueueRepository $queueRepository, MessageQueueConfig $messageQueueConfig, $data = [])
     {
         $this->data = $data;
         $this->queueRepository = $queueRepository;
-        $this->messageQueueConfig = $messageQueueConfig;
     }
 
     /**
@@ -80,7 +90,21 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     public function getType()
     {
-        return $this->getData(self::CONSUMER_TYPE);
+        $topics = $this->getData(self::TOPICS);
+        if (count($topics) > 1) {
+            throw new \LogicException(
+                'Current method is deprecated and does not support more than 1 topic declarations for consumer. '
+                . 'Use \Magento\Framework\MessageQueue\ConsumerConfiguration::getConsumerType instead. '
+                . "Multiple topics declared for consumer '{$this->getConsumerName()}'"
+            );
+        } else if (count($topics) < 1) {
+            throw new \LogicException(
+                "There must be at least one topic declared for consumer '{$this->getConsumerName()}'."
+            );
+        }
+        // Get the only topic and read consumer type from its declaration. Necessary for backward compatibility
+        $topicConfig = reset($topics);
+        return $topicConfig[self::TOPIC_TYPE];
     }
 
     /**
@@ -88,8 +112,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     public function getHandlers($topicName)
     {
-        $output = $this->getData(self::HANDLERS);
-        return isset($output[$topicName]) ? $output[$topicName] : [];
+        return $this->getTopicConfig($topicName)[self::TOPIC_HANDLERS];
     }
 
     /**
@@ -97,8 +120,8 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     public function getTopicNames()
     {
-        $output = $this->getData(self::HANDLERS);
-        return is_array($output) && count($output) ? array_keys($output) : [];
+        $topics = $this->getData(self::TOPICS);
+        return is_array($topics) && count($topics) ? array_keys($topics) : [];
     }
 
     /**
@@ -106,7 +129,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     public function getQueue()
     {
-        $connectionName = $this->messageQueueConfig->getConnectionByConsumer($this->getConsumerName());
+        $connectionName = $this->getConsumerConfig()->getConsumer($this->getConsumerName())->getConnection();
         return $this->queueRepository->get($connectionName, $this->getQueueName());
     }
 
@@ -115,7 +138,21 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      */
     public function getMessageSchemaType($topicName)
     {
-        return $this->messageQueueConfig->getMessageSchemaType($topicName);
+        return $this->getCommunicationConfig()->getTopic($topicName)[CommunicationConfig::TOPIC_REQUEST_TYPE];
+    }
+
+    /**
+     * Get topic configuration for current consumer.
+     * @param string $topicName
+     * @return array
+     * @throws \LogicException
+     */
+    private function getTopicConfig($topicName)
+    {
+        if (!isset($this->getData(self::TOPICS)[$topicName])) {
+            throw new \LogicException("Consumer configuration for {$topicName} topic not found.");
+        }
+        return $this->getData(self::TOPICS)[$topicName];
     }
 
     /**
@@ -130,5 +167,36 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
             return null;
         }
         return $this->data[$key];
+    }
+
+    /**
+     * Get consumer config.
+     *
+     * @return ConsumerConfig
+     *
+     * @deprecated
+     */
+    private function getConsumerConfig()
+    {
+        if ($this->consumerConfig === null) {
+            $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
+        }
+        return $this->consumerConfig;
+    }
+
+    /**
+     * Get communication config.
+     *
+     * @return CommunicationConfig
+     *
+     * @deprecated
+     */
+    private function getCommunicationConfig()
+    {
+        if ($this->communicationConfig === null) {
+            $this->communicationConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CommunicationConfig::class);
+        }
+        return $this->communicationConfig;
     }
 }

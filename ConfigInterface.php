@@ -8,6 +8,9 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * @deprecated
+ */
 interface ConfigInterface
 {
     const PUBLISHERS = 'publishers';
@@ -74,6 +77,7 @@ interface ConfigInterface
      * @param string $topicName
      * @return string
      * @throws LocalizedException
+     * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
      */
     public function getExchangeByTopic($topicName);
 
@@ -83,6 +87,7 @@ interface ConfigInterface
      * @param string $topic
      * @return string[]
      * @throws LocalizedException
+     * @see \Magento\Framework\MessageQueue\Topology\ConfigInterface::getQueues
      */
     public function getQueuesByTopic($topic);
 
@@ -90,6 +95,7 @@ interface ConfigInterface
      * @param string $topic
      * @return string
      * @throws LocalizedException
+     * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
      */
     public function getConnectionByTopic($topic);
 
@@ -97,6 +103,7 @@ interface ConfigInterface
      * @param string $consumer
      * @return string
      * @throws LocalizedException
+     * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumer
      */
     public function getConnectionByConsumer($consumer);
 
@@ -105,6 +112,7 @@ interface ConfigInterface
      *
      * @param string $topic
      * @return string
+     * @see \Magento\Framework\Communication\ConfigInterface::getTopic
      */
     public function getMessageSchemaType($topic);
 
@@ -112,6 +120,7 @@ interface ConfigInterface
      * Get all consumer names
      *
      * @return string[]
+     * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumers
      */
     public function getConsumerNames();
 
@@ -120,6 +129,7 @@ interface ConfigInterface
      *
      * @param string $name
      * @return array|null
+     * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumer
      */
     public function getConsumer($name);
 
@@ -127,6 +137,7 @@ interface ConfigInterface
      * Get queue binds
      *
      * @return array
+     * @see \Magento\Framework\MessageQueue\Topology\ConfigInterface::getExchanges
      */
     public function getBinds();
 
@@ -134,6 +145,7 @@ interface ConfigInterface
      * Get publishers
      *
      * @return array
+     * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublishers
      */
     public function getPublishers();
 
@@ -141,6 +153,7 @@ interface ConfigInterface
      * Get consumers
      *
      * @return array
+     * @see \Magento\Framework\MessageQueue\Consumer\ConfigInterface::getConsumers
      */
     public function getConsumers();
 
@@ -149,6 +162,8 @@ interface ConfigInterface
      * @param string $name
      *
      * @return array
+     * @see \Magento\Framework\Communication\ConfigInterface::getTopic
+     * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
      */
     public function getTopic($name);
 
@@ -157,6 +172,7 @@ interface ConfigInterface
      * @param string $name
      *
      * @return array
+     * @see \Magento\Framework\MessageQueue\Publisher\ConfigInterface::getPublisher
      */
     public function getPublisher($name);
 
@@ -165,6 +181,7 @@ interface ConfigInterface
      *
      * @param string $topicName
      * @return string
+     * @see \Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder::getQueueName
      */
     public function getResponseQueueName($topicName);
 }

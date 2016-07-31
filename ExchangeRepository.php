@@ -30,6 +30,7 @@ class ExchangeRepository
     /**
      * @param string $connectionName
      * @return ExchangeInterface
+     * @throws \LogicException
      */
     public function getByConnectionName($connectionName)
     {

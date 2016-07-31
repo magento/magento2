@@ -8,8 +8,8 @@ namespace Magento\Framework\MessageQueue;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\ExchangeRepository;
 use Magento\Framework\MessageQueue\PublisherInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
+use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 
 /**
  * A MessageQueue Publisher to handle publishing a message.
@@ -27,11 +27,6 @@ class Publisher implements PublisherInterface
     private $envelopeFactory;
 
     /**
-     * @var MessageQueueConfig
-     */
-    private $messageQueueConfig;
-
-    /**
      * @var MessageEncoder
      */
     private $messageEncoder;
@@ -42,6 +37,11 @@ class Publisher implements PublisherInterface
     private $messageValidator;
 
     /**
+     * @var PublisherConfig
+     */
+    private $publisherConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param ExchangeRepository $exchangeRepository
@@ -50,6 +50,8 @@ class Publisher implements PublisherInterface
      * @param MessageEncoder $messageEncoder
      * @param MessageValidator $messageValidator
      * @internal param ExchangeInterface $exchange
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ExchangeRepository $exchangeRepository,
@@ -60,7 +62,6 @@ class Publisher implements PublisherInterface
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
-        $this->messageQueueConfig = $messageQueueConfig;
         $this->messageEncoder = $messageEncoder;
         $this->messageValidator = $messageValidator;
     }
@@ -81,9 +82,24 @@ class Publisher implements PublisherInterface
                 ]
             ]
         );
-        $connectionName = $this->messageQueueConfig->getConnectionByTopic($topicName);
+        $connectionName = $this->getPublisherConfig()->getPublisher($topicName)->getConnection()->getName();
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $exchange->enqueue($topicName, $envelope);
         return null;
+    }
+
+    /**
+     * Get publisher config.
+     *
+     * @return PublisherConfig
+     *
+     * @deprecated
+     */
+    private function getPublisherConfig()
+    {
+        if ($this->publisherConfig === null) {
+            $this->publisherConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(PublisherConfig::class);
+        }
+        return $this->publisherConfig;
     }
 }

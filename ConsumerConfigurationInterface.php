@@ -10,6 +10,20 @@ namespace Magento\Framework\MessageQueue;
  */
 interface ConsumerConfigurationInterface
 {
+    const CONSUMER_NAME = "consumer_name";
+
+    const QUEUE_NAME = "queue_name";
+    const MAX_MESSAGES = "max_messages";
+    const SCHEMA_TYPE = "schema_type";
+    const TOPICS = 'topics';
+    const TOPIC_TYPE = 'consumer_type';
+    const TOPIC_HANDLERS = 'handlers';
+
+    const TYPE_SYNC = 'sync';
+    const TYPE_ASYNC = 'async';
+    const INSTANCE_TYPE_BATCH = 'batch';
+    const INSTANCE_TYPE_SINGULAR = 'singular';
+
     /**
      * Get consumer name.
      *
@@ -28,6 +42,9 @@ interface ConsumerConfigurationInterface
      * Get consumer type sync|async.
      *
      * @return string
+     * @deprecated
+     * @see \Magento\Framework\Communication\ConfigInterface::getTopic
+     * @throws \LogicException
      */
     public function getType();
 
@@ -43,6 +60,7 @@ interface ConsumerConfigurationInterface
      *
      * @param string $topicName
      * @return callback[]
+     * @throws \LogicException
      */
     public function getHandlers($topicName);
 
