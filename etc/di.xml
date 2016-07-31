@@ -6,6 +6,15 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\MessageQueue\Consumer\Config\CompositeReader">
+        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Consumer\ConfigReaderPlugin" />
+    </type>
+    <type name="Magento\Framework\MessageQueue\Publisher\Config\CompositeReader">
+        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Publisher\ConfigReaderPlugin" />
+    </type>
+    <type name="Magento\Framework\MessageQueue\Topology\Config\CompositeReader">
+        <plugin name="queueConfigPlugin" type="Magento\Framework\MessageQueue\Config\Topology\ConfigReaderPlugin" />
+    </type>
     <type name="Magento\Framework\MessageQueue\QueueRepository">
         <arguments>
             <argument name="queues" xsi:type="array">
@@ -17,19 +26,6 @@
         <arguments>
             <argument name="exchanges" xsi:type="array">
                 <item name="amqp" xsi:type="string">Magento\Amqp\Model\Exchange</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\MessageQueue\ConsumerFactory">
-        <arguments>
-            <argument name="consumers" xsi:type="array">
-                <item name="amqp" xsi:type="array">
-                    <item name="connectionName" xsi:type="string">amqp</item>
-                    <item name="type" xsi:type="array">
-                        <item name="async" xsi:type="string">Magento\Framework\MessageQueue\Consumer</item>
-                        <item name="sync" xsi:type="string">Magento\Framework\MessageQueue\Rpc\Consumer</item>
-                    </item>
-                </item>
             </argument>
         </arguments>
     </type>
