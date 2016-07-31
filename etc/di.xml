@@ -11,6 +11,7 @@
     <preference for="Magento\Framework\MessageQueue\Lock\WriterInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock" />
     <preference for="Magento\Framework\MessageQueue\Lock\ReaderInterface" type="Magento\MessageQueue\Model\ResourceModel\Lock" />
     <preference for="Magento\Framework\MessageQueue\EnvelopeInterface" type="Magento\Framework\MessageQueue\Envelope"/>
+    <preference for="Magento\Framework\MessageQueue\ConsumerInterface" type="Magento\Framework\MessageQueue\Consumer"/>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
