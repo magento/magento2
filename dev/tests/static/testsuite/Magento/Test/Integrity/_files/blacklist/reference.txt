@@ -112,3 +112,5 @@ DoubleColon
 \Magento\Framework\Model\Name
 \Magento\Test\Di\WrappedClass
 \Magento\Test\Di\WrappedClass\Logger
+\Magento\TestModuleMessageQueueConfiguration\AsyncHandler
+\Magento\TestModuleMessageQueueConfiguration\SyncHandler
