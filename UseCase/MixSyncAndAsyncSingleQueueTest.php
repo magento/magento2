@@ -24,7 +24,7 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 
     public function testMixSyncAndAsyncSingleQueue()
     {
-        $this->msgObject = $this->objectManager->create('Magento\TestModuleAsyncAmqp\Model\AsyncTestData');
+        $this->msgObject = $this->objectManager->create(\Magento\TestModuleAsyncAmqp\Model\AsyncTestData::class);
 
         // Publish asynchronous messages
         foreach ($this->messages as $item) {

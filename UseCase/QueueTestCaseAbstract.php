@@ -39,7 +39,7 @@ abstract class QueueTestCaseAbstract extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->publisher = $this->objectManager->get(PublisherInterface::class);
         /** @var \Magento\Framework\OsInfo $osInfo */
-        $osInfo = $this->objectManager->get('Magento\Framework\OsInfo');
+        $osInfo = $this->objectManager->get(\Magento\Framework\OsInfo::class);
         if ($osInfo->isWindows()) {
             $this->markTestSkipped("This test relies on *nix shell and should be skipped in Windows environment.");
         }

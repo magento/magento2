@@ -39,7 +39,7 @@ class AsyncMultiTopicsSeparateQueuesTest extends QueueTestCaseAbstract
      */
     public function testAsyncMultipleTopicsPerQueue()
     {
-        $this->msgObject = $this->objectManager->create('Magento\TestModuleAsyncAmqp\Model\AsyncTestData');
+        $this->msgObject = $this->objectManager->create(\Magento\TestModuleAsyncAmqp\Model\AsyncTestData::class);
 
         foreach ($this->topics as $topic) {
             $this->uniqueID[$topic] = md5(uniqid($topic));

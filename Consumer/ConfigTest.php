@@ -41,7 +41,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('consumer1', $consumer->getName());
         $this->assertEquals('queue1', $consumer->getQueue());
         $this->assertEquals('amqp', $consumer->getConnection());
-        $this->assertEquals('Magento\Framework\MessageQueue\BatchConsumer', $consumer->getConsumerInstance());
+        $this->assertEquals( \Magento\Framework\MessageQueue\BatchConsumer::class, $consumer->getConsumerInstance());
         $this->assertEquals('100', $consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
@@ -60,7 +60,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('consumer5', $consumer->getName());
         $this->assertEquals('queue5', $consumer->getQueue());
         $this->assertEquals('amqp', $consumer->getConnection());
-        $this->assertEquals('Magento\Framework\MessageQueue\ConsumerInterface', $consumer->getConsumerInstance());
+        $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
         $this->assertEquals(null, $consumer->getMaxMessages());
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
