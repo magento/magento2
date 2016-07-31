@@ -15,6 +15,9 @@ if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
 }
 
+$testFrameworkDir = __DIR__;
+require_once 'deployTestModules.php';
+
 try {
     setCustomErrorHandler();
 

@@ -83,4 +83,36 @@ class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider isSetAddressInfoDataProvider
+     * @param array $ip
+     * @param bool $expected
+     */
+    public function testIsSetAddressInfo($ip, $expected)
+    {
+        $this->maintenanceMode
+            ->expects($this->any())
+            ->method('getAddressInfo')
+            ->willReturn($ip);
+
+        $this->assertEquals($expected, $this->command->isSetAddressInfo());
+    }
+
+    /**
+     * return array
+     */
+    public function isSetAddressInfoDataProvider()
+    {
+        return [
+            [
+                'ip' => ['127.0.0.1', '127.0.0.2'],
+                'expected' => true
+            ],
+            [
+                'ip' => [],
+                'expected' => false
+            ],
+        ];
+    }
 }

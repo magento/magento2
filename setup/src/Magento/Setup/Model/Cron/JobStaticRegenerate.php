@@ -43,8 +43,6 @@ class JobStaticRegenerate extends AbstractJob
     ) {
         $this->cleanupFiles = $objectManagerProvider->get()->get(\Magento\Framework\App\State\CleanupFiles::class);
         $this->cache = $objectManagerProvider->get()->get(\Magento\Framework\App\Cache::class);
-        $this->output = $output;
-        $this->status = $status;
 
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
