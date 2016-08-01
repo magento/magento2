@@ -18,7 +18,7 @@ use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * Class PublicationDecoratorTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
 {

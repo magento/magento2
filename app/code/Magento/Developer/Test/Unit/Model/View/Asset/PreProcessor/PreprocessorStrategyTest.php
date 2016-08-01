@@ -53,11 +53,6 @@ class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
     private $objectMangerMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfigMock;
-
-    /**
      * Set up
      */
     protected function setUp()
