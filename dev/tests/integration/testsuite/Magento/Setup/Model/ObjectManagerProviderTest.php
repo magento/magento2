@@ -23,7 +23,7 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->locator = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
-        $this->object = new ObjectManagerProvider($this->locator);
+        $this->object = new ObjectManagerProvider($this->locator, new Bootstrap());
     }
 
     public function testGet()
