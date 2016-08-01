@@ -64,32 +64,38 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
+        $this->eventManagerMock = $this->getMock(\Magento\Framework\Event\Manager::class, [], [], '', false);
         $this->productFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ProductFactory',
+            \Magento\Catalog\Model\ProductFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->jsonHelperMock = $this->getMock('Magento\Framework\Json\Helper\Data', ['jsonDecode'], [], '', false);
+        $this->jsonHelperMock = $this->getMock(
+            \Magento\Framework\Json\Helper\Data::class,
+            ['jsonDecode'],
+            [],
+            '',
+            false
+        );
         $this->jsonHelperMock->expects($this->any())->method('jsonDecode')->will($this->returnArgument(0));
         $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getData', 'getAttributes'],
             [],
             '',
             false
         );
         $this->requestMock = $this->getMock(
-            'Magento\Framework\App\Request\Http',
+            \Magento\Framework\App\Request\Http::class,
             ['getPost', 'getParam', '__wakeup'],
             [],
             '',
             false
         );
         $this->responseMock = $this->getMock(
-            'Magento\Framework\DataObject',
+            \Magento\Framework\DataObject::class,
             ['setError', 'setMessage', 'setAttributes'],
             [],
             '',
@@ -100,7 +106,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () use ($proceedResult) {
             return $proceedResult;
         };
-        $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product\Validator', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Catalog\Model\Product\Validator::class, [], [], '', false);
         $this->plugin = new \Magento\ConfigurableProduct\Model\Product\Validator\Plugin(
             $this->eventManagerMock,
             $this->productFactoryMock,
@@ -113,7 +119,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $matrix = ['products'];
 
         $plugin = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Validator\Plugin',
+            \Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class,
             ['_validateProductVariations'],
             [$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock]
         );
@@ -159,7 +165,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $matrix = ['products'];
 
         $plugin = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Validator\Plugin',
+            \Magento\ConfigurableProduct\Model\Product\Validator\Plugin::class,
             ['_validateProductVariations'],
             [$this->eventManagerMock, $this->productFactoryMock, $this->jsonHelperMock]
         );
@@ -331,7 +337,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     private function createProduct($index, $id, $isValid = true)
     {
         $productMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
+            \Magento\Catalog\Model\Product::class,
             ['getAttributes', 'addData', 'setAttributeSetId', 'validate'],
             [],
             '',
@@ -355,7 +361,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     private function createAttribute($attributeCode, $isUserDefined, $isRequired)
     {
-        $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode', 'getIsUserDefined', 'getIsRequired'])
             ->getMock();

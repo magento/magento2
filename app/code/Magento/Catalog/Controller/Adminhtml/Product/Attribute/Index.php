@@ -15,7 +15,7 @@ class Index extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     {
         $resultPage = $this->createActionPage();
         $resultPage->addContent(
-            $resultPage->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Product\Attribute')
+            $resultPage->getLayout()->createBlock(\Magento\Catalog\Block\Adminhtml\Product\Attribute::class)
         );
         return $resultPage;
     }

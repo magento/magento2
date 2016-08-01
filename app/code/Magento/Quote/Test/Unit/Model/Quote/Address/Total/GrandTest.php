@@ -17,7 +17,7 @@ class GrandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Quote\Model\Quote\Address\Total\Grand');
+        $this->model = $objectManager->getObject(\Magento\Quote\Model\Quote\Address\Total\Grand::class);
     }
 
     public function testCollect()
@@ -28,7 +28,7 @@ class GrandTest extends \PHPUnit_Framework_TestCase
         $grandTotalBase = 15.7; // 4 + 5 + 6.7
 
         $totalMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address\Total',
+            \Magento\Quote\Model\Quote\Address\Total::class,
             ['getAllTotalAmounts', 'getAllBaseTotalAmounts', 'setGrandTotal', 'setBaseGrandTotal'],
             [],
             '',
@@ -40,8 +40,8 @@ class GrandTest extends \PHPUnit_Framework_TestCase
         $totalMock->expects($this->once())->method('setBaseGrandTotal')->with($grandTotalBase);
 
         $this->model->collect(
-            $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false),
-            $this->getMock('\Magento\Quote\Api\Data\ShippingAssignmentInterface'),
+            $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false),
+            $this->getMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class),
             $totalMock
         );
     }

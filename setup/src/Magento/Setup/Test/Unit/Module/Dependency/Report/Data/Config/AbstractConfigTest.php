@@ -13,7 +13,7 @@ class AbstractConfigTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Setup\Module\Dependency\Report\Data\Config\AbstractConfig $config */
         $config = $this->getMockForAbstractClass(
-            'Magento\Setup\Module\Dependency\Report\Data\Config\AbstractConfig',
+            \Magento\Setup\Module\Dependency\Report\Data\Config\AbstractConfig::class,
             ['modules' => $modules]
         );
 

@@ -29,14 +29,14 @@ class ConstructorArgumentTypesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->argumentsReaderMock = $this->getMock(
-            '\Magento\Framework\Code\Reader\ArgumentsReader',
+            \Magento\Framework\Code\Reader\ArgumentsReader::class,
             [],
             [],
             '',
             false
         );
         $this->sourceArgumentsReaderMock = $this->getMock(
-            '\Magento\Framework\Code\Reader\SourceArgumentsReader',
+            \Magento\Framework\Code\Reader\SourceArgumentsReader::class,
             [],
             [],
             '',

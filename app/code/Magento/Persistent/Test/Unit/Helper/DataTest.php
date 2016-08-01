@@ -19,10 +19,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_modulesReader = $this->getMock('\Magento\Framework\Module\Dir\Reader', [], [], '', false);
+        $this->_modulesReader = $this->getMock(\Magento\Framework\Module\Dir\Reader::class, [], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_helper = $objectManager->getObject(
-            'Magento\Persistent\Helper\Data',
+            \Magento\Persistent\Helper\Data::class,
             ['modulesReader' => $this->_modulesReader]
         );
     }

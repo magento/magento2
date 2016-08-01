@@ -46,7 +46,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data implements
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Mview\Config\Data',
+        $instanceName = \Magento\Framework\Mview\Config\Data::class,
         $shared = true
     ) {
         $this->objectManager = $objectManager;

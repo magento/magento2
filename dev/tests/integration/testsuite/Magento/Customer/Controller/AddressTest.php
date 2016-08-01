@@ -21,9 +21,9 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     protected function setUp()
     {
         parent::setUp();
-        $logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
+        $logger = $this->getMock(\Psr\Log\LoggerInterface::class, [], [], '', false);
         $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Session',
+            \Magento\Customer\Model\Session::class,
             [$logger]
         );
         $this->accountManagement = Bootstrap::getObjectManager()->create(AccountManagementInterface::class);
@@ -72,7 +72,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             'POST'
         )->setPostValue(
             [
-                'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+                'form_key' => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
                 'company' => 'Magento Commerce Inc.',
@@ -127,7 +127,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
             'POST'
         )->setPostValue(
             [
-                'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
+                'form_key' => $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class)->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
                 'company' => 'Magento Commerce Inc.',
