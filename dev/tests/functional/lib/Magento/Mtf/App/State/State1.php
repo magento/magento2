@@ -46,7 +46,7 @@ class State1 extends AbstractState
         parent::apply();
         if (file_exists(dirname(dirname(dirname(MTF_BP))) . '/app/etc/config.php')) {
             $this->objectManager->create(
-                '\Magento\Config\Test\TestStep\SetupConfigurationStep',
+                \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
                 ['configData' => $this->config]
             )->run();
         }

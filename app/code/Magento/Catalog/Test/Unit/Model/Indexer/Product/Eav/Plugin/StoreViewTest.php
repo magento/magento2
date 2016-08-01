@@ -13,18 +13,18 @@ class StoreViewTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave(array $data)
     {
-        $eavProcessorMock = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Product\Eav\Processor')
+        $eavProcessorMock = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $matcher = $data['matcher'];
         $eavProcessorMock->expects($this->$matcher())
             ->method('markIndexerAsInvalid');
 
-        $subjectMock = $this->getMockBuilder('Magento\Store\Model\ResourceModel\Store')
+        $subjectMock = $this->getMockBuilder(\Magento\Store\Model\ResourceModel\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectMock = $this->getMockBuilder('Magento\Framework\Model\AbstractModel')
+        $objectMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'dataHasChangedFor', 'getIsActive', '__wakeup'])
             ->getMock();

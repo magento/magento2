@@ -75,7 +75,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ImportExport\Model\ResourceModel\History');
+        $this->_init(\Magento\ImportExport\Model\ResourceModel\History::class);
     }
 
     /**
@@ -269,6 +269,7 @@ class History extends \Magento\Framework\Model\AbstractModel
     {
         return $this->setData(self::ERROR_FILE, $errorFile);
     }
+
     /**
      * Set Execution Time
      *

@@ -250,8 +250,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Type'),
                 'type' => 'select',
                 'index' => 'type',
-                'filter' => 'Magento\Review\Block\Adminhtml\Grid\Filter\Type',
-                'renderer' => 'Magento\Review\Block\Adminhtml\Grid\Renderer\Type'
+                'filter' => \Magento\Review\Block\Adminhtml\Grid\Filter\Type::class,
+                'renderer' => \Magento\Review\Block\Adminhtml\Grid\Renderer\Type::class
             ]
         );
 

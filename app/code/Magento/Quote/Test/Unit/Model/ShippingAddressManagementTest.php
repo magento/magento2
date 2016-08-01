@@ -10,6 +10,9 @@
 namespace Magento\Quote\Test\Unit\Model;
 
 use \Magento\Quote\Model\ShippingAddressManagement;
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -50,11 +53,11 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->quoteRepositoryMock = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->quoteAddressMock = $this->getMock(
-            '\Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             [
                 'setSameAsBilling',
                 'setCollectShippingRates',
@@ -70,15 +73,21 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->validatorMock = $this->getMock(
-            'Magento\Quote\Model\QuoteAddressValidator', [], [], '', false
+            \Magento\Quote\Model\QuoteAddressValidator::class, [], [], '', false
         );
-        $this->totalsCollectorMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
+        $this->totalsCollectorMock = $this->getMock(
+            \Magento\Quote\Model\Quote\TotalsCollector::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->service = $this->objectManager->getObject(
-            '\Magento\Quote\Model\ShippingAddressManagement',
+            \Magento\Quote\Model\ShippingAddressManagement::class,
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'addressValidator' => $this->validatorMock,
-                'logger' => $this->getMock('\Psr\Log\LoggerInterface'),
+                'logger' => $this->getMock(\Psr\Log\LoggerInterface::class),
                 'scopeConfig' => $this->scopeConfigMock,
                 'totalsCollector' => $this->totalsCollectorMock
             ]
@@ -91,7 +100,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressValidationFailed()
     {
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart654')
@@ -107,7 +116,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('MAGETWO-48531');
         $addressId = 1;
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')
@@ -143,7 +152,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAddressForVirtualProduct()
     {
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('getActive')
             ->with('cart867')
@@ -170,7 +179,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
             new \Exception('Unable to save address. Please check input data.')
         );
 
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->totalsCollectorMock
             ->expects($this->once())
             ->method('collectAddressTotals')
@@ -197,7 +206,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
         $storeId = 12;
         $this->quoteAddressMock->expects($this->once())->method('save');
 
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cart123')
             ->will($this->returnValue($quoteMock));
         $quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(false));
@@ -215,12 +224,12 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAddress()
     {
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );
 
-        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $addressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $quoteMock->expects($this->any())->method('getShippingAddress')->will($this->returnValue($addressMock));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue(false));
         $this->assertEquals($addressMock, $this->service->get('cartId'));
@@ -232,7 +241,7 @@ class ShippingAddressManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAddressOfQuoteWithVirtualProducts()
     {
-        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock = $this->getMock(\Magento\Quote\Model\Quote::class, [], [], '', false);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );

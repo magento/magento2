@@ -54,7 +54,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                     $this->messageManager->addErrorMessage($exception->getMessage());
                     return $resultRedirect->setPath('admin');
                 }
-                $collection = $this->_objectManager->get('Magento\User\Model\ResourceModel\User\Collection');
+                $collection = $this->_objectManager->get(\Magento\User\Model\ResourceModel\User\Collection::class);
                 /** @var $collection \Magento\User\Model\ResourceModel\User\Collection */
                 $collection->addFieldToFilter('email', $email);
                 $collection->load(false);
@@ -66,7 +66,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                             $user = $this->_userFactory->create()->load($item->getId());
                             if ($user->getId()) {
                                 $newPassResetToken = $this->_objectManager->get(
-                                    'Magento\User\Helper\Data'
+                                    \Magento\User\Helper\Data::class
                                 )->generateResetPasswordLinkToken();
                                 $user->changeResetPasswordLinkToken($newPassResetToken);
                                 $user->save();
@@ -86,7 +86,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
                 $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
-                    $this->_objectManager->get('Magento\Backend\Helper\Data')->getHomePageUrl()
+                    $this->_objectManager->get(\Magento\Backend\Helper\Data::class)->getHomePageUrl()
                 );
                 return;
             } else {

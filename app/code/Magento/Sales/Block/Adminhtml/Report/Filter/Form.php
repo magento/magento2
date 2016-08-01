@@ -89,7 +89,7 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
                 $this->setChild(
                     'form_after',
                     $this->getLayout()->createBlock(
-                        'Magento\Backend\Block\Widget\Form\Element\Dependence'
+                        \Magento\Backend\Block\Widget\Form\Element\Dependence::class
                     )->addFieldMap(
                         "{$htmlIdPrefix}show_order_statuses",
                         'show_order_statuses'

@@ -26,8 +26,8 @@ class LocaleQuantityProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resolver = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')->getMock();
-        $this->filter   = $this->getMockBuilder('Magento\Framework\Filter\LocalizedToNormalized')
+        $this->resolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)->getMock();
+        $this->filter   = $this->getMockBuilder(\Magento\Framework\Filter\LocalizedToNormalized::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->processor = new LocaleQuantityProcessor($this->resolver, $this->filter);

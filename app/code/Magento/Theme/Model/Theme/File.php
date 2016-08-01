@@ -78,7 +78,7 @@ class File extends AbstractModel implements FileInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Theme\Model\ResourceModel\Theme\File');
+        $this->_init(\Magento\Theme\Model\ResourceModel\Theme\File::class);
     }
 
     /**

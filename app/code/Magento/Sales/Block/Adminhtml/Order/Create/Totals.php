@@ -26,7 +26,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      *
      * @var string
      */
-    protected $_defaultRenderer = 'Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals';
+    protected $_defaultRenderer = \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals::class;
 
     /**
      * Sales data

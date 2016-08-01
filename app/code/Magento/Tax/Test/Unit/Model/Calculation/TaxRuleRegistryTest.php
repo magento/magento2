@@ -35,15 +35,15 @@ class TaxRuleRegistryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->taxRuleModelFactoryMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\RuleFactory')
+        $this->taxRuleModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RuleFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->taxRuleRegistry = $objectManager->getObject(
-            'Magento\Tax\Model\Calculation\TaxRuleRegistry',
+            \Magento\Tax\Model\Calculation\TaxRuleRegistry::class,
             ['taxRuleModelFactory' => $this->taxRuleModelFactoryMock]
         );
-        $this->taxRuleModelMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Rule')
+        $this->taxRuleModelMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

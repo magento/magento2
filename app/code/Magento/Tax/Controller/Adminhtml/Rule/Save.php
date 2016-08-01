@@ -36,7 +36,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
                 $this->messageManager->addError(__('We can\'t save this tax rule right now.'));
             }
 
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setRuleData($postData);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setRuleData($postData);
             return $resultRedirect->setUrl($this->_redirect->getRedirectUrl($this->getUrl('*')));
         }
         return $resultRedirect->setPath('tax/rule');

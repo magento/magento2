@@ -290,7 +290,7 @@ class Config
         $entityTypesData = $this->entityTypeCollectionFactory->create()->getData();
         foreach ($entityTypesData as $typeData) {
             if (!isset($typeData['attribute_model'])) {
-                $typeData['attribute_model'] = 'Magento\Eav\Model\Entity\Attribute';
+                $typeData['attribute_model'] = \Magento\Eav\Model\Entity\Attribute::class;
             }
 
             $typeCode = $typeData['entity_type_code'];

@@ -100,7 +100,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $this->dataObjectHelper->populateWithArray(
             $quoteTotals,
             $addressTotalsData,
-            '\Magento\Quote\Api\Data\TotalsInterface'
+            \Magento\Quote\Api\Data\TotalsInterface::class
         );
         $items = [];
         foreach ($quote->getAllVisibleItems() as $index => $item) {

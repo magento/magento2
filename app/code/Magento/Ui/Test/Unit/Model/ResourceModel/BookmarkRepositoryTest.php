@@ -11,6 +11,8 @@ use Magento\Ui\Model\ResourceModel\BookmarkRepository;
 
 /**
  * Class BookmarkRepositoryTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,10 +41,10 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->bookmarkMock = $this->getMockBuilder('Magento\Ui\Model\Bookmark')
+        $this->bookmarkMock = $this->getMockBuilder(\Magento\Ui\Model\Bookmark::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $bookmarkFactoryMock = $this->getMockBuilder('Magento\Ui\Api\Data\BookmarkInterfaceFactory')
+        $bookmarkFactoryMock = $this->getMockBuilder(\Magento\Ui\Api\Data\BookmarkInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -50,16 +52,16 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $bookmarkFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->bookmarkMock);
-        $this->bookmarkResourceMock = $this->getMockBuilder('Magento\Ui\Model\ResourceModel\Bookmark')
+        $this->bookmarkResourceMock = $this->getMockBuilder(\Magento\Ui\Model\ResourceModel\Bookmark::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'save', 'delete'])
             ->getMock();
 
-        $this->searchResultsMock = $this->getMockBuilder('Magento\Ui\Api\Data\BookmarkSearchResultsInterface')
+        $this->searchResultsMock = $this->getMockBuilder(\Magento\Ui\Api\Data\BookmarkSearchResultsInterface::class)
             ->getMockForAbstractClass();
         /** @var $searchResultsFactoryMock \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory */
         $searchResultsFactoryMock = $this->getMockBuilder(
-            'Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory'
+            \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory::class
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $searchResultsFactoryMock->expects($this->any())->method('create')->willReturn($this->searchResultsMock);
 
@@ -85,7 +87,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->bookmarkMock)
             ->willThrowException(new \Exception($exceptionMessage));
-        $this->setExpectedException('Magento\Framework\Exception\CouldNotSaveException', __($exceptionMessage));
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotSaveException::class, __($exceptionMessage));
         $this->bookmarkRepository->save($this->bookmarkMock);
     }
 
@@ -113,7 +115,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->bookmarkMock, $notExistsBookmarkId)
             ->willReturn($this->bookmarkMock);
         $this->setExpectedException(
-            'Magento\Framework\Exception\NoSuchEntityException',
+            \Magento\Framework\Exception\NoSuchEntityException::class,
             __('Bookmark with id "%1" does not exist.', $notExistsBookmarkId)
         );
         $this->bookmarkRepository->getById($notExistsBookmarkId);
@@ -134,7 +136,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->with($this->bookmarkMock)
             ->willThrowException(new \Exception($exceptionMessage));
-        $this->setExpectedException('Magento\Framework\Exception\CouldNotDeleteException', __($exceptionMessage));
+        $this->setExpectedException(\Magento\Framework\Exception\CouldNotDeleteException::class, __($exceptionMessage));
         $this->assertTrue($this->bookmarkRepository->delete($this->bookmarkMock));
     }
 
@@ -152,10 +154,10 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->with($this->bookmarkMock, $bookmarkId)
             ->willReturn($this->bookmarkMock);
-        $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')
+        $filterGroup = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $sortOrderAsc = $this->getMockBuilder('Magento\Framework\Api\SortOrder')
+        $sortOrderAsc = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $sortOrderAsc->expects($this->once())
@@ -164,7 +166,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $sortOrderAsc->expects($this->once())
             ->method('getDirection')
             ->willReturn(SortOrder::SORT_ASC);
-        $sortOrderDesc = $this->getMockBuilder('Magento\Framework\Api\SortOrder')
+        $sortOrderDesc = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $sortOrderDesc->expects($this->once())
@@ -173,7 +175,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $sortOrderDesc->expects($this->once())
             ->method('getDirection')
             ->willReturn(SortOrder::SORT_DESC);
-        $fieldAsc = $this->getMockBuilder('Magento\Framework\Api\Filter')
+        $fieldAsc = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fieldAsc->expects($this->once())
@@ -185,7 +187,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $fieldAsc->expects($this->any())
             ->method('getConditionType')
             ->willReturn(false);
-        $fieldDesc = $this->getMockBuilder('Magento\Framework\Api\Filter')
+        $fieldDesc = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fieldDesc->expects($this->once())
@@ -200,7 +202,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterGroup->expects($this->once())
             ->method('getFilters')
             ->willReturn([$fieldAsc, $fieldDesc]);
-        $collection = $this->getMockBuilder('Magento\Ui\Model\ResourceModel\Bookmark\Collection')
+        $collection = $this->getMockBuilder(\Magento\Ui\Model\ResourceModel\Bookmark\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())
@@ -215,7 +217,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->bookmarkMock->expects($this->once())
             ->method('getCollection')
             ->willReturn($collection);
-        $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaInterface')
+        $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
             ->getMockForAbstractClass();
         $searchCriteria->expects($this->once())
             ->method('getFilterGroups')

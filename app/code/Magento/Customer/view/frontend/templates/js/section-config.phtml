@@ -9,7 +9,7 @@
 ?>
 <script type="text/x-magento-init">
 <?php
-    /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode([
+    /* @escapeNotVerified */ echo $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode([
         '*' => ['Magento_Customer/js/section-config' => [
             'sections' => $block->getSections(),
             'clientSideSections' => $block->getClientSideSections(),
