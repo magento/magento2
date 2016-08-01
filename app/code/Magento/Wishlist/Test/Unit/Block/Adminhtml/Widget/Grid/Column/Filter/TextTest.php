@@ -16,7 +16,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->textFilterBlock = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text'
+            \Magento\Wishlist\Block\Adminhtml\Widget\Grid\Column\Filter\Text::class
         );
     }
 

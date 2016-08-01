@@ -17,8 +17,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testSetMethodFormTemplate()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $childBlockA = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template');
-        $childBlockB = $objectManagerHelper->getObject('Magento\Framework\View\Element\Template');
+        $childBlockA = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template::class);
+        $childBlockB = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Template::class);
 
         $func = function ($blockName) use ($childBlockA, $childBlockB) {
             switch ($blockName) {
@@ -29,7 +29,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             }
             return null;
         };
-        $block = $this->getMock('Magento\Payment\Block\Form\Container', ['getChildBlock'], [], '', false);
+        $block = $this->getMock(\Magento\Payment\Block\Form\Container::class, ['getChildBlock'], [], '', false);
         $block->expects($this->atLeastOnce())->method('getChildBlock')->will($this->returnCallback($func));
 
         $template = 'any_template.phtml';

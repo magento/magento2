@@ -21,14 +21,14 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->agreementFactory = $this->getMockBuilder('Magento\Paypal\Model\Billing\AgreementFactory')
+        $this->agreementFactory = $this->getMockBuilder(\Magento\Paypal\Model\Billing\AgreementFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            'Magento\Paypal\Model\Method\Checks\SpecificationPlugin',
+            \Magento\Paypal\Model\Method\Checks\SpecificationPlugin::class,
             [
                 'agreementFactory' => $this->agreementFactory
             ]
@@ -69,7 +69,7 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
         $quote = $this->getQuote(1);
         $proceed = $this->getProceedClosure(true, $paymentMethod, $quote);
         $agreementCollection = $this->getMock(
-            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection',
+            \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection::class,
             [],
             [],
             '',
@@ -78,7 +78,7 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
         $agreementCollection->expects($this->once())
             ->method('count')
             ->will($this->returnValue($count));
-        $agreement = $this->getMock('Magento\Paypal\Model\Billing\Agreement', [], [], '', false);
+        $agreement = $this->getMock(\Magento\Paypal\Model\Billing\Agreement::class, [], [], '', false);
         $agreement->expects($this->once())
             ->method('getAvailableCustomerBillingAgreements')
             ->with(1)
@@ -118,7 +118,7 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
      */
     private function getPaymentMethod($code)
     {
-        $paymentMethod = $this->getMockForAbstractClass('Magento\Payment\Model\MethodInterface');
+        $paymentMethod = $this->getMockForAbstractClass(\Magento\Payment\Model\MethodInterface::class);
         $paymentMethod->expects($this->any())
             ->method('getCode')
             ->will($this->returnValue($code));
@@ -133,7 +133,7 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
      */
     private function getQuote($customerId)
     {
-        $quote = $this->getMock('Magento\Quote\Model\Quote', ['__wakeup'], [], '', false);
+        $quote = $this->getMock(\Magento\Quote\Model\Quote::class, ['__wakeup'], [], '', false);
         $quote->setCustomerId($customerId);
         return $quote;
     }
@@ -151,7 +151,7 @@ class SpecificationPluginTest extends \PHPUnit_Framework_TestCase
         MethodInterface $paymentMethod,
         Quote $quote
     ) {
-        $specification = $this->getMockForAbstractClass('Magento\Payment\Model\Checks\SpecificationInterface');
+        $specification = $this->getMockForAbstractClass(\Magento\Payment\Model\Checks\SpecificationInterface::class);
         return $this->model->aroundIsApplicable($specification, $proceed, $paymentMethod, $quote);
     }
 }

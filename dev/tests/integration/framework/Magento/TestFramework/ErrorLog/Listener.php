@@ -73,7 +73,7 @@ class Listener implements \PHPUnit_Framework_TestListener
      */
     public function startTest(\PHPUnit_Framework_Test $test)
     {
-        $this->logger = Helper\Bootstrap::getObjectManager()->get('Magento\TestFramework\ErrorLog\Logger');
+        $this->logger = Helper\Bootstrap::getObjectManager()->get(\Magento\TestFramework\ErrorLog\Logger::class);
         $this->logger->clearMessages();
     }
 

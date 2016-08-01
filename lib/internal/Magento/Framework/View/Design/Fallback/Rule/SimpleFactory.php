@@ -30,6 +30,6 @@ class SimpleFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\View\Design\Fallback\Rule\Simple', $data);
+        return $this->objectManager->create(\Magento\Framework\View\Design\Fallback\Rule\Simple::class, $data);
     }
 }

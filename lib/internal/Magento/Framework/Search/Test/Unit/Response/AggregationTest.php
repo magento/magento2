@@ -19,7 +19,7 @@ class AggregationTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectManager($this);
 
         $buckets = [];
-        $bucket = $this->getMockBuilder('Magento\Framework\Search\Response\Bucket')
+        $bucket = $this->getMockBuilder(\Magento\Framework\Search\Response\Bucket::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -28,7 +28,7 @@ class AggregationTest extends \PHPUnit_Framework_TestCase
         $buckets[1] = $bucket;
 
         $this->aggregation = $helper->getObject(
-            'Magento\Framework\Search\Response\Aggregation',
+            \Magento\Framework\Search\Response\Aggregation::class,
             [
                 'buckets' => $buckets,
             ]

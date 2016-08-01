@@ -38,7 +38,7 @@ abstract class AbstractIndexerManageCommand extends AbstractIndexerCommand
         if (empty($requestedTypes)) {
             return $this->getAllIndexers();
         } else {
-            $indexerFactory = $this->getObjectManager()->create('Magento\Indexer\Model\IndexerFactory');
+            $indexerFactory = $this->getObjectManager()->create(\Magento\Indexer\Model\IndexerFactory::class);
             $indexers = [];
             $unsupportedTypes = [];
             foreach ($requestedTypes as $code) {

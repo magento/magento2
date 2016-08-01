@@ -29,8 +29,8 @@ class MaintenanceDisableCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
-        $this->ipValidator = $this->getMock('Magento\Setup\Validator\IpValidator', [], [], '', false);
+        $this->maintenanceMode = $this->getMock(\Magento\Framework\App\MaintenanceMode::class, [], [], '', false);
+        $this->ipValidator = $this->getMock(\Magento\Setup\Validator\IpValidator::class, [], [], '', false);
         $this->command = new MaintenanceDisableCommand($this->maintenanceMode, $this->ipValidator);
     }
 

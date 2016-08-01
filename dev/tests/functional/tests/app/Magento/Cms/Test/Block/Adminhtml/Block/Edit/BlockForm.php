@@ -64,7 +64,7 @@ class BlockForm extends Form
     public function getWysiwygConfig()
     {
         return $this->blockFactory->create(
-            'Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config',
+            \Magento\Cms\Test\Block\Adminhtml\Wysiwyg\Config::class,
             ['element' => $this->_rootElement->find($this->customVariableBlock, Locator::SELECTOR_XPATH)]
         );
     }

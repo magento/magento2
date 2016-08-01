@@ -56,22 +56,22 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
-        $this->swatchFactory = $this->getMock('\Magento\Swatches\Model\SwatchFactory', ['create'], [], '', false);
-        $this->swatchHelper = $this->getMock('\Magento\Swatches\Helper\Data', [], [], '', false);
-        $this->swatch = $this->getMock('\Magento\Swatches\Model\Swatch', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Swatches\Model\ResourceModel\Swatch', [], [], '', false);
+        $this->attribute = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
+        $this->swatchFactory = $this->getMock(\Magento\Swatches\Model\SwatchFactory::class, ['create'], [], '', false);
+        $this->swatchHelper = $this->getMock(\Magento\Swatches\Helper\Data::class, [], [], '', false);
+        $this->swatch = $this->getMock(\Magento\Swatches\Model\Swatch::class, [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Swatches\Model\ResourceModel\Swatch::class, [], [], '', false);
         $this->collection =
-            $this->getMock('\Magento\Swatches\Model\ResourceModel\Swatch\Collection', [], [], '', false);
+            $this->getMock(\Magento\Swatches\Model\ResourceModel\Swatch\Collection::class, [], [], '', false);
         $this->collectionFactory = $this->getMock(
-            '\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory',
+            \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->abstractSource = $this->getMock(
-            '\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
+            \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class,
             [],
             [],
             '',
@@ -80,7 +80,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavAttribute = $objectManager->getObject(
-            'Magento\Swatches\Model\Plugin\EavAttribute',
+            \Magento\Swatches\Model\Plugin\EavAttribute::class,
             [
                 'collectionFactory' => $this->collectionFactory,
                 'swatchFactory' => $this->swatchFactory,

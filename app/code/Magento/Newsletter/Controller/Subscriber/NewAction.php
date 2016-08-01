@@ -13,6 +13,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class NewAction extends \Magento\Newsletter\Controller\Subscriber
 {
     /**
@@ -75,7 +78,7 @@ class NewAction extends \Magento\Newsletter\Controller\Subscriber
      */
     protected function validateGuestSubscription()
     {
-        if ($this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')
+        if ($this->_objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class)
                 ->getValue(
                     \Magento\Newsletter\Model\Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE

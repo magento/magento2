@@ -163,7 +163,7 @@ class InstallData implements InstallDataInterface
                 'label' => 'Price View',
                 'input' => 'select',
                 'class' => '',
-                'source' => 'Magento\Bundle\Model\Product\Attribute\Source\Price\View',
+                'source' => \Magento\Bundle\Model\Product\Attribute\Source\Price\View::class,
                 'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
                 'visible' => true,
                 'required' => true,

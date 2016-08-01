@@ -534,7 +534,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'data-form-part' => $this->getFormName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
     }
 
@@ -575,7 +575,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
                 'data-form-part' => $this->getFormName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class));
 
         return $element;
     }
@@ -607,7 +607,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         if (strpos($this->getValueElementType(), '/') !== false) {
             return $this->_layout->getBlockSingleton($this->getValueElementType());
         }
-        return $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable');
+        return $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class);
     }
 
     /**

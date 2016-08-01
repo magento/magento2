@@ -24,7 +24,7 @@ class DomainTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $domain \Magento\Cookie\Model\Config\Backend\Domain */
         $domain = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Cookie\Model\Config\Backend\Domain'
+            \Magento\Cookie\Model\Config\Backend\Domain::class
         );
         $domain->setValue($value);
         $domain->setPath('path');

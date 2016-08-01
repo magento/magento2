@@ -208,7 +208,7 @@ TEXT;
         $file = '/absolute/path/to/phtml/template/file';
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
 
-        $htmlDriver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false);
+        $htmlDriver = $this->getMock(\Magento\Framework\Filesystem\DriverInterface::class, [], [], '', false);
         $htmlDriver
             ->expects($this->once())
             ->method('getRealPathSafety')
