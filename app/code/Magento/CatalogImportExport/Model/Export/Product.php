@@ -1263,6 +1263,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $row['max_characters'] = $option['max_characters'];
                 }
 
+                foreach (['file_extension', 'image_size_x', 'image_size_y'] as $fileOptionKey) {
+                    if (!isset($option[$fileOptionKey])) {
+                        continue;
+                    }
+
+                    $row[$fileOptionKey] = $option[$fileOptionKey];
+                }
+
                 $values = $option->getValues();
 
                 if ($values) {
