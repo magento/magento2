@@ -101,7 +101,20 @@
                 </block>
             </container>
             <container name="product.info.media" htmlTag="div" htmlClass="product media" after="product.info.main">
+                <container name="skip_gallery.wrapper" htmlTag="div" htmlClass="action-skip-wrapper">
+                    <block class="Magento\Framework\View\Element\Template" before="product.info.media.image" name="skip_gallery" template="Magento_Theme::html/skip.phtml">
+                        <arguments>
+                            <argument name="target" xsi:type="string">nextarea</argument>
+                            <argument name="label" translate="true" xsi:type="string">Skip Gallery</argument>
+                        </arguments>
+                    </block>
+                </container>
                 <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="product/view/gallery.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="skip_gallery.target" after="product.info.media.image" template="Magento_Theme::html/skiptarget.phtml">
+                    <arguments>
+                        <argument name="target_id" xsi:type="string">nextarea</argument>
+                    </arguments>
+                </block>
             </container>
             <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="product/view/details.phtml" after="product.info.media">
                 <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" template="product/view/attribute.phtml" group="detailed_info">
