@@ -17,7 +17,6 @@ interface BulkSummaryInterface
     const DESCRIPTION = 'description';
     const START_TIME = 'start_time';
     const USER_ID = 'user_id';
-    const ENTITY_TYPE = 'entity_type';
     /**#@-*/
 
     /**#@+
