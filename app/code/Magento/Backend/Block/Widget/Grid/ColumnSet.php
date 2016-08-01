@@ -110,7 +110,7 @@ class ColumnSet extends \Magento\Framework\View\Element\Template
         \Magento\Backend\Model\Widget\Grid\Totals $totals,
         array $data = []
     ) {
-        $generatorClassName = 'Magento\Backend\Model\Widget\Grid\Row\UrlGenerator';
+        $generatorClassName = \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator::class;
         if (isset($data['rowUrl'])) {
             $rowUrlParams = $data['rowUrl'];
             if (isset($rowUrlParams['generatorClass'])) {

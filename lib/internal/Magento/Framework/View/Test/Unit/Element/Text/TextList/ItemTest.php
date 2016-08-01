@@ -21,7 +21,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->item = $objectManager->getObject('Magento\Framework\View\Element\Text\TextList\Item');
+        $this->item = $objectManager->getObject(\Magento\Framework\View\Element\Text\TextList\Item::class);
     }
 
     public function testSetLink()

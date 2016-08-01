@@ -29,7 +29,7 @@ class VariablesTest extends \PHPUnit_Framework_TestCase
     protected function setup()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $helper->getObject('Magento\Email\Model\Source\Variables');
+        $this->model = $helper->getObject(\Magento\Email\Model\Source\Variables::class);
         $this->configVariables = [
             [
                 'value' => Store::XML_PATH_UNSECURE_BASE_URL,

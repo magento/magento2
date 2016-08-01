@@ -19,7 +19,7 @@ class CartTotalsProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->model = new \Magento\Checkout\Block\Cart\CartTotalsProcessor($this->scopeConfig);
     }
 

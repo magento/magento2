@@ -145,7 +145,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         if ($this->cacheManager === null) {
             $this->cacheManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Framework\App\CacheInterface'
+                \Magento\Framework\App\CacheInterface::class
             );
         }
         return $this->cacheManager;

@@ -30,7 +30,7 @@ class Form extends AbstractForm
     public function getItemsBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form\Items',
+            \Magento\Sales\Test\Block\Adminhtml\Order\Invoice\Form\Items::class,
             ['element' => $this->_rootElement->find($this->items)]
         );
     }

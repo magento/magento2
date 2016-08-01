@@ -433,7 +433,7 @@ class PackagesData
             ];
 
             $applicationFactory = $this->objectManagerProvider->get()
-                ->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
+                ->get(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
             /** @var \Magento\Composer\MagentoComposerApplication $application */
             $application = $applicationFactory->create();
 

@@ -16,7 +16,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->orderItem = $this->getMock(
-            'Magento\Sales\Model\Order\Item',
+            \Magento\Sales\Model\Order\Item::class,
             ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem', 'getOrderItemId', 'getId'],
             [],
             '',
@@ -24,7 +24,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject('Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment');
+        $this->model = $objectManager->getObject(\Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment::class);
     }
 
     /**
@@ -46,9 +46,21 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     public function getChildrenEmptyItemsDataProvider()
     {
         return [
-            ['Magento\Sales\Model\Order\Invoice\Item', 'getInvoice', 'Magento\Sales\Model\Order\Invoice'],
-            ['Magento\Sales\Model\Order\Shipment\Item', 'getShipment', 'Magento\Sales\Model\Order\Shipment'],
-            ['Magento\Sales\Model\Order\Creditmemo\Item', 'getCreditmemo', 'Magento\Sales\Model\Order\Creditmemo']
+            [
+                \Magento\Sales\Model\Order\Invoice\Item::class,
+                'getInvoice',
+                \Magento\Sales\Model\Order\Invoice::class
+            ],
+            [
+                \Magento\Sales\Model\Order\Shipment\Item::class,
+                'getShipment',
+                \Magento\Sales\Model\Order\Shipment::class
+            ],
+            [
+                \Magento\Sales\Model\Order\Creditmemo\Item::class,
+                'getCreditmemo',
+                \Magento\Sales\Model\Order\Creditmemo::class
+            ]
         ];
     }
 
@@ -58,7 +70,7 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     public function testGetChildren($parentItem)
     {
         if ($parentItem) {
-            $parentItem = $this->getMock('Magento\Sales\Model\Order\Item', ['getId', '__wakeup'], [], '', false);
+            $parentItem = $this->getMock(\Magento\Sales\Model\Order\Item::class, ['getId', '__wakeup'], [], '', false);
             $parentItem->expects($this->any())->method('getId')->will($this->returnValue(1));
         }
         $this->orderItem->expects($this->any())->method('getOrderItem')->will($this->returnSelf());
@@ -66,11 +78,17 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
         $this->orderItem->expects($this->any())->method('getOrderItemId')->will($this->returnValue(2));
         $this->orderItem->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $salesModel = $this->getMock('Magento\Sales\Model\Order\Invoice', ['getAllItems', '__wakeup'], [], '', false);
+        $salesModel = $this->getMock(
+            \Magento\Sales\Model\Order\Invoice::class,
+            ['getAllItems', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $salesModel->expects($this->once())->method('getAllItems')->will($this->returnValue([$this->orderItem]));
 
         $item = $this->getMock(
-            'Magento\Sales\Model\Order\Invoice\Item',
+            \Magento\Sales\Model\Order\Invoice\Item::class,
             ['getInvoice', 'getOrderItem', '__wakeup'],
             [],
             '',
@@ -116,8 +134,13 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     public function testIsShipmentSeparatelyWithItem($productOptions, $result, $parentItem)
     {
         if ($parentItem) {
-            $parentItem =
-                $this->getMock('Magento\Sales\Model\Order\Item', ['getProductOptions', '__wakeup'], [], '', false);
+            $parentItem = $this->getMock(
+                \Magento\Sales\Model\Order\Item::class,
+                ['getProductOptions', '__wakeup'],
+                [],
+                '',
+                false
+            );
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -165,8 +188,13 @@ class AbstractItemsTest extends \PHPUnit_Framework_TestCase
     public function testIsChildCalculatedWithItem($productOptions, $result, $parentItem)
     {
         if ($parentItem) {
-            $parentItem =
-                $this->getMock('Magento\Sales\Model\Order\Item', ['getProductOptions', '__wakeup'], [], '', false);
+            $parentItem = $this->getMock(
+                \Magento\Sales\Model\Order\Item::class,
+                ['getProductOptions', '__wakeup'],
+                [],
+                '',
+                false
+            );
             $parentItem->expects($this->any())->method('getProductOptions')->will($this->returnValue($productOptions));
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')

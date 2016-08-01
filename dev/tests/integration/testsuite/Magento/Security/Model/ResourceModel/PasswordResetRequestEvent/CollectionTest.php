@@ -27,7 +27,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->collectionModel = $this->objectManager
-            ->create('Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection');
+            ->create(\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection::class);
     }
 
     /**

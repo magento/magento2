@@ -70,31 +70,31 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->urlEncoderMock = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
+        $this->urlEncoderMock = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getServer'])
             ->getMockForAbstractClass();
 
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())
@@ -107,19 +107,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
 
-        $this->wishlistProvider = $this->getMockBuilder('Magento\Wishlist\Controller\WishlistProviderInterface')
+        $this->wishlistProvider = $this->getMockBuilder(\Magento\Wishlist\Controller\WishlistProviderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->coreRegistry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->coreRegistry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->postDataHelper = $this->getMockBuilder('Magento\Framework\Data\Helper\PostHelper')
+        $this->postDataHelper = $this->getMockBuilder(\Magento\Framework\Data\Helper\PostHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->wishlistItem = $this->getMockBuilder('Magento\Wishlist\Model\Item')
+        $this->wishlistItem = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getProduct',
@@ -127,17 +127,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->wishlist = $this->getMockBuilder('Magento\Wishlist\Model\Wishlist')
+        $this->wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
-            'Magento\Wishlist\Helper\Data',
+            \Magento\Wishlist\Helper\Data::class,
             [
                 'context' => $this->context,
                 'storeManager' => $this->storeManager,
@@ -171,7 +171,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $wishlistItem */
         $wishlistItem = $this->getMock(
-            'Magento\Wishlist\Model\Item',
+            \Magento\Wishlist\Model\Item::class,
             ['getWishlistItemId', 'getProductId'],
             [],
             '',

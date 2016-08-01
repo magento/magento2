@@ -15,6 +15,6 @@ class Orders extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\NewRelicReporting\Model\ResourceModel\Orders');
+        $this->_init(\Magento\NewRelicReporting\Model\ResourceModel\Orders::class);
     }
 }

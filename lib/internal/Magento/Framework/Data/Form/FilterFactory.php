@@ -42,7 +42,7 @@ class FilterFactory
             throw new \InvalidArgumentException(sprintf(
                 '%s class must implement %s',
                 $filterClass,
-                '\Magento\Framework\Data\Form\Filter\FilterInterface'
+                \Magento\Framework\Data\Form\Filter\FilterInterface::class
             ));
         }
 

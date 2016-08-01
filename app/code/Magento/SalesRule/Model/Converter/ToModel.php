@@ -181,7 +181,7 @@ class ToModel
 
         $data = $this->dataObjectProcessor->buildOutputDataArray(
             $dataModel,
-            '\Magento\SalesRule\Api\Data\RuleInterface'
+            \Magento\SalesRule\Api\Data\RuleInterface::class
         );
 
         $mergedData = array_merge($modelData, $data);

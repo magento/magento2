@@ -31,7 +31,7 @@ class Substitution extends AbstractMethod
     /**
      * @var string
      */
-    protected $_infoBlockType = 'Magento\Payment\Block\Info\Substitution';
+    protected $_infoBlockType = \Magento\Payment\Block\Info\Substitution::class;
 
     /**
      * Retrieve payment method title

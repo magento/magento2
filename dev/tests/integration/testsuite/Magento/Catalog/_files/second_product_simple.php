@@ -6,7 +6,7 @@
 
 /** @var $product2 \Magento\Catalog\Model\Product */
 $product2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Product');
+    ->create(\Magento\Catalog\Model\Product::class);
 $product2
     ->setTypeId('simple')
     ->setId(6)

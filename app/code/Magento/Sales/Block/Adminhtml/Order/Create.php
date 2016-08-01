@@ -90,7 +90,9 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _prepareLayout()
     {
-        $pageTitle = $this->getLayout()->createBlock('Magento\Sales\Block\Adminhtml\Order\Create\Header')->toHtml();
+        $pageTitle = $this->getLayout()->createBlock(
+            \Magento\Sales\Block\Adminhtml\Order\Create\Header::class
+        )->toHtml();
         if (is_object($this->getLayout()->getBlock('page.title'))) {
             $this->getLayout()->getBlock('page.title')->setPageTitle($pageTitle);
         }
@@ -105,7 +107,7 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderHtml()
     {
         $out = '<div id="order-header">' . $this->getLayout()->createBlock(
-            'Magento\Sales\Block\Adminhtml\Order\Create\Header'
+            \Magento\Sales\Block\Adminhtml\Order\Create\Header::class
         )->toHtml() . '</div>';
         return $out;
     }

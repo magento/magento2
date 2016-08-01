@@ -63,8 +63,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Eav\Model\Entity\Attribute\Option',
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option'
+            \Magento\Eav\Model\Entity\Attribute\Option::class,
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option::class
         );
         $this->_optionValueTable = $this->_coreResource->getTableName('eav_attribute_option_value');
     }

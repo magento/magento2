@@ -97,7 +97,9 @@ class ValidateTest extends AttributeTest
      */
     protected function getModel()
     {
-        return $this->objectManager->getObject(Validate::class, [
+        return $this->objectManager->getObject(
+            Validate::class,
+            [
             'context' => $this->contextMock,
             'attributeLabelCache' => $this->attributeLabelCacheMock,
             'coreRegistry' => $this->coreRegistryMock,
@@ -105,7 +107,8 @@ class ValidateTest extends AttributeTest
             'resultJsonFactory' => $this->resultJsonFactoryMock,
             'layoutFactory' => $this->layoutFactoryMock,
             'multipleAttributeList' => ['select' => 'option']
-        ]);
+            ]
+        );
     }
 
     public function testExecute()
@@ -120,8 +123,8 @@ class ValidateTest extends AttributeTest
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
             ->willReturnMap([
-                ['Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], $this->attributeMock],
-                ['Magento\Eav\Model\Entity\Attribute\Set', [], $this->attributeSetMock]
+                [\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], $this->attributeMock],
+                [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
             ]);
         $this->attributeMock->expects($this->once())
             ->method('loadByCode')
@@ -167,7 +170,7 @@ class ValidateTest extends AttributeTest
                 ['option', null, $options],
                 ['message_key', null, Validate::DEFAULT_MESSAGE_KEY]
             ]);
-        
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn($this->attributeMock);

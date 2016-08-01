@@ -32,9 +32,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->connection =
-            $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+            $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class, [], [], '', false);
         $this->dbSelect = $this->getMockBuilder(\Magento\Framework\Db\Select::class)
             ->disableOriginalConstructor()
             ->getMock();

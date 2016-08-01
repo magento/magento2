@@ -37,10 +37,10 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->searchBuilder = $objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
-        $this->sortOrderBuilder = $objectManager->create('Magento\Framework\Api\SortOrderBuilder');
-        $this->filterBuilder = $objectManager->create('Magento\Framework\Api\FilterBuilder');
-        $this->user = $objectManager->create('Magento\User\Model\User');
+        $this->searchBuilder = $objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $this->sortOrderBuilder = $objectManager->create(\Magento\Framework\Api\SortOrderBuilder::class);
+        $this->filterBuilder = $objectManager->create(\Magento\Framework\Api\FilterBuilder::class);
+        $this->user = $objectManager->create(\Magento\User\Model\User::class);
     }
 
     /**
