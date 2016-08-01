@@ -6,13 +6,14 @@
 
 // @codingStandardsIgnoreFile
 /** @var $block Magento\Wishlist\Block\Catalog\Product\ProductList\Item\AddTo\Wishlist */
+
 ?>
 <?php if ($block->getWishlistHelper()->isAllow()): ?>
     <a href="#"
        class="action towishlist"
        title="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
        aria-label="<?php echo $block->escapeHtml(__('Add to Wish List')); ?>"
-       data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($block->getProduct()); ?>'
+       data-post='<?php /* @noEscape */ echo $block->getAddToWishlistParams($block->getProduct()); ?>'
        data-action="add-to-wishlist"
        role="button">
         <span><?php /* @noEscape */ echo __('Add to Wish List') ?></span>

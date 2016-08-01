@@ -9,6 +9,7 @@
 /**
  * @var $block \Magento\Framework\View\Element\Template
  */
+
 ?>
 <script>
     require([
@@ -65,8 +66,8 @@
     productConfigure.addListType(
         'wishlist',
         {
-            urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-            urlConfirm: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/wishlist_product_composite_wishlist/update') ?>'
+            urlFetch: '<?php echo $block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure')) ?>',
+            urlConfirm: '<?php echo $block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/update')) ?>'
         }
     );
     //-->

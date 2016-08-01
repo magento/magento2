@@ -6,11 +6,12 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $block \Magento\Wishlist\Block\Share\Wishlist */
+/** @var $block \Magento\Wishlist\Block\Share\Wishlist */
+
 ?>
 
 <?php if ($block->hasWishlistItems()): ?>
-    <form class="form shared wishlist" action="<?php /* @escapeNotVerified */ echo $block->getUrl('wishlist/index/update') ?>" method="post">
+    <form class="form shared wishlist" action="<?php echo $block->escapeUrl($block->getUrl('wishlist/index/update')) ?>" method="post">
         <div class="wishlist table-wrapper">
             <table class="table data wishlist" id="wishlist-table">
                 <caption class="table-caption"><?php /* @noEscape */ echo __('Wish List'); ?></caption>
@@ -29,11 +30,11 @@
                     ?>
                     <tr>
                         <td data-th="<?php echo $block->escapeHtml(__('Product')) ?>" class="col product">
-                            <a class="product photo" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
+                            <a class="product photo" href="<?php echo $block->escapeUrl($block->getProductUrl($item)) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
                                 <?php echo $block->getImage($product, 'customer_shared_wishlist')->toHtml(); ?>
                             </a>
                             <strong class="product name">
-                                <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>">
+                                <a href="<?php echo $block->escapeUrl($block->getProductUrl($item)) ?>">
                                     <?php echo $block->escapeHtml($product->getName()) ?>
                                 </a>
                             </strong>
@@ -53,13 +54,13 @@
                                 <?php if ($isVisibleProduct): ?>
                                     <button type="button"
                                             title="<?php /* @noEscape */ echo __('Add to Cart') ?>"
-                                            data-post='<?php /* @escapeNotVerified */ echo $block->getSharedItemAddToCartUrl($item); ?>'
+                                            data-post='<?php /* @noEscape */ echo $block->getSharedItemAddToCartUrl($item); ?>'
                                             class="action tocart">
                                         <span><?php /* @noEscape */ echo __('Add to Cart') ?></span>
                                     </button>
                                 <?php endif ?>
                             <?php endif; ?>
-                            <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
+                            <a href="#" data-post='<?php /* @noEscape */ echo $block->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
                                 <span><?php /* @noEscape */ echo __('Add to Wish List') ?></span>
                             </a>
                         </td>
@@ -74,7 +75,7 @@
                 <div class="primary">
                     <button type="button"
                             title="<?php /* @noEscape */ echo __('Add All to Cart') ?>"
-                            data-post='<?php /* @escapeNotVerified */ echo $block->getSharedAddAllToCartUrl(); ?>'
+                            data-post='<?php echo $block->escapeUrl($block->getSharedAddAllToCartUrl()); ?>'
                             class="action tocart primary">
                         <span><?php /* @noEscape */ echo __('Add All to Cart') ?></span>
                     </button>

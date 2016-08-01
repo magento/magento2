@@ -6,9 +6,11 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var \Magento\Wishlist\Model\Item $item */
+/** @var $block \Magento\Wishlist\Block\AbstractBlock */
+/** @var \Magento\Wishlist\Model\Item $item */
+
 ?>
 
 <?php foreach ($block->getChildNames() as $childName): ?>
-    <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false); ?>
+    <?php echo $block->escapeHtml($block->getLayout()->renderElement($childName, false)); ?>
 <?php endforeach;?>

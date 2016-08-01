@@ -6,10 +6,12 @@
 
 // @codingStandardsIgnoreFile
 
-/* @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart */
-/* @var \Magento\Wishlist\Model\Item $item */
+/** @var $block \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Cart */
+
+/** @var \Magento\Wishlist\Model\Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
+
 ?>
 <?php foreach ($block->getChildNames() as $childName): ?>
     <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false); ?>
@@ -28,7 +30,7 @@ $product = $item->getProduct();
     <?php if ($product->isSaleable()): ?>
     <div class="product-item-actions">
         <div class="actions-primary">
-            <button type="button" data-role="tocart" data-post='<?php /* @escapeNotVerified */ echo $block->getItemAddToCartParams($item)?>' title="<?php /* @noEscape */ echo __('Add to Cart') ?>" data-item-id="<?php echo $block->escapeHtml($item->getId())?>" class="action tocart primary">
+            <button type="button" data-role="tocart" data-post='<?php /* @noEscape */ echo $block->getItemAddToCartParams($item)?>' title="<?php /* @noEscape */ echo __('Add to Cart') ?>" data-item-id="<?php echo $block->escapeHtml($item->getId())?>" class="action tocart primary">
                 <span><?php /* @noEscape */ echo __('Add to Cart') ?></span>
             </button>
         </div>
