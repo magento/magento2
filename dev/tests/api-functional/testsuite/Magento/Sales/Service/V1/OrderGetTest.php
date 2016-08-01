@@ -81,5 +81,10 @@ class OrderGetTest extends WebapiAbstract
         foreach ($expectedBillingAddressNotEmpty as $field) {
             $this->assertArrayHasKey($field, $result['billing_address']);
         }
+
+        //check that nullable fields were marked as optional and were not sent
+        foreach ($result as $value) {
+            $this->assertNotNull($value);
+        }
     }
 }
