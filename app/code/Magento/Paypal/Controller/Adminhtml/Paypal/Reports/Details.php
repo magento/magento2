@@ -33,7 +33,7 @@ class Details extends \Magento\Paypal\Controller\Adminhtml\Paypal\Reports
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('View Transaction'));
         $this->_addContent(
             $this->_view->getLayout()->createBlock(
-                'Magento\Paypal\Block\Adminhtml\Settlement\Details',
+                \Magento\Paypal\Block\Adminhtml\Settlement\Details::class,
                 'settlementDetails'
             )
         );

@@ -83,7 +83,7 @@ class CreditmemoGetTest extends WebapiAbstract
     {
         /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditmemoCollection */
         $creditmemoCollection =
-            $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection');
+            $this->objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection::class);
         $creditmemo = $creditmemoCollection->getFirstItem();
 
         $serviceInfo = [

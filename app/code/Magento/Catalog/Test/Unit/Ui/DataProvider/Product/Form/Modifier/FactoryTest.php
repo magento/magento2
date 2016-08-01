@@ -44,9 +44,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = $this->objectManager->getObject(\Magento\Ui\DataProvider\Modifier\ModifierFactory::class, [
-            'objectManager' => $this->objectManagerMock,
-        ]);
+        $this->model = $this->objectManager->getObject(
+            \Magento\Ui\DataProvider\Modifier\ModifierFactory::class,
+            ['objectManager' => $this->objectManagerMock]
+        );
     }
 
     public function testCreate()

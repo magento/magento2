@@ -38,8 +38,8 @@ class Collection extends AbstractCollection implements CreditmemoCommentSearchRe
     {
         parent::_construct();
         $this->_init(
-            'Magento\Sales\Model\Order\Creditmemo\Comment',
-            'Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment'
+            \Magento\Sales\Model\Order\Creditmemo\Comment::class,
+            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment::class
         );
     }
 

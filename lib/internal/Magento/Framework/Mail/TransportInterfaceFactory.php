@@ -33,7 +33,7 @@ class TransportInterfaceFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\Mail\TransportInterface'
+        $instanceName = \Magento\Framework\Mail\TransportInterface::class
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;

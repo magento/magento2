@@ -15,7 +15,7 @@ class ResolverFactoryTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory $resolverFactory */
         $resolverFactory = $objectManagerHelper
-            ->getObject('Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory');
+            ->getObject(\Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory::class);
         $this->assertInstanceOf(
             \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory::DEFAULT_RESOLVER,
             $resolverFactory->create('some_dir', true)
@@ -31,7 +31,7 @@ class ResolverFactoryTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory $resolverFactory */
         $resolverFactory = $objectManagerHelper->getObject(
-            'Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory',
+            \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory::class,
             [
                 'resolverClass' => 'stdClass'
             ]

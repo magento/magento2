@@ -19,18 +19,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->_objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_factory = $objectManagerHelper->getObject(
-            'Magento\Catalog\Model\Layer\Filter\Factory',
+            \Magento\Catalog\Model\Layer\Filter\Factory::class,
             ['objectManager' => $this->_objectManagerMock]
         );
     }
 
     public function testCreate()
     {
-        $className = 'Magento\Catalog\Model\Layer\Filter\AbstractFilter';
+        $className = \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class;
 
         $filterMock = $this->getMock($className, [], [], '', false);
         $this->_objectManagerMock->expects(
@@ -49,7 +49,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithArguments()
     {
-        $className = 'Magento\Catalog\Model\Layer\Filter\AbstractFilter';
+        $className = \Magento\Catalog\Model\Layer\Filter\AbstractFilter::class;
         $arguments = ['foo', 'bar'];
 
         $filterMock = $this->getMock($className, [], [], '', false);

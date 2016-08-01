@@ -202,8 +202,8 @@ class PhpReadinessCheck
             $message = sprintf(
                 'Your current PHP memory limit is %s.
                  Magento 2 requires it to be set to %s or more.
-                 As a user with root privileges, edit your php.ini file to increase memory_limit. 
-                 (The command php --ini tells you where it is located.) 
+                 As a user with root privileges, edit your php.ini file to increase memory_limit.
+                 (The command php --ini tells you where it is located.)
                  After that, restart your web server and try again.',
                 $currentMemoryLimit,
                 $minimumRequiredMemoryLimit
@@ -217,8 +217,8 @@ class PhpReadinessCheck
             $message = sprintf(
                 'Your current PHP memory limit is %s.
                  We recommend it to be set to %s or more to use Setup Wizard.
-                 As a user with root privileges, edit your php.ini file to increase memory_limit. 
-                 (The command php --ini tells you where it is located.) 
+                 As a user with root privileges, edit your php.ini file to increase memory_limit.
+                 (The command php --ini tells you where it is located.)
                  After that, restart your web server and try again.',
                 $currentMemoryLimit,
                 $recommendedForUpgradeMemoryLimit

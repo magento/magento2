@@ -49,7 +49,7 @@ class Grids extends \Magento\Backend\Block\Widget\Tabs
             [
                 'label' => __('Bestsellers'),
                 'content' => $this->getLayout()->createBlock(
-                    'Magento\Backend\Block\Dashboard\Tab\Products\Ordered'
+                    \Magento\Backend\Block\Dashboard\Tab\Products\Ordered::class
                 )->toHtml(),
                 'active' => true
             ]

@@ -19,7 +19,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->model = new \Magento\Framework\Mview\ActionFactory($this->objectManagerMock);
     }
 
@@ -45,7 +45,7 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $actionInterfaceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Mview\ActionInterface',
+            \Magento\Framework\Mview\ActionInterface::class,
             [],
             '',
             false
@@ -55,11 +55,11 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
         )->method(
             'get'
         )->with(
-            'Magento\Framework\Mview\ActionInterface'
+            \Magento\Framework\Mview\ActionInterface::class
         )->will(
             $this->returnValue($actionInterfaceMock)
         );
-        $this->model->get('Magento\Framework\Mview\ActionInterface');
-        $this->assertInstanceOf('Magento\Framework\Mview\ActionInterface', $actionInterfaceMock);
+        $this->model->get(\Magento\Framework\Mview\ActionInterface::class);
+        $this->assertInstanceOf(\Magento\Framework\Mview\ActionInterface::class, $actionInterfaceMock);
     }
 }

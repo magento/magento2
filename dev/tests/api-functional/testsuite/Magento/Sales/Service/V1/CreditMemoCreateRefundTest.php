@@ -36,7 +36,7 @@ class CreditMemoCreateRefundTest extends WebapiAbstract
     public function testInvoke()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $orderCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Collection');
+        $orderCollection = $this->objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
         $order = $orderCollection->getFirstItem();
         $items = [];
 

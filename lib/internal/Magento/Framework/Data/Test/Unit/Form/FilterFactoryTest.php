@@ -21,7 +21,7 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->factory = new FilterFactory($this->objectManager);
@@ -33,7 +33,7 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
         $filterCode = 'Date';
         $data = [];
 
-        $filterMock = $this->getMockBuilder('Magento\Framework\Data\Form\Filter\Date')
+        $filterMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Filter\Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -43,7 +43,7 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($filterMock);
 
         $result = $this->factory->create($filterCode, $data);
-        $this->assertInstanceOf('\Magento\Framework\Data\Form\Filter\FilterInterface', $result);
+        $this->assertInstanceOf(\Magento\Framework\Data\Form\Filter\FilterInterface::class, $result);
     }
 
     /**

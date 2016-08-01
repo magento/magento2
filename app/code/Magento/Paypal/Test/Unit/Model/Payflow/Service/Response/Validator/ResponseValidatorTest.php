@@ -36,7 +36,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->validatorMock = $this->getMockBuilder(
-            'Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface'
+            \Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface::class
         )
             ->setMethods(['validate'])
             ->getMockForAbstractClass();

@@ -337,7 +337,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $this->dataObjectHelper->populateWithArray(
             $link,
             $selection->getData(),
-            '\Magento\Bundle\Api\Data\LinkInterface'
+            \Magento\Bundle\Api\Data\LinkInterface::class
         );
         $link->setIsDefault($selection->getIsDefault())
             ->setId($selection->getSelectionId())

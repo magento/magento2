@@ -248,7 +248,7 @@ class Wishlist implements DataProviderInterface
         $priceRender = $this->layout->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->layout->createBlock(
-                'Magento\Framework\Pricing\Render',
+                \Magento\Framework\Pricing\Render::class,
                 'product.price.render.default',
                 ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );

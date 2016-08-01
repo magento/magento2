@@ -325,7 +325,7 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
     {
         $columnId = 'massaction';
         $massactionColumn = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Column'
+            \Magento\Backend\Block\Widget\Grid\Column::class
         )->setData(
             [
                 'index' => $this->getMassactionIdField(),

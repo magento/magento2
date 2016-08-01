@@ -7,6 +7,9 @@
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -53,56 +56,56 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->metaData = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Metadata',
+            \Magento\Sales\Model\ResourceModel\Metadata::class,
             [],
             [],
             '',
             false
         );
         $this->searchResultFactory = $this->getMock(
-            'Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory',
+            \Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->searchCriteria = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
+            \Magento\Framework\Api\SearchCriteria::class,
             [],
             [],
             '',
             false
         );
         $this->collection = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment\Collection',
+            \Magento\Sales\Model\ResourceModel\Order\Payment\Collection::class,
             [],
             [],
             '',
             false
         );
         $this->paymentResource = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Payment',
+            \Magento\Sales\Model\ResourceModel\Order\Payment::class,
             [],
             [],
             '',
             false
         );
         $this->filterGroup = $this->getMock(
-            'Magento\Framework\Api\Search\FilterGroup',
+            \Magento\Framework\Api\Search\FilterGroup::class,
             [],
             [],
             '',
             false
         );
         $this->filter = $this->getMock(
-            'Magento\Framework\Api\Filter',
+            \Magento\Framework\Api\Filter::class,
             [],
             [],
             '',
             false
         );
         $this->repository = $objectManager->getObject(
-            'Magento\Sales\Model\Order\Payment\Repository',
+            \Magento\Sales\Model\Order\Payment\Repository::class,
             [
                 'searchResultFactory' => $this->searchResultFactory,
                 'metaData' => $this->metaData,
@@ -179,7 +182,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected function mockPayment($id = false)
     {
         $payment = $this->getMock(
-            'Magento\Sales\Model\Order\Payment',
+            \Magento\Sales\Model\Order\Payment::class,
             [],
             [],
             '',
