@@ -36,9 +36,9 @@ $order = $objectManager->create('Magento\Sales\Model\Order');
 $order->setIncrementId(
     '100000001'
 )->setState(
-    \Magento\Sales\Model\Order::STATE_NEW
+    \Magento\Sales\Model\Order::STATE_PROCESSING
 )->setStatus(
-    $order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_NEW)
+    $order->getConfig()->getStateDefaultStatus(\Magento\Sales\Model\Order::STATE_PROCESSING)
 )->setSubtotal(
     100
 )->setGrandTotal(
