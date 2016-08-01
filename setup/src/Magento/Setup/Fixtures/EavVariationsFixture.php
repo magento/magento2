@@ -30,9 +30,10 @@ class EavVariationsFixture extends Fixture
         $this->fixtureModel->resetObjectManager();
 
         /* @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-        $model = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
+        $model = $this->fixtureModel->getObjectManager()
+            ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
+        $storeManager = $this->fixtureModel->getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
         $stores = $storeManager->getStores();
         $storeViewsCount = count($stores);
 
@@ -89,7 +90,7 @@ class EavVariationsFixture extends Fixture
          * See MAGETWO-16492
          */
         $model->addData($data);
-        $attributeSet = $this->fixtureModel->getObjectManager()->get('Magento\Eav\Model\Entity\Attribute\Set');
+        $attributeSet = $this->fixtureModel->getObjectManager()->get(\Magento\Eav\Model\Entity\Attribute\Set::class);
         $attributeSet->load(self::ATTRIBUTE_SET_ID);
         $model->setAttributeSetId(self::ATTRIBUTE_SET_ID)
             ->setAttributeGroupId($attributeSet->getDefaultGroupId(4))
@@ -99,7 +100,7 @@ class EavVariationsFixture extends Fixture
         $model->save();
 
         /* @var $cache \Magento\Framework\App\CacheInterface */
-        $cache = $this->fixtureModel->getObjectManager()->get('Magento\Framework\App\CacheInterface');
+        $cache = $this->fixtureModel->getObjectManager()->get(\Magento\Framework\App\CacheInterface::class);
 
         $cacheKey = \Magento\Eav\Model\Config::ATTRIBUTES_CACHE_ID . \Magento\Catalog\Model\Product::ENTITY;
         $cache->remove($cacheKey);

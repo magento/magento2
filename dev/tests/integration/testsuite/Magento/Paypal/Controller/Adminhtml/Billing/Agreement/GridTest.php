@@ -26,7 +26,7 @@ class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     public function testAclHasAccess()
     {
         /** @var $session \Magento\Backend\Model\Session */
-        Bootstrap::getObjectManager()->create('Magento\Backend\Model\Session');
+        Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session::class);
 
         parent::testAclHasAccess();
 

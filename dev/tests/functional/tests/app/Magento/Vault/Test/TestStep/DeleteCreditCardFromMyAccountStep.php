@@ -14,6 +14,9 @@ use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Vault\Test\Constraint\AssertStoredPaymentDeletedMessage;
 use Magento\Vault\Test\Page\StoredPaymentMethods;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeleteCreditCardFromMyAccountStep implements TestStepInterface
 {
     /**

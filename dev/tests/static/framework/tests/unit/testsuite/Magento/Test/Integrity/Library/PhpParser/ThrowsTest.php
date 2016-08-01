@@ -27,7 +27,7 @@ class ThrowsTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->tokens = $this->getMockBuilder(
-            'Magento\TestFramework\Integrity\Library\PhpParser\Tokens'
+            \Magento\TestFramework\Integrity\Library\PhpParser\Tokens::class
         )->disableOriginalConstructor()->getMock();
     }
 
@@ -70,7 +70,7 @@ class ThrowsTest extends \PHPUnit_Framework_TestCase
         }
 
         $uses = $this->getMockBuilder(
-            'Magento\TestFramework\Integrity\Library\PhpParser\Uses'
+            \Magento\TestFramework\Integrity\Library\PhpParser\Uses::class
         )->disableOriginalConstructor()->getMock();
 
         $uses->expects($this->once())->method('hasUses')->will($this->returnValue(true));

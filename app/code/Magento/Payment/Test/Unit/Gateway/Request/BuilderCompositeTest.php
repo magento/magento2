@@ -12,11 +12,11 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuildEmpty()
     {
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -44,18 +44,18 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild(array $expected)
     {
-        $tMapFactory = $this->getMockBuilder('Magento\Framework\ObjectManager\TMapFactory')
+        $tMapFactory = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMapFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $tMap = $this->getMockBuilder('Magento\Framework\ObjectManager\TMap')
+        $tMap = $this->getMockBuilder(\Magento\Framework\ObjectManager\TMap::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $customerBuilder = $this->getMockBuilder('Magento\Payment\Gateway\Request\BuilderInterface')
+        $customerBuilder = $this->getMockBuilder(\Magento\Payment\Gateway\Request\BuilderInterface::class)
             ->getMockForAbstractClass();
-        $productBuilder = $this->getMockBuilder('Magento\Payment\Gateway\Request\BuilderInterface')
+        $productBuilder = $this->getMockBuilder(\Magento\Payment\Gateway\Request\BuilderInterface::class)
             ->getMockForAbstractClass();
-        $magentoBuilder = $this->getMockBuilder('Magento\Payment\Gateway\Request\BuilderInterface')
+        $magentoBuilder = $this->getMockBuilder(\Magento\Payment\Gateway\Request\BuilderInterface::class)
             ->getMockForAbstractClass();
 
         $customerBuilder->expects(static::once())
@@ -91,9 +91,9 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     'array' => [
-                        'customer' => 'Magento\Payment\Gateway\Request\BuilderInterface',
-                        'product' => 'Magento\Payment\Gateway\Request\BuilderInterface',
-                        'magento' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                        'customer' => \Magento\Payment\Gateway\Request\BuilderInterface::class,
+                        'product' => \Magento\Payment\Gateway\Request\BuilderInterface::class,
+                        'magento' => \Magento\Payment\Gateway\Request\BuilderInterface::class
                     ],
                     'type' => BuilderInterface::class
                 ]
@@ -106,9 +106,9 @@ class BuilderCompositeTest extends \PHPUnit_Framework_TestCase
         $builder = new BuilderComposite(
             $tMapFactory,
             [
-                'customer' => 'Magento\Payment\Gateway\Request\BuilderInterface',
-                'product' => 'Magento\Payment\Gateway\Request\BuilderInterface',
-                'magento' => 'Magento\Payment\Gateway\Request\BuilderInterface'
+                'customer' => \Magento\Payment\Gateway\Request\BuilderInterface::class,
+                'product' => \Magento\Payment\Gateway\Request\BuilderInterface::class,
+                'magento' => \Magento\Payment\Gateway\Request\BuilderInterface::class
             ]
         );
 

@@ -18,9 +18,10 @@ class StatusTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->resolver = $this->objectManagerHelper->getObject('Magento\LayeredNavigation\Model\Aggregation\Status');
+        $this->resolver = $this->objectManagerHelper->getObject(
+            \Magento\LayeredNavigation\Model\Aggregation\Status::class
+        );
     }
 
     public function testIsEnabled()

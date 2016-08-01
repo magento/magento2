@@ -86,7 +86,7 @@ class ProductUrlRewriteGenerator
     {
         if ($this->anchorUrlRewriteGenerator === null) {
             $this->anchorUrlRewriteGenerator = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator');
+                ->get(\Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator::class);
         }
         return $this->anchorUrlRewriteGenerator;
     }

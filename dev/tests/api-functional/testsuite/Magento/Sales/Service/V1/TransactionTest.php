@@ -49,11 +49,11 @@ class TransactionTest extends WebapiAbstract
     public function testTransactionGet()
     {
         /** @var Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         /**
          * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
          */
-        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = \Magento\Sales\Model\Order\Payment\Transaction\Repository::class;
         $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
@@ -93,11 +93,11 @@ class TransactionTest extends WebapiAbstract
     public function testTransactionList($filters)
     {
         /** @var Order $order */
-        $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        $order = $this->objectManager->create(\Magento\Sales\Model\Order::class);
         /**
          * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
          */
-        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = \Magento\Sales\Model\Order\Payment\Transaction\Repository::class;
         $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
@@ -112,7 +112,7 @@ class TransactionTest extends WebapiAbstract
 
         /** @var $searchCriteriaBuilder  \Magento\Framework\Api\SearchCriteriaBuilder */
         $searchCriteriaBuilder = $this->objectManager->create(
-            'Magento\Framework\Api\SearchCriteriaBuilder'
+            \Magento\Framework\Api\SearchCriteriaBuilder::class
         );
 
         $searchCriteriaBuilder->addFilters($filters);
@@ -187,7 +187,7 @@ class TransactionTest extends WebapiAbstract
     {
         /** @var $filterBuilder  \Magento\Framework\Api\FilterBuilder */
         $filterBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Api\FilterBuilder'
+            \Magento\Framework\Api\FilterBuilder::class
         );
 
         return [

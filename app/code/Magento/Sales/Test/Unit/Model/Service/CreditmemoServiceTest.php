@@ -60,33 +60,33 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->creditmemoRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\CreditmemoRepositoryInterface',
+            \Magento\Sales\Api\CreditmemoRepositoryInterface::class,
             ['get'],
             '',
             false
         );
         $this->creditmemoCommentRepositoryMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Api\CreditmemoCommentRepositoryInterface',
+            \Magento\Sales\Api\CreditmemoCommentRepositoryInterface::class,
             [],
             '',
             false
         );
         $this->searchCriteriaBuilderMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
+            \Magento\Framework\Api\SearchCriteriaBuilder::class,
             ['create', 'addFilters'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
-            'Magento\Framework\Api\FilterBuilder',
+            \Magento\Framework\Api\FilterBuilder::class,
             ['setField', 'setValue', 'setConditionType', 'create'],
             [],
             '',
             false
         );
         $this->creditmemoNotifierMock = $this->getMock(
-            'Magento\Sales\Model\Order\CreditmemoNotifier',
+            \Magento\Sales\Model\Order\CreditmemoNotifier::class,
             [],
             [],
             '',
@@ -95,7 +95,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)->getMockForAbstractClass();
 
         $this->creditmemoService = $objectManager->getObject(
-            'Magento\Sales\Model\Service\CreditmemoService',
+            \Magento\Sales\Model\Service\CreditmemoService::class,
             [
                 'creditmemoRepository' => $this->creditmemoRepositoryMock,
                 'creditmemoCommentRepository' => $this->creditmemoCommentRepositoryMock,
@@ -126,14 +126,14 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $returnValue = 'return-value';
 
         $filterMock = $this->getMock(
-            'Magento\Framework\Api\Filter',
+            \Magento\Framework\Api\Filter::class,
             [],
             [],
             '',
             false
         );
         $searchCriteriaMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteria',
+            \Magento\Framework\Api\SearchCriteria::class,
             [],
             [],
             '',
@@ -178,7 +178,7 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
         $returnValue = 'return-value';
 
         $modelMock = $this->getMockForAbstractClass(
-            'Magento\Sales\Model\AbstractModel',
+            \Magento\Sales\Model\AbstractModel::class,
             [],
             '',
             false

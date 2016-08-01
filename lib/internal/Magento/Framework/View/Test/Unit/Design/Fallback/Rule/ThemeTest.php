@@ -48,6 +48,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             $this->directoryListMock
         );
     }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Parameter "theme" should be specified and should implement the theme interface

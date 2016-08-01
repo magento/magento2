@@ -5,7 +5,7 @@
  */
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
-$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
 $rule->setName(
     '#1'
 )->setIsActive(
@@ -26,7 +26,7 @@ $rule->setName(
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
-$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
 $rule->setName(
     '#2'
 )->setIsActive(
@@ -47,7 +47,7 @@ $rule->setName(
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
-$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
 $rule->setName(
     '#3'
 )->setIsActive(
@@ -68,7 +68,7 @@ $rule->setName(
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
-$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
 $rule->setName(
     '#4'
 )->setIsActive(
@@ -89,7 +89,7 @@ $rule->setName(
     ->save();
 
 /** @var \Magento\SalesRule\Model\Rule $rule */
-$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+$rule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\SalesRule\Model\Rule::class);
 $rule->setName(
     '#5'
 )->setIsActive(

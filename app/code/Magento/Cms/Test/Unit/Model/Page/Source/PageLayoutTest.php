@@ -38,11 +38,12 @@ class PageLayoutTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->builderMock = $this->getMockBuilder('Magento\Framework\View\Model\PageLayout\Config\BuilderInterface')
-            ->disableOriginalConstructor()
+        $this->builderMock = $this->getMockBuilder(
+            \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::class
+        )->disableOriginalConstructor()
             ->setMethods(['getPageLayoutsConfig'])
             ->getMock();
-        $this->pageLayoutConfigMock = $this->getMockBuilder('Magento\Framework\View\PageLayout\Config')
+        $this->pageLayoutConfigMock = $this->getMockBuilder(\Magento\Framework\View\PageLayout\Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOptions'])
             ->getMock();
@@ -61,7 +62,7 @@ class PageLayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected function getSourceClassName()
     {
-        return 'Magento\Cms\Model\Page\Source\PageLayout';
+        return \Magento\Cms\Model\Page\Source\PageLayout::class;
     }
 
     /**

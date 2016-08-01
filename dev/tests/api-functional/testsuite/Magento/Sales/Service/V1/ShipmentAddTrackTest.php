@@ -46,7 +46,9 @@ class ShipmentAddTrackTest extends WebapiAbstract
     public function testShipmentAddTrack()
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
+        $shipmentCollection = $this->objectManager->get(
+            \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class
+        );
         $shipment = $shipmentCollection->getFirstItem();
 
         $trackData = [

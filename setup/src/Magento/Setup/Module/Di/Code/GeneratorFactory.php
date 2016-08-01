@@ -30,6 +30,6 @@ class GeneratorFactory
      */
     public function create($arguments = [])
     {
-        return $this->objectManager->create('Magento\Setup\Module\Di\Code\Generator', $arguments);
+        return $this->objectManager->create(\Magento\Setup\Module\Di\Code\Generator::class, $arguments);
     }
 }

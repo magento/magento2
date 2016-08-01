@@ -30,7 +30,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $urlModel = $this->getMock(
-            'Magento\Backend\Model\Url',
+            \Magento\Backend\Model\Url::class,
             ['getUrl'],
             [],
             '',
@@ -38,7 +38,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
         );
         $urlModel->expects($this->any())->method('getUrl')->willReturn('url');
         $this->context = $this->getMock(
-            'Magento\Backend\Block\Context',
+            \Magento\Backend\Block\Context::class,
             ['getUrlBuilder'],
             [],
             '',
@@ -49,7 +49,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->download = $this->objectManagerHelper->getObject(
-            'Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download',
+            \Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download::class,
             [
                 'context' => $this->context,
                 'data' => $data

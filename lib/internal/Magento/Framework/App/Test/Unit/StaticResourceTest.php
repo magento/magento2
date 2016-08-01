@@ -11,6 +11,9 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Filesystem;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StaticResourceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -65,16 +68,16 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->state = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->response = $this->getMock('Magento\MediaStorage\Model\File\Storage\Response', [], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
-        $this->publisher = $this->getMock('Magento\Framework\App\View\Asset\Publisher', [], [], '', false);
-        $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
-        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
+        $this->state = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->response = $this->getMock(\Magento\MediaStorage\Model\File\Storage\Response::class, [], [], '', false);
+        $this->request = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
+        $this->publisher = $this->getMock(\Magento\Framework\App\View\Asset\Publisher::class, [], [], '', false);
+        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
+        $this->moduleList = $this->getMock(\Magento\Framework\Module\ModuleList::class, [], [], '', false);
+        $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
         $this->configLoader = $this->getMock(
-            'Magento\Framework\App\ObjectManager\ConfigLoader', [], [], '', false
+            \Magento\Framework\App\ObjectManager\ConfigLoader::class, [], [], '', false
         );
         $this->object = new \Magento\Framework\App\StaticResource(
             $this->state,
@@ -85,7 +88,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
             $this->moduleList,
             $this->objectManager,
             $this->configLoader,
-            $this->getMockForAbstractClass('\Magento\Framework\View\DesignInterface')
+            $this->getMockForAbstractClass(\Magento\Framework\View\DesignInterface::class)
         );
     }
 
@@ -141,7 +144,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
             ->method('has')
             ->with($requestedModule)
             ->will($this->returnValue($moduleExists));
-        $asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
         $asset->expects($this->once())->method('getSourceFile')->will($this->returnValue('resource/file.css'));
         $this->assetRepo->expects($this->once())
             ->method('createAsset')

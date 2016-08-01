@@ -106,7 +106,7 @@ class Payment extends \Magento\Payment\Model\Info implements PaymentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\ResourceModel\Quote\Payment');
+        $this->_init(\Magento\Quote\Model\ResourceModel\Quote\Payment::class);
     }
 
     /**

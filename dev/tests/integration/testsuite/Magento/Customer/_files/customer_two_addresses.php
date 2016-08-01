@@ -12,7 +12,7 @@ require 'customer_address.php';
 
 /** @var \Magento\Customer\Model\Address $customerAddress */
 $customerAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Customer\Model\Address');
+    ->create(\Magento\Customer\Model\Address::class);
 /** @var CustomerRegistry $customerRegistry */
 $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get(CustomerRegistry::class);
