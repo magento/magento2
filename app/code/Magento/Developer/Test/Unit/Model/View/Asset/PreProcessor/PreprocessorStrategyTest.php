@@ -19,6 +19,7 @@ use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
  * Class PreprocessorStrategyTest
  *
  * @see \Magento\Developer\Model\View\Asset\PreProcessor\PreprocessorStrategy
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PreprocessorStrategyTest extends \PHPUnit_Framework_TestCase
 {
