@@ -75,6 +75,14 @@ define([
         },
 
         /**
+         * Checks if component has error.
+         * @returns {Boolean}
+         */
+        isInvalid: function () {
+            return this.error() && this.error().length;
+        },
+
+        /**
          * Initializes observable properties of instance
          *
          * @returns {Abstract} Chainable.
