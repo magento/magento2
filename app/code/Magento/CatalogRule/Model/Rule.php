@@ -21,7 +21,8 @@ use Magento\Catalog\Model\Product;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\CatalogRule\Api\Data\RuleInterface, \Magento\Framework\DataObject\IdentityInterface
+class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\CatalogRule\Api\Data\RuleInterface,
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Prefix of model events names

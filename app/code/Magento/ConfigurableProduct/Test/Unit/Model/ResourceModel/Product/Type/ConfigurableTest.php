@@ -17,7 +17,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $connection;
+
     /**
      * @var Configurable
      */

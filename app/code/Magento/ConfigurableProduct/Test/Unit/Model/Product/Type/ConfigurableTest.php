@@ -37,6 +37,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $eavConfig;
+
+    /**
      * @var Configurable
      */
     protected $_model;
@@ -168,10 +173,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_model = $this->_objectHelper->getObject(
+        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)->disableOriginalConstructor()
+            ->getMock();
 
+        $this->_model = $this->_objectHelper->getObject(
             Configurable::class,
             [
+                'eavConfig' => $this->eavConfig,
                 'typeConfigurableFactory' => $this->_typeConfigurableFactory,
                 'configurableAttributeFactory' => $this->_configurableAttributeFactoryMock,
                 'productCollectionFactory' => $this->_productCollectionFactory,
@@ -759,14 +767,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn('some_filter');
         $productMock->expects($this->any())->method('hasData')->willReturn(true);
 
-        $productMock->expects($this->at(3))->method('getData')
-            ->with('_cache_instance_product_set_attributes')
-            ->willReturn([$eavAttributeMock]);
-        $eavAttributeMock->expects($this->once())->method('getId')->willReturn(1);
         $eavAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attr_code');
         $usedProductMock->expects($this->once())
             ->method('getData')->with('attr_code')
             ->willReturn($this->attributeData[1]);
+        $this->eavConfig->expects($this->any())->method('getAttribute')->willReturn($eavAttributeMock);
 
         $this->assertEquals(
             $usedProductMock,

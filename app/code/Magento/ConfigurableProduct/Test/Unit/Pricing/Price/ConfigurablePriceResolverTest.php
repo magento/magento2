@@ -39,7 +39,6 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
         $this->cofigurableOptionProvider = $this->getMockBuilder(ConfigurableOptionsProviderInterface::class)
             ->disableOriginalConstructor()->getMock();
 
-
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
             \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver::class,
