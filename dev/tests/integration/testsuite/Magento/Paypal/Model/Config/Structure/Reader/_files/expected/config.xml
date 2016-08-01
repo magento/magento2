@@ -29,11 +29,14 @@
             <group id="paypal_payflowpro" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
                 <label>Payflow Pro</label>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <fieldset_css>pp-method-payflow</fieldset_css>
-                <comment>Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site.</comment>
+                <fieldset_css>paypal-other-section</fieldset_css>
+                <comment><![CDATA[Connect your merchant account with a fully customizable gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
                 <attribute type="activity_path">payment/payflowpro/active</attribute>
-                <more_url>https://www.paypal.com/webapps/mpp/payflow-payment-gateway?partner_id=NB9WWHYEMVUMS</more_url>
                 <attribute type="paypal_ec_separate">1</attribute>
+                <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                    <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-pro.html</comment>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+                </group>
                 <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                     <label>Required PayPal Settings</label>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -234,12 +237,15 @@
                 </group>
             </group>
             <group id="payflow_link" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
-                <label>Payflow Link (Includes Express Checkout)</label>
+                <label>Payflow Link</label>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <fieldset_css>pp-method-payflow</fieldset_css>
-                <comment>Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site.</comment>
+                <fieldset_css>paypal-other-section</fieldset_css>
+                <comment><![CDATA[Connect your merchant account with a PCI-compliant gateway that lets customers pay without leaving your site. (<u>Includes Express Checkout</u>)]]></comment>
                 <attribute type="activity_path">payment/payflow_link/active</attribute>
-                <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payflow-link?partner_id=NB9WWHYEMVUMS</more_url>
+                <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                    <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payflow-link.html</comment>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+                </group>
                 <group id="payflow_link_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                     <label>Required PayPal Settings</label>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -562,10 +568,13 @@
             <group id="express_checkout" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
                 <label>Express Checkout</label>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <fieldset_css>pp-method-express</fieldset_css>
+                <fieldset_css>paypal-other-section</fieldset_css>
                 <comment>Add PayPal as an additional payment method to your checkout page.</comment>
                 <attribute type="activity_path">payment/paypal_express/active</attribute>
-                <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-express-checkout?partner_id=NB9WWHYEMVUMS</more_url>
+                <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                    <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-express-checkout.html</comment>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+                </group>
                 <group id="express_checkout_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                     <label>Required PayPal Settings</label>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -1200,11 +1209,15 @@
             </group>
             <group id="payments_pro_hosted_solution" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                 <label>Website Payments Pro Hosted Solution</label>
-                <fieldset_css>pp-method-general</fieldset_css>
+                <fieldset_css>paypal-other-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <attribute type="activity_path">payment/hosted_pro/active</attribute>
-                <comment>Accept payments with a PCI compliant checkout that keeps customers on your site.</comment>
+                <comment><![CDATA[Accept payments with a PCI compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)]]></comment>
                 <attribute type="paypal_ec_separate">1</attribute>
+                <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                    <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-pro.html</comment>
+                    <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+                </group>
                 <group id="pphs_required_settings" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                     <label>Required PayPal Settings</label>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -1421,12 +1434,15 @@
                 <comment>Choose a secure bundled payment solution for your business.</comment>
                 <help_url>https://www.paypal-marketing.com/emarketing/partner/na/merchantlineup/home.page#mainTab=checkoutlineup&amp;subTab=newlineup</help_url>
                 <group id="payflow_advanced" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
-                    <label>Payments Advanced (Includes Express Checkout)</label>
-                    <fieldset_css>pp-method-general</fieldset_css>
+                    <label>Payments Advanced</label>
+                    <fieldset_css>paypal-other-section</fieldset_css>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                    <more_url>https://www.paypal.com/webapps/mpp/referral/paypal-payments-advanced?partner_id=NB9WWHYEMVUMS</more_url>
-                    <comment>Accept payments with a PCI-compliant checkout that keeps customers on your site.</comment>
+                    <comment><![CDATA[Accept payments with a PCI-compliant checkout that keeps customers on your site. (<u>Includes Express Checkout</u>)]]></comment>
                     <attribute type="activity_path">payment/payflow_advanced/active</attribute>
+                    <group id="configuration_details" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="4">
+                        <comment>http://docs.magento.com/m2/ce/user_guide/payment/paypal-payments-advanced.html</comment>
+                        <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint</frontend_model>
+                    </group>
                     <group id="required_settings" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                         <label>Required PayPal Settings</label>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
@@ -1777,7 +1793,7 @@
                 <comment>Process payments using your own internet merchant account.</comment>
                 <help_url>https://merchant.paypal.com/cgi-bin/marketingweb?cmd=_render-content</help_url>
                 <group id="paypal_payflowpro_with_express_checkout" translate="label comment" extends="payment_all_paypal/paypal_payflowpro">
-                    <label>Payflow Pro (Includes Express Checkout)</label>
+                    <label>Payflow Pro</label>
                     <attribute type="paypal_ec_separate">0</attribute>
                     <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                         <label>Required PayPal Settings</label>
@@ -2039,9 +2055,7 @@
                     </group>
                 </group>
                 <group id="payments_pro_hosted_solution_with_express_checkout" translate="labelcomment" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml" sortOrder="30">
-                    <label>Website Payments Pro Hosted Solution (Includes Express Checkout)</label>
-                    <fieldset_css>pp-general-uk</fieldset_css>
-                    <more_url>https://cms.paypal.com/cms_content/GB/en_GB/files/developer/HostedSolution.pdf</more_url>
+                    <label>Website Payments Pro Hosted Solution</label>
                     <attribute type="paypal_ec_separate">0</attribute>
                     <group id="pphs_required_settings">
                         <group id="pphs_required_settings_pphs" translate="label">
