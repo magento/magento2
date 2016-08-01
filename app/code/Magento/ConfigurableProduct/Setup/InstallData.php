@@ -51,6 +51,7 @@ class InstallData implements InstallDataInterface
             'special_price',
             'special_from_date',
             'special_to_date',
+            'tier_price',
             'weight',
             'color'
         ];
