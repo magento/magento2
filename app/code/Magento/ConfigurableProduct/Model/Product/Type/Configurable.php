@@ -1231,7 +1231,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param  int $attributeId
      * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getAttributeById($attributeId, $product)
     {
