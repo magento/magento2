@@ -20,6 +20,8 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Class GroupRepositoryTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupRepositoryTest extends WebapiAbstract
 {

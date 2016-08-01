@@ -20,7 +20,7 @@ class SortingProcessorTest extends \PHPUnit_Framework_TestCase
      * @param array $defaultOrders
      * @return SortingProcessor
      */
-    private function getModel( array $fieldMapping, array $defaultOrders)
+    private function getModel(array $fieldMapping, array $defaultOrders)
     {
         return new SortingProcessor($fieldMapping, $defaultOrders);
     }

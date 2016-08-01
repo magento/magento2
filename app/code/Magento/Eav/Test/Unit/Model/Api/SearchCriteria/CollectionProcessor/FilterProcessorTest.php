@@ -26,6 +26,9 @@ class FilterProcessorTest extends \PHPUnit_Framework_TestCase
         return new FilterProcessor($customFilters, $fieldMapping);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testProcess()
     {
         /** @var CustomFilterInterface|\PHPUnit_Framework_MockObject_MockObject $customFilterMock */

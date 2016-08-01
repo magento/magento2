@@ -88,7 +88,7 @@ class CollectionProcessorCompositeTest extends \PHPUnit_Framework_TestCase
             ->with($searchCriteriaMock, $collectionMock);
 
         $processorTwoMock->expects($this->never())
-            ->method('process');;
+            ->method('process');
 
         $model->process($searchCriteriaMock, $collectionMock);
     }
