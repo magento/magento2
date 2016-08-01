@@ -49,7 +49,7 @@ class UpgradeData implements UpgradeDataInterface
                 $eavSetup->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'tier_price', 'apply_to')
             );
             $key = array_search(Configurable::TYPE_CODE, $relatedProductTypes);
-            if($key !== false) {
+            if ($key !== false) {
                 unset($relatedProductTypes[$key]);
                 $eavSetup->updateAttribute(
                     \Magento\Catalog\Model\Product::ENTITY,
