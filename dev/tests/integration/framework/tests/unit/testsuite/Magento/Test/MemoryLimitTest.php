@@ -54,7 +54,7 @@ class MemoryLimitTest extends \PHPUnit_Framework_TestCase
     protected function _createObject($memCap, $leakCap)
     {
         $helper = $this->getMock(
-            'Magento\TestFramework\Helper\Memory',
+            \Magento\TestFramework\Helper\Memory::class,
             ['getRealMemoryUsage'],
             [],
             '',

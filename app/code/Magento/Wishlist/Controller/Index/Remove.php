@@ -11,6 +11,9 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Remove extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
@@ -53,7 +56,7 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
         }
 
         $id = (int)$this->getRequest()->getParam('item');
-        $item = $this->_objectManager->create('Magento\Wishlist\Model\Item')->load($id);
+        $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class)->load($id);
         if (!$item->getId()) {
             throw new NotFoundException(__('Page not found.'));
         }
@@ -72,7 +75,7 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex
             $this->messageManager->addError(__('We can\'t delete the item from the Wish List right now.'));
         }
 
-        $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
+        $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
         $request = $this->getRequest();
         $refererUrl = (string)$request->getServer('HTTP_REFERER');
         $url = (string)$request->getParam(\Magento\Framework\App\Response\RedirectInterface::PARAM_NAME_REFERER_URL);

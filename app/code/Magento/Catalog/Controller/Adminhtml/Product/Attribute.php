@@ -72,7 +72,7 @@ abstract class Attribute extends \Magento\Backend\App\Action
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         $this->_entityTypeId = $this->_objectManager->create(
-            'Magento\Eav\Model\Entity'
+            \Magento\Eav\Model\Entity::class
         )->setType(
             \Magento\Catalog\Model\Product::ENTITY
         )->getTypeId();
@@ -119,7 +119,7 @@ abstract class Attribute extends \Magento\Backend\App\Action
             preg_replace(
                 '/[^a-z_0-9]/',
                 '_',
-                $this->_objectManager->create('Magento\Catalog\Model\Product\Url')->formatUrlKey($label)
+                $this->_objectManager->create(\Magento\Catalog\Model\Product\Url::class)->formatUrlKey($label)
             ),
             0,
             30

@@ -5,7 +5,7 @@
  */
 
 /** @var \Magento\Sales\Model\Order\Status $status */
-$status = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Status');
+$status = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order\Status::class);
 //status for state new
 $status->setData('status', 'custom_new_status')->setData('label', 'Test Status')->save();
 $status->assignState(\Magento\Sales\Model\Order::STATE_NEW, true);

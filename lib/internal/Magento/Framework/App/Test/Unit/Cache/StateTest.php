@@ -22,8 +22,8 @@ class StateTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->config = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->writer = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
+        $this->config = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->writer = $this->getMock(\Magento\Framework\App\DeploymentConfig\Writer::class, [], [], '', false);
     }
 
     /**

@@ -46,7 +46,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     public function getMapBlock()
     {
         return $this->blockFactory->create(
-            'Magento\Msrp\Test\Block\Product\Map',
+            \Magento\Msrp\Test\Block\Product\Map::class,
             ['element' => $this->_rootElement->find($this->mapPopupBlock, Locator::SELECTOR_XPATH)]
         );
     }

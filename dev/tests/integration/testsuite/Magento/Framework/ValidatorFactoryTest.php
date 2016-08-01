@@ -15,18 +15,18 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $objectManager->create('Magento\Framework\ValidatorFactory');
+        $this->model = $objectManager->create(\Magento\Framework\ValidatorFactory::class);
     }
 
     public function testCreateWithInstanceName()
     {
-        $setName = 'Magento\Framework\DataObject';
+        $setName = \Magento\Framework\DataObject::class;
         $this->assertInstanceOf($setName, $this->model->create([], $setName));
     }
 
     public function testCreateDefault()
     {
-        $default = 'Magento\Framework\Validator';
+        $default = \Magento\Framework\Validator::class;
         $this->assertInstanceOf($default, $this->model->create());
     }
 }

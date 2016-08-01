@@ -15,7 +15,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         /** @var Group $group */
-        $group = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Config\Source\Group');
+        $group = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Config\Source\Group::class);
         $this->assertEquals(
             [
                 ['value' => '', 'label' => '-- Please Select --'],

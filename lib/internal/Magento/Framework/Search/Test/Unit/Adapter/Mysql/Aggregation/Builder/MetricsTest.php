@@ -29,17 +29,17 @@ class MetricsTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->requestBucket = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+        $this->requestBucket = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
             ->setMethods(['getMetrics'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->metric = $this->getMockBuilder('Magento\Framework\Search\Request\Aggregation\Metric')
+        $this->metric = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\Metric::class)
             ->setMethods(['getType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->metrics = $helper->getObject('Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics');
+        $this->metrics = $helper->getObject(\Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics::class);
     }
 
     public function testBuild()

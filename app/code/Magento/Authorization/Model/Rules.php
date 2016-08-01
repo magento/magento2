@@ -50,7 +50,7 @@ class Rules extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Authorization\Model\ResourceModel\Rules');
+        $this->_init(\Magento\Authorization\Model\ResourceModel\Rules::class);
     }
 
     /**

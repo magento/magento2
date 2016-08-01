@@ -15,7 +15,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->validationStateMock = $this->getMock(
-            '\Magento\Framework\Config\ValidationStateInterface',
+            \Magento\Framework\Config\ValidationStateInterface::class,
             [],
             [],
             '',
@@ -172,7 +172,7 @@ class DomTest extends \PHPUnit_Framework_TestCase
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
         $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
-        $domMock = $this->getMock('DOMDocument', ['schemaValidate'], []);
+        $domMock = $this->getMock(\DOMDocument::class, ['schemaValidate'], []);
         $domMock->expects($this->once())
             ->method('schemaValidate')
             ->with($schemaFile)

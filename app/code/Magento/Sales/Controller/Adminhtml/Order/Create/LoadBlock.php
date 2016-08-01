@@ -85,7 +85,7 @@ class LoadBlock extends \Magento\Sales\Controller\Adminhtml\Order\Create
 
         $result = $resultPage->getLayout()->renderElement('content');
         if ($request->getParam('as_js_varname')) {
-            $this->_objectManager->get('Magento\Backend\Model\Session')->setUpdateResult($result);
+            $this->_objectManager->get(\Magento\Backend\Model\Session::class)->setUpdateResult($result);
             return $this->resultRedirectFactory->create()->setPath('sales/*/showUpdateResult');
         }
         return $this->resultRawFactory->create()->setContents($result);
