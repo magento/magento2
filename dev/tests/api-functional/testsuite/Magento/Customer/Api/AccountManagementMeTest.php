@@ -94,7 +94,7 @@ class AccountManagementMeTest extends \Magento\TestFramework\TestCase\WebapiAbst
      */
     public function tearDown()
     {
-        unset($this->customerRepository);
+        $this->customerRepository = null;
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');

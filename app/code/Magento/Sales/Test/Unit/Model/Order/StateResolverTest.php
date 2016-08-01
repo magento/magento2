@@ -70,7 +70,7 @@ class StateResolverTest extends \PHPUnit_Framework_TestCase
             ->method('isCanceled')
             ->willReturn(true);
 
-        $this->orderMock->expects($this->once())
+        $this->orderMock->expects($this->any())
             ->method('getState')
             ->willReturn(Order::STATE_NEW);
 

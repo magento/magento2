@@ -82,6 +82,18 @@ class TriggerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for table name setter
+     */
+    public function testSetTableName()
+    {
+        $names = ['PREFIX_table', 'prefix_table'];
+        foreach ($names as $name) {
+            $this->_object->setTable($name);
+            $this->assertEquals($name, $this->_object->getTable());
+        }
+    }
+
+    /**
      * Test case for getName()
      *
      * @expectedException \Zend_Db_Exception
