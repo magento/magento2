@@ -134,7 +134,7 @@ class DiCompileCommand extends Command
         $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
 
-        $this->objectManager->get('Magento\Framework\App\Cache')->clean();
+        $this->objectManager->get(\Magento\Framework\App\Cache::class)->clean();
         $compiledPathsList = [
             'application' => $modulePaths,
             'library' => $libraryPaths,
@@ -172,7 +172,7 @@ class DiCompileCommand extends Command
 
             /** @var ProgressBar $progressBar */
             $progressBar = $this->objectManager->create(
-                'Symfony\Component\Console\Helper\ProgressBar',
+                \Symfony\Component\Console\Helper\ProgressBar::class,
                 [
                     'output' => $output,
                     'max' => count($operations)
@@ -228,39 +228,38 @@ class DiCompileCommand extends Command
     {
         $this->objectManager->configure(
             [
-                'preferences' => [
-                    'Magento\Setup\Module\Di\Compiler\Config\WriterInterface' =>
-                        'Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem',
-                ],
-                'Magento\Setup\Module\Di\Compiler\Config\ModificationChain' => [
+                'preferences' => [\Magento\Setup\Module\Di\Compiler\Config\WriterInterface::class =>
+                    \Magento\Setup\Module\Di\Compiler\Config\Writer\Filesystem::class,
+                ], \Magento\Setup\Module\Di\Compiler\Config\ModificationChain::class => [
                     'arguments' => [
                         'modificationsList' => [
                             'BackslashTrim' =>
-                                ['instance' => 'Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim'],
+                                ['instance' => \Magento\Setup\Module\Di\Compiler\Config\Chain\BackslashTrim::class],
                             'PreferencesResolving' =>
-                                ['instance' => 'Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving'],
+                                ['instance' =>
+                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
                             'InterceptorSubstitution' =>
-                                ['instance' => 'Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution'],
+                                ['instance' =>
+                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitution::class],
                             'InterceptionPreferencesResolving' =>
-                                ['instance' => 'Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving'],
+                                ['instance' =>
+                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\PreferencesResolving::class],
                             'ArgumentsSerialization' =>
-                                ['instance' => 'Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization'],
+                                ['instance' =>
+                                    \Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization::class],
                         ]
                     ]
-                ],
-                'Magento\Setup\Module\Di\Code\Generator\PluginList' => [
+                ], \Magento\Setup\Module\Di\Code\Generator\PluginList::class => [
                     'arguments' => [
                         'cache' => [
-                            'instance' => 'Magento\Framework\App\Interception\Cache\CompiledConfig'
+                            'instance' => \Magento\Framework\App\Interception\Cache\CompiledConfig::class
                         ]
                     ]
-                ],
-                'Magento\Setup\Module\Di\Code\Reader\ClassesScanner' => [
+                ], \Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class => [
                     'arguments' => [
                         'excludePatterns' => $this->excludedPathsList
                     ]
-                ],
-                'Magento\Setup\Module\Di\Compiler\Log\Writer\Console' => [
+                ], \Magento\Setup\Module\Di\Compiler\Log\Writer\Console::class => [
                     'arguments' => [
                         'output' => $output,
                     ]

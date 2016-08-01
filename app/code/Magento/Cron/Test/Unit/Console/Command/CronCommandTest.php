@@ -12,9 +12,9 @@ class CronCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $objectManagerFactory = $this->getMock('Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
-        $objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $cron = $this->getMock('Magento\Framework\App\Cron', [], [], '', false);
+        $objectManagerFactory = $this->getMock(\Magento\Framework\App\ObjectManagerFactory::class, [], [], '', false);
+        $objectManager = $this->getMock(\Magento\Framework\ObjectManagerInterface::class, [], [], '', false);
+        $cron = $this->getMock(\Magento\Framework\App\Cron::class, [], [], '', false);
         $objectManager->expects($this->once())->method('create')->willReturn($cron);
         $cron->expects($this->once())->method('launch');
         $objectManagerFactory->expects($this->once())->method('create')->willReturn($objectManager);

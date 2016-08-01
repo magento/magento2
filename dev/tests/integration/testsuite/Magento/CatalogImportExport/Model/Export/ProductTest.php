@@ -92,7 +92,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv'
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
         $this->assertNotEmpty($this->model->export());

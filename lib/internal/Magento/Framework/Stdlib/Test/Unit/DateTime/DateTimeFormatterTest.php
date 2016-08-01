@@ -25,7 +25,7 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Skip this test for hhvm due to problem with \IntlDateFormatter::formatObject');
         }
         $this->objectManager = new ObjectManager($this);
-        $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+        $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->localeResolverMock->expects($this->any())
@@ -44,7 +44,7 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
     public function testFormatObject($object, $format = null, $locale = null, $useIntlFormatObject = false)
     {
         $dateTimeFormatter = $this->objectManager->getObject(
-            'Magento\Framework\Stdlib\DateTime\DateTimeFormatter',
+            \Magento\Framework\Stdlib\DateTime\DateTimeFormatter::class,
             [
                 'useIntlFormatObject' => $useIntlFormatObject,
             ]
@@ -124,7 +124,7 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
     public function testFormatObjectIfPassedWrongFormat()
     {
         $dateTimeFormatter = $this->objectManager->getObject(
-            'Magento\Framework\Stdlib\DateTime\DateTimeFormatter',
+            \Magento\Framework\Stdlib\DateTime\DateTimeFormatter::class,
             [
                 'useIntlFormatObject' => false,
             ]

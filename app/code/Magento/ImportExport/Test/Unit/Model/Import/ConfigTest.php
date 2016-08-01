@@ -30,13 +30,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_readerMock = $this->getMock(
-            'Magento\ImportExport\Model\Import\Config\Reader',
+            \Magento\ImportExport\Model\Import\Config\Reader::class,
             [],
             [],
             '',
             false
         );
-        $this->_configScopeMock = $this->getMock('Magento\Framework\Config\CacheInterface');
+        $this->_configScopeMock = $this->getMock(\Magento\Framework\Config\CacheInterface::class);
     }
 
     /**

@@ -14,7 +14,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->markTestSkipped('MAGETWO-44910');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Locale\ResolverInterface')->setLocale('de_DE');
+        $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class)->setLocale('de_DE');
 
         $this->getRequest()->setParam('q', 'query_text');
         $this->dispatch('catalogsearch/result');

@@ -59,37 +59,37 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->eventDispatcher = $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
+        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
         $this->eventDispatcher->method('dispatch')->willReturnSelf();
-        $this->context = $this->getMockBuilder('\Magento\Framework\Model\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
         
-        $this->registry = $this->getMock('\Magento\Framework\Registry');
-        $this->config = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->cacheTypeList = $this->getMockBuilder('\Magento\Framework\App\Cache\TypeList')
+        $this->registry = $this->getMock(\Magento\Framework\Registry::class);
+        $this->config = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->cacheTypeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeList::class)
             ->disableOriginalConstructor()
             ->setMethods(['invalidate'])
             ->getMock();
 
-        $this->urlRewriteHelper = $this->getMockBuilder('\Magento\UrlRewrite\Helper\UrlRewrite')
+        $this->urlRewriteHelper = $this->getMockBuilder(\Magento\UrlRewrite\Helper\UrlRewrite::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('\Magento\Store\Model\StoreManager')
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStores'])
             ->getMock();
         $this->storeManager->method('getStores')->willReturn([]);
         
-        $this->appResource =$this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
+        $this->appResource =$this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlFinder =$this->getMockBuilder('\Magento\UrlRewrite\Model\UrlFinderInterface')
+        $this->urlFinder =$this->getMockBuilder(\Magento\UrlRewrite\Model\UrlFinderInterface::class)
             ->setMethods(['findAllByData', 'findOneByData'])
             ->getMock();
         $this->urlFinder->method('findAllByData')->willReturn([]);
@@ -109,7 +109,9 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveCleanCache()
     {
         $this->suffixModel->setValue('new');
-        $this->suffixModel->setPath(\Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX);
+        $this->suffixModel->setPath(
+            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
+        );
         $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')->withConsecutive(
             [$this->equalTo([
                 \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
@@ -123,7 +125,9 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveWithoutChanges()
     {
         $this->suffixModel->setValue('');
-        $this->suffixModel->setPath(\Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX);
+        $this->suffixModel->setPath(
+            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
+        );
         $this->cacheTypeList->expects($this->never())->method('invalidate');
         $this->suffixModel->afterSave();
     }
@@ -131,7 +135,9 @@ class SuffixTest extends \PHPUnit_Framework_TestCase
     public function testAfterSaveProduct()
     {
         $this->suffixModel->setValue('new');
-        $this->suffixModel->setPath(\Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX);
+        $this->suffixModel->setPath(
+            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX
+        );
         $this->cacheTypeList->expects($this->once())->method('invalidate')->with('config');
         $this->suffixModel->afterSave();
     }

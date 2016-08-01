@@ -34,10 +34,10 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     {
         $this->_markTestAsRestOnly("JSON generation tests are intended to be executed for REST adapter only.");
 
-        $this->storeCode = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')
+        $this->storeCode = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()->getCode();
 
-        $this->productMetadata =  Bootstrap::getObjectManager()->get('Magento\Framework\App\ProductMetadataInterface');
+        $this->productMetadata =  Bootstrap::getObjectManager()->get(\Magento\Framework\App\ProductMetadataInterface::class);
 
         parent::setUp();
     }

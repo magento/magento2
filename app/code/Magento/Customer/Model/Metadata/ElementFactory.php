@@ -69,8 +69,8 @@ class ElementFactory
             'attribute' => $attribute,
         ];
         /** TODO fix when Validation is implemented MAGETWO-17341 */
-        if ($dataModelClass == 'Magento\Customer\Model\Attribute\Data\Postcode') {
-            $dataModelClass = 'Magento\Customer\Model\Metadata\Form\Postcode';
+        if ($dataModelClass == \Magento\Customer\Model\Attribute\Data\Postcode::class) {
+            $dataModelClass = \Magento\Customer\Model\Metadata\Form\Postcode::class;
         }
         if (!empty($dataModelClass)) {
             $dataModel = $this->_objectManager->create($dataModelClass, $params);

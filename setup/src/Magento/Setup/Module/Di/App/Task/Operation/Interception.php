@@ -92,7 +92,7 @@ class Interception implements OperationInterface
             [
                 'ioObject' => $generatorIo,
                 'generatedEntities' => [
-                    Interceptor::ENTITY_TYPE => 'Magento\Setup\Module\Di\Code\Generator\Interceptor',
+                    Interceptor::ENTITY_TYPE => \Magento\Setup\Module\Di\Code\Generator\Interceptor::class,
                 ]
             ]
         );

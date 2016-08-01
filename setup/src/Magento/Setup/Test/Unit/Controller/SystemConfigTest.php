@@ -18,7 +18,7 @@ class SystemConfigTest extends \PHPUnit_Framework_TestCase
         /** @var $controller SystemConfig */
         $controller = new SystemConfig();
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 }

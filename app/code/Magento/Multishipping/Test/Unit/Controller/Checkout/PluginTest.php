@@ -27,9 +27,9 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->cartMock = $this->getMock('Magento\Checkout\Model\Cart', [], [], '', false);
+        $this->cartMock = $this->getMock(\Magento\Checkout\Model\Cart::class, [], [], '', false);
         $this->quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
+            \Magento\Quote\Model\Quote::class,
             ['__wakeUp', 'setIsMultiShipping'],
             [],
             '',
@@ -41,7 +41,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteTurnsOffMultishippingModeOnQuote()
     {
-        $subject = $this->getMock('Magento\Checkout\Controller\Index\Index', [], [], '', false);
+        $subject = $this->getMock(\Magento\Checkout\Controller\Index\Index::class, [], [], '', false);
         $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(0);
         $this->object->beforeExecute($subject);
     }

@@ -490,7 +490,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _loadXmlString($xmlString)
     {
-        return simplexml_load_string($xmlString, 'Magento\Framework\View\Layout\Element');
+        return simplexml_load_string($xmlString, \Magento\Framework\View\Layout\Element::class);
     }
 
     /**

@@ -12,7 +12,7 @@ class ParserFactory
     /**
      * Default instance type
      */
-    const DEFAULT_INSTANCE_TYPE = 'Magento\Framework\Translate\Inline\ParserInterface';
+    const DEFAULT_INSTANCE_TYPE = \Magento\Framework\Translate\Inline\ParserInterface::class;
 
     /**
      * Object Manager

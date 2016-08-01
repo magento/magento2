@@ -26,7 +26,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface',
+            \Magento\Store\Model\StoreManagerInterface::class,
             [],
             [],
             '',
@@ -44,7 +44,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->getMock('Magento\Framework\App\ScopeInterface', [], [], '', false, false);
+        $scopeMock = $this->getMock(\Magento\Framework\App\ScopeInterface::class, [], [], '', false, false);
         $this->_storeManagerMock
             ->expects($this->once())
             ->method('getStore')

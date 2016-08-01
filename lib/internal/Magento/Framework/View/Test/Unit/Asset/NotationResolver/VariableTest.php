@@ -32,12 +32,12 @@ class VariableTest extends \PHPUnit_Framework_TestCase
         $path = 'frontend/Magento/blank/en_US';
 
         $this->context = $this->getMock(
-            '\Magento\Framework\View\Asset\File\Context',
+            \Magento\Framework\View\Asset\File\Context::class,
             null,
             [$baseUrl, DirectoryList::STATIC_VIEW, $path]
         );
 
-        $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->assetRepo = $this->getMock(\Magento\Framework\View\Asset\Repository::class, [], [], '', false);
         $this->assetRepo->expects($this->any())
             ->method('getStaticViewFileContext')
             ->will($this->returnValue($this->context));

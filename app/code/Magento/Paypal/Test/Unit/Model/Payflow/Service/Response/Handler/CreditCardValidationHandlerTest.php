@@ -20,13 +20,12 @@ class CreditCardValidationHandlerTest extends \PHPUnit_Framework_TestCase
             Info::PAYPAL_IAVS => 'X'
         ];
 
-
-        $paypalInfoManager = $this->getMockBuilder('Magento\Paypal\Model\Info')
+        $paypalInfoManager = $this->getMockBuilder(\Magento\Paypal\Model\Info::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
+        $paymentMock = $this->getMockBuilder(\Magento\Payment\Model\InfoInterface::class)
             ->getMock();
-        $responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
+        $responseMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 

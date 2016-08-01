@@ -42,7 +42,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
             $this->dataObjectHelper->populateWithArray(
                 $customer,
                 $data,
-                '\Magento\Customer\Api\Data\CustomerInterface'
+                \Magento\Customer\Api\Data\CustomerInterface::class
             );
             $errors = $this->customerAccountManagement->validate($customer)->getMessages();
         } catch (\Magento\Framework\Validator\Exception $exception) {

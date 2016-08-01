@@ -81,7 +81,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->wysiwygConfigMock = $this->getMock(WysiwygConfig::class, ['setStoreId'], [], '', false);
         $this->requestMock = $this->getMock(Http::class, [], [], '', false);
         $methods = ['setStoreId', 'setData', 'load', '__wakeup', 'setAttributeSetId', 'setTypeId'];
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -94,13 +94,16 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->storeMock);
 
-        $this->builder = $this->objectManager->getObject(Builder::class, [
-            'productFactory' => $this->productFactoryMock,
-            'logger' => $this->loggerMock,
-            'registry' => $this->registryMock,
-            'wysiwygConfig' => $this->wysiwygConfigMock,
-            'storeFactory' => $this->storeFactoryMock,
-        ]);
+        $this->builder = $this->objectManager->getObject(
+            Builder::class,
+            [
+                'productFactory' => $this->productFactoryMock,
+                'logger' => $this->loggerMock,
+                'registry' => $this->registryMock,
+                'wysiwygConfig' => $this->wysiwygConfigMock,
+                'storeFactory' => $this->storeFactoryMock,
+            ]
+        );
     }
 
     public function testBuildWhenProductExistAndPossibleToLoadProduct()

@@ -16,7 +16,7 @@ class ProductGrid extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite
     public function execute()
     {
         $this->getResponse()->setBody(
-            $this->_view->getLayout()->createBlock('Magento\UrlRewrite\Block\Catalog\Product\Grid')->toHtml()
+            $this->_view->getLayout()->createBlock(\Magento\UrlRewrite\Block\Catalog\Product\Grid::class)->toHtml()
         );
     }
 }

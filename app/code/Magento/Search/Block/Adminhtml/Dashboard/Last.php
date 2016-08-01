@@ -91,7 +91,7 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
                 'header' => __('Search Term'),
                 'sortable' => false,
                 'index' => 'query_text',
-                'renderer' => 'Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery',
+                'renderer' => \Magento\Backend\Block\Dashboard\Searches\Renderer\Searchquery::class,
                 'header_css_class' => 'col-search-query',
                 'column_css_class' => 'col-search-query'
             ]
