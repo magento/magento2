@@ -22,10 +22,10 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->loggerMock = $this->getMockBuilder('\Psr\Log\LoggerInterface')
+        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->driverMock = $this->getMockBuilder('\Magento\Framework\Shell\Driver')
+        $this->driverMock = $this->getMockBuilder(\Magento\Framework\Shell\Driver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new Shell(

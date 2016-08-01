@@ -46,7 +46,7 @@ class Chooser extends \Magento\Backend\App\Action
         /** @var \Magento\Framework\View\Layout $layout */
         $layout = $this->layoutFactory->create();
         $pagesGrid = $layout->createBlock(
-            'Magento\Cms\Block\Adminhtml\Page\Widget\Chooser',
+            \Magento\Cms\Block\Adminhtml\Page\Widget\Chooser::class,
             '',
             ['data' => ['id' => $uniqId]]
         );

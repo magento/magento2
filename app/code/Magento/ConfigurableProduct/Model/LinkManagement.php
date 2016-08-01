@@ -82,7 +82,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             $this->dataObjectHelper->populateWithArray(
                 $productDataObject,
                 $attributes,
-                '\Magento\Catalog\Api\Data\ProductInterface'
+                \Magento\Catalog\Api\Data\ProductInterface::class
             );
             $childrenList[] = $productDataObject;
         }

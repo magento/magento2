@@ -5,7 +5,9 @@
  */
 
 /** @var \Magento\Sales\Model\Order\Status $status */
-$status = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order\Status');
+$status = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    \Magento\Sales\Model\Order\Status::class
+);
 $status->setData(
     [
         'status' => 'fake_status_do_not_use_it',

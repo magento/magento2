@@ -127,7 +127,7 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      */
     protected function _construct()
     {
-        $this->_init('Magento\Newsletter\Model\ResourceModel\Template');
+        $this->_init(\Magento\Newsletter\Model\ResourceModel\Template::class);
     }
 
     /**

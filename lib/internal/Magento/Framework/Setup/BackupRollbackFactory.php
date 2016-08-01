@@ -33,7 +33,7 @@ class BackupRollbackFactory
      */
     public function create($output)
     {
-        $log = $this->_objectManager->create('Magento\Framework\Setup\ConsoleLogger', ['output' => $output]);
-        return $this->_objectManager->create('Magento\Framework\Setup\BackupRollback', ['log' => $log]);
+        $log = $this->_objectManager->create(\Magento\Framework\Setup\ConsoleLogger::class, ['output' => $output]);
+        return $this->_objectManager->create(\Magento\Framework\Setup\BackupRollback::class, ['log' => $log]);
     }
 }

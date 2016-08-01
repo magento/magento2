@@ -29,7 +29,7 @@ class Store extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Store');
+        $this->_init(\Magento\Eav\Model\ResourceModel\Entity\Store::class);
     }
 
     /**

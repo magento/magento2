@@ -44,14 +44,14 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_application = $this->getMock(
-            'Magento\TestFramework\Application',
+            \Magento\TestFramework\Application::class,
             ['getTempDir', 'getInitParams', 'reinitialize', 'run'],
             [],
             '',
             false
         );
         $this->_bootstrap = $this->getMock(
-            'Magento\TestFramework\Bootstrap',
+            \Magento\TestFramework\Bootstrap::class,
             ['getApplication', 'getDbVendorName'],
             [],
             '',

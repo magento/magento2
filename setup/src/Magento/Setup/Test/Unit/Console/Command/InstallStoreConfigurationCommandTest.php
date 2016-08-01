@@ -42,18 +42,18 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->installerFactory = $this->getMock('Magento\Setup\Model\InstallerFactory', [], [], '', false);
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->installer = $this->getMock('Magento\Setup\Model\Installer', [], [], '', false);
+        $this->installerFactory = $this->getMock(\Magento\Setup\Model\InstallerFactory::class, [], [], '', false);
+        $this->deploymentConfig = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->installer = $this->getMock(\Magento\Setup\Model\Installer::class, [], [], '', false);
         $objectManagerProvider = $this->getMock(
-            'Magento\Setup\Model\ObjectManagerProvider',
+            \Magento\Setup\Model\ObjectManagerProvider::class,
             [],
             [],
             '',
             false
         );
         $this->objectManager = $this->getMockForAbstractClass(
-            'Magento\Framework\ObjectManagerInterface',
+            \Magento\Framework\ObjectManagerInterface::class,
             [],
             '',
             false
@@ -102,35 +102,35 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteInvalidData(array $option, $error)
     {
-        $url= $this->getMock('Magento\Framework\Url\Validator', [], [], '', false);
+        $url= $this->getMock(\Magento\Framework\Url\Validator::class, [], [], '', false);
         $url->expects($this->any())->method('isValid')->will($this->returnValue(false));
         if (!isset($option['--' . StoreConfigurationDataMapper::KEY_BASE_URL_SECURE])) {
             $url->expects($this->any())->method('getMessages')->will($this->returnValue([
                 Validator::INVALID_URL => 'Invalid URL.'
             ]));
         }
-        $localeLists= $this->getMock('Magento\Framework\Validator\Locale', [], [], '', false);
+        $localeLists= $this->getMock(\Magento\Framework\Validator\Locale::class, [], [], '', false);
         $localeLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
-        $timezoneLists= $this->getMock('Magento\Framework\Validator\Timezone', [], [], '', false);
+        $timezoneLists= $this->getMock(\Magento\Framework\Validator\Timezone::class, [], [], '', false);
         $timezoneLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
-        $currencyLists= $this->getMock('Magento\Framework\Validator\Currency', [], [], '', false);
+        $currencyLists= $this->getMock(\Magento\Framework\Validator\Currency::class, [], [], '', false);
         $currencyLists->expects($this->any())->method('isValid')->will($this->returnValue(false));
 
         $returnValueMapOM = [
             [
-                'Magento\Framework\Url\Validator',
+                \Magento\Framework\Url\Validator::class,
                 $url
             ],
             [
-                'Magento\Framework\Validator\Locale',
+                \Magento\Framework\Validator\Locale::class,
                 $localeLists
             ],
             [
-                'Magento\Framework\Validator\Timezone',
+                \Magento\Framework\Validator\Timezone::class,
                 $timezoneLists
             ],
             [
-                'Magento\Framework\Validator\Currency',
+                \Magento\Framework\Validator\Currency::class,
                 $currencyLists
             ],
         ];

@@ -36,10 +36,12 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->accountManagement = $this->objectManager->create('Magento\Customer\Api\AccountManagementInterface');
-        $this->securityManager = $this->objectManager->create('Magento\Security\Model\SecurityManager');
+        $this->accountManagement = $this->objectManager->create(
+            \Magento\Customer\Api\AccountManagementInterface::class
+        );
+        $this->securityManager = $this->objectManager->create(\Magento\Security\Model\SecurityManager::class);
         $this->passwordResetRequestEvent = $this->objectManager
-            ->get('Magento\Security\Model\PasswordResetRequestEvent');
+            ->get(\Magento\Security\Model\PasswordResetRequestEvent::class);
     }
 
     /**
@@ -68,7 +70,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
         $longIp = 127001;
         $accountReference = 'customer@example.com';
         $this->assertInstanceOf(
-            'Magento\Security\Model\SecurityManager',
+            \Magento\Security\Model\SecurityManager::class,
             $this->securityManager->performSecurityCheck(
                 $requestType,
                 $accountReference,

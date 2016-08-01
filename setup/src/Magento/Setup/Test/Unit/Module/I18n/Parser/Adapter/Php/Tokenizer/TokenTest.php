@@ -110,7 +110,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     {
         $line = 110;
         return $this->objectManager->getObject(
-            'Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token',
+            \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\Token::class,
             [
                 'name' => $name,
                 'value' => $value,

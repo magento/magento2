@@ -23,11 +23,11 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $this->processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

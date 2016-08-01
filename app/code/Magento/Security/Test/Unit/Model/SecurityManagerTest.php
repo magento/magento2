@@ -143,7 +143,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
     public function testConstructorException()
     {
         $securityChecker = $this->getMock(
-            '\Magento\Framework\Message\ManagerInterface',
+            \Magento\Framework\Message\ManagerInterface::class,
             [],
             [],
             '',
@@ -151,7 +151,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->setExpectedException(
-            '\Magento\Framework\Exception\LocalizedException',
+            \Magento\Framework\Exception\LocalizedException::class,
             __('Incorrect Security Checker class. It has to implement SecurityCheckerInterface')
         );
 

@@ -55,7 +55,7 @@ class AddressesAdditional extends Block
             ->find($this->deleteAddressLink)->click();
         $element = $this->browser->find($this->confirmModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
-        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal = $this->blockFactory->create(\Magento\Ui\Test\Block\Adminhtml\Modal::class, ['element' => $element]);
         $modal->acceptAlert();
     }
 

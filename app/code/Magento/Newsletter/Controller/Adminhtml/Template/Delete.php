@@ -16,7 +16,7 @@ class Delete extends \Magento\Newsletter\Controller\Adminhtml\Template
     public function execute()
     {
         $template = $this->_objectManager->create(
-            'Magento\Newsletter\Model\Template'
+            \Magento\Newsletter\Model\Template::class
         )->load(
             $this->getRequest()->getParam('id')
         );
