@@ -8,7 +8,6 @@ namespace Magento\Backup\Test\Unit\Controller\Adminhtml\Index;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class RollbackTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
