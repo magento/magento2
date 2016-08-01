@@ -10,6 +10,6 @@
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink() && $this->helper('Magento\Wishlist\Helper\Data')->getWishlist()->getItemsCount()): ?>
     <a href="<?php /* @escapeNotVerified */ echo $block->getLink(); ?>" class="action rss wishlist">
-        <span><?php /* @escapeNotVerified */ echo __('RSS Feed') ?></span>
+        <span><?php /* @noEscape */ echo __('RSS Feed') ?></span>
     </a>
 <?php endif; ?>

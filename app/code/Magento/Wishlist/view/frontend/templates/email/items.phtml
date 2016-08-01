@@ -31,13 +31,13 @@
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
                     <p>
-                        <strong><?= /* @escapeNotVerified */  __('Comment') ?>:</strong>
-                        <br/><?= /* @escapeNotVerified */  $block->getEscapedDescription($item) ?>
+                        <strong><?= /* @noEscape */  __('Comment') ?>:</strong>
+                        <br/><?= /* @noEscape */  $block->getEscapedDescription($item) ?>
                     </p>
                 <?php endif; ?>
                 <p>
                     <a href="<?= /* @escapeNotVerified */  $block->getProductUrl($_product) ?>">
-                        <?= /* @escapeNotVerified */  __('View Product') ?>
+                        <?= /* @noEscape */  __('View Product') ?>
                     </a>
                 </p>
             </td>

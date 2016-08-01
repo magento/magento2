@@ -6,14 +6,14 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions $block */
 /* @var \Magento\Wishlist\Model\Item $item */
 ?>
-
 <?php $children = $block->getChildNames(); ?>
 <?php if ($children): ?>
-    <div class="<?php /* @escapeNotVerified */ echo $block->getCssClass() ?>">
+    <div class="<?php echo $block->escapeHtml($block->getCssClass()) ?>">
         <?php foreach ($children as $childName):?>
-            <?php /* @escapeNotVerified */ echo $block->getLayout()->renderElement($childName, false);?>
+            <?php /* @noEscape */ echo $block->getLayout()->renderElement($childName, false);?>
         <?php endforeach;?>
     </div>
 <?php endif; ?>

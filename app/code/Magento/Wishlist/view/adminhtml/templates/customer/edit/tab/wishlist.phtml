@@ -23,13 +23,13 @@
                     if (!urlParams) {
                         urlParams = '';
                     }
-                    var url = <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.url + '?ajax=true' + urlParams;
+                    var url = <?php echo $block->escapeHtml($block->getJsObjectName()) ?>.url + '?ajax=true' + urlParams;
                     new Ajax.Updater(
-                        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.containerId,
+                        <?php echo $block->escapeHtml($block->getJsObjectName()) ?>.containerId,
                         url,
                         {
                             parameters: {form_key: FORM_KEY},
-                            onComplete: <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.initGrid.bind(<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>),
+                            onComplete: <?php echo $block->escapeHtml($block->getJsObjectName()) ?>.initGrid.bind(<?php echo $block->escapeHtml($block->getJsObjectName()) ?>),
                         evalScripts:true
                 }
             );
@@ -52,7 +52,7 @@
         var self = this;
 
         confirm({
-            content: '<?php /* @escapeNotVerified */ echo __('Are you sure you want to remove this item?') ?>',
+            content: '<?php /* @noEscape */ echo __('Are you sure you want to remove this item?') ?>',
             actions: {
                 confirm: function () {
                     self.reload('&delete=' + itemId);
