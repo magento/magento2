@@ -182,7 +182,7 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Error in writing Auth file. Please check permissions for writing.
+     * @expectedExceptionMessage Error in writing Auth file path/to/auth.json. Please check permissions for writing.
      * @return void
      */
     public function testExecuteWithException()
@@ -195,6 +195,10 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
             ->method('writeFile')
             ->with(PackagesAuth::PATH_TO_AUTH_FILE, '{}')
             ->willThrowException(new \Exception('Something went wrong...'));
+        $this->directoryWriteMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with(PackagesAuth::PATH_TO_AUTH_FILE)
+            ->willReturn('path/to/auth.json');
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::COMPOSER_HOME)
