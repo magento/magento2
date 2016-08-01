@@ -21,6 +21,7 @@ use Magento\Setup\Model\PackagesAuth;
 
 /**
  * Command for deployment of Sample Data
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SampleDataDeployCommand extends Command
 {
@@ -35,6 +36,12 @@ class SampleDataDeployCommand extends Command
     private $sampleDataDependency;
 
     /**
+     * @var ArrayInputFactory
+     * @deprecated
+     */
+    private $arrayInputFactory;
+
+    /**
      * @var ApplicationFactory
      */
     private $applicationFactory;
@@ -44,7 +51,6 @@ class SampleDataDeployCommand extends Command
      * @param Dependency $sampleDataDependency
      * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         Filesystem $filesystem,
@@ -54,6 +60,7 @@ class SampleDataDeployCommand extends Command
     ) {
         $this->filesystem = $filesystem;
         $this->sampleDataDependency = $sampleDataDependency;
+        $this->arrayInputFactory = $arrayInputFactory;
         $this->applicationFactory = $applicationFactory;
         parent::__construct();
     }
