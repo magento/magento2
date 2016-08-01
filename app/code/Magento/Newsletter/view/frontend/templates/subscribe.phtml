@@ -12,7 +12,7 @@
     <div class="content">
         <form class="form subscribe"
             novalidate
-            action="<?php /* @escapeNotVerified */ echo $block->getFormActionUrl() ?>"
+            action="<?php echo $block->escapeUrl($block->getFormActionUrl()) ?>"
             method="post"
             data-mage-init='{"validation": {"errorClass": "mage-error"}}'
             id="newsletter-validate-detail">
