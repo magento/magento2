@@ -26,6 +26,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Deployer
 {
@@ -180,7 +181,14 @@ class Deployer
                                     $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
                                 ))
                         ) {
-                            $compiledFile = $this->deployFile($filePath, $area, $themePath, $locale, $module, $fullPath);
+                            $compiledFile = $this->deployFile(
+                                $filePath,
+                                $area,
+                                $themePath,
+                                $locale,
+                                $module,
+                                $fullPath
+                            );
                             if ($compiledFile !== '') {
                                 $this->deployFile($compiledFile, $area, $themePath, $locale, $module, $fullPath);
                             }
