@@ -213,7 +213,7 @@
         },
         "#country": {
             "regionUpdater": {
-                "optionalRegionAllowed": <?php /* @noEscape */ $block->getConfig('general/region/display_all') ? 'true' : 'false'; ?>,
+                "optionalRegionAllowed": <?php /* @noEscape */ echo $block->getConfig('general/region/display_all') ? 'true' : 'false'; ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
