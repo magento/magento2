@@ -1033,7 +1033,7 @@ class Category extends AbstractResource
     {
         if (null === $this->entityManager) {
             $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\EntityManager\EntityManager');
+                ->get(\Magento\Framework\EntityManager\EntityManager::class);
         }
         return $this->entityManager;
     }
@@ -1045,7 +1045,7 @@ class Category extends AbstractResource
     {
         if (null === $this->aggregateCount) {
             $this->aggregateCount = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\ResourceModel\Category\AggregateCount');
+                ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
         }
         return $this->aggregateCount;
     }

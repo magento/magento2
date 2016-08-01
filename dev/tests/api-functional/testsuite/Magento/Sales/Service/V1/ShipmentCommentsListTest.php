@@ -25,9 +25,9 @@ class ShipmentCommentsListTest extends WebapiAbstract
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Collection $shipmentCollection */
-        $shipmentCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
+        $shipmentCollection = $objectManager->get(\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class);
         $shipment = $shipmentCollection->getFirstItem();
-        $shipmentComment = $objectManager->get('Magento\Sales\Model\Order\Shipment\Comment');
+        $shipmentComment = $objectManager->get(\Magento\Sales\Model\Order\Shipment\Comment::class);
         $shipmentComment->setComment($comment);
         $shipmentComment->setParentId($shipment->getId());
         $shipmentComment->save();
@@ -48,7 +48,7 @@ class ShipmentCommentsListTest extends WebapiAbstract
         // TODO Test fails, due to the inability of the framework API to handle data collection
         foreach ($result['items'] as $item) {
             /** @var \Magento\Sales\Model\Order\Shipment\Comment $shipmentHistoryStatus */
-            $shipmentHistoryStatus = $objectManager->get('Magento\Sales\Model\Order\Shipment\Comment')
+            $shipmentHistoryStatus = $objectManager->get(\Magento\Sales\Model\Order\Shipment\Comment::class)
                 ->load($item['entity_id']);
             $this->assertEquals($shipmentHistoryStatus->getComment(), $item['comment']);
         }

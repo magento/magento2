@@ -49,7 +49,7 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->_backupDbMock = $this->getMock('Magento\Framework\Backup\Db', [], [], '', false);
+        $this->_backupDbMock = $this->getMock(\Magento\Framework\Backup\Db::class, [], [], '', false);
         $this->_backupDbMock->expects($this->any())->method('setBackupExtension')->will($this->returnSelf());
 
         $this->_backupDbMock->expects($this->any())->method('setTime')->will($this->returnSelf());
@@ -68,13 +68,13 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
 
         $this->_backupDbMock->expects($this->any())->method('create')->will($this->returnValue(true));
 
-        $this->_filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $dirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->_filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
+        $dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->_filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($dirMock));
 
-        $this->_backupFactoryMock = $this->getMock('Magento\Framework\Backup\Factory', [], [], '', false);
+        $this->_backupFactoryMock = $this->getMock(\Magento\Framework\Backup\Factory::class, [], [], '', false);
         $this->_backupFactoryMock->expects(
             $this->once()
         )->method(
@@ -83,7 +83,7 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_backupDbMock)
         );
 
-        $this->fsMock = $this->getMock('Magento\Framework\Backup\Filesystem\Rollback\Fs', [], [], '', false);
+        $this->fsMock = $this->getMock(\Magento\Framework\Backup\Filesystem\Rollback\Fs::class, [], [], '', false);
     }
 
     /**

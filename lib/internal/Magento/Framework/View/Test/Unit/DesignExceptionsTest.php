@@ -30,12 +30,12 @@ class DesignExceptionsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->designExceptions = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\DesignExceptions',
+            \Magento\Framework\View\DesignExceptions::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'exceptionConfigPath' => $this->exceptionConfigPath,

@@ -12,7 +12,7 @@ class ListTest extends \PHPUnit_Framework_TestCase
         $childBlock = new \Magento\Framework\DataObject();
 
         $block = $this->getMock(
-            'Magento\Catalog\Block\Product\ListProduct',
+            \Magento\Catalog\Block\Product\ListProduct::class,
             ['getChildBlock'],
             [],
             '',

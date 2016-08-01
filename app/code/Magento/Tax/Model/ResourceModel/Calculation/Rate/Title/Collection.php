@@ -20,8 +20,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'Magento\Tax\Model\Calculation\Rate\Title',
-            'Magento\Tax\Model\ResourceModel\Calculation\Rate\Title'
+            \Magento\Tax\Model\Calculation\Rate\Title::class,
+            \Magento\Tax\Model\ResourceModel\Calculation\Rate\Title::class
         );
     }
 

@@ -29,12 +29,12 @@ class FirebugTest extends \PHPUnit_Framework_TestCase
         $this->markTestSkipped('Remove it when MAGETWO-33495 is done.');
 
         $this->_response = $this->getMockBuilder(
-            '\Magento\Framework\App\Response\Http'
+            \Magento\Framework\App\Response\Http::class
         )->setMethods(
             ['sendHeaders']
         )->disableOriginalConstructor()->getMock();
 
-        $this->_request = $this->getMock('\Magento\Framework\App\Request\Http', ['getHeader'], [], '', false);
+        $this->_request = $this->getMock(\Magento\Framework\App\Request\Http::class, ['getHeader'], [], '', false);
         $header = \Zend\Http\Header\GenericHeader::fromString('User-Agent: Mozilla/5.0 FirePHP/1.6');
         $this->_request->expects(
             $this->any()

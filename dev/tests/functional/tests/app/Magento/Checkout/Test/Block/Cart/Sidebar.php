@@ -188,7 +188,7 @@ class Sidebar extends Block
                 Locator::SELECTOR_XPATH
             );
             $cartItem = $this->blockFactory->create(
-                'Magento\Checkout\Test\Block\Cart\Sidebar\Item',
+                \Magento\Checkout\Test\Block\Cart\Sidebar\Item::class,
                 ['element' => $cartItemBlock]
             );
         }

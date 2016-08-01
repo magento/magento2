@@ -25,16 +25,16 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->processorMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Product\Flat\Processor',
+            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
             ['markIndexerAsInvalid'],
             [],
             '',
             false
         );
 
-        $this->subjectMock = $this->getMock('\Magento\Store\Model\ResourceModel\Store', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Store\Model\ResourceModel\Store::class, [], [], '', false);
         $this->storeMock = $this->getMock(
-            'Magento\Store\Model\Store',
+            \Magento\Store\Model\Store::class,
             ['getId', '__wakeup', 'dataHasChangedFor'],
             [],
             '',

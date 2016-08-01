@@ -15,7 +15,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     {
         /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $billingAgreementCollection */
         $billingAgreementCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
+            \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection::class
         )->load();
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->dispatch('backend/paypal/billing_agreement/view/agreement/' . $agreementId);

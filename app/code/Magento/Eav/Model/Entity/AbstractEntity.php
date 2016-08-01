@@ -651,7 +651,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 } else {
                     /** @var \Magento\Eav\Model\Entity\Attribute\Exception $e */
                     $e = $this->_universalFactory->create(
-                        'Magento\Eav\Model\Entity\Attribute\Exception',
+                        \Magento\Eav\Model\Entity\Attribute\Exception::class,
                         ['phrase' => __($e->getMessage())]
                     );
                     $e->setAttributeCode($attrCode)->setPart($part);

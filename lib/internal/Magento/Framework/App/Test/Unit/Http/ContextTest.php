@@ -23,7 +23,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->object = $this->objectManager->getObject('Magento\Framework\App\Http\Context');
+        $this->object = $this->objectManager->getObject(\Magento\Framework\App\Http\Context::class);
     }
 
     public function testGetValue()

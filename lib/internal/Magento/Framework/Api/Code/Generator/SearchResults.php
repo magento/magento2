@@ -22,8 +22,9 @@ class SearchResults extends EntityAbstract
 
     /**
      * Search result default class
+     * @deprecated
      */
-    const SEARCH_RESULT = '\\Magento\Framework\Api\SearchResults';
+    const SEARCH_RESULT = '\\' . \Magento\Framework\Api\SearchResults::class;
 
     /**
      * Retrieve class properties
@@ -77,7 +78,7 @@ class SearchResults extends EntityAbstract
     protected function _generateCode()
     {
         $this->_classGenerator->setName($this->_getResultClassName())
-            ->setExtendedClass(self::SEARCH_RESULT)
+            ->setExtendedClass('\\' . \Magento\Framework\Api\SearchResults::class)
             ->addMethods($this->_getClassMethods());
         return $this->_getGeneratedCode();
     }
