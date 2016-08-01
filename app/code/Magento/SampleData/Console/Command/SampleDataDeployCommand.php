@@ -21,7 +21,6 @@ use Magento\Setup\Model\PackagesAuth;
 
 /**
  * Command for deployment of Sample Data
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SampleDataDeployCommand extends Command
 {
@@ -36,12 +35,6 @@ class SampleDataDeployCommand extends Command
     private $sampleDataDependency;
 
     /**
-     * @var ArrayInputFactory
-     * @deprecated
-     */
-    private $arrayInputFactory;
-
-    /**
      * @var ApplicationFactory
      */
     private $applicationFactory;
@@ -51,6 +44,7 @@ class SampleDataDeployCommand extends Command
      * @param Dependency $sampleDataDependency
      * @param ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function __construct(
         Filesystem $filesystem,
@@ -60,7 +54,6 @@ class SampleDataDeployCommand extends Command
     ) {
         $this->filesystem = $filesystem;
         $this->sampleDataDependency = $sampleDataDependency;
-        $this->arrayInputFactory = $arrayInputFactory;
         $this->applicationFactory = $applicationFactory;
         parent::__construct();
     }
@@ -113,6 +106,8 @@ class SampleDataDeployCommand extends Command
     /**
      * Create new auth.json file if it doesn't exist.
      *
+     * We create auth.json with correct permissions instead of relying on Composer.
+     *
      * @return void
      * @throws \Exception
      */
@@ -124,7 +119,10 @@ class SampleDataDeployCommand extends Command
             try {
                 $directory->writeFile(PackagesAuth::PATH_TO_AUTH_FILE, '{}');
             } catch (\Exception $e) {
-                throw new \Exception('Error in writing Auth file. Please check permissions for writing.');
+                $message = 'Error in writing Auth file '
+                    . $directory->getAbsolutePath(PackagesAuth::PATH_TO_AUTH_FILE)
+                    . '. Please check permissions for writing.';
+                throw new \Exception($message);
             }
         }
     }
