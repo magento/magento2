@@ -170,7 +170,7 @@ class RollbackTest extends \PHPUnit_Framework_TestCase
             ->willReturn($rollbackAllowed);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with('Magento\Backup\Helper\Data')
+            ->with(\Magento\Backup\Helper\Data::class)
             ->willReturn($this->dataHelperMock);
 
         $this->assertSame($this->responseMock, $this->rollbackController->execute());
