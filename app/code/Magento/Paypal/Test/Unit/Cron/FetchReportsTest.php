@@ -42,7 +42,7 @@ class FetchReportsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface');
+        $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->fetchReports = $this->objectManager->getObject(
@@ -64,7 +64,7 @@ class FetchReportsTest extends \PHPUnit_Framework_TestCase
             'password' => ['test_password'],
             'path' => ['test_path']
         ];
-        $settlementMock = $this->getMockBuilder('Magento\Paypal\Model\Report\Settlement')
+        $settlementMock = $this->getMockBuilder(\Magento\Paypal\Model\Report\Settlement::class)
             ->disableOriginalConstructor()
             ->getMock();
 

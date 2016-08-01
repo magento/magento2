@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_model = new \Magento\Framework\Data\Collection(
-            $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
+            $this->getMock(\Magento\Framework\Data\Collection\EntityFactory::class, [], [], '', false)
         );
     }
 
@@ -34,7 +34,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadWithFilter()
     {
-        $this->assertInstanceOf('Magento\Framework\Data\Collection', $this->_model->loadWithFilter());
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $this->_model->loadWithFilter());
         $this->assertEmpty($this->_model->getItems());
         $this->_model->addItem(new \Magento\Framework\DataObject());
         $this->_model->addItem(new \Magento\Framework\DataObject());
@@ -55,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function setItemObjectClassDataProvider()
     {
-        return [['Magento\Framework\Url'], ['Magento\Framework\DataObject']];
+        return [[\Magento\Framework\Url::class], [\Magento\Framework\DataObject::class]];
     }
 
     /**
@@ -103,9 +103,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testPossibleFlowWithItem()
     {
-        $firstItemMock = $this->getMock('Magento\Framework\DataObject', ['getId', 'getData', 'toArray'], [], '', false);
+        $firstItemMock = $this->getMock(
+            \Magento\Framework\DataObject::class,
+            ['getId', 'getData', 'toArray'],
+            [],
+            '',
+            false
+        );
         $secondItemMock = $this->getMock(
-            'Magento\Framework\DataObject',
+            \Magento\Framework\DataObject::class,
             ['getId', 'getData', 'toArray'],
             [],
             '',

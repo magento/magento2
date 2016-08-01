@@ -36,7 +36,7 @@ class ResultFactory
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $instanceName = 'Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface'
+        $instanceName = \Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface::class
     ) {
         $this->objectManager = $objectManager;
         $this->instanceName = $instanceName;

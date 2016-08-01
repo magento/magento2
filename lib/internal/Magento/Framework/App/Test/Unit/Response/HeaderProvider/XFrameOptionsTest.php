@@ -28,7 +28,7 @@ class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->object = $objectManager->getObject(
-            '\Magento\Framework\App\Response\HeaderProvider\XFrameOptions',
+            \Magento\Framework\App\Response\HeaderProvider\XFrameOptions::class,
             ['xFrameOpt' => $this::HEADER_VALUE]
         );
     }

@@ -20,7 +20,7 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->helperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+        $this->helperMock = $this->getMock(\Magento\Payment\Helper\Data::class, [], [], '', false);
         $this->typesArrayModel = new \Magento\Payment\Model\ResourceModel\Grid\TypeList($this->helperMock);
     }
 

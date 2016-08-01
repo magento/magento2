@@ -67,7 +67,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\ResourceModel\Order\Invoice\Comment');
+        $this->_init(\Magento\Sales\Model\ResourceModel\Order\Invoice\Comment::class);
     }
 
     /**
@@ -164,6 +164,7 @@ class Comment extends AbstractModel implements InvoiceCommentInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */

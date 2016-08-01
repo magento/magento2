@@ -33,7 +33,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
     public function execute()
     {
         $this->_setTypeId();
-        $attributeSet = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Set')
+        $attributeSet = $this->_objectManager->create(\Magento\Eav\Model\Entity\Attribute\Set::class)
             ->load($this->getRequest()->getParam('id'));
 
         if (!$attributeSet->getId()) {

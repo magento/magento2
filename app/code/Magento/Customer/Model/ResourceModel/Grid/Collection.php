@@ -35,7 +35,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'customer_grid_flat',
-        $resourceModel = '\Magento\Customer\Model\ResourceModel\Customer'
+        $resourceModel = \Magento\Customer\Model\ResourceModel\Customer::class
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }

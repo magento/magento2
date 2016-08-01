@@ -24,7 +24,7 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\SalesRule\Model\Coupon', 'Magento\SalesRule\Model\ResourceModel\Coupon');
+        $this->_init(\Magento\SalesRule\Model\Coupon::class, \Magento\SalesRule\Model\ResourceModel\Coupon::class);
     }
 
     /**

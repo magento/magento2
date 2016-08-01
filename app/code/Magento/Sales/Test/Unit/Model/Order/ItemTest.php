@@ -20,6 +20,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Item
      */
     protected $model;
+
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
@@ -34,14 +35,13 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
+        $this->orderFactory = $this->getMock(\Magento\Sales\Model\OrderFactory::class, ['create'], [], '', false);
 
         $arguments = [
             'orderFactory' => $this->orderFactory,
         ];
-        $this->model = $this->objectManager->getObject('Magento\Sales\Model\Order\Item', $arguments);
+        $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, $arguments);
     }
-
 
     public function testSetParentItemNull()
     {
@@ -49,10 +49,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getParentItem());
     }
 
-
     public function testSetParentItem()
     {
-        $item = $this->objectManager->getObject('Magento\Sales\Model\Order\Item', []);
+        $item = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, []);
         $this->assertEquals($this->model, $this->model->setParentItem($item));
         $this->assertEquals($item, $this->model->getParentItem());
         $this->assertTrue($item->getHasChildren());
@@ -61,7 +60,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPatentItem()
     {
-        $item = $this->objectManager->getObject('Magento\Sales\Model\Order\Item', []);
+        $item = $this->objectManager->getObject(\Magento\Sales\Model\Order\Item::class, []);
         $this->model->setData(\Magento\Sales\Api\Data\OrderItemInterface::PARENT_ITEM, $item);
         $this->assertEquals($item, $this->model->getParentItem());
     }
@@ -69,7 +68,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testSetOrder()
     {
         $orderId = 123;
-        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $order = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
         $order->expects($this->once())
             ->method('getId')
             ->willReturn($orderId);
@@ -84,7 +83,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         //set order_id and get order by id
         $orderId = 123;
-        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $order = $this->getMock(\Magento\Sales\Model\Order::class, [], [], '', false);
         $order->expects($this->once())
             ->method('load')
             ->with($orderId)

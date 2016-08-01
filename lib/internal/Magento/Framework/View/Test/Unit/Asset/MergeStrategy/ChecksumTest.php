@@ -38,10 +38,12 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mergerMock = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\MergeStrategyInterface');
-        $this->sourceDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->targetDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
+        $this->mergerMock = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\MergeStrategyInterface::class);
+        $this->sourceDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->targetDir = $this->getMockForAbstractClass(
+            \Magento\Framework\Filesystem\Directory\WriteInterface::class
+        );
+        $filesystem = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
@@ -51,7 +53,7 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->targetDir));
         $this->checksum = new Checksum($this->mergerMock, $filesystem);
-        $this->resultAsset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
+        $this->resultAsset = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
     }
 
     public function testMergeNoAssets()
@@ -111,9 +113,9 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
      */
     private function getAssetsToMerge()
     {
-        $one = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
+        $one = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $one->expects($this->once())->method('getSourceFile')->will($this->returnValue('/dir/file/one.txt'));
-        $two = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
+        $two = $this->getMock(\Magento\Framework\View\Asset\File::class, [], [], '', false);
         $two->expects($this->once())->method('getSourceFile')->will($this->returnValue('/dir/file/two.txt'));
         $this->sourceDir->expects($this->exactly(2))
             ->method('getRelativePath')

@@ -28,7 +28,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             [
                 'label' => __('General'),
                 'content' => $this->getLayout()->createBlock(
-                    'Magento\Backend\Block\System\Design\Edit\Tab\General'
+                    \Magento\Backend\Block\System\Design\Edit\Tab\General::class
                 )->toHtml()
             ]
         );

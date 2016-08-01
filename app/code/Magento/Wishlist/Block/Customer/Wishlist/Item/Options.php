@@ -25,7 +25,7 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected $_optionsCfg = [
         'default' => [
-            'helper' => 'Magento\Catalog\Helper\Product\Configuration',
+            'helper' => \Magento\Catalog\Helper\Product\Configuration::class,
             'template' => 'Magento_Wishlist::options_list.phtml',
         ],
     ];

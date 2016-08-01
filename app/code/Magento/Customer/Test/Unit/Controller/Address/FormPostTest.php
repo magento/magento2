@@ -168,7 +168,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
     {
         $this->prepareContext();
 
-        $this->session = $this->getMockBuilder('Magento\Customer\Model\Session')
+        $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'setAddressFormData',
@@ -176,7 +176,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->formKeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
+        $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -184,27 +184,27 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $this->prepareAddress();
         $this->prepareRegion();
 
-        $this->dataProcessor = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+        $this->dataProcessor = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dataObjectHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+        $this->dataObjectHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultForwardFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\ForwardFactory')
+        $this->resultForwardFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultPageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+        $this->resultPageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helperData = $this->getMockBuilder('Magento\Directory\Helper\Data')
+        $this->helperData = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerAddressMapper = $this->getMockBuilder('Magento\Customer\Model\Address\Mapper')
+        $this->customerAddressMapper = $this->getMockBuilder(\Magento\Customer\Model\Address\Mapper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -234,11 +234,11 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareContext()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
+        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->setMethods([
                 'isPost',
                 'getPostValue',
@@ -250,19 +250,19 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $this->redirect = $this->getMockBuilder('Magento\Framework\App\Response\RedirectInterface')
+        $this->redirect = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
             ->getMockForAbstractClass();
 
         $this->context->expects($this->any())
             ->method('getRedirect')
             ->willReturn($this->redirect);
 
-        $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirectFactory = $this->getMockBuilder(
+            \Magento\Framework\Controller\Result\RedirectFactory::class
+        )->disableOriginalConstructor()->getMock();
         $this->resultRedirectFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultRedirect);
@@ -271,14 +271,14 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
-        $this->objectManager = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->context->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManager);
 
-        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->context->expects($this->any())
@@ -288,13 +288,13 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareAddress()
     {
-        $this->addressRepository = $this->getMockBuilder('Magento\Customer\Api\AddressRepositoryInterface')
+        $this->addressRepository = $this->getMockBuilder(\Magento\Customer\Api\AddressRepositoryInterface::class)
             ->getMockForAbstractClass();
 
-        $this->addressData = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
+        $this->addressData = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
             ->getMockForAbstractClass();
 
-        $this->addressDataFactory = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
+        $this->addressDataFactory = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'create',
@@ -307,7 +307,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareRegion()
     {
-        $this->region = $this->getMockBuilder('Magento\Directory\Model\Region')
+        $this->region = $this->getMockBuilder(\Magento\Directory\Model\Region::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'load',
@@ -316,17 +316,17 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->regionFactory = $this->getMockBuilder('Magento\Directory\Model\RegionFactory')
+        $this->regionFactory = $this->getMockBuilder(\Magento\Directory\Model\RegionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->regionFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->region);
 
-        $this->regionData = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterface')
+        $this->regionData = $this->getMockBuilder(\Magento\Customer\Api\Data\RegionInterface::class)
             ->getMockForAbstractClass();
 
-        $this->regionDataFactory = $this->getMockBuilder('Magento\Customer\Api\Data\RegionInterfaceFactory')
+        $this->regionDataFactory = $this->getMockBuilder(\Magento\Customer\Api\Data\RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'create',
@@ -339,11 +339,11 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
     protected function prepareForm()
     {
-        $this->form = $this->getMockBuilder('Magento\Customer\Model\Metadata\Form')
+        $this->form = $this->getMockBuilder(\Magento\Customer\Model\Metadata\Form::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->formFactory = $this->getMockBuilder('Magento\Customer\Model\Metadata\FormFactory')
+        $this->formFactory = $this->getMockBuilder(\Magento\Customer\Model\Metadata\FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -385,7 +385,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
         $urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -394,7 +394,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\UrlInterface')
+            ->with(\Magento\Framework\UrlInterface::class)
             ->willReturn($urlBuilder);
 
         $this->redirect->expects($this->once())
@@ -519,14 +519,13 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->willReturnMap([
                 [
                     $this->regionData,
-                    $regionData,
-                    '\Magento\Customer\Api\Data\RegionInterface',
+                    $regionData, \Magento\Customer\Api\Data\RegionInterface::class,
                     $this->dataObjectHelper,
                 ],
                 [
                     $this->addressData,
                     array_merge($existingAddressData, $newAddressData),
-                    '\Magento\Customer\Api\Data\AddressInterface',
+                    \Magento\Customer\Api\Data\AddressInterface::class,
                     $this->dataObjectHelper,
                 ],
             ]);
@@ -556,7 +555,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with(__('You saved the address.'))
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
         $urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -565,7 +564,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\UrlInterface')
+            ->with(\Magento\Framework\UrlInterface::class)
             ->willReturn($urlBuilder);
 
         $this->redirect->expects($this->once())
@@ -649,7 +648,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
         $urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -658,7 +657,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\UrlInterface')
+            ->with(\Magento\Framework\UrlInterface::class)
             ->willReturn($urlBuilder);
 
         $this->redirect->expects($this->once())
@@ -712,7 +711,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
         $urlBuilder->expects($this->once())
             ->method('getUrl')
@@ -721,7 +720,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\UrlInterface')
+            ->with(\Magento\Framework\UrlInterface::class)
             ->willReturn($urlBuilder);
 
         $this->redirect->expects($this->once())

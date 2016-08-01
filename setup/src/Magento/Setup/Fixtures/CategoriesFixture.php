@@ -29,9 +29,9 @@ class CategoriesFixture extends Fixture
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
+        $storeManager = $this->fixtureModel->getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\Category');
+        $category = $this->fixtureModel->getObjectManager()->create(\Magento\Catalog\Model\Category::class);
 
         $storeGroups = $storeManager->getGroups();
         $i = 0;

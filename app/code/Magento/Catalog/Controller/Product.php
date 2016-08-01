@@ -26,7 +26,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action implements V
         $params->setCategoryId($categoryId);
 
         /** @var \Magento\Catalog\Helper\Product $product */
-        $product = $this->_objectManager->get('Magento\Catalog\Helper\Product');
+        $product = $this->_objectManager->get(\Magento\Catalog\Helper\Product::class);
         return $product->initProduct($productId, $this, $params);
     }
 }

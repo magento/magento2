@@ -29,7 +29,7 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->sampleContent = serialize([1, 2, 3]);
         $this->filesystemDriverMock = $this->getMock(
-            'Magento\Framework\Filesystem\Driver\File',
+            \Magento\Framework\Filesystem\Driver\File::class,
             [],
             [],
             '',
@@ -46,7 +46,7 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateClassDefinitionFromString()
     {
         $this->assertInstanceOf(
-            '\Magento\Framework\ObjectManager\Definition\Compiled\Serialized',
+            \Magento\Framework\ObjectManager\Definition\Compiled\Serialized::class,
             $this->model->createClassDefinition($this->sampleContent)
         );
     }
@@ -73,13 +73,11 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             'relations' => [
                 'DefinitionDir/relations.ser',
-                'createRelations',
-                '\Magento\Framework\ObjectManager\Relations\Compiled',
+                'createRelations', \Magento\Framework\ObjectManager\Relations\Compiled::class,
             ],
             'plugins' => [
                 'DefinitionDir/plugins.ser',
-                'createPluginDefinition',
-                '\Magento\Framework\Interception\Definition\Compiled',
+                'createPluginDefinition', \Magento\Framework\Interception\Definition\Compiled::class,
             ],
         ];
     }
@@ -103,13 +101,11 @@ class DefinitionFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             'relations' => [
                 'DefinitionDir/relations.ser',
-                'createRelations',
-                '\Magento\Framework\ObjectManager\Relations\Runtime',
+                'createRelations', \Magento\Framework\ObjectManager\Relations\Runtime::class,
             ],
             'plugins' => [
                 'DefinitionDir/plugins.ser',
-                'createPluginDefinition',
-                '\Magento\Framework\Interception\Definition\Runtime',
+                'createPluginDefinition', \Magento\Framework\Interception\Definition\Runtime::class,
             ],
         ];
     }

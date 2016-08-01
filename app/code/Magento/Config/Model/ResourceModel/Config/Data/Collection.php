@@ -19,7 +19,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Framework\App\Config\Value', 'Magento\Config\Model\ResourceModel\Config\Data');
+        $this->_init(
+            \Magento\Framework\App\Config\Value::class,
+            \Magento\Config\Model\ResourceModel\Config\Data::class
+        );
     }
 
     /**

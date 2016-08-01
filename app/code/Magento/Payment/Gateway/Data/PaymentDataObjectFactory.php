@@ -65,7 +65,7 @@ class PaymentDataObjectFactory implements PaymentDataObjectFactoryInterface
         $data['payment'] = $paymentInfo;
 
         return $this->objectManager->create(
-            'Magento\Payment\Gateway\Data\PaymentDataObject',
+            \Magento\Payment\Gateway\Data\PaymentDataObject::class,
             $data
         );
     }

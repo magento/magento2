@@ -47,7 +47,7 @@ abstract class Rating extends Action
     {
         $this->coreRegistry->register(
             'entityId',
-            $this->_objectManager->create('Magento\Review\Model\Rating\Entity')->getIdByCode('product')
+            $this->_objectManager->create(\Magento\Review\Model\Rating\Entity::class)->getIdByCode('product')
         );
     }
 }
