@@ -39,8 +39,6 @@ class CronTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
-
         $this->configMock = $this->getMockBuilder('Magento\NewRelicReporting\Model\Config')
             ->setMethods([
                 'isCronEnabled'

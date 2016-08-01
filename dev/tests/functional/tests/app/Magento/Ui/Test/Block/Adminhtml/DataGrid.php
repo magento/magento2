@@ -99,10 +99,12 @@ class DataGrid extends Grid
      */
     protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
 
+    // @codingStandardsIgnoreStart
     /**
      * @var string
      */
-    protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
+    private $cellByHeader = "//td[count(//th[span[.='%s']][not(ancestor::*[@class='sticky-header'])]/preceding-sibling::th)+1]";
+    // @codingStandardsIgnoreEnd
 
     /**
      * @var string
@@ -234,7 +236,7 @@ class DataGrid extends Grid
         if ($rowItem->isVisible()) {
             $this->clickEditLink($rowItem);
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
         $this->waitLoader();
     }
@@ -252,7 +254,7 @@ class DataGrid extends Grid
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectItem)->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
         $this->waitLoader();
     }
@@ -354,7 +356,7 @@ class DataGrid extends Grid
                 }
             } while ($this->nextPage());
             if (!$selectItem->isVisible()) {
-                throw new \Exception('Searched item was not found.');
+                throw new \Exception("Searched item was not found\n" . print_r($item, true));
             }
         }
     }

@@ -769,7 +769,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     protected function _canReorder($ignoreSalable = false)
     {
-        if ($this->canUnhold() || $this->isPaymentReview() || !$this->getCustomerId()) {
+        if ($this->canUnhold() || $this->isPaymentReview()) {
             return false;
         }
 
@@ -937,7 +937,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Retrieve order billing address
      *
-     * @return \Magento\Sales\Model\Order\Address|null
+     * @return \Magento\Sales\Api\Data\OrderAddressInterface|null
      */
     public function getBillingAddress()
     {
@@ -1640,7 +1640,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Retrieve order total due value
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalDue()
     {
@@ -1652,7 +1652,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Retrieve order total due value
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalDue()
     {
@@ -1971,7 +1971,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]
+     * @return \Magento\Sales\Api\Data\OrderStatusHistoryInterface[]|null
      */
     public function getStatusHistories()
     {
@@ -2009,7 +2009,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns adjustment_negative
      *
-     * @return float
+     * @return float|null
      */
     public function getAdjustmentNegative()
     {
@@ -2019,7 +2019,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns adjustment_positive
      *
-     * @return float
+     * @return float|null
      */
     public function getAdjustmentPositive()
     {
@@ -2029,7 +2029,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns applied_rule_ids
      *
-     * @return string
+     * @return string|null
      */
     public function getAppliedRuleIds()
     {
@@ -2039,7 +2039,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_adjustment_negative
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseAdjustmentNegative()
     {
@@ -2049,7 +2049,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_adjustment_positive
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseAdjustmentPositive()
     {
@@ -2059,7 +2059,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getBaseCurrencyCode()
     {
@@ -2069,7 +2069,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountAmount()
     {
@@ -2079,7 +2079,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_discount_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountCanceled()
     {
@@ -2089,7 +2089,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_discount_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountInvoiced()
     {
@@ -2099,7 +2099,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_discount_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountRefunded()
     {
@@ -2119,7 +2119,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationAmount()
     {
@@ -2129,7 +2129,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_discount_tax_compensation_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationInvoiced()
     {
@@ -2139,7 +2139,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_discount_tax_compensation_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseDiscountTaxCompensationRefunded()
     {
@@ -2149,7 +2149,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingAmount()
     {
@@ -2159,7 +2159,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingCanceled()
     {
@@ -2169,7 +2169,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingDiscountAmount()
     {
@@ -2179,7 +2179,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_discount_tax_compensation_amnt
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingDiscountTaxCompensationAmnt()
     {
@@ -2189,7 +2189,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingInclTax()
     {
@@ -2199,7 +2199,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingInvoiced()
     {
@@ -2209,7 +2209,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingRefunded()
     {
@@ -2219,7 +2219,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingTaxAmount()
     {
@@ -2229,7 +2229,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_shipping_tax_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseShippingTaxRefunded()
     {
@@ -2239,7 +2239,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_subtotal
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseSubtotal()
     {
@@ -2249,7 +2249,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_subtotal_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseSubtotalCanceled()
     {
@@ -2259,7 +2259,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_subtotal_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseSubtotalInclTax()
     {
@@ -2269,7 +2269,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_subtotal_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseSubtotalInvoiced()
     {
@@ -2279,7 +2279,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_subtotal_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseSubtotalRefunded()
     {
@@ -2289,7 +2289,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTaxAmount()
     {
@@ -2299,7 +2299,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_tax_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTaxCanceled()
     {
@@ -2309,7 +2309,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_tax_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTaxInvoiced()
     {
@@ -2319,7 +2319,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_tax_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTaxRefunded()
     {
@@ -2329,7 +2329,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalCanceled()
     {
@@ -2339,7 +2339,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalInvoiced()
     {
@@ -2349,7 +2349,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_invoiced_cost
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalInvoicedCost()
     {
@@ -2359,7 +2359,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_offline_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalOfflineRefunded()
     {
@@ -2369,7 +2369,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_online_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalOnlineRefunded()
     {
@@ -2379,7 +2379,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_paid
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalPaid()
     {
@@ -2389,7 +2389,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_qty_ordered
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalQtyOrdered()
     {
@@ -2399,7 +2399,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_total_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseTotalRefunded()
     {
@@ -2409,7 +2409,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_to_global_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseToGlobalRate()
     {
@@ -2419,7 +2419,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns base_to_order_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getBaseToOrderRate()
     {
@@ -2429,7 +2429,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns billing_address_id
      *
-     * @return int
+     * @return int|null
      */
     public function getBillingAddressId()
     {
@@ -2439,7 +2439,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns can_ship_partially
      *
-     * @return int
+     * @return int|null
      */
     public function getCanShipPartially()
     {
@@ -2449,7 +2449,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns can_ship_partially_item
      *
-     * @return int
+     * @return int|null
      */
     public function getCanShipPartiallyItem()
     {
@@ -2459,7 +2459,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns coupon_code
      *
-     * @return string
+     * @return string|null
      */
     public function getCouponCode()
     {
@@ -2469,7 +2469,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns created_at
      *
-     * @return string
+     * @return string|null
      */
     public function getCreatedAt()
     {
@@ -2487,7 +2487,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_dob
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerDob()
     {
@@ -2507,7 +2507,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_firstname
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerFirstname()
     {
@@ -2517,7 +2517,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_gender
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerGender()
     {
@@ -2527,7 +2527,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_group_id
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerGroupId()
     {
@@ -2537,7 +2537,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_id
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerId()
     {
@@ -2547,7 +2547,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_is_guest
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerIsGuest()
     {
@@ -2557,7 +2557,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_lastname
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerLastname()
     {
@@ -2567,7 +2567,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_middlename
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerMiddlename()
     {
@@ -2577,7 +2577,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_note
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerNote()
     {
@@ -2587,7 +2587,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_note_notify
      *
-     * @return int
+     * @return int|null
      */
     public function getCustomerNoteNotify()
     {
@@ -2597,7 +2597,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_prefix
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerPrefix()
     {
@@ -2607,7 +2607,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_suffix
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerSuffix()
     {
@@ -2617,7 +2617,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns customer_taxvat
      *
-     * @return string
+     * @return string|null
      */
     public function getCustomerTaxvat()
     {
@@ -2627,7 +2627,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountAmount()
     {
@@ -2637,7 +2637,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountCanceled()
     {
@@ -2647,7 +2647,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_description
      *
-     * @return string
+     * @return string|null
      */
     public function getDiscountDescription()
     {
@@ -2657,7 +2657,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountInvoiced()
     {
@@ -2667,7 +2667,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountRefunded()
     {
@@ -2677,7 +2677,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns edit_increment
      *
-     * @return int
+     * @return int|null
      */
     public function getEditIncrement()
     {
@@ -2687,7 +2687,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns email_sent
      *
-     * @return int
+     * @return int|null
      */
     public function getEmailSent()
     {
@@ -2697,7 +2697,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns ext_customer_id
      *
-     * @return string
+     * @return string|null
      */
     public function getExtCustomerId()
     {
@@ -2707,7 +2707,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns ext_order_id
      *
-     * @return string
+     * @return string|null
      */
     public function getExtOrderId()
     {
@@ -2717,7 +2717,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns forced_shipment_with_invoice
      *
-     * @return int
+     * @return int|null
      */
     public function getForcedShipmentWithInvoice()
     {
@@ -2727,7 +2727,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns global_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getGlobalCurrencyCode()
     {
@@ -2747,7 +2747,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationAmount()
     {
@@ -2757,7 +2757,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_tax_compensation_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationInvoiced()
     {
@@ -2767,7 +2767,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns discount_tax_compensation_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getDiscountTaxCompensationRefunded()
     {
@@ -2777,7 +2777,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns hold_before_state
      *
-     * @return string
+     * @return string|null
      */
     public function getHoldBeforeState()
     {
@@ -2787,7 +2787,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns hold_before_status
      *
-     * @return string
+     * @return string|null
      */
     public function getHoldBeforeStatus()
     {
@@ -2797,7 +2797,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns is_virtual
      *
-     * @return int
+     * @return int|null
      */
     public function getIsVirtual()
     {
@@ -2807,7 +2807,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns order_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getOrderCurrencyCode()
     {
@@ -2817,7 +2817,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns original_increment_id
      *
-     * @return string
+     * @return string|null
      */
     public function getOriginalIncrementId()
     {
@@ -2827,7 +2827,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns payment_authorization_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getPaymentAuthorizationAmount()
     {
@@ -2837,7 +2837,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns payment_auth_expiration
      *
-     * @return int
+     * @return int|null
      */
     public function getPaymentAuthExpiration()
     {
@@ -2847,7 +2847,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns protect_code
      *
-     * @return string
+     * @return string|null
      */
     public function getProtectCode()
     {
@@ -2857,7 +2857,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns quote_address_id
      *
-     * @return int
+     * @return int|null
      */
     public function getQuoteAddressId()
     {
@@ -2867,7 +2867,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns quote_id
      *
-     * @return int
+     * @return int|null
      */
     public function getQuoteId()
     {
@@ -2877,7 +2877,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns relation_child_id
      *
-     * @return string
+     * @return string|null
      */
     public function getRelationChildId()
     {
@@ -2887,7 +2887,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns relation_child_real_id
      *
-     * @return string
+     * @return string|null
      */
     public function getRelationChildRealId()
     {
@@ -2897,7 +2897,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns relation_parent_id
      *
-     * @return string
+     * @return string|null
      */
     public function getRelationParentId()
     {
@@ -2907,7 +2907,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns relation_parent_real_id
      *
-     * @return string
+     * @return string|null
      */
     public function getRelationParentRealId()
     {
@@ -2917,7 +2917,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns remote_ip
      *
-     * @return string
+     * @return string|null
      */
     public function getRemoteIp()
     {
@@ -2927,7 +2927,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingAmount()
     {
@@ -2937,7 +2937,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingCanceled()
     {
@@ -2947,7 +2947,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_description
      *
-     * @return string
+     * @return string|null
      */
     public function getShippingDescription()
     {
@@ -2957,7 +2957,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_discount_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingDiscountAmount()
     {
@@ -2967,7 +2967,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_discount_tax_compensation_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingDiscountTaxCompensationAmount()
     {
@@ -2977,7 +2977,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingInclTax()
     {
@@ -2987,7 +2987,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingInvoiced()
     {
@@ -2997,7 +2997,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingRefunded()
     {
@@ -3007,7 +3007,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingTaxAmount()
     {
@@ -3017,7 +3017,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns shipping_tax_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getShippingTaxRefunded()
     {
@@ -3027,7 +3027,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns state
      *
-     * @return string
+     * @return string|null
      */
     public function getState()
     {
@@ -3037,7 +3037,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns status
      *
-     * @return string
+     * @return string|null
      */
     public function getStatus()
     {
@@ -3047,7 +3047,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns store_currency_code
      *
-     * @return string
+     * @return string|null
      */
     public function getStoreCurrencyCode()
     {
@@ -3057,7 +3057,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns store_id
      *
-     * @return int
+     * @return int|null
      */
     public function getStoreId()
     {
@@ -3067,7 +3067,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns store_name
      *
-     * @return string
+     * @return string|null
      */
     public function getStoreName()
     {
@@ -3077,7 +3077,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns store_to_base_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getStoreToBaseRate()
     {
@@ -3087,7 +3087,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns store_to_order_rate
      *
-     * @return float
+     * @return float|null
      */
     public function getStoreToOrderRate()
     {
@@ -3097,7 +3097,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns subtotal
      *
-     * @return float
+     * @return float|null
      */
     public function getSubtotal()
     {
@@ -3107,7 +3107,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns subtotal_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getSubtotalCanceled()
     {
@@ -3117,7 +3117,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns subtotal_incl_tax
      *
-     * @return float
+     * @return float|null
      */
     public function getSubtotalInclTax()
     {
@@ -3127,7 +3127,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns subtotal_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getSubtotalInvoiced()
     {
@@ -3137,7 +3137,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns subtotal_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getSubtotalRefunded()
     {
@@ -3147,7 +3147,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns tax_amount
      *
-     * @return float
+     * @return float|null
      */
     public function getTaxAmount()
     {
@@ -3157,7 +3157,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns tax_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getTaxCanceled()
     {
@@ -3167,7 +3167,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns tax_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getTaxInvoiced()
     {
@@ -3177,7 +3177,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns tax_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getTaxRefunded()
     {
@@ -3187,7 +3187,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_canceled
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalCanceled()
     {
@@ -3197,7 +3197,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_invoiced
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalInvoiced()
     {
@@ -3207,7 +3207,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_item_count
      *
-     * @return int
+     * @return int|null
      */
     public function getTotalItemCount()
     {
@@ -3217,7 +3217,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_offline_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalOfflineRefunded()
     {
@@ -3227,7 +3227,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_online_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalOnlineRefunded()
     {
@@ -3237,7 +3237,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_paid
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalPaid()
     {
@@ -3247,7 +3247,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_qty_ordered
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalQtyOrdered()
     {
@@ -3257,7 +3257,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns total_refunded
      *
-     * @return float
+     * @return float|null
      */
     public function getTotalRefunded()
     {
@@ -3267,7 +3267,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns updated_at
      *
-     * @return string
+     * @return string|null
      */
     public function getUpdatedAt()
     {
@@ -3277,7 +3277,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns weight
      *
-     * @return float
+     * @return float|null
      */
     public function getWeight()
     {
@@ -3287,7 +3287,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Returns x_forwarded_for
      *
-     * @return string
+     * @return string|null
      */
     public function getXForwardedFor()
     {

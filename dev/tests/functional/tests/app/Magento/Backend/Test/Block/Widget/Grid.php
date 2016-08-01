@@ -293,7 +293,7 @@ abstract class Grid extends Block
         if ($selectItem->isVisible()) {
             $selectItem->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
     }
 
