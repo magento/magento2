@@ -111,6 +111,7 @@ class InterfaceValidator
                     );
                     break;
                 case self::METHOD_AFTER:
+                    // TODO: Remove this condition check in scope of MAGETWO-56123
                     if (count($pluginMethodParameters) > 1) {
                         // remove result
                         array_shift($pluginMethodParameters);
