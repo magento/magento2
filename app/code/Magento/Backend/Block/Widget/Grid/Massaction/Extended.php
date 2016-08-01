@@ -88,7 +88,7 @@ class Extended extends \Magento\Backend\Block\Widget
     public function addItem($itemId, array $item)
     {
         $this->_items[$itemId] = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Grid\Massaction\Item'
+            \Magento\Backend\Block\Widget\Grid\Massaction\Item::class
         )->setData(
             $item
         )->setMassaction(

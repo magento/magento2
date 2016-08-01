@@ -29,12 +29,12 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_oldLogActive = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->getConfig(
             'dev/log/active'
         );
         $this->_oldExceptionFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            \Magento\Store\Model\StoreManagerInterface::class
         )->getStore()->getConfig(
             'dev/log/exception_file'
         );
@@ -43,7 +43,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             'dev/log/active',
             $this->_oldLogActive,
@@ -53,7 +53,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         $this->_oldLogActive = null;
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+            \Magento\Framework\App\Config\MutableScopeConfigInterface::class
         )->setValue(
             'dev/log/exception_file',
             $this->_oldExceptionFile,
@@ -70,7 +70,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
          * Class declaration in data fixture file is dumb too.
          * Added a quick fix to be able run separate tests with "phpunit --filter testMethod"
          */
-        if (class_exists('Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest', false)) {
+        if (class_exists(\Magento\Catalog\Model\Category\CategoryImageTest\StubZendLogWriterStreamTest::class, false)) {
             StubZendLogWriterStream::$exceptions = [];
         }
     }
@@ -88,7 +88,7 @@ class CategoryImageTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $objectManager->get('Magento\Framework\Registry')
+        $category = $objectManager->get(\Magento\Framework\Registry::class)
             ->registry('_fixture/Magento\Catalog\Model\Category');
         $this->assertNotEmpty($category->getId());
 

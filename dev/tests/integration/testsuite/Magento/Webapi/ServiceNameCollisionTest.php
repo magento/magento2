@@ -25,9 +25,9 @@ class ServiceNameCollisionTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Webapi\Model\ServiceMetadata $serviceMetadata */
-        $serviceMetadata = $objectManager->get('Magento\Webapi\Model\ServiceMetadata');
+        $serviceMetadata = $objectManager->get(\Magento\Webapi\Model\ServiceMetadata::class);
         /** @var \Magento\Webapi\Model\Config $webapiConfig */
-        $webapiConfig = $objectManager->get('Magento\Webapi\Model\Config');
+        $webapiConfig = $objectManager->get(\Magento\Webapi\Model\Config::class);
         $serviceNames = [];
 
         foreach ($webapiConfig->getServices()[Converter::KEY_SERVICES] as $serviceClassName => $serviceVersionData) {

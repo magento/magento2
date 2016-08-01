@@ -38,7 +38,7 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\View\Element\Template\Context | \PHPUnit_Framework_MockObject_MockObject $context */
         $context = $this->getMock(
-            'Magento\Framework\View\Element\Template\Context',
+            \Magento\Framework\View\Element\Template\Context::class,
             [],
             [],
             '',
@@ -51,7 +51,7 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->block = $objectManager->getObject(
-            '\Magento\Customer\Block\Account\Resetpassword',
+            \Magento\Customer\Block\Account\Resetpassword::class,
             ['context' => $context]
         );
     }

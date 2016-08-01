@@ -58,7 +58,7 @@ class Option extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Wishlist\Model\ResourceModel\Item\Option');
+        $this->_init(\Magento\Wishlist\Model\ResourceModel\Item\Option::class);
     }
 
     /**

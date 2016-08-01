@@ -29,11 +29,11 @@ class CartsTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerRepository = $this->_objectManager->get(
-            'Magento\Customer\Api\CustomerRepositoryInterface'
+            \Magento\Customer\Api\CustomerRepositoryInterface::class
         );
-        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManager');
+        $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManager::class);
         $this->_context = $this->_objectManager->get(
-            'Magento\Backend\Block\Template\Context',
+            \Magento\Backend\Block\Template\Context::class,
             ['storeManager' => $storeManager]
         );
     }
@@ -48,9 +48,9 @@ class CartsTest extends \PHPUnit_Framework_TestCase
         $this->_context->getBackendSession()->setCustomerData($data);
 
         $this->_block = $this->_objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\Carts',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\Carts::class,
             '',
             ['context' => $this->_context]
         );
@@ -71,9 +71,9 @@ class CartsTest extends \PHPUnit_Framework_TestCase
         $this->_context->getBackendSession()->setCustomerData($data);
 
         $this->_block = $this->_objectManager->get(
-            'Magento\Framework\View\LayoutInterface'
+            \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
-            'Magento\Customer\Block\Adminhtml\Edit\Tab\Carts',
+            \Magento\Customer\Block\Adminhtml\Edit\Tab\Carts::class,
             '',
             ['context' => $this->_context]
         );

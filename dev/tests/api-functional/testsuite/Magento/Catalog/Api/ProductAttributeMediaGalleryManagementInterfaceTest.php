@@ -86,7 +86,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     protected function getTargetSimpleProduct()
     {
         $objectManager = Bootstrap::getObjectManager();
-        return $objectManager->get('Magento\Catalog\Model\ProductFactory')->create()->load(1);
+        return $objectManager->get(\Magento\Catalog\Model\ProductFactory::class)->create()->load(1);
     }
 
     /**
@@ -519,7 +519,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
 
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Model\ProductRepository $repository */
-        $repository = $objectManager->create('Magento\Catalog\Model\ProductRepository');
+        $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
         $product = $repository->get($productSku);
         $image = current($product->getMediaGallery('images'));
         $imageId = $image['value_id'];

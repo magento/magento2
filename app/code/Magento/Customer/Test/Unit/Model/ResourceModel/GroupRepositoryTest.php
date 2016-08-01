@@ -74,21 +74,21 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->groupRegistry = $this->getMock(
-            'Magento\Customer\Model\GroupRegistry',
+            \Magento\Customer\Model\GroupRegistry::class,
             [],
             [],
             '',
             false
         );
         $this->groupFactory = $this->getMock(
-            'Magento\Customer\Model\GroupFactory',
+            \Magento\Customer\Model\GroupFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->groupModel = $this->getMock(
-            'Magento\Customer\Model\Group',
+            \Magento\Customer\Model\Group::class,
             [
                 'getTaxClassId',
                 'getTaxClassName',
@@ -107,49 +107,54 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->groupDataFactory = $this->getMock(
-            'Magento\Customer\Api\Data\GroupInterfaceFactory',
+            \Magento\Customer\Api\Data\GroupInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
-        $this->group = $this->getMockForAbstractClass('Magento\Customer\Api\Data\GroupInterface', [], 'group', false);
+        $this->group = $this->getMockForAbstractClass(
+            \Magento\Customer\Api\Data\GroupInterface::class,
+            [],
+            'group',
+            false
+        );
 
         $this->groupResourceModel = $this->getMock(
-            'Magento\Customer\Model\ResourceModel\Group',
+            \Magento\Customer\Model\ResourceModel\Group::class,
             [],
             [],
             '',
             false
         );
         $this->dataObjectProcessor = $this->getMock(
-            'Magento\Framework\Reflection\DataObjectProcessor',
+            \Magento\Framework\Reflection\DataObjectProcessor::class,
             [],
             [],
             '',
             false
         );
         $this->searchResultsFactory = $this->getMock(
-            'Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory',
+            \Magento\Customer\Api\Data\GroupSearchResultsInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->searchResults = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\GroupSearchResultsInterface',
+            \Magento\Customer\Api\Data\GroupSearchResultsInterface::class,
             [],
             '',
             false
         );
         $this->taxClassRepository = $this->getMockForAbstractClass(
-            'Magento\Tax\Api\TaxClassRepositoryInterface',
+            \Magento\Tax\Api\TaxClassRepositoryInterface::class,
             [],
             '',
             false
         );
         $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class,
             [],
             '',
             false
@@ -170,7 +175,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $groupId = 0;
 
-        $taxClass = $this->getMockForAbstractClass('Magento\Tax\Api\Data\TaxClassInterface', [], '', false);
+        $taxClass = $this->getMockForAbstractClass(\Magento\Tax\Api\Data\TaxClassInterface::class, [], '', false);
 
         $this->group->expects($this->once())
             ->method('getCode')
@@ -225,7 +230,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->groupModel);
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
-            ->with($this->group, '\Magento\Customer\Api\Data\GroupInterface')
+            ->with($this->group, \Magento\Customer\Api\Data\GroupInterface::class)
             ->willReturn(['attributeCode' => 'attributeData']);
         $this->groupModel->expects($this->once())
             ->method('setDataUsingMethod')
@@ -248,7 +253,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveWithException()
     {
-        $taxClass = $this->getMockForAbstractClass('Magento\Tax\Api\Data\TaxClassInterface', [], '', false);
+        $taxClass = $this->getMockForAbstractClass(\Magento\Tax\Api\Data\TaxClassInterface::class, [], '', false);
 
         $this->groupFactory->expects($this->once())
             ->method('create')
@@ -345,19 +350,19 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $groupId = 86;
 
-        $groupExtension = $this->getMock('Magento\Customer\Api\Data\GroupExtensionInterface', [], [], '', false);
-        $filterGroup = $this->getMock('Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
-        $filter = $this->getMock('Magento\Framework\Api\Filter', [], [], '', false);
-        $collection = $this->getMock('Magento\Customer\Model\ResourceModel\Group\Collection', [], [], '', false);
-        $sortOrder = $this->getMock('Magento\Framework\Api\SortOrder', [], [], '', false);
+        $groupExtension = $this->getMock(\Magento\Customer\Api\Data\GroupExtensionInterface::class, [], [], '', false);
+        $filterGroup = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
+        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
+        $collection = $this->getMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class, [], [], '', false);
+        $sortOrder = $this->getMock(\Magento\Framework\Api\SortOrder::class, [], [], '', false);
         $searchCriteria = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\SearchCriteriaInterface',
+            \Magento\Framework\Api\SearchCriteriaInterface::class,
             [],
             '',
             false
         );
         $searchResults = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AddressSearchResultsInterface',
+            \Magento\Customer\Api\Data\AddressSearchResultsInterface::class,
             [],
             '',
             false
@@ -377,7 +382,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($collection);
         $this->extensionAttributesJoinProcessor->expects($this->once())
             ->method('process')
-            ->with($collection, 'Magento\Customer\Api\Data\GroupInterface');
+            ->with($collection, \Magento\Customer\Api\Data\GroupInterface::class);
         $collection->expects($this->once())
             ->method('addTaxClass');
         $searchCriteria->expects($this->once())
@@ -464,7 +469,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
         $this->extensionAttributesJoinProcessor->expects($this->once())
             ->method('extractExtensionAttributes')
-            ->with('Magento\Customer\Api\Data\GroupInterface', [])
+            ->with(\Magento\Customer\Api\Data\GroupInterface::class, [])
             ->willReturn(['extension_attributes' => $groupExtension]);
         $this->group->expects($this->once())
             ->method('setExtensionAttributes')
@@ -491,18 +496,18 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $groupId = 86;
 
-        $groupExtension = $this->getMock('Magento\Customer\Api\Data\GroupExtensionInterface', [], [], '', false);
-        $filterGroup = $this->getMock('Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
-        $filter = $this->getMock('Magento\Framework\Api\Filter', [], [], '', false);
-        $collection = $this->getMock('Magento\Customer\Model\ResourceModel\Group\Collection', [], [], '', false);
+        $groupExtension = $this->getMock(\Magento\Customer\Api\Data\GroupExtensionInterface::class, [], [], '', false);
+        $filterGroup = $this->getMock(\Magento\Framework\Api\Search\FilterGroup::class, [], [], '', false);
+        $filter = $this->getMock(\Magento\Framework\Api\Filter::class, [], [], '', false);
+        $collection = $this->getMock(\Magento\Customer\Model\ResourceModel\Group\Collection::class, [], [], '', false);
         $searchCriteria = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\SearchCriteriaInterface',
+            \Magento\Framework\Api\SearchCriteriaInterface::class,
             [],
             '',
             false
         );
         $searchResults = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AddressSearchResultsInterface',
+            \Magento\Customer\Api\Data\AddressSearchResultsInterface::class,
             [],
             '',
             false
@@ -522,7 +527,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($collection);
         $this->extensionAttributesJoinProcessor->expects($this->once())
             ->method('process')
-            ->with($collection, 'Magento\Customer\Api\Data\GroupInterface');
+            ->with($collection, \Magento\Customer\Api\Data\GroupInterface::class);
         $collection->expects($this->once())
             ->method('addTaxClass');
         $searchCriteria->expects($this->once())
@@ -598,7 +603,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
         $this->extensionAttributesJoinProcessor->expects($this->once())
             ->method('extractExtensionAttributes')
-            ->with('Magento\Customer\Api\Data\GroupInterface', [])
+            ->with(\Magento\Customer\Api\Data\GroupInterface::class, [])
             ->willReturn(['extension_attributes' => $groupExtension]);
         $this->group->expects($this->once())
             ->method('setExtensionAttributes')

@@ -39,10 +39,10 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mediaDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
 
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
+        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystem->expects($this->any())
@@ -50,15 +50,15 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->uploaderFactory = $this->getMockBuilder('Magento\MediaStorage\Model\File\UploaderFactory')
+        $this->uploaderFactory = $this->getMockBuilder(\Magento\MediaStorage\Model\File\UploaderFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
+        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
             ->getMockForAbstractClass();
 
-        $this->urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')
+        $this->urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
             ->getMockForAbstractClass();
     }
 
@@ -74,7 +74,6 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
         );
         return $model;
     }
-
 
     public function testGetStat()
     {
@@ -177,7 +176,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
             'path' => 'filepath',
         ];
 
-        $uploaderMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Uploader')
+        $uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $uploaderMock->expects($this->once())
@@ -232,7 +231,7 @@ class FileProcessorTest extends \PHPUnit_Framework_TestCase
 
         $absolutePath = '/absolute/filepath';
 
-        $uploaderMock = $this->getMockBuilder('Magento\MediaStorage\Model\File\Uploader')
+        $uploaderMock = $this->getMockBuilder(\Magento\MediaStorage\Model\File\Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $uploaderMock->expects($this->once())

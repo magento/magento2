@@ -13,7 +13,7 @@ class ExpressionTest extends \PHPUnit_Framework_TestCase
     public function testExpression()
     {
         $expression = (new ObjectManagerHelper($this))->getObject(
-            '\Magento\Rule\Model\Condition\Sql\Expression',
+            \Magento\Rule\Model\Condition\Sql\Expression::class,
             ['expression' => 'SQL_EXPRESSION']
         );
         $this->assertEquals('(SQL_EXPRESSION)', (string)$expression);

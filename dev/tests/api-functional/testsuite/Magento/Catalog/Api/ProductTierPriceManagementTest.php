@@ -122,7 +122,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, $requestData);
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductTierPriceManagementInterface $service */
-        $service = $objectManager->get('Magento\Catalog\Api\ProductTierPriceManagementInterface');
+        $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
         $prices = $service->getList($productSku, 1);
         $this->assertCount(1, $prices);
         $this->assertEquals(10, $prices[0]->getValue());
@@ -160,7 +160,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, $requestData);
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductTierPriceManagementInterface $service */
-        $service = $objectManager->get('Magento\Catalog\Api\ProductTierPriceManagementInterface');
+        $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
         $prices = $service->getList($productSku, 'all');
         $this->assertCount(3, $prices);
         $this->assertEquals(20, (int)$prices[2]->getValue());
@@ -198,7 +198,7 @@ class ProductTierPriceManagementTest extends WebapiAbstract
         $this->_webApiCall($serviceInfo, $requestData);
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
         /** @var \Magento\Catalog\Api\ProductTierPriceManagementInterface $service */
-        $service = $objectManager->get('Magento\Catalog\Api\ProductTierPriceManagementInterface');
+        $service = $objectManager->get(\Magento\Catalog\Api\ProductTierPriceManagementInterface::class);
         $prices = $service->getList($productSku, 'all');
         $this->assertCount(2, $prices);
         $this->assertEquals(20, (int)$prices[0]->getValue());

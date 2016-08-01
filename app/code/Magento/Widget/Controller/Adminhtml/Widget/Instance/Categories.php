@@ -46,7 +46,7 @@ class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
         $isAnchorOnly = $this->getRequest()->getParam('is_anchor_only', 0);
 
         /** @var \Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser $chooser */
-        $chooser = $this->layout->createBlock('Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser')
+        $chooser = $this->layout->createBlock(\Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser::class)
             ->setUseMassaction(true)
             ->setId($this->mathRandom->getUniqueHash('categories'))
             ->setIsAnchorOnly($isAnchorOnly)

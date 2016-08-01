@@ -96,7 +96,7 @@ class GiftOptions extends Form
                         Locator::SELECTOR_XPATH
                     )->click();
                     $giftMessageForm = $this->blockFactory->create(
-                        'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
+                        \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm::class,
                         ['element' => $this->_rootElement->find($this->giftMessageItemForm)]
                     );
                     $giftMessage = $giftMessage->getItems()[0];

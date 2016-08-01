@@ -10,7 +10,7 @@ if (!defined('FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME')) {
 }
 
 /** @var Magento\Customer\Model\Attribute $model */
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Customer\Model\Attribute');
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Attribute::class);
 
 $model->setName(
     FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_NAME

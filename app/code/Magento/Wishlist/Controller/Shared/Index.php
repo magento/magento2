@@ -60,7 +60,7 @@ class Index extends Action
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             $resultRedirect->setUrl(
-                $this->_objectManager->get('Magento\Wishlist\Helper\Data')->getListUrl($wishlist->getId())
+                $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->getListUrl($wishlist->getId())
             );
             return $resultRedirect;
         }

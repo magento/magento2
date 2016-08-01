@@ -15,14 +15,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->dataStorage = $this->getMock('Magento\Search\Model\SearchEngine\Config\Data', [], [], '', false);
+        $this->dataStorage = $this->getMock(\Magento\Search\Model\SearchEngine\Config\Data::class, [], [], '', false);
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
 
     public function testGetDeclaredFeatures()
     {
         $config = $this->objectManager->getObject(
-            '\Magento\Search\Model\SearchEngine\Config',
+            \Magento\Search\Model\SearchEngine\Config::class,
             ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);
@@ -32,7 +32,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testIsFeatureSupported()
     {
         $config = $this->objectManager->getObject(
-            '\Magento\Search\Model\SearchEngine\Config',
+            \Magento\Search\Model\SearchEngine\Config::class,
             ['dataStorage' => $this->dataStorage]
         );
         $this->dataStorage->expects($this->once())->method('get')->with('mysql')->willReturn(['synonyms']);

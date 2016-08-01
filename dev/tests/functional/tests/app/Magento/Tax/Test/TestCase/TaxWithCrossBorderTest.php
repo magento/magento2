@@ -128,7 +128,7 @@ class TaxWithCrossBorderTest extends Injectable
             $this->catalogRule = $catalogRule;
         }
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
         $product->persist();
@@ -142,18 +142,18 @@ class TaxWithCrossBorderTest extends Injectable
     public function tearDown()
     {
         if (isset($this->salesRule)) {
-            $this->objectManager->create('Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep')->run();
+            $this->objectManager->create(\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep::class)->run();
             $this->salesRule = null;
         }
         if (isset($this->catalogRule)) {
-            $this->objectManager->create('\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep')->run();
+            $this->objectManager->create(\Magento\CatalogRule\Test\TestStep\DeleteAllCatalogRulesStep::class)->run();
             $this->catalogRule = null;
         }
 
         // TODO: Move set default configuration to "tearDownAfterClass" method after fix bug MAGETWO-29331
-        $this->objectManager->create('Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep')->run();
+        $this->objectManager->create(\Magento\Tax\Test\TestStep\DeleteAllTaxRulesStep::class)->run();
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => 'default_tax_configuration']
         )->run();
     }

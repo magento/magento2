@@ -46,7 +46,7 @@ class ProductGrid extends ProductController
         $layout = $this->layoutFactory->create();
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
-        $resultRaw->setContents($layout->createBlock('Magento\Review\Block\Adminhtml\Product\Grid')->toHtml());
+        $resultRaw->setContents($layout->createBlock(\Magento\Review\Block\Adminhtml\Product\Grid::class)->toHtml());
         return $resultRaw;
     }
 }

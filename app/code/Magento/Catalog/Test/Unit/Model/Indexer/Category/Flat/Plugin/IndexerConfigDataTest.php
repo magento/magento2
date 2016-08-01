@@ -25,14 +25,14 @@ class IndexerConfigDataTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stateMock = $this->getMock(
-            'Magento\Catalog\Model\Indexer\Category\Flat\State',
+            \Magento\Catalog\Model\Indexer\Category\Flat\State::class,
             ['isFlatEnabled'],
             [],
             '',
             false
         );
 
-        $this->subjectMock = $this->getMock('Magento\Indexer\Model\Config\Data', [], [], '', false);
+        $this->subjectMock = $this->getMock(\Magento\Indexer\Model\Config\Data::class, [], [], '', false);
 
         $this->model = new \Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData($this->stateMock);
     }

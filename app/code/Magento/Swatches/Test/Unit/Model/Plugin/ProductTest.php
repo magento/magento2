@@ -16,8 +16,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testAfterGetMediaAttributes($productType, $hasKey)
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $productMock = $this->getMock('\Magento\Catalog\Model\Product', ['getTypeId'], [], '', false);
-        $roleMock = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
+        $productMock = $this->getMock(\Magento\Catalog\Model\Product::class, ['getTypeId'], [], '', false);
+        $roleMock = $this->getMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class, [], [], '', false);
 
         $imageRolesArray = [
             'image' => $roleMock,
@@ -26,7 +26,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             'swatch_image' => $roleMock,
         ];
 
-        $plugin = $objectManager->getObject('\Magento\Swatches\Model\Plugin\Product');
+        $plugin = $objectManager->getObject(\Magento\Swatches\Model\Plugin\Product::class);
 
         $productMock->expects($this->atLeastOnce())->method('getTypeId')->willReturn($productType);
 

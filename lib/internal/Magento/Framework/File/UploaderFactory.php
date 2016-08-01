@@ -30,6 +30,6 @@ class UploaderFactory
      */
     public function create(array $data = [])
     {
-        return $this->_objectManager->create('Magento\Framework\File\Uploader', $data);
+        return $this->_objectManager->create(\Magento\Framework\File\Uploader::class, $data);
     }
 }

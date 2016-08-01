@@ -31,7 +31,7 @@ class FieldsFilterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->requestMock = $this->getMock('Magento\Framework\Webapi\Rest\Request', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\Webapi\Rest\Request::class, [], [], '', false);
         $this->processor = new FieldsFilter($this->requestMock);
         $this->sampleResponseValue = [
             'customer' => [

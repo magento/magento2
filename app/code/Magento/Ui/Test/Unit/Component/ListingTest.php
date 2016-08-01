@@ -33,12 +33,12 @@ class ListingTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->contextMock = $this->getMockForAbstractClass(
-            'Magento\Framework\View\Element\UiComponent\ContextInterface',
+            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
             [],
             '',
             false
         );
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
@@ -53,7 +53,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
     {
         /** @var Listing $listing */
         $listing = $this->objectManager->getObject(
-            'Magento\Ui\Component\Listing',
+            \Magento\Ui\Component\Listing::class,
             [
                 'context' => $this->contextMock,
                 'data' => []
@@ -76,7 +76,7 @@ class ListingTest extends \PHPUnit_Framework_TestCase
         ];
         /** @var Listing $listing */
         $listing = $this->objectManager->getObject(
-            'Magento\Ui\Component\Listing',
+            \Magento\Ui\Component\Listing::class,
             [
                 'context' => $this->contextMock,
                 'data' => [
