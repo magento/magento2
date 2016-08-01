@@ -38,7 +38,13 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->driver = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->driver = $this->getMock(
+            'Magento\Framework\Filesystem\Driver\File',
+            [],
+            [],
+            '',
+            false
+        );
         $this->fileFactory = $this->getMock(
             'Magento\Framework\Filesystem\File\WriteFactory',
             [],
@@ -88,7 +94,6 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->write->isWritable('correct-path'));
     }
 
-
     public function testCreateSymlinkTargetDirectoryExists()
     {
         $targetDir = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
@@ -120,6 +125,17 @@ class WriteTest extends \PHPUnit_Framework_TestCase
             )->willReturn(true);
 
         $this->assertTrue($this->write->createSymlink($sourcePath, $destinationFile, $targetDir));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\FileSystemException
+     */
+    public function testOpenFileNonWritable()
+    {
+        $targetPath = '/path/to/target.file';
+        $this->driver->expects($this->once())->method('isExists')->willReturn(true);
+        $this->driver->expects($this->once())->method('isWritable')->willReturn(false);
+        $this->write->openFile($targetPath);
     }
 
     /**
