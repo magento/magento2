@@ -6,6 +6,8 @@
 namespace Magento\CatalogRule\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Api\Data\RuleInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * Catalog Rule data model
@@ -21,8 +23,7 @@ use Magento\Catalog\Model\Product;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\CatalogRule\Api\Data\RuleInterface,
-    \Magento\Framework\DataObject\IdentityInterface
+class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface
 {
     /**
      * Prefix of model events names

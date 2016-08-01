@@ -54,7 +54,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
 
         $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
         $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
@@ -136,7 +136,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
 
         $configurable = $this->getMock(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
             [
                 'getTable',
                 'getConnection',
@@ -149,9 +149,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             true
         );
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $reflection = new \ReflectionClass(Configurable::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
@@ -315,7 +312,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $readerAdapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $readerAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods([
                 'select',
                 'fetchAll',
