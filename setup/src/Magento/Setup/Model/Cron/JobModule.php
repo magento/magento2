@@ -39,8 +39,6 @@ class JobModule extends AbstractJob
         $params = []
     ) {
         $this->command = $command;
-        $this->output = $output;
-        $this->status = $status;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
 
         // map name to command string
