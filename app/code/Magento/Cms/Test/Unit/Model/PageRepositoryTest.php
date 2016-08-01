@@ -260,7 +260,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->pageSearchResult->expects($this->once())->method('setSearchCriteria')->with($criteria)->willReturnSelf();
         $this->collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($field, [$condition => $value])
+            ->with([$field], [[$condition => $value]])
             ->willReturnSelf();
         $this->pageSearchResult->expects($this->once())->method('setTotalCount')->with($total)->willReturnSelf();
         $this->collection->expects($this->once())->method('getSize')->willReturn($total);
