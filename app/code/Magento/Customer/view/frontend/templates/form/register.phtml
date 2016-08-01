@@ -60,7 +60,7 @@
             <div class="field telephone">
                 <label for="telephone" class="label"><span><?php /* @escapeNotVerified */ echo __('Phone Number') ?></span></label>
                 <div class="control">
-                    <input type="text" name="telephone" id="telephone" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getTelephone()) ?>" title="<?php /* @escapeNotVerified */ echo __('Phone Number') ?>" class="input-text <?php /* @escapeNotVerified */ echo $this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone') ?>">
+                    <input type="text" name="telephone" id="telephone" value="<?php echo $block->escapeHtmlAttr($block->getFormData()->getTelephone()) ?>" title="<?php /* @escapeNotVerified */ echo __('Phone Number') ?>" class="input-text <?php echo $block->escapeHtmlAttr($this->helper('Magento\Customer\Helper\Address')->getAttributeValidationClass('telephone')) ?>">
                 </div>
             </div>
 
@@ -74,11 +74,11 @@
                         <?php $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
                         <?php for ($_i = 2, $_n = $this->helper('Magento\Customer\Helper\Address')->getStreetLines(); $_i <= $_n; $_i++): ?>
                             <div class="field additional">
-                                <label class="label" for="street_<?php /* @escapeNotVerified */ echo $_i ?>">
+                                <label class="label" for="street_<?php /* @noEscape */ echo $_i ?>">
                                     <span><?php /* @escapeNotVerified */ echo __('Address') ?></span>
                                 </label>
                                 <div class="control">
-                                    <input type="text" name="street[]" value="<?php echo $block->escapeHtml($block->getFormData()->getStreetLine($_i - 1)) ?>" title="<?php /* @escapeNotVerified */ echo __('Street Address %1', $_i) ?>" id="street_<?php /* @escapeNotVerified */ echo $_i ?>" class="input-text <?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
+                                    <input type="text" name="street[]" value="<?php echo $block->escapeHtml($block->getFormData()->getStreetLine($_i - 1)) ?>" title="<?php /* @escapeNotVerified */ echo __('Street Address %1', $_i) ?>" id="street_<?php /* @noEscape */ echo $_i ?>" class="input-text <?php echo $block->escapeHtmlAttr($_streetValidationClass) ?>">
                                 </div>
                             </div>
                         <?php endfor; ?>
