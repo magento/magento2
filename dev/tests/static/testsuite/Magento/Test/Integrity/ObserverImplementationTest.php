@@ -15,7 +15,7 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
     /**
      * Observer interface
      */
-    const OBSERVER_INTERFACE = 'Magento\Framework\Event\ObserverInterface';
+    const OBSERVER_INTERFACE = \Magento\Framework\Event\ObserverInterface::class;
 
     /**
      * @var array

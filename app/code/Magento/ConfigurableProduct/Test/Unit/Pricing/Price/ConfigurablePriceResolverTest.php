@@ -30,10 +30,10 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $className = 'Magento\ConfigurableProduct\Model\Product\Type\Configurable';
+        $className = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class;
         $this->configurable = $this->getMock($className, ['getUsedProducts'], [], '', false);
 
-        $className = 'Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface';
+        $className = \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
         $this->cofigurableOptionProvider = $this->getMockBuilder(ConfigurableOptionsProviderInterface::class)
@@ -42,7 +42,7 @@ class ConfigurablePriceResolverTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
-            'Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver',
+            \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver::class,
             [
                 'priceResolver' => $this->priceResolver,
                 'configurable' => $this->configurable,

@@ -15,7 +15,7 @@ class AddDatabaseTest extends \PHPUnit_Framework_TestCase
         /** @var $controller AddDatabase */
         $controller = new AddDatabase();
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 }

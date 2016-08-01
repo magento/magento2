@@ -22,7 +22,7 @@ class ShellTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->logger = $this->getMockBuilder('Zend_Log')
+        $this->logger = $this->getMockBuilder(\Zend_Log::class)
             ->setMethods(['log'])
             ->disableOriginalConstructor()
             ->getMock();

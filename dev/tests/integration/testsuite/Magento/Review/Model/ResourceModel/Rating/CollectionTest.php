@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Review\Model\ResourceModel\Rating\Collection'
+            \Magento\Review\Model\ResourceModel\Rating\Collection::class
         );
     }
 
@@ -25,7 +25,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddEntitySummaryToItem()
     {
         $ratingData = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\Registry')
+            ->get(\Magento\Framework\Registry::class)
             ->registry('rating_data');
 
         $result = $this->collection->addEntitySummaryToItem($ratingData->getEntityId(), $ratingData->getStoreId());

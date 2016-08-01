@@ -35,7 +35,7 @@ class TotalsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
      */
     public function testExecute()
     {
-        $titleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
+        $titleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
         $titleMock

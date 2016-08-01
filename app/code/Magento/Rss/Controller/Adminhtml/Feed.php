@@ -39,7 +39,7 @@ abstract class Feed extends \Magento\Backend\App\Action
         \Magento\Rss\Model\RssFactory $rssFactory
     ) {
         parent::__construct($context);
-        $this->_objectManager->get('Magento\Backend\Model\UrlInterface')->turnOffSecretKey();
+        $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
         $this->rssManager = $rssManager;
         $this->scopeConfig = $scopeConfig;
         $this->rssFactory = $rssFactory;

@@ -53,7 +53,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             [],
             [],
             '',
@@ -63,7 +63,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->method('setCacheAdapter');
 
         $metadata = $this->getMock(
-            'Magento\Framework\EntityManager\EntityMetadata',
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',
@@ -77,7 +77,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->connection);
 
         $metadataPool = $this->getMock(
-            'Magento\Framework\EntityManager\MetadataPool',
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',
@@ -85,21 +85,27 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         );
         $metadataPool->expects($this->once())
             ->method('getMetadata')
-            ->with('Magento\Catalog\Api\Data\ProductInterface')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->willReturn($metadata);
 
-        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $resource->expects($this->any())->method('getTableName')->willReturn('table');
         $this->resource = $objectManager->getObject(
-            'Magento\Catalog\Model\ResourceModel\Product\Gallery',
+            \Magento\Catalog\Model\ResourceModel\Product\Gallery::class,
             [
                 'metadataPool' => $metadataPool,
                 'resource' => $resource
             ]
         );
-        $this->product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute\AbstractAttribute', [], [], '', false);
+        $this->product = $this->getMock(\Magento\Catalog\Model\Product::class, [], [], '', false);
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
+        $this->attribute = $this->getMock(
+            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     public function testLoadDataFromTableByValueId()

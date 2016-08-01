@@ -162,7 +162,7 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->getMock('Magento\Framework\DataObject', ['setTestData', 'getTestData']);
+        $mock = $this->getMock(\Magento\Framework\DataObject::class, ['setTestData', 'getTestData']);
         $mock->expects($this->once())->method('setTestData')->with($this->equalTo('data'));
         $mock->expects($this->once())->method('getTestData');
 

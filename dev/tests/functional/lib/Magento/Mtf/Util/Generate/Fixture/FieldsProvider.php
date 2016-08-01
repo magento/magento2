@@ -43,8 +43,8 @@ class FieldsProvider
      */
     public function __construct(ObjectManagerInterface $objectManager)
     {
-        $this->eavConfig = $objectManager->create('Magento\Eav\Model\Config');
-        $this->resource = $objectManager->create('Magento\Framework\App\ResourceConnection');
+        $this->eavConfig = $objectManager->create(\Magento\Eav\Model\Config::class);
+        $this->resource = $objectManager->create(\Magento\Framework\App\ResourceConnection::class);
     }
 
     /**

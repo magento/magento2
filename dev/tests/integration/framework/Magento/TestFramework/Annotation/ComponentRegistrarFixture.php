@@ -23,7 +23,7 @@ class ComponentRegistrarFixture
     /**#@+
      * Properties of components registrar
      */
-    const REGISTRAR_CLASS = 'Magento\Framework\Component\ComponentRegistrar';
+    const REGISTRAR_CLASS = \Magento\Framework\Component\ComponentRegistrar::class;
     const PATHS_FIELD = 'paths';
     /**#@-*/
 

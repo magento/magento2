@@ -70,7 +70,7 @@ class Ordered extends \Magento\Backend\Block\Dashboard\Grid
         }
 
         $collection = $this->_collectionFactory->create()->setModel(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         )->addStoreFilter(
             $storeId
         );

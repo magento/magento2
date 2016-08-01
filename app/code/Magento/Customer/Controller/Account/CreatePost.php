@@ -224,7 +224,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
             $addressData,
-            '\Magento\Customer\Api\Data\AddressInterface'
+            \Magento\Customer\Api\Data\AddressInterface::class
         );
         $addressDataObject->setRegion($regionDataObject);
 

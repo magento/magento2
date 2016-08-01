@@ -53,7 +53,7 @@ class ExtensionAttributesInterfaceGenerator extends \Magento\Framework\Api\Code\
      */
     protected function getExtendedClass()
     {
-        return '\Magento\Framework\Api\ExtensionAttributesInterface';
+        return '\\' . \Magento\Framework\Api\ExtensionAttributesInterface::class;
     }
 
     /**

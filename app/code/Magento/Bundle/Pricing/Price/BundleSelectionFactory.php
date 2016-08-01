@@ -16,7 +16,7 @@ class BundleSelectionFactory
     /**
      * Default selection class
      */
-    const SELECTION_CLASS_DEFAULT = 'Magento\Bundle\Pricing\Price\BundleSelectionPrice';
+    const SELECTION_CLASS_DEFAULT = \Magento\Bundle\Pricing\Price\BundleSelectionPrice::class;
 
     /**
      * Object Manager

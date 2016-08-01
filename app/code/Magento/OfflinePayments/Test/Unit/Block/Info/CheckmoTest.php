@@ -14,7 +14,7 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
+        $context = $this->getMock(\Magento\Framework\View\Element\Template\Context::class, [], [], '', false);
         $this->_model = new \Magento\OfflinePayments\Block\Info\Checkmo($context);
     }
 
@@ -23,7 +23,7 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPayableTo($details, $expected)
     {
-        $info = $this->getMock('Magento\Payment\Model\Info', ['getAdditionalData'], [], '', false);
+        $info = $this->getMock(\Magento\Payment\Model\Info::class, ['getAdditionalData'], [], '', false);
         $info->expects($this->once())
             ->method('getAdditionalData')
             ->willReturn(serialize($details));
@@ -48,7 +48,7 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMailingAddress($details, $expected)
     {
-        $info = $this->getMock('Magento\Payment\Model\Info', ['getAdditionalData'], [], '', false);
+        $info = $this->getMock(\Magento\Payment\Model\Info::class, ['getAdditionalData'], [], '', false);
         $info->expects($this->once())
             ->method('getAdditionalData')
             ->willReturn(serialize($details));
@@ -70,7 +70,7 @@ class CheckmoTest extends \PHPUnit_Framework_TestCase
 
     public function testConvertAdditionalDataIsNeverCalled()
     {
-        $info = $this->getMock('Magento\Payment\Model\Info', ['getAdditionalData'], [], '', false);
+        $info = $this->getMock(\Magento\Payment\Model\Info::class, ['getAdditionalData'], [], '', false);
         $info->expects($this->once())
             ->method('getAdditionalData')
             ->willReturn(serialize(['mailing_address' => 'blah@blah.com']));

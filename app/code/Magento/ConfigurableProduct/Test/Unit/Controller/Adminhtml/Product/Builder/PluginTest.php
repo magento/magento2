@@ -60,22 +60,22 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->productFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ProductFactory',
+            \Magento\Catalog\Model\ProductFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->configurableTypeMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             [],
             [],
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $methods = ['setTypeId', 'getAttributes', 'addData', 'setWebsiteIds', '__wakeup'];
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
+        $this->productMock = $this->getMock(\Magento\Catalog\Model\Product::class, $methods, [], '', false);
         $product = $this->productMock;
         $attributeMethods = [
             'getId',
@@ -86,7 +86,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             'getIsUnique',
         ];
         $this->attributeMock = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             $attributeMethods,
             [],
             '',
@@ -104,21 +104,21 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             'getSetAttributes',
         ];
         $this->configurableMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             $configMethods,
             [],
             '',
             false
         );
         $this->frontendAttrMock = $this->getMock(
-            'Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend',
+            \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend::class,
             [],
             [],
             '',
             false
         );
         $this->subjectMock = $this->getMock(
-            'Magento\Catalog\Controller\Adminhtml\Product\Builder',
+            \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,
             [],
             [],
             '',

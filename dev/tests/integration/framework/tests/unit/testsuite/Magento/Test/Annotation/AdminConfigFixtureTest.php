@@ -19,7 +19,7 @@ class AdminConfigFixtureTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_object = $this->getMock(
-            'Magento\TestFramework\Annotation\AdminConfigFixture',
+            \Magento\TestFramework\Annotation\AdminConfigFixture::class,
             ['_getConfigValue', '_setConfigValue']
         );
     }

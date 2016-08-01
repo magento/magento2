@@ -38,11 +38,11 @@ class AssertCatalogPriceRuleAppliedProductPage extends AbstractConstraint
     ) {
         if ($customer !== null) {
             $this->objectManager->create(
-                '\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+                \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
                 ['customer' => $customer]
             )->run();
         } else {
-            $this->objectManager->create('\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep')->run();
+            $this->objectManager->create(\Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep::class)->run();
         }
 
         $cmsIndexPage->open();
