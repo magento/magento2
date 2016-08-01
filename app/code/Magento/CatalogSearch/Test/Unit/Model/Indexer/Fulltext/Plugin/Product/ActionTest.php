@@ -75,7 +75,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->subjectMock,
-            $this->plugin->afterUpdateAttributes($this->subjectMock, $this->subjectMock, $productIds)
+            $this->plugin->afterUpdateAttributes($this->subjectMock, $this->subjectMock, $productIds, [], null)
         );
     }
 
@@ -91,7 +91,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->subjectMock,
-            $this->plugin->afterUpdateAttributes($this->subjectMock, $this->subjectMock, $productIds)
+            $this->plugin->afterUpdateAttributes($this->subjectMock, $this->subjectMock, $productIds, [], null)
         );
     }
 
@@ -106,7 +106,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             ->method('reindexList')
             ->with($productIds);
 
-        $this->plugin->afterUpdateWebsites($this->subjectMock, $this->subjectMock, $productIds);
+        $this->plugin->afterUpdateWebsites($this->subjectMock, $this->subjectMock, $productIds, [], null);
     }
 
     public function testAfterUpdateWebsitesScheduled()
@@ -119,6 +119,6 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         $this->indexerMock->expects(static::never())
             ->method('reindexList');
 
-        $this->plugin->afterUpdateWebsites($this->subjectMock, $this->subjectMock, $productIds);
+        $this->plugin->afterUpdateWebsites($this->subjectMock, $this->subjectMock, $productIds, [], null);
     }
 }

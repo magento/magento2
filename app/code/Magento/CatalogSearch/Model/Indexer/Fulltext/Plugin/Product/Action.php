@@ -19,12 +19,19 @@ class Action extends AbstractIndexerPlugin
      * @param ProductAction $subject
      * @param ProductAction $action
      * @param array $productIds
+     * @param array $attrData
+     * @param int $storeId
      * @return ProductAction
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterUpdateAttributes(ProductAction $subject, ProductAction $action, array $productIds)
-    {
+    public function afterUpdateAttributes(
+        ProductAction $subject,
+        ProductAction $action,
+        $productIds,
+        $attrData,
+        $storeId
+    ) {
         $this->reindexList(array_unique($productIds));
 
         return $action;
@@ -36,11 +43,13 @@ class Action extends AbstractIndexerPlugin
      * @param ProductAction $subject
      * @param null $result
      * @param array $productIds
+     * @param array $websiteIds
+     * @param string $type
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterUpdateWebsites(ProductAction $subject, $result, array $productIds)
+    public function afterUpdateWebsites(ProductAction $subject, $result, $productIds, $websiteIds, $type)
     {
         $this->reindexList(array_unique($productIds));
     }
