@@ -60,21 +60,6 @@ interface BulkSummaryInterface
     public function setDescription($description);
 
     /**
-     * Get bulk entity type
-     *
-     * @return string
-     */
-    public function getEntityType();
-
-    /**
-     * Set bulk entity type
-     *
-     * @param string $entityType
-     * @return $this
-     */
-    public function setEntityType($entityType);
-
-    /**
      * Get bulk scheduled time
      *
      * @return string
