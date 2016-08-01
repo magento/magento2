@@ -26,7 +26,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Braintree\Model\Report\Row\TransactionMap';
+    protected $_itemObjectClass = \Magento\Braintree\Model\Report\Row\TransactionMap::class;
 
     /**
      * @var array

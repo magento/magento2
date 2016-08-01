@@ -68,7 +68,7 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
             ->willReturn($extensions);
 
         $jsonModel = $this->controller->extensionsAction();
-        static::assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
+        static::assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         static::assertArrayHasKey('success', $variables);
         static::assertArrayHasKey('extensions', $variables);

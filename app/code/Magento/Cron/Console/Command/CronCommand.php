@@ -94,7 +94,7 @@ class CronCommand extends Command
             }
         }
         /** @var \Magento\Framework\App\Cron $cronObserver */
-        $cronObserver = $objectManager->create('Magento\Framework\App\Cron', ['parameters' => $params]);
+        $cronObserver = $objectManager->create(\Magento\Framework\App\Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
         $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
     }

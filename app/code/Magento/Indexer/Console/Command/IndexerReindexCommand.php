@@ -129,7 +129,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         if (empty($indexerIds)) {
             return $this;
         }
-        $indexerFactory = $this->getObjectManager()->create('Magento\Indexer\Model\IndexerFactory');
+        $indexerFactory = $this->getObjectManager()->create(\Magento\Indexer\Model\IndexerFactory::class);
         foreach ($indexerIds as $indexerId) {
             /** @var \Magento\Indexer\Model\Indexer $indexer */
             $indexer = $indexerFactory->create();

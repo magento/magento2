@@ -14,6 +14,8 @@ use Zend\Mvc\MvcEvent;
 
 /**
  * Tests Magento\Setup\Mvc\Bootstrap\InitParamListener
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InitParamListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,22 +48,27 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnBootstrap()
     {
         /** @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
-        $mvcEvent = $this->getMock('Zend\Mvc\MvcEvent');
-        $mvcApplication = $this->getMockBuilder('Zend\Mvc\Application')->disableOriginalConstructor()->getMock();
+        $mvcEvent = $this->getMock(\Zend\Mvc\MvcEvent::class);
+        $mvcApplication = $this->getMockBuilder(\Zend\Mvc\Application::class)->disableOriginalConstructor()->getMock();
         $mvcEvent->expects($this->once())->method('getApplication')->willReturn($mvcApplication);
-        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceManager');
+        $serviceManager = $this->getMock(\Zend\ServiceManager\ServiceManager::class);
         $initParams[AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::ROOT] = ['path' => '/test'];
         $serviceManager->expects($this->once())->method('get')
             ->willReturn($initParams);
         $serviceManager->expects($this->exactly(2))->method('setService')
             ->withConsecutive(
-                ['Magento\Framework\App\Filesystem\DirectoryList',
-                 $this->isInstanceOf('Magento\Framework\App\Filesystem\DirectoryList')],
-                ['Magento\Framework\Filesystem', $this->isInstanceOf('Magento\Framework\Filesystem')]
+                [
+                    \Magento\Framework\App\Filesystem\DirectoryList::class,
+                    $this->isInstanceOf(\Magento\Framework\App\Filesystem\DirectoryList::class)
+                ],
+                [
+                    \Magento\Framework\Filesystem::class,
+                    $this->isInstanceOf(\Magento\Framework\Filesystem::class)
+                ]
             );
         $mvcApplication->expects($this->any())->method('getServiceManager')->willReturn($serviceManager);
 
-        $eventManager = $this->getMockForAbstractClass('Zend\EventManager\EventManagerInterface');
+        $eventManager = $this->getMockForAbstractClass(\Zend\EventManager\EventManagerInterface::class);
         $mvcApplication->expects($this->any())->method('getEventManager')->willReturn($eventManager);
         $eventManager->expects($this->any())->method('attach');
 
@@ -91,9 +98,9 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Zend\ServiceManager\ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
          */
-        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mvcApplication = $this->getMockBuilder('Zend\Mvc\Application')->disableOriginalConstructor()->getMock();
-        $request = $this->getMock('Zend\Stdlib\RequestInterface');
+        $serviceLocator = $this->getMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mvcApplication = $this->getMockBuilder(\Zend\Mvc\Application::class)->disableOriginalConstructor()->getMock();
+        $request = $this->getMock(\Zend\Stdlib\RequestInterface::class);
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
@@ -117,9 +124,9 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
         /**
          * @var \Zend\ServiceManager\ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
          */
-        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
-        $mvcApplication = $this->getMockBuilder('Zend\Mvc\Application')->disableOriginalConstructor()->getMock();
-        $request = $this->getMockBuilder('Zend\Console\Request')->disableOriginalConstructor()->getMock();
+        $serviceLocator = $this->getMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mvcApplication = $this->getMockBuilder(\Zend\Mvc\Application::class)->disableOriginalConstructor()->getMock();
+        $request = $this->getMockBuilder(\Zend\Console\Request::class)->disableOriginalConstructor()->getMock();
         $request->expects($this->any())
             ->method('getContent')
             ->willReturn(
@@ -189,7 +196,7 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Framework\App\Filesystem\DirectoryList|
          * \PHPUnit_Framework_MockObject_MockObject $directoryList
          */
-        $directoryList = $this->getMockBuilder('Magento\Framework\App\Filesystem\DirectoryList')
+        $directoryList = $this->getMockBuilder(\Magento\Framework\App\Filesystem\DirectoryList::class)
             ->disableOriginalConstructor()->getMock();
         $directoryList->expects($this->any())->method('getPath')->willReturn($testPath);
         $filesystem = $this->listener->createFilesystem($directoryList);
@@ -205,15 +212,16 @@ class InitParamListenerTest extends \PHPUnit_Framework_TestCase
      */
     private function prepareEventManager()
     {
-        $this->callbackHandler = $this->getMockBuilder('Zend\Stdlib\CallbackHandler')->disableOriginalConstructor()
+        $this->callbackHandler = $this->getMockBuilder(\Zend\Stdlib\CallbackHandler::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         /** @var \Zend\EventManager\EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject $events */
-        $eventManager = $this->getMock('Zend\EventManager\EventManagerInterface');
+        $eventManager = $this->getMock(\Zend\EventManager\EventManagerInterface::class);
 
-        $sharedManager = $this->getMock('Zend\EventManager\SharedEventManager');
+        $sharedManager = $this->getMock(\Zend\EventManager\SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(
-            'Zend\Mvc\Application',
+            \Zend\Mvc\Application::class,
             MvcEvent::EVENT_BOOTSTRAP,
             [$this->listener, 'onBootstrap']
         )->willReturn($this->callbackHandler);

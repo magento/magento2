@@ -10,6 +10,8 @@ use Magento\Framework\Api\SortOrder;
 
 /**
  * Test for Magento\Cms\Model\PageRepository
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PageRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -63,43 +65,43 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->pageResource = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
+        $this->pageResource = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dataObjectProcessor = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+        $this->dataObjectProcessor = $this->getMockBuilder(\Magento\Framework\Reflection\DataObjectProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $pageFactory = $this->getMockBuilder('Magento\Cms\Model\PageFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $pageDataFactory = $this->getMockBuilder('Magento\Cms\Api\Data\PageInterfaceFactory')
+        $pageFactory = $this->getMockBuilder(\Magento\Cms\Model\PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $pageSearchResultFactory = $this->getMockBuilder('Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory')
+        $pageDataFactory = $this->getMockBuilder(\Magento\Cms\Api\Data\PageInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page\CollectionFactory')
+        $pageSearchResultFactory = $this->getMockBuilder(\Magento\Cms\Api\Data\PageSearchResultsInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $collectionFactory = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $store = $this->getMockBuilder('\Magento\Store\Api\Data\StoreInterface')
+        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getId')->willReturn(0);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->page = $this->getMockBuilder('Magento\Cms\Model\Page')->disableOriginalConstructor()->getMock();
-        $this->pageData = $this->getMockBuilder('Magento\Cms\Api\Data\PageInterface')
+        $this->page = $this->getMockBuilder(\Magento\Cms\Model\Page::class)->disableOriginalConstructor()->getMock();
+        $this->pageData = $this->getMockBuilder(\Magento\Cms\Api\Data\PageInterface::class)
             ->getMock();
-        $this->pageSearchResult = $this->getMockBuilder('Magento\Cms\Api\Data\PageSearchResultsInterface')
+        $this->pageSearchResult = $this->getMockBuilder(\Magento\Cms\Api\Data\PageSearchResultsInterface::class)
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page\Collection')
+        $this->collection = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page\Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
@@ -123,7 +125,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory $collectionFactory
          */
 
-        $this->dataHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
+        $this->dataHelper = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -233,11 +235,11 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $pageSize = 2;
         $sortField = 'id';
 
-        $criteria = $this->getMockBuilder('Magento\Framework\Api\SearchCriteriaInterface')->getMock();
-        $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')->getMock();
-        $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')->getMock();
-        $storeFilter = $this->getMockBuilder('Magento\Framework\Api\Filter')->getMock();
-        $sortOrder = $this->getMockBuilder('Magento\Framework\Api\SortOrder')->getMock();
+        $criteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)->getMock();
+        $filterGroup = $this->getMockBuilder(\Magento\Framework\Api\Search\FilterGroup::class)->getMock();
+        $filter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)->getMock();
+        $storeFilter = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)->getMock();
+        $sortOrder = $this->getMockBuilder(\Magento\Framework\Api\SortOrder::class)->getMock();
 
         $criteria->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroup]);
         $criteria->expects($this->once())->method('getSortOrders')->willReturn([$sortOrder]);
@@ -258,7 +260,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->pageSearchResult->expects($this->once())->method('setSearchCriteria')->with($criteria)->willReturnSelf();
         $this->collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($field, [$condition => $value])
+            ->with([$field], [[$condition => $value]])
             ->willReturnSelf();
         $this->pageSearchResult->expects($this->once())->method('setTotalCount')->with($total)->willReturnSelf();
         $this->collection->expects($this->once())->method('getSize')->willReturn($total);
@@ -269,10 +271,10 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->pageSearchResult->expects($this->once())->method('setItems')->with(['someData'])->willReturnSelf();
         $this->dataHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($this->pageData, ['data'], 'Magento\Cms\Api\Data\PageInterface');
+            ->with($this->pageData, ['data'], \Magento\Cms\Api\Data\PageInterface::class);
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
-            ->with($this->pageData, 'Magento\Cms\Api\Data\PageInterface')
+            ->with($this->pageData, \Magento\Cms\Api\Data\PageInterface::class)
             ->willReturn('someData');
 
         $this->assertEquals($this->pageSearchResult, $this->repository->getList($criteria));

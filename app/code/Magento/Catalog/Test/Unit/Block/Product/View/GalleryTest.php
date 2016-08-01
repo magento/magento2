@@ -41,11 +41,11 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
     {
         $this->mockContext();
 
-        $this->arrayUtils = $this->getMockBuilder('Magento\Framework\Stdlib\ArrayUtils')
+        $this->arrayUtils = $this->getMockBuilder(\Magento\Framework\Stdlib\ArrayUtils::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->jsonEncoderMock = $this->getMockBuilder('Magento\Framework\Json\EncoderInterface')
+        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -58,18 +58,18 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
 
     protected function mockContext()
     {
-        $this->context = $this->getMockBuilder('Magento\Catalog\Block\Product\Context')
+        $this->context = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->imageHelper = $this->getMockBuilder('Magento\Catalog\Helper\Image')
+        $this->imageHelper = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
             ->method('getImageHelper')
             ->willReturn($this->imageHelper);
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())
@@ -79,15 +79,15 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetGalleryImages()
     {
-        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+        $productTypeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type\AbstractType::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productTypeMock->expects($this->once())
@@ -143,7 +143,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $images = $this->model->getGalleryImages();
-        $this->assertInstanceOf('Magento\Framework\Data\Collection', $images);
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $images);
     }
 
     /**
@@ -151,7 +151,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
      */
     private function getImagesCollection()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Framework\Data\Collection')
+        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -17,7 +17,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testViewAction()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $productRepository = $this->_objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $productRepository = $this->_objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $product = $productRepository->get('bundle-product');
         $this->dispatch('catalog/product/view/id/' . $product->getEntityId());
         $responseBody = $this->getResponse()->getBody();

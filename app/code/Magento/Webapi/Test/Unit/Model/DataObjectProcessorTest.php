@@ -24,18 +24,18 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $methodsMapProcessor = $objectManager->getObject(
-            'Magento\Framework\Reflection\MethodsMap',
+            \Magento\Framework\Reflection\MethodsMap::class,
             [
-                'fieldNamer' => $objectManager->getObject('Magento\Framework\Reflection\FieldNamer'),
-                'typeProcessor' => $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor'),
+                'fieldNamer' => $objectManager->getObject(\Magento\Framework\Reflection\FieldNamer::class),
+                'typeProcessor' => $objectManager->getObject(\Magento\Framework\Reflection\TypeProcessor::class),
             ]
         );
         $this->dataObjectProcessor = $objectManager->getObject(
-            'Magento\Framework\Reflection\DataObjectProcessor',
+            \Magento\Framework\Reflection\DataObjectProcessor::class,
             [
                 'methodsMapProcessor' => $methodsMapProcessor,
-                'typeCaster' => $objectManager->getObject('Magento\Framework\Reflection\TypeCaster'),
-                'fieldNamer' => $objectManager->getObject('Magento\Framework\Reflection\FieldNamer'),
+                'typeCaster' => $objectManager->getObject(\Magento\Framework\Reflection\TypeCaster::class),
+                'fieldNamer' => $objectManager->getObject(\Magento\Framework\Reflection\FieldNamer::class),
             ]
         );
         parent::setUp();
@@ -45,7 +45,7 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager =  new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Webapi\Test\Unit\Model\Files\TestDataObject $testDataObject */
-        $testDataObject = $objectManager->getObject('Magento\Webapi\Test\Unit\Model\Files\TestDataObject');
+        $testDataObject = $objectManager->getObject(\Magento\Webapi\Test\Unit\Model\Files\TestDataObject::class);
 
         $expectedOutputDataArray = [
             'id' => '1',
@@ -54,7 +54,7 @@ class DataObjectProcessorTest extends \PHPUnit_Framework_TestCase
             'required_billing' => 'false',
         ];
 
-        $testDataObjectType = 'Magento\Webapi\Test\Unit\Model\Files\TestDataInterface';
+        $testDataObjectType = \Magento\Webapi\Test\Unit\Model\Files\TestDataInterface::class;
         $outputData = $this->dataObjectProcessor->buildOutputDataArray($testDataObject, $testDataObjectType);
         $this->assertEquals($expectedOutputDataArray, $outputData);
     }

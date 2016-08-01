@@ -27,19 +27,19 @@ class PublicationDecoratorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $publisherMock = $this->getMockBuilder('Magento\Framework\App\View\Asset\Publisher')
+        $publisherMock = $this->getMockBuilder(\Magento\Framework\App\View\Asset\Publisher::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $assetRepoMock = $this->getMockBuilder('Magento\Framework\View\Asset\Repository')
+        $assetRepoMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $relatedAssetMock = $this->getMockBuilder('Magento\Framework\View\Asset\File')
+        $relatedAssetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $importGeneratorMock = $this->getMockBuilder('Magento\Framework\Css\PreProcessor\Instruction\Import')
+        $importGeneratorMock = $this->getMockBuilder(\Magento\Framework\Css\PreProcessor\Instruction\Import::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $localAssetMock = $this->getMockBuilder('Magento\Framework\View\Asset\LocalInterface')
+        $localAssetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)

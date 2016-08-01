@@ -55,7 +55,7 @@ class ShowModeCommand extends Command
         try {
             /** @var \Magento\Deploy\Model\Mode $mode */
             $mode = $this->objectManager->create(
-                'Magento\Deploy\Model\Mode',
+                \Magento\Deploy\Model\Mode::class,
                 [
                     'input' => $input,
                     'output' => $output,

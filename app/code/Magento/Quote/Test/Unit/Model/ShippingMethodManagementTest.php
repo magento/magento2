@@ -86,11 +86,11 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepository = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $this->addressRepository = $this->getMock('\Magento\Customer\Api\AddressRepositoryInterface');
-
+        $this->quoteRepository = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->addressRepository = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
+        
         $this->methodDataFactoryMock = $this->getMock(
-            '\Magento\Quote\Api\Data\ShippingMethodInterfaceFactory',
+            \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory::class,
             [
                 'create'
             ],
@@ -98,18 +98,18 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        
         $this->addressFactory = $this->getMock(
-            'Magento\Customer\Api\Data\AddressInterfaceFactory',
+            \Magento\Customer\Api\Data\AddressInterfaceFactory::class,
             ['create'],
             [],
             '',
             false
         );
 
-        $this->dataProcessor = $this->getMock('Magento\Framework\Reflection\DataObjectProcessor', [], [], '', false);
-
-        $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->dataProcessor = $this->getMock(\Magento\Framework\Reflection\DataObjectProcessor::class, [], [], '', false);
+        
+        $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -210,14 +210,14 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingMethod')->will($this->returnValue('one_two'));
 
         $this->shippingAddress->expects($this->once())->method('collectShippingRates')->willReturnSelf();
-        $shippingRateMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate', [], [], '', false);
+        $shippingRateMock = $this->getMock(\Magento\Quote\Model\Quote\Address\Rate::class, [], [], '', false);
 
         $this->shippingAddress->expects($this->once())
             ->method('getShippingRateByCode')
             ->with('one_two')
             ->willReturn($shippingRateMock);
 
-        $this->shippingMethodMock = $this->getMock('\Magento\Quote\Api\Data\ShippingMethodInterface');
+        $this->shippingMethodMock = $this->getMock(\Magento\Quote\Api\Data\ShippingMethodInterface::class);
         $this->converter->expects($this->once())
             ->method('modelToDataObject')
             ->with($shippingRateMock, $currencyCode)
@@ -299,7 +299,7 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddress));
         $this->shippingAddress->expects($this->once())->method('getCountryId')->will($this->returnValue(345));
         $this->shippingAddress->expects($this->once())->method('collectShippingRates');
-        $shippingRateMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Rate', [], [], '', false);
+        $shippingRateMock = $this->getMock(\Magento\Quote\Model\Quote\Address\Rate::class, [], [], '', false);
         $this->shippingAddress->expects($this->once())
             ->method('getGroupedAllShippingRates')
             ->will($this->returnValue([[$shippingRateMock]]));
