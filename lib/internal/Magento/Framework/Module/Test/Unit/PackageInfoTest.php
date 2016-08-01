@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Module\Test\Unit;
 
+use Magento\Framework\Module\ModuleList;
 use \Magento\Framework\Module\PackageInfo;
 
 class PackageInfoTest extends \PHPUnit_Framework_TestCase
@@ -99,5 +100,10 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('0.3', $this->packageInfo->getVersion('D'));
         $this->assertEquals('0.4', $this->packageInfo->getVersion('E'));
         $this->assertEquals('', $this->packageInfo->getVersion('F'));
+    }
+
+    public function testGetRequiredBy()
+    {
+        $this->assertEquals(['A'], $this->packageInfo->getRequiredBy('b'));
     }
 }
