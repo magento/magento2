@@ -88,26 +88,15 @@ class ShippingMethodManagementTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = new ObjectManager($this);
         $this->quoteRepository = $this->getMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->addressRepository = $this->getMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        
-        $this->methodDataFactoryMock = $this->getMock(
-            \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory::class,
-            [
-                'create'
-            ],
-            [],
-            '',
-            false
-        );
-        
-        $this->addressFactory = $this->getMock(
-            \Magento\Customer\Api\Data\AddressInterfaceFactory::class,
-            ['create'],
-            [],
-            '',
-            false
-        );
 
-        $this->dataProcessor = $this->getMock(\Magento\Framework\Reflection\DataObjectProcessor::class, [], [], '', false);
+        $className = \Magento\Quote\Api\Data\ShippingMethodInterfaceFactory::class;
+        $this->methodDataFactoryMock = $this->getMock($className, ['create'], [], '', false);
+
+        $className = \Magento\Customer\Api\Data\AddressInterfaceFactory::class;
+        $this->addressFactory = $this->getMock($className, ['create'], [], '', false);
+
+        $className = \Magento\Framework\Reflection\DataObjectProcessor::class;
+        $this->dataProcessor = $this->getMock($className, [], [], '', false);
         
         $this->storeMock = $this->getMock(\Magento\Store\Model\Store::class, [], [], '', false);
         $this->quote = $this->getMockBuilder(Quote::class)
