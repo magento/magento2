@@ -66,7 +66,7 @@ class QuoteItemTest extends \PHPUnit_Framework_TestCase
         $expectedOptions = $productOptions + ['bundle_selection_attributes' => $attributeValue];
 
         $bundleAttribute = $this->getMock(
-            'Magento\Catalog\Model\Product\Configuration\Item\Option',
+            \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
             [],
             [],
             '',
