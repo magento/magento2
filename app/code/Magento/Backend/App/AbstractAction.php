@@ -9,6 +9,7 @@ namespace Magento\Backend\App;
  * Generic backend controller
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 {
@@ -264,7 +265,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
             if ($this->getRequest()->getQuery('isAjax', false) || $this->getRequest()->getQuery('ajax', false)) {
                 $this->getResponse()->representJson(
                     $this->_objectManager->get(
-                        'Magento\Framework\Json\Helper\Data'
+                        \Magento\Framework\Json\Helper\Data::class
                     )->jsonEncode(
                         ['error' => true, 'message' => $_keyErrorMsg]
                     )
@@ -286,7 +287,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     protected function _processLocaleSettings()
     {
         $forceLocale = $this->getRequest()->getParam('locale', null);
-        if ($this->_objectManager->get('Magento\Framework\Validator\Locale')->isValid($forceLocale)) {
+        if ($this->_objectManager->get(\Magento\Framework\Validator\Locale::class)->isValid($forceLocale)) {
             $this->_getSession()->setSessionLocale($forceLocale);
         }
 

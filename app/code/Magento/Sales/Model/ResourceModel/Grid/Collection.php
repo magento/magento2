@@ -45,7 +45,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
         $eventPrefix,
         $eventObject,
         $resourceModel,
-        $model = 'Magento\Sales\Model\ResourceModel\Grid\Document',
+        $model = \Magento\Sales\Model\ResourceModel\Grid\Document::class,
         $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
@@ -79,7 +79,6 @@ class Collection extends AbstractCollection implements SearchResultInterface
     {
         $this->aggregations = $aggregations;
     }
-
 
     /**
      * Retrieve all ids for collection

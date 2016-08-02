@@ -10,7 +10,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testIsActive()
     {
         $result = 'result';
-        $backendConfig = $this->getMockForAbstractClass('Magento\Backend\App\ConfigInterface');
+        $backendConfig = $this->getMockForAbstractClass(\Magento\Backend\App\ConfigInterface::class);
         $backendConfig->expects(
             $this->once()
         )->method(
@@ -22,7 +22,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $config = $objectManager->getObject(
-            'Magento\Backend\Model\Translate\Inline\Config',
+            \Magento\Backend\Model\Translate\Inline\Config::class,
             ['config' => $backendConfig]
         );
         $this->assertEquals($result, $config->isActive('any'));

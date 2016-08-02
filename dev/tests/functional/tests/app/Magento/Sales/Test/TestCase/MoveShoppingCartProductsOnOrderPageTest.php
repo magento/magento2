@@ -135,12 +135,12 @@ class MoveShoppingCartProductsOnOrderPageTest extends Injectable
         //Preconditions
         // Create product
         $product = $this->objectManager->create(
-            '\Magento\Catalog\Test\TestStep\CreateProductStep',
+            \Magento\Catalog\Test\TestStep\CreateProductStep::class,
             ['product' => $product]
         )->run()['product'];
         // Login under customer
         $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            \Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep::class,
             ['customer' => $customer]
         )->run();
         $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

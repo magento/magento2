@@ -51,23 +51,23 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rootResource = $this->getMockBuilder('Magento\Framework\Acl\RootResource')
+        $this->rootResource = $this->getMockBuilder(\Magento\Framework\Acl\RootResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aclResourceProvider = $this->getMockBuilder('Magento\Framework\Acl\AclResource\ProviderInterface')
+        $this->aclResourceProvider = $this->getMockBuilder(\Magento\Framework\Acl\AclResource\ProviderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->integrationHelper = $this->getMockBuilder('Magento\Integration\Helper\Data')
+        $this->integrationHelper = $this->getMockBuilder(\Magento\Integration\Helper\Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder('Magento\Integration\Model\IntegrationService')
+        $this->integrationService = $this->getMockBuilder(\Magento\Integration\Model\IntegrationService::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -233,7 +233,7 @@ class WebapiTest extends \PHPUnit_Framework_TestCase
             ->willReturnOnConsecutiveCalls(false, $integrationData, $integrationData);
 
         return $this->objectManager->getObject(
-            'Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi',
+            \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi::class,
             [
                 'registry' => $this->registry,
                 'rootResource' => $this->rootResource,

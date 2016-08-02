@@ -32,12 +32,12 @@ class StockDataFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue(1));
 
         $this->stockConfiguration = $this->getMock(
-            'Magento\CatalogInventory\Model\Configuration',
+            \Magento\CatalogInventory\Model\Configuration::class,
             ['getManageStock'],
             [],
             '',

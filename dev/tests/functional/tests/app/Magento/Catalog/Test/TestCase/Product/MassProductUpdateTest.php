@@ -90,7 +90,7 @@ class MassProductUpdateTest extends Injectable
         $initialProduct->persist();
 
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $configData]
         )->run();
 
@@ -101,7 +101,7 @@ class MassProductUpdateTest extends Injectable
         $this->attributeMassActionPage->getFormPageActions()->save();
         $data = array_merge($initialProduct->getData(), $product->getData());
         $product = $this->objectManager->create(
-            'Magento\Catalog\Test\Fixture\CatalogProductSimple',
+            \Magento\Catalog\Test\Fixture\CatalogProductSimple::class,
             ['data' => $data]
         );
 
@@ -119,7 +119,7 @@ class MassProductUpdateTest extends Injectable
     public function tearDown()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => $this->configData, 'rollback' => true]
         )->run();
     }

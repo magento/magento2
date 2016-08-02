@@ -581,9 +581,9 @@ class ConfigurableProductsFixture extends Fixture
         $this->fixtureModel->resetObjectManager();
 
         /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
+        $storeManager = $this->fixtureModel->getObjectManager()->create(\Magento\Store\Model\StoreManager::class);
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
+        $category = $this->fixtureModel->getObjectManager()->get(\Magento\Catalog\Model\Category::class);
 
         $result = [];
         //Get all websites
@@ -638,7 +638,7 @@ class ConfigurableProductsFixture extends Fixture
 
         /** @var \Magento\ImportExport\Model\Import $import */
         $import = $this->fixtureModel->getObjectManager()->create(
-            'Magento\ImportExport\Model\Import',
+            \Magento\ImportExport\Model\Import::class,
             [
                 'data' => [
                     'entity' => 'catalog_product',

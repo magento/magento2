@@ -235,7 +235,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getDependence()
     {
         if (!$this->getChildBlock('element_dependence')) {
-            $this->addChild('element_dependence', 'Magento\Backend\Block\Widget\Form\Element\Dependence');
+            $this->addChild('element_dependence', \Magento\Backend\Block\Widget\Form\Element\Dependence::class);
         }
         return $this->getChildBlock('element_dependence');
     }
@@ -609,9 +609,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _getAdditionalElementTypes()
     {
         return [
-            'allowspecific' => 'Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific',
-            'image' => 'Magento\Config\Block\System\Config\Form\Field\Image',
-            'file' => 'Magento\Config\Block\System\Config\Form\Field\File'
+            'allowspecific' => \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
+            'image' => \Magento\Config\Block\System\Config\Form\Field\Image::class,
+            'file' => \Magento\Config\Block\System\Config\Form\Field\File::class
         ];
     }
 

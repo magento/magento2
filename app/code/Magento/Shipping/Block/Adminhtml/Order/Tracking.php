@@ -49,7 +49,7 @@ class Tracking extends \Magento\Backend\Block\Template
     {
         $this->addChild(
             'add_button',
-            'Magento\Backend\Block\Widget\Button',
+            \Magento\Backend\Block\Widget\Button::class,
             ['label' => __('Add Tracking Number'), 'class' => '', 'onclick' => 'trackingControl.add()']
         );
     }

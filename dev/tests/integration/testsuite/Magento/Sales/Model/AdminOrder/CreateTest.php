@@ -26,9 +26,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->_messageManager = Bootstrap::getObjectManager()->get('Magento\Framework\Message\ManagerInterface');
+        $this->_messageManager = Bootstrap::getObjectManager()->get(\Magento\Framework\Message\ManagerInterface::class);
         $this->_model = Bootstrap::getObjectManager()->create(
-            'Magento\Sales\Model\AdminOrder\Create',
+            \Magento\Sales\Model\AdminOrder\Create::class,
             ['messageManager' => $this->_messageManager]
         );
     }
@@ -40,13 +40,13 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     public function testInitFromOrderShippingAddressSameAsBillingWhenEmpty()
     {
         /** @var $order \Magento\Sales\Model\Order */
-        $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
         $this->assertNull($order->getShippingAddress());
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->unregister('rule_data');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('rule_data');
         $this->_model->initFromOrder($order);
 
         $this->assertNull($order->getShippingAddress());
@@ -60,14 +60,14 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     public function testInitFromOrderShippingAddressSameAsBillingWhenSame()
     {
         /** @var $order \Magento\Sales\Model\Order */
-        $order = Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        $order = Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
 
         $this->assertNull($order->getShippingAddress()->getSameAsBilling());
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->unregister('rule_data');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('rule_data');
         $this->_model->initFromOrder($order);
 
         $this->assertTrue($order->getShippingAddress()->getSameAsBilling());
@@ -84,12 +84,12 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var $order \Magento\Sales\Model\Order */
-        $order = $objectManager->create('Magento\Sales\Model\Order');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000002');
 
         $this->assertNull($order->getShippingAddress()->getSameAsBilling());
 
-        $objectManager->get('Magento\Framework\Registry')->unregister('rule_data');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('rule_data');
         $this->_model->initFromOrder($order);
 
         $this->assertFalse($order->getShippingAddress()->getSameAsBilling());
@@ -104,7 +104,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
 
         /** @var $order \Magento\Sales\Model\Order */
-        $order = $objectManager->create('Magento\Sales\Model\Order');
+        $order = $objectManager->create(\Magento\Sales\Model\Order::class);
         $order->loadByIncrementId('100000001');
 
         $payment = $order->getPayment();
@@ -113,7 +113,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('AE', $payment->getCcType());
         $this->assertEquals('0005', $payment->getCcLast4());
 
-        $objectManager->get('Magento\Framework\Registry')->unregister('rule_data');
+        $objectManager->get(\Magento\Framework\Registry::class)->unregister('rule_data');
         $payment = $this->_model->initFromOrder($order)->getQuote()->getPayment();
 
         $this->assertNull($payment->getCcExpMonth());
@@ -154,7 +154,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerWishlistNoCustomerId()
     {
         /** @var \Magento\Backend\Model\Session\Quote $session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Session\Quote');
+        $session = Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session\Quote::class);
         $session->setCustomerId(null);
         $this->assertFalse(
             $this->_model->getCustomerWishlist(true),
@@ -173,14 +173,14 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $customerIdFromFixture = 1;
         $productIdFromFixture = 1;
         /** @var \Magento\Backend\Model\Session\Quote $session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Session\Quote');
+        $session = Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session\Quote::class);
         $session->setCustomerId($customerIdFromFixture);
 
         /** Test new wishlist creation for the customer specified above */
         /** @var \Magento\Wishlist\Model\Wishlist $wishlist */
         $wishlist = $this->_model->getCustomerWishlist(true);
         $this->assertInstanceOf(
-            'Magento\Wishlist\Model\Wishlist',
+            \Magento\Wishlist\Model\Wishlist::class,
             $wishlist,
             'New Wish List is expected to be created if existing Customer does not have one yet.'
         );
@@ -218,7 +218,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         /** Validate data before creating address object */
         $this->_model->setIsValidate(true)->setBillingAddress($addressData);
         $this->assertInstanceOf(
-            'Magento\Quote\Model\Quote\Address',
+            \Magento\Quote\Model\Quote\Address::class,
             $this->_model->getBillingAddress(),
             'Billing address object was not created.'
         );
@@ -251,7 +251,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     {
         $customerIdFromFixture = 1;
         /** @var \Magento\Backend\Model\Session\Quote $session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Session\Quote');
+        $session = Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session\Quote::class);
         $session->setCustomerId($customerIdFromFixture);
         $invalidAddressData = array_merge($this->_getValidAddressData(), ['firstname' => '', 'lastname' => '']);
         /**
@@ -320,7 +320,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $order = $this->_model->createOrder();
         $this->_verifyCreatedOrder($order, $shippingMethod);
         /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+        $customer = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Customer::class);
         $customer->load($order->getCustomerId());
         $this->assertEquals(
             $firstNameForShippingAddress,
@@ -461,10 +461,10 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         /** Preconditions */
         /** @var \Magento\Backend\Model\Session\Quote $session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Session\Quote');
+        $session = Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session\Quote::class);
         $session->setCustomerId($fixtureCustomerId);
         /** @var $quoteFixture \Magento\Quote\Model\Quote */
-        $quoteFixture = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote');
+        $quoteFixture = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);
         $quoteFixture->load('test01', 'reserved_order_id');
         $quoteFixture->setCustomerIsGuest(false)->setCustomerId($fixtureCustomerId)->save();
 
@@ -489,7 +489,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         /** Preconditions */
         /** @var \Magento\Backend\Model\Session\Quote $session */
-        $session = Bootstrap::getObjectManager()->create('Magento\Backend\Model\Session\Quote');
+        $session = Bootstrap::getObjectManager()->create(\Magento\Backend\Model\Session\Quote::class);
         $session->setCustomerId($customerIdFromFixture);
 
         /** SUT execution */
@@ -526,18 +526,18 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     ) {
         /** Disable product options */
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+        $product = Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
         $product->load($productIdFromFixture)->setHasOptions(false)->save();
 
         /** Set current customer */
         /** @var \Magento\Backend\Model\Session\Quote $session */
-        $session = Bootstrap::getObjectManager()->get('Magento\Backend\Model\Session\Quote');
+        $session = Bootstrap::getObjectManager()->get(\Magento\Backend\Model\Session\Quote::class);
         if ($customerIdFromFixture !== null) {
             $session->setCustomerId($customerIdFromFixture);
 
             /** Unset fake IDs for default billing and shipping customer addresses */
             /** @var \Magento\Customer\Model\Customer $customer */
-            $customer = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Customer');
+            $customer = Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Customer::class);
             $customer->load($customerIdFromFixture)->setDefaultBilling(null)->setDefaultShipping(null)->save();
         } else {
             /**
@@ -549,7 +549,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         /** Emulate availability of shipping method (all are disabled by default) */
         /** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
-        $rate = Bootstrap::getObjectManager()->create('Magento\Quote\Model\Quote\Address\Rate');
+        $rate = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote\Address\Rate::class);
         $rate->setCode($shippingMethod);
         $this->_model->getQuote()->getShippingAddress()->addShippingRate($rate);
 
@@ -661,7 +661,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     private function getCustomerRepository()
     {
-        return Bootstrap::getObjectManager()->create('Magento\Customer\Api\CustomerRepositoryInterface');
+        return Bootstrap::getObjectManager()->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
     }
 
     /**
@@ -679,6 +679,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     private function getAddressRepository()
     {
         /** @var \Magento\Customer\Api\AddressRepositoryInterface $addressRepository */
-        return Bootstrap::getObjectManager()->create('Magento\Customer\Api\AddressRepositoryInterface');
+        return Bootstrap::getObjectManager()->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
     }
 }

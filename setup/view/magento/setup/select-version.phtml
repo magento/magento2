@@ -157,7 +157,12 @@
                         >
                             <span>Previous page</span>
                         </button>
-                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage}}">
+                    <input id="pageCurrent"
+                           class="admin__control-text"
+                           type="number"
+                           value="{{currentPage}}"
+                           ng-model="currentPage"
+                    >
                         <label class="admin__control-support-text" for="pageCurrent">
                         of {{numberOfPages}}
                         </label>

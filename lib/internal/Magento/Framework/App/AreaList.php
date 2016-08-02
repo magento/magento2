@@ -124,7 +124,7 @@ class AreaList
     {
         if (!isset($this->_areaInstances[$code])) {
             $this->_areaInstances[$code] = $this->objectManager->create(
-                'Magento\Framework\App\AreaInterface',
+                \Magento\Framework\App\AreaInterface::class,
                 ['areaCode' => $code]
             );
         }
