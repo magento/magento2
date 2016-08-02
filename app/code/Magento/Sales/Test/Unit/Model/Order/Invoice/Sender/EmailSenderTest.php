@@ -204,7 +204,7 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->storeMock);
 
         $this->senderBuilderFactoryMock = $this->getMockBuilder(
-                \Magento\Sales\Model\Order\Email\SenderBuilderFactory::class
+            \Magento\Sales\Model\Order\Email\SenderBuilderFactory::class
         )
         ->disableOriginalConstructor()
         ->setMethods(['create'])

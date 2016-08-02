@@ -192,7 +192,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     public function testOrderInvoice($orderId, $capture, $items, $notify, $appendComment)
     {
         $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
+            ->method('getConnectionByName')
             ->with('sales')
             ->willReturn($this->adapterInterface);
 
@@ -284,9 +284,9 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Model\Order\SalesDocumentValidationException
+     * @expectedException \Magento\Sales\Api\DocumentValidationException
      */
-    public function testSalesDocumentValidationException()
+    public function testDocumentValidationException()
     {
         $orderId = 1;
         $capture = true;
@@ -326,9 +326,9 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Sales\Model\Order\SalesOperationFailedException
+     * @expectedException \Magento\Sales\Api\CouldNotInvoiceException
      */
-    public function testSalesOperationFailedException()
+    public function testCouldNotInvoiceException()
     {
         $orderId = 1;
         $items = [1 => 2];
@@ -336,7 +336,7 @@ class OrderInvoiceTest extends \PHPUnit_Framework_TestCase
         $notify = true;
         $appendComment = true;
         $this->resourceConnectionMock->expects($this->once())
-            ->method('getConnection')
+            ->method('getConnectionByName')
             ->with('sales')
             ->willReturn($this->adapterInterface);
 
