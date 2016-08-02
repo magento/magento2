@@ -6,6 +6,8 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Newsletter\Block\Adminhtml\Subscriber $block */
+
 ?>
 <?php echo $block->getChildHtml('grid') ?>
 <?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()): ?>
