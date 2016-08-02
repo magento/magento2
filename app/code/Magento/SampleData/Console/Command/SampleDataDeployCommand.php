@@ -12,7 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\SampleData\Model\Dependency;
 use Magento\Framework\App\State;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\ArrayInputFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Composer\Console\Application;
@@ -21,7 +20,6 @@ use Magento\Setup\Model\PackagesAuth;
 
 /**
  * Command for deployment of Sample Data
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SampleDataDeployCommand extends Command
 {
@@ -36,7 +34,7 @@ class SampleDataDeployCommand extends Command
     private $sampleDataDependency;
 
     /**
-     * @var ArrayInputFactory
+     * @var \Symfony\Component\Console\Input\ArrayInputFactory
      * @deprecated
      */
     private $arrayInputFactory;
@@ -49,13 +47,13 @@ class SampleDataDeployCommand extends Command
     /**
      * @param Filesystem $filesystem
      * @param Dependency $sampleDataDependency
-     * @param ArrayInputFactory $arrayInputFactory
+     * @param \Symfony\Component\Console\Input\ArrayInputFactory $arrayInputFactory
      * @param ApplicationFactory $applicationFactory
      */
     public function __construct(
         Filesystem $filesystem,
         Dependency $sampleDataDependency,
-        ArrayInputFactory $arrayInputFactory,
+        \Symfony\Component\Console\Input\ArrayInputFactory $arrayInputFactory,
         ApplicationFactory $applicationFactory
     ) {
         $this->filesystem = $filesystem;
