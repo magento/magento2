@@ -27,15 +27,17 @@ class PurchasedPriceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
-        $this->priceFormatterMock = $this->getMockForAbstractClass('Magento\Framework\Pricing\PriceCurrencyInterface');
+        $this->priceFormatterMock = $this->getMockForAbstractClass(
+            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+        );
         $this->model = $objectManager->getObject(
-            'Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice',
+            \Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice::class,
             ['priceFormatter' => $this->priceFormatterMock, 'context' => $contextMock]
         );
     }

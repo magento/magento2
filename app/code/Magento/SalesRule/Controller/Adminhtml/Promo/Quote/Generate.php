@@ -36,7 +36,7 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 }
 
                 /** @var $generator \Magento\SalesRule\Model\Coupon\Massgenerator */
-                $generator = $this->_objectManager->get('Magento\SalesRule\Model\Coupon\Massgenerator');
+                $generator = $this->_objectManager->get(\Magento\SalesRule\Model\Coupon\Massgenerator::class);
                 if (!$generator->validateData($data)) {
                     $result['error'] = __('Invalid data provided');
                 } else {
@@ -53,11 +53,11 @@ class Generate extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 $result['error'] = __(
                     'Something went wrong while generating coupons. Please review the log and try again.'
                 );
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             }
         }
         $this->getResponse()->representJson(
-            $this->_objectManager->get('Magento\Framework\Json\Helper\Data')->jsonEncode($result)
+            $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
         );
     }
 }

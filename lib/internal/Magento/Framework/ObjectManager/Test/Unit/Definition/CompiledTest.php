@@ -15,7 +15,7 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
         $undefinedDefinitionSignature = new \stdClass();
         $className = 'undefinedDefinition';
         $readerMock = $this->getMock(
-            '\Magento\Framework\Code\Reader\ClassReader',
+            \Magento\Framework\Code\Reader\ClassReader::class,
             ['getConstructor'],
             [],
             '',
@@ -26,30 +26,12 @@ class CompiledTest extends \PHPUnit_Framework_TestCase
             ->with($className)
             ->willReturn($undefinedDefinitionSignature);
         $model = $objectManager->getObject(
-            'Magento\Framework\ObjectManager\Test\Unit\Definition\CompiledStub',
+            \Magento\Framework\ObjectManager\Test\Unit\Definition\CompiledStub::class,
             [
                 'definitions' => [[], []],
                 'reader' => $readerMock
             ]
         );
         $this->assertEquals($undefinedDefinitionSignature, $model->getParameters($className));
-    }
-}
-
-/**
- * Stub class for abstract Magento\Framework\ObjectManager\DefinitionInterface
- */
-class CompiledStub extends Compiled
-{
-
-    /**
-     * Unpack signature
-     *
-     * @param string $signature
-     * @return mixed
-     */
-    protected function _unpack($signature)
-    {
-        return unserialize($signature);
     }
 }

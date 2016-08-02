@@ -12,7 +12,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
     public function testRemove()
     {
         $composerAppFactory = $this->getMock(
-            'Magento\Framework\Composer\MagentoComposerApplicationFactory',
+            \Magento\Framework\Composer\MagentoComposerApplicationFactory::class,
             [],
             [],
             '',
@@ -20,7 +20,7 @@ class RemoveTest extends \PHPUnit_Framework_TestCase
         );
 
         $composerApp = $this->getMock(
-            'Magento\Composer\MagentoComposerApplication',
+            \Magento\Composer\MagentoComposerApplication::class,
             [],
             [],
             '',

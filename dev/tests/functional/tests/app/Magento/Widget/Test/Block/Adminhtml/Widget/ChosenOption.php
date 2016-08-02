@@ -42,21 +42,21 @@ class ChosenOption extends SimpleElement
      *
      * @var string
      */
-    protected $pageWidgetChooserBlockClass = 'Magento\Cms\Test\Block\Adminhtml\Page\Widget\Chooser';
+    protected $pageWidgetChooserBlockClass = \Magento\Cms\Test\Block\Adminhtml\Page\Widget\Chooser::class;
 
     /**
      * Category widget chooser block class.
      *
      * @var string
      */
-    protected $categoryWidgetChooserBlockClass = '\Magento\Catalog\Test\Block\Adminhtml\Category\Widget\Chooser';
+    protected $categoryWidgetChooserBlockClass = \Magento\Catalog\Test\Block\Adminhtml\Category\Widget\Chooser::class;
 
     /**
      * Product widget chooser block class.
      *
      * @var string
      */
-    protected $productWidgetChooserBlockClass = '\Magento\Catalog\Test\Block\Adminhtml\Product\Widget\Chooser';
+    protected $productWidgetChooserBlockClass = \Magento\Catalog\Test\Block\Adminhtml\Product\Widget\Chooser::class;
 
     /**
      * Entity chooser block class mapping.
@@ -64,9 +64,9 @@ class ChosenOption extends SimpleElement
      * @var array
      */
     protected $chooserClasses = [
-        'page' => 'Magento\Cms\Test\Block\Adminhtml\Page\Widget\Chooser',
-        'category' => 'Magento\Catalog\Test\Block\Adminhtml\Category\Widget\Chooser',
-        'product' => 'Magento\Catalog\Test\Block\Adminhtml\Product\Widget\Chooser',
+        'page' => \Magento\Cms\Test\Block\Adminhtml\Page\Widget\Chooser::class,
+        'category' => \Magento\Catalog\Test\Block\Adminhtml\Category\Widget\Chooser::class,
+        'product' => \Magento\Catalog\Test\Block\Adminhtml\Product\Widget\Chooser::class,
     ];
 
     /**

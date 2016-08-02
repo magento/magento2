@@ -26,9 +26,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_urlResolver = $this->getMock('Magento\Framework\UrlInterface');
+        $this->_urlResolver = $this->getMock(\Magento\Framework\UrlInterface::class);
         $this->_interpreter = $this->getMock(
-            'Magento\Framework\View\Layout\Argument\Interpreter\NamedParams',
+            \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class,
             [],
             [],
             '',

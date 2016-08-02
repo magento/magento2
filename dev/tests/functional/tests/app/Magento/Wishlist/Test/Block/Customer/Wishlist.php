@@ -75,7 +75,7 @@ class Wishlist extends Block
     {
         $this->waitFormToLoad();
         return $this->blockFactory->create(
-            'Magento\Wishlist\Test\Block\Customer\Wishlist\Items',
+            \Magento\Wishlist\Test\Block\Customer\Wishlist\Items::class,
             ['element' => $this->_rootElement->find($this->productItems)]
         );
     }

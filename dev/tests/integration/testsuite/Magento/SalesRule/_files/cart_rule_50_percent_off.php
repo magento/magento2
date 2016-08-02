@@ -6,10 +6,10 @@
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var Magento\Framework\Registry $registry */
-$registry = $objectManager->get('Magento\Framework\Registry');
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
 
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
-$salesRule = $objectManager->create('Magento\SalesRule\Model\Rule');
+$salesRule = $objectManager->create(\Magento\SalesRule\Model\Rule::class);
 $salesRule->setData(
     [
         'name' => '50% Off on Large Orders',
@@ -18,7 +18,7 @@ $salesRule->setData(
         'coupon_type' => \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON,
         'conditions' => [
             [
-                'type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
+                'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
                 'operator' => '>',
                 'value' => 1000
@@ -30,7 +30,7 @@ $salesRule->setData(
         'stop_rules_processing' => 1,
         'website_ids' => [
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                \Magento\Store\Model\StoreManagerInterface::class
             )->getWebsite()->getId()
         ]
     ]

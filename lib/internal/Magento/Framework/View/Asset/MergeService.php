@@ -88,7 +88,7 @@ class MergeService
             $mergeStrategy = $this->objectManager->get($mergeStrategyClass);
 
             $assets = $this->objectManager->create(
-                'Magento\Framework\View\Asset\Merged',
+                \Magento\Framework\View\Asset\Merged::class,
                 ['assets' => $assets, 'mergeStrategy' => $mergeStrategy]
             );
         }

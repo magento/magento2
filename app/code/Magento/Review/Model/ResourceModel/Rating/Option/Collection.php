@@ -26,7 +26,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Magento\Review\Model\Rating\Option', 'Magento\Review\Model\ResourceModel\Rating\Option');
+        $this->_init(
+            \Magento\Review\Model\Rating\Option::class,
+            \Magento\Review\Model\ResourceModel\Rating\Option::class
+        );
         $this->_ratingVoteTable = $this->getTable('rating_option_vote');
     }
 

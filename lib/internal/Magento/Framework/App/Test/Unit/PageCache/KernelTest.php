@@ -32,20 +32,20 @@ class KernelTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', [], [], '', false);
-        $this->fullPageCacheMock = $this->getMock('\Magento\PageCache\Model\Cache\Type', [], [], '', false);
+        $this->cacheMock = $this->getMock(\Magento\Framework\App\PageCache\Cache::class, [], [], '', false);
+        $this->fullPageCacheMock = $this->getMock(\Magento\PageCache\Model\Cache\Type::class, [], [], '', false);
         $this->identifierMock =
-            $this->getMock('Magento\Framework\App\PageCache\Identifier', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+            $this->getMock(\Magento\Framework\App\PageCache\Identifier::class, [], [], '', false);
+        $this->requestMock = $this->getMock(\Magento\Framework\App\Request\Http::class, [], [], '', false);
         $this->kernel = new Kernel($this->cacheMock, $this->identifierMock, $this->requestMock);
 
-        $reflection = new \ReflectionClass('\Magento\Framework\App\PageCache\Kernel');
+        $reflection = new \ReflectionClass(\Magento\Framework\App\PageCache\Kernel::class);
         $reflectionProperty = $reflection->getProperty('fullPageCache');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
 
         $this->responseMock = $this->getMockBuilder(
-            'Magento\Framework\App\Response\Http'
+            \Magento\Framework\App\Response\Http::class
         )->setMethods(
             ['getHeader', 'getHttpResponseCode', 'setNoCacheHeaders', 'clearHeader', '__wakeup']
         )->disableOriginalConstructor()->getMock();

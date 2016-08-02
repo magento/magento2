@@ -76,7 +76,7 @@ class CreateHandler implements ExtensionInterface
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
     ) {
-        $this->metadata = $metadataPool->getMetadata('Magento\Catalog\Api\Data\ProductInterface');
+        $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
         $this->resourceModel = $resourceModel;
         $this->jsonHelper = $jsonHelper;

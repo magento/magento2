@@ -87,7 +87,9 @@ class TaxClass extends DataSource
     protected function setTaxClassId($taxClassName)
     {
         $url = $_ENV['app_backend_url'] . 'tax/rule/new/';
-        $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create('Magento\Mtf\Config\DataInterface');
+        $config = \Magento\Mtf\ObjectManagerFactory::getObjectManager()->create(
+            \Magento\Mtf\Config\DataInterface::class
+        );
         $curl = new BackendDecorator(new CurlTransport(), $config);
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write($url, [], CurlInterface::GET);

@@ -15,7 +15,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection'
+            \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class
         );
     }
 

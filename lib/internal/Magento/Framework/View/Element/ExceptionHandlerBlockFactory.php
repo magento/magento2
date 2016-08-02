@@ -11,7 +11,7 @@ namespace Magento\Framework\View\Element;
  */
 class ExceptionHandlerBlockFactory
 {
-    const DEFAULT_INSTANCE_NAME = 'Magento\Framework\View\Element\ExceptionHandlerBlock';
+    const DEFAULT_INSTANCE_NAME = \Magento\Framework\View\Element\ExceptionHandlerBlock::class;
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface

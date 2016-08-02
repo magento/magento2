@@ -28,6 +28,6 @@ class ContextFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\View\Layout\Generator\Context', $data);
+        return $this->objectManager->create(\Magento\Framework\View\Layout\Generator\Context::class, $data);
     }
 }

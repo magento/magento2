@@ -12,7 +12,7 @@ require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_a
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$productModel = $objectManager->create('Magento\Catalog\Model\Product');
+$productModel = $objectManager->create(\Magento\Catalog\Model\Product::class);
 
 $customOptions = [
     [
@@ -75,7 +75,7 @@ $productModel->setTypeId(
 $options = [];
 
 /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory $customOptionFactory */
-$customOptionFactory = $objectManager->create('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+$customOptionFactory = $objectManager->create(\Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory::class);
 
 foreach ($customOptions as $option) {
     /** @var \Magento\Catalog\Api\Data\ProductCustomOptionInterface $option */

@@ -15,7 +15,7 @@ class SetBilling extends \Magento\Multishipping\Controller\Checkout\Address
     {
         if ($addressId = $this->getRequest()->getParam('id')) {
             $this->_objectManager->create(
-                'Magento\Multishipping\Model\Checkout\Type\Multishipping'
+                \Magento\Multishipping\Model\Checkout\Type\Multishipping::class
             )->setQuoteCustomerBillingAddress(
                 $addressId
             );

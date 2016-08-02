@@ -22,7 +22,7 @@ class Post extends ProductController
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if ($data = $this->getRequest()->getPostValue()) {
             /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-            $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+            $storeManager = $this->_objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
             if ($storeManager->hasSingleStore()) {
                 $data['stores'] = [
                     $storeManager->getStore(true)->getId(),

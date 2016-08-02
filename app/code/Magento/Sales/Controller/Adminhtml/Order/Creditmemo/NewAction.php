@@ -62,7 +62,7 @@ class NewAction extends \Magento\Backend\App\Action
         $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
         $creditmemo = $this->creditmemoLoader->load();
         if ($creditmemo) {
-            if ($comment = $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true)) {
+            if ($comment = $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getCommentText(true)) {
                 $creditmemo->setCommentText($comment);
             }
             $resultPage = $this->resultPageFactory->create();

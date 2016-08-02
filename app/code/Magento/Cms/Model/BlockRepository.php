@@ -135,24 +135,19 @@ class BlockRepository implements BlockRepositoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
+     * @return \Magento\Cms\Api\Data\BlockSearchResultsInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
 
+        /** @var \Magento\Cms\Model\ResourceModel\Block\Collection $collection */
         $collection = $this->blockCollectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                if ($filter->getField() === 'store_id') {
-                    $collection->addStoreFilter($filter->getValue(), false);
-                    continue;
-                }
-                $condition = $filter->getConditionType() ?: 'eq';
-                $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
+            $this->addFilterGroupToCollection($filterGroup, $collection);
         }
+
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $criteria->getSortOrders();
         if ($sortOrders) {
@@ -172,11 +167,11 @@ class BlockRepository implements BlockRepositoryInterface
             $this->dataObjectHelper->populateWithArray(
                 $blockData,
                 $blockModel->getData(),
-                'Magento\Cms\Api\Data\BlockInterface'
+                \Magento\Cms\Api\Data\BlockInterface::class
             );
             $blocks[] = $this->dataObjectProcessor->buildOutputDataArray(
                 $blockData,
-                'Magento\Cms\Api\Data\BlockInterface'
+                \Magento\Cms\Api\Data\BlockInterface::class
             );
         }
         $searchResults->setItems($blocks);
@@ -211,5 +206,34 @@ class BlockRepository implements BlockRepositoryInterface
     public function deleteById($blockId)
     {
         return $this->delete($this->getById($blockId));
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param \Magento\Cms\Model\ResourceModel\Block\Collection $collection
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    private function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        \Magento\Cms\Model\ResourceModel\Block\Collection $collection
+    ) {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            if ($filter->getField() === 'store_id') {
+                $collection->addStoreFilter($filter->getValue(), false);
+                continue;
+            }
+            $condition = $filter->getConditionType() ?: 'eq';
+            $fields[] = $filter->getField();
+            $conditions[] = [$condition => $filter->getValue()];
+        }
+
+        if ($fields) {
+            $collection->addFieldToFilter($fields, $conditions);
+        }
     }
 }

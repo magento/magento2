@@ -42,7 +42,7 @@ class CreateShipmentEntityTest extends Injectable
     public function __prepare()
     {
         $this->objectManager->create(
-            'Magento\Config\Test\TestStep\SetupConfigurationStep',
+            \Magento\Config\Test\TestStep\SetupConfigurationStep::class,
             ['configData' => "checkmo,flatrate"]
         )->run();
     }
@@ -61,7 +61,7 @@ class CreateShipmentEntityTest extends Injectable
 
         // Steps
         $createShipping = $this->objectManager->create(
-            'Magento\Sales\Test\TestStep\CreateShipmentStep',
+            \Magento\Sales\Test\TestStep\CreateShipmentStep::class,
             ['order' => $order, 'data' => $data]
         );
 

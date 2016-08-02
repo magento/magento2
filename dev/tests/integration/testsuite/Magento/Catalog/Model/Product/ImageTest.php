@@ -21,7 +21,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $model \Magento\Catalog\Model\Product\Image */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product\Image'
+            \Magento\Catalog\Model\Product\Image::class
         );
         $model->setDestinationSubdir('image')->setBaseFile('');
         $this->assertEmpty($model->getBaseFile());
@@ -34,7 +34,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveFilePlaceholder($model)
     {
-        $processor = $this->getMock('Magento\Framework\Image', ['save'], [], '', false);
+        $processor = $this->getMock(\Magento\Framework\Image::class, ['save'], [], '', false);
         $processor->expects($this->exactly(0))->method('save');
         $model->setImageProcessor($processor)->saveFile();
     }
@@ -57,7 +57,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $expectedFile = '/somewhere/watermark.png';
 
         /** @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject $viewFilesystem */
-        $viewFileSystem = $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false);
+        $viewFileSystem = $this->getMock(\Magento\Framework\View\FileSystem::class, [], [], '', false);
         $viewFileSystem->expects($this->once())
             ->method('getStaticFileName')
             ->with($inputFile)
@@ -65,9 +65,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
 
         /** @var $model \Magento\Catalog\Model\Product\Image */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Product\Image', ['viewFileSystem' => $viewFileSystem]);
+            ->create(\Magento\Catalog\Model\Product\Image::class, ['viewFileSystem' => $viewFileSystem]);
         $processor = $this->getMock(
-            'Magento\Framework\Image',
+            \Magento\Framework\Image::class,
             ['save', 'keepAspectRatio', 'keepFrame', 'keepTransparency', 'constrainOnly', 'backgroundColor', 'quality',
                 'setWatermarkPosition', 'setWatermarkImageOpacity', 'setWatermarkWidth', 'setWatermarkHeight',
                 'watermark'],
