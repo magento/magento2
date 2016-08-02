@@ -142,6 +142,7 @@ class ConfigurableProductsFixture extends Fixture
      * @param string $variation
      * @param string $suffix
      * @return array
+     * @SuppressWarnings(PHPMD)
      */
     private function generateConfigurableProduct($productCategory, $productWebsite, $variation, $suffix)
     {
@@ -396,46 +397,8 @@ class ConfigurableProductsFixture extends Fixture
         }
         $this->fixtureModel->resetObjectManager();
 
-        /** @var \Magento\Store\Model\StoreManager $storeManager */
-        $storeManager = $this->fixtureModel->getObjectManager()->get(\Magento\Store\Model\StoreManager::class);
-        /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+        $result = $this->getCategoriesAndWebsites();
 
-        $result = [];
-        //Get all websites
-        $websites = $storeManager->getWebsites();
-        foreach ($websites as $website) {
-            $websiteCode = $website->getCode();
-            //Get all groups
-            $websiteGroups = $website->getGroups();
-            foreach ($websiteGroups as $websiteGroup) {
-                $websiteGroupRootCategory = $websiteGroup->getRootCategoryId();
-                $category->load($websiteGroupRootCategory);
-                $categoryResource = $category->getResource();
-                $rootCategoryName = $category->getName();
-                //Get all categories
-                $resultsCategories = $categoryResource->getAllChildren($category);
-                foreach ($resultsCategories as $resultsCategory) {
-                    $category->load($resultsCategory);
-                    $structure = explode('/', $category->getPath());
-                    $pathSize  = count($structure);
-                    if ($pathSize > 1) {
-                        $path = [];
-                        for ($i = 1; $i < $pathSize; $i++) {
-                            $path[] = $category->load($structure[$i])->getName();
-                        }
-                        array_shift($path);
-                        $resultsCategoryName = implode('/', $path);
-                    } else {
-                        $resultsCategoryName = $category->getName();
-                    }
-                    //Deleted root categories
-                    if (trim($resultsCategoryName) != '') {
-                        $result[$resultsCategory] = [$websiteCode, $resultsCategoryName, $rootCategoryName];
-                    }
-                }
-            }
-        }
         $result = array_values($result);
 
         $productWebsite = function ($index) use ($result) {
@@ -501,5 +464,53 @@ class ConfigurableProductsFixture extends Fixture
         return [
             'configurable_products' => 'Configurable products',
         ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getCategoriesAndWebsites()
+    {
+        /** @var \Magento\Store\Model\StoreManager $storeManager */
+        $storeManager = $this->fixtureModel->getObjectManager()->get(\Magento\Store\Model\StoreManager::class);
+        /** @var $category \Magento\Catalog\Model\Category */
+        $category = $this->fixtureModel->getObjectManager()->create(\Magento\Catalog\Model\Category::class);
+
+        $result = [];
+        //Get all websites
+        $websites = $storeManager->getWebsites();
+        foreach ($websites as $website) {
+            $websiteCode = $website->getCode();
+            //Get all groups
+            $websiteGroups = $website->getGroups();
+            foreach ($websiteGroups as $websiteGroup) {
+                $websiteGroupRootCategory = $websiteGroup->getRootCategoryId();
+                $category->load($websiteGroupRootCategory);
+                $categoryResource = $category->getResource();
+                $rootCategoryName = $category->getName();
+                //Get all categories
+                $resultsCategories = $categoryResource->getAllChildren($category);
+                foreach ($resultsCategories as $resultsCategory) {
+                    $category->load($resultsCategory);
+                    $structure = explode('/', $category->getPath());
+                    $pathSize = count($structure);
+                    if ($pathSize > 1) {
+                        $path = [];
+                        for ($i = 1; $i < $pathSize; $i++) {
+                            $path[] = $category->load($structure[$i])->getName();
+                        }
+                        array_shift($path);
+                        $resultsCategoryName = implode('/', $path);
+                    } else {
+                        $resultsCategoryName = $category->getName();
+                    }
+                    //Deleted root categories
+                    if (trim($resultsCategoryName) != '') {
+                        $result[$resultsCategory] = [$websiteCode, $resultsCategoryName, $rootCategoryName];
+                    }
+                }
+            }
+        }
+        return $result;
     }
 }
