@@ -21,7 +21,7 @@ trait Interceptor
     /**
      * List of plugins
      *
-     * @var \Magento\Framework\Interception\PluginListInterface
+     * @var PluginListInterface
      */
     private $pluginList;
 
@@ -39,7 +39,7 @@ trait Interceptor
      */
     public function ___init()
     {
-        $this->pluginList = ObjectManager::getInstance()->get('Magento\Framework\Interception\PluginListInterface');
+        $this->pluginList = ObjectManager::getInstance()->get(PluginListInterface::class);
         $this->subjectType = get_parent_class($this);
         if (method_exists($this->subjectType, '___init')) {
             parent::___init();
